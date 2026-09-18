@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getCorsHeaders } from "@/lib/cors"
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   if (!pathname.startsWith("/api/") && pathname !== "/health") {
     return NextResponse.next()

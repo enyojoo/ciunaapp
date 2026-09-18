@@ -35,5 +35,10 @@
   },
   "dependencies": {
     "next": "^16.1.6"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "sharp": true,
+    "unrs-resolver": true
   }
 }
