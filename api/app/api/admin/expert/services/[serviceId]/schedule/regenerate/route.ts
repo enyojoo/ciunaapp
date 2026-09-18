@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin } from "@/lib/admin-auth-utils"
-import { computeMaterializedSlots } from "@/lib/expert-schedule-materialize"
+import { computeMaterializedSlots, type WeeklyRuleInput } from "@/lib/expert-schedule-materialize"
 
 const SCHEDULE_SELECT =
   "id, expert_service_id, timezone, window_start_date, window_end_date, slot_duration_minutes, created_at, updated_at"

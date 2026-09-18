@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js"
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Create a client that can read cookies from the request
@@ -54,7 +54,7 @@ export async function PATCH(
     }
 
     const { verification_status } = await request.json()
-    const userId = params.id
+    const { id: userId } = await params
 
     console.log(`Updating user ${userId} verification to ${verification_status}`)
 

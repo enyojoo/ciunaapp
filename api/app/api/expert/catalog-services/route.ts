@@ -74,7 +74,8 @@ export const GET = withErrorHandling(async (_request: NextRequest) => {
 
   if (sErr && isMissingFulfillmentColumnError(sErr)) {
     const retry = await server.from("expert_services").select(SERVICE_FIELDS_BASE).eq("is_published", true)
-    svcRows = retry.data?.map((row) => ({ ...row, fulfillment_type: "online" as const }))
+    svcRows = (retry.data?.map((row) => ({ ...row, fulfillment_type: "online" as const })) ??
+      null) as typeof svcRows
     sErr = retry.error
   }
 

@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
         userId: user.id
       })
       
-      if (error.statusCode === 404 || error.statusCode === "404" || error.message?.includes("not found")) {
+      if (String(error.statusCode) === "404" || error.message?.includes("not found")) {
         return NextResponse.json({ error: "File not found" }, { status: 404 })
       }
       

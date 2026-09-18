@@ -25,16 +25,17 @@ export interface KYCSubmission {
 }
 
 export interface CreateIdentitySubmission {
-  full_name: string
-  date_of_birth: string // ISO date string (YYYY-MM-DD)
+  full_name?: string
+  date_of_birth?: string
   country_code: string
   id_type: string
   id_document_file: File
+  metadata?: unknown
 }
 
 export interface CreateAddressSubmission {
-  country_code: string
-  address: string
+  country_code?: string
+  address?: string
   document_type: "utility_bill" | "bank_statement" | "lease_agreement"
   address_document_file: File
 }

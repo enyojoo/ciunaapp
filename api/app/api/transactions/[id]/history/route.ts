@@ -6,11 +6,11 @@ import { requireUser } from "@/lib/auth-utils"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireUser(request)
-    const transactionId = params.id
+    const { id: transactionId } = await params
 
     // Verify transaction ownership
     const transaction = await transactionStatusService.getTransaction(transactionId)

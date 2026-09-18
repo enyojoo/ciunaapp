@@ -12,6 +12,30 @@ export const userService = {
     return data
   },
 
+  async create(input: {
+    email: string
+    password?: string
+    firstName: string
+    lastName: string
+    phone?: string
+    baseCurrency?: string
+  }) {
+    const server = createServerClient()
+    const { data, error } = await server
+      .from("users")
+      .insert({
+        email: input.email,
+        first_name: input.firstName,
+        last_name: input.lastName,
+        phone: input.phone ?? null,
+        base_currency: input.baseCurrency || "USD",
+      })
+      .select()
+      .single()
+    if (error) throw error
+    return data
+  },
+
   async updateProfile(
     userId: string,
     updates: {

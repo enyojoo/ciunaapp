@@ -9,7 +9,7 @@ import { createServerClient } from "@/lib/supabase"
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthenticatedUser(request)
@@ -29,7 +29,7 @@ export async function GET(
       return NextResponse.json({ error: "Admin access required" }, { status: 403 })
     }
 
-    const { id: userId } = params
+    const { id: userId } = await params
     if (!userId) {
       return NextResponse.json(
         { error: "User ID is required" },

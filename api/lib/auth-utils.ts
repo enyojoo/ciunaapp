@@ -222,23 +222,32 @@ export function createSuccessResponse(data: any, status: number = 200) {
  * Supports both handlers with and without params
  * In Next.js 15, params can be a Promise, so we handle that
  */
-export function withErrorHandling<T extends { params?: any } = {}>(
-  handler: (request: NextRequest, context?: T | Promise<T>) => Promise<Response>
+export function withErrorHandling(
+  handler: (request: NextRequest, context?: any) => Promise<Response>
 ) {
   return async (
-    request: NextRequest, 
-    context?: T | Promise<T>
+    request: NextRequest,
+    context?: any
   ): Promise<Response> => {
     try {
-      // Handle async params in Next.js 15
       let resolvedContext = context
-      if (context && typeof context === 'object' && 'then' in context) {
-        resolvedContext = await context as T
-      } else if (context && 'params' in context && context.params && typeof context.params === 'object' && 'then' in context.params) {
+      if (context && typeof context === "object" && context !== null && "then" in context) {
+        resolvedContext = await (context as Promise<unknown>)
+      } else if (
+        context &&
+        typeof context === "object" &&
+        context !== null &&
+        "params" in context &&
+        (context as { params?: unknown }).params &&
+        typeof (context as { params: unknown }).params === "object" &&
+        (context as { params: object }) &&
+        "then" in ((context as { params: { then?: unknown } }).params as object)
+      ) {
+        const ctx = context as { params: Promise<unknown> }
         resolvedContext = {
-          ...context,
-          params: await context.params
-        } as T
+          ...ctx,
+          params: await ctx.params,
+        }
       }
       return await handler(request, resolvedContext)
     } catch (error) {

@@ -62,10 +62,12 @@ export const GET = withErrorHandling(async (_request: NextRequest, context?: { p
 
   if (sErr && isMissingFulfillmentColumnError(sErr)) {
     const retry = await fetchPublishedServices(SERVICE_FIELDS_BASE)
-    services = retry.data
     sErr = retry.error
-    if (!sErr && services?.length) {
-      services = services.map((row) => ({ ...row, fulfillment_type: "online" as const }))
+    if (!sErr) {
+      services = ((retry.data as unknown as Record<string, unknown>[] | null) || []).map((row) => ({
+        ...row,
+        fulfillment_type: "online" as const,
+      })) as unknown as typeof services
     }
   }
 

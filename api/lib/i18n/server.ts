@@ -1,9 +1,9 @@
 import i18next, { type i18n as I18nInstance } from "i18next"
 
-import enEmails from "../../../locales/en/emails.json"
-import ruEmails from "../../../locales/ru/emails.json"
-import frEmails from "../../../locales/fr/emails.json"
-import esEmails from "../../../locales/es/emails.json"
+import enEmails from "@/locales/en/emails.json"
+import ruEmails from "@/locales/ru/emails.json"
+import frEmails from "@/locales/fr/emails.json"
+import esEmails from "@/locales/es/emails.json"
 
 export type EmailLocale = "en" | "ru" | "fr" | "es"
 
