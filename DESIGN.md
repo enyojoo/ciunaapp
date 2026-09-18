@@ -19,7 +19,9 @@ Four engines we ship. Office Hub Services still drives which tiles appear.
 
 Food and Mart share one marketplace engine. No map or live courier this pass (web does not have it). Experts is booking. Send is the transfer API. Home is the grid. **Transactions** lists send + food/mart/expert orders together.
 
-**One pay model:** Food, Mart, and Experts checkout reuse the send pay step (`sendCurrency`, `receiveCurrency`, contact). Not a shopping-cart UX.
+**Food and Mart are a cart, single-vendor.** Browse a vendor storefront → add fixed-price items to a server-synced cart (adding from a different vendor abandons the current one, with a notice) → Cart → Checkout. Custom-amount (`user_input`) products skip the cart and keep the direct one-item Order flow. Experts stays single-booking (one expert, one slot) — no cart.
+
+**Two payment rails, same checkout shell:** contact/delivery is shared; the pay step then offers **Bank transfer** (manual — FX-convert, show a bank/mobile-money/crypto/QR method, customer uploads a receipt, office reviews it) or, when the charge is RUB, **Pay online** via YooKassa (card/SBP, instant, webhook-confirmed, no office review). Food/Mart cart checkout and Experts booking both get both rails; Send stays manual-transfer-only.
 
 ### Grid vs engines (do both)
 
@@ -115,7 +117,8 @@ Home: **logo left, Refer pill + Support right, then 2-col office-icon tiles**. N
 | Giant orange hero | Compact header |
 | Emoji tab icons | Lucide: Home, History, More |
 | Hardcoded tiles | `GET /api/hub/service-lines` |
-| Cart-only checkout | Reuse send pay step |
+| Cross-vendor cart | One cart per vendor; switching vendor clears it |
+| Cards/wallet on Send | Manual transfer, or YooKassa online for RUB Hub/Experts checkout |
 | Raw `TextInput` | Shared `Field` |
 | PIN on More | Full-screen keypad |
 | Web hover shadows | 4:3 image, title, price, one CTA |
@@ -133,9 +136,10 @@ Sheets for currency, recipient, filters — not desktop dialogs.
 | --- | --- |
 | Home | Logo, Refer, Support, 2-col tiles (`icon_url`, i18n) |
 | Food / Mart catalog | Image, title, vendor chip, price, stores strip |
-| Storefront | Vendor catalog |
-| Checkout | Send-like pay + `POST /api/hub/checkout` |
-| Experts | Directory → profile → book → same pay model |
+| Storefront | Vendor catalog, add to cart |
+| Cart | Line items, qty stepper, subtotal, one vendor |
+| Checkout | Cart summary → contact/delivery → Bank transfer or Pay online (`POST /api/hub/checkout`) |
+| Experts | Directory → profile → book → same checkout shell (no cart) |
 | Send | Amount → FX / who receives / arrival → recipient → pay. Same numbers as web |
 | Transactions | Amount, counterparty, status, line |
 | More | Identity first, then Account / App groups, KYC badge |
@@ -148,7 +152,7 @@ Sheets for currency, recipient, filters — not desktop dialogs.
 Expo Go after each slice. APIs already live — do not rebuild.
 
 1. Shell + Home from Hub Services
-2. Food + Mart marketplace
+2. Food + Mart marketplace, cart, checkout (Bank transfer + Pay online)
 3. Send wizard
 4. Experts hire
 5. Transactions + order

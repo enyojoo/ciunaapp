@@ -18,6 +18,8 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   const contactPhone = String(body.contactPhone || "").trim()
   const message = body.message != null ? String(body.message) : null
   const idempotencyKey = body.idempotencyKey != null ? String(body.idempotencyKey) : undefined
+  const paymentMethod = body.paymentMethod === "yookassa" ? "yookassa" : "manual"
+  const returnUrl = body.returnUrl != null ? String(body.returnUrl) : undefined
 
   if (!expert_service_slot_id || !sendCurrency || !receiveCurrency) {
     return createErrorResponse("Missing required fields", 400)
@@ -27,7 +29,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   }
 
   try {
-    const { transaction, duplicate } = await createExpertBookingCheckoutTransaction(user.id, {
+    const { transaction, duplicate, gateway } = await createExpertBookingCheckoutTransaction(user.id, {
       expert_service_slot_id,
       sendCurrency,
       receiveCurrency,
@@ -35,6 +37,8 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       contactPhone,
       message,
       idempotencyKey,
+      paymentMethod,
+      returnUrl,
     })
 
     if (!duplicate) {
@@ -47,7 +51,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       }
     }
 
-    return NextResponse.json({ transaction, duplicate: !!duplicate })
+    return NextResponse.json({ transaction, duplicate: !!duplicate, gateway })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Checkout failed"
     const code =

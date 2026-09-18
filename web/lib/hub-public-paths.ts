@@ -32,6 +32,16 @@ export function hubMarketplaceCheckoutPath(lineSlug: string, productId: string):
   return `${hubLineHomePath(lineSlug)}/checkout/${encodeURIComponent(productId)}`
 }
 
+/** Cart screen for a Food/Mart vendor's cart (single-vendor cart). */
+export function hubCartPath(lineSlug: string): string {
+  return `${hubLineHomePath(lineSlug)}/cart`
+}
+
+/** Cart-based checkout (Food/Mart) — no product id in the URL; driven by the active cart. */
+export function hubCartCheckoutPath(lineSlug: string): string {
+  return `${hubLineHomePath(lineSlug)}/checkout`
+}
+
 /** Checkout for non–Food/Mart hub catalog products. */
 export function hubGenericCheckoutPath(productId: string): string {
   return `/hub/checkout/${encodeURIComponent(productId)}`

@@ -22,6 +22,7 @@ import {
   CurrencyPickerTrigger,
 } from "@/components/send/currency-picker-sheet"
 import { SendMakePaymentStep } from "@/components/send/send-make-payment-step"
+import { fetchPublicPlatformFlags } from "@/lib/fetch-public-platform-flags"
 import { paymentMethodService, transactionService, userService } from "@/lib/database"
 import type { Currency, ExchangeRate } from "@/types"
 import { formatCurrency, getCurrencyNarrowSymbol, roundMoney } from "@/utils/currency"
@@ -110,6 +111,16 @@ export function ExpertSessionCheckoutPanel({
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [quoteSubmitting, setQuoteSubmitting] = useState(false)
+  const [payChoice, setPayChoice] = useState<"manual" | "yookassa">("manual")
+  const [yookassaEnabled, setYookassaEnabled] = useState(false)
+
+  useEffect(() => {
+    void fetchPublicPlatformFlags().then((f) => setYookassaEnabled(f.yookassaEnabled))
+  }, [])
+
+  useEffect(() => {
+    if (sendCurrency.toUpperCase() !== "RUB" && payChoice === "yookassa") setPayChoice("manual")
+  }, [sendCurrency, payChoice])
 
   const isQuote = svc.pricing_type === "quote"
 
@@ -408,6 +419,7 @@ export function ExpertSessionCheckoutPanel({
           contactPhone: contactPhone.trim(),
           message: message.trim() || null,
           idempotencyKey: idempotencyKeyRef.current,
+          paymentMethod: payChoice,
         }),
       })
       const data = await res.json().catch(() => ({}))
@@ -415,6 +427,11 @@ export function ExpertSessionCheckoutPanel({
 
       const transactionId = data.transaction?.transaction_id as string | undefined
       if (!transactionId) throw new Error(t("hub.checkout.errors.missingTransaction"))
+
+      if (payChoice === "yookassa") {
+        router.replace(`/pay/${String(transactionId).toLowerCase()}`)
+        return
+      }
 
       if (uploadedFile && uploadProgress === 100 && !isUploading) {
         setTimeout(async () => {
@@ -673,6 +690,57 @@ export function ExpertSessionCheckoutPanel({
               {!user?.email_confirmed_at ? (
                 <p className="mb-3 text-sm text-amber-700">{t("hub.checkout.errors.verifyEmail")}</p>
               ) : null}
+              {yookassaEnabled && sendCurrency.toUpperCase() === "RUB" ? (
+                <Card className="mb-4">
+                  <CardContent className="grid grid-cols-2 gap-3 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setPayChoice("manual")}
+                      className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-sm font-medium transition-colors ${
+                        payChoice === "manual" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 text-gray-600"
+                      }`}
+                    >
+                      {t("hub.checkout.payManual", { defaultValue: "Bank transfer" })}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPayChoice("yookassa")}
+                      className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-sm font-medium transition-colors ${
+                        payChoice === "yookassa" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 text-gray-600"
+                      }`}
+                    >
+                      {t("hub.checkout.payOnline", { defaultValue: "Pay online" })}
+                    </button>
+                  </CardContent>
+                </Card>
+              ) : null}
+              {payChoice === "yookassa" ? (
+                <Card>
+                  <CardContent className="space-y-4 pt-6">
+                    <p className="text-sm text-gray-600">
+                      {t("hub.checkout.onlinePayHint", {
+                        defaultValue: "You'll be taken to a secure payment page to pay by card or SBP.",
+                      })}
+                    </p>
+                    <div className="flex gap-3">
+                      <Button type="button" variant="outline" onClick={() => setStep(2)} className="min-h-12 flex-1">
+                        {t("hub.checkout.back")}
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => void handlePay()}
+                        disabled={submitting || !pricingPreview || !user?.email_confirmed_at}
+                        className="min-h-12 flex-1 rounded-xl bg-primary text-base font-semibold hover:bg-primary/90"
+                      >
+                        {submitting
+                          ? t("hub.checkout.creating")
+                          : `${t("hub.checkout.payOnline", { defaultValue: "Pay online" })} · ${formatCurrency(pricingPreview?.total || 0, sendCurrency)}`}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : null}
+              {payChoice === "manual" ? (
               <SendMakePaymentStep
                 sendCurrency={sendCurrency}
                 sendCurrencyData={sendCurrencyData}
@@ -716,6 +784,7 @@ export function ExpertSessionCheckoutPanel({
                 submittingLabel={t("hub.checkout.creating")}
                 idlePaidLabel={t("send.ivePaid")}
               />
+              ) : null}
             </>
           ) : null}
         </div>

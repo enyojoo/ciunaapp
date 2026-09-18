@@ -23,6 +23,13 @@ export interface HubTransactionSnapshot {
   fulfillmentType?: "online" | "in_person" | "vendor"
   deliveryAddressLine?: string | null
   formAnswers: Record<string, unknown>
+  /**
+   * Cart checkouts (multiple line items) mirror `hub_order_items` here too, so a consumer that
+   * only has `hub_snapshot` (e.g. an email template) can render a summary without an extra join.
+   * `hub_order_items` is the source of truth; this is a convenience copy, frozen at checkout.
+   */
+  items?: { title: string; quantity: number; unitPrice: number; lineTotal: number }[]
+  vendorName?: string | null
 }
 
 /** Vendor summary joined on public hub product APIs for storefront links. */
@@ -65,6 +72,52 @@ export interface HubProductRow {
   funded_max: number | null
   sla_text: string | null
   image_url: string | null
+  /** Null = unlimited stock. */
+  stock_quantity?: number | null
+  sold_out?: boolean
   created_at: string
   updated_at: string
 }
+
+/** One line in a cart, hydrated with live product data (price/availability may have moved since it was added). */
+export interface HubCartItemRow {
+  id: string
+  cart_id: string
+  hub_product_id: string
+  quantity: number
+  /** Joined live from `hub_products`; absent/null when the product was deleted. */
+  product?: HubProductRow | null
+  /** True when `product` is missing, archived, or `sold_out` — surfaced so the UI can flag it instead of silently changing the total. */
+  unavailable?: boolean
+  created_at: string
+  updated_at: string
+}
+
+/** A single-vendor, server-synced cart (Food/Mart only). */
+export interface HubCartRow {
+  id: string
+  user_id: string
+  service_line_slug: "food" | "mart"
+  vendor_id: string
+  vendor?: HubProductVendorSummary
+  status: "active" | "converted" | "abandoned"
+  items: HubCartItemRow[]
+  created_at: string
+  updated_at: string
+}
+
+/** Frozen line item on a placed order (`transactions` row = order header). */
+export interface HubOrderItemRow {
+  id: string
+  transaction_id: string
+  hub_product_id: string | null
+  title: string
+  unit_price: number
+  currency: string
+  quantity: number
+  line_total: number
+  created_at: string
+}
+
+/** How a Hub/Expert transaction was paid. */
+export type HubPaymentProvider = "manual" | "yookassa"

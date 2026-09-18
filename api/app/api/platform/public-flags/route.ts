@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { getCachedPublicPlatformFlags } from "@/lib/platform-settings-server"
+import { isYooKassaConfigured } from "@/lib/yookassa"
 
 export async function GET() {
   try {
@@ -16,6 +17,7 @@ export async function GET() {
         maintenanceMode: false,
         registrationEnabled: true,
         emailVerificationRequired: true,
+        yookassaEnabled: isYooKassaConfigured(),
       },
       { status: 200 },
     )

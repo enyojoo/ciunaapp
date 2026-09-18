@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
+import { Toaster } from "sonner"
 import { AuthProvider } from "@/lib/auth-context"
 import { PostHogProvider } from "@/components/posthog-provider"
 import { ProtectedRouteWrapper } from "@/components/auth/protected-route-wrapper"
@@ -131,6 +132,7 @@ export default function RootLayout({
                 <AuthProvider>
                   <ProtectedRouteWrapper>{children}</ProtectedRouteWrapper>
                 </AuthProvider>
+                <Toaster position="top-center" richColors closeButton />
               </ThemeProvider>
             </I18nProvider>
           </PostHogProvider>

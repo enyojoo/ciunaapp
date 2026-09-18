@@ -3,11 +3,15 @@ import { generateTransactionId } from "@/lib/transaction-id"
 import { roundMoney } from "@/utils/currency"
 import { computeHubFeeFromReceive } from "@/lib/hub-fee"
 import { hubPayMatchesProductCurrency, hubSyntheticSameCurrencyRateRow } from "@/lib/hub-same-currency-rate"
+import { computeHubCartTotals } from "@/lib/hub-cart-pricing"
+import { getCartById, markCartConverted } from "@/lib/hub-cart-server"
+import { attachYooKassaPayment, type GatewayConfirmation } from "@/lib/gateway-checkout"
 import type { HubTransactionSnapshot, HubProductRow } from "@/lib/hub-types"
 import type { ExchangeRate } from "@/types"
 import { hubProductEffectivePrice } from "@/lib/hub-product-price"
 
 const HUB_IDEMPOTENCY_PREFIX = "HUB:"
+const HUB_CART_IDEMPOTENCY_PREFIX = "HUBCART:"
 
 function parseFormSchema(raw: unknown): unknown[] {
   if (Array.isArray(raw)) return raw
@@ -203,6 +207,211 @@ export async function createHubCheckoutTransaction(
     throw new Error("Failed to create transaction")
   }
 
+  return { transaction: inserted as Record<string, unknown> }
+}
+
+export interface HubCartCheckoutPayload {
+  cartId: string
+  sendCurrency: string
+  contactName: string
+  contactPhone: string
+  deliveryAddressLine?: string | null
+  deliveryAddressId?: string | null
+  formAnswers?: Record<string, unknown>
+  idempotencyKey?: string
+  paymentMethod: "manual" | "yookassa"
+  /**
+   * App origin (e.g. `https://app.ciuna.com`) the hosted `/pay/[transactionId]` page lives on —
+   * only needed to override `NEXT_PUBLIC_APP_URL` (e.g. a mobile build pointing at a different
+   * origin). The transaction id is appended server-side once it's generated.
+   */
+  returnUrl?: string
+}
+
+export interface HubCartCheckoutResult {
+  transaction: Record<string, unknown>
+  duplicate?: boolean
+  gateway?: GatewayConfirmation
+}
+
+/**
+ * Checkout for a multi-item Hub cart (Food/Mart). Re-validates every item server-side against
+ * live `hub_products` rows — cart items never carry a frozen price, so this is the only place
+ * that price is locked in. Writes one `transactions` header row + N `hub_order_items` rows.
+ */
+export async function createHubCartCheckoutTransaction(
+  userId: string,
+  payload: HubCartCheckoutPayload,
+): Promise<HubCartCheckoutResult> {
+  const server = createServerClient()
+  const {
+    cartId,
+    sendCurrency,
+    contactName,
+    contactPhone,
+    deliveryAddressLine,
+    deliveryAddressId,
+    formAnswers = {},
+    idempotencyKey,
+    paymentMethod,
+    returnUrl,
+  } = payload
+
+  if (idempotencyKey?.trim()) {
+    const ref = `${HUB_CART_IDEMPOTENCY_PREFIX}${idempotencyKey.trim()}`
+    const { data: existing } = await server
+      .from("transactions")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("reference", ref)
+      .maybeSingle()
+    if (existing?.transaction_id) {
+      return { transaction: existing as Record<string, unknown>, duplicate: true }
+    }
+  }
+
+  const cart = await getCartById(userId, cartId)
+  if (cart.status !== "active") throw new Error("Cart is no longer active")
+  if (!cart.items.length) throw new Error("Cart is empty")
+
+  const unavailable = cart.items.filter((i) => i.unavailable || !i.product)
+  if (unavailable.length) {
+    throw new Error(`Some items in your cart are no longer available: ${unavailable.map((i) => i.product?.title || i.hub_product_id).join(", ")}`)
+  }
+
+  const items = cart.items.map((i) => ({ product: i.product as HubProductRow, quantity: i.quantity }))
+  const firstProduct = items[0].product
+  const fulfillmentType = firstProduct.fulfillment_type === "in_person" ? "in_person" : "vendor"
+
+  if (fulfillmentType === "in_person" && !deliveryAddressLine?.trim()) {
+    throw new Error("Delivery address required for in-person fulfillment")
+  }
+  if (paymentMethod === "yookassa" && String(sendCurrency).trim().toUpperCase() !== "RUB") {
+    throw new Error("Online payment is only available in RUB")
+  }
+
+  const receiveCurrencyResolved = String(firstProduct.fixed_currency || "").trim().toUpperCase()
+  const payInProductCurrency = hubPayMatchesProductCurrency(sendCurrency, receiveCurrencyResolved)
+
+  let rateRow: ExchangeRate
+  if (payInProductCurrency) {
+    rateRow = hubSyntheticSameCurrencyRateRow(sendCurrency, receiveCurrencyResolved)
+  } else {
+    const { data: row, error: rErr } = await server
+      .from("exchange_rates")
+      .select("*")
+      .eq("from_currency", sendCurrency)
+      .eq("to_currency", receiveCurrencyResolved)
+      .eq("status", "active")
+      .single()
+    if (rErr || !row) throw new Error("Exchange rate not available for selected currencies")
+    rateRow = row as ExchangeRate
+  }
+
+  const totals = computeHubCartTotals(items, rateRow)
+  const vendorTitle = cart.vendor?.name ? String(cart.vendor.name) : "Hub order"
+
+  const snapshot: HubTransactionSnapshot = {
+    productTitle: `${totals.lines.length} item${totals.lines.length === 1 ? "" : "s"} from ${vendorTitle}`,
+    productPricingType: "fixed",
+    fundedAmount: totals.totalReceive,
+    fundedCurrency: totals.currency,
+    feePercent: null,
+    hubFeeAmount: totals.hubFeeReceive,
+    corridorFeeAmount: totals.transferFee,
+    billingContext: null,
+    contactName: contactName.trim(),
+    contactPhone: contactPhone.trim(),
+    fulfillmentType: fulfillmentType === "in_person" ? "in_person" : "vendor",
+    deliveryAddressLine: deliveryAddressLine?.trim() || null,
+    formAnswers,
+    items: totals.lines.map((l) => ({ title: l.title, quantity: l.quantity, unitPrice: l.unitPrice, lineTotal: l.lineTotal })),
+    vendorName: vendorTitle,
+  }
+
+  const transactionId = generateTransactionId()
+  const reference = idempotencyKey?.trim() ? `${HUB_CART_IDEMPOTENCY_PREFIX}${idempotencyKey.trim()}` : null
+
+  const insertRow = {
+    transaction_id: transactionId,
+    user_id: userId,
+    recipient_id: null,
+    send_amount: totals.totalSend,
+    send_currency: sendCurrency,
+    receive_amount: totals.totalReceive,
+    receive_currency: totals.currency,
+    exchange_rate: totals.exchangeRate,
+    fee_amount: totals.transferFee,
+    fee_type: rateRow.fee_type,
+    total_amount: totals.total,
+    reference,
+    fulfillment_type: "bank_transfer",
+    logistics_fee_amount: 0,
+    logistics_fee_type_snapshot: null,
+    delivery_address_line: deliveryAddressLine?.trim() || null,
+    delivery_phone: contactPhone.trim(),
+    delivery_address_id: deliveryAddressId || null,
+    transaction_source: "hub",
+    hub_product_id: null,
+    hub_snapshot: snapshot as unknown as Record<string, unknown>,
+    hub_fee_amount: totals.hubFeeReceive,
+    payment_provider: paymentMethod,
+    status: "pending",
+  }
+
+  const { data: inserted, error: insErr } = await server.from("transactions").insert(insertRow).select().single()
+
+  if (insErr || !inserted) {
+    if (insErr?.code === "23505" && reference) {
+      const { data: again } = await server
+        .from("transactions")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("reference", reference)
+        .maybeSingle()
+      if (again) return { transaction: again as Record<string, unknown>, duplicate: true }
+    }
+    console.error("hub cart checkout insert error", insErr)
+    throw new Error("Failed to create transaction")
+  }
+
+  const orderItemRows = totals.lines.map((l) => ({
+    transaction_id: inserted.id,
+    hub_product_id: l.hubProductId,
+    title: l.title,
+    unit_price: l.unitPrice,
+    currency: totals.currency,
+    quantity: l.quantity,
+    line_total: l.lineTotal,
+  }))
+
+  const { error: itemsErr } = await server.from("hub_order_items").insert(orderItemRows)
+  if (itemsErr) {
+    console.error("hub cart checkout order items insert error", itemsErr)
+    await server.from("transactions").delete().eq("id", inserted.id)
+    throw new Error("Failed to create order items")
+  }
+
+  if (paymentMethod === "yookassa") {
+    try {
+      const appUrl = (returnUrl?.trim() || process.env.NEXT_PUBLIC_APP_URL || "https://app.ciuna.com").replace(/\/$/, "")
+      const gateway = await attachYooKassaPayment({
+        transactionRowId: String(inserted.id),
+        transactionId,
+        amount: totals.total,
+        description: snapshot.productTitle,
+        returnUrl: `${appUrl}/pay/${transactionId.toLowerCase()}`,
+        metadata: { transactionId, userId },
+      })
+      await markCartConverted(cartId)
+      return { transaction: inserted as Record<string, unknown>, gateway }
+    } catch (e) {
+      // attachYooKassaPayment already rolled back the transaction row on failure.
+      throw e instanceof Error ? e : new Error("Failed to start online payment")
+    }
+  }
+
+  await markCartConverted(cartId)
   return { transaction: inserted as Record<string, unknown> }
 }
 

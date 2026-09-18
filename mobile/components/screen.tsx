@@ -33,13 +33,16 @@ export function ScreenScroll({
   children,
   keyboard = false,
   contentStyle,
+  /** Pass `["left", "right"]` on a screen rendered under a native header (`headerShown: true`) — the header already owns the top safe area, so the default `"top"` edge would double it up. */
+  edges,
 }: {
   children: ReactNode
   keyboard?: boolean
   contentStyle?: ViewStyle
+  edges?: Edge[]
 }) {
   return (
-    <Screen keyboard={keyboard}>
+    <Screen keyboard={keyboard} edges={edges}>
       <ScrollView
         style={styles.flex}
         keyboardShouldPersistTaps="handled"

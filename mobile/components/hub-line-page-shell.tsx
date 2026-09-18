@@ -46,6 +46,7 @@ function LineHero({
   heroLoading,
   backAriaLabel,
   onBack,
+  trailingAction,
 }: {
   title: string
   subtitle?: string | null
@@ -56,6 +57,7 @@ function LineHero({
   heroLoading?: boolean
   backAriaLabel: string
   onBack: () => void
+  trailingAction?: ReactNode
 }) {
   if (heroLoading) {
     return (
@@ -100,6 +102,7 @@ function LineHero({
           </Text>
         ) : null}
       </View>
+      {trailingAction}
     </View>
   )
 }
@@ -115,6 +118,7 @@ function StorefrontHero({
   heroLoading,
   backAriaLabel,
   onBack,
+  trailingAction,
 }: {
   title: string
   subtitle?: string | null
@@ -125,6 +129,7 @@ function StorefrontHero({
   heroLoading?: boolean
   backAriaLabel: string
   onBack: () => void
+  trailingAction?: ReactNode
 }) {
   if (heroLoading) {
     return (
@@ -169,6 +174,7 @@ function StorefrontHero({
               </View>
             ) : null}
           </View>
+          {trailingAction}
         </View>
         {subtitle ? (
           <Text style={styles.storeBio} numberOfLines={4}>
@@ -198,6 +204,7 @@ export function HubLinePageShell({
   refreshControl,
   keyboard,
   variant = "line",
+  trailingAction,
 }: {
   title: string
   subtitle?: string | null
@@ -212,6 +219,8 @@ export function HubLinePageShell({
   refreshControl?: ReactElement<RefreshControlProps>
   keyboard?: boolean
   variant?: "line" | "storefront"
+  /** Optional extra control in the hero row (e.g. a cart icon on Food/Mart). */
+  trailingAction?: ReactNode
 }) {
   const router = useRouter()
   const photo = photoUrl?.trim() || ""
@@ -233,6 +242,7 @@ export function HubLinePageShell({
             heroLoading={heroLoading}
             backAriaLabel={backAriaLabel}
             onBack={onBack}
+            trailingAction={trailingAction}
           />
         ) : (
           <LineHero
@@ -245,6 +255,7 @@ export function HubLinePageShell({
             heroLoading={heroLoading}
             backAriaLabel={backAriaLabel}
             onBack={onBack}
+            trailingAction={trailingAction}
           />
         )}
       </SafeAreaView>
@@ -396,6 +407,9 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: colors.heroBody,
   },
-  scroll: { paddingBottom: 40 },
+  // A little extra clearance vs. a plain screen's 40 — Food/Mart screens under this shell can also
+  // show the floating cart bar, and last-row content ending up pressed against it looks cramped.
+  // Kept modest (not a big empty void), and harmless for lines that never show that bar.
+  scroll: { paddingBottom: 56 },
   body: { paddingHorizontal: space.page, paddingTop: 20 },
 })

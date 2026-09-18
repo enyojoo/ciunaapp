@@ -18,13 +18,19 @@ export function CatalogProducts({
   showCategory = false,
   onProductPress,
   onVendorPress,
+  cartLineSlug,
+  heading: headingProp,
 }: {
   products: HubProduct[]
   loading?: boolean
   showVendor?: boolean
   showCategory?: boolean
-  onProductPress: (product: HubProduct) => void
+  onProductPress?: (product: HubProduct) => void
   onVendorPress?: (product: HubProduct) => void
+  /** Food/Mart, any listing: fixed-price cards render Add-to-cart/stepper (each card owns its own cart lookup by `product.vendor_id`) instead of navigating. */
+  cartLineSlug?: "food" | "mart"
+  /** Overrides the default "Products" heading — e.g. "More from {vendor}" on the product detail screen's recommendations. */
+  heading?: string
 }) {
   const { t } = useTranslation("app")
   const [category, setCategory] = useState("")
@@ -35,7 +41,7 @@ export function CatalogProducts({
   const buy = t("hub.buy", { defaultValue: "Buy" })
   const order = t("hub.order", { defaultValue: "Order" })
   const allLabel = t("hub.allCategories", { defaultValue: "All categories" })
-  const heading = t("hub.marketplaceProductsHeading", { defaultValue: "Products" })
+  const heading = headingProp || t("hub.marketplaceProductsHeading", { defaultValue: "Products" })
   const filterAria = t("hub.categoryFilterAria", { defaultValue: "Filter by category" })
   const pickerItems = useMemo(
     () => [{ id: ALL_VALUE, label: allLabel }, ...options.map((c) => ({ id: c, label: c }))],
@@ -114,8 +120,9 @@ export function CatalogProducts({
               cta={p.pricing_type === "user_input" ? order : buy}
               showVendor={showVendor}
               showCategory={showCategory}
-              onPress={() => onProductPress(p)}
+              onPress={onProductPress ? () => onProductPress(p) : undefined}
               onVendorPress={onVendorPress ? () => onVendorPress(p) : undefined}
+              cartLineSlug={cartLineSlug}
             />
           ))}
         </View>

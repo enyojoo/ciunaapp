@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
+import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
+import { CreditCard, Landmark } from "lucide-react-native"
 import { EmptyState } from "@/components/empty-state"
 import { Field } from "@/components/field"
 import { PayStep } from "@/components/pay-step"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
-import { fetchWithAuth } from "@/lib/api"
+import { apiUrl, fetchWithAuth } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { useFx } from "@/lib/use-fx"
+import { openInAppBrowser } from "@/lib/in-app-browser"
 import type { ExpertSlot } from "@/lib/types"
-import { colors, type as typeSize } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export default function ExpertBookScreen() {
   const { serviceId } = useLocalSearchParams<{ serviceId: string }>()
@@ -33,6 +36,25 @@ export default function ExpertBookScreen() {
   const { showError } = useToast()
   const [busy, setBusy] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [payChoice, setPayChoice] = useState<"manual" | "yookassa">("manual")
+  const [yookassaEnabled, setYookassaEnabled] = useState(false)
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const res = await fetchWithAuth("/api/platform/public-flags")
+        if (!res.ok) return
+        const body = (await res.json()) as { yookassaEnabled?: boolean }
+        setYookassaEnabled(Boolean(body.yookassaEnabled))
+      } catch {
+        // ignore — online payment simply stays hidden
+      }
+    })()
+  }, [])
+
+  useEffect(() => {
+    if (sendCurrency.toUpperCase() !== "RUB" && payChoice === "yookassa") setPayChoice("manual")
+  }, [sendCurrency, payChoice])
 
   useEffect(() => {
     if (!serviceId) return
@@ -51,31 +73,41 @@ export default function ExpertBookScreen() {
   const submit = async () => {
     if (!slotId) return
     setBusy(true)
-    const res = await fetchWithAuth("/api/expert/bookings/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        expert_service_slot_id: slotId,
-        sendCurrency,
-        receiveCurrency,
-        contactName: contactName.trim(),
-        contactPhone: contactPhone.trim(),
-        message: message.trim() || null,
-        idempotencyKey: `${slotId}:${Date.now()}`,
-      }),
-    })
-    const body = await res.json().catch(() => ({}))
-    setBusy(false)
-    if (!res.ok) {
-      showError((body as { error?: string }).error || "Booking failed. Try again.")
-      return
+    try {
+      const res = await fetchWithAuth("/api/expert/bookings/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          expert_service_slot_id: slotId,
+          sendCurrency,
+          receiveCurrency,
+          contactName: contactName.trim(),
+          contactPhone: contactPhone.trim(),
+          message: message.trim() || null,
+          idempotencyKey: `${slotId}:${Date.now()}`,
+          paymentMethod: payChoice,
+        }),
+      })
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        showError((body as { error?: string }).error || "Booking failed. Try again.")
+        return
+      }
+      const id = (body as { transaction?: { transaction_id: string } }).transaction?.transaction_id
+      if (!id) return
+
+      if (payChoice === "yookassa") {
+        await openInAppBrowser(apiUrl(`/pay/${id.toLowerCase()}`))
+      }
+      router.replace(`/orders/${id.toLowerCase()}` as never)
+    } finally {
+      setBusy(false)
     }
-    const id = (body as { transaction?: { transaction_id: string } }).transaction?.transaction_id
-    if (id) router.replace(`/orders/${id.toLowerCase()}` as never)
   }
 
   return (
-    <ScreenScroll keyboard>
+    <ScreenScroll keyboard edges={["left", "right"]}>
+      <StatusBar style="dark" />
       {service?.title ? <Text style={styles.title}>{service.title}</Text> : null}
       {service?.short_description ? <Text style={styles.desc}>{service.short_description}</Text> : null}
       <Text className="mb-3 text-lg font-semibold text-gray-900">
@@ -117,8 +149,30 @@ export default function ExpertBookScreen() {
           <Field label="Contact name" value={contactName} onChangeText={setContactName} />
           <Field label="Phone" value={contactPhone} onChangeText={setContactPhone} keyboardType="phone-pad" />
           <Field label="Note (optional)" value={message} onChangeText={setMessage} />
+          {yookassaEnabled && sendCurrency.toUpperCase() === "RUB" ? (
+            <View style={styles.payChoiceRow}>
+              <Pressable
+                onPress={() => setPayChoice("manual")}
+                style={[styles.payChoice, payChoice === "manual" && styles.payChoiceActive]}
+              >
+                <Landmark size={18} color={payChoice === "manual" ? colors.primary : colors.muted} />
+                <Text style={[styles.payChoiceText, payChoice === "manual" && styles.payChoiceTextActive]}>
+                  {t("hub.checkout.payManual", { defaultValue: "Bank transfer" })}
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setPayChoice("yookassa")}
+                style={[styles.payChoice, payChoice === "yookassa" && styles.payChoiceActive]}
+              >
+                <CreditCard size={18} color={payChoice === "yookassa" ? colors.primary : colors.muted} />
+                <Text style={[styles.payChoiceText, payChoice === "yookassa" && styles.payChoiceTextActive]}>
+                  {t("hub.checkout.payOnline", { defaultValue: "Pay online" })}
+                </Text>
+              </Pressable>
+            </View>
+          ) : null}
           <PrimaryButton
-            label="Pay"
+            label={payChoice === "yookassa" ? t("hub.checkout.payOnline", { defaultValue: "Pay online" }) : "Pay"}
             onPress={() => void submit()}
             busy={busy}
             disabled={!contactName.trim() || !contactPhone.trim()}
@@ -132,4 +186,17 @@ export default function ExpertBookScreen() {
 const styles = StyleSheet.create({
   title: { marginBottom: 8, fontSize: 20, fontWeight: "600", color: colors.text },
   desc: { marginBottom: 16, fontSize: typeSize.body, lineHeight: 22, color: colors.muted },
+  payChoiceRow: { flexDirection: "row", gap: 10, marginTop: 4, marginBottom: 12 },
+  payChoice: {
+    flex: 1,
+    alignItems: "center",
+    gap: 6,
+    paddingVertical: 14,
+    borderRadius: radius.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  payChoiceActive: { borderColor: colors.primary, backgroundColor: "#FFF7ED" },
+  payChoiceText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.muted },
+  payChoiceTextActive: { color: colors.primary },
 })

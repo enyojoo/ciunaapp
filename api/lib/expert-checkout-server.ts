@@ -3,6 +3,7 @@ import { generateTransactionId } from "@/lib/transaction-id"
 import { roundMoney } from "@/utils/currency"
 import { computeHubFeeFromReceive } from "@/lib/hub-fee"
 import { hubPayMatchesProductCurrency, hubSyntheticSameCurrencyRateRow } from "@/lib/hub-same-currency-rate"
+import { attachYooKassaPayment, type GatewayConfirmation } from "@/lib/gateway-checkout"
 import type { HubTransactionSnapshot } from "@/lib/hub-types"
 import type { ExchangeRate } from "@/types"
 
@@ -25,6 +26,9 @@ export interface ExpertCheckoutPayload {
   contactPhone: string
   message?: string | null
   idempotencyKey?: string
+  paymentMethod?: "manual" | "yookassa"
+  /** App origin override for the hosted `/pay/[transactionId]` page — see `hub-checkout-server.ts`. */
+  returnUrl?: string
 }
 
 export function computeExpertFundedAmount(params: {
@@ -61,7 +65,7 @@ export function computeExpertFundedAmount(params: {
 export async function createExpertBookingCheckoutTransaction(
   userId: string,
   payload: ExpertCheckoutPayload,
-): Promise<{ transaction: Record<string, unknown>; booking: Record<string, unknown>; duplicate?: boolean }> {
+): Promise<{ transaction: Record<string, unknown>; booking: Record<string, unknown>; duplicate?: boolean; gateway?: GatewayConfirmation }> {
   const server = createServerClient()
   const {
     expert_service_slot_id: slotId,
@@ -71,6 +75,8 @@ export async function createExpertBookingCheckoutTransaction(
     contactPhone,
     message,
     idempotencyKey,
+    paymentMethod = "manual",
+    returnUrl,
   } = payload
 
   const sendCur = sendCurrency.trim()
@@ -81,6 +87,9 @@ export async function createExpertBookingCheckoutTransaction(
   }
   if (!contactName.trim() || !contactPhone.trim()) {
     throw new Error("Contact name and phone required")
+  }
+  if (paymentMethod === "yookassa" && sendCur.toUpperCase() !== "RUB") {
+    throw new Error("Online payment is only available in RUB")
   }
 
   if (idempotencyKey?.trim()) {
@@ -243,6 +252,7 @@ export async function createExpertBookingCheckoutTransaction(
     hub_product_id: null,
     hub_snapshot: snapshot as unknown as Record<string, unknown>,
     hub_fee_amount: hubFeeAmount,
+    payment_provider: paymentMethod,
     status: "pending",
   }
 
@@ -293,6 +303,29 @@ export async function createExpertBookingCheckoutTransaction(
       .update({ status: "available", updated_at: new Date().toISOString() })
       .eq("id", slotId)
     throw new Error("Failed to create booking record")
+  }
+
+  if (paymentMethod === "yookassa") {
+    try {
+      const appUrl = (returnUrl?.trim() || process.env.NEXT_PUBLIC_APP_URL || "https://app.ciuna.com").replace(/\/$/, "")
+      const gateway = await attachYooKassaPayment({
+        transactionRowId: String(insertedTx.id),
+        transactionId,
+        amount: totalAmount,
+        description: snapshot.productTitle,
+        returnUrl: `${appUrl}/pay/${transactionId.toLowerCase()}`,
+        metadata: { transactionId, userId },
+      })
+      return { transaction: insertedTx as Record<string, unknown>, booking: booking as Record<string, unknown>, gateway }
+    } catch (e) {
+      // attachYooKassaPayment already rolled back the transaction row — undo the booking + slot lock too.
+      await server.from("expert_bookings").delete().eq("id", booking.id)
+      await server
+        .from("expert_service_slots")
+        .update({ status: "available", updated_at: new Date().toISOString() })
+        .eq("id", slotId)
+      throw e instanceof Error ? e : new Error("Failed to start online payment")
+    }
   }
 
   return { transaction: insertedTx as Record<string, unknown>, booking: booking as Record<string, unknown> }

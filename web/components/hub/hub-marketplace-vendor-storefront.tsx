@@ -74,10 +74,12 @@ function VendorCatalogInner({
   lineSlug,
   vendorSlug,
   cacheUserId,
+  vendorId,
 }: {
   lineSlug: string
   vendorSlug: string
   cacheUserId: string
+  vendorId?: string | null
 }) {
   const vendorBasePath = hubMarketplaceVendorPath(lineSlug, vendorSlug)
   const [products, setProducts] = useState<HubProductRow[]>([])
@@ -142,6 +144,7 @@ function VendorCatalogInner({
       loading={loading}
       vendorBasePath={vendorBasePath}
       lineSlug={lineSlug}
+      vendorId={vendorId}
       showVendorChip={false}
     />
   )
@@ -345,7 +348,12 @@ export function HubMarketplaceVendorStorefront({ lineSlug: lineProp, vendorSlug:
       heroLoading={false}
       showHeroClose={showHeroClose}
     >
-      <VendorCatalogInner lineSlug={lineSlug} vendorSlug={vendorSlug} cacheUserId={sliceVendorCacheUserId} />
+      <VendorCatalogInner
+        lineSlug={lineSlug}
+        vendorSlug={vendorSlug}
+        cacheUserId={sliceVendorCacheUserId}
+        vendorId={displayVendor?.id ?? null}
+      />
     </HubLinePageShell>
   )
 }

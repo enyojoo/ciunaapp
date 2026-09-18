@@ -28,6 +28,7 @@ export default function RootLayout() {
                 headerStyle: { backgroundColor: colors.paper },
                 headerShadowVisible: false,
                 headerTintColor: colors.text,
+                headerBackButtonDisplayMode: "minimal",
                 animationDuration: 180,
               }}
             >

@@ -68,6 +68,7 @@ export function HubLinePageShell({
   heroBelowTitle,
   heroLoading,
   showHeroClose = true,
+  heroTrailingAction,
 }: {
   title: string
   subtitle: string | null
@@ -95,6 +96,8 @@ export function HubLinePageShell({
   heroLoading?: boolean
   /** When false, hides the top-right hero close control (e.g. public vendor / expert storefront). */
   showHeroClose?: boolean
+  /** Optional extra control in the top-right hero row, before the close button (e.g. a cart icon on Food/Mart). */
+  heroTrailingAction?: ReactNode
 }) {
   const locationLine = (heroLocation || "").trim()
   const fulfillmentLine = (heroFulfillment || "").trim()
@@ -116,15 +119,18 @@ export function HubLinePageShell({
                     <div className="hidden h-4 max-w-sm rounded-md bg-white/10 sm:block sm:w-[70%]" aria-hidden />
                   </div>
                 </div>
-                {showHeroClose ? (
-                  <HeroCloseLink
-                    backHref={backHref}
-                    backToHubAriaLabel={backToHubAriaLabel}
-                    preferHistory={heroClosePreferHistory}
-                  />
-                ) : (
-                  <span className="h-8 w-8 shrink-0 sm:h-9 sm:w-9 md:h-10 md:w-10 xl:h-11 xl:w-11" aria-hidden />
-                )}
+                <div className="flex shrink-0 items-center gap-2">
+                  {heroTrailingAction}
+                  {showHeroClose ? (
+                    <HeroCloseLink
+                      backHref={backHref}
+                      backToHubAriaLabel={backToHubAriaLabel}
+                      preferHistory={heroClosePreferHistory}
+                    />
+                  ) : (
+                    <span className="h-8 w-8 shrink-0 sm:h-9 sm:w-9 md:h-10 md:w-10 xl:h-11 xl:w-11" aria-hidden />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -168,15 +174,18 @@ export function HubLinePageShell({
                       ) : null}
                     </div>
                   </div>
-                  {showHeroClose ? (
-                    <HeroCloseLink
-                    backHref={backHref}
-                    backToHubAriaLabel={backToHubAriaLabel}
-                    preferHistory={heroClosePreferHistory}
-                  />
-                  ) : (
-                    <span className="h-8 w-8 shrink-0 sm:h-9 sm:w-9 md:h-10 md:w-10 xl:h-11 xl:w-11" aria-hidden />
-                  )}
+                  <div className="flex shrink-0 items-center gap-2">
+                    {heroTrailingAction}
+                    {showHeroClose ? (
+                      <HeroCloseLink
+                        backHref={backHref}
+                        backToHubAriaLabel={backToHubAriaLabel}
+                        preferHistory={heroClosePreferHistory}
+                      />
+                    ) : (
+                      <span className="h-8 w-8 shrink-0 sm:h-9 sm:w-9 md:h-10 md:w-10 xl:h-11 xl:w-11" aria-hidden />
+                    )}
+                  </div>
                 </div>
                 {subtitle ? (
                   <p className="min-w-0 max-w-none text-pretty text-sm/6 text-orange-50/95 sm:text-base/7">
@@ -210,15 +219,18 @@ export function HubLinePageShell({
                     <p className="max-w-xl pt-1 text-sm/6 text-orange-50 sm:text-base/7">{subtitle}</p>
                   ) : null}
                 </div>
-                {showHeroClose ? (
-                  <HeroCloseLink
-                    backHref={backHref}
-                    backToHubAriaLabel={backToHubAriaLabel}
-                    preferHistory={heroClosePreferHistory}
-                  />
-                ) : (
-                  <span className="h-8 w-8 shrink-0 sm:h-9 sm:w-9 md:h-10 md:w-10 xl:h-11 xl:w-11" aria-hidden />
-                )}
+                <div className="flex shrink-0 items-center gap-2">
+                  {heroTrailingAction}
+                  {showHeroClose ? (
+                    <HeroCloseLink
+                      backHref={backHref}
+                      backToHubAriaLabel={backToHubAriaLabel}
+                      preferHistory={heroClosePreferHistory}
+                    />
+                  ) : (
+                    <span className="h-8 w-8 shrink-0 sm:h-9 sm:w-9 md:h-10 md:w-10 xl:h-11 xl:w-11" aria-hidden />
+                  )}
+                </div>
               </div>
             )}
           </div>

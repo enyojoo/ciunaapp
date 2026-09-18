@@ -1,10 +1,13 @@
 import { unstable_cache } from "next/cache"
 import { createServerClient } from "@/lib/supabase"
+import { isYooKassaConfigured } from "@/lib/yookassa"
 
 export type PublicPlatformFlags = {
   maintenanceMode: boolean
   registrationEnabled: boolean
   emailVerificationRequired: boolean
+  /** Whether "Pay online" (YooKassa) can be offered at Hub/Expert checkout — env-derived, not a DB toggle. */
+  yookassaEnabled: boolean
 }
 
 const KEYS = [
@@ -29,6 +32,7 @@ async function fetchPublicPlatformFlagsFromDb(): Promise<PublicPlatformFlags> {
       maintenanceMode: false,
       registrationEnabled: true,
       emailVerificationRequired: true,
+      yookassaEnabled: isYooKassaConfigured(),
     }
   }
   const { data, error } = await supabase
@@ -42,6 +46,7 @@ async function fetchPublicPlatformFlagsFromDb(): Promise<PublicPlatformFlags> {
       maintenanceMode: false,
       registrationEnabled: true,
       emailVerificationRequired: true,
+      yookassaEnabled: isYooKassaConfigured(),
     }
   }
 
@@ -58,6 +63,7 @@ async function fetchPublicPlatformFlagsFromDb(): Promise<PublicPlatformFlags> {
     emailVerificationRequired: byKey.has("email_verification_required")
       ? parseRow(byKey.get("email_verification_required")?.value, byKey.get("email_verification_required")?.data_type)
       : true,
+    yookassaEnabled: isYooKassaConfigured(),
   }
 }
 

@@ -1,20 +1,28 @@
 import { useEffect, useState } from "react"
-import { StyleSheet, Text, View } from "react-native"
-import { useLocalSearchParams, useRouter } from "expo-router"
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
+import { StatusBar } from "expo-status-bar"
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
+import { MapPin } from "lucide-react-native"
 import { EmptyState } from "@/components/empty-state"
 import {
   ExpertServiceCard,
   ExpertServiceSkeleton,
   expertServiceToCatalog,
 } from "@/components/expert-catalog"
-import { HubLinePageShell } from "@/components/hub-line-page-shell"
+import { ScreenScroll } from "@/components/screen"
 import { apiFetch } from "@/lib/api"
 import type { ExpertProfile, ExpertService } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
+/**
+ * Expert profile — same plain native header as a product/store screen, not the orange gradient
+ * hero: the gradient is reserved for service-line screens (Home → Experts). A real profile-style
+ * body underneath: a proper avatar, name, headline/category, location, bio, then bookable services.
+ */
 export default function ExpertProfileScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
+  const navigation = useNavigation()
   const router = useRouter()
   const { t } = useTranslation("app")
   const [profile, setProfile] = useState<ExpertProfile | null>(null)
@@ -58,37 +66,71 @@ export default function ExpertProfileScreen() {
     }
   }, [slug])
 
+  // No title — the expert's name is already the big heading in the body; a repeated header title is redundant.
+  useEffect(() => {
+    navigation.setOptions({ title: "" })
+  }, [navigation])
+
   const bio = (profile?.bio || "").trim()
   const meeting = (profile?.meeting_hint || "").trim()
   const showBioFrame = Boolean(bio || meeting)
+  const category = (profile?.category || "").trim()
+  const location = (profile?.service_area || "").trim()
 
-  if (!loading && (notFound || !profile)) {
+  if (loading && !profile) {
     return (
-      <HubLinePageShell
-        title={t("hub.expertNotFound", { defaultValue: "Expert not found" })}
-        subtitle={null}
-        backAriaLabel={t("hub.backToExperts", { defaultValue: "Back to experts" })}
-        backHref="/experts"
-      >
+      <ScreenScroll edges={["left", "right"]}>
+        <StatusBar style="dark" />
+        <View style={styles.center}>
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      </ScreenScroll>
+    )
+  }
+
+  if (notFound || !profile) {
+    return (
+      <ScreenScroll edges={["left", "right"]}>
+        <StatusBar style="dark" />
         <EmptyState
           title={t("hub.expertNotFound", { defaultValue: "Expert not found" })}
           actionLabel={t("hub.expertsAll", { defaultValue: "All experts" })}
           onAction={() => router.replace("/experts" as never)}
         />
-      </HubLinePageShell>
+      </ScreenScroll>
     )
   }
 
   return (
-    <HubLinePageShell
-      title={profile?.display_name || t("experts.profile.loadingTitle", { defaultValue: "Expert" })}
-      subtitle={profile?.headline ?? null}
-      backAriaLabel={t("hub.backToExperts", { defaultValue: "Back to experts" })}
-      backHref="/experts"
-      photoUrl={profile?.image_url}
-      location={profile?.service_area}
-      heroLoading={loading && !profile}
-    >
+    <ScreenScroll edges={["left", "right"]}>
+      <StatusBar style="dark" />
+      <View style={styles.identityRow}>
+        <View style={styles.avatarWrap}>
+          {profile.image_url ? (
+            <Image source={{ uri: profile.image_url }} style={styles.avatar} resizeMode="cover" />
+          ) : null}
+        </View>
+        <View style={styles.identityBody}>
+          <Text style={styles.name} numberOfLines={2}>
+            {profile.display_name}
+          </Text>
+          {profile.headline ? (
+            <Text style={styles.headline} numberOfLines={2}>
+              {profile.headline}
+            </Text>
+          ) : null}
+          {category ? <Text style={styles.category}>{category}</Text> : null}
+          {location ? (
+            <View style={styles.locRow}>
+              <MapPin size={13} color={colors.muted} strokeWidth={2} />
+              <Text style={styles.loc} numberOfLines={1}>
+                {location}
+              </Text>
+            </View>
+          ) : null}
+        </View>
+      </View>
+
       {showBioFrame ? (
         <View style={styles.bioFrame}>
           {bio ? <Text style={styles.bio}>{bio}</Text> : null}
@@ -106,7 +148,7 @@ export default function ExpertProfileScreen() {
         </View>
       ) : services.length === 0 ? (
         <EmptyState title={t("experts.profile.noServices", { defaultValue: "No bookable services yet." })} />
-      ) : profile ? (
+      ) : (
         <View style={styles.grid}>
           {services.map((s) => (
             <ExpertServiceCard
@@ -117,12 +159,30 @@ export default function ExpertProfileScreen() {
             />
           ))}
         </View>
-      ) : null}
-    </HubLinePageShell>
+      )}
+    </ScreenScroll>
   )
 }
 
 const styles = StyleSheet.create({
+  center: { paddingVertical: 60, alignItems: "center" },
+  identityRow: { flexDirection: "row", gap: 14, marginBottom: 20 },
+  avatarWrap: {
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    overflow: "hidden",
+    backgroundColor: colors.paper,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  avatar: { width: "100%", height: "100%" },
+  identityBody: { flex: 1, minWidth: 0, justifyContent: "center", gap: 3 },
+  name: { fontSize: 20, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
+  headline: { fontSize: typeSize.body, color: colors.text },
+  category: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary },
+  locRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 2 },
+  loc: { flexShrink: 1, fontSize: typeSize.meta, color: colors.muted },
   bioFrame: {
     marginBottom: 24,
     borderRadius: radius.card,

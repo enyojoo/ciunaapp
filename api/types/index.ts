@@ -95,6 +95,11 @@ export interface Transaction {
   reference?: string
   receipt_url?: string
   receipt_filename?: string
+  /** manual (default, bank/mobile-money/crypto + receipt review) | yookassa (RUB online payment) */
+  payment_provider?: "manual" | "yookassa"
+  gateway_payment_id?: string | null
+  gateway_status?: string | null
+  gateway_confirmation_url?: string | null
   created_at: string
   updated_at: string
   completed_at?: string

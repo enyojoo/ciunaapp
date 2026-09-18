@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
+import { StatusBar } from "expo-status-bar"
 import { Image } from "expo-image"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -87,7 +88,8 @@ export default function HubCheckoutScreen() {
   }
 
   return (
-    <ScreenScroll keyboard>
+    <ScreenScroll keyboard edges={["left", "right"]}>
+      <StatusBar style="dark" />
       {product?.image_url ? (
         <Image source={{ uri: product.image_url }} style={styles.image} contentFit="cover" />
       ) : (

@@ -54,6 +54,9 @@ export default function OrderScreen() {
       : tx.recipient?.full_name || badge
   const amount = tx.send_amount ?? tx.total_amount
   const created = tx.created_at ? new Date(tx.created_at).toLocaleString() : ""
+  const items = Array.isArray((tx.hub_snapshot as { items?: unknown } | undefined)?.items)
+    ? ((tx.hub_snapshot as { items: { title: string; quantity: number; lineTotal: number }[] }).items)
+    : null
 
   return (
     <ScreenScroll>
@@ -64,7 +67,26 @@ export default function OrderScreen() {
           <Text className="text-xs font-medium text-gray-900">{badge}</Text>
         </View>
         <StatusChip status={tx.status} />
+        {tx.payment_provider === "yookassa" ? (
+          <View className="rounded-full bg-surface px-2.5 py-0.5">
+            <Text className="text-xs font-medium text-gray-900">Paid online</Text>
+          </View>
+        ) : null}
       </View>
+      {items ? (
+        <View className="mt-4 gap-1 rounded-xl bg-surface p-3">
+          {items.map((item, idx) => (
+            <View key={idx} className="flex-row items-center justify-between gap-2">
+              <Text className="flex-1 text-sm text-gray-700" numberOfLines={1}>
+                {item.quantity} × {item.title}
+              </Text>
+              <Text className="text-sm font-medium text-gray-900">
+                {formatMoney(item.lineTotal, tx.receive_currency)}
+              </Text>
+            </View>
+          ))}
+        </View>
+      ) : null}
       {created ? <Text className="mt-4 text-sm text-muted">{created}</Text> : null}
       {tx.receive_amount != null ? (
         <Text className="mt-4 text-base text-gray-900">

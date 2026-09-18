@@ -16,6 +16,9 @@ export type HubProduct = {
   vendor_id?: string | null
   funded_min?: number | null
   funded_max?: number | null
+  fee_percent?: number | null
+  stock_quantity?: number | null
+  sold_out?: boolean | null
   is_featured?: boolean | null
   updated_at?: string
   vendor?: {
@@ -26,6 +29,36 @@ export type HubProduct = {
     photo_url?: string | null
     is_verified?: boolean
   } | null
+}
+
+export type HubCartItem = {
+  id: string
+  cart_id: string
+  hub_product_id: string
+  quantity: number
+  product?: HubProduct | null
+  unavailable?: boolean
+}
+
+export type HubCart = {
+  id: string
+  user_id: string
+  service_line_slug: "food" | "mart"
+  vendor_id: string
+  vendor?: HubProduct["vendor"]
+  status: "active" | "converted" | "abandoned"
+  items: HubCartItem[]
+}
+
+export type HubOrderItem = {
+  id: string
+  transaction_id: string
+  hub_product_id: string | null
+  title: string
+  unit_price: number
+  currency: string
+  quantity: number
+  line_total: number
 }
 
 export type HubVendor = {
@@ -49,6 +82,8 @@ export type CombinedTransaction = {
   transaction_source?: string | null
   hub_snapshot?: Record<string, unknown> | null
   hub_product_category?: string | null
+  hub_order_items?: HubOrderItem[]
+  payment_provider?: "manual" | "yookassa" | null
   send_amount?: number
   send_currency?: string
   receive_amount?: number

@@ -4,12 +4,15 @@ export type PublicPlatformFlags = {
   maintenanceMode: boolean
   registrationEnabled: boolean
   emailVerificationRequired: boolean
+  /** Whether "Pay online" (YooKassa) can be offered at Hub/Expert checkout. */
+  yookassaEnabled: boolean
 }
 
 const DEFAULT_FLAGS: PublicPlatformFlags = {
   maintenanceMode: false,
   registrationEnabled: true,
   emailVerificationRequired: true,
+  yookassaEnabled: false,
 }
 
 async function fetchPublicPlatformFlagsFromApi(): Promise<PublicPlatformFlags> {
@@ -23,6 +26,7 @@ async function fetchPublicPlatformFlagsFromApi(): Promise<PublicPlatformFlags> {
       maintenanceMode: Boolean(body.maintenanceMode),
       registrationEnabled: body.registrationEnabled !== false,
       emailVerificationRequired: body.emailVerificationRequired !== false,
+      yookassaEnabled: Boolean(body.yookassaEnabled),
     }
   } catch (e) {
     console.error("fetchPublicPlatformFlagsFromApi:", e)

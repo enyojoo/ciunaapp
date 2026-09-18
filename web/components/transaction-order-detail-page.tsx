@@ -926,6 +926,8 @@ function TransactionOrderDetailPage() {
                                 productTitle?: string
                                 fundedAmount?: number
                                 fundedCurrency?: string
+                                items?: { title: string; quantity: number; unitPrice: number; lineTotal: number }[]
+                                vendorName?: string | null
                               }
                             | undefined
                           const receiveCur = String(snap?.fundedCurrency || transaction.receive_currency || "") || "—"
@@ -938,16 +940,31 @@ function TransactionOrderDetailPage() {
                           const subtotalRecv = roundMoney(productPrice + hubFeeRecv)
                           const rate = Number(transaction.exchange_rate)
                           const feeAmount = Number(transaction.fee_amount) || 0
+                          const items = Array.isArray(snap?.items) ? snap.items : null
                           return (
                             <>
                               <div className="flex min-w-0 items-start justify-between gap-2">
                                 <span className="min-w-0 text-gray-600">
-                                  {t("hub.checkout.productLabel", { defaultValue: "Product" })}
+                                  {items ? t("hub.checkout.orderLabel", { defaultValue: "Order" }) : t("hub.checkout.productLabel", { defaultValue: "Product" })}
                                 </span>
                                 <span className="text-right font-semibold text-gray-900">
                                   {typeof snap?.productTitle === "string" ? snap.productTitle : "—"}
                                 </span>
                               </div>
+                              {items ? (
+                                <div className="space-y-1 rounded-lg bg-gray-50 p-3">
+                                  {items.map((item, idx) => (
+                                    <div key={idx} className="flex min-w-0 items-start justify-between gap-2 text-sm">
+                                      <span className="min-w-0 truncate text-gray-600">
+                                        {item.quantity} × {item.title}
+                                      </span>
+                                      <span className="shrink-0 text-right font-medium tabular-nums text-gray-900">
+                                        {formatCurrency(item.lineTotal, receiveCur)}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : null}
                               <div className="flex min-w-0 items-start justify-between gap-2">
                                 <span className="min-w-0 text-gray-600">
                                   {t("hub.checkout.productPrice", { defaultValue: "Product price" })}
@@ -1002,6 +1019,16 @@ function TransactionOrderDetailPage() {
                                   {formatCurrency(transaction.total_amount, sendCur)}
                                 </span>
                               </div>
+                              {transaction.payment_provider === "yookassa" ? (
+                                <div className="flex min-w-0 items-start justify-between gap-2">
+                                  <span className="min-w-0 text-gray-600">
+                                    {t("hub.checkout.paymentMethod", { defaultValue: "Payment method" })}
+                                  </span>
+                                  <span className="shrink-0 text-right font-medium text-gray-900">
+                                    {t("hub.checkout.paidOnline", { defaultValue: "Paid online" })}
+                                  </span>
+                                </div>
+                              ) : null}
                             </>
                           )
                         })()}

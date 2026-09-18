@@ -10,6 +10,8 @@ import type { HubServiceLineRow } from "@/lib/hub-service-line-types"
 import { sortHubCatalogProducts } from "@/lib/hub-catalog-utils"
 import { HubLinePageShell } from "@/components/hub/hub-line-page-shell"
 import { VendorHubCatalog } from "@/components/hub/vendor-hub-catalog"
+import { HubCartBar } from "@/components/hub/hub-cart-bar"
+import { HubCartHeaderButton } from "@/components/hub/hub-cart-header-button"
 import { hubLineHomePath, hubMarketplaceVendorPath } from "@/lib/hub-public-paths"
 import {
   hubPublicHubJsonCacheUserId,
@@ -203,14 +205,17 @@ function FoodVendorStorefrontInner({ vendorSlug }: VendorPageProps) {
       heroTitleVerifiedAriaLabel={t("hub.verifiedVendor", { defaultValue: "Verified vendor" })}
       heroLoading={!vendor}
       showHeroClose={showHeroClose}
+      heroTrailingAction={<HubCartHeaderButton lineSlug={LINE_SLUG} />}
     >
       <VendorHubCatalog
         products={products}
         loading={loadingProducts}
         vendorBasePath={vendorBasePath}
         lineSlug={LINE_SLUG}
+        vendorId={vendor?.id ?? null}
         showVendorChip={false}
       />
+      <HubCartBar lineSlug={LINE_SLUG} vendorId={vendor?.id ?? null} />
     </HubLinePageShell>
   )
 }

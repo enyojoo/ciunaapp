@@ -100,6 +100,8 @@ interface CombinedTransaction {
   total_amount?: number | null
   reference?: string | null
   transaction_source?: string | null
+  payment_provider?: string | null
+  gateway_payment_id?: string | null
 }
 
 /** Maps a raw send transaction from admin data into CombinedTransaction, preserving cash-delivery fields. */
@@ -141,6 +143,8 @@ function mapSendTransaction(tx: any): CombinedTransaction {
     hub_fee_amount: tx.hub_fee_amount ?? null,
     hub_product_id: tx.hub_product_id ?? null,
     hub_product_category: tx.hub_product_category ?? null,
+    payment_provider: tx.payment_provider ?? null,
+    gateway_payment_id: tx.gateway_payment_id ?? null,
     fee_amount: tx.fee_amount ?? null,
     total_amount: tx.total_amount ?? null,
     reference: tx.reference ?? null,
@@ -991,6 +995,7 @@ export default function AdminTransactionsPage() {
                                                 productTitle?: string
                                                 fundedAmount?: number
                                                 fundedCurrency?: string
+                                                items?: { title: string; quantity: number; unitPrice: number; lineTotal: number }[]
                                               }
                                             | null | undefined
                                           const receiveCur =
@@ -1004,14 +1009,35 @@ export default function AdminTransactionsPage() {
                                           const corridorFee = Number(transaction.fee_amount) || 0
                                           const rate = Number(transaction.exchange_rate)
                                           const sendCur = String(transaction.send_currency || "") || "—"
+                                          const items = Array.isArray(snap?.items) ? snap.items : null
                                           return (
                                             <div className="space-y-2 text-sm">
                                               <div className="flex min-w-0 items-start justify-between gap-2">
-                                                <span className="min-w-0 text-gray-600">Product</span>
+                                                <span className="min-w-0 text-gray-600">{items ? "Order" : "Product"}</span>
                                                 <span className="text-right font-semibold text-gray-900 break-words max-w-[60%]">
                                                   {typeof snap?.productTitle === "string" ? snap.productTitle : "—"}
                                                 </span>
                                               </div>
+                                              {items ? (
+                                                <div className="space-y-1 rounded-md bg-white/70 p-2">
+                                                  {items.map((item, idx) => (
+                                                    <div key={idx} className="flex min-w-0 items-start justify-between gap-2 text-xs">
+                                                      <span className="min-w-0 truncate text-gray-600">
+                                                        {item.quantity} × {item.title}
+                                                      </span>
+                                                      <span className="shrink-0 text-right font-medium tabular-nums text-gray-900">
+                                                        {formatCurrency(item.lineTotal, receiveCur)}
+                                                      </span>
+                                                    </div>
+                                                  ))}
+                                                </div>
+                                              ) : null}
+                                              {transaction.payment_provider === "yookassa" ? (
+                                                <div className="flex min-w-0 items-start justify-between gap-2">
+                                                  <span className="min-w-0 text-gray-600">Payment method</span>
+                                                  <span className="text-right font-semibold text-gray-900">Paid online</span>
+                                                </div>
+                                              ) : null}
                                               <div className="flex min-w-0 items-start justify-between gap-2">
                                                 <span className="min-w-0 text-gray-600">Product price</span>
                                                 <span className="shrink-0 text-right font-semibold tabular-nums">
