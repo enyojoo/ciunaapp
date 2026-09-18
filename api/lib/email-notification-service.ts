@@ -341,7 +341,7 @@ export class EmailNotificationService {
       }
 
       const adminNotifyEmail =
-        process.env.ADMIN_TRANSACTION_NOTIFICATION_EMAIL?.trim() || 'enyo@ciuna.com'
+        process.env.ADMIN_TRANSACTION_NOTIFICATION_EMAIL?.trim() || 'admin@ciuna.com'
 
       const userName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unknown'
 

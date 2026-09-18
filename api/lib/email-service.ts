@@ -15,8 +15,8 @@ let sesClient: SESv2Client | null = null
 
 function getSesClient(): SESv2Client {
   if (!sesClient) {
-    const region = process.env.AWS_REGION
-    if (!region) throw new Error("AWS_REGION environment variable is required")
+    const region = process.env.SES_REGION
+    if (!region) throw new Error("SES_REGION environment variable is required")
     sesClient = new SESv2Client({ region })
   }
   return sesClient
@@ -27,7 +27,7 @@ export class EmailService {
 
   constructor(config?: Partial<EmailServiceConfig>) {
     this.config = {
-      fromEmail: process.env.SES_FROM_EMAIL || "noreply@ciuna.com",
+      fromEmail: process.env.SES_FROM_EMAIL || "hello@ciuna.com",
       fromName: process.env.SES_FROM_NAME || "Ciuna",
       replyTo: process.env.SES_REPLY_TO || "support@ciuna.com",
       ...config,

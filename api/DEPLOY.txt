@@ -1,8 +1,10 @@
 # Ciuna API — deploy as a separate Vercel project (root directory: api/)
 # Domain: api.ciuna.com
 # After first deploy:
-# 1. Set WEBHOOK_SECRET in Vercel and the same value on the Supabase Auth webhook
-#    URL: https://api.ciuna.com/api/webhooks/supabase-auth
+# 1. Leave Database Webhooks alone unless you add a new HTTP endpoint on purpose.
+#    Do not point auth.users at /api/webhooks/supabase-auth. Auth emails stay on
+#    Supabase templates (Authentication → Email Templates). User provisioning is
+#    POST /api/auth/bootstrap with the user JWT, not a webhook.
 # 2. Cron is configured in vercel.json (CRON_SECRET must match Authorization bearer)
 # 3. Point web + office NEXT_PUBLIC_API_URL to https://api.ciuna.com
 # 4. Remove CRON from the web Vercel project (already stripped from web/vercel.json)

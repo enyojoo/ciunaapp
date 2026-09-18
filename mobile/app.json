@@ -29,11 +29,27 @@
           "action": "VIEW",
           "autoVerify": true,
           "data": [
-            { "scheme": "https", "host": "app.ciuna.com", "pathPrefix": "/" },
-            { "scheme": "https", "host": "m.ciuna.com", "pathPrefix": "/" }
+            {
+              "scheme": "https",
+              "host": "app.ciuna.com",
+              "pathPrefix": "/"
+            },
+            {
+              "scheme": "https",
+              "host": "m.ciuna.com",
+              "pathPrefix": "/"
+            }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
+      ],
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -70,8 +86,9 @@
         "origin": "https://m.ciuna.com"
       },
       "eas": {
-        "projectId": ""
+        "projectId": "e69a5841-a05d-4c20-a572-3b1c0c8f3a2d"
       }
-    }
+    },
+    "owner": "easner"
   }
 }
