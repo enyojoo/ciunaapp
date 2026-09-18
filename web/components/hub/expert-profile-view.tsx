@@ -14,10 +14,10 @@ import {
   EXPERTS_CATALOG_PATH,
 } from "@/lib/experts-public-paths"
 import { HubLinePageShell } from "@/components/hub/hub-line-page-shell"
+import { ExpertServicePriceRow } from "@/components/hub/hub-expert-service-catalog-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { formatCurrencySymbolOnly } from "@/utils/currency"
 import {
   isExpertProfileDetailCacheFresh,
   readStaleExpertProfileDetailCache,
@@ -56,17 +56,6 @@ function fulfillmentKindLabel(ft: string | null | undefined, t: (k: string, o?: 
   if (f === "in_person") return t("experts.profile.fulfillmentInPerson")
   if (f === "both") return t("experts.profile.fulfillmentBoth")
   return t("experts.profile.fulfillmentOnline")
-}
-
-function servicePriceLabel(s: ExpertService, t: (k: string, o?: Record<string, string>) => string): string {
-  if (s.pricing_type === "quote") return t("experts.bookingWizard.priceQuote")
-  if (s.pricing_type === "hourly" && s.hourly_rate != null && s.hourly_currency)
-    return `${formatCurrencySymbolOnly(Number(s.hourly_rate), s.hourly_currency)} / hr`
-  if (s.pricing_type === "fixed" && s.fixed_amount != null && s.fixed_currency) {
-    const amt = formatCurrencySymbolOnly(Number(s.fixed_amount), s.fixed_currency)
-    return s.package_label ? `${amt} — ${s.package_label}` : amt
-  }
-  return "—"
 }
 
 export function ExpertProfileView({ slugOrId }: { slugOrId: string }) {
@@ -258,20 +247,13 @@ export function ExpertProfileView({ slugOrId }: { slugOrId: string }) {
                         <p className="break-words text-base font-semibold leading-snug tracking-tight text-gray-900 dark:text-foreground sm:text-lg">
                           {s.title}
                         </p>
-                        {s.short_description ? (
-                          <p className="line-clamp-4 text-xs leading-relaxed text-gray-600 dark:text-muted-foreground sm:text-sm">
-                            {s.short_description}
-                          </p>
-                        ) : null}
                         {s.default_duration_minutes != null && Number(s.default_duration_minutes) > 0 ? (
                           <p className="text-xs text-muted-foreground">
                             {t("experts.profile.typicalSession", { minutes: String(s.default_duration_minutes) })}
                           </p>
                         ) : null}
                       </div>
-                      <p className="text-sm font-semibold tabular-nums text-orange-700 dark:text-orange-300 sm:text-base">
-                        {servicePriceLabel(s, t)}
-                      </p>
+                      <ExpertServicePriceRow service={s} />
                       <div className="mt-auto flex flex-col gap-2 pt-0.5">
                         <Button asChild size="sm" className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm">
                           <Link

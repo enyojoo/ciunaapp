@@ -2,42 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import * as SecureStore from "expo-secure-store"
 import { Platform } from "react-native"
 
-const CHUNK = 1800
 const memory = new Map<string, string>()
 
 function isSsr(): boolean {
   return typeof window === "undefined" && Platform.OS === "web"
-}
-
-async function nativeGet(key: string): Promise<string | null> {
-  const chunksRaw = await SecureStore.getItemAsync(`${key}_chunks`)
-  if (!chunksRaw) {
-    return SecureStore.getItemAsync(key)
-  }
-  const chunks = Number(chunksRaw)
-  let value = ""
-  for (let i = 0; i < chunks; i++) {
-    value += (await SecureStore.getItemAsync(`${key}_${i}`)) ?? ""
-  }
-  return value || null
-}
-
-async function nativeSet(key: string, value: string): Promise<void> {
-  const chunks = Math.ceil(value.length / CHUNK) || 1
-  await SecureStore.setItemAsync(`${key}_chunks`, String(chunks))
-  for (let i = 0; i < chunks; i++) {
-    await SecureStore.setItemAsync(`${key}_${i}`, value.slice(i * CHUNK, (i + 1) * CHUNK))
-  }
-}
-
-async function nativeRemove(key: string): Promise<void> {
-  const chunksRaw = await SecureStore.getItemAsync(`${key}_chunks`)
-  const chunks = chunksRaw ? Number(chunksRaw) : 0
-  await SecureStore.deleteItemAsync(key)
-  await SecureStore.deleteItemAsync(`${key}_chunks`)
-  for (let i = 0; i < chunks; i++) {
-    await SecureStore.deleteItemAsync(`${key}_${i}`)
-  }
 }
 
 async function webGet(key: string): Promise<string | null> {
@@ -61,15 +29,23 @@ async function webRemove(key: string): Promise<void> {
   await AsyncStorage.removeItem(key)
 }
 
+/**
+ * Auth JWTs are too large for Expo Go SecureStore (~2KB). Easner keeps the
+ * session in AsyncStorage; PIN secrets stay in SecureStore via secretGet/Set.
+ */
 export const supabaseAuthStorage = {
-  getItem: (key: string) => (Platform.OS === "web" ? webGet(key) : nativeGet(key)),
-  setItem: (key: string, value: string) => (Platform.OS === "web" ? webSet(key, value) : nativeSet(key, value)),
-  removeItem: (key: string) => (Platform.OS === "web" ? webRemove(key) : nativeRemove(key)),
+  getItem: (key: string) => AsyncStorage.getItem(key).catch(() => null),
+  setItem: (key: string, value: string) => AsyncStorage.setItem(key, value).catch(() => undefined),
+  removeItem: (key: string) => AsyncStorage.removeItem(key).catch(() => undefined),
 }
 
 export async function secretGet(key: string): Promise<string | null> {
   if (Platform.OS === "web") return webGet(key)
-  return SecureStore.getItemAsync(key)
+  try {
+    return await SecureStore.getItemAsync(key)
+  } catch {
+    return null
+  }
 }
 
 export async function secretSet(key: string, value: string): Promise<void> {
@@ -77,7 +53,11 @@ export async function secretSet(key: string, value: string): Promise<void> {
     await webSet(key, value)
     return
   }
-  await SecureStore.setItemAsync(key, value)
+  try {
+    await SecureStore.setItemAsync(key, value)
+  } catch {
+    // Expo Go / simulator can reject SecureStore; PIN setup can retry later
+  }
 }
 
 export async function secretDelete(key: string): Promise<void> {
@@ -85,5 +65,9 @@ export async function secretDelete(key: string): Promise<void> {
     await webRemove(key)
     return
   }
-  await SecureStore.deleteItemAsync(key)
+  try {
+    await SecureStore.deleteItemAsync(key)
+  } catch {
+    // ignore
+  }
 }

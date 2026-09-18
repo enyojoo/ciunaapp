@@ -1,69 +1,140 @@
 import { useEffect, useState } from "react"
-import { ScrollView, Text, View } from "react-native"
-import { Image } from "expo-image"
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
+import { StyleSheet, Text, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { useTranslation } from "react-i18next"
 import { EmptyState } from "@/components/empty-state"
-import { PrimaryButton } from "@/components/primary-button"
-import { Screen } from "@/components/screen"
+import {
+  ExpertServiceCard,
+  ExpertServiceSkeleton,
+  expertServiceToCatalog,
+} from "@/components/expert-catalog"
+import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { apiFetch } from "@/lib/api"
-import { formatMoney } from "@/lib/money"
 import type { ExpertProfile, ExpertService } from "@/lib/types"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export default function ExpertProfileScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
   const router = useRouter()
-  const navigation = useNavigation()
+  const { t } = useTranslation("app")
   const [profile, setProfile] = useState<ExpertProfile | null>(null)
   const [services, setServices] = useState<ExpertService[]>([])
   const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
     if (!slug) return
+    let cancelled = false
+    setLoading(true)
+    setNotFound(false)
     void (async () => {
-      const res = await apiFetch(`/api/expert/profiles/${encodeURIComponent(String(slug))}`)
-      const body = (await res.json()) as { profile?: ExpertProfile; services?: ExpertService[] }
-      setProfile(body.profile || null)
-      setServices(body.services || [])
-      if (body.profile?.display_name) navigation.setOptions({ title: body.profile.display_name })
-      setLoading(false)
+      try {
+        const res = await apiFetch(`/api/expert/profiles/${encodeURIComponent(String(slug))}`)
+        const body = (await res.json().catch(() => ({}))) as {
+          profile?: ExpertProfile
+          services?: ExpertService[]
+        }
+        if (cancelled) return
+        if (!res.ok || !body.profile) {
+          setProfile(null)
+          setServices([])
+          setNotFound(true)
+          return
+        }
+        setProfile(body.profile)
+        setServices(body.services || [])
+      } catch {
+        if (!cancelled) {
+          setProfile(null)
+          setServices([])
+          setNotFound(true)
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
     })()
-  }, [slug, navigation])
+    return () => {
+      cancelled = true
+    }
+  }, [slug])
+
+  const bio = (profile?.bio || "").trim()
+  const meeting = (profile?.meeting_hint || "").trim()
+  const showBioFrame = Boolean(bio || meeting)
+
+  if (!loading && (notFound || !profile)) {
+    return (
+      <HubLinePageShell
+        title={t("hub.expertNotFound", { defaultValue: "Expert not found" })}
+        subtitle={null}
+        backAriaLabel={t("hub.backToExperts", { defaultValue: "Back to experts" })}
+        backHref="/experts"
+      >
+        <EmptyState
+          title={t("hub.expertNotFound", { defaultValue: "Expert not found" })}
+          actionLabel={t("hub.expertsAll", { defaultValue: "All experts" })}
+          onAction={() => router.replace("/experts" as never)}
+        />
+      </HubLinePageShell>
+    )
+  }
 
   return (
-    <Screen edges={["left", "right"]}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 40 }}>
-        {loading ? <Text className="py-8 text-center text-muted">Loading…</Text> : null}
-        {profile?.image_url ? (
-          <Image
-            source={{ uri: profile.image_url }}
-            style={{ width: "100%", aspectRatio: 4 / 3, borderRadius: 16, marginBottom: 12 }}
-            contentFit="cover"
-          />
-        ) : null}
-        {profile?.headline ? <Text className="text-base text-muted">{profile.headline}</Text> : null}
-        {profile?.bio ? <Text className="mt-3 text-base text-gray-900">{profile.bio}</Text> : null}
+    <HubLinePageShell
+      title={profile?.display_name || t("experts.profile.loadingTitle", { defaultValue: "Expert" })}
+      subtitle={profile?.headline ?? null}
+      backAriaLabel={t("hub.backToExperts", { defaultValue: "Back to experts" })}
+      backHref="/experts"
+      photoUrl={profile?.image_url}
+      location={profile?.service_area}
+      heroLoading={loading && !profile}
+    >
+      {showBioFrame ? (
+        <View style={styles.bioFrame}>
+          {bio ? <Text style={styles.bio}>{bio}</Text> : null}
+          {meeting ? <Text style={[styles.meeting, bio ? styles.meetingRule : null]}>{meeting}</Text> : null}
+        </View>
+      ) : null}
 
-        <Text className="mb-3 mt-6 text-lg font-semibold text-gray-900">Services</Text>
-        {!loading && services.length === 0 ? <EmptyState title="No published services" /> : null}
-        {services.map((s) => {
-          const price =
-            s.pricing_type === "hourly" && s.hourly_rate != null
-              ? `${formatMoney(s.hourly_rate, s.hourly_currency)}/hr`
-              : s.fixed_amount != null
-                ? formatMoney(s.fixed_amount, s.fixed_currency)
-                : "Custom quote"
-          return (
-            <View key={s.id} className="mb-3 rounded-2xl border border-border bg-surface px-4 py-4">
-              <Text className="font-semibold text-gray-900">{s.title}</Text>
-              {s.short_description ? <Text className="mt-1 text-sm text-muted">{s.short_description}</Text> : null}
-              <Text className="mt-2 text-base text-gray-900">{price}</Text>
-              <View className="mt-3">
-                <PrimaryButton label="Book" onPress={() => router.push(`/experts/book/${s.id}` as never)} />
-              </View>
-            </View>
-          )
-        })}
-      </ScrollView>
-    </Screen>
+      <Text style={styles.heading}>{t("experts.profile.servicesHeading", { defaultValue: "Services" })}</Text>
+      {loading && services.length === 0 ? (
+        <View style={styles.grid}>
+          <ExpertServiceSkeleton />
+          <ExpertServiceSkeleton />
+          <ExpertServiceSkeleton />
+          <ExpertServiceSkeleton />
+        </View>
+      ) : services.length === 0 ? (
+        <EmptyState title={t("experts.profile.noServices", { defaultValue: "No bookable services yet." })} />
+      ) : profile ? (
+        <View style={styles.grid}>
+          {services.map((s) => (
+            <ExpertServiceCard
+              key={s.id}
+              service={expertServiceToCatalog(s, profile)}
+              showExpert={false}
+              showTypicalSession
+            />
+          ))}
+        </View>
+      ) : null}
+    </HubLinePageShell>
   )
 }
+
+const styles = StyleSheet.create({
+  bioFrame: {
+    marginBottom: 24,
+    borderRadius: radius.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  bio: { fontSize: typeSize.body, lineHeight: 22, color: colors.text },
+  meeting: { fontSize: typeSize.body, lineHeight: 22, color: colors.muted },
+  meetingRule: { marginTop: 16, paddingTop: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  heading: { marginBottom: 16, fontSize: 18, fontWeight: "600", color: colors.text },
+  grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", rowGap: 12 },
+})

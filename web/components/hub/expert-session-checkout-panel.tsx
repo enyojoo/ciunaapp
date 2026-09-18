@@ -39,6 +39,7 @@ type ExpertProfile = {
 type ExpertService = {
   id: string
   title: string
+  short_description?: string | null
   pricing_type: string
   hourly_rate: number | null
   hourly_currency: string | null
@@ -519,6 +520,9 @@ export function ExpertSessionCheckoutPanel({
                     <p className="text-xl font-bold leading-tight sm:text-2xl">
                       {t("experts.bookingWizard.heroBookService", { title: svc.title })}
                     </p>
+                    {(svc.short_description || "").trim() ? (
+                      <p className="mt-3 max-w-2xl text-sm/6 text-orange-50">{svc.short_description}</p>
+                    ) : null}
                     <div className="mt-4 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
                       <span className="shrink-0 text-[11px] font-medium sm:text-xs text-orange-100/95">
                         {t("experts.bookingWizard.providedBy")}

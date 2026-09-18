@@ -12,9 +12,10 @@ import {
   hubPublicHubJsonCacheUserId,
   isHubServiceLinesCacheFresh,
   readStaleHubServiceLinesCache,
+  scheduleHubServiceLinesStaleWhileRevalidate,
   writeHubServiceLinesCache,
 } from "@/lib/hub-client-cache"
-import { hubServiceLineShellLabels } from "@/lib/hub-service-line-i18n"
+import { findHubServiceLineBySlug, hubServiceLineShellLabels } from "@/lib/hub-service-line-i18n"
 import {
   readFoodProductsCache,
   readFoodVendorsCache,
@@ -40,8 +41,7 @@ function FoodLinePageInner() {
   useLayoutEffect(() => {
     const stale = readStaleHubServiceLinesCache(SERVICE_LINES_CACHE_USER)
     if (stale !== null) {
-      const found = stale.find((l) => l.slug === LINE_SLUG) ?? null
-      setLine(found)
+      setLine(findHubServiceLineBySlug(stale, LINE_SLUG))
       setLinesLoaded(true)
     }
     const cachedProducts = readFoodProductsCache()
@@ -56,9 +56,27 @@ function FoodLinePageInner() {
     }
   }, [])
 
-  /** Service lines: skip fetch when fresh (matches /experts). */
+  /** Service lines: SWR so Office Hub Services title/description show up quickly. */
   useEffect(() => {
-    if (isHubServiceLinesCacheFresh(SERVICE_LINES_CACHE_USER)) return
+    const apply = (list: HubServiceLineRow[]) => {
+      setLine(findHubServiceLineBySlug(list, LINE_SLUG))
+    }
+    if (isHubServiceLinesCacheFresh(SERVICE_LINES_CACHE_USER)) {
+      const s = readStaleHubServiceLinesCache(SERVICE_LINES_CACHE_USER)
+      if (s) apply(s)
+      setLinesLoaded(true)
+      scheduleHubServiceLinesStaleWhileRevalidate(
+        SERVICE_LINES_CACHE_USER,
+        async () => {
+          const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
+          if (!res.ok) return null
+          const data = await res.json()
+          return (data.serviceLines || []) as HubServiceLineRow[]
+        },
+        apply,
+      )
+      return
+    }
     let cancelled = false
     ;(async () => {
       try {
@@ -68,8 +86,7 @@ function FoodLinePageInner() {
         const list = (data.serviceLines || []) as HubServiceLineRow[]
         if (cancelled) return
         writeHubServiceLinesCache(SERVICE_LINES_CACHE_USER, list)
-        const found = list.find((l) => l.slug === LINE_SLUG) ?? null
-        setLine(found)
+        apply(list)
       } catch {
         /* ignore */
       } finally {

@@ -219,7 +219,8 @@
       "fulfillmentOnline": "Online",
       "fulfillmentInPerson": "In person",
       "fulfillmentBoth": "Online or in person",
-      "fulfillmentHero": "Fulfillment: {{value}}"
+      "fulfillmentHero": "Fulfillment: {{value}}",
+      "priceFrom": "From"
     },
     "booking": {
       "title": "Book an expert",

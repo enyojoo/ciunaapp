@@ -62,7 +62,7 @@ export default function LoginScreen() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: trimmed }),
         }).catch(() => {})
-        showError(friendlyLoginError(err, t("auth.loginError", { defaultValue: "Invalid credentials" })))
+        showError(friendlyLoginError(err, t("auth.invalidCredentials", { defaultValue: "Invalid email or password" })))
         return
       }
       await apiFetch("/api/auth/login-attempt/success", {

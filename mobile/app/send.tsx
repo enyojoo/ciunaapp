@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from "react"
 import { Pressable, Text, View } from "react-native"
 import { useRouter } from "expo-router"
+import { useTranslation } from "react-i18next"
+import { hubServiceLineShellLabels } from "@ciuna/shared"
+import { useHubServiceLine } from "@/lib/use-hub-service-line"
 import { Field } from "@/components/field"
+import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { PayStep } from "@/components/pay-step"
 import { PrimaryButton } from "@/components/primary-button"
-import { ScreenScroll } from "@/components/screen"
 import { SheetPicker } from "@/components/sheet-picker"
 import { useToast } from "@/components/toast-provider"
 import { fetchWithAuth } from "@/lib/api"
@@ -16,7 +19,15 @@ import type { RecipientRow } from "@/lib/types"
 type Step = "amount" | "recipient" | "pay"
 
 export default function SendScreen() {
+  const { t } = useTranslation("app")
   const router = useRouter()
+  const sendLine = useHubServiceLine("send")
+  const labels = hubServiceLineShellLabels(
+    "send",
+    sendLine,
+    t,
+    t("hub.serviceLineTiles.send.title", { defaultValue: "Send Money" }),
+  )
   const { currencies, rates } = useFx()
   const [step, setStep] = useState<Step>("amount")
   const [sendAmount, setSendAmount] = useState("")
@@ -103,7 +114,12 @@ export default function SendScreen() {
   const steps = useMemo(() => ["amount", "recipient", "pay"] as const, [])
 
   return (
-    <ScreenScroll keyboard>
+    <HubLinePageShell
+      title={labels.title}
+      subtitle={labels.subtitle}
+      backAriaLabel={t("hub.backToHub", { defaultValue: "Back to Hub" })}
+      keyboard
+    >
       <View className="mb-6 flex-row gap-2">
         {steps.map((s, i) => (
           <View key={s} className={`h-1.5 flex-1 rounded-full ${steps.indexOf(step) >= i ? "bg-primary" : "bg-border"}`} />
@@ -192,6 +208,6 @@ export default function SendScreen() {
           </View>
         </View>
       ) : null}
-    </ScreenScroll>
+    </HubLinePageShell>
   )
 }

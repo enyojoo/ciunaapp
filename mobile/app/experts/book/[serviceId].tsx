@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
+import { useTranslation } from "react-i18next"
 import { EmptyState } from "@/components/empty-state"
 import { Field } from "@/components/field"
 import { PayStep } from "@/components/pay-step"
@@ -11,13 +12,16 @@ import { fetchWithAuth } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { useFx } from "@/lib/use-fx"
 import type { ExpertSlot } from "@/lib/types"
+import { colors, type as typeSize } from "@/lib/theme"
 
 export default function ExpertBookScreen() {
   const { serviceId } = useLocalSearchParams<{ serviceId: string }>()
   const router = useRouter()
+  const { t } = useTranslation("app")
   const { profile } = useAuth()
   const { currencies, rates } = useFx()
   const [slots, setSlots] = useState<ExpertSlot[]>([])
+  const [service, setService] = useState<{ title: string; short_description?: string | null } | null>(null)
   const [slotId, setSlotId] = useState<string | null>(null)
   const [sendCurrency, setSendCurrency] = useState("USD")
   const [receiveCurrency, setReceiveCurrency] = useState("USD")
@@ -34,8 +38,12 @@ export default function ExpertBookScreen() {
     if (!serviceId) return
     void (async () => {
       const res = await fetchWithAuth(`/api/expert/services/${encodeURIComponent(String(serviceId))}/slots`)
-      const body = (await res.json()) as { slots?: ExpertSlot[] }
+      const body = (await res.json()) as {
+        slots?: ExpertSlot[]
+        service?: { title?: string; short_description?: string | null }
+      }
       setSlots(body.slots || [])
+      setService(body.service ? { title: body.service.title || "", short_description: body.service.short_description } : null)
       setLoading(false)
     })()
   }, [serviceId])
@@ -68,7 +76,11 @@ export default function ExpertBookScreen() {
 
   return (
     <ScreenScroll keyboard>
-      <Text className="mb-3 text-lg font-semibold text-gray-900">Pick a time</Text>
+      {service?.title ? <Text style={styles.title}>{service.title}</Text> : null}
+      {service?.short_description ? <Text style={styles.desc}>{service.short_description}</Text> : null}
+      <Text className="mb-3 text-lg font-semibold text-gray-900">
+        {t("experts.bookingWizard.chooseTime", { defaultValue: "Pick a date and time" })}
+      </Text>
       {loading ? <Text className="text-muted">Loading slots…</Text> : null}
       {!loading && slots.length === 0 ? <EmptyState title="No open slots" body="This service has no upcoming times." /> : null}
       {slots.map((s) => {
@@ -116,3 +128,8 @@ export default function ExpertBookScreen() {
     </ScreenScroll>
   )
 }
+
+const styles = StyleSheet.create({
+  title: { marginBottom: 8, fontSize: 20, fontWeight: "600", color: colors.text },
+  desc: { marginBottom: 16, fontSize: typeSize.body, lineHeight: 22, color: colors.muted },
+})

@@ -4,7 +4,7 @@ import * as Linking from "expo-linking"
 import * as WebBrowser from "expo-web-browser"
 import * as AppleAuthentication from "expo-apple-authentication"
 import type { User } from "@supabase/supabase-js"
-import { supabase } from "./supabase"
+import { supabase, clearInvalidPersistedAuthSession } from "./supabase"
 import i18n, { setAppLocale, type AppLocale, SUPPORTED_LOCALES } from "./i18n"
 import { apiFetch } from "./api"
 import { isAppleWebSignInCanceled, signInWithAppleWeb } from "./apple-sign-in-web"
@@ -125,6 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       void consumeOAuthCallback(event.url)
     })
     supabase.auth.getSession().then(async () => {
+      await clearInvalidPersistedAuthSession()
       const initialUrl = await Linking.getInitialURL()
       if (initialUrl) await consumeOAuthCallback(initialUrl)
       if (Platform.OS === "web" && typeof window !== "undefined") {
@@ -147,10 +148,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [applySessionUser, consumeOAuthCallback])
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) return { error: error.message }
-    await applySessionUser(data.user)
-    return { error: null }
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      })
+      if (error) {
+        console.warn("signInWithPassword:", error.message, error.code ?? "", error.status ?? "")
+        return { error: error.message }
+      }
+      if (data.session) {
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        })
+      }
+      await applySessionUser(data.user)
+      return { error: null }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Unable to sign in"
+      console.warn("signIn threw:", message)
+      return { error: message }
+    }
   }, [applySessionUser])
 
   const waitForOAuthSession = useCallback(async () => {

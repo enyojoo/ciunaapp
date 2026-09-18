@@ -11,7 +11,7 @@ import { useAuth } from "@/lib/auth-context"
 import { stashRedirectAfterLogin } from "@/lib/auth-login-redirect"
 import { expertsBookPath, expertsProfilePath } from "@/lib/experts-public-paths"
 import { cn } from "@/lib/utils"
-import { formatCurrencySymbolOnly } from "@/utils/currency"
+import { amountPrefixClass, amountValueClass, formatCardPrice } from "@/lib/hub-catalog-utils"
 
 export type ExpertCatalogService = {
   id: string
@@ -30,25 +30,49 @@ export type ExpertCatalogService = {
 const serviceCardClass =
   "flex h-full flex-col rounded-2xl border border-gray-200 bg-white py-0 shadow-[0_8px_24px_rgba(15,23,42,0.08)] transition-all duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:border-orange-300/70 motion-safe:hover:shadow-[0_18px_36px_rgba(15,23,42,0.14)] dark:border-border dark:bg-card"
 
-function priceLine(
-  s: ExpertCatalogService,
-  t: (k: string, o?: Record<string, string>) => string,
-): string {
-  if (s.pricing_type === "quote") return t("experts.bookingWizard.priceQuote")
-  if (s.pricing_type === "hourly" && s.hourly_rate != null && s.hourly_currency)
-    return `${formatCurrencySymbolOnly(Number(s.hourly_rate), s.hourly_currency)} / hr`
-  if (s.pricing_type === "fixed" && s.fixed_amount != null && s.fixed_currency) {
-    const amt = formatCurrencySymbolOnly(Number(s.fixed_amount), s.fixed_currency)
-    return s.package_label ? `${amt} — ${s.package_label}` : amt
-  }
-  return t("experts.bookingWizard.priceDash")
-}
-
 function fulfillmentKindLabel(ft: string | null | undefined, t: (k: string, o?: Record<string, string>) => string): string {
   const f = ft || "online"
   if (f === "in_person") return t("experts.profile.fulfillmentInPerson")
   if (f === "both") return t("experts.profile.fulfillmentBoth")
   return t("experts.profile.fulfillmentOnline")
+}
+
+type ExpertServicePriceFields = Pick<
+  ExpertCatalogService,
+  "pricing_type" | "hourly_rate" | "hourly_currency" | "fixed_amount" | "fixed_currency" | "package_label"
+>
+
+export function ExpertServicePriceRow({ service: s }: { service: ExpertServicePriceFields }) {
+  const { t } = useTranslation("app")
+  if (s.pricing_type === "quote") {
+    return (
+      <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
+        <span className={amountPrefixClass}>{t("experts.bookingWizard.priceQuote")}</span>
+      </div>
+    )
+  }
+  if (s.pricing_type === "hourly" && s.hourly_rate != null) {
+    return (
+      <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
+        <span className={amountPrefixClass}>{t("experts.profile.priceFrom")}</span>
+        <span className={amountValueClass}>{formatCardPrice(Number(s.hourly_rate), s.hourly_currency)}</span>
+        <span className={amountPrefixClass}>/ hr</span>
+      </div>
+    )
+  }
+  if (s.pricing_type === "fixed" && s.fixed_amount != null) {
+    return (
+      <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
+        <span className={amountValueClass}>{formatCardPrice(Number(s.fixed_amount), s.fixed_currency)}</span>
+        {s.package_label ? <span className={amountPrefixClass}>— {s.package_label}</span> : null}
+      </div>
+    )
+  }
+  return (
+    <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
+      <span className={amountPrefixClass}>{t("experts.bookingWizard.priceDash")}</span>
+    </div>
+  )
 }
 
 export function HubExpertServiceCatalogCard({ service: s }: { service: ExpertCatalogService }) {
@@ -73,9 +97,6 @@ export function HubExpertServiceCatalogCard({ service: s }: { service: ExpertCat
               {s.title}
             </p>
           </Link>
-          {s.short_description ? (
-            <p className="line-clamp-4 text-xs leading-relaxed text-gray-600 dark:text-muted-foreground sm:text-sm">{s.short_description}</p>
-          ) : null}
           <div className="pt-0.5">
             <HubExpertChipLight
               expert={s.expert}
@@ -84,7 +105,7 @@ export function HubExpertServiceCatalogCard({ service: s }: { service: ExpertCat
             />
           </div>
         </div>
-        <p className="text-sm font-semibold tabular-nums text-orange-700 dark:text-orange-300 sm:text-base">{priceLine(s, t)}</p>
+        <ExpertServicePriceRow service={s} />
         <div className="mt-auto flex flex-col gap-2 pt-0.5">
           <Button asChild size="sm" className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm">
             <Link href={user ? bookHref : "/auth/login"} prefetch={Boolean(user)} onClick={user ? undefined : onGuestBookNav}>

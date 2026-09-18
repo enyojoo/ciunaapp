@@ -13,6 +13,17 @@ export const colors = {
   danger: "#DC2626",
   success: "#059669",
   refer: "#059669",
+  referBg: "#F0FDFA",
+  referBgEnd: "#ECFDF5",
+  referBorder: "#99F6E4",
+  referText: "#134E4A",
+  referIcon: "#115E59",
+  supportBg: "#F3F4F6",
+  supportIcon: "#4B5563",
+  heroOrange: "#EA580C",
+  heroOrangeMid: "#F97316",
+  heroAmber: "#FBBF24",
+  heroBody: "#FFF7ED",
 } as const
 
 export const radius = {

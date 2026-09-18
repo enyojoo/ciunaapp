@@ -1,45 +1,96 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
-import { formatMoney, hubProductEffectivePrice, hubProductListPrice, hubProductShowListStrike } from "@/lib/money"
+import { BadgeCheck } from "lucide-react-native"
+import { useTranslation } from "react-i18next"
+import {
+  formatCardPrice,
+  hubProductEffectivePrice,
+  hubProductListPrice,
+  hubProductShowListStrike,
+} from "@/lib/money"
 import type { HubProduct } from "@/lib/types"
-import { colors, radius, space, type as typeSize } from "@/lib/theme"
+import { colors, radius } from "@/lib/theme"
 
 export function ProductCard({
   product,
   cta,
   onPress,
+  onVendorPress,
+  showVendor = true,
+  showCategory = false,
 }: {
   product: HubProduct
   cta: string
   onPress: () => void
+  onVendorPress?: () => void
+  showVendor?: boolean
+  showCategory?: boolean
 }) {
+  const { t } = useTranslation("app")
   const price = hubProductEffectivePrice(product)
   const list = hubProductListPrice(product)
   const strike = hubProductShowListStrike(product)
   const currency = product.fixed_currency || product.default_input_currency || ""
+  const vendor = product.vendor
+  const category = (product.category || "").trim() || "Other"
+  const userInput = product.pricing_type === "user_input"
+  const min = product.funded_min
+  const hasMin = typeof min === "number" && Number.isFinite(min)
+
   return (
-    <Pressable onPress={onPress} accessibilityRole="button">
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={product.title} style={styles.hit}>
       <View style={styles.card}>
-        {product.image_url ? (
-          <Image source={{ uri: product.image_url }} style={styles.image} contentFit="cover" />
-        ) : (
-          <View style={styles.imageFallback} />
-        )}
+        <View style={styles.imageWrap}>
+          {product.image_url ? (
+            <Image source={{ uri: product.image_url }} style={styles.image} contentFit="contain" />
+          ) : (
+            <View style={styles.imageFallback}>
+              <Text style={styles.noImage}>{t("hub.noImage", { defaultValue: "No image" })}</Text>
+            </View>
+          )}
+          {showCategory ? (
+            <View style={styles.catBadge}>
+              <Text style={styles.catBadgeText} numberOfLines={1}>
+                {category}
+              </Text>
+            </View>
+          ) : null}
+        </View>
         <View style={styles.body}>
           <Text style={styles.title} numberOfLines={2}>
             {product.title}
           </Text>
-          {product.vendor?.name ? (
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>{product.vendor.name}</Text>
-            </View>
+          {showVendor && vendor?.name ? (
+            onVendorPress ? (
+              <Pressable onPress={onVendorPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={vendor.name} style={styles.vendorHit}>
+                <VendorChip vendor={vendor} />
+              </Pressable>
+            ) : (
+              <View style={styles.vendorHit}>
+                <VendorChip vendor={vendor} />
+              </View>
+            )
           ) : null}
-          <View style={styles.priceRow}>
-            <Text style={styles.price}>{formatMoney(price, currency)}</Text>
-            {strike && list != null ? <Text style={styles.strike}>{formatMoney(list, currency)}</Text> : null}
-          </View>
-          <View style={styles.cta}>
-            <Text style={styles.ctaText}>{cta}</Text>
+          <View style={styles.priceBlock}>
+            {userInput ? (
+              <View style={styles.priceRow}>
+                <Text style={styles.pricePrefix}>
+                  {hasMin
+                    ? t("hub.payFrom", { defaultValue: "Pay from" })
+                    : t("hub.setAmount", { defaultValue: "Set amount" })}
+                </Text>
+                {hasMin ? <Text style={styles.price}>{formatCardPrice(min, currency)}</Text> : null}
+              </View>
+            ) : (
+              <View style={styles.priceRow}>
+                <Text style={styles.pricePrefix}>{t("hub.sellPrice", { defaultValue: "Sell price" })}</Text>
+                {strike && list != null ? <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text> : null}
+                <Text style={styles.price}>{formatCardPrice(price, currency)}</Text>
+              </View>
+            )}
+            <View style={styles.cta}>
+              <Text style={styles.ctaText}>{cta}</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -47,43 +98,102 @@ export function ProductCard({
   )
 }
 
+function VendorChip({ vendor }: { vendor: NonNullable<HubProduct["vendor"]> }) {
+  return (
+    <View style={styles.vendorRow}>
+      {vendor.photo_url ? (
+        <Image source={{ uri: vendor.photo_url }} style={styles.vendorPhoto} contentFit="cover" />
+      ) : (
+        <View style={styles.vendorFallback}>
+          <Text style={styles.vendorInitial}>{(vendor.name.trim().charAt(0) || "?").toUpperCase()}</Text>
+        </View>
+      )}
+      <Text style={styles.vendorName} numberOfLines={1}>
+        {vendor.name}
+      </Text>
+      {vendor.is_verified ? <BadgeCheck size={12} color={colors.primary} strokeWidth={2.2} /> : null}
+    </View>
+  )
+}
+
 export function ProductCardSkeleton() {
-  return <View style={[styles.card, styles.skeleton]} />
+  return (
+    <View style={styles.hit}>
+      <View style={[styles.card, styles.skeleton]}>
+        <View style={styles.imageFallback} />
+        <View style={styles.body}>
+          <View style={styles.skelTitle} />
+          <View style={styles.skelMeta} />
+        </View>
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
+  hit: { width: "48.5%" },
   card: {
-    marginBottom: 12,
     overflow: "hidden",
     borderRadius: radius.card,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: "#E5E7EB",
     backgroundColor: colors.surface,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
-  skeleton: { minHeight: 280, backgroundColor: colors.paper, borderColor: colors.border },
-  image: { width: "100%", aspectRatio: 4 / 3 },
-  imageFallback: { width: "100%", aspectRatio: 4 / 3, backgroundColor: colors.paper },
-  body: { paddingHorizontal: 16, paddingVertical: 12 },
-  title: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  chip: {
-    marginTop: 6,
-    alignSelf: "flex-start",
-    borderRadius: radius.pill,
-    backgroundColor: colors.paper,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-  },
-  chipText: { fontSize: 12, color: colors.muted },
-  priceRow: { marginTop: 8, flexDirection: "row", alignItems: "baseline", gap: 8 },
-  price: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  strike: { fontSize: typeSize.meta, color: colors.muted, textDecorationLine: "line-through" },
-  cta: {
-    marginTop: 12,
-    minHeight: space.tap,
+  skeleton: { borderColor: colors.border, shadowOpacity: 0, elevation: 0 },
+  imageWrap: { width: "100%", aspectRatio: 4 / 3, backgroundColor: "#F3F4F6" },
+  image: { width: "100%", height: "100%" },
+  imageFallback: {
+    width: "100%",
+    aspectRatio: 4 / 3,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: radius.row,
+    backgroundColor: "#F3F4F6",
+  },
+  noImage: { fontSize: 11, color: colors.muted, textAlign: "center", paddingHorizontal: 8 },
+  catBadge: {
+    position: "absolute",
+    top: 6,
+    right: 6,
+    maxWidth: "72%",
+    borderRadius: radius.pill,
+    backgroundColor: "rgba(255,255,255,0.92)",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  catBadgeText: { fontSize: 9, fontWeight: "600", color: "#374151" },
+  body: { paddingHorizontal: 10, paddingTop: 8, paddingBottom: 10 },
+  title: { fontSize: 13, fontWeight: "600", lineHeight: 17, color: colors.text },
+  vendorHit: { marginTop: 6, alignSelf: "flex-start", maxWidth: "100%" },
+  vendorRow: { flexDirection: "row", alignItems: "center", gap: 6, maxWidth: "100%" },
+  vendorPhoto: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.paper },
+  vendorFallback: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: colors.paper,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  vendorInitial: { fontSize: 9, fontWeight: "700", color: colors.muted },
+  vendorName: { flexShrink: 1, fontSize: 11, fontWeight: "500", color: colors.text },
+  priceBlock: { marginTop: 10, gap: 8 },
+  priceRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 4 },
+  pricePrefix: { fontSize: 11, fontWeight: "500", color: colors.muted },
+  price: { fontSize: 15, fontWeight: "700", color: colors.text },
+  strike: { fontSize: 11, color: colors.muted, textDecorationLine: "line-through" },
+  cta: {
+    minHeight: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
     backgroundColor: colors.primary,
   },
-  ctaText: { fontWeight: "600", color: "#FFFFFF" },
+  ctaText: { fontSize: 12, fontWeight: "600", color: "#FFFFFF" },
+  skelTitle: { height: 14, width: "80%", borderRadius: 4, backgroundColor: colors.paper },
+  skelMeta: { marginTop: 8, height: 10, width: "50%", borderRadius: 4, backgroundColor: colors.paper },
 })

@@ -36,18 +36,23 @@ export function hubMarketplaceCheckoutPath(lineSlug: string, productId: string):
 }
 
 function expoPathFromRoutePath(p: string): string {
-  const s = p.trim()
-  if (!s) return ""
-  if (s === "/send" || s.startsWith("/send?")) return "/send"
-  if (s === "/food" || s.startsWith("/food/")) return "/hub/food"
-  if (s === "/mart" || s.startsWith("/mart/")) return "/hub/mart"
-  if (s === "/experts" || s.startsWith("/experts/")) return "/experts"
-  if (s.startsWith("/hub/")) return s
-  return s.startsWith("/") ? s : `/${s}`
+  const raw = p.trim()
+  if (!raw) return ""
+  const s = raw.split("?")[0].replace(/\/$/, "") || "/"
+  if (s === "/send" || s.startsWith("/send/")) return "/send"
+  if (s === "/food" || s.startsWith("/food/") || s === "/hub/food") return "/hub/food"
+  if (s === "/mart" || s.startsWith("/mart/") || s === "/hub/mart") return "/hub/mart"
+  if (s === "/experts" || s.startsWith("/experts/") || s === "/hub/experts") return "/experts"
+  if (raw.startsWith("/hub/")) return raw
+  return raw.startsWith("/") ? raw : `/${raw}`
 }
 
 export function lineHref(line: HubServiceLineRow): string | null {
   if (line.grid_kind === "external_url") return line.href?.trim() || null
+  const slug = String(line.slug || "").trim().toLowerCase()
+  if (isHubExpertsSlug(slug)) return "/experts"
+  if (isHubSendSlug(slug)) return "/send"
+  if (isHubMarketplaceSlug(slug)) return `/hub/${slug}`
   const p = line.route_path?.trim()
   if (p) return expoPathFromRoutePath(p)
   if (line.grid_kind === "hub_category") return hubLineHomePath(line.slug)

@@ -23,27 +23,41 @@ export function normalizedHubServiceLineSlug(slug: string): string {
 
 export type HubServiceLineCopyInput = Pick<HubServiceLineRow, "slug" | "title" | "short_description">
 
+function localeKeySlug(slug: string): string {
+  const n = normalizedHubServiceLineSlug(slug)
+  return n === "send-money" ? "send" : n
+}
+
+/** Match office/API rows to a route slug (`send` ↔ `send-money`, underscores vs hyphens). */
+export function findHubServiceLineBySlug(
+  lines: readonly HubServiceLineRow[],
+  slug: string,
+): HubServiceLineRow | null {
+  const want = localeKeySlug(slug)
+  return (
+    lines.find((line) => localeKeySlug(line.slug) === want) ?? null
+  )
+}
+
 /**
- * Hub grid tiles use DB title/description by default. When `hub.serviceLineTiles.{slug}` exists
- * in `app` locales, those strings override for the active language.
+ * Home grid + line shells use Office Hub Services (`title`, `short_description`) when set.
+ * Locale `hub.serviceLineTiles.{slug}` is only a fallback while the row is missing or blank.
  */
 export function hubServiceLineTileCopy(
   line: HubServiceLineCopyInput,
   t: (key: string, options?: { defaultValue?: string }) => string,
 ): { title: string; shortDescription: string | null } {
-  let slug = normalizedHubServiceLineSlug(line.slug)
-  if (slug === "send-money") slug = "send"
-
-  const base = `hub.serviceLineTiles.${slug}`
-  const title = t(`${base}.title`, { defaultValue: line.title })
+  const base = `hub.serviceLineTiles.${localeKeySlug(line.slug)}`
+  const dbTitle = line.title?.trim() ?? ""
   const dbDesc = line.short_description?.trim() ?? ""
-  const shortDescriptionRaw = t(`${base}.shortDescription`, { defaultValue: dbDesc })
+  const title = dbTitle || t(`${base}.title`, { defaultValue: line.title })
+  const shortDescriptionRaw = dbDesc || t(`${base}.shortDescription`, { defaultValue: dbDesc })
   const shortDescription = shortDescriptionRaw.trim() || null
   return { title, shortDescription }
 }
 
 /**
- * Line page shells: translate by route slug even when the row is still loading.
+ * Line page shells: Office copy when the row is loaded; locale keys while loading.
  */
 export function hubServiceLineShellLabels(
   slug: string,
@@ -51,15 +65,12 @@ export function hubServiceLineShellLabels(
   t: (key: string, options?: { defaultValue?: string }) => string,
   fallbackTitle: string,
 ): { title: string; subtitle: string | null } {
-  let keySlug = normalizedHubServiceLineSlug(slug)
-  if (keySlug === "send-money") keySlug = "send"
-
-  const base = `hub.serviceLineTiles.${keySlug}`
+  const base = `hub.serviceLineTiles.${localeKeySlug(slug)}`
   const dbTitle = line?.title?.trim() ?? ""
   const dbDesc = line?.short_description?.trim() ?? ""
 
-  const title = t(`${base}.title`, { defaultValue: dbTitle || fallbackTitle })
-  const subtitleRaw = t(`${base}.shortDescription`, { defaultValue: dbDesc })
+  const title = dbTitle || t(`${base}.title`, { defaultValue: fallbackTitle })
+  const subtitleRaw = dbDesc || t(`${base}.shortDescription`, { defaultValue: "" })
   const subtitle = subtitleRaw.trim() || null
   return { title, subtitle }
 }

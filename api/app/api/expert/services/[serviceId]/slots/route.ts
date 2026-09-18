@@ -17,7 +17,7 @@ export const GET = withErrorHandling(async (request: NextRequest, { params }: { 
   const nowIso = new Date().toISOString()
   const { data: svc, error: se } = await server
     .from("expert_services")
-    .select("id, is_published, expert_profile_id")
+    .select("id, title, short_description, is_published, expert_profile_id")
     .eq("id", serviceId)
     .maybeSingle()
 
@@ -44,7 +44,14 @@ export const GET = withErrorHandling(async (request: NextRequest, { params }: { 
     return createErrorResponse("Failed to load slots", 500)
   }
 
-  const res = NextResponse.json({ slots: data || [] })
+  const res = NextResponse.json({
+    slots: data || [],
+    service: {
+      id: String(svc.id),
+      title: String(svc.title ?? ""),
+      short_description: svc.short_description != null ? String(svc.short_description) : null,
+    },
+  })
   res.headers.set("Cache-Control", EXPERT_SLOTS_JSON_CACHE_CONTROL)
   return res
 })

@@ -751,7 +751,8 @@
       "fulfillmentOnline": "En línea",
       "fulfillmentInPerson": "Presencial",
       "fulfillmentBoth": "En línea o presencial",
-      "fulfillmentHero": "Modalidad: {{value}}"
+      "fulfillmentHero": "Modalidad: {{value}}",
+      "priceFrom": "Desde"
     },
     "booking": {
       "title": "Reservar un experto",

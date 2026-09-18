@@ -12,9 +12,10 @@ export default function HubServiceCatalogRoutePage() {
   useEffect(() => {
     if (slug === "food") router.replace("/food")
     else if (slug === "mart") router.replace("/mart")
+    else if (slug === "experts") router.replace("/experts")
   }, [slug, router])
 
-  if (slug === "food" || slug === "mart") return null
+  if (slug === "food" || slug === "mart" || slug === "experts") return null
 
   return <HubServiceCatalogPage key={slug} slug={slug} />
 }

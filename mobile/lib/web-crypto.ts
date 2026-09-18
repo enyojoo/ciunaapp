@@ -40,8 +40,16 @@ export function ensureWebCrypto(): void {
   }
 
   const subtle = {
-    digest: (algorithm: AlgorithmIdentifier, data: BufferSource) =>
-      ExpoCrypto.digest(toExpoAlgo(algorithmName(algorithm)), data),
+    digest: async (algorithm: AlgorithmIdentifier, data: BufferSource) => {
+      const hex = await ExpoCrypto.digest(toExpoAlgo(algorithmName(algorithm)), data)
+      if (hex instanceof ArrayBuffer) return hex
+      const str = String(hex)
+      const bytes = new Uint8Array(Math.floor(str.length / 2))
+      for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = Number.parseInt(str.slice(i * 2, i * 2 + 2), 16)
+      }
+      return bytes.buffer
+    },
   } as SubtleCrypto
 
   if (current && installSubtle(current, subtle)) {
@@ -55,10 +63,15 @@ export function ensureWebCrypto(): void {
     return
   }
 
-  Object.defineProperty(globalThis, "crypto", {
-    configurable: true,
-    value: { ...(current ?? {}), getRandomValues, subtle },
-  })
+  try {
+    Object.defineProperty(globalThis, "crypto", {
+      configurable: true,
+      value: { ...(current ?? {}), getRandomValues, subtle },
+    })
+  } catch {
+    const g = globalThis as { crypto?: Crypto }
+    g.crypto = { ...(current ?? {}), getRandomValues, subtle } as Crypto
+  }
 }
 
 ensureWebCrypto()

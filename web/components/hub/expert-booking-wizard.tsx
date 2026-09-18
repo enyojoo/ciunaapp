@@ -25,13 +25,13 @@ import {
 } from "@/lib/expert-profile-client-cache"
 import { AppPageHeader } from "@/components/layout/app-page-header"
 import { HubExpertChipLight } from "@/components/hub/hub-expert-chip-light"
+import { ExpertServicePriceRow } from "@/components/hub/hub-expert-service-catalog-card"
 import { ExpertSessionCheckoutPanel } from "@/components/hub/expert-session-checkout-panel"
 import { HubLinePageShell } from "@/components/hub/hub-line-page-shell"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { formatCurrencySymbolOnly } from "@/utils/currency"
 
 type ExpertProfile = {
   id: string
@@ -62,17 +62,6 @@ type Preflight = {
   slot: { id: string; slot_start: string; slot_end: string }
   service: ExpertService
   profile: ExpertProfile
-}
-
-function priceLine(s: ExpertService, t: (k: string, o?: Record<string, string>) => string): string {
-  if (s.pricing_type === "quote") return t("experts.bookingWizard.priceQuote")
-  if (s.pricing_type === "hourly" && s.hourly_rate != null && s.hourly_currency)
-    return `${formatCurrencySymbolOnly(Number(s.hourly_rate), s.hourly_currency)} / hr`
-  if (s.pricing_type === "fixed" && s.fixed_amount != null && s.fixed_currency) {
-    const amt = formatCurrencySymbolOnly(Number(s.fixed_amount), s.fixed_currency)
-    return s.package_label ? `${amt} — ${s.package_label}` : amt
-  }
-  return t("experts.bookingWizard.priceDash")
 }
 
 function slotDayLocalKey(iso: string): string {
@@ -441,7 +430,7 @@ export function ExpertBookingWizard() {
               <p className="text-muted-foreground">
                 {new Date(slot.slot_start).toLocaleString()} — {new Date(slot.slot_end).toLocaleString()}
               </p>
-              <p className="font-medium text-orange-700 dark:text-orange-300">{priceLine(svc, t)}</p>
+              <ExpertServicePriceRow service={svc} />
             </CardContent>
           </Card>
           <p className="text-xs text-muted-foreground">
@@ -517,8 +506,9 @@ export function ExpertBookingWizard() {
                     )}
                   >
                     <p className="font-semibold text-foreground">{s.title}</p>
-                    <p className="mt-1 text-sm font-medium text-orange-700 dark:text-orange-300">{priceLine(s, t)}</p>
-                    {s.short_description ? <p className="mt-2 line-clamp-3 text-xs text-muted-foreground">{s.short_description}</p> : null}
+                    <p className="mt-1">
+                      <ExpertServicePriceRow service={s} />
+                    </p>
                   </button>
                 ))}
               </div>
@@ -543,6 +533,9 @@ export function ExpertBookingWizard() {
 
         {wizardStep === 2 ? (
           <div className="space-y-6">
+            {(selectedService?.short_description || "").trim() ? (
+              <p className="text-sm leading-relaxed text-muted-foreground">{selectedService.short_description}</p>
+            ) : null}
             <h2 className="text-base font-semibold text-foreground">{t("experts.bookingWizard.chooseTime")}</h2>
             <div className="flex flex-col gap-6 lg:flex-row">
               <div className="shrink-0">

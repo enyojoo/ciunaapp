@@ -32,6 +32,7 @@ export { BrandLogo } from "./components/BrandLogo"
 export type { BrandLogoProps } from "./components/BrandLogo"
 export {
   normalizedHubServiceLineSlug,
+  findHubServiceLineBySlug,
   hubServiceLineTileCopy,
   hubServiceLineShellLabels,
   type HubServiceLineRow,

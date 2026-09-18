@@ -5,19 +5,18 @@ export default function HubStack() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
+        gestureEnabled: true,
+        fullScreenGestureEnabled: true,
         contentStyle: { backgroundColor: colors.paper },
-        headerStyle: { backgroundColor: colors.paper },
-        headerShadowVisible: false,
-        headerTintColor: colors.text,
         animationDuration: 180,
       }}
     >
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="index" />
       <Stack.Screen name="[slug]/index" />
       <Stack.Screen name="[slug]/stores" />
       <Stack.Screen name="[slug]/v/[vendor]" />
-      <Stack.Screen name="[slug]/checkout/[productId]" />
+      <Stack.Screen name="[slug]/checkout/[productId]" options={{ headerShown: true, title: "Checkout" }} />
     </Stack>
   )
 }

@@ -14,6 +14,10 @@ export type HubProduct = {
   fulfillment_type?: string | null
   sla_text?: string | null
   vendor_id?: string | null
+  funded_min?: number | null
+  funded_max?: number | null
+  is_featured?: boolean | null
+  updated_at?: string
   vendor?: {
     id: string
     name: string
@@ -90,12 +94,37 @@ export type ExpertProfile = {
   image_url?: string | null
   pricing_hint?: string | null
   service_area?: string | null
+  meeting_hint?: string | null
+  created_at?: string
+}
+
+export type ExpertCatalogService = {
+  id: string
+  title: string
+  short_description?: string | null
+  fulfillment_type?: string | null
+  pricing_type?: string
+  hourly_rate?: number | null
+  hourly_currency?: string | null
+  fixed_amount?: number | null
+  fixed_currency?: string | null
+  package_label?: string | null
+  default_duration_minutes?: number | null
+  expert: {
+    id: string
+    slug?: string | null
+    display_name: string
+    image_url?: string | null
+    category?: string | null
+    is_verified?: boolean
+  }
 }
 
 export type ExpertService = {
   id: string
   title: string
   short_description?: string | null
+  fulfillment_type?: string | null
   pricing_type?: string
   hourly_rate?: number | null
   hourly_currency?: string | null

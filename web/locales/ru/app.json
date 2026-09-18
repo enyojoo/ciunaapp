@@ -751,7 +751,8 @@
       "fulfillmentOnline": "Онлайн",
       "fulfillmentInPerson": "Очно",
       "fulfillmentBoth": "Онлайн или очно",
-      "fulfillmentHero": "Формат: {{value}}"
+      "fulfillmentHero": "Формат: {{value}}",
+      "priceFrom": "От"
     },
     "booking": {
       "title": "Запись к эксперту",

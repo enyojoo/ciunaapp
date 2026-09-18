@@ -36,21 +36,51 @@ export function hubProductShowListStrike(p: {
   return list != null && sale != null && sale > 0 && sale !== list
 }
 
-export function formatMoney(amount: number | null | undefined, currency?: string | null): string {
-  if (amount == null || !Number.isFinite(Number(amount))) return "—"
-  const n = Number(amount)
-  const cur = (currency || "").toUpperCase()
+export function roundMoney(n: number): number {
+  return Math.round((n + Number.EPSILON) * 100) / 100
+}
+
+/** Same corridor symbols as web (`formatCurrencySymbolOnly`). Hermes often prints RUB instead of ₽. */
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  RUB: "₽",
+  NGN: "₦",
+}
+
+export function getCurrencyNarrowSymbol(currencyCode: string | null | undefined): string {
+  const code = String(currencyCode || "").trim().toUpperCase()
+  if (!code) return ""
+  if (CURRENCY_SYMBOLS[code]) return CURRENCY_SYMBOLS[code]
   try {
-    return new Intl.NumberFormat(undefined, {
-      style: cur ? "currency" : "decimal",
-      currency: cur || "USD",
-      maximumFractionDigits: 2,
-    }).format(n)
+    const part = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: code,
+      currencyDisplay: "narrowSymbol",
+    })
+      .formatToParts(0)
+      .find((p) => p.type === "currency")
+    return part?.value || code
   } catch {
-    return cur ? `${n.toFixed(2)} ${cur}` : n.toFixed(2)
+    return code
   }
 }
 
-export function roundMoney(n: number): number {
-  return Math.round((n + Number.EPSILON) * 100) / 100
+export function formatMoney(amount: number | null | undefined, currency?: string | null): string {
+  if (amount == null || !Number.isFinite(Number(amount))) return "—"
+  const rounded = roundMoney(Number(amount))
+  const cur = String(currency || "").trim().toUpperCase()
+  const num = rounded.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+  if (!cur) return num
+  const symbol = getCurrencyNarrowSymbol(cur)
+  return `${symbol === cur ? `${cur} ` : symbol}${num}`
+}
+
+/** Catalog card amount: drop trailing .00 like web. */
+export function formatCardPrice(amount: number | null | undefined, currency?: string | null): string {
+  return formatMoney(amount, currency).replace(/\.00\b/, "")
 }

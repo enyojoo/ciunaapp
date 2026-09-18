@@ -36,7 +36,7 @@ export default function RootLayout() {
               <Stack.Screen name="(app)" />
               <Stack.Screen name="pin" />
               <Stack.Screen name="pin-setup" options={{ headerShown: false }} />
-              <Stack.Screen name="send" options={{ headerShown: true, title: "Send" }} />
+              <Stack.Screen name="send" options={{ headerShown: false, gestureEnabled: true, fullScreenGestureEnabled: true }} />
               <Stack.Screen name="food" />
               <Stack.Screen name="mart" />
               <Stack.Screen name="experts" />

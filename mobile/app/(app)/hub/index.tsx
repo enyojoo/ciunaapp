@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useState } from "react"
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { hubServiceLineTileCopy, type HubServiceLineRow } from "@ciuna/shared"
 import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
+import { HubHero } from "@/components/hub-hero"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
 import { useToast } from "@/components/toast-provider"
 import { fetchWithAuth } from "@/lib/api"
 import { useExternalLink } from "@/lib/external-link"
 import { lineHref } from "@/lib/hub"
-import { colors, space, type as typeSize } from "@/lib/theme"
+import { colors, space } from "@/lib/theme"
 
 export default function HomeScreen() {
   const { t } = useTranslation("app")
@@ -26,7 +27,7 @@ export default function HomeScreen() {
     async (soft?: boolean) => {
       if (!soft) setLoading(true)
       try {
-        const res = await fetchWithAuth("/api/hub/service-lines")
+        const res = await fetchWithAuth("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("load")
         const data = (await res.json()) as { serviceLines?: HubServiceLineRow[] }
         setLines(data.serviceLines || [])
@@ -73,11 +74,7 @@ export default function HomeScreen() {
           />
         }
       >
-        <Text style={styles.hero}>
-          {t("hub.heroBody", {
-            defaultValue: "Shop foodstuffs, book services, send money home and handle life abroad on Ciuna.",
-          })}
-        </Text>
+        <HubHero />
         {loading ? (
           <View style={styles.grid}>
             {Array.from({ length: 6 }).map((_, i) => (
@@ -110,14 +107,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  scroll: { paddingBottom: 40 },
-  hero: {
-    paddingHorizontal: space.page,
-    paddingBottom: 16,
-    fontSize: typeSize.meta,
-    lineHeight: 18,
-    color: colors.muted,
-  },
+  scroll: { paddingTop: 16, paddingBottom: 40 },
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", paddingHorizontal: space.page },
   cell: { width: "48.5%", marginBottom: 10 },
 })

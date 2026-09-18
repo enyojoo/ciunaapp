@@ -97,6 +97,7 @@ export default function HubCheckoutScreen() {
       )}
       <Text style={styles.title}>{product?.title || t("hub.checkout.title", { defaultValue: "Checkout" })}</Text>
       {product?.vendor?.name ? <Text style={styles.vendor}>{product.vendor.name}</Text> : null}
+      {product?.short_description ? <Text style={styles.desc}>{product.short_description}</Text> : null}
       <View style={styles.form}>
         <PayStep
           sendAmount={amount}
@@ -152,5 +153,6 @@ const styles = StyleSheet.create({
   noImage: { fontSize: typeSize.meta, color: colors.muted },
   title: { fontSize: 20, fontWeight: "600", color: colors.text },
   vendor: { marginTop: 4, fontSize: typeSize.meta, color: colors.muted },
+  desc: { marginTop: 10, fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   form: { marginTop: 16 },
 })
