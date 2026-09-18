@@ -89,9 +89,15 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
+# Never commit real env files (api/.env, web/.env, office/.env, mobile/.env)
 .env
+.env.*
+!.env.example
 .env*.local
+
+# local leftovers
+*.bak
+.claude/
 
 # typescript
 *.tsbuildinfo
@@ -111,9 +117,6 @@ out/
 npm-debug.*
 yarn-debug.*
 yarn-error.*
-
-# local env files
-.env*.local
 
 # Turborepo
 .turbo
