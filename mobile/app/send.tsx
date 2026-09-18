@@ -1,26 +1,83 @@
+import { useEffect, useMemo, useState } from "react"
+import { Pressable, Text, View } from "react-native"
 import { useRouter } from "expo-router"
-import { useState } from "react"
-import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native"
-import { useTranslation } from "react-i18next"
-import QRCode from "react-native-qrcode-svg"
-import { Screen } from "@/components/screen"
+import { Field } from "@/components/field"
+import { PayStep } from "@/components/pay-step"
+import { PrimaryButton } from "@/components/primary-button"
+import { ScreenScroll } from "@/components/screen"
+import { SheetPicker } from "@/components/sheet-picker"
+import { useToast } from "@/components/toast-provider"
 import { fetchWithAuth } from "@/lib/api"
-import { useAuth } from "@/lib/auth-context"
+import { findRate, quoteSend } from "@/lib/fx"
+import { formatMoney } from "@/lib/money"
+import { useFx } from "@/lib/use-fx"
+import type { RecipientRow } from "@/lib/types"
+
+type Step = "amount" | "recipient" | "pay"
 
 export default function SendScreen() {
-  const { t } = useTranslation("app")
-  const { user } = useAuth()
   const router = useRouter()
-  const [sendAmount, setSendAmount] = useState("100")
+  const { currencies, rates } = useFx()
+  const [step, setStep] = useState<Step>("amount")
+  const [sendAmount, setSendAmount] = useState("")
   const [sendCurrency, setSendCurrency] = useState("USD")
   const [receiveCurrency, setReceiveCurrency] = useState("NGN")
-  const [recipientId, setRecipientId] = useState("")
+  const [recipients, setRecipients] = useState<RecipientRow[]>([])
+  const [recipientId, setRecipientId] = useState<string | null>(null)
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [name, setName] = useState("")
+  const [account, setAccount] = useState("")
+  const [bank, setBank] = useState("")
+  const { showError } = useToast()
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
+
+  useEffect(() => {
+    void (async () => {
+      const res = await fetchWithAuth("/api/recipients")
+      const body = (await res.json()) as { recipients?: RecipientRow[] }
+      setRecipients(body.recipients || [])
+    })()
+  }, [])
+
+  const rate = findRate(rates, sendCurrency, receiveCurrency)
+  const quote = quoteSend(Number(sendAmount) || 0, rate)
+  const selected = recipients.find((r) => r.id === recipientId)
+
+  const canAmount = Boolean(quote)
+  const canRecipient = Boolean(recipientId)
+
+  const addRecipient = async () => {
+    if (!name.trim() || !account.trim() || !bank.trim()) return
+    setBusy(true)
+    const res = await fetchWithAuth("/api/recipients", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fullName: name.trim(),
+        accountNumber: account.trim(),
+        bankName: bank.trim(),
+        currency: receiveCurrency,
+      }),
+    })
+    const body = await res.json().catch(() => ({}))
+    setBusy(false)
+    if (!res.ok) {
+      showError((body as { error?: string }).error || "Could not save recipient")
+      return
+    }
+    const rec = (body as { recipient?: RecipientRow }).recipient
+    if (rec) {
+      setRecipients((prev) => [rec, ...prev])
+      setRecipientId(rec.id)
+      setName("")
+      setAccount("")
+      setBank("")
+    }
+  }
 
   const submit = async () => {
+    if (!recipientId || !quote) return
     setBusy(true)
-    setError("")
     const res = await fetchWithAuth("/api/transactions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -28,37 +85,113 @@ export default function SendScreen() {
         sendAmount: Number(sendAmount),
         sendCurrency,
         receiveCurrency,
-        recipientId: recipientId || null,
+        receiveAmount: quote.receiveAmount,
+        recipientId,
         fulfillmentType: "bank_transfer",
       }),
     })
-    setBusy(false)
     const body = await res.json().catch(() => ({}))
+    setBusy(false)
     if (!res.ok) {
-      setError((body as { error?: string }).error || "Failed")
+      showError((body as { error?: string }).error || "Send failed. Try again.")
       return
     }
     const id = (body as { transaction?: { transaction_id: string } }).transaction?.transaction_id
-    if (id) router.push(`/orders/${id.toLowerCase()}`)
+    if (id) router.replace(`/orders/${id.toLowerCase()}` as never)
   }
 
+  const steps = useMemo(() => ["amount", "recipient", "pay"] as const, [])
+
   return (
-    <Screen className="px-5">
-      <Text className="mb-4 text-2xl font-bold">{t("send.title", { defaultValue: "Send money" })}</Text>
-      <TextInput value={sendAmount} onChangeText={setSendAmount} keyboardType="decimal-pad" className="mb-3 rounded-xl border border-gray-200 px-3 py-3" placeholder="Amount" />
-      <TextInput value={sendCurrency} onChangeText={setSendCurrency} autoCapitalize="characters" className="mb-3 rounded-xl border border-gray-200 px-3 py-3" placeholder="Send currency" />
-      <TextInput value={receiveCurrency} onChangeText={setReceiveCurrency} autoCapitalize="characters" className="mb-3 rounded-xl border border-gray-200 px-3 py-3" placeholder="Receive currency" />
-      <TextInput value={recipientId} onChangeText={setRecipientId} className="mb-3 rounded-xl border border-gray-200 px-3 py-3" placeholder="Recipient id" />
-      {error ? <Text className="mb-3 text-red-600">{error}</Text> : null}
-      <Pressable onPress={() => void submit()} disabled={busy} className="items-center rounded-xl bg-primary py-3.5">
-        {busy ? <ActivityIndicator color="#fff" /> : <Text className="font-semibold text-white">{t("send.continue", { defaultValue: "Continue" })}</Text>}
-      </Pressable>
-      {user ? (
-        <View className="mt-8 items-center">
-          <Text className="mb-3 text-gray-500">Pay QR</Text>
-          <QRCode value={`ciuna://pay/${user.id}`} size={160} color="#111827" backgroundColor="#ffffff" />
+    <ScreenScroll keyboard>
+      <View className="mb-6 flex-row gap-2">
+        {steps.map((s, i) => (
+          <View key={s} className={`h-1.5 flex-1 rounded-full ${steps.indexOf(step) >= i ? "bg-primary" : "bg-border"}`} />
+        ))}
+      </View>
+
+      {step === "amount" ? (
+        <View>
+          <Text className="mb-4 text-xl font-semibold text-gray-900">How much are you sending?</Text>
+          <PayStep
+            sendAmount={sendAmount}
+            onChangeAmount={setSendAmount}
+            sendCurrency={sendCurrency}
+            receiveCurrency={receiveCurrency}
+            onChangeSendCurrency={setSendCurrency}
+            onChangeReceiveCurrency={setReceiveCurrency}
+            currencies={currencies}
+            rates={rates}
+          />
+          <PrimaryButton label="Continue" onPress={() => setStep("recipient")} disabled={!canAmount} />
         </View>
       ) : null}
-    </Screen>
+
+      {step === "recipient" ? (
+        <View>
+          <Text className="mb-4 text-xl font-semibold text-gray-900">Who receives it?</Text>
+          <Pressable
+            onPress={() => setPickerOpen(true)}
+            className="mb-4 min-h-[48px] justify-center rounded-xl border border-border bg-surface px-4 py-3"
+          >
+            <Text className="text-base text-gray-900">{selected?.full_name || "Choose a recipient"}</Text>
+            {selected?.bank_name ? <Text className="text-sm text-muted">{selected.bank_name}</Text> : null}
+          </Pressable>
+          <Text className="mb-2 font-medium text-gray-900">Or add someone</Text>
+          <Field label="Full name" value={name} onChangeText={setName} />
+          <Field label="Account number" value={account} onChangeText={setAccount} keyboardType="number-pad" />
+          <Field label="Bank name" value={bank} onChangeText={setBank} />
+          <View className="mb-3">
+            <PrimaryButton label="Save recipient" variant="secondary" onPress={() => void addRecipient()} busy={busy} />
+          </View>
+          <PrimaryButton label="Continue" onPress={() => setStep("pay")} disabled={!canRecipient} />
+          <View className="mt-3">
+            <PrimaryButton label="Back" variant="ghost" onPress={() => setStep("amount")} />
+          </View>
+          <SheetPicker
+            open={pickerOpen}
+            title="Recipients"
+            items={recipients}
+            keyExtractor={(r) => r.id}
+            labelExtractor={(r) => `${r.full_name}${r.bank_name ? ` · ${r.bank_name}` : ""}`}
+            selectedId={recipientId}
+            onSelect={(r) => setRecipientId(r.id)}
+            onClose={() => setPickerOpen(false)}
+          />
+        </View>
+      ) : null}
+
+      {step === "pay" ? (
+        <View>
+          <Text className="mb-4 text-xl font-semibold text-gray-900">Pay</Text>
+          {quote ? (
+            <View className="mb-4 rounded-2xl border border-border bg-surface px-4 py-4">
+              <Text className="text-sm text-muted">You send</Text>
+              <Text className="text-2xl font-semibold text-gray-900">{formatMoney(Number(sendAmount), sendCurrency)}</Text>
+              <Text className="mt-3 text-sm text-muted">They receive</Text>
+              <Text className="text-lg font-semibold text-gray-900">
+                {formatMoney(quote.receiveAmount, receiveCurrency)}
+              </Text>
+              <Text className="mt-3 text-sm text-muted">
+                Rate 1 {sendCurrency} = {quote.rate.toFixed(4)} {receiveCurrency}
+              </Text>
+              <Text className="mt-1 text-sm text-muted">
+                {quote.feeAmount > 0
+                  ? `Exchange fee ${formatMoney(quote.feeAmount, sendCurrency)}`
+                  : "No exchange fee on this corridor"}
+              </Text>
+              <Text className="mt-3 text-sm text-muted">To {selected?.full_name}</Text>
+              <Text className="mt-3 text-base font-semibold text-gray-900">
+                You pay {formatMoney(quote.totalAmount, sendCurrency)}
+              </Text>
+            </View>
+          ) : null}
+          <PrimaryButton label="Send" onPress={() => void submit()} busy={busy} />
+          <View className="mt-3">
+            <PrimaryButton label="Back" variant="ghost" onPress={() => setStep("recipient")} />
+          </View>
+        </View>
+      ) : null}
+    </ScreenScroll>
   )
 }

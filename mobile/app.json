@@ -10,6 +10,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ciuna.app",
+      "usesAppleSignIn": true,
       "infoPlist": {
         "NSFaceIDUsageDescription": "Unlock Ciuna with Face ID after your PIN.",
         "NSPhotoLibraryUsageDescription": "Upload identity and address documents."
@@ -59,6 +60,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-apple-authentication",
       "expo-secure-store",
       "expo-localization",
       "expo-web-browser",
@@ -76,7 +78,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#F97316"
         }
-      ]
+      ],
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true

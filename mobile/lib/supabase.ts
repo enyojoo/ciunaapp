@@ -1,3 +1,4 @@
+import "./web-crypto"
 import { createClient } from "@supabase/supabase-js"
 import { supabaseAuthStorage } from "./secure-storage"
 

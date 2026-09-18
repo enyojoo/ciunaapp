@@ -1,0 +1,116 @@
+import { useCallback, useEffect, useState } from "react"
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
+import { useRouter } from "expo-router"
+import { useTranslation } from "react-i18next"
+import { hubServiceLineTileCopy, type HubServiceLineRow } from "@ciuna/shared"
+import { AppHeader } from "@/components/app-header"
+import { EmptyState } from "@/components/empty-state"
+import { Screen } from "@/components/screen"
+import { Tile, TileSkeleton } from "@/components/tile"
+import { apiFetch } from "@/lib/api"
+import { useExternalLink } from "@/lib/external-link"
+import { lineHref } from "@/lib/hub"
+import { colors, type as typeSize } from "@/lib/theme"
+
+export default function HomeScreen() {
+  const { t } = useTranslation("app")
+  const router = useRouter()
+  const { openLink } = useExternalLink()
+  const [lines, setLines] = useState<HubServiceLineRow[]>([])
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+
+  const load = useCallback(async (soft?: boolean) => {
+    if (!soft) setLoading(true)
+    try {
+      const res = await apiFetch("/api/hub/service-lines")
+      const data = (await res.json()) as { serviceLines?: HubServiceLineRow[] }
+      setLines(data.serviceLines || [])
+    } finally {
+      setLoading(false)
+      setRefreshing(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    void load()
+  }, [load])
+
+  const open = (line: HubServiceLineRow) => {
+    const href = lineHref(line)
+    if (!href) return
+    if (line.grid_kind === "external_url") {
+      const { title } = hubServiceLineTileCopy(line, t)
+      void openLink(href, title)
+      return
+    }
+    router.push(href as never)
+  }
+
+  return (
+    <Screen edges={["top", "left", "right"]}>
+      <AppHeader />
+      <ScrollView
+        style={styles.flex}
+        contentContainerStyle={styles.scroll}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true)
+              void load(true)
+            }}
+            tintColor={colors.primary}
+          />
+        }
+      >
+        <Text style={styles.hero}>
+          {t("hub.heroBody", {
+            defaultValue: "Shop foodstuffs, book services, send money home and handle life abroad on Ciuna.",
+          })}
+        </Text>
+        {loading ? (
+          <View style={styles.grid}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <View key={i} style={styles.cell}>
+                <TileSkeleton />
+              </View>
+            ))}
+          </View>
+        ) : lines.length === 0 ? (
+          <EmptyState title="Nothing on Home yet" body="Office Hub Services is empty or all lines are off." />
+        ) : (
+          <View style={styles.grid}>
+            {lines.map((line) => {
+              const { title, shortDescription } = hubServiceLineTileCopy(line, t)
+              return (
+                <View key={line.id} style={styles.cell}>
+                  <Tile
+                    title={title}
+                    description={shortDescription}
+                    iconUrl={line.icon_url}
+                    onPress={() => open(line)}
+                  />
+                </View>
+              )
+            })}
+          </View>
+        )}
+      </ScrollView>
+    </Screen>
+  )
+}
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  scroll: { paddingBottom: 40 },
+  hero: {
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    fontSize: typeSize.meta,
+    lineHeight: 18,
+    color: colors.muted,
+  },
+  grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", paddingHorizontal: 20 },
+  cell: { width: "48.5%", marginBottom: 10 },
+})

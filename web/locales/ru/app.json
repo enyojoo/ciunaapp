@@ -736,7 +736,10 @@
     "resetSuccessRedirect": "Пароль изменён. Войдите с новым паролем.",
     "callbackCancelled": "Вход отменён",
     "callbackFailedSignIn": "Не удалось завершить вход",
-    "callbackRedirectLogin": "Переход ко входу…"
+    "callbackRedirectLogin": "Переход ко входу…",
+    "fillAllFields": "Заполните все поля",
+    "passwordMinLength": "Пароль должен содержать не менее 6 символов",
+    "helpToast": "Нужна помощь? Напишите на {{email}}"
   },
   "experts": {
     "profile": {

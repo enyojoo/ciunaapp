@@ -1,9 +1,9 @@
 {
   "nav": {
-    "home": "Hub",
+    "home": "Home",
     "sendMoney": "Send Money",
     "send": "Send",
-    "hub": "Hub",
+    "hub": "Home",
     "recipients": "Recipients",
     "transactions": "Transactions",
     "more": "More",

@@ -1,58 +1,129 @@
-import { Link, useRouter } from "expo-router"
-import { useState } from "react"
-import { ActivityIndicator, Pressable, Text, TextInput } from "react-native"
+import { useEffect, useMemo, useState } from "react"
+import { StyleSheet, View } from "react-native"
+import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { Screen } from "@/components/screen"
+import { AuthFooter, AuthSubtitle, AuthTitle, AuthTopBar, PasswordEye, useAuthBack } from "@/components/auth-chrome"
+import { Field } from "@/components/field"
+import { PrimaryButton } from "@/components/primary-button"
+import { ScreenScroll } from "@/components/screen"
+import { useToast } from "@/components/toast-provider"
 import { apiFetch } from "@/lib/api"
+import { takeResetSession } from "@/lib/reset-session"
 
 export default function ResetPasswordScreen() {
   const { t } = useTranslation("app")
   const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [otp, setOtp] = useState("")
+  const onBack = useAuthBack()
+  const { showError, showSuccess } = useToast()
+  const session = useMemo(() => takeResetSession(), [])
   const [password, setPassword] = useState("")
+  const [confirm, setConfirm] = useState("")
+  const [show, setShow] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
+
+  useEffect(() => {
+    if (session) return
+    showError(t("auth.invalidResetLink", { defaultValue: "Invalid or expired reset link. Please request a new password reset." }))
+  }, [session, showError, t])
 
   const onSubmit = async () => {
+    if (!session) return
+    if (!password || !confirm) {
+      showError(t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }))
+      return
+    }
+    if (password !== confirm) {
+      showError(t("auth.passwordMismatch", { defaultValue: "Passwords do not match" }))
+      return
+    }
+    if (password.length < 6) {
+      showError(t("auth.passwordMinLength", { defaultValue: "Password must be at least 6 characters long" }))
+      return
+    }
     setBusy(true)
-    setError("")
-    const verify = await apiFetch("/api/auth/verify-reset-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email.trim(), token: otp.trim() }),
-    })
-    if (!verify.ok) {
+    try {
+      const res = await apiFetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: session.resetToken, email: session.email, newPassword: password }),
+      })
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string }
+        showError(body.error || t("auth.resetPasswordFailed", { defaultValue: "Failed to reset password" }))
+        return
+      }
+      showSuccess(t("auth.resetSuccessRedirect", { defaultValue: "Your password has been successfully updated" }))
+      setTimeout(() => router.replace("/auth/login"), 500)
+    } catch {
+      showError(t("auth.genericError", { defaultValue: "Network error. Please check your connection and try again." }))
+    } finally {
       setBusy(false)
-      setError("Invalid code")
-      return
     }
-    const res = await apiFetch("/api/auth/reset-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email.trim(), token: otp.trim(), password }),
-    })
-    setBusy(false)
-    if (!res.ok) {
-      setError("Could not reset password")
-      return
-    }
-    router.replace("/auth/login")
   }
 
   return (
-    <Screen className="justify-center px-6">
-      <Text className="mb-4 text-2xl font-bold">{t("auth.resetPassword", { defaultValue: "Reset password" })}</Text>
-      <TextInput autoCapitalize="none" placeholder="Email" value={email} onChangeText={setEmail} className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base" />
-      <TextInput placeholder="OTP" value={otp} onChangeText={setOtp} keyboardType="number-pad" className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base" />
-      <TextInput secureTextEntry placeholder="New password" value={password} onChangeText={setPassword} className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base" />
-      {error ? <Text className="mb-3 text-red-600">{error}</Text> : null}
-      <Pressable onPress={() => void onSubmit()} disabled={busy} className="items-center rounded-xl bg-primary py-3.5">
-        {busy ? <ActivityIndicator color="#fff" /> : <Text className="font-semibold text-white">{t("auth.save", { defaultValue: "Save" })}</Text>}
-      </Pressable>
-      <Link href="/auth/login" className="mt-4 text-center text-gray-500">
-        {t("auth.signIn", { defaultValue: "Sign in" })}
-      </Link>
-    </Screen>
+    <ScreenScroll keyboard contentStyle={styles.content}>
+      <AuthTopBar onBack={onBack} />
+      <AuthTitle compact>{t("auth.resetPasswordTitle", { defaultValue: "Reset Password" })}</AuthTitle>
+      <AuthSubtitle>
+        {session
+          ? t("auth.resetPasswordDesc", { defaultValue: "Enter your new password below" })
+          : t("auth.invalidResetLink", { defaultValue: "Invalid or expired reset link. Please request a new password reset." })}
+      </AuthSubtitle>
+      <View style={styles.form}>
+        {session ? (
+          <>
+            <Field
+              label={t("auth.newPassword", { defaultValue: "New Password" })}
+              secureTextEntry={!show}
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="password-new"
+              textContentType="newPassword"
+              placeholder={t("auth.newPasswordPlaceholder", { defaultValue: "Enter new password" })}
+              value={password}
+              onChangeText={setPassword}
+              returnKeyType="next"
+              trailing={<PasswordEye show={show} onToggle={() => setShow((s) => !s)} />}
+            />
+            <Field
+              label={t("auth.confirmPassword", { defaultValue: "Confirm password" })}
+              secureTextEntry={!showConfirm}
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="password-new"
+              textContentType="newPassword"
+              placeholder={t("auth.confirmPasswordPlaceholder", { defaultValue: "Confirm new password" })}
+              value={confirm}
+              onChangeText={setConfirm}
+              returnKeyType="done"
+              onSubmitEditing={() => void onSubmit()}
+              trailing={<PasswordEye show={showConfirm} onToggle={() => setShowConfirm((s) => !s)} />}
+            />
+            <PrimaryButton
+              label={busy ? t("auth.resetting", { defaultValue: "Resetting..." }) : t("auth.updatePassword", { defaultValue: "Update password" })}
+              onPress={() => void onSubmit()}
+              busy={busy}
+            />
+          </>
+        ) : (
+          <PrimaryButton
+            label={t("auth.forgotPasswordTitle", { defaultValue: "Forgot Password" })}
+            onPress={() => router.replace("/auth/forgot-password")}
+          />
+        )}
+        <AuthFooter
+          prompt={t("auth.alreadyHaveAccount", { defaultValue: "Already have an account?" })}
+          action={t("auth.signInLink", { defaultValue: "Sign in" })}
+          href="/auth/login"
+        />
+      </View>
+    </ScreenScroll>
   )
 }
+
+const styles = StyleSheet.create({
+  content: { flexGrow: 1, paddingTop: 8 },
+  form: { width: "100%", maxWidth: 448, alignSelf: "center", marginTop: 16 },
+})

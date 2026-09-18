@@ -1,30 +1,47 @@
 import { useRouter } from "expo-router"
 import { useEffect } from "react"
-import { ActivityIndicator, View } from "react-native"
+import { ActivityIndicator, Platform, StyleSheet, View } from "react-native"
 import * as Linking from "expo-linking"
+import { useAuth } from "@/lib/auth-context"
+import { parseAuthCallbackUrl } from "@/lib/oauth-callback"
 import { supabase } from "@/lib/supabase"
+import { colors } from "@/lib/theme"
 
 export default function AuthCallbackScreen() {
   const router = useRouter()
+  const { user, loading } = useAuth()
 
   useEffect(() => {
     const run = async () => {
-      const url = await Linking.getInitialURL()
+      const url =
+        Platform.OS === "web" && typeof window !== "undefined"
+          ? window.location.href
+          : ((await Linking.getInitialURL()) ?? "")
       if (url) {
-        const parsed = Linking.parse(url)
-        const code = typeof parsed.queryParams?.code === "string" ? parsed.queryParams.code : null
+        const { code, accessToken, refreshToken } = parseAuthCallbackUrl(url)
         if (code) {
-          await supabase.auth.exchangeCodeForSession(code)
+          const { data } = await supabase.auth.getSession()
+          if (!data.session) await supabase.auth.exchangeCodeForSession(code)
+        } else if (accessToken) {
+          await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken ?? "" })
         }
       }
-      router.replace("/")
     }
     void run()
-  }, [router])
+  }, [])
+
+  useEffect(() => {
+    if (loading) return
+    router.replace(user ? "/" : "/auth/login")
+  }, [loading, router, user])
 
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <ActivityIndicator color="#F97316" />
+    <View style={styles.center}>
+      <ActivityIndicator color={colors.primary} />
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.paper },
+})

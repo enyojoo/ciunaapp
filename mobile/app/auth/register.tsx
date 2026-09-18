@@ -1,44 +1,152 @@
-import { Link, useRouter } from "expo-router"
+import { useRouter } from "expo-router"
 import { useState } from "react"
-import { ActivityIndicator, Pressable, Text, TextInput } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { Screen } from "@/components/screen"
+import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth, useAuthBack } from "@/components/auth-chrome"
+import { Field } from "@/components/field"
+import { PrimaryButton } from "@/components/primary-button"
+import { ScreenScroll } from "@/components/screen"
+import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
+import { useExternalLink } from "@/lib/external-link"
+import { supabase } from "@/lib/supabase"
+import { colors, type as typeSize } from "@/lib/theme"
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function RegisterScreen() {
   const { t } = useTranslation("app")
-  const { signUp } = useAuth()
+  const { signUp, signInWithGoogle, signInWithApple } = useAuth()
+  const { showError } = useToast()
+  const { openLink } = useExternalLink()
   const router = useRouter()
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
+  const onBack = useAuthBack()
+  const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [show, setShow] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
 
   const onSubmit = async () => {
+    const trimmedEmail = email.trim()
+    if (!fullName.trim() || !trimmedEmail || !password) {
+      showError(t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }))
+      return
+    }
+    if (password.length < 6) {
+      showError(t("auth.passwordMinLength", { defaultValue: "Password must be at least 6 characters long" }))
+      return
+    }
+    if (!EMAIL_RE.test(trimmedEmail)) {
+      showError(t("auth.enterEmailAddress", { defaultValue: "Please enter a valid email address" }))
+      return
+    }
     setBusy(true)
-    setError("")
-    const { error: err } = await signUp(email.trim(), password, firstName.trim(), lastName.trim())
+    const { error: err } = await signUp(trimmedEmail, password, fullName)
     setBusy(false)
-    if (err) setError(err)
+    if (err) showError(err)
     else router.replace("/auth/login")
   }
 
+  const onSocial = async (fn: () => Promise<{ error: string | null }>) => {
+    setBusy(true)
+    const { error: err } = await fn()
+    setBusy(false)
+    if (err) {
+      showError(err)
+      return
+    }
+    const { data } = await supabase.auth.getSession()
+    if (data.session?.user) router.replace("/")
+  }
+
   return (
-    <Screen className="justify-center px-6">
-      <Text className="mb-4 text-2xl font-bold">{t("auth.createAccount", { defaultValue: "Create account" })}</Text>
-      <TextInput placeholder="First name" value={firstName} onChangeText={setFirstName} className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base" />
-      <TextInput placeholder="Last name" value={lastName} onChangeText={setLastName} className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base" />
-      <TextInput autoCapitalize="none" keyboardType="email-address" placeholder="Email" value={email} onChangeText={setEmail} className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base" />
-      <TextInput secureTextEntry placeholder="Password" value={password} onChangeText={setPassword} className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base" />
-      {error ? <Text className="mb-3 text-red-600">{error}</Text> : null}
-      <Pressable onPress={() => void onSubmit()} disabled={busy} className="items-center rounded-xl bg-primary py-3.5">
-        {busy ? <ActivityIndicator color="#fff" /> : <Text className="font-semibold text-white">{t("auth.register", { defaultValue: "Register" })}</Text>}
-      </Pressable>
-      <Link href="/auth/login" className="mt-4 text-center text-primary">
-        {t("auth.signIn", { defaultValue: "Sign in" })}
-      </Link>
-    </Screen>
+    <ScreenScroll keyboard contentStyle={styles.content}>
+      <AuthTopBar onBack={onBack} />
+      <AuthTitle>{t("auth.createAccountTitle", { defaultValue: "Create an Account" })}</AuthTitle>
+      <Text style={styles.terms}>
+        {t("auth.termsPrefix", { defaultValue: "By creating an account you agree to our" })}{" "}
+        <Text
+          style={styles.termsLink}
+          onPress={() => void openLink("https://www.ciuna.com/terms", t("auth.termsLink", { defaultValue: "Terms" }))}
+        >
+          {t("auth.termsLink", { defaultValue: "Terms" })}
+        </Text>
+        .
+      </Text>
+      <View style={styles.form}>
+        <SocialAuth
+          appleLabel={t("auth.signUpApple", { defaultValue: "Sign up with Apple" })}
+          googleLabel={t("auth.signUpGoogle", { defaultValue: "Sign up with Google" })}
+          orLabel={t("auth.or", { defaultValue: "Or" })}
+          onApple={() => void onSocial(signInWithApple)}
+          onGoogle={() => void onSocial(signInWithGoogle)}
+          disabled={busy}
+        />
+        <Field
+          label={t("auth.fullName", { defaultValue: "Full name" })}
+          value={fullName}
+          onChangeText={setFullName}
+          autoComplete="name"
+          textContentType="name"
+          autoCapitalize="words"
+          placeholder={t("auth.fullNamePlaceholder", { defaultValue: "Jane Doe" })}
+          returnKeyType="next"
+        />
+        <Field
+          label={t("auth.email", { defaultValue: "Email" })}
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="email-address"
+          autoComplete="email"
+          textContentType="emailAddress"
+          placeholder={t("auth.emailPlaceholder", { defaultValue: "you@example.com" })}
+          value={email}
+          onChangeText={setEmail}
+          returnKeyType="next"
+        />
+        <Field
+          label={t("auth.password", { defaultValue: "Password" })}
+          secureTextEntry={!show}
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="password-new"
+          textContentType="newPassword"
+          placeholder={t("auth.createPasswordPlaceholder", { defaultValue: "Create a password" })}
+          value={password}
+          onChangeText={setPassword}
+          returnKeyType="go"
+          onSubmitEditing={() => void onSubmit()}
+          trailing={<PasswordEye show={show} onToggle={() => setShow((s) => !s)} />}
+        />
+        <PrimaryButton
+          label={
+            busy
+              ? t("auth.creatingAccount", { defaultValue: "Creating account…" })
+              : t("auth.createAccount", { defaultValue: "Create Account" })
+          }
+          onPress={() => void onSubmit()}
+          busy={busy}
+        />
+        <AuthFooter
+          prompt={t("auth.alreadyHaveAccount", { defaultValue: "Already have an account?" })}
+          action={t("auth.signInLink", { defaultValue: "Sign in" })}
+          href="/auth/login"
+        />
+      </View>
+    </ScreenScroll>
   )
 }
+
+const styles = StyleSheet.create({
+  content: { flexGrow: 1, paddingTop: 8 },
+  form: { width: "100%", maxWidth: 448, alignSelf: "center" },
+  terms: {
+    marginBottom: 16,
+    fontSize: typeSize.meta,
+    lineHeight: 20,
+    color: colors.muted,
+    textAlign: "center",
+  },
+  termsLink: { fontWeight: "600", color: colors.primary },
+})

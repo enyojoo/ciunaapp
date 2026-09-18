@@ -666,6 +666,8 @@
   "auth": {
     "welcomeBack": "Bienvenido de nuevo",
     "signInGoogle": "Iniciar sesión con Google",
+    "signInApple": "Iniciar sesión con Apple",
+    "signUpApple": "Registrarse con Apple",
     "or": "o",
     "email": "Correo",
     "emailPlaceholder": "tu@ejemplo.com",
@@ -684,6 +686,8 @@
     "termsPrefix": "Al crear una cuenta aceptas nuestros",
     "termsLink": "Términos",
     "signUpGoogle": "Registrarse con Google",
+    "fullName": "Nombre completo",
+    "fullNamePlaceholder": "Ana García",
     "firstNameRequired": "Nombre *",
     "lastNameRequired": "Apellido *",
     "firstNamePlaceholder": "Nombre",
@@ -730,13 +734,20 @@
     "resetPasswordDesc": "Ingresa tu nueva contraseña abajo",
     "newPassword": "Nueva contraseña",
     "newPasswordPlaceholder": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Confirma la nueva contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "updatePassword": "Actualizar contraseña",
     "resetting": "Guardando…",
     "resetPasswordFailed": "No se pudo restablecer la contraseña",
     "invalidResetLink": "Enlace no válido o expirado. Solicita un nuevo restablecimiento.",
     "resetSuccessRedirect": "Contraseña actualizada. Inicia sesión con la nueva contraseña.",
     "callbackCancelled": "Inicio de sesión cancelado",
     "callbackFailedSignIn": "No se pudo completar el inicio de sesión",
-    "callbackRedirectLogin": "Redirigiendo al inicio de sesión…"
+    "callbackRedirectLogin": "Redirigiendo al inicio de sesión…",
+    "fillAllFields": "Completa todos los campos",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "helpToast": "¿Necesitas ayuda? Contacta a {{email}}"
   },
   "experts": {
     "profile": {

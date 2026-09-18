@@ -1,20 +1,5 @@
-import { useEffect, useState } from "react"
-import { ActivityIndicator, ScrollView, Text } from "react-native"
-import { apiFetch } from "@/lib/api"
+import { Redirect } from "expo-router"
 
-export default function MartScreen() {
-  const [count, setCount] = useState<number | null>(null)
-  useEffect(() => {
-    void (async () => {
-      const res = await apiFetch("/api/hub/products?service_line=mart")
-      const data = await res.json()
-      setCount((data.products || []).length)
-    })()
-  }, [])
-  return (
-    <ScrollView className="flex-1 bg-white" contentContainerClassName="p-5">
-      <Text className="text-2xl font-bold">Mart</Text>
-      {count == null ? <ActivityIndicator color="#F97316" className="mt-5" /> : <Text className="mt-3 text-gray-500">{count} products</Text>}
-    </ScrollView>
-  )
+export default function MartAlias() {
+  return <Redirect href="/(app)/hub/mart" />
 }

@@ -666,6 +666,8 @@
   "auth": {
     "welcomeBack": "С возвращением",
     "signInGoogle": "Войти через Google",
+    "signInApple": "Войти через Apple",
+    "signUpApple": "Регистрация через Apple",
     "or": "или",
     "email": "Эл. почта",
     "emailPlaceholder": "you@example.com",
@@ -684,6 +686,8 @@
     "termsPrefix": "Регистрируясь, вы принимаете",
     "termsLink": "Условия",
     "signUpGoogle": "Регистрация через Google",
+    "fullName": "Полное имя",
+    "fullNamePlaceholder": "Анна Иванова",
     "firstNameRequired": "Имя *",
     "lastNameRequired": "Фамилия *",
     "firstNamePlaceholder": "Имя",
@@ -730,13 +734,20 @@
     "resetPasswordDesc": "Введите новый пароль ниже",
     "newPassword": "Новый пароль",
     "newPasswordPlaceholder": "Новый пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "confirmPasswordPlaceholder": "Повторите новый пароль",
+    "passwordMismatch": "Пароли не совпадают",
+    "updatePassword": "Обновить пароль",
     "resetting": "Сохранение…",
     "resetPasswordFailed": "Не удалось сбросить пароль",
     "invalidResetLink": "Ссылка недействительна или истекла. Запросите сброс снова.",
     "resetSuccessRedirect": "Пароль изменён. Войдите с новым паролем.",
     "callbackCancelled": "Вход отменён",
     "callbackFailedSignIn": "Не удалось завершить вход",
-    "callbackRedirectLogin": "Переход ко входу…"
+    "callbackRedirectLogin": "Переход ко входу…",
+    "fillAllFields": "Заполните все поля",
+    "passwordMinLength": "Пароль должен содержать не менее 6 символов",
+    "helpToast": "Нужна помощь? Напишите на {{email}}"
   },
   "experts": {
     "profile": {

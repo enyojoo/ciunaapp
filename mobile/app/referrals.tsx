@@ -18,7 +18,7 @@ export default function ReferralsScreen() {
   }, [])
   const url = slug ? `${APP_URLS.app}/${slug}` : ""
   return (
-    <Screen className="px-5">
+    <Screen padded>
       <Text className="mb-3 text-2xl font-bold">Referrals</Text>
       <Text className="text-gray-500">{url || "Loading…"}</Text>
       {url ? (

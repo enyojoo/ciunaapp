@@ -1,13 +1,14 @@
 import { Redirect } from "expo-router"
-import { ActivityIndicator, View } from "react-native"
+import { ActivityIndicator, StyleSheet, View } from "react-native"
 import { useAuth } from "@/lib/auth-context"
+import { colors } from "@/lib/theme"
 
 export default function Index() {
   const { user, loading, pinUnlocked } = useAuth()
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator color="#F97316" />
+      <View style={styles.center}>
+        <ActivityIndicator color={colors.primary} />
       </View>
     )
   }
@@ -15,3 +16,7 @@ export default function Index() {
   if (!pinUnlocked) return <Redirect href="/pin" />
   return <Redirect href="/(app)/hub" />
 }
+
+const styles = StyleSheet.create({
+  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.paper },
+})

@@ -37,6 +37,7 @@ if (!i18n.isInitialized) {
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
     lng: isBrowser ? undefined : "en",
+    showSupportNotice: false,
     detection: isBrowser
       ? {
           order: ["localStorage", "navigator"],

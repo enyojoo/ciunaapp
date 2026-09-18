@@ -1,8 +1,8 @@
-import { Redirect } from "expo-router"
-import { Tabs } from "expo-router"
-import { Text } from "react-native"
+import { Redirect, Tabs } from "expo-router"
+import { Home, History, LayoutDashboard } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { useAuth } from "@/lib/auth-context"
+import { colors } from "@/lib/theme"
 
 export default function AppTabs() {
   const { t } = useTranslation("common")
@@ -13,30 +13,35 @@ export default function AppTabs() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#F97316",
-        tabBarInactiveTintColor: "#6b7280",
-        headerTitleStyle: { fontWeight: "700" },
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.muted,
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+        },
+        tabBarLabelStyle: { fontSize: 12, fontWeight: "600" },
       }}
     >
       <Tabs.Screen
         name="hub"
         options={{
-          title: t("nav.hub", { defaultValue: "Hub" }),
-          tabBarIcon: () => <Text>⌂</Text>,
+          title: t("nav.home", { defaultValue: "Home" }),
+          tabBarIcon: ({ color, size }) => <Home size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="transactions"
         options={{
           title: t("nav.transactions", { defaultValue: "Transactions" }),
-          tabBarIcon: () => <Text>☰</Text>,
+          tabBarIcon: ({ color, size }) => <History size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="more"
         options={{
           title: t("nav.more", { defaultValue: "More" }),
-          tabBarIcon: () => <Text>⋯</Text>,
+          tabBarIcon: ({ color, size }) => <LayoutDashboard size={size} color={color} />,
         }}
       />
     </Tabs>

@@ -20,7 +20,7 @@ export default function AssistantScreen() {
   }
 
   return (
-    <Screen className="px-5">
+    <Screen padded>
       <Text className="mb-3 text-2xl font-bold">Assistant</Text>
       <TextInput value={notes} onChangeText={setNotes} placeholder="What do you need?" multiline className="mb-3 min-h-[120px] rounded-xl border border-gray-200 px-3 py-3" />
       <Pressable onPress={() => void submit()} className="items-center rounded-xl bg-primary py-3.5">

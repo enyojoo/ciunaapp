@@ -1,22 +1,35 @@
 import { useEffect, useState } from "react"
-import { ActivityIndicator, ScrollView, Text } from "react-native"
+import { ScrollView, Text } from "react-native"
+import { EmptyState } from "@/components/empty-state"
+import { Screen } from "@/components/screen"
 import { fetchWithAuth } from "@/lib/api"
+import type { RecipientRow } from "@/lib/types"
 
 export default function RecipientsScreen() {
-  const [rows, setRows] = useState<{ id: string; full_name: string }[]>([])
+  const [rows, setRows] = useState<RecipientRow[]>([])
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     void (async () => {
       const res = await fetchWithAuth("/api/recipients")
-      const data = await res.json()
-      setRows((data.recipients || []) as { id: string; full_name: string }[])
+      const data = (await res.json()) as { recipients?: RecipientRow[] }
+      setRows(data.recipients || [])
       setLoading(false)
     })()
   }, [])
   return (
-    <ScrollView className="flex-1 bg-white" contentContainerClassName="p-5">
-      <Text className="mb-3 text-2xl font-bold">Recipients</Text>
-      {loading ? <ActivityIndicator color="#F97316" /> : rows.map((r) => <Text key={r.id} className="py-2.5">{r.full_name}</Text>)}
-    </ScrollView>
+    <Screen edges={["left", "right"]}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 40 }}>
+        {loading ? <Text className="py-8 text-center text-muted">Loading…</Text> : null}
+        {!loading && rows.length === 0 ? (
+          <EmptyState title="No recipients" body="Add someone when you send money." />
+        ) : null}
+        {rows.map((r) => (
+          <Text key={r.id} className="border-b border-border py-3.5 text-base text-gray-900">
+            {r.full_name}
+            {r.bank_name ? `\n${r.bank_name}` : ""}
+          </Text>
+        ))}
+      </ScrollView>
+    </Screen>
   )
 }

@@ -666,6 +666,8 @@
   "auth": {
     "welcomeBack": "Bon retour",
     "signInGoogle": "Se connecter avec Google",
+    "signInApple": "Se connecter avec Apple",
+    "signUpApple": "S’inscrire avec Apple",
     "or": "ou",
     "email": "E-mail",
     "emailPlaceholder": "vous@exemple.com",
@@ -684,6 +686,8 @@
     "termsPrefix": "En créant un compte, vous acceptez nos",
     "termsLink": "Conditions",
     "signUpGoogle": "S’inscrire avec Google",
+    "fullName": "Nom complet",
+    "fullNamePlaceholder": "Camille Dupont",
     "firstNameRequired": "Prénom *",
     "lastNameRequired": "Nom *",
     "firstNamePlaceholder": "Prénom",
@@ -730,13 +734,20 @@
     "resetPasswordDesc": "Saisissez votre nouveau mot de passe ci-dessous",
     "newPassword": "Nouveau mot de passe",
     "newPasswordPlaceholder": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez le nouveau mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "updatePassword": "Mettre à jour le mot de passe",
     "resetting": "Enregistrement…",
     "resetPasswordFailed": "Impossible de réinitialiser le mot de passe",
     "invalidResetLink": "Lien invalide ou expiré. Demandez un nouveau lien.",
     "resetSuccessRedirect": "Mot de passe réinitialisé. Connectez-vous avec le nouveau mot de passe.",
     "callbackCancelled": "Connexion annulée",
     "callbackFailedSignIn": "Impossible de terminer la connexion",
-    "callbackRedirectLogin": "Redirection vers la connexion…"
+    "callbackRedirectLogin": "Redirection vers la connexion…",
+    "fillAllFields": "Veuillez remplir tous les champs",
+    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
+    "helpToast": "Besoin d’aide ? Contactez {{email}}"
   },
   "experts": {
     "profile": {

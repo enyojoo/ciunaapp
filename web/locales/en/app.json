@@ -810,7 +810,10 @@
     "resetSuccessRedirect": "Password reset successful. Please sign in with your new password.",
     "callbackCancelled": "Sign in was cancelled",
     "callbackFailedSignIn": "Failed to complete sign in",
-    "callbackRedirectLogin": "Redirecting to login..."
+    "callbackRedirectLogin": "Redirecting to login...",
+    "fillAllFields": "Please fill in all fields",
+    "passwordMinLength": "Password must be at least 6 characters long",
+    "helpToast": "Need assistance? Contact support at {{email}}"
   },
   "referralLanding": {
     "redirecting": "Redirecting…",

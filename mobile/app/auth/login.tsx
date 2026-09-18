@@ -1,69 +1,160 @@
 import { Link, useRouter } from "expo-router"
 import { useState } from "react"
-import { ActivityIndicator, Pressable, Text, TextInput } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { Screen } from "@/components/screen"
+import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth } from "@/components/auth-chrome"
+import { Field } from "@/components/field"
+import { PrimaryButton } from "@/components/primary-button"
+import { ScreenScroll } from "@/components/screen"
+import { useToast } from "@/components/toast-provider"
+import { apiFetch } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
+import { supabase } from "@/lib/supabase"
+import { ui } from "@/lib/theme"
 
 export default function LoginScreen() {
   const { t } = useTranslation("app")
-  const { signIn, signInWithGoogle } = useAuth()
+  const { signIn, signInWithGoogle, signInWithApple } = useAuth()
+  const { showError } = useToast()
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [show, setShow] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
 
   const onSubmit = async () => {
+    const trimmed = email.trim()
+    if (!trimmed || !password) {
+      showError(t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }))
+      return
+    }
     setBusy(true)
-    setError("")
-    const { error: err } = await signIn(email.trim(), password)
-    setBusy(false)
-    if (err) setError(err)
-    else router.replace("/")
+    try {
+      const statusRes = await apiFetch("/api/auth/login-attempt/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      })
+      if (statusRes.ok) {
+        const lockBody = (await statusRes.json()) as { locked?: boolean; remainingMinutes?: number }
+        if (lockBody.locked) {
+          showError(
+            t("auth.accountTemporarilyLocked", {
+              defaultValue: "Account locked. Try again in {{minutes}} minutes.",
+              minutes: lockBody.remainingMinutes ?? 0,
+            }),
+          )
+          return
+        }
+      }
+      const { error: err } = await signIn(trimmed, password)
+      if (err) {
+        await apiFetch("/api/auth/login-attempt/failure", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: trimmed }),
+        }).catch(() => {})
+        showError(friendlyLoginError(err, t("auth.loginError", { defaultValue: "Invalid credentials" })))
+        return
+      }
+      await apiFetch("/api/auth/login-attempt/success", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      }).catch(() => {})
+      router.replace("/")
+    } catch {
+      showError(t("auth.genericError", { defaultValue: "An unexpected error occurred" }))
+    } finally {
+      setBusy(false)
+    }
   }
 
-  const onGoogle = async () => {
+  const onSocial = async (fn: () => Promise<{ error: string | null }>) => {
     setBusy(true)
-    setError("")
-    const { error: err } = await signInWithGoogle()
+    const { error: err } = await fn()
     setBusy(false)
-    if (err) setError(err)
-    else router.replace("/")
+    if (err) {
+      showError(err)
+      return
+    }
+    const { data } = await supabase.auth.getSession()
+    if (data.session?.user) router.replace("/")
   }
 
   return (
-    <Screen className="justify-center px-6">
-      <Text className="mb-1 text-3xl font-bold text-gray-900">Ciuna</Text>
-      <Text className="mb-6 text-gray-500">{t("auth.signInTitle", { defaultValue: "Sign in" })}</Text>
-      <TextInput
-        autoCapitalize="none"
-        keyboardType="email-address"
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base"
-      />
-      <TextInput
-        secureTextEntry
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        className="mb-3 rounded-xl border border-gray-200 px-3 py-3 text-base"
-      />
-      {error ? <Text className="mb-3 text-red-600">{error}</Text> : null}
-      <Pressable onPress={() => void onSubmit()} disabled={busy} className="items-center rounded-xl bg-primary py-3.5">
-        {busy ? <ActivityIndicator color="#fff" /> : <Text className="font-semibold text-white">{t("auth.signIn", { defaultValue: "Sign in" })}</Text>}
-      </Pressable>
-      <Pressable onPress={() => void onGoogle()} disabled={busy} className="mt-3 items-center rounded-xl border border-gray-200 py-3.5">
-        <Text className="font-semibold text-gray-900">Google</Text>
-      </Pressable>
-      <Link href="/auth/register" className="mt-4 text-center text-primary">
-        {t("auth.createAccount", { defaultValue: "Create account" })}
-      </Link>
-      <Link href="/auth/forgot-password" className="mt-3 text-center text-gray-500">
-        {t("auth.forgotPassword", { defaultValue: "Forgot password" })}
-      </Link>
-    </Screen>
+    <ScreenScroll keyboard contentStyle={styles.content}>
+      <AuthTopBar />
+      <AuthTitle>{t("auth.welcomeBack", { defaultValue: "Welcome back" })}</AuthTitle>
+      <View style={styles.form}>
+        <SocialAuth
+          appleLabel={t("auth.signInApple", { defaultValue: "Sign in with Apple" })}
+          googleLabel={t("auth.signInGoogle", { defaultValue: "Sign in with Google" })}
+          orLabel={t("auth.or", { defaultValue: "Or" })}
+          onApple={() => void onSocial(signInWithApple)}
+          onGoogle={() => void onSocial(signInWithGoogle)}
+          disabled={busy}
+        />
+        <Field
+          label={t("auth.email", { defaultValue: "Email" })}
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="email-address"
+          autoComplete="email"
+          textContentType="emailAddress"
+          placeholder={t("auth.emailPlaceholder", { defaultValue: "you@example.com" })}
+          value={email}
+          onChangeText={setEmail}
+          returnKeyType="next"
+        />
+        <Field
+          label={t("auth.password", { defaultValue: "Password" })}
+          secureTextEntry={!show}
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="password"
+          textContentType="password"
+          placeholder={t("auth.passwordPlaceholder", { defaultValue: "Enter your password" })}
+          value={password}
+          onChangeText={setPassword}
+          returnKeyType="done"
+          onSubmitEditing={() => void onSubmit()}
+          trailing={<PasswordEye show={show} onToggle={() => setShow((s) => !s)} />}
+        />
+        <Link href="/auth/forgot-password" asChild>
+          <Pressable hitSlop={8} style={styles.forgot}>
+            <Text style={ui.linkLeft}>{t("auth.forgotPassword", { defaultValue: "Forgot password?" })}</Text>
+          </Pressable>
+        </Link>
+        <PrimaryButton
+          label={busy ? t("auth.signingIn", { defaultValue: "Signing in…" }) : t("auth.signIn", { defaultValue: "Sign in" })}
+          onPress={() => void onSubmit()}
+          busy={busy}
+        />
+        <AuthFooter
+          prompt={t("auth.noAccount", { defaultValue: "Don't have an account?" })}
+          action={t("auth.signUp", { defaultValue: "Sign up" })}
+          href="/auth/register"
+        />
+      </View>
+    </ScreenScroll>
   )
 }
+
+function friendlyLoginError(err: string, fallback: string) {
+  const lower = err.toLowerCase()
+  if (
+    lower.includes("invalid login") ||
+    lower.includes("invalid email or password") ||
+    lower.includes("invalid credentials")
+  ) {
+    return fallback
+  }
+  return err
+}
+
+const styles = StyleSheet.create({
+  content: { flexGrow: 1, paddingTop: 8 },
+  form: { width: "100%", maxWidth: 448, alignSelf: "center" },
+  forgot: { alignSelf: "flex-start", marginBottom: 16 },
+})

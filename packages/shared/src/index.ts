@@ -30,4 +30,12 @@ export { cn } from "./utils/cn"
 export { normalizePublicSlug, isUuidLike } from "./utils/public-slug"
 export { BrandLogo } from "./components/BrandLogo"
 export type { BrandLogoProps } from "./components/BrandLogo"
+export {
+  normalizedHubServiceLineSlug,
+  hubServiceLineTileCopy,
+  hubServiceLineShellLabels,
+  type HubServiceLineRow,
+  type HubServiceLineGridKind,
+  type HubServiceLineCopyInput,
+} from "./hub/service-lines"
 export * from "./types"

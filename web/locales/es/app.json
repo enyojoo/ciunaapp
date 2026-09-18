@@ -736,7 +736,10 @@
     "resetSuccessRedirect": "Contraseña actualizada. Inicia sesión con la nueva contraseña.",
     "callbackCancelled": "Inicio de sesión cancelado",
     "callbackFailedSignIn": "No se pudo completar el inicio de sesión",
-    "callbackRedirectLogin": "Redirigiendo al inicio de sesión…"
+    "callbackRedirectLogin": "Redirigiendo al inicio de sesión…",
+    "fillAllFields": "Completa todos los campos",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "helpToast": "¿Necesitas ayuda? Contacta a {{email}}"
   },
   "experts": {
     "profile": {

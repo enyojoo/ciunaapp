@@ -1,7 +1,7 @@
 export const BRAND = {
   name: "Ciuna",
-  tagline: "Send money globally with ease",
-  description: "Fast, secure, and affordable international money transfers",
+  tagline: "One app, all your needs",
+  description: "Send money, order food, shop the mart, and hire experts — one Ciuna account.",
   logo: "https://seeqjiebmrnolcyydewj.supabase.co/storage/v1/object/public/brand/Ciuna.svg",
   domain: "ciuna.com",
   url: "https://www.ciuna.com/",

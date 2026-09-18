@@ -1,7 +1,9 @@
 import * as ImagePicker from "expo-image-picker"
 import { useState } from "react"
-import { Pressable, Text } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
+import { PrimaryButton } from "@/components/primary-button"
 import { Screen } from "@/components/screen"
+import { ui } from "@/lib/theme"
 
 export default function VerificationScreen() {
   const [picked, setPicked] = useState<string | null>(null)
@@ -10,13 +12,17 @@ export default function VerificationScreen() {
     if (!result.canceled) setPicked(result.assets[0]?.uri ?? null)
   }
   return (
-    <Screen className="px-5">
-      <Text className="mb-3 text-2xl font-bold">Verification</Text>
-      <Text className="mb-4 text-gray-500">Upload identity and address documents from your camera roll.</Text>
-      <Pressable onPress={() => void pick()} className="items-center rounded-xl bg-primary py-3.5">
-        <Text className="font-semibold text-white">Choose document</Text>
-      </Pressable>
-      {picked ? <Text className="mt-3 text-gray-500">{picked}</Text> : null}
+    <Screen padded>
+      <Text style={ui.title}>Verification</Text>
+      <Text style={ui.subtitle}>Upload identity and address documents from your camera roll.</Text>
+      <View style={styles.cta}>
+        <PrimaryButton label="Choose document" onPress={() => void pick()} />
+      </View>
+      {picked ? <Text style={ui.meta}>{picked}</Text> : null}
     </Screen>
   )
 }
+
+const styles = StyleSheet.create({
+  cta: { marginTop: 24 },
+})

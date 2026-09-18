@@ -736,7 +736,10 @@
     "resetSuccessRedirect": "Mot de passe réinitialisé. Connectez-vous avec le nouveau mot de passe.",
     "callbackCancelled": "Connexion annulée",
     "callbackFailedSignIn": "Impossible de terminer la connexion",
-    "callbackRedirectLogin": "Redirection vers la connexion…"
+    "callbackRedirectLogin": "Redirection vers la connexion…",
+    "fillAllFields": "Veuillez remplir tous les champs",
+    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
+    "helpToast": "Besoin d’aide ? Contactez {{email}}"
   },
   "experts": {
     "profile": {
