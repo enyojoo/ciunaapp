@@ -19,6 +19,7 @@ import {
 import { REDIRECT_AFTER_LOGIN_KEY } from "@/lib/auth-login-redirect"
 import { useTranslation } from "react-i18next"
 import { fetchPublicPlatformFlags } from "@/lib/fetch-public-platform-flags"
+import { apiFetch } from "@/lib/api-client"
 
 function LoginPageContent() {
   const { t } = useTranslation("app")
@@ -71,7 +72,7 @@ function LoginPageContent() {
     const trimmedEmail = email.trim()
 
     try {
-      const statusRes = await fetch("/api/auth/login-attempt/status", {
+      const statusRes = await apiFetch("/api/auth/login-attempt/status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: trimmedEmail }),
@@ -92,7 +93,7 @@ function LoginPageContent() {
       const { error: signInError, session: signInSession } = await signIn(trimmedEmail, password, rememberMe)
 
       if (signInError) {
-        await fetch("/api/auth/login-attempt/failure", {
+        await apiFetch("/api/auth/login-attempt/failure", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: trimmedEmail }),
@@ -101,7 +102,7 @@ function LoginPageContent() {
         return
       }
 
-      await fetch("/api/auth/login-attempt/success", {
+      await apiFetch("/api/auth/login-attempt/success", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: trimmedEmail }),

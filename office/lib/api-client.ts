@@ -1,9 +1,7 @@
 import { supabase } from "./supabase"
 
 const API_URL =
-  typeof window !== "undefined"
-    ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
-    : process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002"
 
 /** Join base URL (may end with `/`) and path (should start with `/`) without `//` before the path. */
 function joinApiUrl(path: string): string {
@@ -29,11 +27,10 @@ export async function officeFetch(
     headers.set("Authorization", `Bearer ${session.access_token}`)
   }
 
-  const isSameOrigin = typeof window !== "undefined" && url.startsWith(window.location.origin)
   const fetchOptions: RequestInit = {
     ...options,
     headers,
-    credentials: isSameOrigin ? "include" : "omit",
+    credentials: "omit",
   }
 
   return fetch(url, fetchOptions)

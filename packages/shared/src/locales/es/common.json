@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Centro",
+    "sendMoney": "Enviar dinero",
+    "send": "Enviar",
+    "hub": "Centro",
+    "recipients": "Destinatarios",
+    "transactions": "Transacciones",
+    "more": "Más",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión"
+  },
+  "more": {
+    "title": "Más",
+    "account": "Cuenta",
+    "yourProfile": "Tu perfil",
+    "accountVerification": "Verificación de cuenta",
+    "affiliatesReferrals": "Referidos",
+    "loginPin": "PIN de acceso",
+    "app": "Aplicación",
+    "recipients": "Destinatarios",
+    "support": "Soporte",
+    "privacyPolicy": "Política de privacidad",
+    "termsOfService": "Términos del servicio",
+    "version": "Versión {{version}}",
+    "logout": "Cerrar sesión",
+    "signOutTitle": "Cerrar sesión",
+    "signOutDescription": "¿Seguro que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tu cuenta.",
+    "cancel": "Cancelar",
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión…"
+  },
+  "kyc": {
+    "verified": "Verificado",
+    "inReview": "En revisión",
+    "rejected": "Rechazado",
+    "pending": "Pendiente",
+    "takeAction": "Acción requerida"
+  },
+  "languages": {
+    "en": "Inglés",
+    "ru": "Ruso",
+    "fr": "Francés",
+    "es": "Español"
+  },
+  "app": {
+    "language": "Idioma"
+  },
+  "pinSetup": {
+    "createTitle": "Crea tu PIN de acceso",
+    "createSubtitle": "Introduce un PIN de 4 dígitos",
+    "confirmTitle": "Confirma tu PIN",
+    "confirmSubtitle": "Introduce el mismo PIN otra vez",
+    "benefitLine": "Acceso rápido al volver. Seguirás usando la contraseña si cierras sesión por completo.",
+    "mismatch": "Los PIN no coinciden. Inténtalo de nuevo.",
+    "saving": "Guardando…"
+  },
+  "pinDialog": {
+    "createTitle": "Crear PIN",
+    "changeTitle": "Cambiar PIN",
+    "createDescription": "Elige un PIN de 4 dígitos para acceder rápido la próxima vez que abras la app. Tras el bloqueo por inactividad, usa el PIN en lugar de la contraseña. Si cierras sesión, volverás a iniciar sesión con la contraseña.",
+    "changeDescription": "Introduce tu PIN actual y luego un nuevo PIN de 4 dígitos.",
+    "currentPin": "PIN actual",
+    "pin": "PIN",
+    "newPin": "Nuevo PIN",
+    "confirmPin": "Confirmar PIN",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "errorBothFields": "Introduce un PIN de 4 dígitos en ambos campos.",
+    "errorPinsNoMatch": "Los PIN no coinciden.",
+    "errorSave": "No se pudo guardar el PIN.",
+    "errorCurrentRequired": "Introduce tu PIN actual de 4 dígitos.",
+    "errorNewBothFields": "Introduce un nuevo PIN de 4 dígitos en ambos campos.",
+    "errorNewNoMatch": "Los nuevos PIN no coinciden.",
+    "errorNewSameAsOld": "El nuevo PIN debe ser distinto del actual.",
+    "errorWrongCurrent": "PIN actual incorrecto.",
+    "errorUpdate": "No se pudo actualizar el PIN."
+  },
+  "pinLock": {
+    "welcomeBack": "Bienvenido de nuevo",
+    "enterPin": "Introduce tu PIN de 4 dígitos",
+    "incorrectPin": "PIN incorrecto",
+    "verifying": "Verificando…",
+    "tooManyAttempts": "Demasiados intentos. Vuelve a intentarlo en {{minutes}} minuto(s).",
+    "tooManyAttemptsOne": "Demasiados intentos. Vuelve a intentarlo en 1 minuto.",
+    "notYourAccount": "¿No es tu cuenta?",
+    "logOut": "Cerrar sesión",
+    "backspaceAria": "Borrar"
+  }
+}

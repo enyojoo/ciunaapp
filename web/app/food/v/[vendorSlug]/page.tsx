@@ -23,6 +23,7 @@ import {
   writeFoodVendorCache,
   writeFoodVendorProductsCache,
 } from "@/lib/marketplace-line-cache"
+import { apiFetch } from "@/lib/api-client"
 
 const LINE_SLUG = "food" as const
 const SERVICE_LINES_CACHE_USER = hubPublicHubJsonCacheUserId()
@@ -71,7 +72,7 @@ function FoodVendorStorefrontInner({ vendorSlug }: VendorPageProps) {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("lines")
         const data = await res.json()
         const list = (data.serviceLines || []) as HubServiceLineRow[]
@@ -96,7 +97,7 @@ function FoodVendorStorefrontInner({ vendorSlug }: VendorPageProps) {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch(
+        const res = await apiFetch(
           `/api/hub/vendors/${encodeURIComponent(vendorSlug)}?service_line=${LINE_SLUG}`,
           { cache: "no-store" },
         )
@@ -132,7 +133,7 @@ function FoodVendorStorefrontInner({ vendorSlug }: VendorPageProps) {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch(
+        const res = await apiFetch(
           `/api/hub/vendors/${encodeURIComponent(vendorSlug)}/products?service_line=${LINE_SLUG}`,
           { cache: "no-store" },
         )

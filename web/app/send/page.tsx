@@ -49,6 +49,8 @@ import {
 import { cn } from "@/lib/utils"
 import { formatCurrency, roundMoney } from "@/utils/currency"
 import { fetchPublicPlatformFlags } from "@/lib/fetch-public-platform-flags"
+import { apiFetch } from "@/lib/api-client"
+import { fetchWithAuth } from "@/lib/fetch-with-auth"
 
 function formatReceiveArrivalDuration(
   totalSeconds: number,
@@ -615,7 +617,7 @@ export default function UserSendPage() {
     
     setIsResendingVerification(true)
     try {
-      const response = await fetch('/api/auth/resend-verification', {
+      const response = await apiFetch('/api/auth/resend-verification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -672,25 +674,26 @@ export default function UserSendPage() {
             ? deliveryAddresses.find((d) => d.id === selectedDeliveryAddressId)
             : null
 
-        const transaction = await transactionService.create({
-          userId: userProfile.id,
-          recipientId: fulfillment === "cash_hand" ? null : selectedRecipientId,
-          sendAmount: Number.parseFloat(sendAmount),
-          sendCurrency,
-          receiveAmount: Number.parseFloat(receiveAmount),
-          receiveCurrency,
-          exchangeRate: exchangeRateData.rate,
-          feeAmount: fee,
-          feeType: feeType,
-          totalAmount: totalToPay,
-          fulfillmentType: fulfillment,
-          logisticsFeeAmount: fulfillment === "cash_hand" ? logisticsFee : 0,
-          logisticsFeeTypeSnapshot:
-            fulfillment === "cash_hand" ? (exchangeRateData?.logistics_fee_type ?? null) : null,
-          deliveryAddressLine: selectedDelivery?.address_line ?? null,
-          deliveryPhone: selectedDelivery?.phone ?? null,
-          deliveryAddressId: fulfillment === "cash_hand" ? selectedDeliveryAddressId || null : null,
+        const createRes = await fetchWithAuth("/api/transactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipientId: fulfillment === "cash_hand" ? null : selectedRecipientId,
+            sendAmount: Number.parseFloat(sendAmount),
+            sendCurrency,
+            receiveAmount: Number.parseFloat(receiveAmount),
+            receiveCurrency,
+            fulfillmentType: fulfillment,
+            deliveryAddressLine: selectedDelivery?.address_line ?? null,
+            deliveryPhone: selectedDelivery?.phone ?? null,
+            deliveryAddressId: fulfillment === "cash_hand" ? selectedDeliveryAddressId || null : null,
+          }),
         })
+        if (!createRes.ok) {
+          const errBody = await createRes.json().catch(() => ({}))
+          throw new Error((errBody as { error?: string }).error || "Failed to create transaction")
+        }
+        const { transaction } = (await createRes.json()) as { transaction: { transaction_id: string } }
 
         // Redirect to transaction status page immediately (don't wait for receipt upload)
         router.replace(`/hub/orders/${transaction.transaction_id.toLowerCase()}`)

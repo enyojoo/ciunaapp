@@ -1,16 +1,14 @@
 import { supabase } from "./supabase"
+import { apiUrl } from "./api-client"
 
-/** After signInWithPassword, getSession() can lag briefly — wait before attaching Authorization. */
 const SESSION_WAIT_MS = 4000
 
 export type FetchWithAuthOptions = {
-  /** Use this token instead of getSession() (e.g. access_token from signInWithPassword / signUp response). */
   accessToken?: string | null
 }
 
 /**
- * Same-origin API calls with `requireUser` / `getAccessTokenFromRequest` need the bearer token
- * when the session lives in localStorage (default Supabase browser client) and is not mirrored to cookies.
+ * Cross-origin API calls with Bearer token. Session lives in localStorage, not cookies.
  */
 export async function fetchWithAuth(
   input: RequestInfo | URL,
@@ -50,11 +48,14 @@ export async function fetchWithAuth(
 
   await attachSessionToken()
 
+  const resolvedInput =
+    typeof input === "string" && input.startsWith("/") ? apiUrl(input) : input
+
   const doFetch = () =>
-    fetch(input, {
+    fetch(resolvedInput, {
       ...init,
       headers,
-      credentials: init?.credentials ?? "include",
+      credentials: "omit",
     })
 
   let res = await doFetch()

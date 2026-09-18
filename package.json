@@ -6,21 +6,28 @@
   "workspaces": [
     "packages/*",
     "web",
-    "office"
+    "office",
+    "api",
+    "mobile"
   ],
   "scripts": {
-    "dev": "turbo run dev --filter=web",
+    "dev": "turbo run dev --filter=api --filter=web",
     "dev:web": "turbo run dev --filter=web",
-    "dev:all": "turbo run dev --filter=web --filter=office",
+    "dev:api": "turbo run dev --filter=api",
+    "dev:all": "turbo run dev --filter=api --filter=web --filter=office",
     "build": "turbo run build",
     "build:web": "turbo run build --filter=web",
+    "build:api": "turbo run build --filter=api",
     "build:shared": "turbo run build --filter=@ciuna/shared",
     "lint": "turbo run lint",
     "start:web": "turbo run start --filter=web",
+    "start:api": "turbo run start --filter=api",
     "dev:office": "turbo run dev --filter=office",
     "build:office": "turbo run build --filter=office",
     "start:office": "turbo run start --filter=office",
-    "sync:rates": "npm run sync -w @ciuna/rate-sync --",
+    "dev:mobile": "npm run start -w mobile",
+    "dev:mobile:web": "npm run web -w mobile",
+    "export:mobile:web": "npm run export:web -w mobile",
     "sync:rates:debug": "npm run sync:debug -w @ciuna/rate-sync --"
   },
   "devDependencies": {

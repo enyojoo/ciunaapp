@@ -1,3 +1,4 @@
+import { apiFetch } from "@/lib/api-client"
 export type PublicPlatformFlags = {
   maintenanceMode: boolean
   registrationEnabled: boolean
@@ -12,7 +13,7 @@ const DEFAULT_FLAGS: PublicPlatformFlags = {
 
 export async function fetchPublicPlatformFlags(): Promise<PublicPlatformFlags> {
   try {
-    const res = await fetch("/api/platform/public-flags", { credentials: "same-origin" })
+    const res = await apiFetch("/api/platform/public-flags")
     if (!res.ok) return DEFAULT_FLAGS
     const body = (await res.json()) as Partial<PublicPlatformFlags>
     return {

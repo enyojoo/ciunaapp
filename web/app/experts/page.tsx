@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { EXPERTS_BROWSE_PATH } from "@/lib/experts-public-paths"
 import { hubServiceLineShellLabels } from "@/lib/hub-service-line-i18n"
+import { apiFetch } from "@/lib/api-client"
 
 const ALL_CATEGORIES_VALUE = "__all__"
 const FEATURED_PREVIEW_COUNT = 8
@@ -94,7 +95,7 @@ function ExpertsDiscoveryInner() {
       if (s) setLines(s)
       setLinesLoaded(true)
       scheduleHubServiceLinesStaleWhileRevalidate(SERVICE_LINES_CACHE_USER, async () => {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) return null
         const data = await res.json()
         return (data.serviceLines || []) as HubServiceLineRow[]
@@ -106,7 +107,7 @@ function ExpertsDiscoveryInner() {
     const silent = readStaleHubServiceLinesCache(SERVICE_LINES_CACHE_USER) !== null
     ;(async () => {
       try {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("lines")
         const data = await res.json()
         const next = (data.serviceLines || []) as HubServiceLineRow[]
@@ -134,7 +135,7 @@ function ExpertsDiscoveryInner() {
 
     ;(async () => {
       try {
-        const res = await fetch("/api/expert/profiles", { cache: "no-store" })
+        const res = await apiFetch("/api/expert/profiles", { cache: "no-store" })
         if (!res.ok) throw new Error("profiles")
         const data = await res.json()
         const next = (data.profiles || []) as ExpertProfile[]
@@ -162,7 +163,7 @@ function ExpertsDiscoveryInner() {
 
     ;(async () => {
       try {
-        const res = await fetch("/api/expert/catalog-services", { cache: "no-store" })
+        const res = await apiFetch("/api/expert/catalog-services", { cache: "no-store" })
         if (!res.ok) throw new Error("catalog")
         const data = await res.json()
         const list = (data.services || []) as ExpertCatalogService[]

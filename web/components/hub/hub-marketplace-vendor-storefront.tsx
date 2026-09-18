@@ -27,6 +27,7 @@ import { HubLinePageShell } from "@/components/hub/hub-line-page-shell"
 import { VendorHubCatalog } from "@/components/hub/vendor-hub-catalog"
 import { sortHubCatalogProducts } from "@/lib/hub-catalog-utils"
 import { hubLineHomePath, hubMarketplaceVendorPath } from "@/lib/hub-public-paths"
+import { apiFetch } from "@/lib/api-client"
 
 const MARKETPLACE = new Set(["food", "mart"])
 
@@ -113,7 +114,7 @@ function VendorCatalogInner({
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch(
+        const res = await apiFetch(
           `/api/hub/vendors/${encodeURIComponent(vendorSlug)}/products?service_line=${encodeURIComponent(lineSlug)}`,
           { cache: "no-store" },
         )
@@ -210,7 +211,7 @@ export function HubMarketplaceVendorStorefront({ lineSlug: lineProp, vendorSlug:
       if (s) setLines(s)
       setLinesLoaded(true)
       scheduleHubServiceLinesStaleWhileRevalidate(SERVICE_LINES_CACHE_USER, async () => {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) return null
         const data = await res.json()
         return (data.serviceLines || []) as HubServiceLineRow[]
@@ -222,7 +223,7 @@ export function HubMarketplaceVendorStorefront({ lineSlug: lineProp, vendorSlug:
     const silent = readStaleHubServiceLinesCache(SERVICE_LINES_CACHE_USER) !== null
     ;(async () => {
       try {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("lines")
         const data = await res.json()
         const next = (data.serviceLines || []) as HubServiceLineRow[]
@@ -248,7 +249,7 @@ export function HubMarketplaceVendorStorefront({ lineSlug: lineProp, vendorSlug:
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch(
+        const res = await apiFetch(
           `/api/hub/vendors/${encodeURIComponent(vendorSlug)}?service_line=${encodeURIComponent(lineSlug)}`,
           { cache: "no-store" },
         )

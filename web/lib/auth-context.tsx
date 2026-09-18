@@ -13,6 +13,7 @@ import { clearHubClientMemory } from "./hub-client-cache"
 import { clearExpertProfileDetailMemory } from "./expert-profile-client-cache"
 import { writeLastKnownUserId, clearLastKnownUserId } from "./last-user-id"
 import i18n from "./i18n/config"
+import { apiFetch } from "@/lib/api-client"
 
 const SUPPORTED_LOCALES = new Set(["en", "ru", "fr", "es"])
 
@@ -344,7 +345,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async (email: string, password: string, userData: any) => {
     try {
       // First check if user already exists
-      const checkResponse = await fetch('/api/auth/check-email', {
+      const checkResponse = await apiFetch('/api/auth/check-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

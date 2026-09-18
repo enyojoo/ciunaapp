@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { getOfficeCorsHeaders } from "@/lib/cors"
 import { getPublicPlatformFlagsEdgeCached } from "@/lib/platform-settings-server"
 
 const CONSUMER_APP_PREFIXES = [
@@ -38,25 +37,6 @@ function isApiOrStatic(pathname: string): boolean {
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-
-  const isOfficeCorsApi =
-    pathname.startsWith("/api/admin/") ||
-    pathname.startsWith("/api/auth/admin/") ||
-    pathname.startsWith("/api/auth/login-attempt") ||
-    pathname === "/api/send-email-notification" ||
-    pathname === "/api/referrals/process-completion"
-  if (isOfficeCorsApi) {
-    const corsHeaders = getOfficeCorsHeaders(request)
-    if (request.method === "OPTIONS") {
-      return new NextResponse(null, { status: 204, headers: corsHeaders })
-    }
-    const response = NextResponse.next()
-    Object.entries(corsHeaders).forEach(([key, value]) => {
-      response.headers.set(key, value)
-    })
-    response.headers.set("Cache-Control", "no-cache, no-store, must-revalidate")
-    return response
-  }
 
   if (pathname === "/") {
     return NextResponse.redirect(new URL("/auth/login", request.url))

@@ -2,14 +2,14 @@ import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 
-import enCommon from "@/locales/en/common.json"
-import ruCommon from "@/locales/ru/common.json"
-import frCommon from "@/locales/fr/common.json"
-import esCommon from "@/locales/es/common.json"
-import enApp from "@/locales/en/app.json"
-import ruApp from "@/locales/ru/app.json"
-import frApp from "@/locales/fr/app.json"
-import esApp from "@/locales/es/app.json"
+import enCommon from "@ciuna/shared/locales/en/common.json"
+import ruCommon from "@ciuna/shared/locales/ru/common.json"
+import frCommon from "@ciuna/shared/locales/fr/common.json"
+import esCommon from "@ciuna/shared/locales/es/common.json"
+import enApp from "@ciuna/shared/locales/en/app.json"
+import ruApp from "@ciuna/shared/locales/ru/app.json"
+import frApp from "@ciuna/shared/locales/fr/app.json"
+import esApp from "@ciuna/shared/locales/es/app.json"
 
 const resources = {
   en: { common: enCommon, app: enApp },

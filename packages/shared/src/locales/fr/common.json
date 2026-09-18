@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Centre",
+    "sendMoney": "Envoyer",
+    "send": "Envoyer",
+    "hub": "Centre",
+    "recipients": "Bénéficiaires",
+    "transactions": "Opérations",
+    "more": "Plus",
+    "logout": "Déconnexion",
+    "login": "Connexion"
+  },
+  "more": {
+    "title": "Plus",
+    "account": "Compte",
+    "yourProfile": "Votre profil",
+    "accountVerification": "Vérification du compte",
+    "affiliatesReferrals": "Parrainage",
+    "loginPin": "Code PIN",
+    "app": "Application",
+    "recipients": "Bénéficiaires",
+    "support": "Assistance",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "version": "Version : {{version}}",
+    "logout": "Déconnexion",
+    "signOutTitle": "Déconnexion",
+    "signOutDescription": "Voulez-vous vraiment vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
+    "cancel": "Annuler",
+    "signOut": "Se déconnecter",
+    "signingOut": "Déconnexion…"
+  },
+  "kyc": {
+    "verified": "Vérifié",
+    "inReview": "En cours d'examen",
+    "rejected": "Refusé",
+    "pending": "En attente",
+    "takeAction": "Action requise"
+  },
+  "languages": {
+    "en": "Anglais",
+    "ru": "Russe",
+    "fr": "Français",
+    "es": "Espagnol"
+  },
+  "app": {
+    "language": "Langue"
+  },
+  "pinSetup": {
+    "createTitle": "Créer un PIN applicatif",
+    "createSubtitle": "Saisissez votre PIN à 4 chiffres",
+    "confirmTitle": "Confirmer le PIN",
+    "confirmSubtitle": "Saisissez le même PIN à nouveau",
+    "benefitLine": "Accès rapide au retour. Votre mot de passe reste nécessaire si vous vous déconnectez complètement.",
+    "mismatch": "Les PIN ne correspondent pas. Réessayez.",
+    "saving": "Enregistrement…"
+  },
+  "pinDialog": {
+    "createTitle": "Créer un PIN",
+    "changeTitle": "Modifier le PIN",
+    "createDescription": "Choisissez un PIN à 4 chiffres pour un accès rapide à la prochaine ouverture. Après verrouillage pour inactivité, utilisez ce PIN plutôt que votre mot de passe. Vous vous connecterez encore avec le mot de passe si vous vous déconnectez.",
+    "changeDescription": "Saisissez votre PIN actuel, puis choisissez un nouveau PIN à 4 chiffres.",
+    "currentPin": "PIN actuel",
+    "pin": "PIN",
+    "newPin": "Nouveau PIN",
+    "confirmPin": "Confirmer le PIN",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "errorBothFields": "Saisissez un PIN à 4 chiffres dans les deux champs.",
+    "errorPinsNoMatch": "Les PIN ne correspondent pas.",
+    "errorSave": "Impossible d'enregistrer le PIN.",
+    "errorCurrentRequired": "Saisissez votre PIN actuel à 4 chiffres.",
+    "errorNewBothFields": "Saisissez un nouveau PIN à 4 chiffres dans les deux champs.",
+    "errorNewNoMatch": "Les nouveaux PIN ne correspondent pas.",
+    "errorNewSameAsOld": "Le nouveau PIN doit être différent de l'actuel.",
+    "errorWrongCurrent": "PIN actuel incorrect.",
+    "errorUpdate": "Impossible de mettre à jour le PIN."
+  },
+  "pinLock": {
+    "welcomeBack": "Bon retour",
+    "enterPin": "Saisissez votre PIN à 4 chiffres",
+    "incorrectPin": "PIN incorrect",
+    "verifying": "Vérification…",
+    "tooManyAttempts": "Trop de tentatives. Réessayez dans {{minutes}} minute(s).",
+    "tooManyAttemptsOne": "Trop de tentatives. Réessayez dans 1 minute.",
+    "notYourAccount": "Ce n'est pas votre compte ?",
+    "logOut": "Se déconnecter",
+    "backspaceAria": "Supprimer"
+  }
+}

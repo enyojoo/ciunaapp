@@ -1,0 +1,192 @@
+{
+  "common": {
+    "logoAlt": "Ciuna",
+    "needHelp": "Need help? We're here for you!",
+    "contactSupport": "Contact Support",
+    "contactSupportMailto": "mailto:support@ciuna.com",
+    "footerCopyright": "© {{year}} Ciuna. All rights reserved.",
+    "footerAccountNote": "You received this email because you have a Ciuna account.",
+    "refundNote": "If you were charged, we'll refund to your original payment method within 24 hours."
+  },
+  "status": {
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "failed": "Failed",
+    "cancelled": "Cancelled"
+  },
+  "summary": {
+    "heading": "Transaction Details",
+    "transactionId": "Transaction ID:",
+    "recipient": "Recipient:",
+    "amount": "Amount:",
+    "receiving": "Receiving:",
+    "rateUsed": "Rate Used:",
+    "exchangeFee": "Exchange fee:",
+    "logisticsFee": "Logistics fee:",
+    "corridorFee": "Corridor fee:",
+    "hubFee": "Hub fee:",
+    "totalPaid": "Total paid:",
+    "status": "Status:",
+    "date": "Date:",
+    "order": "Order:",
+    "type": "Type:",
+    "typeFixed": "Fixed price",
+    "typeUserInput": "User-entered amount",
+    "fundedAmount": "Funded amount:",
+    "exchangeRate": "Exchange rate:",
+    "fulfillment": "Fulfillment:",
+    "fulfillmentOnlineValue": "Online delivery to {{contactName}}",
+    "fulfillmentInPersonValue": "In-person delivery to {{contactName}}",
+    "deliveryAddress": "Delivery address:",
+    "contact": "Contact:",
+    "product": "Product:"
+  },
+  "welcome": {
+    "subject": "Welcome to Ciuna! Let's get started",
+    "title": "Welcome to Ciuna!",
+    "greeting": "Hi {{firstName}}! Welcome to Ciuna.",
+    "intro": "Thank you for joining Ciuna! We're excited to have you as part of our community. Your account is now active and ready to send money across borders in under 5 minutes.",
+    "featuresLead": "With Ciuna, you can:",
+    "featureSpeed": "Send money globally in under 5 minutes - Lightning-fast cross-border transfers",
+    "featureTracking": "Track your transfers in real-time with live updates",
+    "featureRecipients": "Save your favorite recipients for instant transfers",
+    "featureRates": "Enjoy competitive exchange rates with zero hidden fees",
+    "gettingStartedHeading": "Getting Started",
+    "gettingStartedBody": "To send your first transfer, simply click the \"Send Money\" button in your dashboard and follow the easy steps. Your money will reach its destination in under 5 minutes!",
+    "cta": "Go to Dashboard"
+  },
+  "send": {
+    "pending": {
+      "subject": "Transfer Created - #{{transactionId}}",
+      "title": "Transaction Created",
+      "body": "Your transfer to {{recipientName}} has been created and is now being processed. We'll send you updates as your money makes its way to its destination!",
+      "nextHeading": "What's Next",
+      "nextBody": "We're working on your transfer and will notify you as soon as it's completed. You can track the progress in your dashboard.",
+      "cta": "Track Transaction"
+    },
+    "processing": {
+      "subject": "Transfer Processing - #{{transactionId}}",
+      "title": "Transfer Processing",
+      "body": "Great news! We've received your payment and your transfer to {{recipientName}} is now being processed. Your money will arrive in under 5 minutes!",
+      "nextHeading": "What's Happening",
+      "nextBody": "We're working with our banking partners to complete your transfer. Thanks to our advanced technology, this typically takes under 5 minutes!",
+      "cta": "Track Transfer"
+    },
+    "completed": {
+      "subject": "Transfer Completed Successfully! #{{transactionId}}",
+      "title": "Transfer Completed!",
+      "body": "Your transfer to {{recipientName}} has been completed successfully! The money has been sent and should arrive within minutes.",
+      "nextHeading": "What's Next",
+      "nextBody": "Your recipient should receive the money within minutes thanks to our fast processing. You can track all your transfers in your dashboard.",
+      "cta": "View Transaction"
+    },
+    "failed": {
+      "subject": "Transfer Failed - #{{transactionId}}",
+      "title": "Transfer Failed",
+      "bodyWithReason": "Unfortunately, your transfer to {{recipientName}} could not be completed. Reason: {{reason}}",
+      "bodyNoReason": "Unfortunately, your transfer to {{recipientName}} could not be completed. Please contact support for more information.",
+      "nextHeading": "What Happens Next",
+      "cta": "Contact Support"
+    },
+    "cancelled": {
+      "subject": "Transfer Cancelled - #{{transactionId}}",
+      "title": "Transfer Cancelled",
+      "bodyWithReason": "Your transfer to {{recipientName}} has been cancelled. Reason: {{reason}}",
+      "bodyNoReason": "Your transfer to {{recipientName}} has been cancelled. This may have been cancelled by you or our support team.",
+      "refundHeading": "Refund Information",
+      "cta": "Send New Transfer"
+    }
+  },
+  "hubOrder": {
+    "pending": {
+      "subject": "Order received - {{productTitle}} (#{{transactionId}})",
+      "title": "Order Received",
+      "hero": {
+        "fixed": "Thanks for your purchase of {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
+        "userInput": "We've received your top-up for {{productTitle}} - {{fundedAmount}} {{fundedCurrency}}."
+      },
+      "fulfillment": {
+        "online": "We'll deliver to {{contactName}} at {{contactPhone}}.",
+        "inPerson": "We'll deliver to {{contactName}} at {{deliveryAddressLine}}. Our rider will call {{contactPhone}} on arrival."
+      },
+      "nextHeading": "What's Next",
+      "nextBody": "We're preparing your order and will notify you as soon as it's processed. You can track the progress anytime in Transactions.",
+      "cta": "View order"
+    },
+    "processing": {
+      "subject": "Processing your order - {{productTitle}} (#{{transactionId}})",
+      "title": "Order Processing",
+      "hero": {
+        "fixed": "We've received your payment for {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) and are processing it now.",
+        "userInput": "We've received your payment for {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) and are processing your top-up now."
+      },
+      "fulfillment": {
+        "online": "Delivery to {{contactName}} at {{contactPhone}} is on the way.",
+        "inPerson": "Our rider is preparing delivery to {{contactName}} at {{deliveryAddressLine}} and will call {{contactPhone}} on arrival."
+      },
+      "nextHeading": "What's Happening",
+      "nextBody": "We'll send you a final confirmation as soon as your order is ready.",
+      "cta": "View order"
+    },
+    "completed": {
+      "subjectOnline": "Order delivered - {{productTitle}} (#{{transactionId}})",
+      "subjectInPerson": "Order on the way - {{productTitle}} (#{{transactionId}})",
+      "title": "Order Completed",
+      "hero": {
+        "fixed": "Your order of {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) is complete.",
+        "userInput": "Your top-up for {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) is complete."
+      },
+      "fulfillment": {
+        "online": "Your order has been delivered to {{contactName}}. Check your order page for details.",
+        "inPerson": "Our rider is on the way to {{contactName}} at {{deliveryAddressLine}} and will call {{contactPhone}} on arrival."
+      },
+      "nextHeading": "What's Next",
+      "nextBody": "You can view the full receipt on your order page at any time.",
+      "cta": "View order"
+    },
+    "failed": {
+      "subject": "Order failed - {{productTitle}} (#{{transactionId}})",
+      "title": "Order Failed",
+      "bodyWithReason": "Unfortunately, your order of {{productTitle}} could not be completed. Reason: {{reason}}",
+      "bodyNoReason": "Unfortunately, your order of {{productTitle}} could not be completed. Please contact support for more information.",
+      "nextHeading": "What Happens Next",
+      "cta": "Contact Support"
+    },
+    "cancelled": {
+      "subject": "Order cancelled - {{productTitle}} (#{{transactionId}})",
+      "title": "Order Cancelled",
+      "bodyWithReason": "Your order of {{productTitle}} has been cancelled. Reason: {{reason}}",
+      "bodyNoReason": "Your order of {{productTitle}} has been cancelled. This may have been cancelled by you or our support team.",
+      "refundHeading": "Refund Information",
+      "cta": "Browse Hub"
+    }
+  },
+  "referralPayout": {
+    "pending": {
+      "subjectWithTx": "Referral payout request — #{{payoutTransactionId}}",
+      "subjectWithRequest": "Referral payout request received — {{requestIdShort}}…",
+      "subjectFallback": "Referral payout request received",
+      "title": "Referral payout request received",
+      "body": "Hi {{firstName}}, we've received your referral reward withdrawal request of {{amount}} {{currency}} to {{recipientName}}. Our team will review and process it—similar to when you start a send, you'll get another email when the payout is completed or if it's cancelled.",
+      "referenceTx": "Transaction ID: {{payoutTransactionId}}",
+      "referenceRequest": "Request ID: {{payoutRequestId}}",
+      "nextHeading": "What happens next",
+      "nextBody": "We'll notify you by email when the payout is sent or if the request is cancelled. You can also check status under Affiliates & Referrals in the app.",
+      "cta": "View referrals"
+    },
+    "completed": {
+      "subject": "Referral payout sent — {{amount}} {{currency}}",
+      "title": "Referral payout completed",
+      "body": "Hi {{firstName}}, your referral reward withdrawal of {{amount}} {{currency}} to {{recipientName}} has been completed. This send appears in your activity like a regular transfer and counts toward your send totals for the year.",
+      "referenceTx": "Transaction ID: {{linkedTransactionId}}",
+      "cta": "View activity"
+    },
+    "cancelled": {
+      "subject": "Referral payout request cancelled",
+      "title": "Referral payout cancelled",
+      "body": "Hi {{firstName}}, your referral payout request for {{amount}} {{currency}} to {{recipientName}} has been cancelled. Those funds remain in your available referral balance. If you did not expect this, contact support.",
+      "cta": "Open referrals"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# Expo web preview + later app.ciuna.com cutover
+#
+# Phase 3 — preview host (do this first, never skip)
+# 1. New Vercel project, root directory: mobile/
+# 2. Domain: m.ciuna.com (or a Vercel preview URL)
+# 3. Env: EXPO_PUBLIC_API_URL=https://api.ciuna.com
+#         EXPO_PUBLIC_APP_URL=https://m.ciuna.com
+#         EXPO_PUBLIC_SUPABASE_URL / EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+# 4. Build: expo export --platform web  (see vercel.json)
+# 5. Gate: send, KYC upload, checkout, Google OAuth, keyboard, files.
+#    If those fail, keep Next.js on app.ciuna.com; native still ships.
+#
+# Crawler OG: vercel.json rewrites WhatsApp/iMessage/Slack bots to
+#   https://api.ciuna.com/api/share/:slug
+# Humans get Expo Router. Do not reverse-proxy /api on this host.
+#
+# Phase 4 — only if Phase 3 passes
+# 1. DNS app.ciuna.com → this Expo web project
+# 2. EXPO_PUBLIC_APP_URL=https://app.ciuna.com
+# 3. Keep Supabase redirect URLs:
+#      https://app.ciuna.com/auth/callback
+#      ciuna://auth/callback
+# 4. Then retire web/ customer pages. api/ and office/ stay.
+#
+# Native (EAS)
+#   eas build --platform ios / android from mobile/
+#   Add ciuna://auth/callback to the Supabase Auth allowlist before TestFlight Google login.

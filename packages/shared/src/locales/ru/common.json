@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Хаб",
+    "sendMoney": "Отправить",
+    "send": "Отправить",
+    "hub": "Хаб",
+    "recipients": "Получатели",
+    "transactions": "Операции",
+    "more": "Ещё",
+    "logout": "Выйти",
+    "login": "Войти"
+  },
+  "more": {
+    "title": "Ещё",
+    "account": "Аккаунт",
+    "yourProfile": "Профиль",
+    "accountVerification": "Верификация",
+    "affiliatesReferrals": "Рефералы",
+    "loginPin": "PIN входа",
+    "app": "Приложение",
+    "recipients": "Получатели",
+    "support": "Поддержка",
+    "privacyPolicy": "Конфиденциальность",
+    "termsOfService": "Условия",
+    "version": "Версия {{version}}",
+    "logout": "Выйти",
+    "signOutTitle": "Выход",
+    "signOutDescription": "Выйти из аккаунта? Потребуется снова войти.",
+    "cancel": "Отмена",
+    "signOut": "Выйти",
+    "signingOut": "Выход…"
+  },
+  "kyc": {
+    "verified": "Подтверждён",
+    "inReview": "На проверке",
+    "rejected": "Отклонён",
+    "pending": "В ожидании",
+    "takeAction": "Действие"
+  },
+  "languages": {
+    "en": "Английский",
+    "ru": "Русский",
+    "fr": "Французский",
+    "es": "Испанский"
+  },
+  "app": {
+    "language": "Язык"
+  },
+  "pinSetup": {
+    "createTitle": "Создайте PIN для входа",
+    "createSubtitle": "Введите 4-значный PIN",
+    "confirmTitle": "Подтвердите PIN",
+    "confirmSubtitle": "Введите тот же PIN ещё раз",
+    "benefitLine": "Быстрый доступ при возврате в приложение. Пароль по-прежнему нужен при полном выходе.",
+    "mismatch": "PIN не совпадают. Попробуйте снова.",
+    "saving": "Сохранение…"
+  },
+  "pinDialog": {
+    "createTitle": "Создать PIN",
+    "changeTitle": "Сменить PIN",
+    "createDescription": "Задайте 4-значный PIN для быстрого доступа при следующем открытии приложения. После блокировки из‑за простоя вводите PIN вместо пароля. При выходе из аккаунта вход снова по паролю.",
+    "changeDescription": "Введите текущий PIN, затем новый 4-значный PIN.",
+    "currentPin": "Текущий PIN",
+    "pin": "PIN",
+    "newPin": "Новый PIN",
+    "confirmPin": "Подтвердите PIN",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "saving": "Сохранение…",
+    "errorBothFields": "Введите 4-значный PIN в оба поля.",
+    "errorPinsNoMatch": "PIN не совпадают.",
+    "errorSave": "Не удалось сохранить PIN.",
+    "errorCurrentRequired": "Введите текущий 4-значный PIN.",
+    "errorNewBothFields": "Введите новый 4-значный PIN в оба поля.",
+    "errorNewNoMatch": "Новые PIN не совпадают.",
+    "errorNewSameAsOld": "Новый PIN должен отличаться от текущего.",
+    "errorWrongCurrent": "Неверный текущий PIN.",
+    "errorUpdate": "Не удалось обновить PIN."
+  },
+  "pinLock": {
+    "welcomeBack": "С возвращением",
+    "enterPin": "Введите 4-значный PIN",
+    "incorrectPin": "Неверный PIN",
+    "verifying": "Проверка…",
+    "tooManyAttempts": "Слишком много попыток. Повторите через {{minutes}} мин.",
+    "tooManyAttemptsOne": "Слишком много попыток. Повторите через 1 минуту.",
+    "notYourAccount": "Не ваш аккаунт?",
+    "logOut": "Выйти",
+    "backspaceAria": "Удалить"
+  }
+}

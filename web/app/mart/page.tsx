@@ -21,6 +21,7 @@ import {
   writeMartProductsCache,
   writeMartVendorsCache,
 } from "@/lib/marketplace-line-cache"
+import { apiFetch } from "@/lib/api-client"
 
 const LINE_SLUG = "mart" as const
 const SERVICE_LINES_CACHE_USER = hubPublicHubJsonCacheUserId()
@@ -61,7 +62,7 @@ function MartLinePageInner() {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("lines")
         const data = await res.json()
         const list = (data.serviceLines || []) as HubServiceLineRow[]
@@ -86,7 +87,7 @@ function MartLinePageInner() {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch(`/api/hub/products?service_line=${LINE_SLUG}`, { cache: "no-store" })
+        const res = await apiFetch(`/api/hub/products?service_line=${LINE_SLUG}`, { cache: "no-store" })
         if (!res.ok) throw new Error("products")
         const data = await res.json()
         const list = sortHubCatalogProducts((data.products || []) as HubProductRow[])
@@ -110,7 +111,7 @@ function MartLinePageInner() {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch(`/api/hub/vendors?service_line=${LINE_SLUG}`, { cache: "no-store" })
+        const res = await apiFetch(`/api/hub/vendors?service_line=${LINE_SLUG}`, { cache: "no-store" })
         if (!res.ok) throw new Error("vendors")
         const data = await res.json()
         const next = (data.vendors || []) as HubVendorRow[]

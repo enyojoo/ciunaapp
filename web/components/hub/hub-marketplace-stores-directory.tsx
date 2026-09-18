@@ -23,6 +23,7 @@ import { HubVendorCardNameRow } from "@/components/hub/hub-vendor-card-name-row"
 import { HubLinePageShell } from "@/components/hub/hub-line-page-shell"
 import { hubLineHomePath, hubMarketplaceVendorPath } from "@/lib/hub-public-paths"
 import { hubServiceLineShellLabels } from "@/lib/hub-service-line-i18n"
+import { apiFetch } from "@/lib/api-client"
 
 const MARKETPLACE = new Set(["food", "mart"])
 
@@ -99,7 +100,7 @@ export function HubMarketplaceStoresDirectory({ lineSlug: slugProp }: { lineSlug
       if (s) setLines(s)
       setLinesLoaded(true)
       scheduleHubServiceLinesStaleWhileRevalidate(SERVICE_LINES_CACHE_USER, async () => {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) return null
         const data = await res.json()
         return (data.serviceLines || []) as HubServiceLineRow[]
@@ -111,7 +112,7 @@ export function HubMarketplaceStoresDirectory({ lineSlug: slugProp }: { lineSlug
     const silent = readStaleHubServiceLinesCache(SERVICE_LINES_CACHE_USER) !== null
     ;(async () => {
       try {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("lines")
         const data = await res.json()
         const next = (data.serviceLines || []) as HubServiceLineRow[]
@@ -141,7 +142,7 @@ export function HubMarketplaceStoresDirectory({ lineSlug: slugProp }: { lineSlug
 
     ;(async () => {
       try {
-        const res = await fetch(`/api/hub/vendors?service_line=${encodeURIComponent(slug)}`, { cache: "no-store" })
+        const res = await apiFetch(`/api/hub/vendors?service_line=${encodeURIComponent(slug)}`, { cache: "no-store" })
         if (!res.ok) throw new Error("vendors")
         const data = await res.json()
         const next = (data.vendors || []) as HubVendorRow[]

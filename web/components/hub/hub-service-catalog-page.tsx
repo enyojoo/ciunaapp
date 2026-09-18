@@ -48,6 +48,7 @@ import { HubProductVendorChipLight } from "@/components/hub/hub-product-vendor-c
 import { HubMarketplaceLineHome } from "@/components/hub/hub-marketplace-line-home"
 import { hubGenericCheckoutPath, hubLineHomePath, hubMarketplaceCheckoutPath } from "@/lib/hub-public-paths"
 import { hubServiceLineShellLabels } from "@/lib/hub-service-line-i18n"
+import { apiFetch } from "@/lib/api-client"
 
 const ALL_CATEGORIES_VALUE = "__all__"
 
@@ -159,7 +160,7 @@ export function HubServiceCatalogPage({ slug: slugProp }: { slug: string }) {
       setLinesLoaded(true)
       scheduleHubServiceLinesStaleWhileRevalidate(linesCacheUserId, async () => {
         const res = isMarketplaceLine
-          ? await fetch("/api/hub/service-lines", { cache: "no-store" })
+          ? await apiFetch("/api/hub/service-lines", { cache: "no-store" })
           : await fetchWithAuth("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) return null
         const data = await res.json()
@@ -173,7 +174,7 @@ export function HubServiceCatalogPage({ slug: slugProp }: { slug: string }) {
     ;(async () => {
       try {
         const res = isMarketplaceLine
-          ? await fetch("/api/hub/service-lines", { cache: "no-store" })
+          ? await apiFetch("/api/hub/service-lines", { cache: "no-store" })
           : await fetchWithAuth("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("lines")
         const data = await res.json()
@@ -220,7 +221,7 @@ export function HubServiceCatalogPage({ slug: slugProp }: { slug: string }) {
       try {
         const qs = isMarketplaceLine ? `?service_line=${encodeURIComponent(slug)}` : ""
         const res = isMarketplaceLine
-          ? await fetch(`/api/hub/products${qs}`, { cache: "no-store", signal: ac.signal })
+          ? await apiFetch(`/api/hub/products${qs}`, { cache: "no-store", signal: ac.signal })
           : await fetchWithAuth(`/api/hub/products${qs}`, { cache: "no-store", signal: ac.signal })
         if (!res.ok) throw new Error("load")
         const data = await res.json()
@@ -261,7 +262,7 @@ export function HubServiceCatalogPage({ slug: slugProp }: { slug: string }) {
 
     ;(async () => {
       try {
-        const res = await fetch(`/api/hub/vendors?service_line=${encodeURIComponent(slug)}`, {
+        const res = await apiFetch(`/api/hub/vendors?service_line=${encodeURIComponent(slug)}`, {
           cache: "no-store",
           signal: ac.signal,
         })

@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Hub",
+    "sendMoney": "Send Money",
+    "send": "Send",
+    "hub": "Hub",
+    "recipients": "Recipients",
+    "transactions": "Transactions",
+    "more": "More",
+    "logout": "Logout",
+    "login": "Log in"
+  },
+  "more": {
+    "title": "More",
+    "account": "Account",
+    "yourProfile": "Your Profile",
+    "accountVerification": "Account Verification",
+    "affiliatesReferrals": "Affiliates & Referrals",
+    "loginPin": "Login PIN",
+    "app": "App",
+    "recipients": "Recipients",
+    "support": "Support",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "version": "Version {{version}}",
+    "logout": "Logout",
+    "signOutTitle": "Sign Out",
+    "signOutDescription": "Are you sure you want to sign out? You'll need to sign in again to access your account.",
+    "cancel": "Cancel",
+    "signOut": "Sign Out",
+    "signingOut": "Signing out..."
+  },
+  "kyc": {
+    "verified": "Verified",
+    "inReview": "In review",
+    "rejected": "Rejected",
+    "pending": "Pending",
+    "takeAction": "Take action"
+  },
+  "languages": {
+    "en": "English",
+    "ru": "Russian",
+    "fr": "French",
+    "es": "Spanish"
+  },
+  "app": {
+    "language": "Language"
+  },
+  "pinSetup": {
+    "createTitle": "Create your app PIN",
+    "createSubtitle": "Enter your 4-digit PIN",
+    "confirmTitle": "Confirm your PIN",
+    "confirmSubtitle": "Enter the same PIN again",
+    "benefitLine": "Use it for quick access when you return. You’ll still use your password if you sign out fully.",
+    "mismatch": "PINs don’t match. Try again.",
+    "saving": "Saving…"
+  },
+  "pinDialog": {
+    "createTitle": "Create PIN",
+    "changeTitle": "Change PIN",
+    "createDescription": "Choose a 4-digit PIN for quick access when you open the app again. After idle lock, enter your PIN instead of your password. You’ll still sign in with your password if you log out.",
+    "changeDescription": "Enter your current PIN, then choose a new 4-digit PIN.",
+    "currentPin": "Current PIN",
+    "pin": "PIN",
+    "newPin": "New PIN",
+    "confirmPin": "Confirm PIN",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "errorBothFields": "Enter a 4-digit PIN in both fields.",
+    "errorPinsNoMatch": "PINs do not match.",
+    "errorSave": "Could not save PIN.",
+    "errorCurrentRequired": "Enter your current 4-digit PIN.",
+    "errorNewBothFields": "Enter a new 4-digit PIN in both fields.",
+    "errorNewNoMatch": "New PINs do not match.",
+    "errorNewSameAsOld": "New PIN must be different from your current PIN.",
+    "errorWrongCurrent": "Current PIN is incorrect.",
+    "errorUpdate": "Could not update PIN."
+  },
+  "pinLock": {
+    "welcomeBack": "Welcome back",
+    "enterPin": "Enter your 4-digit PIN",
+    "incorrectPin": "Incorrect PIN",
+    "verifying": "Verifying…",
+    "tooManyAttempts": "Too many attempts. Try again in {{minutes}} minute(s).",
+    "tooManyAttemptsOne": "Too many attempts. Try again in 1 minute.",
+    "notYourAccount": "Not your account?",
+    "logOut": "Log out",
+    "backspaceAria": "Delete"
+  }
+}

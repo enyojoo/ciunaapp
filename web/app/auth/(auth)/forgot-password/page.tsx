@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { apiFetch } from "@/lib/api-client"
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation("app")
@@ -30,7 +31,7 @@ export default function ForgotPasswordPage() {
     setMessage("")
 
     try {
-      const response = await fetch("/api/auth/forgot-password", {
+      const response = await apiFetch("/api/auth/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +90,7 @@ export default function ForgotPasswordPage() {
     setError("")
 
     try {
-      const response = await fetch("/api/auth/verify-reset-otp", {
+      const response = await apiFetch("/api/auth/verify-reset-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +122,7 @@ export default function ForgotPasswordPage() {
     setError("")
 
     try {
-      const response = await fetch("/api/auth/forgot-password", {
+      const response = await apiFetch("/api/auth/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

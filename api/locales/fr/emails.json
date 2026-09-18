@@ -1,0 +1,192 @@
+{
+  "common": {
+    "logoAlt": "Ciuna",
+    "needHelp": "Besoin d'aide ? Nous sommes là pour vous !",
+    "contactSupport": "Contacter le support",
+    "contactSupportMailto": "mailto:support@ciuna.com",
+    "footerCopyright": "© {{year}} Ciuna. Tous droits réservés.",
+    "footerAccountNote": "Vous recevez cet e-mail car vous avez un compte Ciuna.",
+    "refundNote": "Si vous avez été débité, nous vous rembourserons sur votre moyen de paiement initial sous 24 heures."
+  },
+  "status": {
+    "pending": "En attente",
+    "processing": "En cours",
+    "completed": "Terminé",
+    "failed": "Échoué",
+    "cancelled": "Annulé"
+  },
+  "summary": {
+    "heading": "Détails de la transaction",
+    "transactionId": "ID de transaction :",
+    "recipient": "Bénéficiaire :",
+    "amount": "Montant :",
+    "receiving": "Réception :",
+    "rateUsed": "Taux utilisé :",
+    "exchangeFee": "Frais de change :",
+    "logisticsFee": "Frais de livraison :",
+    "corridorFee": "Frais de corridor :",
+    "hubFee": "Commission Hub :",
+    "totalPaid": "Total payé :",
+    "status": "Statut :",
+    "date": "Date :",
+    "order": "Commande :",
+    "type": "Type :",
+    "typeFixed": "Prix fixe",
+    "typeUserInput": "Montant saisi",
+    "fundedAmount": "Montant crédité :",
+    "exchangeRate": "Taux de change :",
+    "fulfillment": "Livraison :",
+    "fulfillmentOnlineValue": "Livraison en ligne à {{contactName}}",
+    "fulfillmentInPersonValue": "Livraison en personne à {{contactName}}",
+    "deliveryAddress": "Adresse de livraison :",
+    "contact": "Contact :",
+    "product": "Produit :"
+  },
+  "welcome": {
+    "subject": "Bienvenue sur Ciuna ! C'est parti",
+    "title": "Bienvenue sur Ciuna !",
+    "greeting": "Bonjour {{firstName}} ! Bienvenue sur Ciuna.",
+    "intro": "Merci d'avoir rejoint Ciuna ! Nous sommes ravis de vous compter parmi nos membres. Votre compte est actif et prêt à envoyer de l'argent à l'international en moins de 5 minutes.",
+    "featuresLead": "Avec Ciuna, vous pouvez :",
+    "featureSpeed": "Envoyer de l'argent dans le monde entier en moins de 5 minutes — des transferts transfrontaliers ultrarapides",
+    "featureTracking": "Suivre vos transferts en temps réel avec des mises à jour en direct",
+    "featureRecipients": "Enregistrer vos bénéficiaires favoris pour des envois instantanés",
+    "featureRates": "Profiter de taux de change compétitifs sans frais cachés",
+    "gettingStartedHeading": "Pour commencer",
+    "gettingStartedBody": "Pour envoyer votre premier transfert, cliquez simplement sur « Envoyer » dans votre tableau de bord et suivez les étapes. Votre argent arrivera en moins de 5 minutes !",
+    "cta": "Aller au tableau de bord"
+  },
+  "send": {
+    "pending": {
+      "subject": "Transfert créé — #{{transactionId}}",
+      "title": "Transfert créé",
+      "body": "Votre transfert à {{recipientName}} a été créé et est en cours de traitement. Nous vous tiendrons informé à chaque étape !",
+      "nextHeading": "Et maintenant",
+      "nextBody": "Nous traitons votre transfert et vous enverrons une notification dès qu'il sera finalisé. Vous pouvez suivre sa progression dans votre tableau de bord.",
+      "cta": "Suivre la transaction"
+    },
+    "processing": {
+      "subject": "Transfert en cours — #{{transactionId}}",
+      "title": "Transfert en cours",
+      "body": "Bonne nouvelle ! Nous avons reçu votre paiement et votre transfert à {{recipientName}} est en cours. L'argent arrivera en moins de 5 minutes !",
+      "nextHeading": "Ce qui se passe",
+      "nextBody": "Nous travaillons avec nos partenaires bancaires pour finaliser votre transfert. Cela prend généralement moins de 5 minutes grâce à notre technologie !",
+      "cta": "Suivre le transfert"
+    },
+    "completed": {
+      "subject": "Transfert réussi ! #{{transactionId}}",
+      "title": "Transfert terminé !",
+      "body": "Votre transfert à {{recipientName}} a été effectué avec succès ! L'argent a été envoyé et devrait arriver en quelques minutes.",
+      "nextHeading": "Et maintenant",
+      "nextBody": "Votre bénéficiaire recevra l'argent en quelques minutes grâce à notre traitement rapide. Vous pouvez suivre tous vos transferts dans votre tableau de bord.",
+      "cta": "Voir la transaction"
+    },
+    "failed": {
+      "subject": "Transfert échoué — #{{transactionId}}",
+      "title": "Transfert échoué",
+      "bodyWithReason": "Malheureusement, votre transfert à {{recipientName}} n'a pas pu aboutir. Raison : {{reason}}",
+      "bodyNoReason": "Malheureusement, votre transfert à {{recipientName}} n'a pas pu aboutir. Merci de contacter le support pour plus d'informations.",
+      "nextHeading": "Que se passe-t-il ensuite",
+      "cta": "Contacter le support"
+    },
+    "cancelled": {
+      "subject": "Transfert annulé — #{{transactionId}}",
+      "title": "Transfert annulé",
+      "bodyWithReason": "Votre transfert à {{recipientName}} a été annulé. Raison : {{reason}}",
+      "bodyNoReason": "Votre transfert à {{recipientName}} a été annulé. L'annulation peut venir de vous ou de notre équipe support.",
+      "refundHeading": "Informations de remboursement",
+      "cta": "Nouveau transfert"
+    }
+  },
+  "hubOrder": {
+    "pending": {
+      "subject": "Commande reçue — {{productTitle}} (#{{transactionId}})",
+      "title": "Commande reçue",
+      "hero": {
+        "fixed": "Merci pour votre achat de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
+        "userInput": "Nous avons reçu votre recharge pour {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}."
+      },
+      "fulfillment": {
+        "online": "Nous livrerons {{contactName}} au {{contactPhone}}.",
+        "inPerson": "Nous livrerons {{contactName}} à {{deliveryAddressLine}}. Notre coursier appellera au {{contactPhone}} à l'arrivée."
+      },
+      "nextHeading": "Et maintenant",
+      "nextBody": "Nous préparons votre commande et vous préviendrons dès qu’elle est traitée. Vous pouvez suivre l’avancement à tout moment dans Transactions.",
+      "cta": "Voir la commande"
+    },
+    "processing": {
+      "subject": "Traitement de votre commande — {{productTitle}} (#{{transactionId}})",
+      "title": "Commande en cours",
+      "hero": {
+        "fixed": "Nous avons reçu votre paiement pour {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) et nous le traitons.",
+        "userInput": "Nous avons reçu votre paiement pour {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) et traitons votre recharge."
+      },
+      "fulfillment": {
+        "online": "La livraison à {{contactName}} au {{contactPhone}} est en route.",
+        "inPerson": "Notre coursier prépare la livraison à {{contactName}} à {{deliveryAddressLine}} et appellera le {{contactPhone}} à l'arrivée."
+      },
+      "nextHeading": "Ce qui se passe",
+      "nextBody": "Nous vous enverrons une confirmation finale dès que votre commande sera prête.",
+      "cta": "Voir la commande"
+    },
+    "completed": {
+      "subjectOnline": "Commande livrée — {{productTitle}} (#{{transactionId}})",
+      "subjectInPerson": "Commande en route — {{productTitle}} (#{{transactionId}})",
+      "title": "Commande terminée",
+      "hero": {
+        "fixed": "Votre commande {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) est terminée.",
+        "userInput": "Votre recharge pour {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) est terminée."
+      },
+      "fulfillment": {
+        "online": "Votre commande a été livrée à {{contactName}}. Consultez la page de la commande pour les détails.",
+        "inPerson": "Notre coursier est en route vers {{contactName}} à {{deliveryAddressLine}} et appellera le {{contactPhone}} à l'arrivée."
+      },
+      "nextHeading": "Et maintenant",
+      "nextBody": "Vous pouvez consulter le reçu complet sur la page de votre commande à tout moment.",
+      "cta": "Voir la commande"
+    },
+    "failed": {
+      "subject": "Commande échouée — {{productTitle}} (#{{transactionId}})",
+      "title": "Commande échouée",
+      "bodyWithReason": "Malheureusement, votre commande de {{productTitle}} n'a pas pu aboutir. Raison : {{reason}}",
+      "bodyNoReason": "Malheureusement, votre commande de {{productTitle}} n'a pas pu aboutir. Merci de contacter le support pour plus d'informations.",
+      "nextHeading": "Que se passe-t-il ensuite",
+      "cta": "Contacter le support"
+    },
+    "cancelled": {
+      "subject": "Commande annulée — {{productTitle}} (#{{transactionId}})",
+      "title": "Commande annulée",
+      "bodyWithReason": "Votre commande de {{productTitle}} a été annulée. Raison : {{reason}}",
+      "bodyNoReason": "Votre commande de {{productTitle}} a été annulée. L'annulation peut venir de vous ou de notre équipe support.",
+      "refundHeading": "Informations de remboursement",
+      "cta": "Parcourir le Hub"
+    }
+  },
+  "referralPayout": {
+    "pending": {
+      "subjectWithTx": "Demande de paiement de parrainage — #{{payoutTransactionId}}",
+      "subjectWithRequest": "Demande de paiement de parrainage reçue — {{requestIdShort}}…",
+      "subjectFallback": "Demande de paiement de parrainage reçue",
+      "title": "Demande de paiement de parrainage reçue",
+      "body": "Bonjour {{firstName}}, nous avons reçu votre demande de retrait de récompense de parrainage de {{amount}} {{currency}} vers {{recipientName}}. Notre équipe va l'examiner et la traiter — comme pour un envoi classique, vous recevrez un e-mail lorsque le paiement sera terminé ou annulé.",
+      "referenceTx": "ID de transaction : {{payoutTransactionId}}",
+      "referenceRequest": "ID de demande : {{payoutRequestId}}",
+      "nextHeading": "La suite",
+      "nextBody": "Nous vous informerons par e-mail lorsque le paiement sera envoyé ou la demande annulée. Vous pouvez aussi vérifier le statut dans Affiliations & Parrainage dans l'application.",
+      "cta": "Voir les parrainages"
+    },
+    "completed": {
+      "subject": "Paiement de parrainage envoyé — {{amount}} {{currency}}",
+      "title": "Paiement de parrainage terminé",
+      "body": "Bonjour {{firstName}}, votre retrait de récompense de parrainage de {{amount}} {{currency}} vers {{recipientName}} est terminé. Cet envoi apparaît dans votre activité comme un transfert classique et compte dans vos totaux annuels.",
+      "referenceTx": "ID de transaction : {{linkedTransactionId}}",
+      "cta": "Voir l'activité"
+    },
+    "cancelled": {
+      "subject": "Demande de paiement de parrainage annulée",
+      "title": "Paiement de parrainage annulé",
+      "body": "Bonjour {{firstName}}, votre demande de paiement de parrainage de {{amount}} {{currency}} vers {{recipientName}} a été annulée. Ces fonds restent disponibles dans votre solde de parrainage. Si cela n'est pas attendu, contactez le support.",
+      "cta": "Ouvrir les parrainages"
+    }
+  }
+}

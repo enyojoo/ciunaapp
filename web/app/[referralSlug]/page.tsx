@@ -1,19 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { createServerClient } from "@/lib/supabase"
+import { APP_URLS, REFERRAL_SHARE, resolveApiUrl } from "@ciuna/shared"
 import { RESERVED_REFERRAL_SLUGS } from "@/lib/referral-slug"
-import {
-  SEO_REFERRAL_SHARE_DESCRIPTION,
-  SEO_REFERRAL_SHARE_IMAGE_ALT,
-  SEO_REFERRAL_SHARE_IMAGE_URL,
-  SEO_REFERRAL_SHARE_TITLE,
-  SEO_SITE_NAME,
-  SEO_SITE_URL,
-} from "@/lib/seo"
-import { findReferrerRowBySlug } from "@/lib/referral-lookup"
 import { ReferralClientRedirect } from "./referral-client-redirect"
 
-/** 200 + OG in <head> for crawlers; client redirects to register (no server redirect — that drops link previews). */
 export const dynamic = "force-dynamic"
 
 type Props = { params: Promise<{ referralSlug: string }> }
@@ -23,48 +13,56 @@ async function resolveSlug(params: Props["params"]) {
   return referralSlug.trim()
 }
 
+async function lookupReferral(slug: string): Promise<{ ok: boolean } | null> {
+  try {
+    const res = await fetch(`${resolveApiUrl()}/api/referrals/preview/${encodeURIComponent(slug)}`, {
+      cache: "no-store",
+    })
+    if (!res.ok) return null
+    return (await res.json()) as { ok: boolean }
+  } catch {
+    return null
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = await resolveSlug(params)
   if (!slug || slug.length < 8 || RESERVED_REFERRAL_SLUGS.has(slug)) {
     return { title: "Not found" }
   }
 
-  const supabase = createServerClient()
-  const ref = await findReferrerRowBySlug(supabase, slug)
-
-  if (!ref?.id) {
+  const ref = await lookupReferral(slug)
+  if (!ref?.ok) {
     return { title: "Not found" }
   }
 
-  const pageUrl = `${SEO_SITE_URL}/${slug}`
+  const pageUrl = `${APP_URLS.app}/${slug}`
 
   return {
-    title: SEO_REFERRAL_SHARE_TITLE,
-    description: SEO_REFERRAL_SHARE_DESCRIPTION,
-    alternates: {
-      canonical: pageUrl,
-    },
+    title: REFERRAL_SHARE.title,
+    description: REFERRAL_SHARE.description,
+    alternates: { canonical: pageUrl },
     openGraph: {
       type: "website",
-      title: SEO_REFERRAL_SHARE_TITLE,
-      description: SEO_REFERRAL_SHARE_DESCRIPTION,
+      title: REFERRAL_SHARE.title,
+      description: REFERRAL_SHARE.description,
       url: pageUrl,
-      siteName: SEO_SITE_NAME,
+      siteName: "Ciuna",
       locale: "en_US",
       images: [
         {
-          url: SEO_REFERRAL_SHARE_IMAGE_URL,
+          url: REFERRAL_SHARE.imageUrl,
           width: 1200,
           height: 630,
-          alt: SEO_REFERRAL_SHARE_IMAGE_ALT,
+          alt: REFERRAL_SHARE.imageAlt,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: SEO_REFERRAL_SHARE_TITLE,
-      description: SEO_REFERRAL_SHARE_DESCRIPTION,
-      images: [SEO_REFERRAL_SHARE_IMAGE_URL],
+      title: REFERRAL_SHARE.title,
+      description: REFERRAL_SHARE.description,
+      images: [REFERRAL_SHARE.imageUrl],
     },
   }
 }
@@ -76,10 +74,8 @@ export default async function ReferralLandingPage({ params }: Props) {
     notFound()
   }
 
-  const supabase = createServerClient()
-  const ref = await findReferrerRowBySlug(supabase, slug)
-
-  if (!ref?.id) {
+  const ref = await lookupReferral(slug)
+  if (!ref?.ok) {
     notFound()
   }
 

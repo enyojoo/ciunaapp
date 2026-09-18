@@ -18,6 +18,7 @@ import {
 import { HubExpertCatalogCard, type ExpertCatalogProfile } from "@/components/hub/hub-expert-catalog-card"
 import { HubLinePageShell } from "@/components/hub/hub-line-page-shell"
 import { EXPERTS_CATALOG_PATH } from "@/lib/experts-public-paths"
+import { apiFetch } from "@/lib/api-client"
 
 const SERVICE_LINES_CACHE_USER = hubPublicHubJsonCacheUserId()
 
@@ -60,7 +61,7 @@ export default function ExpertsBrowsePage() {
       if (s) setLines(s)
       setLinesLoaded(true)
       scheduleHubServiceLinesStaleWhileRevalidate(SERVICE_LINES_CACHE_USER, async () => {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) return null
         const data = await res.json()
         return (data.serviceLines || []) as HubServiceLineRow[]
@@ -72,7 +73,7 @@ export default function ExpertsBrowsePage() {
     const silent = readStaleHubServiceLinesCache(SERVICE_LINES_CACHE_USER) !== null
     ;(async () => {
       try {
-        const res = await fetch("/api/hub/service-lines", { cache: "no-store" })
+        const res = await apiFetch("/api/hub/service-lines", { cache: "no-store" })
         if (!res.ok) throw new Error("lines")
         const data = await res.json()
         const next = (data.serviceLines || []) as HubServiceLineRow[]
@@ -100,7 +101,7 @@ export default function ExpertsBrowsePage() {
 
     ;(async () => {
       try {
-        const res = await fetch("/api/expert/profiles", { cache: "no-store" })
+        const res = await apiFetch("/api/expert/profiles", { cache: "no-store" })
         if (!res.ok) throw new Error("profiles")
         const data = await res.json()
         const next = (data.profiles || []) as ExpertProfile[]

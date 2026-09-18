@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft, Eye, EyeOff } from "lucide-react"
 import { getSecuritySettings, validatePassword } from "@/lib/security-settings"
 import { useTranslation } from "react-i18next"
+import { apiFetch } from "@/lib/api-client"
 
 function ResetPasswordForm() {
   const { t } = useTranslation("app")
@@ -62,7 +63,7 @@ function ResetPasswordForm() {
       const resetToken = sessionStorage.getItem("reset-token")
       const resetEmail = sessionStorage.getItem("reset-email")
 
-      const response = await fetch("/api/auth/reset-password", {
+      const response = await apiFetch("/api/auth/reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

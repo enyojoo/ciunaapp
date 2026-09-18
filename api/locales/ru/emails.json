@@ -1,0 +1,192 @@
+{
+  "common": {
+    "logoAlt": "Ciuna",
+    "needHelp": "Нужна помощь? Мы на связи!",
+    "contactSupport": "Связаться с поддержкой",
+    "contactSupportMailto": "mailto:support@ciuna.com",
+    "footerCopyright": "© {{year}} Ciuna. Все права защищены.",
+    "footerAccountNote": "Вы получили это письмо, потому что у вас есть аккаунт Ciuna.",
+    "refundNote": "Если с вас сняли деньги, мы вернём их на исходный способ оплаты в течение 24 часов."
+  },
+  "status": {
+    "pending": "Ожидает",
+    "processing": "В обработке",
+    "completed": "Завершено",
+    "failed": "Ошибка",
+    "cancelled": "Отменено"
+  },
+  "summary": {
+    "heading": "Детали транзакции",
+    "transactionId": "ID транзакции:",
+    "recipient": "Получатель:",
+    "amount": "Сумма:",
+    "receiving": "К получению:",
+    "rateUsed": "Курс:",
+    "exchangeFee": "Комиссия за обмен:",
+    "logisticsFee": "Сбор за доставку:",
+    "corridorFee": "Сбор коридора:",
+    "hubFee": "Комиссия Hub:",
+    "totalPaid": "Итого оплачено:",
+    "status": "Статус:",
+    "date": "Дата:",
+    "order": "Заказ:",
+    "type": "Тип:",
+    "typeFixed": "Фиксированная цена",
+    "typeUserInput": "Сумма по выбору",
+    "fundedAmount": "Сумма пополнения:",
+    "exchangeRate": "Курс обмена:",
+    "fulfillment": "Доставка:",
+    "fulfillmentOnlineValue": "Онлайн доставка для {{contactName}}",
+    "fulfillmentInPersonValue": "Личная доставка для {{contactName}}",
+    "deliveryAddress": "Адрес доставки:",
+    "contact": "Контакт:",
+    "product": "Товар:"
+  },
+  "welcome": {
+    "subject": "Добро пожаловать в Ciuna! Давайте начнём",
+    "title": "Добро пожаловать в Ciuna!",
+    "greeting": "Привет, {{firstName}}! Добро пожаловать в Ciuna.",
+    "intro": "Спасибо, что присоединились к Ciuna! Мы рады видеть вас в нашем сообществе. Ваш аккаунт активирован и готов отправлять деньги по всему миру менее чем за 5 минут.",
+    "featuresLead": "С Ciuna вы можете:",
+    "featureSpeed": "Отправлять деньги за границу менее чем за 5 минут — молниеносные международные переводы",
+    "featureTracking": "Отслеживать переводы в реальном времени с живыми обновлениями",
+    "featureRecipients": "Сохранять избранных получателей для мгновенных переводов",
+    "featureRates": "Получать выгодные курсы обмена без скрытых комиссий",
+    "gettingStartedHeading": "Как начать",
+    "gettingStartedBody": "Чтобы отправить первый перевод, нажмите кнопку «Отправить деньги» в вашей панели и следуйте простым шагам. Деньги дойдут за считанные минуты!",
+    "cta": "В панель управления"
+  },
+  "send": {
+    "pending": {
+      "subject": "Перевод создан — #{{transactionId}}",
+      "title": "Перевод создан",
+      "body": "Ваш перевод для {{recipientName}} создан и сейчас обрабатывается. Мы будем держать вас в курсе на каждом этапе!",
+      "nextHeading": "Что дальше",
+      "nextBody": "Мы уже работаем над вашим переводом и уведомим, как только он завершится. Вы можете отслеживать прогресс в панели управления.",
+      "cta": "Отследить перевод"
+    },
+    "processing": {
+      "subject": "Перевод в обработке — #{{transactionId}}",
+      "title": "Перевод в обработке",
+      "body": "Отличные новости! Мы получили ваш платёж, и перевод для {{recipientName}} сейчас обрабатывается. Деньги поступят менее чем за 5 минут!",
+      "nextHeading": "Что происходит",
+      "nextBody": "Мы работаем с нашими банковскими партнёрами, чтобы завершить перевод. Обычно это занимает менее 5 минут благодаря нашим технологиям!",
+      "cta": "Отследить перевод"
+    },
+    "completed": {
+      "subject": "Перевод успешно завершён! #{{transactionId}}",
+      "title": "Перевод завершён!",
+      "body": "Ваш перевод для {{recipientName}} успешно выполнен! Деньги отправлены и должны поступить в течение нескольких минут.",
+      "nextHeading": "Что дальше",
+      "nextBody": "Получатель должен увидеть деньги в ближайшие минуты благодаря быстрой обработке. Все переводы можно отслеживать в панели управления.",
+      "cta": "Посмотреть транзакцию"
+    },
+    "failed": {
+      "subject": "Перевод не выполнен — #{{transactionId}}",
+      "title": "Перевод не выполнен",
+      "bodyWithReason": "К сожалению, ваш перевод для {{recipientName}} не удалось выполнить. Причина: {{reason}}",
+      "bodyNoReason": "К сожалению, ваш перевод для {{recipientName}} не удалось выполнить. Пожалуйста, свяжитесь с поддержкой для получения деталей.",
+      "nextHeading": "Что дальше",
+      "cta": "Связаться с поддержкой"
+    },
+    "cancelled": {
+      "subject": "Перевод отменён — #{{transactionId}}",
+      "title": "Перевод отменён",
+      "bodyWithReason": "Ваш перевод для {{recipientName}} отменён. Причина: {{reason}}",
+      "bodyNoReason": "Ваш перевод для {{recipientName}} отменён. Это могло произойти по вашей инициативе или по решению команды поддержки.",
+      "refundHeading": "Возврат средств",
+      "cta": "Отправить новый перевод"
+    }
+  },
+  "hubOrder": {
+    "pending": {
+      "subject": "Заказ принят — {{productTitle}} (#{{transactionId}})",
+      "title": "Заказ принят",
+      "hero": {
+        "fixed": "Спасибо за покупку {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
+        "userInput": "Мы получили ваше пополнение для {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}."
+      },
+      "fulfillment": {
+        "online": "Мы доставим {{contactName}} по номеру {{contactPhone}}.",
+        "inPerson": "Мы доставим {{contactName}} по адресу {{deliveryAddressLine}}. Курьер позвонит на {{contactPhone}} при прибытии."
+      },
+      "nextHeading": "Что дальше",
+      "nextBody": "Мы готовим ваш заказ и уведомим вас, как только он будет обработан. Отслеживать статус можно в любое время в разделе «Операции».",
+      "cta": "Посмотреть заказ"
+    },
+    "processing": {
+      "subject": "Обрабатываем заказ — {{productTitle}} (#{{transactionId}})",
+      "title": "Заказ в обработке",
+      "hero": {
+        "fixed": "Мы получили оплату за {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) и уже обрабатываем её.",
+        "userInput": "Мы получили оплату за {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) и уже обрабатываем пополнение."
+      },
+      "fulfillment": {
+        "online": "Доставка {{contactName}} по номеру {{contactPhone}} уже в пути.",
+        "inPerson": "Курьер готовит доставку для {{contactName}} по адресу {{deliveryAddressLine}} и позвонит на {{contactPhone}} при прибытии."
+      },
+      "nextHeading": "Что происходит",
+      "nextBody": "Мы пришлём финальное подтверждение, как только ваш заказ будет готов.",
+      "cta": "Посмотреть заказ"
+    },
+    "completed": {
+      "subjectOnline": "Заказ доставлен — {{productTitle}} (#{{transactionId}})",
+      "subjectInPerson": "Заказ в пути — {{productTitle}} (#{{transactionId}})",
+      "title": "Заказ выполнен",
+      "hero": {
+        "fixed": "Ваш заказ {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) выполнен.",
+        "userInput": "Ваше пополнение для {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) завершено."
+      },
+      "fulfillment": {
+        "online": "Заказ доставлен {{contactName}}. Подробности — на странице заказа.",
+        "inPerson": "Курьер уже в пути к {{contactName}} по адресу {{deliveryAddressLine}} и позвонит на {{contactPhone}} при прибытии."
+      },
+      "nextHeading": "Что дальше",
+      "nextBody": "Полный чек всегда доступен на странице заказа.",
+      "cta": "Посмотреть заказ"
+    },
+    "failed": {
+      "subject": "Заказ не выполнен — {{productTitle}} (#{{transactionId}})",
+      "title": "Заказ не выполнен",
+      "bodyWithReason": "К сожалению, ваш заказ {{productTitle}} не удалось выполнить. Причина: {{reason}}",
+      "bodyNoReason": "К сожалению, ваш заказ {{productTitle}} не удалось выполнить. Пожалуйста, свяжитесь с поддержкой для получения деталей.",
+      "nextHeading": "Что дальше",
+      "cta": "Связаться с поддержкой"
+    },
+    "cancelled": {
+      "subject": "Заказ отменён — {{productTitle}} (#{{transactionId}})",
+      "title": "Заказ отменён",
+      "bodyWithReason": "Ваш заказ {{productTitle}} отменён. Причина: {{reason}}",
+      "bodyNoReason": "Ваш заказ {{productTitle}} отменён. Это могло произойти по вашей инициативе или по решению команды поддержки.",
+      "refundHeading": "Возврат средств",
+      "cta": "Перейти в Hub"
+    }
+  },
+  "referralPayout": {
+    "pending": {
+      "subjectWithTx": "Запрос на выплату реферальных — #{{payoutTransactionId}}",
+      "subjectWithRequest": "Запрос на выплату реферальных получен — {{requestIdShort}}…",
+      "subjectFallback": "Запрос на выплату реферальных получен",
+      "title": "Запрос на выплату реферальных получен",
+      "body": "Привет, {{firstName}}! Мы получили ваш запрос на вывод реферального вознаграждения {{amount}} {{currency}} для {{recipientName}}. Наша команда проверит и обработает его — как и при обычной отправке, мы пришлём письмо, когда выплата будет завершена или отменена.",
+      "referenceTx": "ID транзакции: {{payoutTransactionId}}",
+      "referenceRequest": "ID запроса: {{payoutRequestId}}",
+      "nextHeading": "Что дальше",
+      "nextBody": "Мы уведомим вас по email, когда выплата будет отправлена или запрос отменён. Статус также доступен в разделе «Партнёрка» в приложении.",
+      "cta": "Открыть рефералов"
+    },
+    "completed": {
+      "subject": "Реферальная выплата отправлена — {{amount}} {{currency}}",
+      "title": "Реферальная выплата завершена",
+      "body": "Привет, {{firstName}}! Ваш вывод реферального вознаграждения {{amount}} {{currency}} для {{recipientName}} успешно завершён. Этот перевод отображается в вашей активности как обычный и учитывается в годовой статистике.",
+      "referenceTx": "ID транзакции: {{linkedTransactionId}}",
+      "cta": "Открыть активность"
+    },
+    "cancelled": {
+      "subject": "Запрос на реферальную выплату отменён",
+      "title": "Реферальная выплата отменена",
+      "body": "Привет, {{firstName}}! Ваш запрос на выплату реферальных {{amount}} {{currency}} для {{recipientName}} отменён. Эти средства остаются в вашем доступном реферальном балансе. Если вы не ожидали этого, свяжитесь с поддержкой.",
+      "cta": "Открыть рефералов"
+    }
+  }
+}

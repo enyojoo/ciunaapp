@@ -23,6 +23,7 @@ import {
   readStaleExpertProfileDetailCache,
   writeExpertProfileDetailCache,
 } from "@/lib/expert-profile-client-cache"
+import { apiFetch } from "@/lib/api-client"
 
 type ExpertProfile = {
   id: string
@@ -119,7 +120,7 @@ export function ExpertProfileView({ slugOrId }: { slugOrId: string }) {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch(`/api/expert/profiles/${encodeURIComponent(slugOrId)}`, { cache: "no-store" })
+        const res = await apiFetch(`/api/expert/profiles/${encodeURIComponent(slugOrId)}`, { cache: "no-store" })
         if (res.status === 404) {
           writeExpertProfileDetailCache(slugOrId, { profile: null, services: [], notFound: true })
           if (!cancelled) {

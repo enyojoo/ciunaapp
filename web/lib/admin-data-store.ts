@@ -1,6 +1,8 @@
 import { sumCompletedVolumeInBaseCurrency } from "@ciuna/shared"
 import { supabase } from "./supabase"
 import { formatCurrency as formatMoney, roundMoney } from "@/utils/currency"
+import { apiFetch } from "@/lib/api-client"
+import { fetchWithAuth } from "@/lib/fetch-with-auth"
 
 interface AdminData {
   users: any[]
@@ -315,7 +317,7 @@ class AdminDataStore {
       // Get auth users data to include email_confirmed_at
       let authUsers = null
       try {
-        const response = await fetch('/api/admin/auth-users')
+        const response = await apiFetch('/api/admin/auth-users')
         if (response.ok) {
           const data = await response.json()
           authUsers = { users: data.users }
@@ -942,11 +944,8 @@ class AdminDataStore {
     try {
       console.log('AdminDataStore: sendEmailNotification called for:', transactionId, status)
       
-      const baseUrl = typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-      
-      // Send user notification email only (no admin notification for status updates)
       console.log('AdminDataStore: Sending user notification email')
-      const userResponse = await fetch(`${baseUrl}/api/send-email-notification`, {
+      const userResponse = await fetchWithAuth("/api/send-email-notification", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
