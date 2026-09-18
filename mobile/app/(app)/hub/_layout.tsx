@@ -14,6 +14,10 @@ export default function HubStack() {
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="[slug]/index" />
+      <Stack.Screen name="[slug]/stores" />
+      <Stack.Screen name="[slug]/v/[vendor]" />
+      <Stack.Screen name="[slug]/checkout/[productId]" />
     </Stack>
   )
 }

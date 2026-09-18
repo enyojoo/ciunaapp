@@ -1,25 +1,33 @@
 import { useEffect, useState } from "react"
-import { Pressable, ScrollView, Text, View } from "react-native"
-import { Image } from "expo-image"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { Screen } from "@/components/screen"
+import { ScrollView, StyleSheet, Text } from "react-native"
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
+import { useTranslation } from "react-i18next"
 import { EmptyState } from "@/components/empty-state"
-import { apiFetch } from "@/lib/api"
+import { Screen } from "@/components/screen"
+import { StoreRow } from "@/components/store-item"
+import { fetchWithAuth } from "@/lib/api"
 import { hubMarketplaceVendorPath, isHubMarketplaceSlug } from "@/lib/hub"
 import type { HubVendor } from "@/lib/types"
+import { colors, space, type as typeSize } from "@/lib/theme"
 
 export default function StoresScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
   const line = String(slug || "").toLowerCase()
   const router = useRouter()
+  const navigation = useNavigation()
+  const { t } = useTranslation("app")
   const [vendors, setVendors] = useState<HubVendor[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    navigation.setOptions({ title: t("hub.marketplaceStoresHeading", { defaultValue: "Stores" }) })
+  }, [navigation, t])
+
+  useEffect(() => {
     if (!isHubMarketplaceSlug(line)) return
     void (async () => {
-      const res = await apiFetch(`/api/hub/vendors?service_line=${encodeURIComponent(line)}`)
-      const body = (await res.json()) as { vendors?: HubVendor[] }
+      const res = await fetchWithAuth(`/api/hub/vendors?service_line=${encodeURIComponent(line)}`)
+      const body = (await res.json().catch(() => ({}))) as { vendors?: HubVendor[] }
       setVendors(body.vendors || [])
       setLoading(false)
     })()
@@ -27,27 +35,26 @@ export default function StoresScreen() {
 
   return (
     <Screen edges={["left", "right"]}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 40 }}>
-        {loading ? <Text className="py-8 text-center text-muted">Loading…</Text> : null}
-        {!loading && vendors.length === 0 ? <EmptyState title="No stores yet" /> : null}
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <Text style={styles.sub}>{t("hub.storesDirectorySubtitle", { defaultValue: "Choose a store to see its products." })}</Text>
+        {loading ? <Text style={styles.loading}>Loading…</Text> : null}
+        {!loading && vendors.length === 0 ? (
+          <EmptyState title={t("hub.marketplaceNoVendors", { defaultValue: "No stores yet — check back soon." })} />
+        ) : null}
         {vendors.map((v) => (
-          <Pressable
+          <StoreRow
             key={v.id}
+            vendor={v}
             onPress={() => router.push(hubMarketplaceVendorPath(line, v.slug) as never)}
-            className="mb-3 min-h-[72px] flex-row items-center rounded-2xl border border-border bg-surface px-3 py-3"
-          >
-            {v.photo_url ? (
-              <Image source={{ uri: v.photo_url }} style={{ width: 48, height: 48, borderRadius: 24 }} />
-            ) : (
-              <View className="h-12 w-12 rounded-full bg-paper" />
-            )}
-            <View className="ml-3 flex-1">
-              <Text className="font-semibold text-gray-900">{v.name}</Text>
-              {v.location ? <Text className="text-sm text-muted">{v.location}</Text> : null}
-            </View>
-          </Pressable>
+          />
         ))}
       </ScrollView>
     </Screen>
   )
 }
+
+const styles = StyleSheet.create({
+  scroll: { paddingHorizontal: space.page, paddingBottom: 40, paddingTop: 8 },
+  sub: { marginBottom: 16, fontSize: typeSize.meta, lineHeight: 18, color: colors.muted },
+  loading: { paddingVertical: 32, textAlign: "center", color: colors.muted },
+})

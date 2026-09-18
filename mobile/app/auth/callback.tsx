@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { ActivityIndicator, Platform, StyleSheet, View } from "react-native"
 import * as Linking from "expo-linking"
 import { useAuth } from "@/lib/auth-context"
-import { parseAuthCallbackUrl } from "@/lib/oauth-callback"
+import { bounceNativeOAuthRedirect, parseAuthCallbackUrl } from "@/lib/oauth-callback"
 import { supabase } from "@/lib/supabase"
 import { colors } from "@/lib/theme"
 
@@ -17,6 +17,7 @@ export default function AuthCallbackScreen() {
         Platform.OS === "web" && typeof window !== "undefined"
           ? window.location.href
           : ((await Linking.getInitialURL()) ?? "")
+      if (Platform.OS === "web" && url && bounceNativeOAuthRedirect(url)) return
       if (url) {
         const { code, accessToken, refreshToken } = parseAuthCallbackUrl(url)
         if (code) {

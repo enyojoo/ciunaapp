@@ -14,9 +14,11 @@ import {
   isSupabaseSiteUrlFallback,
   mapOAuthCallbackError,
   OAUTH_INCOMPLETE,
+  oauthRedirectsMatch,
   parseAuthCallbackUrl,
 } from "./oauth-callback"
-import { getOAuthRedirectUri } from "./oauth-redirect"
+import { getOAuthRedirectUri, getWebsiteOAuthBounceUri } from "./oauth-redirect"
+import { isExpoGo } from "./expo-go"
 import { hasPin } from "./pin"
 
 WebBrowser.maybeCompleteAuthSession()
@@ -145,12 +147,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [applySessionUser, consumeOAuthCallback])
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error: error?.message ?? null }
-  }, [])
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) return { error: error.message }
+    await applySessionUser(data.user)
+    return { error: null }
+  }, [applySessionUser])
 
   const waitForOAuthSession = useCallback(async () => {
-    const deadline = Date.now() + 3_000
+    const deadline = Date.now() + (isExpoGo ? 15_000 : 3_000)
     while (Date.now() < deadline) {
       const { data } = await supabase.auth.getSession()
       if (data.session?.access_token) return { error: null as string | null }
@@ -172,30 +176,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithOAuth = useCallback(
     async (provider: "google" | "apple") => {
       oauthErrorRef.current = null
-      const redirectTo = getOAuthRedirectUri()
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo,
-          skipBrowserRedirect: true,
-          ...(provider === "google" ? { queryParams: { prompt: "select_account" } } : {}),
-        },
-      })
-      if (error) return { error: error.message }
-      const authUrl = data.url
-      if (!authUrl) return { error: `Could not start ${provider} sign-in` }
-      try {
-        const u = new URL(authUrl)
-        const redirectInAuth = u.searchParams.get("redirect_to") ?? u.searchParams.get("redirectTo")
-        const decoded = redirectInAuth ? decodeURIComponent(redirectInAuth) : null
-        if (isSupabaseSiteUrlFallback(decoded, redirectTo)) {
-          return {
-            error: `Supabase fell back to a website redirect (${decoded}). Add "${redirectTo}" to Auth → Redirect URLs.`,
+      const googleParams = provider === "google" ? { queryParams: { prompt: "select_account" as const } } : {}
+
+      const start = async (redirectTo: string) => {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider,
+          options: { redirectTo, skipBrowserRedirect: true, ...googleParams },
+        })
+        if (error) return { redirectTo, authUrl: null as string | null, error: error.message, rejected: null as string | null }
+        const authUrl = data.url
+        if (!authUrl) return { redirectTo, authUrl: null, error: `Could not start ${provider} sign-in`, rejected: null }
+        try {
+          const u = new URL(authUrl)
+          const redirectInAuth = u.searchParams.get("redirect_to") ?? u.searchParams.get("redirectTo")
+          const decoded = redirectInAuth ? decodeURIComponent(redirectInAuth) : null
+          if (isSupabaseSiteUrlFallback(decoded, redirectTo) || (decoded && !oauthRedirectsMatch(decoded, redirectTo))) {
+            return { redirectTo, authUrl, error: null, rejected: decoded ?? redirectTo }
           }
+        } catch {
+          // ignore parse errors
         }
-      } catch {
-        // ignore parse errors
+        return { redirectTo, authUrl, error: null as string | null, rejected: null as string | null }
       }
+
+      let result = await start(getOAuthRedirectUri())
+      if (!result.error && result.rejected && Platform.OS !== "web") {
+        result = await start(getWebsiteOAuthBounceUri())
+      }
+      if (result.error) return { error: result.error }
+      if (result.rejected) {
+        return {
+          error: `Supabase fell back to a website redirect (${result.rejected}). Add "${result.redirectTo}" to Auth → Redirect URLs.`,
+        }
+      }
+      const authUrl = result.authUrl
+      if (!authUrl) return { error: `Could not start ${provider} sign-in` }
       if (Platform.OS === "web" && typeof window !== "undefined") {
         window.location.assign(authUrl)
         return { error: null }

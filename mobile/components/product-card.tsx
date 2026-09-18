@@ -18,31 +18,37 @@ export function ProductCard({
   const strike = hubProductShowListStrike(product)
   const currency = product.fixed_currency || product.default_input_currency || ""
   return (
-    <Pressable onPress={onPress} style={styles.card}>
-      {product.image_url ? (
-        <Image source={{ uri: product.image_url }} style={styles.image} contentFit="cover" />
-      ) : (
-        <View style={styles.imageFallback} />
-      )}
-      <View style={styles.body}>
-        <Text style={styles.title} numberOfLines={2}>
-          {product.title}
-        </Text>
-        {product.vendor?.name ? (
-          <View style={styles.chip}>
-            <Text style={styles.chipText}>{product.vendor.name}</Text>
+    <Pressable onPress={onPress} accessibilityRole="button">
+      <View style={styles.card}>
+        {product.image_url ? (
+          <Image source={{ uri: product.image_url }} style={styles.image} contentFit="cover" />
+        ) : (
+          <View style={styles.imageFallback} />
+        )}
+        <View style={styles.body}>
+          <Text style={styles.title} numberOfLines={2}>
+            {product.title}
+          </Text>
+          {product.vendor?.name ? (
+            <View style={styles.chip}>
+              <Text style={styles.chipText}>{product.vendor.name}</Text>
+            </View>
+          ) : null}
+          <View style={styles.priceRow}>
+            <Text style={styles.price}>{formatMoney(price, currency)}</Text>
+            {strike && list != null ? <Text style={styles.strike}>{formatMoney(list, currency)}</Text> : null}
           </View>
-        ) : null}
-        <View style={styles.priceRow}>
-          <Text style={styles.price}>{formatMoney(price, currency)}</Text>
-          {strike && list != null ? <Text style={styles.strike}>{formatMoney(list, currency)}</Text> : null}
-        </View>
-        <View style={styles.cta}>
-          <Text style={styles.ctaText}>{cta}</Text>
+          <View style={styles.cta}>
+            <Text style={styles.ctaText}>{cta}</Text>
+          </View>
         </View>
       </View>
     </Pressable>
   )
+}
+
+export function ProductCardSkeleton() {
+  return <View style={[styles.card, styles.skeleton]} />
 }
 
 const styles = StyleSheet.create({
@@ -54,6 +60,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
+  skeleton: { minHeight: 280, backgroundColor: colors.paper, borderColor: colors.border },
   image: { width: "100%", aspectRatio: 4 / 3 },
   imageFallback: { width: "100%", aspectRatio: 4 / 3, backgroundColor: colors.paper },
   body: { paddingHorizontal: 16, paddingVertical: 12 },

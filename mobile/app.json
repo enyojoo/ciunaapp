@@ -11,6 +11,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ciuna.app",
       "usesAppleSignIn": true,
+      "associatedDomains": ["applinks:app.ciuna.com", "applinks:m.ciuna.com"],
       "infoPlist": {
         "NSFaceIDUsageDescription": "Unlock Ciuna with Face ID after your PIN.",
         "NSPhotoLibraryUsageDescription": "Upload identity and address documents."

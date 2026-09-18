@@ -28,6 +28,16 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const handleCallback = async () => {
       const params = getOAuthParamsFromWindow()
+      const nativeRedirect = params.get("app_redirect")
+      if (nativeRedirect && /^(ciuna|exp):\/\//i.test(nativeRedirect)) {
+        params.delete("app_redirect")
+        const leftover = params.toString()
+        const dest = leftover
+          ? `${nativeRedirect}${nativeRedirect.includes("?") ? "&" : "?"}${leftover}`
+          : nativeRedirect
+        window.location.replace(`${dest}${typeof window !== "undefined" ? window.location.hash : ""}`)
+        return
+      }
       const errorParam = params.get("error")
 
       if (errorParam) {

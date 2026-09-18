@@ -1,5 +1,5 @@
 import { Link, useRouter } from "expo-router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth } from "@/components/auth-chrome"
@@ -14,13 +14,17 @@ import { ui } from "@/lib/theme"
 
 export default function LoginScreen() {
   const { t } = useTranslation("app")
-  const { signIn, signInWithGoogle, signInWithApple } = useAuth()
+  const { user, signIn, signInWithGoogle, signInWithApple } = useAuth()
   const { showError } = useToast()
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [show, setShow] = useState(false)
   const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    if (user) router.replace("/")
+  }, [router, user])
 
   const onSubmit = async () => {
     const trimmed = email.trim()
@@ -30,22 +34,26 @@ export default function LoginScreen() {
     }
     setBusy(true)
     try {
-      const statusRes = await apiFetch("/api/auth/login-attempt/status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed }),
-      })
-      if (statusRes.ok) {
-        const lockBody = (await statusRes.json()) as { locked?: boolean; remainingMinutes?: number }
-        if (lockBody.locked) {
-          showError(
-            t("auth.accountTemporarilyLocked", {
-              defaultValue: "Account locked. Try again in {{minutes}} minutes.",
-              minutes: lockBody.remainingMinutes ?? 0,
-            }),
-          )
-          return
+      try {
+        const statusRes = await apiFetch("/api/auth/login-attempt/status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: trimmed }),
+        })
+        if (statusRes.ok) {
+          const lockBody = (await statusRes.json()) as { locked?: boolean; remainingMinutes?: number }
+          if (lockBody.locked) {
+            showError(
+              t("auth.accountTemporarilyLocked", {
+                defaultValue: "Account locked. Try again in {{minutes}} minutes.",
+                minutes: lockBody.remainingMinutes ?? 0,
+              }),
+            )
+            return
+          }
         }
+      } catch {
+        // Lock check is best-effort. CORS / offline must not block sign-in.
       }
       const { error: err } = await signIn(trimmed, password)
       if (err) {

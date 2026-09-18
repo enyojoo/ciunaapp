@@ -1,30 +1,34 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { LifeBuoy } from "lucide-react-native"
+import { useTranslation } from "react-i18next"
 import { BrandLogo } from "./brand-logo"
-import { colors, radius, type as typeSize } from "@/lib/theme"
+import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
 export function AppHeader() {
   const router = useRouter()
+  const { t } = useTranslation("app")
   return (
     <View style={styles.row}>
       <BrandLogo height={28} />
       <View style={styles.actions}>
         <Pressable
           onPress={() => router.push("/referrals")}
-          style={styles.refer}
           accessibilityRole="button"
-          accessibilityLabel="Refer"
+          accessibilityLabel={t("hub.referEarn", { defaultValue: "Refer & earn" })}
         >
-          <Text style={styles.referLabel}>Refer</Text>
+          <View style={styles.refer}>
+            <Text style={styles.referLabel}>{t("hub.referEarnShort", { defaultValue: "Earn" })}</Text>
+          </View>
         </Pressable>
         <Pressable
           onPress={() => router.push("/support")}
-          style={styles.support}
           accessibilityRole="button"
-          accessibilityLabel="Support"
+          accessibilityLabel={t("hub.chatSupport", { defaultValue: "Support" })}
         >
-          <LifeBuoy size={22} color={colors.text} />
+          <View style={styles.support}>
+            <LifeBuoy size={22} color={colors.text} strokeWidth={2} />
+          </View>
         </Pressable>
       </View>
     </View>
@@ -36,19 +40,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: space.page,
     paddingBottom: 12,
     paddingTop: 4,
   },
-  actions: { flexDirection: "row", alignItems: "center", gap: 8 },
+  actions: { flexDirection: "row", alignItems: "center", gap: 4 },
   refer: {
-    height: 36,
-    paddingHorizontal: 14,
+    minHeight: space.tap,
+    paddingHorizontal: 16,
     borderRadius: radius.pill,
     backgroundColor: colors.refer,
     alignItems: "center",
     justifyContent: "center",
   },
   referLabel: { fontSize: typeSize.meta, fontWeight: "600", color: "#FFFFFF" },
-  support: { height: 44, width: 44, alignItems: "center", justifyContent: "center" },
+  support: { height: space.tap, width: space.tap, alignItems: "center", justifyContent: "center" },
 })

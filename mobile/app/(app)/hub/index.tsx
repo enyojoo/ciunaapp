@@ -7,30 +7,39 @@ import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
-import { apiFetch } from "@/lib/api"
+import { useToast } from "@/components/toast-provider"
+import { fetchWithAuth } from "@/lib/api"
 import { useExternalLink } from "@/lib/external-link"
 import { lineHref } from "@/lib/hub"
-import { colors, type as typeSize } from "@/lib/theme"
+import { colors, space, type as typeSize } from "@/lib/theme"
 
 export default function HomeScreen() {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { openLink } = useExternalLink()
+  const { showError } = useToast()
   const [lines, setLines] = useState<HubServiceLineRow[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const load = useCallback(async (soft?: boolean) => {
-    if (!soft) setLoading(true)
-    try {
-      const res = await apiFetch("/api/hub/service-lines")
-      const data = (await res.json()) as { serviceLines?: HubServiceLineRow[] }
-      setLines(data.serviceLines || [])
-    } finally {
-      setLoading(false)
-      setRefreshing(false)
-    }
-  }, [])
+  const load = useCallback(
+    async (soft?: boolean) => {
+      if (!soft) setLoading(true)
+      try {
+        const res = await fetchWithAuth("/api/hub/service-lines")
+        if (!res.ok) throw new Error("load")
+        const data = (await res.json()) as { serviceLines?: HubServiceLineRow[] }
+        setLines(data.serviceLines || [])
+      } catch {
+        if (!soft) setLines([])
+        showError(t("errors.loadFailed", { defaultValue: "Could not load data. Please try again." }))
+      } finally {
+        setLoading(false)
+        setRefreshing(false)
+      }
+    },
+    [showError, t],
+  )
 
   useEffect(() => {
     void load()
@@ -78,19 +87,17 @@ export default function HomeScreen() {
             ))}
           </View>
         ) : lines.length === 0 ? (
-          <EmptyState title="Nothing on Home yet" body="Office Hub Services is empty or all lines are off." />
+          <EmptyState
+            title={t("hub.unavailableTitle", { defaultValue: "Unavailable" })}
+            body={t("hub.serviceUnavailable", { defaultValue: "This service is currently unavailable." })}
+          />
         ) : (
           <View style={styles.grid}>
             {lines.map((line) => {
               const { title, shortDescription } = hubServiceLineTileCopy(line, t)
               return (
                 <View key={line.id} style={styles.cell}>
-                  <Tile
-                    title={title}
-                    description={shortDescription}
-                    iconUrl={line.icon_url}
-                    onPress={() => open(line)}
-                  />
+                  <Tile title={title} description={shortDescription} iconUrl={line.icon_url} onPress={() => open(line)} />
                 </View>
               )
             })}
@@ -105,12 +112,12 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   scroll: { paddingBottom: 40 },
   hero: {
-    paddingHorizontal: 20,
+    paddingHorizontal: space.page,
     paddingBottom: 16,
     fontSize: typeSize.meta,
     lineHeight: 18,
     color: colors.muted,
   },
-  grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", paddingHorizontal: 20 },
+  grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", paddingHorizontal: space.page },
   cell: { width: "48.5%", marginBottom: 10 },
 })
