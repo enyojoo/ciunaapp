@@ -7,14 +7,15 @@ import { CONTENT_MAX_WIDTH_DESKTOP } from "@/lib/layout-metrics"
 import { colors } from "@/lib/theme"
 
 export function DesktopShell({ children }: { children: ReactNode }) {
-  const { contentMaxWidth } = useResponsiveLayout()
+  const { contentMaxWidth, mode } = useResponsiveLayout()
+  const gutter = mode === "tablet" ? 20 : 32
 
   return (
     <View style={styles.root}>
       <DesktopNav />
       <View style={styles.contentColumn}>
         <DesktopHeader />
-        <View style={styles.main}>
+        <View style={[styles.main, { paddingHorizontal: gutter }]}>
           <View style={[styles.mainInner, { maxWidth: Math.min(contentMaxWidth, CONTENT_MAX_WIDTH_DESKTOP) }]}>
             {children}
           </View>

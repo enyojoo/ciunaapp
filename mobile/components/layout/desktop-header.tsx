@@ -6,16 +6,18 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Avatar } from "@/components/avatar"
 import { useAuth } from "@/lib/auth-context"
 import { HEADER_HEIGHT } from "@/lib/layout-metrics"
+import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { colors, radius } from "@/lib/theme"
 
 export function DesktopHeader() {
   const router = useRouter()
   const { t } = useTranslation("app")
   const { profile } = useAuth()
+  const { mode } = useResponsiveLayout()
   const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Account"
 
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { paddingHorizontal: mode === "tablet" ? 20 : 32 }]}>
       <View style={styles.spacer} />
       <View style={styles.actions}>
         <Pressable

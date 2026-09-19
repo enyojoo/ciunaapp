@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SidebarBrandHeader } from "@/components/layout/sidebar-brand-header"
-import { SIDEBAR_WIDTH } from "@/lib/layout-metrics"
+import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { colors, shadow } from "@/lib/theme"
 
 const NAV = [
@@ -22,6 +22,7 @@ export function DesktopNav() {
   const pathname = usePathname()
   const router = useRouter()
   const insets = useSafeAreaInsets()
+  const { sidebarWidth } = useResponsiveLayout()
 
   const items = [
     { ...NAV[0], label: t("nav.home", { defaultValue: "Home" }), icon: Home },
@@ -30,7 +31,7 @@ export function DesktopNav() {
   ]
 
   return (
-    <View style={[styles.sidebar, { paddingBottom: insets.bottom }]}>
+    <View style={[styles.sidebar, { width: sidebarWidth, paddingBottom: insets.bottom }]}>
       <SidebarBrandHeader />
       <ScrollView
         style={styles.navScroll}
@@ -60,7 +61,7 @@ export function DesktopNav() {
 
 const styles = StyleSheet.create({
   sidebar: {
-    width: SIDEBAR_WIDTH,
+    width: 256,
     flexShrink: 0,
     alignSelf: "stretch",
     backgroundColor: colors.surface,

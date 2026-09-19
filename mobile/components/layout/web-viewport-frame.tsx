@@ -1,13 +1,16 @@
 import type { ReactNode } from "react"
 import { Platform, StyleSheet, View } from "react-native"
+import { useAuth } from "@/lib/auth-context"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { CONTENT_MAX_WIDTH, TABLET_MAX_WIDTH } from "@/lib/layout-metrics"
 import { colors, shadow } from "@/lib/theme"
 
 export function WebViewportFrame({ children }: { children: ReactNode }) {
   const { mode, isWeb } = useResponsiveLayout()
+  const { user, loading } = useAuth()
+  const restoring = loading && !user
 
-  if (!isWeb || Platform.OS !== "web" || mode === "desktop" || mode === "tablet") {
+  if (!isWeb || Platform.OS !== "web" || restoring || mode !== "mobile") {
     return <>{children}</>
   }
 

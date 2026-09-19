@@ -3,6 +3,7 @@ export const REGULAR_WIDTH_BREAKPOINT = 600
 export const TABLET_MAX_WIDTH = 480
 export const DESKTOP_MIN_WIDTH = 1024
 export const SIDEBAR_WIDTH = 256
+export const TABLET_SIDEBAR_WIDTH = 200
 export const HEADER_HEIGHT = 64
 export const CONTENT_MAX_WIDTH_DESKTOP = 1440
 

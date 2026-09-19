@@ -15,7 +15,8 @@ export default function Root({ children }: { children: ReactNode }) {
             __html: `
               html, body, #root { height: 100%; }
               html, body { margin: 0; background-color: #FAFAF8; }
-              #root { display: flex; flex-direction: column; }
+              #root { display: flex; flex-direction: column; min-height: 100%; }
+              #root > * { flex: 1; min-height: 100%; width: 100%; }
             `,
           }}
         />

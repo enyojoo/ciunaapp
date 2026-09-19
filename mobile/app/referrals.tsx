@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 import * as Clipboard from "expo-clipboard"
-import { ActivityIndicator, Modal, Pressable, Share, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Pressable, Share, StyleSheet, Text, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Trans, useTranslation } from "react-i18next"
 import QRCode from "react-native-qrcode-svg"
@@ -9,6 +9,8 @@ import { Field } from "@/components/field"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { SheetPicker } from "@/components/sheet-picker"
+import { WebAwareModal } from "@/components/web-aware-modal"
+import { useWebCenteredModal } from "@/lib/web-centered-modal"
 import { useToast } from "@/components/toast-provider"
 import { fetchWithAuth } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
@@ -83,6 +85,7 @@ export default function ReferralsScreen() {
   const [recipientId, setRecipientId] = useState<string | null>(null)
   const [amount, setAmount] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const dialog = useWebCenteredModal()
 
   const openWithdraw = () => {
     setWithdrawOpen(true)
@@ -275,44 +278,40 @@ export default function ReferralsScreen() {
         onClose={() => setRecipientPickerOpen(false)}
       />
 
-      <Modal visible={withdrawOpen} animationType="slide" transparent onRequestClose={() => setWithdrawOpen(false)}>
-        <Pressable style={styles.withdrawOverlay} onPress={() => setWithdrawOpen(false)}>
-          <Pressable onPress={(e) => e.stopPropagation()}>
-            <SafeAreaView edges={["bottom"]} style={styles.withdrawSheet}>
-              <Text style={styles.withdrawTitle}>{t("referrals.requestPayout")}</Text>
-              <Text style={styles.withdrawInstructions}>
-                {t("referrals.payoutInstructions", { available: data?.balances.availableDisplay ?? "" })}
-              </Text>
-              <Text style={styles.label}>{t("referrals.recipient")}</Text>
-              <Pressable style={styles.selectBox} onPress={() => setRecipientPickerOpen(true)}>
-                <Text style={styles.selectText}>
-                  {recipients.find((r) => r.id === recipientId)?.full_name || t("referrals.selectRecipient")}
-                </Text>
-              </Pressable>
-              <Field
-                label={t("referrals.amount", { symbol: baseCurrencySymbol })}
-                value={amount}
-                onChangeText={setAmount}
-                keyboardType="decimal-pad"
-                placeholder="0.00"
-              />
-              <View style={styles.actions}>
-                <View style={styles.actionHalf}>
-                  <PrimaryButton
-                    label={t("referrals.cancel")}
-                    variant="secondary"
-                    onPress={() => setWithdrawOpen(false)}
-                    disabled={submitting}
-                  />
-                </View>
-                <View style={styles.actionHalf}>
-                  <PrimaryButton label={t("referrals.submitRequest")} busy={submitting} onPress={() => void submitWithdraw()} />
-                </View>
-              </View>
-            </SafeAreaView>
+      <WebAwareModal visible={withdrawOpen} onRequestClose={() => setWithdrawOpen(false)}>
+        <SafeAreaView edges={dialog ? [] : ["bottom"]} style={styles.withdrawSheet}>
+          <Text style={styles.withdrawTitle}>{t("referrals.requestPayout")}</Text>
+          <Text style={styles.withdrawInstructions}>
+            {t("referrals.payoutInstructions", { available: data?.balances.availableDisplay ?? "" })}
+          </Text>
+          <Text style={styles.label}>{t("referrals.recipient")}</Text>
+          <Pressable style={styles.selectBox} onPress={() => setRecipientPickerOpen(true)}>
+            <Text style={styles.selectText}>
+              {recipients.find((r) => r.id === recipientId)?.full_name || t("referrals.selectRecipient")}
+            </Text>
           </Pressable>
-        </Pressable>
-      </Modal>
+          <Field
+            label={t("referrals.amount", { symbol: baseCurrencySymbol })}
+            value={amount}
+            onChangeText={setAmount}
+            keyboardType="decimal-pad"
+            placeholder="0.00"
+          />
+          <View style={styles.actions}>
+            <View style={styles.actionHalf}>
+              <PrimaryButton
+                label={t("referrals.cancel")}
+                variant="secondary"
+                onPress={() => setWithdrawOpen(false)}
+                disabled={submitting}
+              />
+            </View>
+            <View style={styles.actionHalf}>
+              <PrimaryButton label={t("referrals.submitRequest")} busy={submitting} onPress={() => void submitWithdraw()} />
+            </View>
+          </View>
+        </SafeAreaView>
+      </WebAwareModal>
     </ScreenScroll>
   )
 }
@@ -412,15 +411,7 @@ const styles = StyleSheet.create({
   refEarnings: { fontSize: typeSize.body, fontWeight: "700", color: colors.primary },
   actions: { flexDirection: "row", gap: 12 },
   actionHalf: { flex: 1 },
-  withdrawOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "flex-end",
-  },
   withdrawSheet: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    backgroundColor: colors.paper,
     padding: 20,
     paddingBottom: 32,
   },

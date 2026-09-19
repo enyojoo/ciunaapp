@@ -1,9 +1,10 @@
-import { createElement, useEffect, useState } from "react"
+import { createElement, useEffect, useState, type ReactNode } from "react"
 import { ActivityIndicator, Modal, Platform, Pressable, StatusBar, StyleSheet, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { WebView } from "react-native-webview"
 import { X } from "lucide-react-native"
 import { ModalToastHost } from "@/components/toast-provider"
+import { useWebCenteredModal } from "@/lib/web-centered-modal"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export function ExternalLinkModal({
@@ -18,6 +19,7 @@ export function ExternalLinkModal({
   onClose: () => void
 }) {
   const [loading, setLoading] = useState(true)
+  const dialog = useWebCenteredModal()
   const insets = useSafeAreaInsets()
   const androidTop =
     Platform.OS === "android" ? Math.max(insets.top, StatusBar.currentHeight ?? 0) : 0
@@ -26,58 +28,90 @@ export function ExternalLinkModal({
     if (visible && url) setLoading(true)
   }, [visible, url])
 
+  const body: ReactNode = (
+    <>
+      <View style={styles.header}>
+        <Text style={styles.title} numberOfLines={1}>
+          {title || ""}
+        </Text>
+        <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={8}>
+          <View style={styles.close}>
+            <X size={20} color={colors.text} strokeWidth={2} />
+          </View>
+        </Pressable>
+      </View>
+      {loading ? (
+        <View style={styles.spinner}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : null}
+      {url ? (
+        Platform.OS === "web" ? (
+          createElement("iframe", {
+            src: url,
+            title: title || "Ciuna",
+            allow: "camera; microphone; clipboard-write",
+            referrerPolicy: "strict-origin-when-cross-origin",
+            style: {
+              flex: 1,
+              width: "100%",
+              height: "100%",
+              border: "none",
+              minHeight: 0,
+              background: colors.paper,
+            },
+            onLoad: () => setLoading(false),
+          })
+        ) : (
+          <WebView
+            source={{ uri: url }}
+            style={styles.webView}
+            onLoadStart={() => setLoading(true)}
+            onLoadEnd={() => setLoading(false)}
+            onError={() => setLoading(false)}
+          />
+        )
+      ) : null}
+      {visible ? <ModalToastHost /> : null}
+    </>
+  )
+
+  if (dialog) {
+    return (
+      <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+        <View style={styles.dialogOverlay}>
+          <View style={styles.dialogPanel}>{body}</View>
+        </View>
+      </Modal>
+    )
+  }
+
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
-      <View style={[styles.sheet, androidTop > 0 ? { paddingTop: androidTop } : null]}>
-        <View style={styles.header}>
-          <Text style={styles.title} numberOfLines={1}>
-            {title || ""}
-          </Text>
-          <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={8}>
-            <View style={styles.close}>
-              <X size={20} color={colors.text} strokeWidth={2} />
-            </View>
-          </Pressable>
-        </View>
-        {loading ? (
-          <View style={styles.spinner}>
-            <ActivityIndicator size="large" color={colors.primary} />
-          </View>
-        ) : null}
-        {url ? (
-          Platform.OS === "web" ? (
-            createElement("iframe", {
-              src: url,
-              title: title || "Ciuna",
-              allow: "camera; microphone; clipboard-write",
-              referrerPolicy: "strict-origin-when-cross-origin",
-              style: {
-                flex: 1,
-                width: "100%",
-                height: "100%",
-                border: "none",
-                minHeight: 0,
-                background: colors.paper,
-              },
-              onLoad: () => setLoading(false),
-            })
-          ) : (
-            <WebView
-              source={{ uri: url }}
-              style={styles.webView}
-              onLoadStart={() => setLoading(true)}
-              onLoadEnd={() => setLoading(false)}
-              onError={() => setLoading(false)}
-            />
-          )
-        ) : null}
-        {visible ? <ModalToastHost /> : null}
-      </View>
+      <View style={[styles.sheet, androidTop > 0 ? { paddingTop: androidTop } : null]}>{body}</View>
     </Modal>
   )
 }
 
 const styles = StyleSheet.create({
+  dialogOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(15, 23, 42, 0.45)",
+    padding: 24,
+  },
+  dialogPanel: {
+    width: "100%",
+    maxWidth: 880,
+    height: "86%",
+    maxHeight: 860,
+    borderRadius: radius.card,
+    overflow: "hidden",
+    backgroundColor: colors.paper,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+  },
   sheet: {
     flex: 1,
     backgroundColor: colors.paper,

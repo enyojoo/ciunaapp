@@ -5,9 +5,11 @@ import {
   CONTENT_MAX_WIDTH_DESKTOP,
   HEADER_HEIGHT,
   SIDEBAR_WIDTH,
+  TABLET_SIDEBAR_WIDTH,
   getLayoutMode,
   type LayoutMode,
 } from "@/lib/layout-metrics"
+import { readWebViewport } from "@/lib/web-viewport"
 
 type ResponsiveLayoutValue = {
   mode: LayoutMode
@@ -22,13 +24,18 @@ type ResponsiveLayoutValue = {
 
 const ResponsiveLayoutContext = createContext<ResponsiveLayoutValue | null>(null)
 
+function sidebarWidthForMode(mode: LayoutMode): number {
+  if (mode === "tablet") return TABLET_SIDEBAR_WIDTH
+  return SIDEBAR_WIDTH
+}
+
 function resolveContentMaxWidth(mode: LayoutMode, viewportWidth: number): number {
   if (mode === "desktop") {
     const available = Math.max(0, viewportWidth - SIDEBAR_WIDTH)
     return Math.min(available, CONTENT_MAX_WIDTH_DESKTOP)
   }
   if (mode === "tablet") {
-    return Math.max(0, viewportWidth - SIDEBAR_WIDTH)
+    return Math.max(0, viewportWidth - TABLET_SIDEBAR_WIDTH)
   }
   return CONTENT_MAX_WIDTH
 }
@@ -53,18 +60,19 @@ export function ResponsiveLayoutProvider({ children }: { children: ReactNode }) 
 
   const value = useMemo(() => {
     void resizeTick
-    const mode = getLayoutMode(width)
+    const viewport = readWebViewport(width, height)
+    const mode = getLayoutMode(viewport.width)
     const isWeb = Platform.OS === "web"
     const showSidebarShell = isWeb && (mode === "tablet" || mode === "desktop")
 
     return {
       mode,
-      width,
-      height,
+      width: viewport.width,
+      height: viewport.height,
       isWeb,
       showSidebarShell,
-      contentMaxWidth: resolveContentMaxWidth(mode, width),
-      sidebarWidth: SIDEBAR_WIDTH,
+      contentMaxWidth: resolveContentMaxWidth(mode, viewport.width),
+      sidebarWidth: sidebarWidthForMode(mode),
       headerHeight: HEADER_HEIGHT,
     }
   }, [height, resizeTick, width])
@@ -84,15 +92,18 @@ export function useOptionalResponsiveLayout(): ResponsiveLayoutValue | null {
   return useContext(ResponsiveLayoutContext)
 }
 
-/** Product / expert-service catalog: 4-up on Expo web tablet/desktop, 2-up on native and phone-width web. */
-export function useCatalogGridColumns(): 2 | 4 {
+/** Catalog: 4-up desktop web, 3-up tablet web, 2-up native and phone-width web. */
+export function useCatalogGridColumns(): 2 | 3 | 4 {
   const layout = useOptionalResponsiveLayout()
-  if (layout?.isWeb && layout.mode !== "mobile") return 4
+  if (layout?.isWeb && layout.mode === "desktop") return 4
+  if (layout?.isWeb && layout.mode === "tablet") return 3
   return 2
 }
 
-export function catalogCardWidth(columns: 2 | 4): `${number}%` {
-  return columns === 4 ? "23.5%" : "48.5%"
+export function catalogCardWidth(columns: 2 | 3 | 4): `${number}%` {
+  if (columns === 4) return "23.5%"
+  if (columns === 3) return "31.5%"
+  return "48.5%"
 }
 
 export function isAppShellPath(pathname: string): boolean {

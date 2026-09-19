@@ -8,9 +8,11 @@ import { colors } from "@/lib/theme"
 export default function AppTabs() {
   const { t } = useTranslation("common")
   const { user, loading, pinUnlocked } = useAuth()
-  const { showSidebarShell } = useResponsiveLayout()
+  const { showSidebarShell, isWeb, mode } = useResponsiveLayout()
   if (!loading && !user) return <Redirect href="/auth/login" />
   if (!loading && user && !pinUnlocked) return <Redirect href="/pin" />
+
+  const hideTabBar = showSidebarShell || (isWeb && (loading || mode !== "mobile"))
 
   return (
     <Tabs
@@ -18,7 +20,7 @@ export default function AppTabs() {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
-        tabBarStyle: showSidebarShell
+        tabBarStyle: hideTabBar
           ? { display: "none", height: 0 }
           : {
               backgroundColor: colors.surface,
