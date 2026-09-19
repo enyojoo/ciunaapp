@@ -1,6 +1,7 @@
 import { type ReactNode } from "react"
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, type ViewStyle } from "react-native"
 import { SafeAreaView, type Edge } from "react-native-safe-area-context"
+import { useOptionalResponsiveLayout } from "@/lib/responsive-layout"
 import { colors } from "@/lib/theme"
 
 export function Screen({
@@ -16,8 +17,12 @@ export function Screen({
   padded?: boolean
   style?: ViewStyle
 }) {
+  const layout = useOptionalResponsiveLayout()
+  const resolvedEdges = layout?.showSidebarShell
+    ? edges.filter((edge) => edge !== "top" && edge !== "bottom")
+    : edges
   const inner = (
-    <SafeAreaView style={[styles.screen, padded && styles.padded, style]} edges={edges}>
+    <SafeAreaView style={[styles.screen, padded && styles.padded, style]} edges={resolvedEdges}>
       {children}
     </SafeAreaView>
   )

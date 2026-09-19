@@ -10,7 +10,15 @@ export default function Root({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <title>Ciuna</title>
         <ScrollViewStyleReset />
-        <style dangerouslySetInnerHTML={{ __html: `body { background-color: #fff; }` }} />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html, body, #root { height: 100%; }
+              html, body { margin: 0; background-color: #FAFAF8; }
+              #root { display: flex; flex-direction: column; }
+            `,
+          }}
+        />
       </head>
       <body>{children}</body>
     </html>

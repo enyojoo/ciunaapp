@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
 import { StatusBar } from "expo-status-bar"
@@ -38,7 +38,6 @@ export default function HubProductDetailScreen() {
   const { showInfo, showError } = useToast()
   const { data: product, loading, error, revalidate } = useHubProduct(productId)
   const notFound = !loading && (Boolean(error) || !product)
-  const [busy, setBusy] = useState(false)
 
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
@@ -67,39 +66,31 @@ export default function HubProductDetailScreen() {
   const currency = product?.fixed_currency || product?.default_input_currency || ""
   const soldOut = Boolean(product?.sold_out) || (product?.stock_quantity != null && Number(product.stock_quantity) <= 0)
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!product?.vendor_id) return
-    setBusy(true)
-    try {
-      const { clearedVendorName } = await addToHubCart({
-        vendorId: product.vendor_id,
-        serviceLineSlug: line as "food" | "mart",
-        hubProductId: product.id,
+    void addToHubCart({
+      vendorId: product.vendor_id,
+      serviceLineSlug: line as "food" | "mart",
+      hubProductId: product.id,
+      product,
+    })
+      .then(({ clearedVendorName }) => {
+        if (clearedVendorName) {
+          showInfo(
+            t("hub.cart.clearedOtherVendor", { defaultValue: "Your {{vendor}} cart was cleared.", vendor: clearedVendorName }),
+          )
+        }
       })
-      if (clearedVendorName) {
-        showInfo(
-          t("hub.cart.clearedOtherVendor", { defaultValue: "Your {{vendor}} cart was cleared.", vendor: clearedVendorName }),
-        )
-      } else {
-        showInfo(t("hub.cart.added", { defaultValue: "Added to cart" }))
-      }
-    } catch (e) {
-      showError(e instanceof Error ? e.message : t("hub.cart.addFailed", { defaultValue: "Couldn't add to cart" }))
-    } finally {
-      setBusy(false)
-    }
+      .catch((e) => {
+        showError(e instanceof Error ? e.message : t("hub.cart.addFailed", { defaultValue: "Couldn't add to cart" }))
+      })
   }
 
-  const handleQuantityChange = async (quantity: number) => {
+  const handleQuantityChange = (quantity: number) => {
     if (!product?.vendor_id || !cartItem) return
-    setBusy(true)
-    try {
-      await updateHubCartItemQuantity(product.vendor_id, cartItem.id, quantity)
-    } catch (e) {
+    void updateHubCartItemQuantity(product.vendor_id, cartItem.id, quantity).catch((e) => {
       showError(e instanceof Error ? e.message : t("hub.cart.updateFailed", { defaultValue: "Couldn't update cart" }))
-    } finally {
-      setBusy(false)
-    }
+    })
   }
 
   if (loading) {
@@ -181,8 +172,7 @@ export default function HubProductDetailScreen() {
             cartQuantity > 0 ? (
               <View style={styles.stepper}>
                 <Pressable
-                  onPress={() => void handleQuantityChange(cartQuantity - 1)}
-                  disabled={busy}
+                  onPress={() => handleQuantityChange(cartQuantity - 1)}
                   hitSlop={8}
                   accessibilityRole="button"
                   accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
@@ -190,14 +180,9 @@ export default function HubProductDetailScreen() {
                 >
                   <Minus size={18} color={colors.primary} strokeWidth={2.4} />
                 </Pressable>
-                {busy ? (
-                  <ActivityIndicator size="small" color={colors.primary} />
-                ) : (
-                  <Text style={styles.stepperValue}>{cartQuantity}</Text>
-                )}
+                <Text style={styles.stepperValue}>{cartQuantity}</Text>
                 <Pressable
-                  onPress={() => void handleQuantityChange(cartQuantity + 1)}
-                  disabled={busy}
+                  onPress={() => handleQuantityChange(cartQuantity + 1)}
                   hitSlop={8}
                   accessibilityRole="button"
                   accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
@@ -209,8 +194,7 @@ export default function HubProductDetailScreen() {
             ) : (
               <PrimaryButton
                 label={soldOut ? t("hub.soldOut", { defaultValue: "Sold out" }) : t("hub.cart.addToCart", { defaultValue: "Add to cart" })}
-                onPress={() => void handleAddToCart()}
-                busy={busy}
+                onPress={() => handleAddToCart()}
                 disabled={soldOut}
               />
             )

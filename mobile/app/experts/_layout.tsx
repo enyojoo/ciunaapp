@@ -20,6 +20,7 @@ export default function ExpertsLayout() {
       <Stack.Screen name="browse" />
       {/* No title — same reasoning as the vendor storefront: the expert's name is already big in the body. */}
       <Stack.Screen name="[slug]" options={{ headerShown: true, title: "" }} />
+      <Stack.Screen name="s/[serviceId]" options={{ headerShown: true, title: "" }} />
       <Stack.Screen name="book/[serviceId]" options={{ headerShown: true, title: "Book" }} />
     </Stack>
   )

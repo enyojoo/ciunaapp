@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { HubExpertChipLight, type HubExpertChipSummary } from "@/components/hub/hub-expert-chip-light"
 import { useAuth } from "@/lib/auth-context"
 import { stashRedirectAfterLogin } from "@/lib/auth-login-redirect"
-import { expertsBookPath, expertsProfilePath } from "@/lib/experts-public-paths"
+import { expertsBookPath, expertsProfilePath, expertsServicePath } from "@/lib/experts-public-paths"
 import { cn } from "@/lib/utils"
 import { amountPrefixClass, amountValueClass, formatCardPrice } from "@/lib/hub-catalog-utils"
 
@@ -29,13 +29,6 @@ export type ExpertCatalogService = {
 
 const serviceCardClass =
   "flex h-full flex-col rounded-2xl border border-gray-200 bg-white py-0 shadow-[0_8px_24px_rgba(15,23,42,0.08)] transition-all duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:border-orange-300/70 motion-safe:hover:shadow-[0_18px_36px_rgba(15,23,42,0.14)] dark:border-border dark:bg-card"
-
-function fulfillmentKindLabel(ft: string | null | undefined, t: (k: string, o?: Record<string, string>) => string): string {
-  const f = ft || "online"
-  if (f === "in_person") return t("experts.profile.fulfillmentInPerson")
-  if (f === "both") return t("experts.profile.fulfillmentBoth")
-  return t("experts.profile.fulfillmentOnline")
-}
 
 type ExpertServicePriceFields = Pick<
   ExpertCatalogService,
@@ -80,6 +73,7 @@ export function HubExpertServiceCatalogCard({ service: s }: { service: ExpertCat
   const router = useRouter()
   const { user } = useAuth()
   const profileHref = expertsProfilePath(s.expert)
+  const detailHref = expertsServicePath(s.id)
   const bookHref = expertsBookPath(s.expert, { service: s.id })
 
   const onGuestBookNav = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -92,8 +86,8 @@ export function HubExpertServiceCatalogCard({ service: s }: { service: ExpertCat
     <Card className={cn(serviceCardClass, "h-full")}>
       <CardContent className="flex min-h-[11rem] flex-1 flex-col gap-2.5 p-3 sm:min-h-[12rem] sm:gap-3 sm:p-5">
         <div className="min-w-0 flex-1 space-y-1.5 sm:space-y-2">
-          <Link href={profileHref} prefetch className="block min-w-0">
-            <p className="break-words text-base font-semibold leading-snug tracking-tight text-gray-900 transition-colors hover:text-orange-700 dark:text-foreground dark:hover:text-orange-300 sm:text-lg">
+          <Link href={detailHref} prefetch className="block min-w-0">
+            <p className="truncate text-base font-semibold leading-snug tracking-tight text-gray-900 transition-colors hover:text-orange-700 dark:text-foreground dark:hover:text-orange-300 sm:text-lg">
               {s.title}
             </p>
           </Link>
@@ -112,9 +106,6 @@ export function HubExpertServiceCatalogCard({ service: s }: { service: ExpertCat
               {t("experts.profile.bookSession")}
             </Link>
           </Button>
-          <p className="text-center text-[11px] leading-snug text-muted-foreground sm:text-xs">
-            {t("experts.profile.fulfillmentHero", { value: fulfillmentKindLabel(s.fulfillment_type, t) })}
-          </p>
         </div>
       </CardContent>
     </Card>

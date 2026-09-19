@@ -6,7 +6,7 @@
 # 3. Env: EXPO_PUBLIC_API_URL=https://api.ciuna.com
 #         EXPO_PUBLIC_APP_URL=https://m.ciuna.com
 #         EXPO_PUBLIC_SUPABASE_URL / EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-# 4. Build: expo export --platform web  (see vercel.json)
+# 4. Build: npm run build:web  (expo export --platform web; see vercel.json)
 # 5. Gate: send, KYC upload, checkout, Google OAuth, keyboard, files.
 #    If those fail, keep Next.js on app.ciuna.com; native still ships.
 #

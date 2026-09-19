@@ -31,22 +31,18 @@ export default function HubCartScreen() {
   const currency = availableItems[0]?.product?.fixed_currency || ""
   const subtotal = availableItems.reduce((sum, i) => sum + hubProductEffectivePrice(i.product!) * i.quantity, 0)
 
-  const onQuantityChange = async (itemId: string, quantity: number) => {
+  const onQuantityChange = (itemId: string, quantity: number) => {
     if (!cart) return
-    try {
-      await updateHubCartItemQuantity(cart.vendor_id, itemId, quantity)
-    } catch (e) {
+    void updateHubCartItemQuantity(cart.vendor_id, itemId, quantity).catch((e) => {
       showError(e instanceof Error ? e.message : t("errors.generic", { defaultValue: "Something went wrong." }))
-    }
+    })
   }
 
-  const onRemove = async (itemId: string) => {
+  const onRemove = (itemId: string) => {
     if (!cart) return
-    try {
-      await removeHubCartItem(cart.vendor_id, itemId)
-    } catch (e) {
+    void removeHubCartItem(cart.vendor_id, itemId).catch((e) => {
       showError(e instanceof Error ? e.message : t("errors.generic", { defaultValue: "Something went wrong." }))
-    }
+    })
   }
 
   if (loading && !cart) {

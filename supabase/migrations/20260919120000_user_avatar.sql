@@ -11,6 +11,7 @@ on conflict (id) do nothing;
 -- Each user may only write/replace/delete objects under a path prefixed with
 -- their own auth uid (e.g. "avatars/<uid>/<filename>"); the bucket is public
 -- so no SELECT policy is needed for reads.
+drop policy if exists "Users can upload their own avatar" on storage.objects;
 create policy "Users can upload their own avatar"
   on storage.objects for insert
   to authenticated
@@ -19,6 +20,7 @@ create policy "Users can upload their own avatar"
     and (storage.foldername(name))[1] = auth.uid()::text
   );
 
+drop policy if exists "Users can update their own avatar" on storage.objects;
 create policy "Users can update their own avatar"
   on storage.objects for update
   to authenticated
@@ -27,6 +29,7 @@ create policy "Users can update their own avatar"
     and (storage.foldername(name))[1] = auth.uid()::text
   );
 
+drop policy if exists "Users can delete their own avatar" on storage.objects;
 create policy "Users can delete their own avatar"
   on storage.objects for delete
   to authenticated

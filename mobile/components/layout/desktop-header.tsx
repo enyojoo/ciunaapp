@@ -1,31 +1,27 @@
 import { useRouter } from "expo-router"
-import { Pressable, StyleSheet, Text, View } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
-import { BadgeDollarSign } from "lucide-react-native"
+import { BadgeDollarSign, LifeBuoy } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
-import { Avatar } from "./avatar"
-import { BrandLogo } from "./brand-logo"
+import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Avatar } from "@/components/avatar"
 import { useAuth } from "@/lib/auth-context"
-import { useOptionalResponsiveLayout } from "@/lib/responsive-layout"
-import { colors, radius, space } from "@/lib/theme"
+import { HEADER_HEIGHT } from "@/lib/layout-metrics"
+import { colors, radius } from "@/lib/theme"
 
-/** Native / mobile-web chrome. Desktop web uses `DesktopHeader` instead. */
-export function AppHeader() {
+export function DesktopHeader() {
   const router = useRouter()
   const { t } = useTranslation("app")
   const { profile } = useAuth()
-  const layout = useOptionalResponsiveLayout()
-  if (layout?.showSidebarShell) return null
   const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Account"
+
   return (
-    <View style={styles.row}>
-      <BrandLogo height={28} />
+    <View style={styles.header}>
+      <View style={styles.spacer} />
       <View style={styles.actions}>
         <Pressable
           onPress={() => router.push("/referrals")}
           accessibilityRole="button"
           accessibilityLabel={t("dashboard.referEarn", { defaultValue: "Refer & Earn" })}
-          hitSlop={8}
         >
           <LinearGradient
             colors={[colors.referBg, colors.referBgEnd]}
@@ -40,10 +36,18 @@ export function AppHeader() {
           </LinearGradient>
         </Pressable>
         <Pressable
+          style={styles.iconButton}
+          onPress={() => router.push("/support")}
+          accessibilityRole="button"
+          accessibilityLabel={t("support.title", { defaultValue: "Support" })}
+        >
+          <LifeBuoy size={20} color={colors.supportIcon} strokeWidth={2} />
+        </Pressable>
+        <Pressable
+          style={styles.avatarButton}
           onPress={() => router.push("/profile")}
           accessibilityRole="button"
           accessibilityLabel={t("dashboard.profileAria", { defaultValue: "Your profile" })}
-          hitSlop={8}
         >
           <Avatar name={name} size={40} uri={profile?.avatar_url} />
         </Pressable>
@@ -53,16 +57,20 @@ export function AppHeader() {
 }
 
 const styles = StyleSheet.create({
-  row: {
+  header: {
+    height: HEADER_HEIGHT,
+    minHeight: HEADER_HEIGHT,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: space.page,
-    paddingBottom: 12,
-    paddingTop: 8,
+    justifyContent: "flex-end",
+    paddingHorizontal: 32,
     backgroundColor: colors.surface,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
+    flexShrink: 0,
   },
-  actions: { flexDirection: "row", alignItems: "center", gap: 6, marginLeft: 12, flexShrink: 1 },
+  spacer: { flex: 1 },
+  actions: { flexDirection: "row", alignItems: "center", gap: 8 },
   refer: {
     height: 32,
     maxWidth: 180,
@@ -75,4 +83,25 @@ const styles = StyleSheet.create({
     borderColor: colors.referBorder,
   },
   referLabel: { fontSize: 12, fontWeight: "600", color: colors.referText },
+  iconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.surface,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    overflow: "hidden",
+    backgroundColor: colors.surface,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 })

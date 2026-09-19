@@ -12,6 +12,7 @@ import { ScreenScroll } from "@/components/screen"
 import { SheetPicker } from "@/components/sheet-picker"
 import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
+import { uploadProfileAvatar } from "@/lib/profile-avatar-upload"
 import { useFx } from "@/lib/use-fx"
 import { supabase } from "@/lib/supabase"
 import { colors, radius, type as typeSize, ui } from "@/lib/theme"
@@ -75,23 +76,18 @@ export default function ProfileScreen() {
     setEditing(false)
   }
 
-  const uploadAvatar = async (uri: string) => {
-    if (!profile?.id) return
+  const uploadAvatar = async (asset: ImagePicker.ImagePickerAsset) => {
     setAvatarUploading(true)
     try {
-      const response = await fetch(uri)
-      const blob = await response.blob()
-      const path = `${profile.id}/${Date.now()}.jpg`
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(path, blob, { contentType: "image/jpeg", upsert: true })
-      if (uploadError) throw uploadError
-      const { data } = supabase.storage.from("avatars").getPublicUrl(path)
-      const { error: updateError } = await supabase
-        .from("users")
-        .update({ avatar_url: data.publicUrl })
-        .eq("id", profile.id)
-      if (updateError) throw updateError
+      const result = await uploadProfileAvatar({
+        uri: asset.uri,
+        name: asset.fileName,
+        mimeType: asset.mimeType,
+      })
+      if ("error" in result) {
+        showError(result.error)
+        return
+      }
       await refreshProfile()
     } catch {
       showError(t("errors.generic", { defaultValue: "Something went wrong. Please try again." }))
@@ -115,7 +111,7 @@ export default function ProfileScreen() {
         })
     if (result.canceled) return
     const asset = result.assets[0]
-    if (asset) void uploadAvatar(asset.uri)
+    if (asset) void uploadAvatar(asset)
   }
 
   const changeAvatar = () => {

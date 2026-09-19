@@ -2,11 +2,13 @@ import { Redirect, Tabs } from "expo-router"
 import { Home, History, LayoutDashboard } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { useAuth } from "@/lib/auth-context"
+import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { colors } from "@/lib/theme"
 
 export default function AppTabs() {
   const { t } = useTranslation("common")
   const { user, loading, pinUnlocked } = useAuth()
+  const { showSidebarShell } = useResponsiveLayout()
   if (!loading && !user) return <Redirect href="/auth/login" />
   if (!loading && user && !pinUnlocked) return <Redirect href="/pin" />
 
@@ -16,10 +18,12 @@ export default function AppTabs() {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-        },
+        tabBarStyle: showSidebarShell
+          ? { display: "none", height: 0 }
+          : {
+              backgroundColor: colors.surface,
+              borderTopColor: colors.border,
+            },
         tabBarLabelStyle: { fontSize: 12, fontWeight: "600" },
       }}
     >

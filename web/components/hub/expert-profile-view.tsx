@@ -11,6 +11,7 @@ import {
   appendExpertsBookEntryFrom,
   expertsBookServicePath,
   expertsProfilePath,
+  expertsServicePath,
   EXPERTS_CATALOG_PATH,
 } from "@/lib/experts-public-paths"
 import { HubLinePageShell } from "@/components/hub/hub-line-page-shell"
@@ -49,13 +50,6 @@ type ExpertService = {
   fixed_currency: string | null
   package_label: string | null
   default_duration_minutes?: number | null
-}
-
-function fulfillmentKindLabel(ft: string | null | undefined, t: (k: string, o?: Record<string, string>) => string): string {
-  const f = ft || "online"
-  if (f === "in_person") return t("experts.profile.fulfillmentInPerson")
-  if (f === "both") return t("experts.profile.fulfillmentBoth")
-  return t("experts.profile.fulfillmentOnline")
 }
 
 export function ExpertProfileView({ slugOrId }: { slugOrId: string }) {
@@ -244,9 +238,11 @@ export function ExpertProfileView({ slugOrId }: { slugOrId: string }) {
                   <Card className={cn(serviceCardClass, "h-full")}>
                     <CardContent className="flex min-h-[11rem] flex-1 flex-col gap-2.5 p-3 sm:min-h-[12rem] sm:gap-3 sm:p-5">
                       <div className="min-w-0 flex-1 space-y-1.5 sm:space-y-2">
-                        <p className="break-words text-base font-semibold leading-snug tracking-tight text-gray-900 dark:text-foreground sm:text-lg">
-                          {s.title}
-                        </p>
+                        <Link href={expertsServicePath(s.id)} prefetch className="block min-w-0">
+                          <p className="truncate text-base font-semibold leading-snug tracking-tight text-gray-900 transition-colors hover:text-orange-700 dark:text-foreground dark:hover:text-orange-300 sm:text-lg">
+                            {s.title}
+                          </p>
+                        </Link>
                         {s.default_duration_minutes != null && Number(s.default_duration_minutes) > 0 ? (
                           <p className="text-xs text-muted-foreground">
                             {t("experts.profile.typicalSession", { minutes: String(s.default_duration_minutes) })}
@@ -276,9 +272,6 @@ export function ExpertProfileView({ slugOrId }: { slugOrId: string }) {
                             {t("experts.profile.bookSession")}
                           </Link>
                         </Button>
-                        <p className="text-center text-[11px] leading-snug text-muted-foreground sm:text-xs">
-                          {t("experts.profile.fulfillmentHero", { value: fulfillmentKindLabel(s.fulfillment_type, t) })}
-                        </p>
                       </div>
                     </CardContent>
                   </Card>

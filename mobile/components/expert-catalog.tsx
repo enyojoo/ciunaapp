@@ -5,6 +5,7 @@ import { BadgeCheck } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { formatCardPrice } from "@/lib/money"
 import type { ExpertCatalogService, ExpertProfile, ExpertService } from "@/lib/types"
+import { seedExpertCatalogService } from "@/lib/use-expert-catalog-services"
 import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
 
 export function expertProfilePath(p: { id: string; slug?: string | null }): string {
@@ -13,6 +14,10 @@ export function expertProfilePath(p: { id: string; slug?: string | null }): stri
 
 export function expertBookPath(serviceId: string): string {
   return `/experts/book/${encodeURIComponent(serviceId)}`
+}
+
+export function expertServicePath(serviceId: string): string {
+  return `/experts/s/${encodeURIComponent(serviceId)}`
 }
 
 export function expertServiceToCatalog(s: ExpertService, expert: ExpertProfile): ExpertCatalogService {
@@ -117,24 +122,29 @@ export function ExpertServiceCard({
   const { t } = useTranslation("app")
   const router = useRouter()
   const expert = service.expert
-  const fulfillment = fulfillmentLabel(service.fulfillment_type, t)
   const minutes = service.default_duration_minutes
   const profileHref = expertProfilePath(expert)
+  const detailHref = expertServicePath(service.id)
   const bookHref = expertBookPath(service.id)
   const bookLabel = t("experts.profile.bookSession", { defaultValue: "Book a session" })
-  const titleEl = <Text style={styles.svcTitle}>{service.title}</Text>
+
+  const openDetail = () => {
+    seedExpertCatalogService(service)
+    router.push(detailHref as never)
+  }
 
   return (
     <View style={styles.svcHit}>
-      <View style={styles.svcCard}>
+      <Pressable
+        onPress={openDetail}
+        accessibilityRole="button"
+        accessibilityLabel={service.title}
+        style={styles.svcCard}
+      >
         <View style={styles.svcTop}>
-          {showExpert ? (
-            <Pressable onPress={() => router.push(profileHref as never)} accessibilityRole="button">
-              {titleEl}
-            </Pressable>
-          ) : (
-            titleEl
-          )}
+          <Text style={styles.svcTitle} numberOfLines={1} ellipsizeMode="tail">
+            {service.title}
+          </Text>
           {showTypicalSession && minutes != null && Number(minutes) > 0 ? (
             <Text style={styles.svcMeta}>
               {t("experts.profile.typicalSession", {
@@ -182,11 +192,8 @@ export function ExpertServiceCard({
               <Text style={styles.ctaText}>{bookLabel}</Text>
             </View>
           </Pressable>
-          <Text style={styles.fulfill}>
-            {t("experts.profile.fulfillmentHero", { defaultValue: "Fulfillment: {{value}}", value: fulfillment })}
-          </Text>
         </View>
-      </View>
+      </Pressable>
     </View>
   )
 }
@@ -195,7 +202,7 @@ export function ExpertServiceSkeleton() {
   return <View style={[styles.svcHit, styles.svcSkeleton]} />
 }
 
-function ServicePriceRow({ service: s }: { service: ExpertCatalogService }) {
+export function ServicePriceRow({ service: s }: { service: ExpertCatalogService }) {
   const { t } = useTranslation("app")
   if (s.pricing_type === "quote") {
     return (
@@ -228,12 +235,6 @@ function ServicePriceRow({ service: s }: { service: ExpertCatalogService }) {
       <Text style={styles.pricePrefix}>{t("experts.bookingWizard.priceDash", { defaultValue: "—" })}</Text>
     </View>
   )
-}
-
-function fulfillmentLabel(ft: string | null | undefined, t: (k: string, o?: Record<string, string>) => string): string {
-  if (ft === "in_person") return t("experts.profile.fulfillmentInPerson", { defaultValue: "In person" })
-  if (ft === "both") return t("experts.profile.fulfillmentBoth", { defaultValue: "Online or in person" })
-  return t("experts.profile.fulfillmentOnline", { defaultValue: "Online" })
 }
 
 const styles = StyleSheet.create({
@@ -301,5 +302,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   ctaText: { fontSize: 12, fontWeight: "600", color: "#FFFFFF" },
-  fulfill: { fontSize: 11, lineHeight: 14, color: colors.muted, textAlign: "center" },
 })

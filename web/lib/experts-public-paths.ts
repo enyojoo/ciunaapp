@@ -18,6 +18,10 @@ export function appendExpertsBookEntryFrom(basePath: string, entryFromProfile: b
   return `${basePath}${sep}${EXPERTS_BOOK_FROM_QUERY}=${EXPERTS_BOOK_FROM_PROFILE}`
 }
 
+export function expertsServicePath(serviceId: string): string {
+  return `/experts/s/${encodeURIComponent(serviceId)}`
+}
+
 export function expertsProfilePath(profileOrSegment: string | { id: string; slug?: string | null }): string {
   const segment = typeof profileOrSegment === "string" ? profileOrSegment : expertsPublicUrlSegment(profileOrSegment)
   return `/experts/${encodeURIComponent(segment)}`
