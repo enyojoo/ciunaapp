@@ -24,12 +24,16 @@ export function useCachedQuery<T>(
   const [loading, setLoading] = useState(data === null)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<unknown>(null)
+  // `load` only depends on `key`, so it can't close over fresh `data` — a ref keeps the
+  // "anything to show yet" check current instead of forever seeing the value from mount.
+  const dataRef = useRef(data)
+  dataRef.current = data
 
   const load = useCallback(
     async (opts2?: { silent?: boolean }) => {
       if (!key) return
       const id = ++requestId.current
-      if (!opts2?.silent) setLoading((current) => current || data === null)
+      if (!opts2?.silent) setLoading((current) => current || dataRef.current === null)
       try {
         const fresh = await fetcherRef.current()
         if (requestId.current !== id) return
@@ -84,7 +88,7 @@ export function useCachedQuery<T>(
   }, [load])
 
   const revalidate = useCallback(() => {
-    void load({ silent: true })
+    return load({ silent: true })
   }, [load])
 
   /** Optimistic local update (e.g. after a delete/edit) — also writes through to the cache. */

@@ -76,6 +76,10 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     return createErrorResponse(uploadError.message || "Upload failed.", 500)
   }
 
+  // A photo picked in a different format than last time lands at a different extension —
+  // clean up any other file left behind so a user only ever has one avatar object in storage.
+  await removeUserAvatarObjects(admin, user.id, path)
+
   const { data } = admin.storage.from(BUCKET).getPublicUrl(path)
   const url = `${data.publicUrl}?v=${Date.now()}`
 
@@ -88,11 +92,15 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   return NextResponse.json({ url })
 })
 
-async function removeUserAvatarObjects(admin: ReturnType<typeof createServerClient>, userId: string) {
+async function removeUserAvatarObjects(
+  admin: ReturnType<typeof createServerClient>,
+  userId: string,
+  exceptPath?: string,
+) {
   const { data: entries } = await admin.storage.from(BUCKET).list(userId, { limit: 100 })
   const paths = (entries || [])
     .map((e) => (e.name ? `${userId}/${e.name}` : null))
-    .filter((p): p is string => Boolean(p))
+    .filter((p): p is string => Boolean(p) && p !== exceptPath)
   if (paths.length) await admin.storage.from(BUCKET).remove(paths)
 }
 

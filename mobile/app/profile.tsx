@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import * as ImagePicker from "expo-image-picker"
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { Camera, Pencil, Trash2 } from "lucide-react-native"
+import { Camera, Image as ImageIcon, Pencil, Trash2 } from "lucide-react-native"
 import { SvgXml } from "react-native-svg"
 import { Avatar } from "@/components/avatar"
 import { Field } from "@/components/field"
@@ -33,6 +33,7 @@ export default function ProfileScreen() {
   const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [avatarUploading, setAvatarUploading] = useState(false)
   const [avatarRemoving, setAvatarRemoving] = useState(false)
+  const [photoSheetOpen, setPhotoSheetOpen] = useState(false)
   const hasPhoto = Boolean(profile?.avatar_url)
 
   useEffect(() => {
@@ -116,15 +117,19 @@ export default function ProfileScreen() {
     if (asset) void uploadAvatar(asset)
   }
 
-  const changeAvatar = () => {
-    Alert.alert(t("profile.changePhoto", { defaultValue: "Change photo" }), undefined, [
-      { text: t("profile.cancel"), style: "cancel" },
-      { text: t("profile.takePhoto", { defaultValue: "Take Photo" }), onPress: () => void pickAvatar(true) },
-      {
-        text: t("profile.chooseFromLibrary", { defaultValue: "Choose from Library" }),
-        onPress: () => void pickAvatar(false),
-      },
-    ])
+  type PhotoAction = { id: "camera" | "library" | "remove"; label: string; icon: typeof Camera; destructive?: boolean }
+  const photoActions: PhotoAction[] = [
+    { id: "camera", label: t("profile.takePhoto", { defaultValue: "Take Photo" }), icon: Camera },
+    { id: "library", label: t("profile.chooseFromLibrary", { defaultValue: "Choose from Library" }), icon: ImageIcon },
+    ...(hasPhoto
+      ? [{ id: "remove" as const, label: t("profile.removePhoto", { defaultValue: "Remove photo" }), icon: Trash2, destructive: true }]
+      : []),
+  ]
+
+  const handlePhotoAction = (action: PhotoAction) => {
+    if (action.id === "camera") void pickAvatar(true)
+    else if (action.id === "library") void pickAvatar(false)
+    else confirmRemoveAvatar()
   }
 
   const removeAvatar = async () => {
@@ -169,32 +174,21 @@ export default function ProfileScreen() {
     <ScreenScroll edges={["left", "right"]}>
       <View style={styles.identity}>
         <View style={styles.avatarWrap}>
-          <Pressable onPress={changeAvatar} disabled={avatarUploading || avatarRemoving} accessibilityRole="button">
+          <Pressable
+            onPress={() => setPhotoSheetOpen(true)}
+            disabled={avatarUploading || avatarRemoving}
+            accessibilityRole="button"
+            accessibilityLabel={t("profile.changePhoto", { defaultValue: "Change photo" })}
+          >
             <Avatar name={name} size={72} uri={profile?.avatar_url} />
             <View style={styles.avatarBadge}>
-              {avatarUploading ? (
+              {avatarUploading || avatarRemoving ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Camera size={14} color="#fff" strokeWidth={2.4} />
               )}
             </View>
           </Pressable>
-          {hasPhoto ? (
-            <Pressable
-              onPress={confirmRemoveAvatar}
-              disabled={avatarUploading || avatarRemoving}
-              style={styles.deleteBadge}
-              accessibilityRole="button"
-              accessibilityLabel={t("profile.removePhoto", { defaultValue: "Remove photo" })}
-              hitSlop={8}
-            >
-              {avatarRemoving ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <Trash2 size={13} color="#fff" strokeWidth={2.4} />
-              )}
-            </Pressable>
-          ) : null}
         </View>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.email}>{profile?.email}</Text>
@@ -282,6 +276,19 @@ export default function ProfileScreen() {
         onSelect={(c) => setBaseCurrency(c.code)}
         onClose={() => setCurrencyPickerOpen(false)}
       />
+
+      <SheetPicker<PhotoAction>
+        open={photoSheetOpen}
+        title={t("profile.changePhoto", { defaultValue: "Change photo" })}
+        items={photoActions}
+        keyExtractor={(a) => a.id}
+        labelExtractor={(a) => a.label}
+        leadingExtractor={(a) => (
+          <a.icon size={18} color={a.destructive ? colors.danger : colors.text} strokeWidth={2} />
+        )}
+        onSelect={handlePhotoAction}
+        onClose={() => setPhotoSheetOpen(false)}
+      />
     </ScreenScroll>
   )
 }
@@ -312,20 +319,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderWidth: 2,
     borderColor: colors.paper,
-  },
-  deleteBadge: {
-    position: "absolute",
-    top: -2,
-    left: -2,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.danger,
-    borderWidth: 2,
-    borderColor: colors.paper,
-    zIndex: 2,
   },
   name: { fontSize: 19, fontWeight: "700", color: colors.text },
   email: { fontSize: typeSize.meta, color: colors.muted },

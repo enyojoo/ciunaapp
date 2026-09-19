@@ -19,6 +19,15 @@ async function readImageBytes(uri: string): Promise<ArrayBuffer> {
   return bytes
 }
 
+/** Lists every object in the user's avatar folder and removes it, optionally skipping one path. */
+async function removeAvatarObjects(userId: string, exceptPath?: string): Promise<void> {
+  const { data: entries } = await supabase.storage.from("avatars").list(userId, { limit: 100 })
+  const paths = (entries || [])
+    .map((e) => (e.name ? `${userId}/${e.name}` : null))
+    .filter((p): p is string => Boolean(p) && p !== exceptPath)
+  if (paths.length) await supabase.storage.from("avatars").remove(paths)
+}
+
 async function uploadAvatarDirect(file: { uri: string; mimeType?: string | null }): Promise<{ url: string } | { error: string }> {
   const {
     data: { session },
@@ -54,6 +63,10 @@ async function uploadAvatarDirect(file: { uri: string; mimeType?: string | null 
     const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string }
     return { error: body.message || body.error || "Upload failed." }
   }
+
+  // A photo picked in a different format than last time lands at a different extension —
+  // clean up any other file left behind so a user only ever has one avatar object in storage.
+  await removeAvatarObjects(userId, path)
 
   const { data } = supabase.storage.from("avatars").getPublicUrl(path)
   const url = `${data.publicUrl}?v=${Date.now()}`

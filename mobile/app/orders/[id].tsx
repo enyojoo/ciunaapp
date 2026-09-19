@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import * as Clipboard from "expo-clipboard"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { Check, Clock, Copy, FileCheck, MapPin, Package2, Phone, UserRound, XCircle } from "lucide-react-native"
+import { SvgXml } from "react-native-svg"
+import { Avatar } from "@/components/avatar"
 import { EmptyState } from "@/components/empty-state"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
@@ -14,6 +16,10 @@ import { apiUrl, fetchWithAuth } from "@/lib/api"
 import { openInAppBrowser } from "@/lib/in-app-browser"
 import { formatMoney } from "@/lib/money"
 import { formatDateTimeLine, isHubTransaction, isReferralPayout, statusTone } from "@/lib/transactions"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useFx } from "@/lib/use-fx"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
+import { useTransaction } from "@/lib/use-transaction"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 import type { CombinedTransaction } from "@/lib/types"
 
@@ -54,44 +60,27 @@ export default function OrderScreen() {
   const navigation = useNavigation()
   const router = useRouter()
   const { showError } = useToast()
-  const [tx, setTx] = useState<CombinedTransaction | null>(null)
-  const [missing, setMissing] = useState(false)
+  const { currencies } = useFx()
+  const flagFor = (code?: string | null) => currencies.find((c) => c.code === code)?.flag_svg
+  const { data: tx, loading, error, revalidate } = useTransaction(id)
+  const missing = !loading && (Boolean(error) || !tx)
   const [copied, setCopied] = useState(false)
   const [payBusy, setPayBusy] = useState(false)
   const [receiptBusy, setReceiptBusy] = useState(false)
 
-  const load = useCallback(async () => {
-    if (!id) return
-    const res = await fetchWithAuth(`/api/transactions/${String(id).toUpperCase()}/status`)
-    if (!res.ok) {
-      setMissing(true)
-      return
-    }
-    const data = (await res.json()) as { transaction?: CombinedTransaction }
-    if (data.transaction) setTx(data.transaction)
-    else setMissing(true)
-  }, [id])
-
-  useEffect(() => {
-    void load()
-  }, [load])
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   const referral = tx ? isReferralPayout(tx) : false
   const isHub = tx ? isHubTransaction(tx) : false
   const tone = statusTone(tx?.status)
 
+  // No title — the transaction status/amount is already the big heading in the body; a repeated header title is redundant.
   useEffect(() => {
-    if (!tx) return
-    navigation.setOptions({
-      title: referral
-        ? t("txDetail.referralPayout")
-        : isHub
-          ? t("hub.checkout.orderSummary", { defaultValue: "Order summary" })
-          : t("txDetail.transfer"),
-    })
-  }, [navigation, t, tx, referral, isHub])
+    navigation.setOptions({ title: "" })
+  }, [navigation])
 
-  if (!tx && !missing) {
+  if (loading && !tx) {
     return (
       <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
@@ -102,7 +91,7 @@ export default function OrderScreen() {
     )
   }
 
-  if (!tx) {
+  if (missing || !tx) {
     return (
       <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
@@ -146,7 +135,7 @@ export default function OrderScreen() {
     setPayBusy(true)
     try {
       await openInAppBrowser(apiUrl(`/pay/${tx.transaction_id.toLowerCase()}`))
-      await load()
+      await revalidate()
     } finally {
       setPayBusy(false)
     }
@@ -409,9 +398,31 @@ export default function OrderScreen() {
             {tx.recipient ? (
               <View style={styles.recipientBlock}>
                 <Text style={styles.recipientHeading}>{t("txDetail.recipient")}</Text>
-                <Text style={styles.recipientText}>{tx.recipient.full_name}</Text>
-                <Text style={styles.recipientMeta}>{tx.recipient.account_number}</Text>
-                <Text style={styles.recipientMeta}>{tx.recipient.bank_name}</Text>
+                <View style={styles.recipientCard}>
+                  <View style={styles.recipientAvatarWrap}>
+                    <Avatar name={tx.recipient.full_name || "?"} size={48} />
+                    {flagFor(tx.receive_currency) ? (
+                      <View style={styles.recipientFlagBadge}>
+                        <SvgXml xml={flagFor(tx.receive_currency)!} width={18} height={12} />
+                      </View>
+                    ) : null}
+                  </View>
+                  <View style={styles.recipientCardBody}>
+                    <Text style={styles.recipientName} numberOfLines={1}>
+                      {tx.recipient.full_name}
+                    </Text>
+                    {tx.recipient.bank_name ? (
+                      <Text style={styles.recipientMeta} numberOfLines={1}>
+                        {tx.recipient.bank_name}
+                      </Text>
+                    ) : null}
+                    {tx.recipient.account_number ? (
+                      <Text style={styles.recipientAccount} numberOfLines={1}>
+                        {tx.recipient.account_number}
+                      </Text>
+                    ) : null}
+                  </View>
+                </View>
               </View>
             ) : null}
           </>
@@ -545,4 +556,27 @@ const styles = StyleSheet.create({
   recipientHeading: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text, marginBottom: 6 },
   recipientText: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   recipientMeta: { fontSize: typeSize.meta, color: colors.muted, marginTop: 2 },
+  recipientCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    borderRadius: radius.row,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.paper,
+    padding: 12,
+  },
+  recipientAvatarWrap: { position: "relative" },
+  recipientFlagBadge: {
+    position: "absolute",
+    bottom: -2,
+    right: -2,
+    borderRadius: 3,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: colors.paper,
+  },
+  recipientCardBody: { flex: 1, minWidth: 0 },
+  recipientName: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
+  recipientAccount: { fontSize: 12, fontFamily: "Courier", color: colors.muted },
 })

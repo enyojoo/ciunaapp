@@ -276,40 +276,42 @@ export default function ReferralsScreen() {
       />
 
       <Modal visible={withdrawOpen} animationType="slide" transparent onRequestClose={() => setWithdrawOpen(false)}>
-        <View style={styles.withdrawOverlay}>
-          <SafeAreaView edges={["bottom"]} style={styles.withdrawSheet}>
-            <Text style={styles.withdrawTitle}>{t("referrals.requestPayout")}</Text>
-            <Text style={styles.withdrawInstructions}>
-              {t("referrals.payoutInstructions", { available: data?.balances.availableDisplay ?? "" })}
-            </Text>
-            <Text style={styles.label}>{t("referrals.recipient")}</Text>
-            <Pressable style={styles.selectBox} onPress={() => setRecipientPickerOpen(true)}>
-              <Text style={styles.selectText}>
-                {recipients.find((r) => r.id === recipientId)?.full_name || t("referrals.selectRecipient")}
+        <Pressable style={styles.withdrawOverlay} onPress={() => setWithdrawOpen(false)}>
+          <Pressable onPress={(e) => e.stopPropagation()}>
+            <SafeAreaView edges={["bottom"]} style={styles.withdrawSheet}>
+              <Text style={styles.withdrawTitle}>{t("referrals.requestPayout")}</Text>
+              <Text style={styles.withdrawInstructions}>
+                {t("referrals.payoutInstructions", { available: data?.balances.availableDisplay ?? "" })}
               </Text>
-            </Pressable>
-            <Field
-              label={t("referrals.amount", { symbol: baseCurrencySymbol })}
-              value={amount}
-              onChangeText={setAmount}
-              keyboardType="decimal-pad"
-              placeholder="0.00"
-            />
-            <View style={styles.actions}>
-              <View style={styles.actionHalf}>
-                <PrimaryButton
-                  label={t("referrals.cancel")}
-                  variant="secondary"
-                  onPress={() => setWithdrawOpen(false)}
-                  disabled={submitting}
-                />
+              <Text style={styles.label}>{t("referrals.recipient")}</Text>
+              <Pressable style={styles.selectBox} onPress={() => setRecipientPickerOpen(true)}>
+                <Text style={styles.selectText}>
+                  {recipients.find((r) => r.id === recipientId)?.full_name || t("referrals.selectRecipient")}
+                </Text>
+              </Pressable>
+              <Field
+                label={t("referrals.amount", { symbol: baseCurrencySymbol })}
+                value={amount}
+                onChangeText={setAmount}
+                keyboardType="decimal-pad"
+                placeholder="0.00"
+              />
+              <View style={styles.actions}>
+                <View style={styles.actionHalf}>
+                  <PrimaryButton
+                    label={t("referrals.cancel")}
+                    variant="secondary"
+                    onPress={() => setWithdrawOpen(false)}
+                    disabled={submitting}
+                  />
+                </View>
+                <View style={styles.actionHalf}>
+                  <PrimaryButton label={t("referrals.submitRequest")} busy={submitting} onPress={() => void submitWithdraw()} />
+                </View>
               </View>
-              <View style={styles.actionHalf}>
-                <PrimaryButton label={t("referrals.submitRequest")} busy={submitting} onPress={() => void submitWithdraw()} />
-              </View>
-            </View>
-          </SafeAreaView>
-        </View>
+            </SafeAreaView>
+          </Pressable>
+        </Pressable>
       </Modal>
     </ScreenScroll>
   )

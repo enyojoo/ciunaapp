@@ -21,6 +21,21 @@ export interface CombinedTransaction {
   send_currency?: string
   receive_amount?: number
   receive_currency?: string
+  total_amount?: number
+  fee_amount?: number
+  fee_type?: string | null
+  exchange_rate?: number
+  logistics_fee_amount?: number | null
+  logistics_fee_type_snapshot?: string | null
+  payment_provider?: "manual" | "yookassa" | null
+  gateway_status?: string | null
+  gateway_confirmation_url?: string | null
+  receipt_url?: string | null
+  receipt_filename?: string | null
+  contact_name?: string | null
+  contact_phone?: string | null
+  completed_at?: string | null
+  failure_reason?: string | null
   recipient?: any
   fulfillment_type?: "bank_transfer" | "cash_hand"
   delivery_address_line?: string | null
@@ -82,6 +97,23 @@ export const combinedTransactionService = {
         send_currency: tx.send_currency,
         receive_amount: tx.receive_amount,
         receive_currency: tx.receive_currency,
+        total_amount: (tx as { total_amount?: number }).total_amount,
+        fee_amount: (tx as { fee_amount?: number }).fee_amount,
+        fee_type: (tx as { fee_type?: string | null }).fee_type ?? null,
+        exchange_rate: (tx as { exchange_rate?: number }).exchange_rate,
+        logistics_fee_amount: (tx as { logistics_fee_amount?: number | null }).logistics_fee_amount ?? null,
+        logistics_fee_type_snapshot:
+          (tx as { logistics_fee_type_snapshot?: string | null }).logistics_fee_type_snapshot ?? null,
+        payment_provider: (tx as { payment_provider?: "manual" | "yookassa" | null }).payment_provider ?? null,
+        gateway_status: (tx as { gateway_status?: string | null }).gateway_status ?? null,
+        gateway_confirmation_url:
+          (tx as { gateway_confirmation_url?: string | null }).gateway_confirmation_url ?? null,
+        receipt_url: (tx as { receipt_url?: string | null }).receipt_url ?? null,
+        receipt_filename: (tx as { receipt_filename?: string | null }).receipt_filename ?? null,
+        contact_name: (tx as { contact_name?: string | null }).contact_name ?? null,
+        contact_phone: (tx as { contact_phone?: string | null }).contact_phone ?? null,
+        completed_at: (tx as { completed_at?: string | null }).completed_at ?? null,
+        failure_reason: (tx as { failure_reason?: string | null }).failure_reason ?? null,
         recipient: tx.recipient,
         fulfillment_type: tx.fulfillment_type,
         delivery_address_line: tx.delivery_address_line ?? null,

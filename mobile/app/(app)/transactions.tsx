@@ -21,6 +21,7 @@ import {
 import { useCachedQuery } from "@/lib/use-cached-query"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
+import { seedTransactionCache } from "@/lib/use-transaction"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 import type { CombinedTransaction } from "@/lib/types"
 
@@ -30,7 +31,9 @@ async function fetchTransactions(): Promise<CombinedTransaction[]> {
   const res = await fetchWithAuth("/api/transactions?type=all&limit=100")
   if (!res.ok) throw new Error("Failed to load transactions")
   const data = (await res.json()) as { transactions?: CombinedTransaction[] }
-  return data.transactions || []
+  const rows = data.transactions || []
+  seedTransactionCache(rows)
+  return rows
 }
 
 type Volume = { amount: number; currency: string }

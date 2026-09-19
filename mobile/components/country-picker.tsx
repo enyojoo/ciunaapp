@@ -33,51 +33,54 @@ export function CountryPicker({
 
   return (
     <Modal visible={open} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.backdrop}>
-        <SafeAreaView edges={["bottom"]} style={styles.sheet}>
-          <View style={styles.head}>
-            <Text style={styles.title}>{title}</Text>
-            <Pressable onPress={onClose} style={styles.close} accessibilityLabel="Close">
-              <X size={20} color={colors.text} />
-            </Pressable>
-          </View>
-          <View style={styles.searchBox}>
-            <Search size={16} color={colors.muted} />
-            <TextInput
-              value={query}
-              onChangeText={setQuery}
-              placeholder={searchPlaceholder}
-              placeholderTextColor="#9CA3AF"
-              style={styles.searchInput}
-            />
-          </View>
-          <ScrollView contentContainerStyle={styles.list} keyboardShouldPersistTaps="handled">
-            {filtered.map((c) => {
-              const selected = selectedCode === c.code
-              return (
-                <Pressable
-                  key={c.code}
-                  onPress={() => {
-                    onSelect(c)
-                    onClose()
-                  }}
-                  style={styles.item}
-                >
-                  <FlagIcon code={c.code} size={20} />
-                  <Text style={[styles.itemText, selected && styles.itemSelected]}>{c.name}</Text>
-                </Pressable>
-              )
-            })}
-          </ScrollView>
-        </SafeAreaView>
-      </View>
+      <Pressable style={styles.backdrop} onPress={onClose}>
+        <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
+          <SafeAreaView edges={["bottom"]} style={styles.sheetInner}>
+            <View style={styles.head}>
+              <Text style={styles.title}>{title}</Text>
+              <Pressable onPress={onClose} style={styles.close} accessibilityLabel="Close">
+                <X size={20} color={colors.text} />
+              </Pressable>
+            </View>
+            <View style={styles.searchBox}>
+              <Search size={16} color={colors.muted} />
+              <TextInput
+                value={query}
+                onChangeText={setQuery}
+                placeholder={searchPlaceholder}
+                placeholderTextColor="#9CA3AF"
+                style={styles.searchInput}
+              />
+            </View>
+            <ScrollView contentContainerStyle={styles.list} keyboardShouldPersistTaps="handled">
+              {filtered.map((c) => {
+                const selected = selectedCode === c.code
+                return (
+                  <Pressable
+                    key={c.code}
+                    onPress={() => {
+                      onSelect(c)
+                      onClose()
+                    }}
+                    style={styles.item}
+                  >
+                    <FlagIcon code={c.code} size={20} />
+                    <Text style={[styles.itemText, selected && styles.itemSelected]}>{c.name}</Text>
+                  </Pressable>
+                )
+              })}
+            </ScrollView>
+          </SafeAreaView>
+        </Pressable>
+      </Pressable>
     </Modal>
   )
 }
 
 const styles = StyleSheet.create({
   backdrop: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.4)" },
-  sheet: { height: "80%", borderTopLeftRadius: 24, borderTopRightRadius: 24, backgroundColor: colors.paper },
+  sheet: { height: "80%", borderTopLeftRadius: 24, borderTopRightRadius: 24, backgroundColor: colors.paper, overflow: "hidden" },
+  sheetInner: { flex: 1 },
   head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 16 },
   title: { fontSize: 18, fontWeight: "600", color: colors.text },
   close: { height: 44, width: 44, alignItems: "center", justifyContent: "center" },
