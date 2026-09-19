@@ -75,26 +75,39 @@ export type HubVendor = {
 export type CombinedTransaction = {
   id?: string
   transaction_id: string
+  user_id?: string
   type?: string | null
   status?: string | null
   created_at?: string
+  updated_at?: string
+  completed_at?: string | null
+  failure_reason?: string | null
   reference?: string | null
   transaction_source?: string | null
   hub_snapshot?: Record<string, unknown> | null
   hub_product_category?: string | null
   hub_order_items?: HubOrderItem[]
+  hub_fee_amount?: number | null
+  hub_product_id?: string | null
   payment_provider?: "manual" | "yookassa" | null
+  gateway_status?: string | null
+  gateway_confirmation_url?: string | null
   send_amount?: number
   send_currency?: string
   receive_amount?: number
   receive_currency?: string
   total_amount?: number
   fee_amount?: number
+  fee_type?: string | null
   exchange_rate?: number
   fulfillment_type?: string | null
+  logistics_fee_amount?: number | null
   delivery_address_line?: string | null
+  delivery_phone?: string | null
   contact_name?: string | null
   contact_phone?: string | null
+  receipt_url?: string | null
+  receipt_filename?: string | null
   recipient?: {
     full_name?: string
     account_number?: string
@@ -106,6 +119,7 @@ export type CurrencyRow = {
   code: string
   name?: string
   symbol?: string
+  flag_svg?: string
   can_send?: boolean
   can_receive?: boolean
 }
@@ -117,6 +131,17 @@ export type RecipientRow = {
   bank_name?: string
   currency?: string
   phone_number?: string
+  routing_number?: string
+  sort_code?: string
+  iban?: string
+  swift_bic?: string
+  address_line1?: string
+  address_line2?: string
+  city?: string
+  state?: string
+  postal_code?: string
+  transfer_type?: "ACH" | "Wire" | null
+  checking_or_savings?: "checking" | "savings" | null
 }
 
 export type ExpertProfile = {

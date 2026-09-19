@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // NativeWind web reads this as `--css-interop-darkMode`. Default `media` throws
+  // when the runtime syncs html class → colorScheme.
+  darkMode: "class",
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}", "./lib/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {

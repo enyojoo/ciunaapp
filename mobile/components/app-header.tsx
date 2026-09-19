@@ -1,15 +1,19 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
-import { BadgeDollarSign, MessageCircle } from "lucide-react-native"
+import { BadgeDollarSign } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
+import { Avatar } from "./avatar"
 import { BrandLogo } from "./brand-logo"
+import { useAuth } from "@/lib/auth-context"
 import { colors, radius, space } from "@/lib/theme"
 
-/** Web `HubShellHeader`: logo left, Refer & Earn pill + support icon. */
+/** Web `HubShellHeader`: logo left, Refer & Earn pill + profile avatar. */
 export function AppHeader() {
   const router = useRouter()
   const { t } = useTranslation("app")
+  const { profile } = useAuth()
+  const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Account"
   return (
     <View style={styles.row}>
       <BrandLogo height={28} />
@@ -33,14 +37,12 @@ export function AppHeader() {
           </LinearGradient>
         </Pressable>
         <Pressable
-          onPress={() => router.push("/support")}
+          onPress={() => router.push("/profile")}
           accessibilityRole="button"
-          accessibilityLabel={t("dashboard.supportAria", { defaultValue: "Support" })}
+          accessibilityLabel={t("dashboard.profileAria", { defaultValue: "Your profile" })}
           hitSlop={8}
         >
-          <View style={styles.support}>
-            <MessageCircle size={24} color={colors.supportIcon} strokeWidth={2} />
-          </View>
+          <Avatar name={name} size={40} uri={profile?.avatar_url} />
         </Pressable>
       </View>
     </View>
@@ -70,12 +72,4 @@ const styles = StyleSheet.create({
     borderColor: colors.referBorder,
   },
   referLabel: { fontSize: 12, fontWeight: "600", color: colors.referText },
-  support: {
-    height: 40,
-    width: 40,
-    borderRadius: radius.pill,
-    backgroundColor: colors.supportBg,
-    alignItems: "center",
-    justifyContent: "center",
-  },
 })

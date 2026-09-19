@@ -13,9 +13,12 @@ import { PrimaryButton } from "@/components/primary-button"
 import { VendorChip } from "@/components/product-card"
 import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
-import { fetchWithAuth } from "@/lib/api"
 import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { hubMarketplaceCheckoutPath, hubMarketplaceVendorPath, hubProductDetailPath, isHubMarketplaceSlug } from "@/lib/hub"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useHubProduct } from "@/lib/use-hub-product"
+import { useHubVendorProducts } from "@/lib/use-hub-vendor"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { formatCardPrice, hubProductEffectivePrice, hubProductListPrice, hubProductShowListStrike } from "@/lib/money"
 import type { HubProduct } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -33,11 +36,12 @@ export default function HubProductDetailScreen() {
   const router = useRouter()
   const { t } = useTranslation("app")
   const { showInfo, showError } = useToast()
-  const [product, setProduct] = useState<HubProduct | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
+  const { data: product, loading, error, revalidate } = useHubProduct(productId)
+  const notFound = !loading && (Boolean(error) || !product)
   const [busy, setBusy] = useState(false)
-  const [moreFromVendor, setMoreFromVendor] = useState<HubProduct[]>([])
+
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   useEffect(() => {
     // No title — the product name is already the big heading in the body; a repeated header title is redundant.
@@ -47,22 +51,6 @@ export default function HubProductDetailScreen() {
     })
   }, [navigation, marketplace, line])
 
-  useEffect(() => {
-    if (!productId) return
-    void (async () => {
-      const res = await fetchWithAuth(`/api/hub/products/${encodeURIComponent(String(productId))}`)
-      if (!res.ok) {
-        setNotFound(true)
-        setLoading(false)
-        return
-      }
-      const body = (await res.json()) as { product?: HubProduct }
-      setProduct(body.product || null)
-      setNotFound(!body.product)
-      setLoading(false)
-    })()
-  }, [productId])
-
   const cartMode = Boolean(product) && product!.pricing_type === "fixed" && Boolean(product!.vendor_id)
   const { cart } = useHubCart(cartMode ? product!.vendor_id : null)
   const cartItem = cart?.items.find((i) => i.hub_product_id === product?.id) || null
@@ -70,30 +58,8 @@ export default function HubProductDetailScreen() {
 
   // "More from {vendor}" — recommendations are scoped to the same vendor since a cart can only
   // ever hold one vendor's items; suggesting anything else would just be a dead end for the CTA.
-  useEffect(() => {
-    const vendorSlug = product?.vendor?.slug
-    if (!vendorSlug || !marketplace) {
-      setMoreFromVendor([])
-      return
-    }
-    let cancelled = false
-    void (async () => {
-      try {
-        const res = await fetchWithAuth(
-          `/api/hub/vendors/${encodeURIComponent(vendorSlug)}/products?service_line=${encodeURIComponent(line)}`,
-        )
-        if (!res.ok) return
-        const body = (await res.json()) as { products?: HubProduct[] }
-        if (cancelled) return
-        setMoreFromVendor((body.products || []).filter((p) => p.id !== product?.id))
-      } catch {
-        if (!cancelled) setMoreFromVendor([])
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [product?.vendor?.slug, product?.id, marketplace, line])
+  const vendorProducts = useHubVendorProducts(line, marketplace ? product?.vendor?.slug : undefined)
+  const moreFromVendor = vendorProducts.filter((p) => p.id !== product?.id)
 
   const price = product ? hubProductEffectivePrice(product) : 0
   const list = product ? hubProductListPrice(product) : null

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
@@ -9,9 +9,11 @@ import { EmptyState } from "@/components/empty-state"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { ScreenScroll } from "@/components/screen"
-import { fetchWithAuth } from "@/lib/api"
 import { hubProductDetailPath, isHubMarketplaceSlug } from "@/lib/hub"
-import type { HubProduct, HubVendor } from "@/lib/types"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useHubVendorStorefront } from "@/lib/use-hub-vendor"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
+import type { HubVendor } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /**
@@ -27,54 +29,16 @@ export default function VendorScreen() {
   const navigation = useNavigation()
   const router = useRouter()
   const { t } = useTranslation("app")
-  const [products, setProducts] = useState<HubProduct[]>([])
-  const [vendor, setVendor] = useState<HubVendor | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
+  const { data, loading, error, revalidate } = useHubVendorStorefront(line, vendorSlug)
+  const products = data?.products || []
+  const vendor = data?.vendor || null
+  const notFound = !loading && (Boolean(error) || (!vendor && products.length === 0))
+
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   const cartMode = isHubMarketplaceSlug(line)
   const vendorId = (vendor as (HubVendor & { id?: string }) | null)?.id ?? null
-
-  useEffect(() => {
-    void (async () => {
-      const [pRes, vRes] = await Promise.all([
-        fetchWithAuth(
-          `/api/hub/vendors/${encodeURIComponent(vendorSlug)}/products?service_line=${encodeURIComponent(line)}`,
-        ),
-        fetchWithAuth(
-          `/api/hub/vendors/${encodeURIComponent(vendorSlug)}?service_line=${encodeURIComponent(line)}`,
-        ),
-      ])
-      if (!pRes.ok && !vRes.ok) {
-        setNotFound(true)
-        setLoading(false)
-        return
-      }
-      const body = pRes.ok ? ((await pRes.json()) as { products?: HubProduct[] }) : { products: [] }
-      const rows = body.products || []
-      setProducts(rows)
-      let found: HubVendor | null = null
-      if (vRes.ok) {
-        const vBody = (await vRes.json()) as { vendor?: HubVendor | null }
-        found = vBody.vendor ?? null
-      }
-      const fromProduct = rows[0]?.vendor
-      setVendor(
-        found ||
-          (fromProduct
-            ? {
-                id: fromProduct.id,
-                name: fromProduct.name,
-                slug: fromProduct.slug,
-                photo_url: fromProduct.photo_url,
-                is_verified: fromProduct.is_verified,
-              }
-            : null),
-      )
-      setNotFound(!found && rows.length === 0)
-      setLoading(false)
-    })()
-  }, [line, vendorSlug])
 
   useEffect(() => {
     // No title — the vendor name is already the big heading in the body; a repeated header title is redundant.

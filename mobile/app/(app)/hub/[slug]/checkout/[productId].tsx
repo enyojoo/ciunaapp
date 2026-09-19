@@ -13,7 +13,7 @@ import { fetchWithAuth } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { hubProductEffectivePrice } from "@/lib/money"
 import { useFx } from "@/lib/use-fx"
-import type { HubProduct } from "@/lib/types"
+import { useHubProduct } from "@/lib/use-hub-product"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export default function HubCheckoutScreen() {
@@ -24,7 +24,7 @@ export default function HubCheckoutScreen() {
   const { profile } = useAuth()
   const { currencies, rates } = useFx()
   const { showError } = useToast()
-  const [product, setProduct] = useState<HubProduct | null>(null)
+  const { data: product, error: productError } = useHubProduct(productId)
   const [contactName, setContactName] = useState(
     [profile?.first_name, profile?.last_name].filter(Boolean).join(" "),
   )
@@ -39,20 +39,13 @@ export default function HubCheckoutScreen() {
   }, [navigation, t])
 
   useEffect(() => {
-    if (!productId) return
-    void (async () => {
-      const res = await fetchWithAuth(`/api/hub/products/${encodeURIComponent(String(productId))}`)
-      if (!res.ok) {
-        showError(t("hub.productNotFound", { defaultValue: "Product not found." }))
-        return
-      }
-      const body = (await res.json()) as { product?: HubProduct }
-      const p = body.product || null
-      setProduct(p)
-      const cur = (p?.fixed_currency || p?.default_input_currency || "USD").toUpperCase()
-      setReceiveCurrency(cur)
-    })()
-  }, [productId, showError, t])
+    if (productError) showError(t("hub.productNotFound", { defaultValue: "Product not found." }))
+  }, [productError, showError, t])
+
+  useEffect(() => {
+    if (!product) return
+    setReceiveCurrency((product.fixed_currency || product.default_input_currency || "USD").toUpperCase())
+  }, [product])
 
   const amount = product ? String(hubProductEffectivePrice(product)) : ""
 

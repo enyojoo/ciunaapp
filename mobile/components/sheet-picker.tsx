@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { X } from "lucide-react-native"
@@ -9,6 +10,7 @@ export function SheetPicker<T>({
   items,
   keyExtractor,
   labelExtractor,
+  leadingExtractor,
   selectedId,
   onSelect,
   onClose,
@@ -18,6 +20,8 @@ export function SheetPicker<T>({
   items: T[]
   keyExtractor: (item: T) => string
   labelExtractor: (item: T) => string
+  /** Optional leading element (e.g. a flag) rendered before the label. */
+  leadingExtractor?: (item: T) => ReactNode
   selectedId?: string | null
   onSelect: (item: T) => void
   onClose: () => void
@@ -45,6 +49,7 @@ export function SheetPicker<T>({
                   }}
                   style={styles.item}
                 >
+                  {leadingExtractor ? leadingExtractor(item) : null}
                   <Text style={[styles.itemText, selected && styles.itemSelected]}>{labelExtractor(item)}</Text>
                 </Pressable>
               )
@@ -63,7 +68,15 @@ const styles = StyleSheet.create({
   title: { fontSize: 18, fontWeight: "600", color: colors.text },
   close: { height: 44, width: 44, alignItems: "center", justifyContent: "center" },
   list: { paddingHorizontal: 20, paddingBottom: 32 },
-  item: { minHeight: 48, justifyContent: "center", borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border, paddingVertical: 14 },
+  item: {
+    minHeight: 48,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
+    paddingVertical: 14,
+  },
   itemText: { fontSize: typeSize.body, color: colors.text },
   itemSelected: { fontWeight: "600", color: colors.primary },
 })

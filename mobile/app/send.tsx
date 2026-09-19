@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Pressable, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -11,9 +11,11 @@ import { PrimaryButton } from "@/components/primary-button"
 import { SheetPicker } from "@/components/sheet-picker"
 import { useToast } from "@/components/toast-provider"
 import { fetchWithAuth } from "@/lib/api"
+import { useAuth } from "@/lib/auth-context"
 import { findRate, quoteSend } from "@/lib/fx"
 import { formatMoney } from "@/lib/money"
 import { useFx } from "@/lib/use-fx"
+import { useRecipients } from "@/lib/use-recipients"
 import type { RecipientRow } from "@/lib/types"
 
 type Step = "amount" | "recipient" | "pay"
@@ -29,11 +31,13 @@ export default function SendScreen() {
     t("hub.serviceLineTiles.send.title", { defaultValue: "Send Money" }),
   )
   const { currencies, rates } = useFx()
+  const { user } = useAuth()
   const [step, setStep] = useState<Step>("amount")
   const [sendAmount, setSendAmount] = useState("")
   const [sendCurrency, setSendCurrency] = useState("USD")
   const [receiveCurrency, setReceiveCurrency] = useState("NGN")
-  const [recipients, setRecipients] = useState<RecipientRow[]>([])
+  const { data: recipientsData, mutate: mutateRecipients } = useRecipients(user?.id)
+  const recipients = recipientsData || []
   const [recipientId, setRecipientId] = useState<string | null>(null)
   const [pickerOpen, setPickerOpen] = useState(false)
   const [name, setName] = useState("")
@@ -41,14 +45,6 @@ export default function SendScreen() {
   const [bank, setBank] = useState("")
   const { showError } = useToast()
   const [busy, setBusy] = useState(false)
-
-  useEffect(() => {
-    void (async () => {
-      const res = await fetchWithAuth("/api/recipients")
-      const body = (await res.json()) as { recipients?: RecipientRow[] }
-      setRecipients(body.recipients || [])
-    })()
-  }, [])
 
   const rate = findRate(rates, sendCurrency, receiveCurrency)
   const quote = quoteSend(Number(sendAmount) || 0, rate)
@@ -78,7 +74,7 @@ export default function SendScreen() {
     }
     const rec = (body as { recipient?: RecipientRow }).recipient
     if (rec) {
-      setRecipients((prev) => [rec, ...prev])
+      mutateRecipients((prev) => [rec, ...(prev || [])])
       setRecipientId(rec.id)
       setName("")
       setAccount("")

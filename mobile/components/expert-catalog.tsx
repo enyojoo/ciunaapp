@@ -5,7 +5,7 @@ import { BadgeCheck } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { formatCardPrice } from "@/lib/money"
 import type { ExpertCatalogService, ExpertProfile, ExpertService } from "@/lib/types"
-import { colors, radius, type as typeSize } from "@/lib/theme"
+import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
 
 export function expertProfilePath(p: { id: string; slug?: string | null }): string {
   return `/experts/${encodeURIComponent(p.slug || p.id)}`
@@ -271,11 +271,7 @@ const styles = StyleSheet.create({
     borderColor: "#E5E7EB",
     backgroundColor: colors.surface,
     padding: 12,
-    shadowColor: "#0F172A",
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
+    ...shadow({ opacity: 0.08, radius: 10, offsetY: 4, elevation: 2 }),
   },
   svcTop: { gap: 6, flexGrow: 1, marginBottom: 10 },
   svcTitle: { fontSize: 15, fontWeight: "700", lineHeight: 20, letterSpacing: -0.2, color: colors.text },

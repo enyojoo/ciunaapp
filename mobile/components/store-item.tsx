@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
 import { BadgeCheck, MapPin } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
-import { colors, radius, type as typeSize } from "@/lib/theme"
+import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
 import type { HubVendor } from "@/lib/types"
 
 export function StoreChip({
@@ -107,11 +107,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    shadowColor: "#0F172A",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    ...shadow({ opacity: 0.06, radius: 8, offsetY: 2, elevation: 2 }),
   },
   photo: { width: "100%", aspectRatio: 1, backgroundColor: colors.paper },
   photoImg: { width: "100%", height: "100%" },

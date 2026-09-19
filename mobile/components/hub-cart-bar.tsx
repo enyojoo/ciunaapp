@@ -6,7 +6,7 @@ import { hubCartItemCount, useHubCart, useHubCartByLine } from "@/lib/hub-cart"
 import { hubProductEffectivePrice } from "@/lib/money"
 import { hubCartPath } from "@/lib/hub"
 import { formatMoney } from "@/lib/money"
-import { colors, radius } from "@/lib/theme"
+import { colors, radius, shadow } from "@/lib/theme"
 
 /**
  * Floating bar shown on Food/Mart screens once the cart has items. Pass `vendorId` on a vendor
@@ -60,11 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#111827",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    shadowColor: "#0F172A",
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 6,
+    ...shadow({ opacity: 0.3, radius: 16, offsetY: 6, elevation: 6 }),
   },
   left: { flexDirection: "row", alignItems: "center", gap: 8, flexShrink: 1 },
   label: { fontSize: 13, fontWeight: "600", color: "#FFFFFF" },

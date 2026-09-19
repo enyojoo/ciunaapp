@@ -34,14 +34,38 @@
     "heroTitle": "Одно приложение — всё, что нужно",
     "heroBody": "Покупайте продукты, заказывайте услуги, отправляйте деньги домой и решайте бытовые вопросы за рубежом в Ciuna.",
     "serviceLineTiles": {
-      "food": { "title": "Еда", "shortDescription": "Всё, на что захотите" },
-      "mart": { "title": "Товары", "shortDescription": "Продукты и многое другое" },
-      "assistant": { "title": "Ассистент", "shortDescription": "Посылки и документы" },
-      "send": { "title": "Переводы", "shortDescription": "Денежные переводы за рубеж" },
-      "experts": { "title": "Эксперты", "shortDescription": "Проверенные специалисты" },
-      "insurance": { "title": "Страхование", "shortDescription": "Защита на каждый день" },
-      "experiences": { "title": "Впечатления", "shortDescription": "Ваше следующее приключение" },
-      "gift-packs": { "title": "Подарочные наборы", "shortDescription": "Подарки близким" }
+      "food": {
+        "title": "Еда",
+        "shortDescription": "Всё, на что захотите"
+      },
+      "mart": {
+        "title": "Товары",
+        "shortDescription": "Продукты и многое другое"
+      },
+      "assistant": {
+        "title": "Ассистент",
+        "shortDescription": "Посылки и документы"
+      },
+      "send": {
+        "title": "Переводы",
+        "shortDescription": "Денежные переводы за рубеж"
+      },
+      "experts": {
+        "title": "Эксперты",
+        "shortDescription": "Проверенные специалисты"
+      },
+      "insurance": {
+        "title": "Страхование",
+        "shortDescription": "Защита на каждый день"
+      },
+      "experiences": {
+        "title": "Впечатления",
+        "shortDescription": "Ваше следующее приключение"
+      },
+      "gift-packs": {
+        "title": "Подарочные наборы",
+        "shortDescription": "Подарки близким"
+      }
     },
     "referEarn": "Пригласить и заработать",
     "referEarnShort": "Бонус",
@@ -491,6 +515,9 @@
     "addRecipient": "Добавить",
     "addNewTitle": "Новый получатель",
     "editRecipientTitle": "Изменить получателя",
+    "confirmDeleteTitle": "Удалить получателя?",
+    "confirmDeleteBody": "Это действие нельзя отменить.",
+    "deleteAction": "Удалить",
     "searchPlaceholder": "Поиск получателей…",
     "saving": "Сохранение…",
     "updateRecipient": "Сохранить",
@@ -586,6 +613,9 @@
   },
   "profile": {
     "title": "Ваш профиль",
+    "changePhoto": "Изменить фото",
+    "takePhoto": "Сделать фото",
+    "chooseFromLibrary": "Выбрать из галереи",
     "profileInfo": "Данные профиля",
     "edit": "Изменить",
     "discard": "Отменить",

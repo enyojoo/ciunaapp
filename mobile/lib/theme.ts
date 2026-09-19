@@ -1,4 +1,41 @@
-import { StyleSheet } from "react-native"
+import { Platform, StyleSheet, type ViewStyle } from "react-native"
+
+function hexToRgba(hex: string, opacity: number): string {
+  const h = hex.replace("#", "")
+  const n = h.length === 3 ? h.split("").map((c) => c + c).join("") : h
+  const r = Number.parseInt(n.slice(0, 2), 16)
+  const g = Number.parseInt(n.slice(2, 4), 16)
+  const b = Number.parseInt(n.slice(4, 6), 16)
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`
+}
+
+/** Native `shadow*` / `elevation`; web `boxShadow` (RN Web deprecates `shadow*`). */
+export function shadow(opts: {
+  color?: string
+  opacity: number
+  radius: number
+  offsetY: number
+  offsetX?: number
+  elevation: number
+}): ViewStyle {
+  const color = opts.color ?? "#0F172A"
+  const offsetX = opts.offsetX ?? 0
+  if (Platform.OS === "web") {
+    return {
+      boxShadow: `${offsetX}px ${opts.offsetY}px ${opts.radius}px ${hexToRgba(color, opts.opacity)}`,
+    } as ViewStyle
+  }
+  return {
+    shadowColor: color,
+    shadowOpacity: opts.opacity,
+    shadowRadius: opts.radius,
+    shadowOffset: { width: offsetX, height: opts.offsetY },
+    elevation: opts.elevation,
+  }
+}
+
+export const shadowNone: ViewStyle =
+  Platform.OS === "web" ? ({ boxShadow: "none" } as ViewStyle) : { shadowOpacity: 0, elevation: 0 }
 
 /** Native canvas tokens. Web stays Geist + oklch(0.99); Expo uses paper + system type. */
 export const colors = {

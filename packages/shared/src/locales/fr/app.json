@@ -34,14 +34,38 @@
     "heroTitle": "Une app, tout ce dont vous avez besoin",
     "heroBody": "Faites vos courses, réservez des services, envoyez de l’argent au pays et gérez votre vie à l’étranger sur Ciuna.",
     "serviceLineTiles": {
-      "food": { "title": "Restauration", "shortDescription": "Toutes vos envies, sans compromis" },
-      "mart": { "title": "Épicerie", "shortDescription": "Produits alimentaires et bien plus encore" },
-      "assistant": { "title": "Assistant", "shortDescription": "Envoi de colis et de documents" },
-      "send": { "title": "Envoi d’argent", "shortDescription": "Transfert d’argent à l’international" },
-      "experts": { "title": "Experts", "shortDescription": "Faites appel à des experts de confiance" },
-      "insurance": { "title": "Assurance", "shortDescription": "Une protection au quotidien" },
-      "experiences": { "title": "Expériences", "shortDescription": "Votre prochaine aventure vous attend" },
-      "gift-packs": { "title": "Coffrets cadeaux", "shortDescription": "Offrez des cadeaux à vos proches" }
+      "food": {
+        "title": "Restauration",
+        "shortDescription": "Toutes vos envies, sans compromis"
+      },
+      "mart": {
+        "title": "Épicerie",
+        "shortDescription": "Produits alimentaires et bien plus encore"
+      },
+      "assistant": {
+        "title": "Assistant",
+        "shortDescription": "Envoi de colis et de documents"
+      },
+      "send": {
+        "title": "Envoi d’argent",
+        "shortDescription": "Transfert d’argent à l’international"
+      },
+      "experts": {
+        "title": "Experts",
+        "shortDescription": "Faites appel à des experts de confiance"
+      },
+      "insurance": {
+        "title": "Assurance",
+        "shortDescription": "Une protection au quotidien"
+      },
+      "experiences": {
+        "title": "Expériences",
+        "shortDescription": "Votre prochaine aventure vous attend"
+      },
+      "gift-packs": {
+        "title": "Coffrets cadeaux",
+        "shortDescription": "Offrez des cadeaux à vos proches"
+      }
     },
     "referEarn": "Parrainer et gagner",
     "referEarnShort": "Gagner",
@@ -491,6 +515,9 @@
     "addRecipient": "Ajouter un bénéficiaire",
     "addNewTitle": "Nouveau bénéficiaire",
     "editRecipientTitle": "Modifier le bénéficiaire",
+    "confirmDeleteTitle": "Supprimer le bénéficiaire ?",
+    "confirmDeleteBody": "Cette action est irréversible.",
+    "deleteAction": "Supprimer",
     "searchPlaceholder": "Rechercher des bénéficiaires…",
     "saving": "Enregistrement…",
     "updateRecipient": "Mettre à jour",
@@ -586,6 +613,9 @@
   },
   "profile": {
     "title": "Votre profil",
+    "changePhoto": "Changer la photo",
+    "takePhoto": "Prendre une photo",
+    "chooseFromLibrary": "Choisir depuis la bibliothèque",
     "profileInfo": "Informations du profil",
     "edit": "Modifier",
     "discard": "Annuler les modifications",

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { ChevronDown, ChevronRight } from "lucide-react-native"
@@ -14,8 +14,10 @@ import {
 } from "@/components/expert-catalog"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { SheetPicker } from "@/components/sheet-picker"
-import { apiFetch } from "@/lib/api"
-import type { ExpertCatalogService, ExpertProfile } from "@/lib/types"
+import { useExpertCatalogServices } from "@/lib/use-expert-catalog-services"
+import { useExpertProfiles } from "@/lib/use-expert-profiles"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 const FEATURED_PREVIEW = 8
@@ -26,48 +28,19 @@ export default function ExpertsDirectory() {
   const { t } = useTranslation("app")
   const expertsLine = useHubServiceLine("experts")
   const labels = hubServiceLineShellLabels("experts", expertsLine, t, t("hub.expertsTitle", { defaultValue: "Experts" }))
-  const [profiles, setProfiles] = useState<ExpertProfile[]>([])
-  const [services, setServices] = useState<ExpertCatalogService[]>([])
-  const [loadingProfiles, setLoadingProfiles] = useState(true)
-  const [loadingServices, setLoadingServices] = useState(true)
+  const { data: profilesData, loading: loadingProfiles, revalidate: revalidateProfiles } = useExpertProfiles()
+  const { data: servicesData, loading: loadingServices, revalidate: revalidateServices } = useExpertCatalogServices()
+  const profiles = profilesData || []
+  const services = servicesData || []
   const [category, setCategory] = useState("")
   const [pickerOpen, setPickerOpen] = useState(false)
 
-  useEffect(() => {
-    let cancelled = false
-    void (async () => {
-      try {
-        const res = await apiFetch("/api/expert/profiles")
-        const body = (await res.json().catch(() => ({}))) as { profiles?: ExpertProfile[] }
-        if (!cancelled) setProfiles(res.ok ? body.profiles || [] : [])
-      } catch {
-        if (!cancelled) setProfiles([])
-      } finally {
-        if (!cancelled) setLoadingProfiles(false)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-    void (async () => {
-      try {
-        const res = await apiFetch("/api/expert/catalog-services")
-        const body = (await res.json().catch(() => ({}))) as { services?: ExpertCatalogService[] }
-        if (!cancelled) setServices(res.ok ? body.services || [] : [])
-      } catch {
-        if (!cancelled) setServices([])
-      } finally {
-        if (!cancelled) setLoadingServices(false)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const revalidateAll = () => {
+    revalidateProfiles()
+    revalidateServices()
+  }
+  useFocusRevalidate(revalidateAll)
+  useRevalidateOnForeground(revalidateAll)
 
   const featured = useMemo(() => {
     return [...profiles]

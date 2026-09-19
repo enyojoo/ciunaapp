@@ -10,7 +10,7 @@ import {
   hubProductShowListStrike,
 } from "@/lib/money"
 import type { HubProduct } from "@/lib/types"
-import { colors, radius } from "@/lib/theme"
+import { colors, radius, shadow, shadowNone } from "@/lib/theme"
 import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useToast } from "@/components/toast-provider"
 
@@ -261,13 +261,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E5E7EB",
     backgroundColor: colors.surface,
-    shadowColor: "#0F172A",
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
+    ...shadow({ opacity: 0.08, radius: 10, offsetY: 4, elevation: 2 }),
   },
-  skeleton: { borderColor: colors.border, shadowOpacity: 0, elevation: 0 },
+  skeleton: { borderColor: colors.border, ...shadowNone },
   imageWrap: { width: "100%", aspectRatio: 4 / 3, backgroundColor: "#F3F4F6" },
   image: { width: "100%", height: "100%" },
   imageFallback: {

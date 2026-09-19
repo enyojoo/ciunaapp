@@ -34,14 +34,38 @@
     "heroTitle": "Una app, todo lo que necesitas",
     "heroBody": "Compra víveres, reserva servicios, envía dinero a casa y gestiona tu vida en el extranjero con Ciuna.",
     "serviceLineTiles": {
-      "food": { "title": "Comida", "shortDescription": "Todo lo que se te antoje" },
-      "mart": { "title": "Abarrotes", "shortDescription": "Encuentra víveres y mucho más" },
-      "assistant": { "title": "Asistente", "shortDescription": "Envía paquetes y documentos" },
-      "send": { "title": "Enviar dinero", "shortDescription": "Transferencias internacionales" },
-      "experts": { "title": "Expertos", "shortDescription": "Contrata expertos de confianza" },
-      "insurance": { "title": "Seguros", "shortDescription": "Protección para el día a día" },
-      "experiences": { "title": "Experiencias", "shortDescription": "Tu próxima aventura te espera" },
-      "gift-packs": { "title": "Paquetes regalo", "shortDescription": "Envía regalos a quien quieras" }
+      "food": {
+        "title": "Comida",
+        "shortDescription": "Todo lo que se te antoje"
+      },
+      "mart": {
+        "title": "Abarrotes",
+        "shortDescription": "Encuentra víveres y mucho más"
+      },
+      "assistant": {
+        "title": "Asistente",
+        "shortDescription": "Envía paquetes y documentos"
+      },
+      "send": {
+        "title": "Enviar dinero",
+        "shortDescription": "Transferencias internacionales"
+      },
+      "experts": {
+        "title": "Expertos",
+        "shortDescription": "Contrata expertos de confianza"
+      },
+      "insurance": {
+        "title": "Seguros",
+        "shortDescription": "Protección para el día a día"
+      },
+      "experiences": {
+        "title": "Experiencias",
+        "shortDescription": "Tu próxima aventura te espera"
+      },
+      "gift-packs": {
+        "title": "Paquetes regalo",
+        "shortDescription": "Envía regalos a quien quieras"
+      }
     },
     "referEarn": "Referir y ganar",
     "referEarnShort": "Ganar",
@@ -491,6 +515,9 @@
     "addRecipient": "Añadir beneficiario",
     "addNewTitle": "Nuevo beneficiario",
     "editRecipientTitle": "Editar beneficiario",
+    "confirmDeleteTitle": "¿Eliminar beneficiario?",
+    "confirmDeleteBody": "Esta acción no se puede deshacer.",
+    "deleteAction": "Eliminar",
     "searchPlaceholder": "Buscar beneficiarios…",
     "saving": "Guardando…",
     "updateRecipient": "Guardar cambios",
@@ -586,6 +613,9 @@
   },
   "profile": {
     "title": "Tu perfil",
+    "changePhoto": "Cambiar foto",
+    "takePhoto": "Tomar foto",
+    "chooseFromLibrary": "Elegir de la galería",
     "profileInfo": "Información del perfil",
     "edit": "Editar",
     "discard": "Descartar",

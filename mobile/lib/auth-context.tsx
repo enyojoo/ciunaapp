@@ -28,6 +28,9 @@ type Profile = {
   email: string
   first_name?: string
   last_name?: string
+  phone?: string | null
+  base_currency?: string | null
+  avatar_url?: string | null
   preferred_language?: AppLocale | null
 }
 
@@ -42,6 +45,7 @@ type AuthCtx = {
   signInWithApple: () => Promise<{ error: string | null }>
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
+  refreshProfile: () => Promise<void>
 }
 
 const Ctx = createContext<AuthCtx | null>(null)
@@ -327,9 +331,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const unlockPin = useCallback(() => setPinUnlocked(true), [])
 
+  const refreshProfile = useCallback(async () => {
+    if (!user) return
+    const { data } = await supabase.from("users").select("*").eq("id", user.id).maybeSingle()
+    if (data) setProfile(data as Profile)
+  }, [user])
+
   const value = useMemo(
-    () => ({ user, profile, loading, pinUnlocked, unlockPin, signIn, signInWithGoogle, signInWithApple, signUp, signOut }),
-    [user, profile, loading, pinUnlocked, unlockPin, signIn, signInWithGoogle, signInWithApple, signUp, signOut],
+    () => ({
+      user,
+      profile,
+      loading,
+      pinUnlocked,
+      unlockPin,
+      signIn,
+      signInWithGoogle,
+      signInWithApple,
+      signUp,
+      signOut,
+      refreshProfile,
+    }),
+    [
+      user,
+      profile,
+      loading,
+      pinUnlocked,
+      unlockPin,
+      signIn,
+      signInWithGoogle,
+      signInWithApple,
+      signUp,
+      signOut,
+      refreshProfile,
+    ],
   )
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

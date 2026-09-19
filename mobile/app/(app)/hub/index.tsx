@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react"
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -8,9 +7,10 @@ import { EmptyState } from "@/components/empty-state"
 import { HubHero } from "@/components/hub-hero"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
-import { useToast } from "@/components/toast-provider"
-import { fetchWithAuth } from "@/lib/api"
 import { useExternalLink } from "@/lib/external-link"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useHubServiceLines } from "@/lib/use-hub-service-line"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { lineHref } from "@/lib/hub"
 import { colors, space } from "@/lib/theme"
 
@@ -18,33 +18,11 @@ export default function HomeScreen() {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { openLink } = useExternalLink()
-  const { showError } = useToast()
-  const [lines, setLines] = useState<HubServiceLineRow[]>([])
-  const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
+  const { data, loading, refreshing, refresh, revalidate } = useHubServiceLines()
+  const lines = data || []
 
-  const load = useCallback(
-    async (soft?: boolean) => {
-      if (!soft) setLoading(true)
-      try {
-        const res = await fetchWithAuth("/api/hub/service-lines", { cache: "no-store" })
-        if (!res.ok) throw new Error("load")
-        const data = (await res.json()) as { serviceLines?: HubServiceLineRow[] }
-        setLines(data.serviceLines || [])
-      } catch {
-        if (!soft) setLines([])
-        showError(t("errors.loadFailed", { defaultValue: "Could not load data. Please try again." }))
-      } finally {
-        setLoading(false)
-        setRefreshing(false)
-      }
-    },
-    [showError, t],
-  )
-
-  useEffect(() => {
-    void load()
-  }, [load])
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   const open = (line: HubServiceLineRow) => {
     const href = lineHref(line)
@@ -64,14 +42,7 @@ export default function HomeScreen() {
         style={styles.flex}
         contentContainerStyle={styles.scroll}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => {
-              setRefreshing(true)
-              void load(true)
-            }}
-            tintColor={colors.primary}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
       >
         <HubHero />

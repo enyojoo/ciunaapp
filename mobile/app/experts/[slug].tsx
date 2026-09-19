@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
@@ -11,8 +11,9 @@ import {
   expertServiceToCatalog,
 } from "@/components/expert-catalog"
 import { ScreenScroll } from "@/components/screen"
-import { apiFetch } from "@/lib/api"
-import type { ExpertProfile, ExpertService } from "@/lib/types"
+import { useExpertProfile } from "@/lib/use-expert-profile"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /**
@@ -25,46 +26,13 @@ export default function ExpertProfileScreen() {
   const navigation = useNavigation()
   const router = useRouter()
   const { t } = useTranslation("app")
-  const [profile, setProfile] = useState<ExpertProfile | null>(null)
-  const [services, setServices] = useState<ExpertService[]>([])
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
+  const { data, loading, error, revalidate } = useExpertProfile(slug)
+  const profile = data?.profile ?? null
+  const services = data?.services ?? []
+  const notFound = !loading && (Boolean(error) || !profile)
 
-  useEffect(() => {
-    if (!slug) return
-    let cancelled = false
-    setLoading(true)
-    setNotFound(false)
-    void (async () => {
-      try {
-        const res = await apiFetch(`/api/expert/profiles/${encodeURIComponent(String(slug))}`)
-        const body = (await res.json().catch(() => ({}))) as {
-          profile?: ExpertProfile
-          services?: ExpertService[]
-        }
-        if (cancelled) return
-        if (!res.ok || !body.profile) {
-          setProfile(null)
-          setServices([])
-          setNotFound(true)
-          return
-        }
-        setProfile(body.profile)
-        setServices(body.services || [])
-      } catch {
-        if (!cancelled) {
-          setProfile(null)
-          setServices([])
-          setNotFound(true)
-        }
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [slug])
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   // No title — the expert's name is already the big heading in the body; a repeated header title is redundant.
   useEffect(() => {

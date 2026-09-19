@@ -1,35 +1,21 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { EmptyState } from "@/components/empty-state"
 import { ExpertDirectoryCard } from "@/components/expert-catalog"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
-import { apiFetch } from "@/lib/api"
-import type { ExpertProfile } from "@/lib/types"
+import { useExpertProfiles } from "@/lib/use-expert-profiles"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors } from "@/lib/theme"
 
 export default function ExpertsBrowseScreen() {
   const { t } = useTranslation("app")
-  const [profiles, setProfiles] = useState<ExpertProfile[]>([])
-  const [loading, setLoading] = useState(true)
+  const { data, loading, revalidate } = useExpertProfiles()
+  const profiles = data || []
 
-  useEffect(() => {
-    let cancelled = false
-    void (async () => {
-      try {
-        const res = await apiFetch("/api/expert/profiles")
-        const body = (await res.json().catch(() => ({}))) as { profiles?: ExpertProfile[] }
-        if (!cancelled) setProfiles(res.ok ? body.profiles || [] : [])
-      } catch {
-        if (!cancelled) setProfiles([])
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   const sorted = useMemo(
     () =>

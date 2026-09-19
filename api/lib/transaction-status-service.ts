@@ -1,6 +1,6 @@
 // Transaction status management service with email notifications
 
-import { createServerClient, supabase } from './supabase'
+import { createServerClient } from './supabase'
 import {
   processReferralRewardsOnCompletedSend,
   rollbackReferralRewardsForTransaction,
@@ -25,10 +25,13 @@ export class TransactionStatusService {
    * Update transaction status with email notifications
    */
   async updateStatus(
-    transactionId: string, 
+    transactionId: string,
     statusData: StatusUpdateData
   ): Promise<StatusUpdateResult> {
     try {
+      // Service-role client: this runs server-side with no forwarded user session,
+      // so the anon client's RLS policies would otherwise hide every row.
+      const supabase = createServerClient()
       // Get current transaction with user and recipient data
       const { data: currentTransaction, error: fetchError } = await supabase
         .from('transactions')
@@ -130,6 +133,7 @@ export class TransactionStatusService {
    * Get transaction status history
    */
   async getStatusHistory(transactionId: string): Promise<TransactionStatusHistory[]> {
+    const supabase = createServerClient()
     const { data, error } = await supabase
       .from('transaction_status_history')
       .select('*')
@@ -264,6 +268,7 @@ export class TransactionStatusService {
    * Get transaction by ID with full details
    */
   async getTransaction(transactionId: string): Promise<Transaction | null> {
+    const supabase = createServerClient()
     const { data, error } = await supabase
       .from('transactions')
       .select(`
@@ -286,6 +291,7 @@ export class TransactionStatusService {
    * Auto-process pending transactions (for demo/testing)
    */
   async autoProcessPendingTransactions(): Promise<void> {
+    const supabase = createServerClient()
     const { data: pendingTransactions, error } = await supabase
       .from('transactions')
       .select(`

@@ -12,9 +12,12 @@ import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
 import { apiUrl, fetchWithAuth } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
+import { useExpertSlots } from "@/lib/use-expert-slots"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useFx } from "@/lib/use-fx"
+import { usePublicFlags } from "@/lib/use-public-flags"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { openInAppBrowser } from "@/lib/in-app-browser"
-import type { ExpertSlot } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export default function ExpertBookScreen() {
@@ -23,8 +26,11 @@ export default function ExpertBookScreen() {
   const { t } = useTranslation("app")
   const { profile } = useAuth()
   const { currencies, rates } = useFx()
-  const [slots, setSlots] = useState<ExpertSlot[]>([])
-  const [service, setService] = useState<{ title: string; short_description?: string | null } | null>(null)
+  const { data: slotsData, loading, revalidate } = useExpertSlots(serviceId)
+  const slots = slotsData?.slots || []
+  const service = slotsData?.service || null
+  const { data: flags } = usePublicFlags()
+  const yookassaEnabled = Boolean(flags?.yookassaEnabled)
   const [slotId, setSlotId] = useState<string | null>(null)
   const [sendCurrency, setSendCurrency] = useState("USD")
   const [receiveCurrency, setReceiveCurrency] = useState("USD")
@@ -35,40 +41,14 @@ export default function ExpertBookScreen() {
   const [message, setMessage] = useState("")
   const { showError } = useToast()
   const [busy, setBusy] = useState(false)
-  const [loading, setLoading] = useState(true)
   const [payChoice, setPayChoice] = useState<"manual" | "yookassa">("manual")
-  const [yookassaEnabled, setYookassaEnabled] = useState(false)
 
-  useEffect(() => {
-    void (async () => {
-      try {
-        const res = await fetchWithAuth("/api/platform/public-flags")
-        if (!res.ok) return
-        const body = (await res.json()) as { yookassaEnabled?: boolean }
-        setYookassaEnabled(Boolean(body.yookassaEnabled))
-      } catch {
-        // ignore — online payment simply stays hidden
-      }
-    })()
-  }, [])
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   useEffect(() => {
     if (sendCurrency.toUpperCase() !== "RUB" && payChoice === "yookassa") setPayChoice("manual")
   }, [sendCurrency, payChoice])
-
-  useEffect(() => {
-    if (!serviceId) return
-    void (async () => {
-      const res = await fetchWithAuth(`/api/expert/services/${encodeURIComponent(String(serviceId))}/slots`)
-      const body = (await res.json()) as {
-        slots?: ExpertSlot[]
-        service?: { title?: string; short_description?: string | null }
-      }
-      setSlots(body.slots || [])
-      setService(body.service ? { title: body.service.title || "", short_description: body.service.short_description } : null)
-      setLoading(false)
-    })()
-  }, [serviceId])
 
   const submit = async () => {
     if (!slotId) return

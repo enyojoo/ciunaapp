@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router"
 import { ChevronRight } from "lucide-react-native"
@@ -7,20 +7,22 @@ import { hubServiceLineShellLabels } from "@ciuna/shared"
 import { useHubServiceLine } from "@/lib/use-hub-service-line"
 import { CatalogProducts } from "@/components/catalog-products"
 import { EmptyState } from "@/components/empty-state"
+import { HubCartBar } from "@/components/hub-cart-bar"
+import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { StoreChip, StoreChipSkeleton } from "@/components/store-item"
-import { useToast } from "@/components/toast-provider"
-import { fetchWithAuth } from "@/lib/api"
 import { attachVendorsToProducts } from "@/lib/hub-catalog"
 import {
-  hubMarketplaceCheckoutPath,
   hubMarketplaceStoresPath,
   hubMarketplaceVendorPath,
+  hubProductDetailPath,
   isHubMarketplaceSlug,
   isHubExpertsSlug,
   isHubSendSlug,
 } from "@/lib/hub"
-import type { HubProduct, HubVendor } from "@/lib/types"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useHubCatalog } from "@/lib/use-hub-catalog"
+import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors } from "@/lib/theme"
 
 const STORES_PREVIEW = 8
@@ -30,50 +32,21 @@ export default function HubLineCatalog() {
   const line = String(slug || "").toLowerCase()
   const { t } = useTranslation("app")
   const router = useRouter()
-  const { showError } = useToast()
   const serviceLine = useHubServiceLine(line)
   const labels = hubServiceLineShellLabels(line, serviceLine, t, line)
   const marketplace = isHubMarketplaceSlug(line)
   const engineRedirect = isHubExpertsSlug(line) ? "/experts" : isHubSendSlug(line) ? "/send" : null
   const backAria = t("hub.backToHub", { defaultValue: "Back to Hub" })
 
-  const [products, setProducts] = useState<HubProduct[]>([])
-  const [vendors, setVendors] = useState<HubVendor[]>([])
-  const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
+  const { data, loading, refreshing, refresh, revalidate } = useHubCatalog(
+    engineRedirect ? "" : line,
+    marketplace,
+  )
+  const products = data?.products || []
+  const vendors = data?.vendors || []
 
-  const load = useCallback(async () => {
-    if (!line || engineRedirect) return
-    try {
-      const [pRes, vRes] = await Promise.all([
-        fetchWithAuth(`/api/hub/products?service_line=${encodeURIComponent(line)}`),
-        marketplace
-          ? fetchWithAuth(`/api/hub/vendors?service_line=${encodeURIComponent(line)}`)
-          : Promise.resolve(null),
-      ])
-      if (!pRes.ok) throw new Error("catalog")
-      const body = (await pRes.json()) as { products?: HubProduct[] }
-      setProducts(body.products || [])
-      if (vRes) {
-        if (!vRes.ok) setVendors([])
-        else {
-          const vBody = (await vRes.json()) as { vendors?: HubVendor[] }
-          setVendors(vBody.vendors || [])
-        }
-      }
-    } catch {
-      setProducts([])
-      setVendors([])
-      showError(t("errors.loadFailed", { defaultValue: "Could not load data. Please try again." }))
-    } finally {
-      setLoading(false)
-      setRefreshing(false)
-    }
-  }, [line, marketplace, engineRedirect, showError, t])
-
-  useEffect(() => {
-    void load()
-  }, [load])
+  useFocusRevalidate(revalidate)
+  useRevalidateOnForeground(revalidate)
 
   const catalogProducts = useMemo(() => attachVendorsToProducts(products, vendors, line), [products, vendors, line])
   const previewVendors = vendors.slice(0, STORES_PREVIEW)
@@ -126,11 +99,12 @@ export default function HubLineCatalog() {
         products={catalogProducts}
         loading={loading}
         showVendor
-        onProductPress={(p) => router.push(hubMarketplaceCheckoutPath(line, p.id) as never)}
+        onProductPress={(p) => router.push(hubProductDetailPath(line, p.id) as never)}
         onVendorPress={(p) => {
           const vendorSlug = p.vendor?.slug
           if (vendorSlug) router.push(hubMarketplaceVendorPath(line, vendorSlug) as never)
         }}
+        cartLineSlug={marketplace ? (line as "food" | "mart") : undefined}
       />
     </>
   )
@@ -149,27 +123,25 @@ export default function HubLineCatalog() {
   }
 
   return (
-    <HubLinePageShell
-      title={labels.title}
-      subtitle={labels.subtitle}
-      backAriaLabel={backAria}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => {
-            setRefreshing(true)
-            void load()
-          }}
-          tintColor={colors.primary}
-        />
-      }
-    >
-      {catalog}
-    </HubLinePageShell>
+    <View style={styles.flex}>
+      <HubLinePageShell
+        title={labels.title}
+        subtitle={labels.subtitle}
+        backAriaLabel={backAria}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
+        }
+        trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="hero" /> : undefined}
+      >
+        {catalog}
+      </HubLinePageShell>
+      {marketplace ? <HubCartBar lineSlug={line as "food" | "mart"} /> : null}
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  flex: { flex: 1 },
   storesBlock: { marginBottom: 32 },
   storesHead: { marginBottom: 12, flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" },
   storesTitle: { fontSize: 18, fontWeight: "600", color: colors.text },

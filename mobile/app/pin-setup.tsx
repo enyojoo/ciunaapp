@@ -65,7 +65,7 @@ export default function PinSetupScreen() {
   }
 
   return (
-    <Screen padded edges={["top", "bottom", "left", "right"]}>
+    <Screen padded edges={["bottom", "left", "right"]}>
       <View style={styles.head}>
         <Text style={[ui.title, styles.centerText]}>{title}</Text>
         <Text style={[ui.subtitle, styles.centerText]}>{subtitle}</Text>
