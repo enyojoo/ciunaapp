@@ -36,7 +36,8 @@ async function readUpload(request: NextRequest): Promise<{ bytes: Buffer; mime: 
   }
   const file = form.get("file")
   if (!file || typeof file === "string") return { error: "Image is required.", status: 400 }
-  const mime = (file.type || "image/jpeg").toLowerCase()
+  const rawType = (file.type || "image/jpeg").toLowerCase()
+  const mime = rawType === "application/octet-stream" || rawType === "application/octet-stream;" ? "image/jpeg" : rawType
   if (!ALLOWED.has(mime)) return { error: "Use a JPEG, PNG, or WebP photo.", status: 400 }
   const bytes = Buffer.from(await file.arrayBuffer())
   if (!bytes.length) return { error: "Could not read the photo.", status: 400 }
@@ -85,4 +86,24 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   }
 
   return NextResponse.json({ url })
+})
+
+async function removeUserAvatarObjects(admin: ReturnType<typeof createServerClient>, userId: string) {
+  const { data: entries } = await admin.storage.from(BUCKET).list(userId, { limit: 100 })
+  const paths = (entries || [])
+    .map((e) => (e.name ? `${userId}/${e.name}` : null))
+    .filter((p): p is string => Boolean(p))
+  if (paths.length) await admin.storage.from(BUCKET).remove(paths)
+}
+
+export const DELETE = withErrorHandling(async (request: NextRequest) => {
+  const user = await requireUser(request)
+  const admin = createServerClient()
+  await removeUserAvatarObjects(admin, user.id)
+  const { error: updateError } = await admin.from("users").update({ avatar_url: null }).eq("id", user.id)
+  if (updateError) {
+    console.error("profile-avatar users clear:", updateError)
+    return createErrorResponse(updateError.message || "Could not remove photo.", 500)
+  }
+  return NextResponse.json({ ok: true })
 })

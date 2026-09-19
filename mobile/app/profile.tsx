@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import * as ImagePicker from "expo-image-picker"
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { Camera, Pencil } from "lucide-react-native"
+import { Camera, Pencil, Trash2 } from "lucide-react-native"
 import { SvgXml } from "react-native-svg"
 import { Avatar } from "@/components/avatar"
 import { Field } from "@/components/field"
@@ -12,7 +12,7 @@ import { ScreenScroll } from "@/components/screen"
 import { SheetPicker } from "@/components/sheet-picker"
 import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
-import { uploadProfileAvatar } from "@/lib/profile-avatar-upload"
+import { removeProfileAvatar, uploadProfileAvatar } from "@/lib/profile-avatar-upload"
 import { useFx } from "@/lib/use-fx"
 import { supabase } from "@/lib/supabase"
 import { colors, radius, type as typeSize, ui } from "@/lib/theme"
@@ -32,6 +32,8 @@ export default function ProfileScreen() {
   const [baseCurrency, setBaseCurrency] = useState("USD")
   const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [avatarUploading, setAvatarUploading] = useState(false)
+  const [avatarRemoving, setAvatarRemoving] = useState(false)
+  const hasPhoto = Boolean(profile?.avatar_url)
 
   useEffect(() => {
     setFirstName(profile?.first_name || "")
@@ -125,6 +127,33 @@ export default function ProfileScreen() {
     ])
   }
 
+  const removeAvatar = async () => {
+    setAvatarRemoving(true)
+    try {
+      const result = await removeProfileAvatar()
+      if ("error" in result) {
+        showError(result.error)
+        return
+      }
+      await refreshProfile()
+    } catch {
+      showError(t("errors.generic", { defaultValue: "Something went wrong. Please try again." }))
+    } finally {
+      setAvatarRemoving(false)
+    }
+  }
+
+  const confirmRemoveAvatar = () => {
+    Alert.alert(t("profile.removePhoto", { defaultValue: "Remove photo" }), t("profile.removePhotoConfirm", { defaultValue: "Remove your profile photo?" }), [
+      { text: t("profile.cancel"), style: "cancel" },
+      {
+        text: t("profile.removePhoto", { defaultValue: "Remove photo" }),
+        style: "destructive",
+        onPress: () => void removeAvatar(),
+      },
+    ])
+  }
+
   const confirmDelete = () => {
     Alert.alert(t("profile.deleteTitle"), t("profile.deleteDescription"), [
       { text: t("profile.cancel"), style: "cancel" },
@@ -139,16 +168,34 @@ export default function ProfileScreen() {
   return (
     <ScreenScroll edges={["left", "right"]}>
       <View style={styles.identity}>
-        <Pressable onPress={changeAvatar} disabled={avatarUploading} style={styles.avatarWrap}>
-          <Avatar name={name} size={72} uri={profile?.avatar_url} />
-          <View style={styles.avatarBadge}>
-            {avatarUploading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <Camera size={14} color="#fff" strokeWidth={2.4} />
-            )}
-          </View>
-        </Pressable>
+        <View style={styles.avatarWrap}>
+          <Pressable onPress={changeAvatar} disabled={avatarUploading || avatarRemoving} accessibilityRole="button">
+            <Avatar name={name} size={72} uri={profile?.avatar_url} />
+            <View style={styles.avatarBadge}>
+              {avatarUploading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Camera size={14} color="#fff" strokeWidth={2.4} />
+              )}
+            </View>
+          </Pressable>
+          {hasPhoto ? (
+            <Pressable
+              onPress={confirmRemoveAvatar}
+              disabled={avatarUploading || avatarRemoving}
+              style={styles.deleteBadge}
+              accessibilityRole="button"
+              accessibilityLabel={t("profile.removePhoto", { defaultValue: "Remove photo" })}
+              hitSlop={8}
+            >
+              {avatarRemoving ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Trash2 size={13} color="#fff" strokeWidth={2.4} />
+              )}
+            </Pressable>
+          ) : null}
+        </View>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.email}>{profile?.email}</Text>
       </View>
@@ -265,6 +312,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderWidth: 2,
     borderColor: colors.paper,
+  },
+  deleteBadge: {
+    position: "absolute",
+    top: -2,
+    left: -2,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.danger,
+    borderWidth: 2,
+    borderColor: colors.paper,
+    zIndex: 2,
   },
   name: { fontSize: 19, fontWeight: "700", color: colors.text },
   email: { fontSize: typeSize.meta, color: colors.muted },

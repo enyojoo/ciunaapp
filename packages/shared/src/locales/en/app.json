@@ -689,6 +689,8 @@
   "profile": {
     "title": "Your profile",
     "changePhoto": "Change photo",
+    "removePhoto": "Remove photo",
+    "removePhotoConfirm": "Remove your profile photo?",
     "takePhoto": "Take Photo",
     "chooseFromLibrary": "Choose from Library",
     "profileInfo": "Profile Information",

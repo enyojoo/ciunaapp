@@ -6,34 +6,51 @@ alter table public.users
 
 insert into storage.buckets (id, name, public)
 values ('avatars', 'avatars', true)
-on conflict (id) do nothing;
+on conflict (id) do update set public = true;
 
--- Each user may only write/replace/delete objects under a path prefixed with
--- their own auth uid (e.g. "avatars/<uid>/<filename>"); the bucket is public
--- so no SELECT policy is needed for reads.
+-- Path is `{auth.uid()}/filename` inside the avatars bucket.
+-- Use split_part: storage.foldername() is easy to get wrong across dashboard templates.
 drop policy if exists "Users can upload their own avatar" on storage.objects;
+drop policy if exists "Users can update their own avatar" on storage.objects;
+drop policy if exists "Users can delete their own avatar" on storage.objects;
+drop policy if exists "Avatar images are publicly readable" on storage.objects;
+
+create policy "Avatar images are publicly readable"
+  on storage.objects for select
+  using (bucket_id = 'avatars');
+
 create policy "Users can upload their own avatar"
   on storage.objects for insert
   to authenticated
   with check (
     bucket_id = 'avatars'
-    and (storage.foldername(name))[1] = auth.uid()::text
+    and split_part(name, '/', 1) = auth.uid()::text
   );
 
-drop policy if exists "Users can update their own avatar" on storage.objects;
 create policy "Users can update their own avatar"
   on storage.objects for update
   to authenticated
   using (
     bucket_id = 'avatars'
-    and (storage.foldername(name))[1] = auth.uid()::text
+    and split_part(name, '/', 1) = auth.uid()::text
+  )
+  with check (
+    bucket_id = 'avatars'
+    and split_part(name, '/', 1) = auth.uid()::text
   );
 
-drop policy if exists "Users can delete their own avatar" on storage.objects;
 create policy "Users can delete their own avatar"
   on storage.objects for delete
   to authenticated
   using (
     bucket_id = 'avatars'
-    and (storage.foldername(name))[1] = auth.uid()::text
+    and split_part(name, '/', 1) = auth.uid()::text
   );
+
+-- Own-row update (avatar_url). Extra permissive policy is OR'd with existing ones.
+drop policy if exists "Users can update own avatar_url" on public.users;
+create policy "Users can update own avatar_url"
+  on public.users for update
+  to authenticated
+  using (id = auth.uid())
+  with check (id = auth.uid());

@@ -614,6 +614,8 @@
   "profile": {
     "title": "Ваш профиль",
     "changePhoto": "Изменить фото",
+    "removePhoto": "Удалить фото",
+    "removePhotoConfirm": "Удалить фото профиля?",
     "takePhoto": "Сделать фото",
     "chooseFromLibrary": "Выбрать из галереи",
     "profileInfo": "Данные профиля",
