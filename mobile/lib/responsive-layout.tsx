@@ -84,6 +84,17 @@ export function useOptionalResponsiveLayout(): ResponsiveLayoutValue | null {
   return useContext(ResponsiveLayoutContext)
 }
 
+/** Product / expert-service catalog: 4-up on Expo web tablet/desktop, 2-up on native and phone-width web. */
+export function useCatalogGridColumns(): 2 | 4 {
+  const layout = useOptionalResponsiveLayout()
+  if (layout?.isWeb && layout.mode !== "mobile") return 4
+  return 2
+}
+
+export function catalogCardWidth(columns: 2 | 4): `${number}%` {
+  return columns === 4 ? "23.5%" : "48.5%"
+}
+
 export function isAppShellPath(pathname: string): boolean {
   if (pathname.startsWith("/auth")) return false
   if (pathname === "/pin" || pathname === "/pin-setup") return false

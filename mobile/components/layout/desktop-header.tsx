@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router"
 import { LinearGradient } from "expo-linear-gradient"
-import { BadgeDollarSign, LifeBuoy } from "lucide-react-native"
+import { BadgeDollarSign } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Avatar } from "@/components/avatar"
@@ -34,14 +34,6 @@ export function DesktopHeader() {
               {t("dashboard.referEarn", { defaultValue: "Refer & Earn" })}
             </Text>
           </LinearGradient>
-        </Pressable>
-        <Pressable
-          style={styles.iconButton}
-          onPress={() => router.push("/support")}
-          accessibilityRole="button"
-          accessibilityLabel={t("support.title", { defaultValue: "Support" })}
-        >
-          <LifeBuoy size={20} color={colors.supportIcon} strokeWidth={2} />
         </Pressable>
         <Pressable
           style={styles.avatarButton}
@@ -83,16 +75,6 @@ const styles = StyleSheet.create({
     borderColor: colors.referBorder,
   },
   referLabel: { fontSize: 12, fontWeight: "600", color: colors.referText },
-  iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   avatarButton: {
     width: 40,
     height: 40,

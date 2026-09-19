@@ -9,6 +9,7 @@ import {
   hubProductShowListStrike,
 } from "@/lib/money"
 import type { HubProduct } from "@/lib/types"
+import { catalogCardWidth, useCatalogGridColumns } from "@/lib/responsive-layout"
 import { colors, radius, shadow, shadowNone } from "@/lib/theme"
 import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useToast } from "@/components/toast-provider"
@@ -42,6 +43,7 @@ export function ProductCard({
 }) {
   const { t } = useTranslation("app")
   const { showInfo, showError } = useToast()
+  const columns = useCatalogGridColumns()
   const price = hubProductEffectivePrice(product)
   const list = hubProductListPrice(product)
   const strike = hubProductShowListStrike(product)
@@ -124,7 +126,7 @@ export function ProductCard({
   )
 
   return (
-    <View style={[styles.hit, style]}>
+    <View style={[styles.hit, { width: catalogCardWidth(columns) }, style]}>
       <Pressable
         style={styles.card}
         onPress={onPress}
@@ -224,8 +226,9 @@ export function VendorChip({ vendor }: { vendor: NonNullable<HubProduct["vendor"
 }
 
 export function ProductCardSkeleton() {
+  const columns = useCatalogGridColumns()
   return (
-    <View style={styles.hit}>
+    <View style={[styles.hit, { width: catalogCardWidth(columns) }]}>
       <View style={[styles.card, styles.skeleton]}>
         <View style={styles.imageFallback} />
         <View style={styles.body}>

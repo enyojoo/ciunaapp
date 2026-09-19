@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 import { formatCardPrice } from "@/lib/money"
 import type { ExpertCatalogService, ExpertProfile, ExpertService } from "@/lib/types"
 import { seedExpertCatalogService } from "@/lib/use-expert-catalog-services"
+import { catalogCardWidth, useCatalogGridColumns } from "@/lib/responsive-layout"
 import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
 
 export function expertProfilePath(p: { id: string; slug?: string | null }): string {
@@ -121,6 +122,7 @@ export function ExpertServiceCard({
 }) {
   const { t } = useTranslation("app")
   const router = useRouter()
+  const columns = useCatalogGridColumns()
   const expert = service.expert
   const minutes = service.default_duration_minutes
   const profileHref = expertProfilePath(expert)
@@ -134,7 +136,7 @@ export function ExpertServiceCard({
   }
 
   return (
-    <View style={styles.svcHit}>
+    <View style={[styles.svcHit, { width: catalogCardWidth(columns) }]}>
       <Pressable
         onPress={openDetail}
         accessibilityRole="button"
@@ -199,7 +201,8 @@ export function ExpertServiceCard({
 }
 
 export function ExpertServiceSkeleton() {
-  return <View style={[styles.svcHit, styles.svcSkeleton]} />
+  const columns = useCatalogGridColumns()
+  return <View style={[styles.svcHit, { width: catalogCardWidth(columns) }, styles.svcSkeleton]} />
 }
 
 export function ServicePriceRow({ service: s }: { service: ExpertCatalogService }) {
