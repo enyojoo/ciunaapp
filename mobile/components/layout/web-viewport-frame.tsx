@@ -1,30 +1,23 @@
 import type { ReactNode } from "react"
 import { Platform, StyleSheet, View } from "react-native"
-import { useAuth } from "@/lib/auth-context"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
-import { CONTENT_MAX_WIDTH, TABLET_MAX_WIDTH } from "@/lib/layout-metrics"
+import { CONTENT_MAX_WIDTH } from "@/lib/layout-metrics"
 import { colors, shadow } from "@/lib/theme"
 
+/**
+ * Easner WebViewportFrame: phone chrome only on confirmed mobile web.
+ * Tablet/desktop pass through so DesktopShell owns the structure.
+ */
 export function WebViewportFrame({ children }: { children: ReactNode }) {
   const { mode, isWeb } = useResponsiveLayout()
-  const { user, loading } = useAuth()
-  const restoring = loading && !user
 
-  if (!isWeb || Platform.OS !== "web" || restoring || mode !== "mobile") {
+  if (!isWeb || Platform.OS !== "web" || mode === "desktop" || mode === "tablet") {
     return <>{children}</>
   }
 
   return (
     <View style={[styles.outer, { backgroundColor: colors.border }]}>
-      <View
-        style={[
-          styles.inner,
-          styles.phoneChrome,
-          { maxWidth: mode === "tablet" ? TABLET_MAX_WIDTH : CONTENT_MAX_WIDTH },
-        ]}
-      >
-        {children}
-      </View>
+      <View style={[styles.inner, styles.phoneChrome, { maxWidth: CONTENT_MAX_WIDTH }]}>{children}</View>
     </View>
   )
 }

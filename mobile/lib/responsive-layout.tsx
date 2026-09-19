@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from "react"
 import { Platform, useWindowDimensions } from "react-native"
 import {
   CONTENT_MAX_WIDTH,
@@ -9,7 +9,7 @@ import {
   getLayoutMode,
   type LayoutMode,
 } from "@/lib/layout-metrics"
-import { readWebViewport } from "@/lib/web-viewport"
+import { persistWebViewport, readWebViewport } from "@/lib/web-chrome"
 
 type ResponsiveLayoutValue = {
   mode: LayoutMode
@@ -44,6 +44,11 @@ export function ResponsiveLayoutProvider({ children }: { children: ReactNode }) 
   const { width, height } = useWindowDimensions()
   const [resizeTick, setResizeTick] = useState(0)
 
+  useLayoutEffect(() => {
+    if (Platform.OS !== "web") return
+    setResizeTick((t) => t + 1)
+  }, [height, width])
+
   useEffect(() => {
     if (Platform.OS !== "web" || typeof window === "undefined") return
     let timer: ReturnType<typeof setTimeout> | null = null
@@ -76,6 +81,11 @@ export function ResponsiveLayoutProvider({ children }: { children: ReactNode }) 
       headerHeight: HEADER_HEIGHT,
     }
   }, [height, resizeTick, width])
+
+  useEffect(() => {
+    if (!value.isWeb) return
+    persistWebViewport({ width: value.width, height: value.height, mode: value.mode })
+  }, [value.height, value.isWeb, value.mode, value.width])
 
   return <ResponsiveLayoutContext.Provider value={value}>{children}</ResponsiveLayoutContext.Provider>
 }

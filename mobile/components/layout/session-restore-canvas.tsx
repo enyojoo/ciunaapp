@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native"
 import { colors } from "@/lib/theme"
 
-/** Same idea as Easner `AuthFlowLoadingShell`: one paper canvas, no phone frame or sidebar. */
+/** Easner `AuthFlowLoadingShell`: flat paper + spinner, no phone frame or sidebar. */
 export function SessionRestoreCanvas() {
   return (
     <View style={styles.fill} accessibilityLabel="Restoring session">
@@ -12,10 +12,11 @@ export function SessionRestoreCanvas() {
 
 const styles = StyleSheet.create({
   fill: {
-    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    width: "100%",
+    minHeight: "100%",
     backgroundColor: colors.paper,
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 20,
   },
 })

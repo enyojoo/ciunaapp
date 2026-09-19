@@ -100,12 +100,15 @@ function RootChrome({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth()
   const restoring = Platform.OS === "web" && loading && !user
 
+  if (restoring) {
+    return <SessionRestoreCanvas />
+  }
+
   return (
     <View style={styles.chrome}>
       <WebViewportFrame>
         <ResponsiveAppShell>{children}</ResponsiveAppShell>
       </WebViewportFrame>
-      {restoring ? <SessionRestoreCanvas /> : null}
     </View>
   )
 }

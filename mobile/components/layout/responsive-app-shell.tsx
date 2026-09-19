@@ -6,11 +6,10 @@ import { isAppShellPath, useResponsiveLayout } from "@/lib/responsive-layout"
 
 export function ResponsiveAppShell({ children }: { children: ReactNode }) {
   const { showSidebarShell } = useResponsiveLayout()
-  const { user, pinUnlocked } = useAuth()
+  const { user } = useAuth()
   const pathname = usePathname()
-  const inApp = Boolean(user && pinUnlocked && isAppShellPath(pathname))
 
-  if (!showSidebarShell || !inApp) {
+  if (!showSidebarShell || !user || !isAppShellPath(pathname)) {
     return <>{children}</>
   }
 

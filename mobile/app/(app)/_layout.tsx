@@ -12,7 +12,7 @@ export default function AppTabs() {
   if (!loading && !user) return <Redirect href="/auth/login" />
   if (!loading && user && !pinUnlocked) return <Redirect href="/pin" />
 
-  const hideTabBar = showSidebarShell || (isWeb && (loading || mode !== "mobile"))
+  const hideTabBar = showSidebarShell || (isWeb && mode !== "mobile")
 
   return (
     <Tabs
