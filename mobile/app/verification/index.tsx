@@ -6,6 +6,8 @@ import { ScreenScroll } from "@/components/screen"
 import { useAuth } from "@/lib/auth-context"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useKycSubmissions } from "@/lib/use-kyc-submissions"
+import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
+import { ShieldCheck } from "lucide-react-native"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 function StatusBadge({ status, t }: { status?: string; t: (key: string) => string }) {
@@ -31,6 +33,7 @@ export default function VerificationHubScreen() {
   const router = useRouter()
   const { user } = useAuth()
   const { data, loading, revalidate } = useKycSubmissions(user?.id)
+  const { data: bitbankerEligibility } = useBitbankerEligibility(user?.id)
   const submissions = data || []
 
   useFocusRevalidate(revalidate)
@@ -53,11 +56,30 @@ export default function VerificationHubScreen() {
     <ScreenScroll edges={["left", "right"]}>
       <Text style={styles.subtitle}>{t("verification.hubSubtitle")}</Text>
 
+      <View style={styles.infoSend}>
+        <Text style={styles.infoSendText}>{t("verification.sendGateNotice")}</Text>
+      </View>
+
       {!bothApproved ? (
         <View style={styles.info}>
           <Text style={styles.infoText}>{t("verification.infoKyc")}</Text>
         </View>
       ) : null}
+
+      <Pressable onPress={() => router.push("/verification/bitbanker")} style={styles.card}>
+        <View style={styles.cardIcon}>
+          <ShieldCheck size={20} color={colors.primary} strokeWidth={2} />
+        </View>
+        <Text style={styles.cardTitle}>{t("verification.sbpCardTitle")}</Text>
+        <Text style={styles.cardDesc}>{t("verification.sbpCardDesc")}</Text>
+        <View style={styles.cardFoot}>
+          <StatusBadge
+            status={bitbankerEligibility?.isVerifiedForSbp ? "approved" : bitbankerEligibility?.status === "checking" ? "in_review" : undefined}
+            t={t}
+          />
+          <ChevronRight size={18} color={colors.muted} />
+        </View>
+      </Pressable>
 
       <Pressable onPress={() => router.push("/verification/identity")} style={styles.card}>
         <View style={styles.cardIcon}>
@@ -98,6 +120,15 @@ const styles = StyleSheet.create({
     padding: 14,
   },
   infoText: { fontSize: typeSize.meta, lineHeight: 19, color: "#1D4ED8" },
+  infoSend: {
+    marginBottom: 16,
+    borderRadius: radius.row,
+    borderWidth: 1,
+    borderColor: "#FDE68A",
+    backgroundColor: "#FFFBEB",
+    padding: 14,
+  },
+  infoSendText: { fontSize: typeSize.meta, lineHeight: 19, color: "#92400E" },
   card: {
     marginBottom: 16,
     borderRadius: radius.card,

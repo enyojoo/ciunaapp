@@ -96,7 +96,7 @@ export interface Transaction {
   receipt_url?: string
   receipt_filename?: string
   /** manual (default, bank/mobile-money/crypto + receipt review) | yookassa (RUB online payment) */
-  payment_provider?: "manual" | "yookassa"
+  payment_provider?: "manual" | "yookassa" | "bitbanker"
   gateway_payment_id?: string | null
   gateway_status?: string | null
   gateway_confirmation_url?: string | null

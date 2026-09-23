@@ -124,6 +124,7 @@ interface PaymentMethod {
   id: string
   currency: string
   type: string
+  provider?: string
   name: string
   account_name?: string
   account_number?: string
@@ -190,6 +191,7 @@ export default function AdminSettingsPage() {
     wallet_address: "",
     instructions: "",
     is_default: false,
+    provider: "manual",
   })
 
   // Add these state variables after the existing state declarations
@@ -604,6 +606,7 @@ export default function AdminSettingsPage() {
           crypto_network: stable ? newPaymentMethod.crypto_network.trim() || null : null,
           wallet_address: stable ? newPaymentMethod.wallet_address.trim() || null : null,
           instructions: newPaymentMethod.instructions || null,
+          provider: newPaymentMethod.provider || "manual",
           is_default: newPaymentMethod.is_default,
           status: "active",
         })
@@ -630,6 +633,7 @@ export default function AdminSettingsPage() {
         wallet_address: "",
         instructions: "",
         is_default: false,
+        provider: "manual",
       })
       setQrCodeFile(null)
       setIsAddPaymentMethodOpen(false)
@@ -688,6 +692,7 @@ export default function AdminSettingsPage() {
           crypto_network: estable ? (editingPaymentMethod.crypto_network || "").trim() || null : null,
           wallet_address: estable ? (editingPaymentMethod.wallet_address || "").trim() || null : null,
           instructions: editingPaymentMethod.instructions || null,
+          provider: editingPaymentMethod.provider || "manual",
           is_default: editingPaymentMethod.is_default,
           updated_at: new Date().toISOString(),
         })
@@ -979,6 +984,35 @@ export default function AdminSettingsPage() {
                             onChange={(e) => setNewPaymentMethod({ ...newPaymentMethod, name: e.target.value })}
                             placeholder="e.g., Sberbank Russia, SberPay QR"
                           />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="provider">Provider</Label>
+                          <Select
+                            value={newPaymentMethod.provider || "manual"}
+                            onValueChange={(value) =>
+                              setNewPaymentMethod({
+                                ...newPaymentMethod,
+                                provider: value,
+                                ...(value === "bitbanker"
+                                  ? { type: "qr_code", currency: newPaymentMethod.currency || "RUB" }
+                                  : {}),
+                              })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="manual">Manual (bank / QR instructions)</SelectItem>
+                              <SelectItem value="bitbanker">Bitbanker SBP (API, RUB)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {newPaymentMethod.provider === "bitbanker" ? (
+                            <p className="text-xs text-muted-foreground">
+                              No bank fields required. Checkout generates SBP QR via Bitbanker API.
+                            </p>
+                          ) : null}
                         </div>
 
                         {newPaymentMethod.type === "bank_account" && (() => {
@@ -1487,6 +1521,24 @@ export default function AdminSettingsPage() {
                             />
                           </div>
 
+                          <div className="space-y-2">
+                            <Label htmlFor="editProvider">Provider</Label>
+                            <Select
+                              value={editingPaymentMethod.provider || "manual"}
+                              onValueChange={(value) =>
+                                setEditingPaymentMethod({ ...editingPaymentMethod, provider: value })
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="manual">Manual</SelectItem>
+                                <SelectItem value="bitbanker">Bitbanker SBP</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
                           {editingPaymentMethod.type === "bank_account" && (() => {
                             const accountConfig = editingPaymentMethod.currency
                               ? getAccountTypeConfigFromCurrency(editingPaymentMethod.currency)
@@ -1972,6 +2024,7 @@ export default function AdminSettingsPage() {
                       <TableHead>Currency</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Name</TableHead>
+                      <TableHead>Provider</TableHead>
                       <TableHead>Details</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Default</TableHead>
@@ -1994,8 +2047,13 @@ export default function AdminSettingsPage() {
                           </div>
                         </TableCell>
                         <TableCell className="font-medium">{method.name}</TableCell>
+                        <TableCell className="capitalize text-sm text-gray-600">
+                          {method.provider || "manual"}
+                        </TableCell>
                         <TableCell>
-                          {method.type === "bank_account" ? (() => {
+                          {method.provider === "bitbanker" ? (
+                            <div className="text-sm text-gray-600">SBP via Bitbanker API</div>
+                          ) : method.type === "bank_account" ? (() => {
                             const accountConfig = getAccountTypeConfigFromCurrency(method.currency)
                             const accountType = accountConfig.accountType
 

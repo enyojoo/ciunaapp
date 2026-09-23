@@ -102,6 +102,9 @@ interface CombinedTransaction {
   transaction_source?: string | null
   payment_provider?: string | null
   gateway_payment_id?: string | null
+  payment_processing_fee?: number | null
+  bitbanker_conversion_snapshot?: Record<string, unknown> | null
+  settlement_metadata?: Record<string, unknown> | null
 }
 
 /** Maps a raw send transaction from admin data into CombinedTransaction, preserving cash-delivery fields. */
@@ -145,6 +148,9 @@ function mapSendTransaction(tx: any): CombinedTransaction {
     hub_product_category: tx.hub_product_category ?? null,
     payment_provider: tx.payment_provider ?? null,
     gateway_payment_id: tx.gateway_payment_id ?? null,
+    payment_processing_fee: tx.payment_processing_fee ?? null,
+    bitbanker_conversion_snapshot: tx.bitbanker_conversion_snapshot ?? null,
+    settlement_metadata: tx.settlement_metadata ?? null,
     fee_amount: tx.fee_amount ?? null,
     total_amount: tx.total_amount ?? null,
     reference: tx.reference ?? null,
@@ -1236,6 +1242,33 @@ export default function AdminTransactionsPage() {
                                   ) : null}
                                 </div>
 
+                                {transaction.type === "send" && transaction.payment_provider === "bitbanker" ? (
+                                  <div className="rounded-lg border border-blue-100 bg-blue-50/50 p-4 space-y-2">
+                                    <p className="text-sm font-medium text-gray-900">Bitbanker SBP</p>
+                                    <p className="text-sm text-gray-700">
+                                      Invoice ID:{" "}
+                                      <span className="font-mono text-xs">
+                                        {transaction.gateway_payment_id || "—"}
+                                      </span>
+                                    </p>
+                                    {transaction.payment_processing_fee != null ? (
+                                      <p className="text-sm text-gray-700">
+                                        Payment processing fee:{" "}
+                                        {formatCurrency(
+                                          Number(transaction.payment_processing_fee) || 0,
+                                          transaction.send_currency || "RUB",
+                                        )}
+                                      </p>
+                                    ) : null}
+                                    {transaction.bitbanker_conversion_snapshot ? (
+                                      <pre className="text-xs bg-white/80 rounded p-2 overflow-x-auto max-h-32">
+                                        {JSON.stringify(transaction.bitbanker_conversion_snapshot, null, 2)}
+                                      </pre>
+                                    ) : null}
+                                    <BitbankerSettlementForm transaction={transaction} />
+                                  </div>
+                                ) : null}
+
                                 {transaction.type === "send" && (
                                 <div>
                                   <label className="text-sm font-medium text-gray-600">Receipt</label>
@@ -1391,5 +1424,51 @@ export default function AdminTransactionsPage() {
         </Card>
       </div>
     </OfficeDashboardLayout>
+  )
+}
+
+function BitbankerSettlementForm({ transaction }: { transaction: CombinedTransaction }) {
+  const meta = (transaction.settlement_metadata || {}) as Record<string, string | null>
+  const [trc20TxHash, setTrc20TxHash] = useState(String(meta.trc20_tx_hash || ""))
+  const [payoutReference, setPayoutReference] = useState(String(meta.payout_reference || ""))
+  const [notes, setNotes] = useState(String(meta.notes || ""))
+  const [saving, setSaving] = useState(false)
+
+  const save = async () => {
+    setSaving(true)
+    try {
+      await officeDataStore.saveTransactionSettlement(transaction.transaction_id, {
+        trc20TxHash,
+        payoutReference,
+        notes,
+      })
+    } catch (e) {
+      console.error(e)
+      alert("Failed to save settlement metadata")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="space-y-2 border-t border-blue-100 pt-3 mt-2">
+      <p className="text-xs font-medium text-gray-700 uppercase tracking-wide">Settlement (TRC20 / payout)</p>
+      <Input
+        placeholder="TRC20 transaction hash"
+        value={trc20TxHash}
+        onChange={(e) => setTrc20TxHash(e.target.value)}
+        className="text-sm font-mono"
+      />
+      <Input
+        placeholder="Recipient payout reference"
+        value={payoutReference}
+        onChange={(e) => setPayoutReference(e.target.value)}
+        className="text-sm"
+      />
+      <Input placeholder="Internal notes" value={notes} onChange={(e) => setNotes(e.target.value)} className="text-sm" />
+      <Button type="button" size="sm" onClick={() => void save()} disabled={saving}>
+        {saving ? "Saving…" : "Save settlement"}
+      </Button>
+    </div>
   )
 }

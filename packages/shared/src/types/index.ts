@@ -120,6 +120,8 @@ export interface User {
   updated_at: string
 }
 
+export type { BitbankerEligibility, BitbankerEligibilityStatus, BitbankerSbpPaymentSummary } from "./bitbanker"
+
 export interface TransactionStatusHistory {
   id: string
   transaction_id: string

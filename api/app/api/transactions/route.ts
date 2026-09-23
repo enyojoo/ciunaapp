@@ -4,6 +4,9 @@ import { combinedTransactionService } from "@/lib/combined-transaction-service"
 import { requireUser, createErrorResponse, withErrorHandling } from "@/lib/auth-utils"
 import { computeLogisticsFee, resolveFulfillment } from "@/lib/send-fulfillment"
 import { roundMoney } from "@/utils/currency"
+import { createServerClient } from "@/lib/supabase"
+import { requireBitbankerEligible } from "@/lib/bitbanker/eligibility-service"
+import { isBitbankerConfigured } from "@/lib/bitbanker/config"
 
 export const GET = withErrorHandling(async (request: NextRequest) => {
   const user = await requireUser(request)
@@ -23,6 +26,15 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
   const user = await requireUser(request)
+  if (isBitbankerConfigured()) {
+    const admin = createServerClient()
+    try {
+      await requireBitbankerEligible(admin, user.id)
+    } catch (e: unknown) {
+      const err = e as Error & { status?: number }
+      return createErrorResponse(err.message || "Verification required", err.status ?? 403)
+    }
+  }
   const body = await request.json()
   const sendAmount = Number(body.sendAmount)
   const sendCurrency = String(body.sendCurrency || "").trim()

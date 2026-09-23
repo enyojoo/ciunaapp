@@ -27,7 +27,7 @@ export interface CombinedTransaction {
   exchange_rate?: number
   logistics_fee_amount?: number | null
   logistics_fee_type_snapshot?: string | null
-  payment_provider?: "manual" | "yookassa" | null
+  payment_provider?: "manual" | "yookassa" | "bitbanker" | null
   gateway_status?: string | null
   gateway_confirmation_url?: string | null
   receipt_url?: string | null
@@ -104,7 +104,7 @@ export const combinedTransactionService = {
         logistics_fee_amount: (tx as { logistics_fee_amount?: number | null }).logistics_fee_amount ?? null,
         logistics_fee_type_snapshot:
           (tx as { logistics_fee_type_snapshot?: string | null }).logistics_fee_type_snapshot ?? null,
-        payment_provider: (tx as { payment_provider?: "manual" | "yookassa" | null }).payment_provider ?? null,
+        payment_provider: (tx as { payment_provider?: "manual" | "yookassa" | "bitbanker" | null }).payment_provider ?? null,
         gateway_status: (tx as { gateway_status?: string | null }).gateway_status ?? null,
         gateway_confirmation_url:
           (tx as { gateway_confirmation_url?: string | null }).gateway_confirmation_url ?? null,

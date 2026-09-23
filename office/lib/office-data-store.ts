@@ -1103,6 +1103,28 @@ class OfficeDataStore {
     this.realtimeChannels = []
   }
 
+  async saveTransactionSettlement(
+    transactionId: string,
+    settlement: { trc20TxHash?: string; payoutReference?: string; notes?: string },
+  ) {
+    const response = await officeFetch(`/api/admin/transactions/${transactionId}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        settlement_metadata: {
+          trc20_tx_hash: settlement.trc20TxHash?.trim() || null,
+          payout_reference: settlement.payoutReference?.trim() || null,
+          notes: settlement.notes?.trim() || null,
+          recorded_at: new Date().toISOString(),
+        },
+      }),
+    })
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok) {
+      throw new Error(result?.error || "Failed to save settlement")
+    }
+    return result
+  }
+
   async updateTransactionStatus(transactionId: string, newStatus: string) {
     try {
       const payload =

@@ -20,6 +20,7 @@ import { formatLocaleDateTimeLine } from "@/lib/format-date-locale"
 import { formatCurrency, roundMoney } from "@/utils/currency"
 import { cn } from "@/lib/utils"
 import { readLastKnownUserId } from "@/lib/last-user-id"
+import { BitbankerOrderPaymentCard } from "@/components/bitbanker-order-payment-card"
 
 const HUB_ORDER_TIMER_SECONDS = 3600
 
@@ -848,6 +849,16 @@ function TransactionOrderDetailPage() {
                     </>
                   )}
 
+                  {!isHub &&
+                  !isReferralPayout &&
+                  transaction.payment_provider === "bitbanker" &&
+                  transaction.status === "pending" ? (
+                    <BitbankerOrderPaymentCard
+                      transactionId={transaction.transaction_id}
+                      totalRub={transaction.total_amount}
+                    />
+                  ) : null}
+
                   {/* Receipt Section */}
                   {transaction.receipt_url && (
                     <div className="bg-gray-50 rounded-lg p-4">
@@ -1027,6 +1038,12 @@ function TransactionOrderDetailPage() {
                                   <span className="shrink-0 text-right font-medium text-gray-900">
                                     {t("hub.checkout.paidOnline", { defaultValue: "Paid online" })}
                                   </span>
+                                </div>
+                              ) : null}
+                              {transaction.payment_provider === "bitbanker" ? (
+                                <div className="flex min-w-0 items-start justify-between gap-2">
+                                  <span className="min-w-0 text-gray-600">Payment method</span>
+                                  <span className="shrink-0 text-right font-medium text-gray-900">SBP (Bitbanker)</span>
                                 </div>
                               ) : null}
                             </>

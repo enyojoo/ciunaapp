@@ -40,3 +40,14 @@ export {
   type HubServiceLineCopyInput,
 } from "./hub/service-lines"
 export * from "./types"
+export {
+  validateBitbankerVerificationInput,
+  parseFlexibleDate,
+  formatBitbankerDate,
+  normalizeBitbankerPhone,
+  isRussianPassportCountry,
+  type BitbankerVerificationFormInput,
+  type BitbankerVerificationField,
+  type BitbankerVerificationErrorCode,
+  type BitbankerPartnerClientPayload,
+} from "./bitbanker/verification-validation"

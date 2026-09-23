@@ -14,10 +14,10 @@ import {
 import { ChevronRight, LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { LanguagePicker } from "@/components/i18n/language-picker"
-import type { KYCSubmission } from "@/lib/kyc-service"
+import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import { InstallAppCard } from "@/components/pwa/install-app-card"
 import { LoginPinDialog } from "@/components/app-lock/login-pin-dialog"
 import { hasPin } from "@/lib/login-pin"
@@ -35,23 +35,7 @@ export default function MorePage() {
     setPinDialogOpen(true)
   }
   
-  // Initialize from cache synchronously to prevent flicker
-  // Use cached data even if expired to prevent skeleton flash
-  const getInitialKycSubmissions = (): KYCSubmission[] => {
-    if (typeof window === "undefined" || !userProfile?.id) return []
-    try {
-      const CACHE_KEY = `ciuna_kyc_submissions_${userProfile.id}`
-      const cached = localStorage.getItem(CACHE_KEY)
-      if (!cached) return []
-      const { value } = JSON.parse(cached)
-      // Always return cached value if it exists (even if expired) to prevent flicker
-      return value || []
-    } catch {
-      return []
-    }
-  }
-
-  const [kycSubmissions, setKycSubmissions] = useState<KYCSubmission[]>(() => getInitialKycSubmissions())
+  const { data: bitbankerEligibility } = useBitbankerEligibility(userProfile?.id)
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
@@ -76,104 +60,21 @@ export default function MorePage() {
     }
   }
 
-  // Fetch KYC submissions with caching
-  useEffect(() => {
-    if (!userProfile?.id) return
-
-    const CACHE_KEY = `ciuna_kyc_submissions_${userProfile.id}`
-    const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
-
-    const getCachedSubmissions = (): KYCSubmission[] | null => {
-      try {
-        const cached = localStorage.getItem(CACHE_KEY)
-        if (!cached) return null
-        const { value, timestamp } = JSON.parse(cached)
-        if (Date.now() - timestamp < CACHE_TTL) {
-          return value
-        }
-        localStorage.removeItem(CACHE_KEY)
-        return null
-      } catch {
-        return null
-      }
-    }
-
-    const setCachedSubmissions = (value: KYCSubmission[]) => {
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          value,
-          timestamp: Date.now()
-        }))
-      } catch {}
-    }
-
-    // Check cache first
-    const cachedSubmissions = getCachedSubmissions()
-    
-    // If cache exists and is valid, no need to fetch (data already in state from initializer)
-    if (cachedSubmissions !== null) {
-      // Fetch in background to ensure we have latest data, but don't show loading
-      const loadKycSubmissions = async () => {
-        try {
-          // Use client-side kycService directly (same as receipt upload)
-          const { kycService } = await import("@/lib/kyc-service")
-          const submissions = await kycService.getByUserId(userProfile.id)
-          // Only update if data changed (prevent flickering)
-          setKycSubmissions(prev => {
-            const prevStr = JSON.stringify(prev)
-            const newStr = JSON.stringify(submissions)
-            if (prevStr !== newStr) {
-              setCachedSubmissions(submissions || [])
-              return submissions || []
-            }
-            return prev
-          })
-        } catch (error) {
-          console.error("Error loading KYC submissions:", error)
-        }
-      }
-      loadKycSubmissions()
-      return
-    }
-
-    // No cache - fetch and update state
-    const loadKycSubmissions = async () => {
-      try {
-        // Use client-side kycService directly (same as receipt upload)
-        const { kycService } = await import("@/lib/kyc-service")
-        const submissions = await kycService.getByUserId(userProfile.id)
-        setKycSubmissions(submissions || [])
-        setCachedSubmissions(submissions || [])
-      } catch (error) {
-        console.error("Error loading KYC submissions:", error)
-      }
-    }
-
-    loadKycSubmissions()
-  }, [userProfile?.id])
-
   const verificationStatus = useMemo(() => {
-    const identitySubmission = kycSubmissions.find((s) => s.type === "identity")
-    const addressSubmission = kycSubmissions.find((s) => s.type === "address")
-
-    if (identitySubmission?.status === "approved" && addressSubmission?.status === "approved") {
+    if (bitbankerEligibility?.isVerifiedForSbp) {
       return { status: "verified" as const, label: t("kyc.verified"), className: "bg-green-100 text-green-700" }
     }
-
-    if (identitySubmission?.status === "in_review" || addressSubmission?.status === "in_review") {
+    if (bitbankerEligibility?.status === "checking") {
       return { status: "in_review" as const, label: t("kyc.inReview"), className: "bg-yellow-100 text-yellow-700" }
     }
-
-    if (identitySubmission?.status === "rejected" || addressSubmission?.status === "rejected") {
+    if (bitbankerEligibility?.status === "not_verified") {
       return { status: "rejected" as const, label: t("kyc.rejected"), className: "bg-red-100 text-red-700" }
     }
-
-    if (identitySubmission || addressSubmission) {
+    if (bitbankerEligibility?.status === "unavailable") {
       return { status: "pending" as const, label: t("kyc.pending"), className: "bg-gray-100 text-gray-700" }
     }
-
     return { status: "not_started" as const, label: t("kyc.takeAction"), className: "bg-amber-100 text-amber-700" }
-  }, [kycSubmissions, t])
+  }, [bitbankerEligibility, t])
 
   return (
     <>

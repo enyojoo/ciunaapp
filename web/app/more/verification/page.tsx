@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { MapPin, User, ChevronRight } from "lucide-react"
+import { MapPin, User, ChevronRight, ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import { AppPageHeader } from "@/components/layout/app-page-header"
 import { VerificationHubSkeleton } from "@/components/verification-hub-skeleton"
@@ -9,10 +9,12 @@ import { useAuth } from "@/lib/auth-context"
 import { kycService, KYCSubmission } from "@/lib/kyc-service"
 import { supabase } from "@/lib/supabase"
 import { useTranslation } from "react-i18next"
+import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 
 export default function VerificationPage() {
   const { t } = useTranslation("app")
   const { userProfile } = useAuth()
+  const { data: bitbankerEligibility } = useBitbankerEligibility(userProfile?.id)
   
   // Initialize from cache synchronously to prevent flicker
   // Use cached data even if expired to prevent skeleton flash
@@ -226,6 +228,10 @@ export default function VerificationPage() {
           {t("verification.hubSubtitle")}
         </p>
 
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <p className="text-sm text-amber-900">{t("verification.sendGateNotice")}</p>
+        </div>
+
         {/* Info Message - Only show if both are not completed */}
         {!bothCompleted && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -237,6 +243,36 @@ export default function VerificationPage() {
 
         {/* Cards Container */}
         <div className="space-y-6">
+          <Link href="/more/verification/bitbanker" className="block">
+            <div className="bg-white rounded-xl border border-primary/30 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center mb-3">
+                      <ShieldCheck className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-1">{t("verification.sbpCardTitle")}</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">{t("verification.sbpCardDesc")}</p>
+                  </div>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    {bitbankerEligibility?.isVerifiedForSbp ? (
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                        {t("verification.sbpBadgeVerified")}
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                        {bitbankerEligibility?.status === "checking"
+                          ? t("verification.sbpBadgeChecking")
+                          : t("verification.sbpBadgeRequired")}
+                      </span>
+                    )}
+                    <ChevronRight className="h-5 w-5 text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+
           {/* Identity Verification Card */}
           <Link href="/more/verification/identity" className="block">
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:shadow-md transition-shadow">

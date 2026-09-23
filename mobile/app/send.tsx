@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react"
-import { Pressable, Text, View } from "react-native"
+import { useEffect, useMemo, useState } from "react"
+import { Image, Pressable, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { hubServiceLineShellLabels } from "@ciuna/shared"
@@ -16,9 +16,23 @@ import { findRate, quoteSend } from "@/lib/fx"
 import { formatMoney } from "@/lib/money"
 import { useFx } from "@/lib/use-fx"
 import { useRecipients } from "@/lib/use-recipients"
+import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import type { RecipientRow } from "@/lib/types"
 
 type Step = "amount" | "recipient" | "pay"
+
+type SendPaymentMethod = {
+  id: string
+  currency: string
+  provider: string
+  isDefault?: boolean
+}
+
+type BitbankerPayment = {
+  amount: number
+  link: string | null
+  qrData: string | null
+}
 
 export default function SendScreen() {
   const { t } = useTranslation("app")
@@ -32,6 +46,7 @@ export default function SendScreen() {
   )
   const { currencies, rates } = useFx()
   const { user } = useAuth()
+  const { data: eligibility } = useBitbankerEligibility(user?.id)
   const [step, setStep] = useState<Step>("amount")
   const [sendAmount, setSendAmount] = useState("")
   const [sendCurrency, setSendCurrency] = useState("USD")
@@ -45,13 +60,40 @@ export default function SendScreen() {
   const [bank, setBank] = useState("")
   const { showError } = useToast()
   const [busy, setBusy] = useState(false)
+  const [sendMethods, setSendMethods] = useState<SendPaymentMethod[]>([])
+  const [bitbankerPayment, setBitbankerPayment] = useState<BitbankerPayment | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    void (async () => {
+      const res = await fetchWithAuth(`/api/payment-methods/send?currency=${encodeURIComponent(sendCurrency)}`)
+      if (!res.ok || cancelled) return
+      const body = (await res.json()) as { methods?: SendPaymentMethod[] }
+      setSendMethods(body.methods || [])
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [sendCurrency])
 
   const rate = findRate(rates, sendCurrency, receiveCurrency)
   const quote = quoteSend(Number(sendAmount) || 0, rate)
   const selected = recipients.find((r) => r.id === recipientId)
 
+  const defaultMethod = sendMethods.find((m) => m.isDefault) || sendMethods[0]
+  const usesBitbanker =
+    sendCurrency === "RUB" && String(defaultMethod?.provider || "").toLowerCase() === "bitbanker"
+
+  const bitbankerGateActive =
+    Boolean(eligibility) && eligibility?.status !== "unconfigured" && !eligibility?.isVerifiedForSbp
+
   const canAmount = Boolean(quote)
   const canRecipient = Boolean(recipientId)
+
+  const requireVerification = () => {
+    showError("Complete account verification to send money.")
+    router.push("/verification/bitbanker" as never)
+  }
 
   const addRecipient = async () => {
     if (!name.trim() || !account.trim() || !bank.trim()) return
@@ -82,32 +124,94 @@ export default function SendScreen() {
     }
   }
 
-  const submit = async () => {
-    if (!recipientId || !quote) return
-    setBusy(true)
-    const res = await fetchWithAuth("/api/transactions", {
+  const createBitbankerTransfer = async () => {
+    if (!recipientId || !quote) throw new Error("Missing recipient or quote")
+    const quoteRes = await fetchWithAuth("/api/send/quotes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         sendAmount: Number(sendAmount),
         sendCurrency,
-        receiveCurrency,
         receiveAmount: quote.receiveAmount,
+        receiveCurrency,
         recipientId,
         fulfillmentType: "bank_transfer",
       }),
     })
-    const body = await res.json().catch(() => ({}))
-    setBusy(false)
-    if (!res.ok) {
-      showError((body as { error?: string }).error || "Send failed. Try again.")
+    const quoteBody = await quoteRes.json().catch(() => ({}))
+    if (!quoteRes.ok) {
+      throw new Error((quoteBody as { error?: string }).error || "Failed to create quote")
+    }
+    const quoteId = (quoteBody as { quote?: { id: string } }).quote?.id
+    if (!quoteId) throw new Error("Invalid quote response")
+
+    const transferRes = await fetchWithAuth("/api/send/transfers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        quoteId,
+        idempotencyKey: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}`,
+      }),
+    })
+    const transferBody = await transferRes.json().catch(() => ({}))
+    if (!transferRes.ok) {
+      throw new Error((transferBody as { error?: string }).error || "Failed to create SBP invoice")
+    }
+    const tx = (transferBody as { transaction?: { transaction_id: string }; payment?: BitbankerPayment }).transaction
+    const payment = (transferBody as { payment?: BitbankerPayment }).payment
+    if (!tx?.transaction_id || !payment) throw new Error("Invalid transfer response")
+    setBitbankerPayment(payment)
+    return tx.transaction_id
+  }
+
+  const submit = async () => {
+    if (!recipientId || !quote) return
+    if (bitbankerGateActive) {
+      requireVerification()
       return
     }
-    const id = (body as { transaction?: { transaction_id: string } }).transaction?.transaction_id
-    if (id) router.replace(`/orders/${id.toLowerCase()}` as never)
+    setBusy(true)
+    try {
+      if (usesBitbanker) {
+        const id = await createBitbankerTransfer()
+        router.replace(`/orders/${id.toLowerCase()}` as never)
+        return
+      }
+      const res = await fetchWithAuth("/api/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sendAmount: Number(sendAmount),
+          sendCurrency,
+          receiveCurrency,
+          receiveAmount: quote.receiveAmount,
+          recipientId,
+          fulfillmentType: "bank_transfer",
+        }),
+      })
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        showError((body as { error?: string }).error || "Send failed. Try again.")
+        return
+      }
+      const id = (body as { transaction?: { transaction_id: string } }).transaction?.transaction_id
+      if (id) router.replace(`/orders/${id.toLowerCase()}` as never)
+    } catch (e) {
+      showError(e instanceof Error ? e.message : "Send failed")
+    } finally {
+      setBusy(false)
+    }
   }
 
   const steps = useMemo(() => ["amount", "recipient", "pay"] as const, [])
+
+  const goRecipient = () => {
+    if (bitbankerGateActive) {
+      requireVerification()
+      return
+    }
+    setStep("recipient")
+  }
 
   return (
     <HubLinePageShell
@@ -135,7 +239,7 @@ export default function SendScreen() {
             currencies={currencies}
             rates={rates}
           />
-          <PrimaryButton label="Continue" onPress={() => setStep("recipient")} disabled={!canAmount} />
+          <PrimaryButton label="Continue" onPress={goRecipient} disabled={!canAmount} />
         </View>
       ) : null}
 
@@ -184,21 +288,25 @@ export default function SendScreen() {
               <Text className="text-lg font-semibold text-gray-900">
                 {formatMoney(quote.receiveAmount, receiveCurrency)}
               </Text>
-              <Text className="mt-3 text-sm text-muted">
-                Rate 1 {sendCurrency} = {quote.rate.toFixed(4)} {receiveCurrency}
-              </Text>
-              <Text className="mt-1 text-sm text-muted">
-                {quote.feeAmount > 0
-                  ? `Exchange fee ${formatMoney(quote.feeAmount, sendCurrency)}`
-                  : "No exchange fee on this corridor"}
-              </Text>
+              {usesBitbanker ? (
+                <Text className="mt-3 text-sm text-primary">Payment: SBP (Bitbanker)</Text>
+              ) : null}
               <Text className="mt-3 text-sm text-muted">To {selected?.full_name}</Text>
               <Text className="mt-3 text-base font-semibold text-gray-900">
                 You pay {formatMoney(quote.totalAmount, sendCurrency)}
               </Text>
             </View>
           ) : null}
-          <PrimaryButton label="Send" onPress={() => void submit()} busy={busy} />
+          {bitbankerPayment?.qrData ? (
+            <View className="mb-4 items-center">
+              <Image source={{ uri: bitbankerPayment.qrData }} style={{ width: 220, height: 220 }} />
+            </View>
+          ) : null}
+          <PrimaryButton
+            label={usesBitbanker ? "Create SBP payment" : "Send"}
+            onPress={() => void submit()}
+            busy={busy}
+          />
           <View className="mt-3">
             <PrimaryButton label="Back" variant="ghost" onPress={() => setStep("recipient")} />
           </View>

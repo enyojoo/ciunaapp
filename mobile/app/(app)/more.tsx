@@ -20,7 +20,7 @@ import { useAuth } from "@/lib/auth-context"
 import { useExternalLink } from "@/lib/external-link"
 import { hasPin } from "@/lib/pin"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
-import { useKycSubmissions } from "@/lib/use-kyc-submissions"
+import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import { colors, radius, type as typeSize, ui } from "@/lib/theme"
 
 export default function MoreScreen() {
@@ -29,31 +29,24 @@ export default function MoreScreen() {
   const { openLink } = useExternalLink()
   const router = useRouter()
   const [pinSet, setPinSet] = useState(false)
-  const { data, revalidate } = useKycSubmissions(user?.id)
-  const kyc = data || []
+  const { data: eligibility, mutate } = useBitbankerEligibility(user?.id)
 
-  useFocusRevalidate(revalidate)
+  useFocusRevalidate(() => void mutate())
 
   useEffect(() => {
     if (!user) return
     void hasPin(user.id).then(setPinSet)
   }, [user])
 
-  const verified = useMemo(() => {
-    const identity = kyc.find((s) => s.type === "identity")
-    const address = kyc.find((s) => s.type === "address")
-    return identity?.status === "approved" && address?.status === "approved"
-  }, [kyc])
+  const verified = eligibility?.isVerifiedForSbp ?? false
 
   const kycLabel = useMemo(() => {
-    const identity = kyc.find((s) => s.type === "identity")
-    const address = kyc.find((s) => s.type === "address")
-    if (identity?.status === "approved" && address?.status === "approved") return t("kyc.verified")
-    if (identity?.status === "in_review" || address?.status === "in_review") return t("kyc.inReview")
-    if (identity?.status === "rejected" || address?.status === "rejected") return t("kyc.rejected")
-    if (identity || address) return t("kyc.pending")
+    if (eligibility?.isVerifiedForSbp) return t("kyc.verified")
+    if (eligibility?.status === "checking") return t("kyc.inReview")
+    if (eligibility?.status === "not_verified") return t("kyc.rejected")
+    if (eligibility?.status === "unavailable") return t("kyc.pending")
     return t("kyc.takeAction")
-  }, [kyc, t])
+  }, [eligibility, t])
 
   const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Account"
 

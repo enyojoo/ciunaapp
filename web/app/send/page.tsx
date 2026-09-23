@@ -34,6 +34,11 @@ import {
   CurrencyPickerTrigger,
 } from "@/components/send/currency-picker-sheet"
 import { SendMakePaymentStep, type SendPaymentMethodRecord } from "@/components/send/send-make-payment-step"
+import {
+  SendBitbankerPaymentStep,
+  type BitbankerPaymentPayload,
+} from "@/components/send/send-bitbanker-payment-step"
+import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import type { Currency } from "@/types"
 import {
   getAccountTypeConfigFromCurrency,
@@ -141,6 +146,9 @@ export default function UserSendPage() {
 
   const [feeType, setFeeType] = useState<string>("free")
   const [isCreatingTransaction, setIsCreatingTransaction] = useState(false)
+  const [bitbankerPayment, setBitbankerPayment] = useState<BitbankerPaymentPayload | null>(null)
+  const [bitbankerTxnId, setBitbankerTxnId] = useState("")
+  const { data: bitbankerEligibility } = useBitbankerEligibility(userProfile?.id)
 
   // Add this state near the other state declarations
   const [isAddRecipientDialogOpen, setIsAddRecipientDialogOpen] = useState(false)
@@ -511,6 +519,69 @@ export default function UserSendPage() {
     return methods.find((pm) => pm.is_default) || methods[0]
   }
 
+  const usesBitbankerPayment = useMemo(() => {
+    const dm = getDefaultPaymentMethod(sendCurrency) as { provider?: string } | undefined
+    return sendCurrency === "RUB" && String(dm?.provider || "").toLowerCase() === "bitbanker"
+  }, [sendCurrency, paymentMethods])
+
+  const bitbankerGateActive =
+    Boolean(bitbankerEligibility) &&
+    bitbankerEligibility?.status !== "unconfigured" &&
+    !bitbankerEligibility?.isVerifiedForSbp
+
+  const prepareBitbankerTransfer = async () => {
+    const fulfillment =
+      fulfillmentResolution.ok && fulfillmentResolution.fulfillment === "cash_hand" ? "cash_hand" : "bank_transfer"
+    if (fulfillment === "bank_transfer" && !selectedRecipientId) {
+      throw new Error("Recipient required")
+    }
+    if (fulfillment === "cash_hand" && !selectedDeliveryAddressId) {
+      throw new Error("Delivery address required")
+    }
+    const selectedDelivery =
+      fulfillment === "cash_hand" ? deliveryAddresses.find((d) => d.id === selectedDeliveryAddressId) : null
+
+    const quoteRes = await fetchWithAuth("/api/send/quotes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sendAmount: Number.parseFloat(sendAmount),
+        sendCurrency,
+        receiveAmount: Number.parseFloat(receiveAmount),
+        receiveCurrency,
+        recipientId: fulfillment === "cash_hand" ? null : selectedRecipientId,
+        fulfillmentType: fulfillment,
+        deliveryAddressLine: selectedDelivery?.address_line ?? null,
+        deliveryPhone: selectedDelivery?.phone ?? null,
+        deliveryAddressId: fulfillment === "cash_hand" ? selectedDeliveryAddressId || null : null,
+      }),
+    })
+    if (!quoteRes.ok) {
+      const errBody = await quoteRes.json().catch(() => ({}))
+      throw new Error((errBody as { error?: string }).error || "Failed to create quote")
+    }
+    const { quote } = (await quoteRes.json()) as { quote: { id: string } }
+    const transferRes = await fetchWithAuth("/api/send/transfers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        quoteId: quote.id,
+        idempotencyKey: crypto.randomUUID(),
+      }),
+    })
+    if (!transferRes.ok) {
+      const errBody = await transferRes.json().catch(() => ({}))
+      throw new Error((errBody as { error?: string }).error || "Failed to create SBP invoice")
+    }
+    const body = (await transferRes.json()) as {
+      transaction: { transaction_id: string }
+      payment: BitbankerPaymentPayload
+    }
+    setBitbankerTxnId(body.transaction.transaction_id)
+    setTransactionId(body.transaction.transaction_id)
+    setBitbankerPayment(body.payment)
+  }
+
   // Update the useEffect to calculate fee and conversion
   useEffect(() => {
     if (!sendCurrency || !receiveCurrency) return
@@ -648,11 +719,34 @@ export default function UserSendPage() {
       if (currentStep === 1 && !fulfillmentResolution.ok) {
         return
       }
+      if (bitbankerGateActive) {
+        setError(t("send.verificationRequired", { defaultValue: "Complete account verification to send money." }))
+        router.push("/more/verification")
+        return
+      }
       if (currentStep === 2 && fulfillmentResolution.ok && fulfillmentResolution.fulfillment === "cash_hand") {
         if (!selectedDeliveryAddressId) return
       }
+      if (currentStep === 2 && usesBitbankerPayment) {
+        try {
+          setIsCreatingTransaction(true)
+          setError(null)
+          await prepareBitbankerTransfer()
+          setCurrentStep(3)
+        } catch (err) {
+          console.error(err)
+          setError(err instanceof Error ? err.message : t("send.failedCreateTxn"))
+        } finally {
+          setIsCreatingTransaction(false)
+        }
+        return
+      }
       setCurrentStep(currentStep + 1)
     } else if (currentStep === 3) {
+      if (usesBitbankerPayment && bitbankerTxnId) {
+        router.replace(`/hub/orders/${bitbankerTxnId.toLowerCase()}`)
+        return
+      }
       // Create transaction in database
       if (!userProfile?.id) return
 
@@ -722,6 +816,10 @@ export default function UserSendPage() {
 
   const handleBack = () => {
     if (currentStep > 1) {
+      if (currentStep === 3) {
+        setBitbankerPayment(null)
+        setBitbankerTxnId("")
+      }
       setCurrentStep(currentStep - 1)
     }
   }
@@ -1756,13 +1854,14 @@ export default function UserSendPage() {
                       <Button
                         onClick={handleContinue}
                         disabled={
-                          fulfillmentResolution.ok && fulfillmentResolution.fulfillment === "cash_hand"
+                          isCreatingTransaction ||
+                          (fulfillmentResolution.ok && fulfillmentResolution.fulfillment === "cash_hand"
                             ? !selectedDeliveryAddressId
-                            : !selectedRecipientId
+                            : !selectedRecipientId)
                         }
                         className="min-h-12 flex-1 rounded-xl bg-primary text-base font-semibold hover:bg-primary/90"
                       >
-                        {t("send.continue")}
+                        {isCreatingTransaction ? t("send.sending") : t("send.continue")}
                       </Button>
                     </div>
                   </CardContent>
@@ -1770,7 +1869,16 @@ export default function UserSendPage() {
               )}
 
               {/* Step 3: Payment Instructions */}
-              {currentStep === 3 && (
+              {currentStep === 3 && usesBitbankerPayment && bitbankerPayment && bitbankerTxnId ? (
+                <SendBitbankerPaymentStep
+                  transactionId={bitbankerTxnId}
+                  totalRub={bitbankerPayment.amount}
+                  payment={bitbankerPayment}
+                  onBack={handleBack}
+                  onDone={() => router.replace(`/hub/orders/${bitbankerTxnId.toLowerCase()}`)}
+                />
+              ) : null}
+              {currentStep === 3 && !(usesBitbankerPayment && bitbankerPayment && bitbankerTxnId) && (
                 <SendMakePaymentStep
                   sendCurrency={sendCurrency}
                   sendCurrencyData={sendCurrencyData ?? null}

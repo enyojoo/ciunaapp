@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import * as Clipboard from "expo-clipboard"
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Image, Linking, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -107,6 +107,7 @@ export default function OrderScreen() {
   const createdMs = tx.created_at ? new Date(tx.created_at).getTime() : 0
   const overdue = (tone === "pending" || tone === "processing") && createdMs > 0 && Date.now() - createdMs > 3600_000
   const canPayNow = tx.payment_provider === "yookassa" && tone === "pending"
+  const showBitbankerPay = tx.payment_provider === "bitbanker" && tone === "pending" && !isHub && !referral
 
   const statusMessage = (() => {
     const key = (suffix: string) => `txDetail.${suffix}`
@@ -237,6 +238,8 @@ export default function OrderScreen() {
         </View>
       ) : null}
 
+      {showBitbankerPay ? <MobileBitbankerPayCard transactionId={tx.transaction_id} totalRub={tx.total_amount} /> : null}
+
       <View style={styles.actions}>
         {!referral && !isHub ? (
           <View style={styles.actionHalf}>
@@ -352,6 +355,9 @@ export default function OrderScreen() {
               />
             ) : null}
             <SummaryRow label={t("txDetail.totalPaid")} value={formatMoney(tx.total_amount, sendCur)} bold border />
+            {tx.payment_provider === "bitbanker" ? (
+              <SummaryRow label="Payment" value="SBP (Bitbanker)" />
+            ) : null}
           </>
         )}
 
@@ -462,6 +468,55 @@ function SummaryRow({
   )
 }
 
+function MobileBitbankerPayCard({ transactionId, totalRub }: { transactionId: string; totalRub: number }) {
+  const [payment, setPayment] = useState<{ qrData: string | null; link: string | null; amount: number | null } | null>(
+    null,
+  )
+
+  useEffect(() => {
+    let cancelled = false
+    const load = async () => {
+      const res = await fetchWithAuth(
+        `/api/send/transfers/${encodeURIComponent(transactionId)}/payment-status`,
+      )
+      if (!res.ok || cancelled) return
+      const body = (await res.json()) as {
+        payment?: { qrData?: string | null; link?: string | null; amount?: number | null }
+      }
+      if (body.payment) {
+        setPayment({
+          qrData: body.payment.qrData ?? null,
+          link: body.payment.link ?? null,
+          amount: body.payment.amount ?? null,
+        })
+      }
+    }
+    void load()
+    const id = setInterval(() => void load(), 8000)
+    return () => {
+      cancelled = true
+      clearInterval(id)
+    }
+  }, [transactionId])
+
+  const amount = payment?.amount ?? totalRub
+
+  return (
+    <View style={styles.bitbankerCard}>
+      <Text style={styles.bitbankerTitle}>Pay with SBP</Text>
+      <Text style={styles.bitbankerAmount}>{formatMoney(amount, "RUB")}</Text>
+      {payment?.qrData ? (
+        <Image source={{ uri: payment.qrData }} style={styles.bitbankerQr} />
+      ) : null}
+      {payment?.link ? (
+        <Pressable onPress={() => void Linking.openURL(payment.link!)} style={styles.bitbankerLink}>
+          <Text style={styles.bitbankerLinkText}>Open payment link</Text>
+        </Pressable>
+      ) : null}
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
   center: { paddingVertical: 80, alignItems: "center" },
   eyebrow: { marginTop: 4, fontSize: 12, fontWeight: "700", color: colors.muted, textTransform: "uppercase", textAlign: "center" },
@@ -517,6 +572,20 @@ const styles = StyleSheet.create({
   receiptTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   receiptSub: { marginTop: 2, fontSize: 12, color: colors.muted },
   payNowWrap: { marginTop: 16 },
+  bitbankerCard: {
+    marginTop: 16,
+    padding: 16,
+    borderRadius: radius.row,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.paper,
+    alignItems: "center",
+  },
+  bitbankerTitle: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
+  bitbankerAmount: { marginTop: 8, fontSize: 22, fontWeight: "700", color: colors.text },
+  bitbankerQr: { marginTop: 12, width: 220, height: 220, borderRadius: 8 },
+  bitbankerLink: { marginTop: 12 },
+  bitbankerLinkText: { color: colors.primaryDeep, fontWeight: "600" },
   actions: { flexDirection: "row", flexWrap: "wrap", gap: 12, marginTop: 16 },
   actionHalf: { flexGrow: 1, flexBasis: "45%" },
   summaryCard: {

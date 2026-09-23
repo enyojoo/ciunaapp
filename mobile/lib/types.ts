@@ -89,7 +89,7 @@ export type CombinedTransaction = {
   hub_order_items?: HubOrderItem[]
   hub_fee_amount?: number | null
   hub_product_id?: string | null
-  payment_provider?: "manual" | "yookassa" | null
+  payment_provider?: "manual" | "yookassa" | "bitbanker" | null
   gateway_status?: string | null
   gateway_confirmation_url?: string | null
   send_amount?: number
