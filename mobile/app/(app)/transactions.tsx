@@ -121,7 +121,7 @@ export default function TransactionsScreen() {
 
   return (
     <Screen>
-      <Text style={styles.title}>{t("transactions.title", { defaultValue: "Transactions" })}</Text>
+      <Text style={styles.title}>{t("transactions.title", { defaultValue: "Transfer" })}</Text>
 
       <View style={styles.summaryRow}>
         <View style={styles.summaryCard}>

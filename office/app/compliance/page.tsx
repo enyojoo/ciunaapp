@@ -464,6 +464,45 @@ export default function OfficeCompliancePage() {
                 </div>
 
                 <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold mb-4">Send identity (Bitbanker)</h3>
+                  {selectedRow.bitbanker?.formSnapshot ? (
+                    <div className="bg-gradient-to-br from-orange-50/80 to-white border border-orange-100 rounded-xl p-4 shadow-sm space-y-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge
+                          className={
+                            selectedRow.bitbanker.isVerifiedForSbp
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
+                          }
+                        >
+                          {selectedRow.bitbanker.isVerifiedForSbp ? "Verified for Send" : "Not verified for Send"}
+                        </Badge>
+                        {selectedRow.bitbanker.submittedAt ? (
+                          <span className="text-xs text-gray-500">
+                            Submitted {new Date(selectedRow.bitbanker.submittedAt).toLocaleString()}
+                          </span>
+                        ) : null}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                        {Object.entries(selectedRow.bitbanker.formSnapshot).map(([key, value]) => (
+                          <div key={key}>
+                            <span className="text-gray-500 text-xs capitalize">{key.replace(/([A-Z])/g, " $1")}:</span>{" "}
+                            <span className="font-medium break-all">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                      {selectedRow.bitbanker.clientId ? (
+                        <p className="text-xs text-gray-500">Client ID: {selectedRow.bitbanker.clientId}</p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center text-sm text-gray-500">
+                      No Bitbanker verification form on file
+                    </div>
+                  )}
+                </div>
+
+                <div className="border-t pt-6">
                   <h3 className="text-lg font-semibold mb-4">Identity</h3>
                   {selectedRow.identity ? (
                     <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-4 shadow-sm space-y-3">

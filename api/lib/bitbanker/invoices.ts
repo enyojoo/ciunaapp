@@ -51,7 +51,35 @@ export async function getInvoice(params: {
       id: params.id,
       client_id: params.clientId,
     },
-    signBody: false,
+    signQuery: true,
+  })
+}
+
+/** SBP RUB collect → USDT convert (Policy A: amount = invoice base B). */
+export async function createBitbankerSendInvoice(
+  input: {
+    partnerClientExternalId: string
+    invoiceBaseB: number
+    description?: string
+  },
+  idempotencyKey: string,
+): Promise<CreateInvoiceResponse> {
+  return bitbankerRequest<CreateInvoiceResponse>({
+    method: "POST",
+    path: "/api/v2/invoices",
+    body: {
+      partner_client_external_id: input.partnerClientExternalId,
+      currency: "RUBR",
+      amount: input.invoiceBaseB,
+      description: input.description,
+      sbp_payment: true,
+      is_convert_payments: true,
+      take_currency: "USDT",
+      payment_currencies: ["RUBR"],
+      auto_withdraw: false,
+      crypto_payment: false,
+    },
+    idempotencyKey,
   })
 }
 

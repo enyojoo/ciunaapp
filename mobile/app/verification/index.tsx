@@ -1,29 +1,59 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { ChevronRight, House, IdCard } from "lucide-react-native"
+import { Clock, House, IdCard, ShieldCheck } from "lucide-react-native"
 import { ScreenScroll } from "@/components/screen"
-import { useAuth } from "@/lib/auth-context"
+import { GroupCard, Row } from "@/components/row"
+import { PrimaryButton } from "@/components/primary-button"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
-import { useKycSubmissions } from "@/lib/use-kyc-submissions"
+import { useAuth } from "@/lib/auth-context"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
-import { ShieldCheck } from "lucide-react-native"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
-function StatusBadge({ status, t }: { status?: string; t: (key: string) => string }) {
-  const label = !status
-    ? t("verification.notStarted")
-    : status === "approved"
-      ? t("verification.badgeDone")
-      : status === "in_review"
-        ? t("verification.badgeInReview")
-        : status === "rejected"
-          ? t("verification.badgeRejected")
-          : t("verification.badgePending")
-  const tone = !status ? "neutral" : status === "approved" ? "success" : status === "rejected" ? "danger" : "pending"
+type HubStatus = "verified" | "checking" | "needed"
+
+function StatusHero({ status, t }: { status: HubStatus; t: (key: string) => string }) {
+  const verified = status === "verified"
+  const checking = status === "checking"
+
+  const icon = verified ? (
+    <ShieldCheck size={28} color={colors.refer} strokeWidth={2.2} />
+  ) : checking ? (
+    <Clock size={28} color="#B45309" strokeWidth={2.2} />
+  ) : (
+    <ShieldCheck size={28} color={colors.primaryDeep} strokeWidth={2.2} />
+  )
+
+  const titleKey = verified
+    ? "verification.hubStatusVerifiedTitle"
+    : checking
+      ? "verification.hubStatusPendingTitle"
+      : "verification.hubStatusNeededTitle"
+  const bodyKey = verified
+    ? "verification.hubStatusVerifiedBody"
+    : checking
+      ? "verification.hubStatusPendingBody"
+      : "verification.hubStatusNeededBody"
+
   return (
-    <View style={[styles.badge, styles[`badge_${tone}` as const]]}>
-      <Text style={[styles.badgeText, styles[`badgeText_${tone}` as const]]}>{label}</Text>
+    <View
+      style={[
+        styles.statusCard,
+        verified && styles.statusCardVerified,
+        checking && styles.statusCardPending,
+      ]}
+    >
+      <View
+        style={[
+          styles.statusIcon,
+          verified && styles.statusIconVerified,
+          checking && styles.statusIconPending,
+        ]}
+      >
+        {icon}
+      </View>
+      <Text style={styles.statusTitle}>{t(titleKey)}</Text>
+      <Text style={styles.statusBody}>{t(bodyKey)}</Text>
     </View>
   )
 }
@@ -32,131 +62,107 @@ export default function VerificationHubScreen() {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { user } = useAuth()
-  const { data, loading, revalidate } = useKycSubmissions(user?.id)
-  const { data: bitbankerEligibility } = useBitbankerEligibility(user?.id)
-  const submissions = data || []
+  const { data: eligibility, revalidate } = useBitbankerEligibility(user?.id)
 
-  useFocusRevalidate(revalidate)
+  useFocusRevalidate(() => void revalidate())
 
-  const identity = submissions.find((s) => s.type === "identity")
-  const address = submissions.find((s) => s.type === "address")
-  const bothApproved = identity?.status === "approved" && address?.status === "approved"
-
-  if (loading) {
-    return (
-      <ScreenScroll edges={["left", "right"]}>
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
-        </View>
-      </ScreenScroll>
-    )
-  }
+  const verified = eligibility?.isVerifiedForSbp
+  const checking = eligibility?.status === "checking" && !verified
+  const status: HubStatus = verified ? "verified" : checking ? "checking" : "needed"
 
   return (
     <ScreenScroll edges={["left", "right"]}>
-      <Text style={styles.subtitle}>{t("verification.hubSubtitle")}</Text>
+      <StatusHero status={status} t={t} />
 
-      <View style={styles.infoSend}>
-        <Text style={styles.infoSendText}>{t("verification.sendGateNotice")}</Text>
-      </View>
-
-      {!bothApproved ? (
-        <View style={styles.info}>
-          <Text style={styles.infoText}>{t("verification.infoKyc")}</Text>
+      {status === "needed" ? (
+        <View style={styles.primaryAction}>
+          <PrimaryButton
+            label={t("verification.hubContinueCta")}
+            onPress={() => router.push("/verification/bitbanker")}
+          />
         </View>
       ) : null}
 
-      <Pressable onPress={() => router.push("/verification/bitbanker")} style={styles.card}>
-        <View style={styles.cardIcon}>
-          <ShieldCheck size={20} color={colors.primary} strokeWidth={2} />
-        </View>
-        <Text style={styles.cardTitle}>{t("verification.sbpCardTitle")}</Text>
-        <Text style={styles.cardDesc}>{t("verification.sbpCardDesc")}</Text>
-        <View style={styles.cardFoot}>
-          <StatusBadge
-            status={bitbankerEligibility?.isVerifiedForSbp ? "approved" : bitbankerEligibility?.status === "checking" ? "in_review" : undefined}
-            t={t}
+      {status === "verified" ? (
+        <View style={styles.primaryAction}>
+          <PrimaryButton
+            label={t("verification.bitbanker.goToSend")}
+            onPress={() => router.replace("/send" as never)}
           />
-          <ChevronRight size={18} color={colors.muted} />
         </View>
-      </Pressable>
+      ) : null}
 
-      <Pressable onPress={() => router.push("/verification/identity")} style={styles.card}>
-        <View style={styles.cardIcon}>
-          <IdCard size={20} color={colors.primary} strokeWidth={2} />
-        </View>
-        <Text style={styles.cardTitle}>{t("verification.identityTitle")}</Text>
-        <Text style={styles.cardDesc}>{t("verification.identityCardDesc")}</Text>
-        <View style={styles.cardFoot}>
-          <StatusBadge status={identity?.status} t={t} />
-          <ChevronRight size={18} color={colors.muted} />
-        </View>
-      </Pressable>
-
-      <Pressable onPress={() => router.push("/verification/address")} style={styles.card}>
-        <View style={styles.cardIcon}>
-          <House size={20} color={colors.primary} strokeWidth={2} />
-        </View>
-        <Text style={styles.cardTitle}>{t("verification.addressInformation")}</Text>
-        <Text style={styles.cardDesc}>{t("verification.addressCardDesc")}</Text>
-        <View style={styles.cardFoot}>
-          <StatusBadge status={address?.status} t={t} />
-          <ChevronRight size={18} color={colors.muted} />
-        </View>
-      </Pressable>
+      <Text style={styles.sectionLabel}>{t("verification.optionalSection")}</Text>
+      <GroupCard>
+        <Row
+          icon={<IdCard size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          label={t("verification.identityTitle")}
+          onPress={() => router.push("/verification/identity")}
+        />
+        <Row
+          icon={<House size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          label={t("verification.addressInformation")}
+          onPress={() => router.push("/verification/address")}
+          last
+        />
+      </GroupCard>
     </ScreenScroll>
   )
 }
 
 const styles = StyleSheet.create({
-  center: { paddingVertical: 80, alignItems: "center" },
-  subtitle: { marginBottom: 16, fontSize: typeSize.body, lineHeight: 22, color: colors.muted },
-  info: {
+  statusCard: {
+    marginTop: 4,
     marginBottom: 20,
-    borderRadius: radius.row,
-    borderWidth: 1,
-    borderColor: "#BFDBFE",
-    backgroundColor: "#EFF6FF",
-    padding: 14,
-  },
-  infoText: { fontSize: typeSize.meta, lineHeight: 19, color: "#1D4ED8" },
-  infoSend: {
-    marginBottom: 16,
-    borderRadius: radius.row,
-    borderWidth: 1,
-    borderColor: "#FDE68A",
-    backgroundColor: "#FFFBEB",
-    padding: 14,
-  },
-  infoSendText: { fontSize: typeSize.meta, lineHeight: 19, color: "#92400E" },
-  card: {
-    marginBottom: 16,
+    alignItems: "center",
     borderRadius: radius.card,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    padding: 18,
+    paddingHorizontal: 20,
+    paddingVertical: 24,
   },
-  cardIcon: {
-    width: 44,
-    height: 44,
-    marginBottom: 12,
-    borderRadius: 22,
+  statusCardVerified: {
+    borderColor: colors.referBorder,
+    backgroundColor: colors.referBg,
+  },
+  statusCardPending: {
+    borderColor: "#FDE68A",
+    backgroundColor: "#FFFBEB",
+  },
+  statusIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: colors.heroBody,
+    marginBottom: 14,
   },
-  cardTitle: { marginBottom: 4, fontSize: 16, fontWeight: "600", color: colors.text },
-  cardDesc: { fontSize: typeSize.meta, lineHeight: 19, color: colors.muted },
-  cardFoot: { marginTop: 14, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-  badge: { borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 4 },
-  badgeText: { fontSize: 12, fontWeight: "600" },
-  badge_neutral: { backgroundColor: "#F3F4F6" },
-  badgeText_neutral: { color: "#374151" },
-  badge_success: { backgroundColor: "#DCFCE7" },
-  badgeText_success: { color: "#15803D" },
-  badge_pending: { backgroundColor: "#FEF3C7" },
-  badgeText_pending: { color: "#A16207" },
-  badge_danger: { backgroundColor: "#FEE2E2" },
-  badgeText_danger: { color: "#B91C1C" },
+  statusIconVerified: { backgroundColor: "#D1FAE5" },
+  statusIconPending: { backgroundColor: "#FEF3C7" },
+  statusTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: colors.text,
+    textAlign: "center",
+    letterSpacing: -0.2,
+  },
+  statusBody: {
+    marginTop: 8,
+    fontSize: typeSize.meta,
+    lineHeight: 20,
+    color: colors.muted,
+    textAlign: "center",
+    maxWidth: 300,
+  },
+  primaryAction: { marginBottom: 28 },
+  sectionLabel: {
+    marginBottom: 8,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 0.35,
+    textTransform: "uppercase",
+    color: colors.muted,
+  },
 })

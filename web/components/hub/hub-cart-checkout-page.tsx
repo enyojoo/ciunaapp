@@ -18,6 +18,7 @@ import {
   CurrencyPickerPopover,
   CurrencyPickerSheet,
   CurrencyPickerTrigger,
+  isCurrencyPickerEnabled,
 } from "@/components/send/currency-picker-sheet"
 import { SendMakePaymentStep, type SendPaymentMethodRecord } from "@/components/send/send-make-payment-step"
 import { useHubCartByLine } from "@/lib/hub-cart-client"
@@ -434,15 +435,20 @@ export function HubCartCheckoutPage({ lineSlug }: { lineSlug: "food" | "mart" })
                               selectedCurrency={sendCurrency}
                               onOpen={() => setSendDropdownOpen(true)}
                               currencies={currencies}
-                            />
-                            <CurrencyPickerSheet
-                              open={sendDropdownOpen}
-                              onOpenChange={setSendDropdownOpen}
-                              selectedCurrency={sendCurrency}
-                              onSelect={setSendCurrency}
-                              currencies={currencies}
                               type="send"
+                              otherCurrency={receiveCurrency}
                             />
+                            {isCurrencyPickerEnabled(currencies, "send", receiveCurrency) ? (
+                              <CurrencyPickerSheet
+                                open={sendDropdownOpen}
+                                onOpenChange={setSendDropdownOpen}
+                                selectedCurrency={sendCurrency}
+                                onSelect={setSendCurrency}
+                                currencies={currencies}
+                                type="send"
+                                otherCurrency={receiveCurrency}
+                              />
+                            ) : null}
                           </div>
                           <div className="hidden md:block shrink-0">
                             <CurrencyPickerPopover
@@ -450,6 +456,7 @@ export function HubCartCheckoutPage({ lineSlug }: { lineSlug: "food" | "mart" })
                               onSelect={setSendCurrency}
                               currencies={currencies}
                               type="send"
+                              otherCurrency={receiveCurrency}
                             />
                           </div>
                         </div>

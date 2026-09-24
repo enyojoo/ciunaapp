@@ -25,7 +25,21 @@ export async function GET(request: NextRequest) {
 
     const status = request.nextUrl.searchParams.get("status")
     const submissions = await kycService.getAllSubmissions(status || undefined)
-    return NextResponse.json({ submissions })
+
+    const { data: bitbankerRefs, error: bitbankerError } = await serverClient
+      .from("bitbanker_client_refs")
+      .select(
+        "user_id, client_id, environment, is_verified_for_sbp, last_form_snapshot, last_form_submitted_at, updated_at",
+      )
+
+    if (bitbankerError) {
+      console.error("Error fetching Bitbanker compliance refs:", bitbankerError)
+    }
+
+    return NextResponse.json({
+      submissions,
+      bitbanker: bitbankerRefs ?? [],
+    })
   } catch (error: any) {
     console.error("Error fetching KYC submissions:", error)
     return NextResponse.json(

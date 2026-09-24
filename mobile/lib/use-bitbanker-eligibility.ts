@@ -1,5 +1,5 @@
-import useSWR from "swr"
 import { fetchWithAuth } from "./api"
+import { useCachedQuery } from "./use-cached-query"
 
 export type BitbankerEligibility = {
   status: string
@@ -7,7 +7,9 @@ export type BitbankerEligibility = {
   clientId: string | null
 }
 
-async function load(): Promise<BitbankerEligibility> {
+const TTL_MS = 2 * 60_000
+
+async function fetchEligibility(): Promise<BitbankerEligibility> {
   const res = await fetchWithAuth("/api/bitbanker/eligibility")
   if (!res.ok) {
     if (res.status === 503) {
@@ -20,5 +22,5 @@ async function load(): Promise<BitbankerEligibility> {
 
 export function useBitbankerEligibility(userId: string | undefined) {
   const key = userId ? `bitbanker-eligibility-${userId}` : null
-  return useSWR(key, load, { revalidateOnFocus: true })
+  return useCachedQuery<BitbankerEligibility>(key, fetchEligibility, { ttlMs: TTL_MS })
 }

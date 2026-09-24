@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { SvgXml } from "react-native-svg"
 import { ChevronDown } from "lucide-react-native"
 import { accountFieldLabel, accountFieldPlaceholder } from "@/lib/account-field-i18n"
 import { Field } from "@/components/field"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
+import { CurrencyFlag } from "@/components/currency-flag"
 import { SheetPicker } from "@/components/sheet-picker"
 import { useToast } from "@/components/toast-provider"
 import { fetchWithAuth } from "@/lib/api"
@@ -201,7 +201,7 @@ export default function RecipientFormScreen() {
         style={[styles.selectBox, isEdit && styles.selectBoxDisabled]}
       >
         <View style={styles.currencyValue}>
-          {selectedCurrency?.flag_svg ? <SvgXml xml={selectedCurrency.flag_svg} width={22} height={16} /> : null}
+          <CurrencyFlag code={form.currency} flagSvg={selectedCurrency?.flag_svg} size={20} />
           <Text style={styles.selectText}>
             {selectedCurrency ? `${selectedCurrency.code} — ${selectedCurrency.name || ""}` : form.currency}
           </Text>
@@ -409,7 +409,7 @@ export default function RecipientFormScreen() {
         items={currencies}
         keyExtractor={(c) => c.code}
         labelExtractor={(c) => `${c.code} — ${c.name || ""}`}
-        leadingExtractor={(c) => (c.flag_svg ? <SvgXml xml={c.flag_svg} width={24} height={16} /> : null)}
+        leadingExtractor={(c) => <CurrencyFlag code={c.code} flagSvg={c.flag_svg} size={20} />}
         selectedId={form.currency}
         onSelect={(c) => set({ currency: c.code })}
         onClose={() => setCurrencyOpen(false)}

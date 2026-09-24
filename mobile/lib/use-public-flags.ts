@@ -1,8 +1,10 @@
+import { useEffect } from "react"
+import { subscribeOfficeConfigRevalidate } from "./config-revalidate-bus"
 import { fetchWithAuth } from "./api"
 import { useCachedQuery } from "./use-cached-query"
 
-const KEY = "ciuna_platform_public_flags_v1"
-const TTL_MS = 15 * 60_000
+const KEY = "ciuna_platform_public_flags_v2"
+const TTL_MS = 60_000
 
 type PublicFlags = { yookassaEnabled: boolean }
 
@@ -15,5 +17,10 @@ async function fetchPublicFlags(): Promise<PublicFlags> {
 
 /** Platform feature flags (e.g. whether YooKassa online payment is enabled) — rarely changes. */
 export function usePublicFlags() {
-  return useCachedQuery<PublicFlags>(KEY, fetchPublicFlags, { ttlMs: TTL_MS })
+  const query = useCachedQuery<PublicFlags>(KEY, fetchPublicFlags, { ttlMs: TTL_MS })
+  useEffect(
+    () => subscribeOfficeConfigRevalidate("publicFlags", () => void query.revalidate()),
+    [query.revalidate],
+  )
+  return query
 }

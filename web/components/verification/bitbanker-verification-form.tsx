@@ -1,12 +1,21 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { fetchWithAuth } from "@/lib/fetch-with-auth"
+import { countryService, type Country } from "@/lib/country-service"
 import {
   isRussianPassportCountry,
   validateBitbankerVerificationInput,
@@ -49,8 +58,22 @@ export function BitbankerVerificationForm({ defaultEmail = "", onSubmitted }: Pr
     Partial<Record<BitbankerVerificationField, BitbankerVerificationErrorCode>>
   >({})
   const [form, setForm] = useState<BitbankerVerificationFormInput>(() => emptyForm(defaultEmail))
+  const [countries, setCountries] = useState<Country[]>([])
+  const [countrySearch, setCountrySearch] = useState("")
+
+  useEffect(() => {
+    void countryService.getAll().then(setCountries)
+  }, [])
 
   const isForeign = useMemo(() => !isRussianPassportCountry(form.passportCountry), [form.passportCountry])
+
+  const filteredCountries = useMemo(() => {
+    const q = countrySearch.trim().toLowerCase()
+    if (!q) return countries
+    return countries.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q),
+    )
+  }, [countries, countrySearch])
 
   const err = (field: BitbankerVerificationField) => {
     const code = fieldErrors[field]
@@ -104,16 +127,38 @@ export function BitbankerVerificationForm({ defaultEmail = "", onSubmitted }: Pr
 
   return (
     <div className="space-y-4 max-w-lg">
-      <div>
-        <Label htmlFor="passportCountry">{t("verification.bitbanker.passportCountry")}</Label>
-        <Input
-          id="passportCountry"
-          value={form.passportCountry}
-          onChange={(e) => set("passportCountry", e.target.value.toUpperCase())}
-          className={cn(err("passportCountry") && "border-red-500")}
-          autoComplete="off"
-        />
-        <p className="mt-1 text-xs text-muted-foreground">{t("verification.bitbanker.passportCountryHint")}</p>
+      <div className="space-y-2">
+        <Label>{t("verification.labelCountry")}</Label>
+        <Select value={form.passportCountry} onValueChange={(code) => set("passportCountry", code)}>
+          <SelectTrigger className={cn(err("passportCountry") && "border-red-500")}>
+            <SelectValue placeholder={t("verification.placeholderSelectCountry")} />
+          </SelectTrigger>
+          <SelectContent>
+            <div className="border-b p-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder={t("verification.searchCountries")}
+                  value={countrySearch}
+                  onChange={(e) => setCountrySearch(e.target.value)}
+                  className="h-9 pl-9"
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => e.stopPropagation()}
+                />
+              </div>
+            </div>
+            <div className="max-h-[300px] overflow-y-auto">
+              {filteredCountries.map((country) => (
+                <SelectItem key={country.code} value={country.code}>
+                  <span className="flex items-center gap-2">
+                    <span className="text-lg">{country.flag_emoji}</span>
+                    <span>{country.name}</span>
+                  </span>
+                </SelectItem>
+              ))}
+            </div>
+          </SelectContent>
+        </Select>
         {err("passportCountry") ? <p className="text-sm text-red-600">{err("passportCountry")}</p> : null}
       </div>
 

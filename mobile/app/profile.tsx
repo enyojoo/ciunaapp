@@ -3,12 +3,12 @@ import * as ImagePicker from "expo-image-picker"
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { Camera, Image as ImageIcon, Pencil, Trash2 } from "lucide-react-native"
-import { SvgXml } from "react-native-svg"
 import { Avatar } from "@/components/avatar"
 import { Field } from "@/components/field"
 import { GroupCard } from "@/components/row"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
+import { CurrencyFlag } from "@/components/currency-flag"
 import { SheetPicker } from "@/components/sheet-picker"
 import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
@@ -223,9 +223,11 @@ export default function ProfileScreen() {
                 style={styles.currencyBox}
                 disabled={saving}
               >
-                {selectedCurrency?.flag_svg ? (
-                  <SvgXml xml={selectedCurrency.flag_svg} width={22} height={16} />
-                ) : null}
+                <CurrencyFlag
+                  code={selectedCurrency?.code || baseCurrency}
+                  flagSvg={selectedCurrency?.flag_svg}
+                  size={20}
+                />
                 <Text style={styles.currencyText}>{selectedCurrency?.code || baseCurrency}</Text>
               </Pressable>
               <Text style={styles.hint}>{t("profile.baseCurrencyHint")}</Text>
@@ -240,9 +242,11 @@ export default function ProfileScreen() {
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>{t("profile.baseCurrency")}</Text>
               <View style={styles.currencyDisplay}>
-                {selectedCurrency?.flag_svg ? (
-                  <SvgXml xml={selectedCurrency.flag_svg} width={20} height={14} />
-                ) : null}
+                <CurrencyFlag
+                  code={selectedCurrency?.code || baseCurrency}
+                  flagSvg={selectedCurrency?.flag_svg}
+                  size={20}
+                />
                 <Text style={styles.infoValue}>{selectedCurrency?.code || baseCurrency}</Text>
               </View>
             </View>
@@ -271,7 +275,7 @@ export default function ProfileScreen() {
         items={currencies}
         keyExtractor={(c) => c.code}
         labelExtractor={(c) => `${c.code}${c.name ? ` — ${c.name}` : ""}`}
-        leadingExtractor={(c) => (c.flag_svg ? <SvgXml xml={c.flag_svg} width={24} height={16} /> : null)}
+        leadingExtractor={(c) => <CurrencyFlag code={c.code} flagSvg={c.flag_svg} size={20} />}
         selectedId={baseCurrency}
         onSelect={(c) => setBaseCurrency(c.code)}
         onClose={() => setCurrencyPickerOpen(false)}
@@ -283,9 +287,10 @@ export default function ProfileScreen() {
         items={photoActions}
         keyExtractor={(a) => a.id}
         labelExtractor={(a) => a.label}
-        leadingExtractor={(a) => (
-          <a.icon size={18} color={a.destructive ? colors.danger : colors.text} strokeWidth={2} />
-        )}
+        leadingExtractor={(action) => {
+          const Icon = action.icon
+          return <Icon size={18} color={action.destructive ? colors.danger : colors.text} strokeWidth={2} />
+        }}
         onSelect={handlePhotoAction}
         onClose={() => setPhotoSheetOpen(false)}
       />

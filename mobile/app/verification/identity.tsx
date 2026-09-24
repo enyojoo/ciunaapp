@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import * as ImagePicker from "expo-image-picker"
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { Camera, ChevronDown, Images } from "lucide-react-native"
+import { ChevronDown } from "lucide-react-native"
+import { KycDocumentUploadFrame } from "@/components/kyc-document-upload-frame"
+import type { KycPickedDocument } from "@/lib/kyc-document-file"
 import { CountryPicker } from "@/components/country-picker"
 import { FlagIcon } from "@/components/flag-icon"
 import { PrimaryButton } from "@/components/primary-button"
@@ -36,7 +37,7 @@ export default function IdentityVerificationScreen() {
   const [idTypeOpen, setIdTypeOpen] = useState(false)
   const [country, setCountry] = useState<Country | null>(null)
   const [idType, setIdType] = useState<string | null>(null)
-  const [image, setImage] = useState<{ uri: string; name: string; type: string } | null>(null)
+  const [image, setImage] = useState<KycPickedDocument | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
@@ -50,21 +51,6 @@ export default function IdentityVerificationScreen() {
 
   const idTypes = country ? getIdTypesForCountry(country.code) : []
   const locked = submission?.status === "in_review" || submission?.status === "approved"
-
-  const pick = async (fromCamera: boolean) => {
-    const perm = fromCamera
-      ? await ImagePicker.requestCameraPermissionsAsync()
-      : await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (!perm.granted) return
-    const result = fromCamera
-      ? await ImagePicker.launchCameraAsync({ mediaTypes: ["images"], quality: 0.8 })
-      : await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], quality: 0.8 })
-    if (result.canceled) return
-    const asset = result.assets[0]
-    if (!asset) return
-    const name = asset.fileName || `identity_${Date.now()}.jpg`
-    setImage({ uri: asset.uri, name, type: asset.mimeType || "image/jpeg" })
-  }
 
   const submit = async () => {
     if (!country || !idType || !image) {
@@ -152,24 +138,11 @@ export default function IdentityVerificationScreen() {
         <ChevronDown size={18} color={colors.muted} />
       </Pressable>
 
-      <Text style={styles.label}>{t("verification.labelIdDocument")}</Text>
-      {image ? (
-        <Pressable onPress={() => void pick(false)}>
-          <Image source={{ uri: image.uri }} style={styles.preview} resizeMode="cover" />
-          <Text style={styles.retake}>{t("verification.clickToTryAgain")}</Text>
-        </Pressable>
-      ) : (
-        <View style={styles.uploadRow}>
-          <Pressable style={styles.uploadBtn} onPress={() => void pick(true)}>
-            <Camera size={20} color={colors.primary} strokeWidth={2} />
-            <Text style={styles.uploadBtnText}>{t("verification.uploadIdTitle")}</Text>
-          </Pressable>
-          <Pressable style={styles.uploadBtn} onPress={() => void pick(false)}>
-            <Images size={20} color={colors.primary} strokeWidth={2} />
-            <Text style={styles.uploadBtnText}>{t("verification.fileHint")}</Text>
-          </Pressable>
-        </View>
-      )}
+      <KycDocumentUploadFrame
+        emptyTitle={t("verification.uploadIdTitle")}
+        value={image}
+        onChange={setImage}
+      />
 
       <View style={styles.submitWrap}>
         <PrimaryButton
@@ -234,21 +207,5 @@ const styles = StyleSheet.create({
   selectBoxDisabled: { opacity: 0.5 },
   selectValue: { flexDirection: "row", alignItems: "center", gap: 10, flexShrink: 1 },
   selectText: { fontSize: typeSize.body, color: colors.text },
-  uploadRow: { flexDirection: "row", gap: 12 },
-  uploadBtn: {
-    flex: 1,
-    minHeight: 88,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    borderRadius: radius.card,
-    borderWidth: 1,
-    borderStyle: "dashed",
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  uploadBtnText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary, textAlign: "center", paddingHorizontal: 8 },
-  preview: { width: "100%", height: 200, borderRadius: radius.card, backgroundColor: colors.paper },
-  retake: { marginTop: 8, textAlign: "center", fontSize: typeSize.meta, fontWeight: "600", color: colors.primary },
   submitWrap: { marginTop: 28 },
 })

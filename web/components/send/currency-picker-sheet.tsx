@@ -5,6 +5,10 @@ import { Check, ChevronDown, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Drawer, DrawerContent } from "@/components/ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  currenciesForReceivePicker,
+  currenciesForSendPicker,
+} from "@ciuna/shared"
 import type { Currency } from "@/types"
 import { cn } from "@/lib/utils"
 
@@ -19,6 +23,12 @@ export const CURRENCY_PICKER_TRIGGER_CLASSES =
 const CURRENCY_PICKER_TRIGGER_CLASSES_MOBILE =
   "inline-flex min-h-9 min-w-[4.25rem] shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1.5 text-xs font-medium shadow-sm transition-colors hover:bg-accent active:bg-accent/80"
 
+function currencyFlagBoxSize(size: "default" | "compact") {
+  const height = size === "compact" ? 20 : 24
+  const width = Math.round(height * (4 / 3))
+  return { height, width }
+}
+
 export function CurrencyFlagIcon({
   currency,
   size = "default",
@@ -26,15 +36,21 @@ export function CurrencyFlagIcon({
   currency: Currency
   size?: "default" | "compact"
 }) {
-  const iconBox =
-    size === "compact"
-      ? "h-5 w-5 shrink-0 [&_svg]:h-5 [&_svg]:w-5"
-      : "h-6 w-6 shrink-0 [&_svg]:h-6 [&_svg]:w-6"
+  const { height, width } = currencyFlagBoxSize(size)
+  const iconBox = cn(
+    "shrink-0 overflow-hidden rounded-[3px] border border-border/30 [&_svg]:block [&_svg]:h-full [&_svg]:w-full",
+  )
 
   if (!currency.flag) return null
 
   if (currency.flag.startsWith("<svg")) {
-    return <div className={iconBox} dangerouslySetInnerHTML={{ __html: currency.flag }} />
+    return (
+      <div
+        className={iconBox}
+        style={{ width, height }}
+        dangerouslySetInnerHTML={{ __html: currency.flag }}
+      />
+    )
   }
 
   if (currency.flag.startsWith("http") || currency.flag.startsWith("/")) {
@@ -42,12 +58,9 @@ export function CurrencyFlagIcon({
       <img
         src={currency.flag || "/placeholder.svg"}
         alt=""
-        width={size === "compact" ? 20 : 24}
-        height={size === "compact" ? 20 : 24}
-        className={cn(
-          "shrink-0 rounded-sm object-cover",
-          size === "compact" ? "h-5 w-5" : "h-6 w-6",
-        )}
+        width={width}
+        height={height}
+        className={cn(iconBox, "object-cover")}
       />
     )
   }
@@ -63,11 +76,13 @@ function useCurrencySearchFilter(
   currencies: Currency[],
   type: "send" | "receive",
   search: string,
+  otherCurrency: string,
 ) {
   return useMemo(() => {
-    let list = currencies
-    if (type === "send") list = list.filter((c) => c.can_send !== false)
-    else list = list.filter((c) => c.can_receive !== false)
+    let list =
+      type === "send"
+        ? currenciesForSendPicker(currencies, otherCurrency)
+        : currenciesForReceivePicker(currencies, otherCurrency)
     if (search.trim()) {
       const q = search.toLowerCase()
       list = list.filter(
@@ -75,7 +90,7 @@ function useCurrencySearchFilter(
       )
     }
     return list
-  }, [currencies, type, search])
+  }, [currencies, type, search, otherCurrency])
 }
 
 function codesEqual(a: string, b: string) {
@@ -216,23 +231,59 @@ export function CurrencyPickerTrigger({
   selectedCurrency,
   onOpen,
   currencies,
+  pickerEnabled,
+  type,
+  otherCurrency = "",
 }: {
   selectedCurrency: string
   onOpen: () => void
   currencies: Currency[]
+  pickerEnabled?: boolean
+  type?: "send" | "receive"
+  otherCurrency?: string
 }) {
+  const resolvedPickerEnabled = useMemo(() => {
+    if (pickerEnabled != null) return pickerEnabled
+    if (!type) return true
+    const list =
+      type === "send"
+        ? currenciesForSendPicker(currencies, otherCurrency)
+        : currenciesForReceivePicker(currencies, otherCurrency)
+    return list.length > 1
+  }, [pickerEnabled, type, currencies, otherCurrency])
+
   const selected = currencies.find((c) => codesEqual(c.code, selectedCurrency))
-  return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className={CURRENCY_PICKER_TRIGGER_CLASSES_MOBILE}
-    >
+  const inner = (
+    <>
       {selected && <CurrencyFlagIcon currency={selected} size="compact" />}
       <span>{selected?.code ?? selectedCurrency}</span>
-      <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+      {resolvedPickerEnabled ? (
+        <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+      ) : null}
+    </>
+  )
+  if (!resolvedPickerEnabled) {
+    return (
+      <span className={cn(CURRENCY_PICKER_TRIGGER_CLASSES_MOBILE, "cursor-default")}>{inner}</span>
+    )
+  }
+  return (
+    <button type="button" onClick={onOpen} className={CURRENCY_PICKER_TRIGGER_CLASSES_MOBILE}>
+      {inner}
     </button>
   )
+}
+
+export function isCurrencyPickerEnabled(
+  currencies: Currency[],
+  type: "send" | "receive",
+  otherCurrency: string,
+): boolean {
+  const list =
+    type === "send"
+      ? currenciesForSendPicker(currencies, otherCurrency)
+      : currenciesForReceivePicker(currencies, otherCurrency)
+  return list.length > 1
 }
 
 export function CurrencyPickerSheet({
@@ -243,6 +294,7 @@ export function CurrencyPickerSheet({
   currencies,
   type,
   title,
+  otherCurrency = "",
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -251,6 +303,8 @@ export function CurrencyPickerSheet({
   currencies: Currency[]
   type: "send" | "receive"
   title?: string
+  /** Opposite lane currency — excluded from this picker (send vs receive). */
+  otherCurrency?: string
 }) {
   const [search, setSearch] = useState("")
   const [keyboardInset, setKeyboardInset] = useState(0)
@@ -280,7 +334,7 @@ export function CurrencyPickerSheet({
     }
   }, [open])
 
-  const filtered = useCurrencySearchFilter(currencies, type, search)
+  const filtered = useCurrencySearchFilter(currencies, type, search, otherCurrency)
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
@@ -326,12 +380,14 @@ export function CurrencyPickerPopover({
   currencies,
   type,
   title,
+  otherCurrency = "",
 }: {
   selectedCurrency: string
   onSelect: (code: string) => void
   currencies: Currency[]
   type: "send" | "receive"
   title?: string
+  otherCurrency?: string
 }) {
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState("")
@@ -340,8 +396,25 @@ export function CurrencyPickerPopover({
     if (!open) setSearch("")
   }, [open])
 
-  const filtered = useCurrencySearchFilter(currencies, type, search)
+  const filtered = useCurrencySearchFilter(currencies, type, search, otherCurrency)
   const selected = currencies.find((c) => codesEqual(c.code, selectedCurrency))
+  const pickerOptions = useMemo(
+    () =>
+      type === "send"
+        ? currenciesForSendPicker(currencies, otherCurrency)
+        : currenciesForReceivePicker(currencies, otherCurrency),
+    [currencies, type, otherCurrency],
+  )
+  const pickerEnabled = pickerOptions.length > 1
+
+  if (!pickerEnabled) {
+    return (
+      <span className={cn(CURRENCY_PICKER_TRIGGER_CLASSES, "cursor-default")}>
+        {selected && <CurrencyFlagIcon currency={selected} />}
+        <span>{selected?.code ?? selectedCurrency}</span>
+      </span>
+    )
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

@@ -3,7 +3,15 @@ import { officeFetch } from "@/lib/api-client"
 
 /** Historical key; `v` must match or disk cache is discarded (payload shape changes). */
 const DISK_CACHE_KEY = "ciuna_compliance_users"
-const DISK_SCHEMA_VERSION = 2
+const DISK_SCHEMA_VERSION = 3
+
+export type OfficeBitbankerCompliance = {
+  clientId?: string
+  environment?: string
+  isVerifiedForSbp: boolean
+  formSnapshot?: Record<string, string> | null
+  submittedAt?: string | null
+}
 
 export interface OfficeComplianceKycUser {
   userId: string
@@ -13,6 +21,7 @@ export interface OfficeComplianceKycUser {
   phone?: string
   identity: KYCSubmission | null
   address: KYCSubmission | null
+  bitbanker: OfficeBitbankerCompliance | null
 }
 
 let memoryRows: OfficeComplianceKycUser[] | null = null
@@ -80,10 +89,23 @@ async function fetchComplianceRows(): Promise<OfficeComplianceKycUser[]> {
     throw new Error((err as { error?: string }).error || response.statusText || "Failed to load KYC")
   }
 
-  const { submissions: allSubmissions } = await response.json()
-  const submissions: KYCSubmission[] = allSubmissions || []
+  const body = (await response.json()) as {
+    submissions?: KYCSubmission[]
+    bitbanker?: Array<{
+      user_id: string
+      client_id?: string
+      environment?: string
+      is_verified_for_sbp?: boolean
+      last_form_snapshot?: Record<string, string> | null
+      last_form_submitted_at?: string | null
+    }>
+  }
+  const submissions: KYCSubmission[] = body.submissions || []
+  const bitbankerRows = body.bitbanker || []
 
-  const userIds = [...new Set(submissions.map((s) => s.user_id))]
+  const userIds = [
+    ...new Set([...submissions.map((s) => s.user_id), ...bitbankerRows.map((b) => b.user_id)]),
+  ]
   const userMap = new Map<string, OfficeComplianceKycUser>()
 
   await Promise.all(
@@ -91,6 +113,16 @@ async function fetchComplianceRows(): Promise<OfficeComplianceKycUser[]> {
       const subs = submissions.filter((s) => s.user_id === userId)
       const identity = subs.find((s) => s.type === "identity") ?? null
       const address = subs.find((s) => s.type === "address") ?? null
+      const bb = bitbankerRows.find((b) => b.user_id === userId)
+      const bitbanker: OfficeBitbankerCompliance | null = bb
+        ? {
+            clientId: bb.client_id,
+            environment: bb.environment,
+            isVerifiedForSbp: Boolean(bb.is_verified_for_sbp),
+            formSnapshot: bb.last_form_snapshot ?? null,
+            submittedAt: bb.last_form_submitted_at ?? null,
+          }
+        : null
 
       let email: string | undefined
       let first_name: string | undefined
@@ -118,6 +150,7 @@ async function fetchComplianceRows(): Promise<OfficeComplianceKycUser[]> {
         phone,
         identity,
         address,
+        bitbanker,
       })
     }),
   )

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Upload, X, Search, Check, AlertCircle } from "lucide-react"
+import { Upload, X, Check, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { AppPageHeader } from "@/components/layout/app-page-header"
 import { useAuth } from "@/lib/auth-context"
@@ -14,10 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { kycService, KYCSubmission } from "@/lib/kyc-service"
-import { countryService, Country, getCountryFlag } from "@/lib/country-service"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 
@@ -45,22 +42,14 @@ export default function AddressVerificationPage() {
   const initialSubmission = getInitialSubmission()
   const [submission, setSubmission] = useState<KYCSubmission | null>(initialSubmission)
   const [loading, setLoading] = useState(false)
-  const [countries, setCountries] = useState<Country[]>([])
-  const [selectedCountry, setSelectedCountry] = useState(initialSubmission?.country_code || "")
-  const [address, setAddress] = useState(initialSubmission?.address || "")
-  const [selectedDocumentType, setSelectedDocumentType] = useState<"utility_bill" | "bank_statement" | "">(
-    (initialSubmission?.document_type as "utility_bill" | "bank_statement") || ""
-  )
+  const [selectedDocumentType, setSelectedDocumentType] = useState<
+    "registration" | "utility_bill" | "bank_statement" | ""
+  >((initialSubmission?.document_type as "registration" | "utility_bill" | "bank_statement") || "")
   const [addressFile, setAddressFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
-  const [countrySearch, setCountrySearch] = useState("")
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    loadCountries()
-  }, [])
 
   useEffect(() => {
     if (!userProfile?.id) return
@@ -102,9 +91,9 @@ export default function AddressVerificationPage() {
       if (addressSubmission && !submission) {
         // Only update if submission wasn't already set from initializer
         setSubmission(addressSubmission)
-        setSelectedCountry(addressSubmission.country_code || "")
-        setAddress(addressSubmission.address || "")
-        setSelectedDocumentType((addressSubmission.document_type as "utility_bill" | "bank_statement") || "")
+        setSelectedDocumentType(
+          (addressSubmission.document_type as "registration" | "utility_bill" | "bank_statement") || "",
+        )
       }
       
       // Fetch in background to ensure we have latest data
@@ -116,9 +105,9 @@ export default function AddressVerificationPage() {
             // Only update if data changed (prevent flickering)
             setSubmission(prev => {
               if (!prev || JSON.stringify(prev) !== JSON.stringify(addressSubmission)) {
-                setSelectedCountry(addressSubmission.country_code || "")
-                setAddress(addressSubmission.address || "")
-                setSelectedDocumentType((addressSubmission.document_type as "utility_bill" | "bank_statement") || "")
+                setSelectedDocumentType(
+          (addressSubmission.document_type as "registration" | "utility_bill" | "bank_statement") || "",
+        )
                 return addressSubmission
               }
               return prev
@@ -144,9 +133,9 @@ export default function AddressVerificationPage() {
         const addressSubmission = submissions.find(s => s.type === "address")
         if (addressSubmission) {
           setSubmission(addressSubmission)
-          setSelectedCountry(addressSubmission.country_code || "")
-          setAddress(addressSubmission.address || "")
-          setSelectedDocumentType((addressSubmission.document_type as "utility_bill" | "bank_statement") || "")
+          setSelectedDocumentType(
+          (addressSubmission.document_type as "registration" | "utility_bill" | "bank_statement") || "",
+        )
         } else {
           setSubmission(null)
         }
@@ -160,15 +149,6 @@ export default function AddressVerificationPage() {
 
     loadSubmission()
   }, [userProfile?.id])
-
-  const loadCountries = async () => {
-    try {
-      const data = await countryService.getAll()
-      setCountries(data)
-    } catch (error) {
-      console.error("Error loading countries:", error)
-    }
-  }
 
   const handleFileSelect = (file: File) => {
     setUploadError(null)
@@ -226,7 +206,7 @@ export default function AddressVerificationPage() {
   }
 
   const handleSubmit = async () => {
-    if (!selectedCountry || !address.trim() || !selectedDocumentType || !addressFile || !userProfile?.id) {
+    if (!selectedDocumentType || !addressFile || !userProfile?.id) {
       setUploadError(t("verification.fillAllFields"))
       return
     }
@@ -241,8 +221,6 @@ export default function AddressVerificationPage() {
     setUploadError(null)
     try {
       const newSubmission = await kycService.createAddressSubmission(userProfile.id, {
-        country_code: selectedCountry,
-        address: address.trim(),
         document_type: selectedDocumentType,
         address_document_file: addressFile,
       })
@@ -318,8 +296,6 @@ export default function AddressVerificationPage() {
     }
   }
 
-  const selectedCountryData = countries.find(c => c.code === selectedCountry)
-
   return (
     <div className="min-h-screen bg-gray-50">
         <AppPageHeader title={t("verification.addressPageTitle")} backHref="/more/verification" />
@@ -344,29 +320,15 @@ export default function AddressVerificationPage() {
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm text-gray-600">{t("verification.labelCountry")}</Label>
-                    <p className="text-base text-gray-900 mt-1">
-                      {selectedCountryData ? (
-                        <span className="flex items-center gap-2">
-                          <span>{selectedCountryData.flag_emoji}</span>
-                          <span>{selectedCountryData.name}</span>
-                        </span>
-                      ) : (
-                        submission.country_code
-                      )}
-                    </p>
-                  </div>
-                  <div>
-                    <Label className="text-sm text-gray-600">{t("verification.labelAddress")}</Label>
-                    <p className="text-base text-gray-900 mt-1 whitespace-pre-wrap">
-                      {submission.address || "-"}
-                    </p>
-                  </div>
-                  <div>
                     <Label className="text-sm text-gray-600">{t("verification.labelDocumentType")}</Label>
                     <p className="text-base text-gray-900 mt-1">
-                      {submission.document_type === "utility_bill" ? t("verification.utilityBill") :
-                       submission.document_type === "bank_statement" ? t("verification.bankStatement") : "-"}
+                      {submission.document_type === "registration"
+                        ? t("verification.registration")
+                        : submission.document_type === "utility_bill"
+                          ? t("verification.utilityBill")
+                          : submission.document_type === "bank_statement"
+                            ? t("verification.bankStatement")
+                            : "-"}
                     </p>
                   </div>
                   <div>
@@ -395,61 +357,18 @@ export default function AddressVerificationPage() {
             // Show form view
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label>{t("verification.labelCountry")}</Label>
-                <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t("verification.placeholderSelectCountry")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <div className="p-2 border-b">
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                        <Input
-                          placeholder={t("verification.searchCountries")}
-                          value={countrySearch}
-                          onChange={(e) => setCountrySearch(e.target.value)}
-                          className="h-9 pl-9"
-                          onClick={(e) => e.stopPropagation()}
-                          onKeyDown={(e) => e.stopPropagation()}
-                        />
-                      </div>
-                    </div>
-                    <div className="max-h-[300px] overflow-y-auto">
-                      {countries
-                        .filter((country) =>
-                          country.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
-                          country.code.toLowerCase().includes(countrySearch.toLowerCase())
-                        )
-                        .map((country) => (
-                          <SelectItem key={country.code} value={country.code}>
-                            <span className="flex items-center gap-2">
-                              <span className="text-lg">{country.flag_emoji}</span>
-                              <span>{country.name}</span>
-                            </span>
-                          </SelectItem>
-                        ))}
-                    </div>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>{t("verification.labelAddress")}</Label>
-                <Textarea
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder={t("verification.placeholderAddress")}
-                  rows={4}
-                />
-              </div>
-
-              <div className="space-y-2">
                 <Label>{t("verification.labelDocumentType")}</Label>
-                <Select value={selectedDocumentType} onValueChange={(value) => setSelectedDocumentType(value as "utility_bill" | "bank_statement")}>
+                <Select
+                  value={selectedDocumentType}
+                  onValueChange={(value) =>
+                    setSelectedDocumentType(value as "registration" | "utility_bill" | "bank_statement")
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder={t("verification.placeholderSelectDocType")} />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="registration">{t("verification.registration")}</SelectItem>
                     <SelectItem value="utility_bill">{t("verification.utilityBill")}</SelectItem>
                     <SelectItem value="bank_statement">{t("verification.bankStatement")}</SelectItem>
                   </SelectContent>
@@ -562,7 +481,7 @@ export default function AddressVerificationPage() {
 
               <Button
                 onClick={handleSubmit}
-                disabled={!selectedCountry || !address.trim() || !selectedDocumentType || !addressFile || uploading}
+                disabled={!selectedDocumentType || !addressFile || uploading}
                 className="w-full"
               >
                 {uploading ? t("verification.uploading") : t("verification.submit")}

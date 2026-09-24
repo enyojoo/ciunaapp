@@ -39,6 +39,18 @@ import {
   type BitbankerPaymentPayload,
 } from "@/components/send/send-bitbanker-payment-step"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
+import { useBitbankerQuotePreview } from "@/lib/use-bitbanker-quote-preview"
+import { translateSendQuoteError } from "@/lib/translate-send-quote-error"
+import { minSendAmountForCurrency } from "@ciuna/shared"
+import { Skeleton } from "@/components/ui/skeleton"
+import {
+  applyReceiveCurrencyChange,
+  applySendCurrencyChange,
+  currenciesForReceivePicker,
+  currenciesForSendPicker,
+  ensureValidReceiveCurrency,
+  initialSendReceivePair,
+} from "@ciuna/shared"
 import type { Currency } from "@/types"
 import {
   getAccountTypeConfigFromCurrency,
@@ -189,64 +201,21 @@ export default function UserSendPage() {
 
   // Default currencies before paint when possible — avoids skeleton flash on repeat visits (store cache)
   useLayoutEffect(() => {
-    if (currencies.length > 0 && userProfile && !sendCurrency && !receiveCurrency) {
-      const userBaseCurrency = userProfile.base_currency || "USD"
-      const availableSendCurrencies = currencies.filter((c) => c.can_send !== false)
-
-      if (availableSendCurrencies.length > 0) {
-        const baseCurrencyExists = availableSendCurrencies.find((c) => c.code === userBaseCurrency)
-        let newSendCurrency: string
-
-        if (baseCurrencyExists) {
-          newSendCurrency = userBaseCurrency
-        } else {
-          const usdCurrency = availableSendCurrencies.find((c) => c.code === "USD")
-          newSendCurrency = usdCurrency ? "USD" : availableSendCurrencies[0].code
-        }
-
-        setSendCurrency(newSendCurrency)
-
-        const availableReceiveCurrencies = currencies.filter(
-          (c) => c.can_receive !== false && c.code !== newSendCurrency
-        )
-        if (availableReceiveCurrencies.length > 0) {
-          const ngnCurrency = availableReceiveCurrencies.find((c) => c.code === "NGN")
-          const newReceiveCurrency = ngnCurrency ? "NGN" : availableReceiveCurrencies[0].code
-          setReceiveCurrency(newReceiveCurrency)
-        }
-      }
-    } else if (currencies.length > 0 && !userProfile && !sendCurrency && !receiveCurrency) {
-      const availableSendCurrencies = currencies.filter((c) => c.can_send !== false)
-      if (availableSendCurrencies.length > 0) {
-        const usdCurrency = availableSendCurrencies.find((c) => c.code === "USD")
-        const newSendCurrency = usdCurrency ? "USD" : availableSendCurrencies[0].code
-        setSendCurrency(newSendCurrency)
-
-        const availableReceiveCurrencies = currencies.filter(
-          (c) => c.can_receive !== false && c.code !== newSendCurrency
-        )
-        if (availableReceiveCurrencies.length > 0) {
-          const ngnCurrency = availableReceiveCurrencies.find((c) => c.code === "NGN")
-          const newReceiveCurrency = ngnCurrency ? "NGN" : availableReceiveCurrencies[0].code
-          setReceiveCurrency(newReceiveCurrency)
-        }
-      }
+    if (currencies.length === 0 || sendCurrency || receiveCurrency) return
+    const pair = initialSendReceivePair(
+      currencies,
+      userProfile?.base_currency ?? null,
+    )
+    if (pair) {
+      setSendCurrency(pair.sendCurrency)
+      setReceiveCurrency(pair.receiveCurrency)
     }
   }, [currencies, userProfile, sendCurrency, receiveCurrency])
 
-  // Ensure receive currency can receive when currencies change
   useEffect(() => {
-    if (currencies.length > 0 && sendCurrency && receiveCurrency) {
-      const currentReceiveCurrency = currencies.find((c) => c.code === receiveCurrency)
-      if (currentReceiveCurrency && currentReceiveCurrency.can_receive === false) {
-        const availableReceiveCurrencies = currencies.filter(
-          (c) => c.can_receive !== false && c.code !== sendCurrency
-        )
-        if (availableReceiveCurrencies.length > 0) {
-          setReceiveCurrency(availableReceiveCurrencies[0].code)
-        }
-      }
-    }
+    if (currencies.length === 0 || !sendCurrency || !receiveCurrency) return
+    const fixed = ensureValidReceiveCurrency(currencies, sendCurrency, receiveCurrency)
+    if (fixed !== receiveCurrency) setReceiveCurrency(fixed)
   }, [currencies, sendCurrency, receiveCurrency])
 
   // Generate transaction ID when moving to step 3
@@ -473,40 +442,15 @@ export default function UserSendPage() {
 
   // Handle currency selection with same currency prevention
   const handleSendCurrencyChange = (newCurrency: string) => {
-    setSendCurrency(newCurrency)
-    // If user selects same currency as receive, find a different currency that can receive
-    if (newCurrency === receiveCurrency) {
-      const availableReceiveCurrencies = currencies.filter(
-        (c) => c.can_receive !== false && c.code !== newCurrency
-      )
-      if (availableReceiveCurrencies.length > 0) {
-        setReceiveCurrency(availableReceiveCurrencies[0].code)
-      }
-    } else {
-      // Ensure receive currency can still receive
-      const currentReceiveCurrency = currencies.find((c) => c.code === receiveCurrency)
-      if (currentReceiveCurrency && currentReceiveCurrency.can_receive === false) {
-        const availableReceiveCurrencies = currencies.filter(
-          (c) => c.can_receive !== false && c.code !== newCurrency
-        )
-        if (availableReceiveCurrencies.length > 0) {
-          setReceiveCurrency(availableReceiveCurrencies[0].code)
-        }
-      }
-    }
+    const next = applySendCurrencyChange(currencies, newCurrency, receiveCurrency)
+    setSendCurrency(next.sendCurrency)
+    setReceiveCurrency(next.receiveCurrency)
   }
 
   const handleReceiveCurrencyChange = (newCurrency: string) => {
-    setReceiveCurrency(newCurrency)
-    // If user selects same currency as send, find a different currency that can send
-    if (newCurrency === sendCurrency) {
-      const availableSendCurrencies = currencies.filter(
-        (c) => c.can_send !== false && c.code !== newCurrency
-      )
-      if (availableSendCurrencies.length > 0) {
-        setSendCurrency(availableSendCurrencies[0].code)
-      }
-    }
+    const next = applyReceiveCurrencyChange(currencies, sendCurrency, newCurrency)
+    setSendCurrency(next.sendCurrency)
+    setReceiveCurrency(next.receiveCurrency)
   }
 
   // Get payment methods for the sending currency
@@ -523,6 +467,24 @@ export default function UserSendPage() {
     const dm = getDefaultPaymentMethod(sendCurrency) as { provider?: string } | undefined
     return sendCurrency === "RUB" && String(dm?.provider || "").toLowerCase() === "bitbanker"
   }, [sendCurrency, paymentMethods])
+
+  const {
+    preview: bitbankerPreview,
+    errorNotice: bitbankerErrorNotice,
+    deskHintNotice: bitbankerDeskHint,
+    loading: bitbankerPreviewLoading,
+    feesConfirmed: bitbankerFeesConfirmed,
+  } = useBitbankerQuotePreview({
+    enabled: usesBitbankerPayment && Boolean(user),
+    sendAmount,
+    sendCurrency,
+    receiveCurrency,
+  })
+
+  useEffect(() => {
+    if (!usesBitbankerPayment || !bitbankerPreview || lastEditedField !== "send") return
+    setReceiveAmount(bitbankerPreview.receiveAmount.toFixed(2))
+  }, [usesBitbankerPayment, bitbankerPreview, lastEditedField])
 
   const bitbankerGateActive =
     Boolean(bitbankerEligibility) &&
@@ -557,8 +519,10 @@ export default function UserSendPage() {
       }),
     })
     if (!quoteRes.ok) {
-      const errBody = await quoteRes.json().catch(() => ({}))
-      throw new Error((errBody as { error?: string }).error || "Failed to create quote")
+      const errBody = (await quoteRes.json().catch(() => ({}))) as { error?: string; errorCode?: string }
+      throw new Error(
+        translateSendQuoteError(t, errBody.error || "Failed to create quote", errBody.errorCode),
+      )
     }
     const { quote } = (await quoteRes.json()) as { quote: { id: string } }
     const transferRes = await fetchWithAuth("/api/send/transfers", {
@@ -659,6 +623,39 @@ export default function UserSendPage() {
   const totalToPay = useMemo(
     () => (Number.parseFloat(sendAmount) || 0) + fee + logisticsFee,
     [sendAmount, fee, logisticsFee],
+  )
+
+  const displayFee = useMemo(() => {
+    if (usesBitbankerPayment && bitbankerPreview) {
+      return roundMoney(bitbankerPreview.feeAmount + bitbankerPreview.paymentProcessingFee)
+    }
+    return fee
+  }, [usesBitbankerPayment, bitbankerPreview, fee])
+
+  const displayTotalToPay = useMemo(() => {
+    if (usesBitbankerPayment && bitbankerPreview) return bitbankerPreview.totalAmount
+    return totalToPay
+  }, [usesBitbankerPayment, bitbankerPreview, totalToPay])
+
+  const displayReceiveAmount = useMemo(() => {
+    if (usesBitbankerPayment && bitbankerPreview) return bitbankerPreview.receiveAmount
+    return Number.parseFloat(receiveAmount) || 0
+  }, [usesBitbankerPayment, bitbankerPreview, receiveAmount])
+
+  const displayExchangeRate = useMemo(() => {
+    if (usesBitbankerPayment && bitbankerPreview) return bitbankerPreview.exchangeRate
+    return exchangeRateData?.rate || 0
+  }, [usesBitbankerPayment, bitbankerPreview, exchangeRateData?.rate])
+
+  const bitbankerPreviewRequired = useMemo(() => {
+    if (!usesBitbankerPayment) return false
+    const amount = Number.parseFloat(sendAmount) || 0
+    const min = minSendAmountForCurrency(sendCurrency)
+    return min == null || amount >= min
+  }, [usesBitbankerPayment, sendAmount, sendCurrency])
+
+  const showBitbankerFeeSkeleton = Boolean(
+    usesBitbankerPayment && bitbankerPreviewRequired && !bitbankerFeesConfirmed,
   )
 
   useEffect(() => {
@@ -827,7 +824,14 @@ export default function UserSendPage() {
   const exchangeRate = exchangeRateData?.rate || 0
   const sendCurrencyData = currencies.find((c) => c.code === sendCurrency)
   const receiveCurrencyData = currencies.find((c) => c.code === receiveCurrency)
-
+  const sendPickerEnabled = useMemo(
+    () => currenciesForSendPicker(currencies, receiveCurrency).length > 1,
+    [currencies, receiveCurrency],
+  )
+  const receivePickerEnabled = useMemo(
+    () => currenciesForReceivePicker(currencies, sendCurrency).length > 1,
+    [currencies, sendCurrency],
+  )
 
   const TransactionSummary = () => (
     <Card className="sticky top-6">
@@ -844,14 +848,20 @@ export default function UserSendPage() {
           </div>
           <div className="flex min-w-0 items-start justify-between gap-2">
             <span className="min-w-0 text-gray-600">{t("send.fee")}</span>
-            <span className={`shrink-0 text-right font-semibold tabular-nums ${fee === 0 ? "text-green-600" : "text-gray-900"}`}>
-              {fee === 0 ? t("send.free") : formatCurrency(fee, sendCurrency)}
+            <span className={`shrink-0 text-right font-semibold tabular-nums ${displayFee === 0 && !showBitbankerFeeSkeleton ? "text-green-600" : "text-gray-900"}`}>
+              {showBitbankerFeeSkeleton ? (
+                <Skeleton className="ml-auto h-5 w-20" />
+              ) : displayFee === 0 ? (
+                t("send.free")
+              ) : (
+                formatCurrency(displayFee, sendCurrency)
+              )}
             </span>
           </div>
           <div className="flex min-w-0 items-start justify-between gap-2">
             <span className="min-w-0 text-gray-600">{t("send.recipientGetsLabel")}</span>
             <span className="shrink-0 text-right font-semibold tabular-nums">
-              {formatCurrency(Number.parseFloat(receiveAmount) || 0, receiveCurrency)}
+              {formatCurrency(displayReceiveAmount, receiveCurrency)}
             </span>
           </div>
           <div className="flex min-w-0 items-start justify-between gap-2">
@@ -876,7 +886,11 @@ export default function UserSendPage() {
           <div className="flex min-w-0 items-start justify-between gap-2 border-t pt-2">
             <span className="min-w-0 text-gray-600">{t("send.totalToPay")}</span>
             <span className="shrink-0 text-right text-[clamp(1rem,2.8vmin,1.125rem)] font-semibold tabular-nums">
-              {formatCurrency(totalToPay, sendCurrency)}
+              {showBitbankerFeeSkeleton ? (
+                <Skeleton className="ml-auto h-5 w-24" />
+              ) : (
+                formatCurrency(displayTotalToPay, sendCurrency)
+              )}
             </span>
           </div>
         </div>
@@ -1025,15 +1039,19 @@ export default function UserSendPage() {
                               selectedCurrency={sendCurrency}
                               onOpen={() => setSendDropdownOpen(true)}
                               currencies={currencies}
+                              pickerEnabled={sendPickerEnabled}
                             />
-                            <CurrencyPickerSheet
-                              open={sendDropdownOpen}
-                              onOpenChange={setSendDropdownOpen}
-                              selectedCurrency={sendCurrency}
-                              onSelect={handleSendCurrencyChange}
-                              currencies={currencies}
-                              type="send"
-                            />
+                            {sendPickerEnabled ? (
+                              <CurrencyPickerSheet
+                                open={sendDropdownOpen}
+                                onOpenChange={setSendDropdownOpen}
+                                selectedCurrency={sendCurrency}
+                                onSelect={handleSendCurrencyChange}
+                                currencies={currencies}
+                                type="send"
+                                otherCurrency={receiveCurrency}
+                              />
+                            ) : null}
                           </div>
                           <div className="hidden md:block shrink-0">
                             <CurrencyPickerPopover
@@ -1041,6 +1059,7 @@ export default function UserSendPage() {
                               onSelect={handleSendCurrencyChange}
                               currencies={currencies}
                               type="send"
+                              otherCurrency={receiveCurrency}
                             />
                           </div>
                         </div>
@@ -1101,15 +1120,19 @@ export default function UserSendPage() {
                               selectedCurrency={receiveCurrency}
                               onOpen={() => setReceiveDropdownOpen(true)}
                               currencies={currencies}
+                              pickerEnabled={receivePickerEnabled}
                             />
-                            <CurrencyPickerSheet
-                              open={receiveDropdownOpen}
-                              onOpenChange={setReceiveDropdownOpen}
-                              selectedCurrency={receiveCurrency}
-                              onSelect={handleReceiveCurrencyChange}
-                              currencies={currencies}
-                              type="receive"
-                            />
+                            {receivePickerEnabled ? (
+                              <CurrencyPickerSheet
+                                open={receiveDropdownOpen}
+                                onOpenChange={setReceiveDropdownOpen}
+                                selectedCurrency={receiveCurrency}
+                                onSelect={handleReceiveCurrencyChange}
+                                currencies={currencies}
+                                type="receive"
+                                otherCurrency={sendCurrency}
+                              />
+                            ) : null}
                           </div>
                           <div className="hidden md:block shrink-0">
                             <CurrencyPickerPopover
@@ -1117,6 +1140,7 @@ export default function UserSendPage() {
                               onSelect={handleReceiveCurrencyChange}
                               currencies={currencies}
                               type="receive"
+                              otherCurrency={sendCurrency}
                             />
                           </div>
                         </div>
@@ -1129,8 +1153,14 @@ export default function UserSendPage() {
                               </div>
                               <span className="text-sm text-gray-600">{t("send.fee")}</span>
                             </div>
-                            <span className={`font-medium ${fee === 0 ? "text-green-600" : "text-gray-900"}`}>
-                              {fee === 0 ? t("send.free") : formatCurrency(fee, sendCurrency)}
+                            <span className={`font-medium ${displayFee === 0 && !showBitbankerFeeSkeleton ? "text-green-600" : "text-gray-900"}`}>
+                              {showBitbankerFeeSkeleton ? (
+                                <Skeleton className="h-5 w-16" />
+                              ) : displayFee === 0 ? (
+                                t("send.free")
+                              ) : (
+                                formatCurrency(displayFee, sendCurrency)
+                              )}
                             </span>
                           </div>
 
@@ -1142,7 +1172,7 @@ export default function UserSendPage() {
                               <span className="text-sm text-gray-600">{t("send.rate")}</span>
                             </div>
                             <span className="font-medium text-primary">
-                              1 {sendCurrency} = {exchangeRate?.toFixed(2) || "0.00"} {receiveCurrency}
+                              1 {sendCurrency} = {displayExchangeRate.toFixed(2) || "0.00"} {receiveCurrency}
                             </span>
                           </div>
 
@@ -1177,6 +1207,19 @@ export default function UserSendPage() {
                       </div>
                     )}
 
+                    {bitbankerErrorNotice ? (
+                      <div className="flex gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-950">
+                        <AlertCircle className="h-5 w-5 shrink-0 text-red-600" />
+                        <p>{t(bitbankerErrorNotice.messageKey)}</p>
+                      </div>
+                    ) : null}
+                    {bitbankerDeskHint ? (
+                      <div className="flex gap-2 rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+                        <AlertCircle className="h-5 w-5 shrink-0" />
+                        <p>{t(bitbankerDeskHint.messageKey)}</p>
+                      </div>
+                    ) : null}
+
                     </div>
                     </div>
 
@@ -1185,7 +1228,11 @@ export default function UserSendPage() {
                         onClick={handleContinue}
                         className="min-h-12 w-full rounded-xl bg-primary text-base font-semibold hover:bg-primary/90"
                         disabled={
-                          !sendCurrency || !receiveCurrency || !sendAmount || !fulfillmentResolution.ok
+                          !sendCurrency ||
+                          !receiveCurrency ||
+                          !sendAmount ||
+                          !fulfillmentResolution.ok ||
+                          (bitbankerPreviewRequired && !bitbankerFeesConfirmed)
                         }
                       >
                         {t("send.continue")}
@@ -1883,15 +1930,15 @@ export default function UserSendPage() {
                   sendCurrency={sendCurrency}
                   sendCurrencyData={sendCurrencyData ?? null}
                   transactionIdNote={transactionId}
-                  totalToPay={totalToPay}
+                  totalToPay={displayTotalToPay}
                   transferTitle={
                     fulfillmentResolution.ok &&
                           fulfillmentResolution.fulfillment === "cash_hand" &&
                           logisticsFee > 0
                             ? t("send.transferLineWithLogistics", {
-                                amount: formatCurrency(totalToPay, sendCurrency),
+                                amount: formatCurrency(displayTotalToPay, sendCurrency),
                               })
-                      : t("send.transferLine", { amount: formatCurrency(totalToPay, sendCurrency) })
+                      : t("send.transferLine", { amount: formatCurrency(displayTotalToPay, sendCurrency) })
                   }
                   transferSubtitle={
                     !(
@@ -1899,11 +1946,11 @@ export default function UserSendPage() {
                           fulfillmentResolution.fulfillment === "cash_hand" &&
                           logisticsFee > 0
                         ) &&
-                    fee > 0 ? (
+                    displayFee > 0 ? (
                             <p className="text-xs text-gray-600">
                               {t("send.sendAmountPlusFee", {
                                 send: formatCurrency(Number.parseFloat(sendAmount) || 0, sendCurrency),
-                                fee: formatCurrency(fee, sendCurrency),
+                                fee: formatCurrency(displayFee, sendCurrency),
                               })}
                             </p>
                     ) : undefined

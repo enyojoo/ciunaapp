@@ -5,12 +5,14 @@ export function bitbankerEnvironment(): BitbankerEnvironment {
   return raw === "production" ? "production" : "sandbox"
 }
 
+const BITBANKER_PROD_BASE = "https://api.aws.bitbanker.org/latest"
+/** Verified sandbox host (no `/latest` suffix). */
+const BITBANKER_SANDBOX_BASE = "https://ext-api.dev.bitbanker.ru"
+
 export function bitbankerApiBaseUrl(): string {
   const fromEnv = process.env.BITBANKER_API_BASE_URL?.trim()
   if (fromEnv) return fromEnv.replace(/\/$/, "")
-  return bitbankerEnvironment() === "production"
-    ? "https://api.aws.bitbanker.org/latest"
-    : "https://api.aws.dev.bitbanker.org/latest"
+  return bitbankerEnvironment() === "production" ? BITBANKER_PROD_BASE : BITBANKER_SANDBOX_BASE
 }
 
 export function bitbankerCredentials(): { apiKey: string; apiSecret: string } {

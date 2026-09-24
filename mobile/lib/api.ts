@@ -1,9 +1,18 @@
+import Constants from "expo-constants"
 import { joinApiPath, resolveApiUrl } from "@ciuna/shared/urls"
 import { supabase } from "./supabase"
 
+function apiBaseUrl(): string {
+  const fromExtra = Constants.expoConfig?.extra?.apiUrl
+  if (typeof fromExtra === "string" && fromExtra.trim()) {
+    return fromExtra.trim().replace(/\/+$/, "")
+  }
+  return resolveApiUrl()
+}
+
 export function apiUrl(path: string): string {
   if (path.startsWith("http")) return path
-  return joinApiPath(path, resolveApiUrl())
+  return joinApiPath(path, apiBaseUrl())
 }
 
 export async function apiFetch(path: string, init?: RequestInit): Promise<Response> {

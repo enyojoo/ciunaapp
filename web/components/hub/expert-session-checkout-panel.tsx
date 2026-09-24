@@ -20,6 +20,7 @@ import {
   CurrencyPickerPopover,
   CurrencyPickerSheet,
   CurrencyPickerTrigger,
+  isCurrencyPickerEnabled,
 } from "@/components/send/currency-picker-sheet"
 import { SendMakePaymentStep } from "@/components/send/send-make-payment-step"
 import { fetchPublicPlatformFlags } from "@/lib/fetch-public-platform-flags"
@@ -586,15 +587,20 @@ export function ExpertSessionCheckoutPanel({
                           selectedCurrency={sendCurrency}
                           onOpen={() => setSendDropdownOpen(true)}
                           currencies={currencies}
-                        />
-                        <CurrencyPickerSheet
-                          open={sendDropdownOpen}
-                          onOpenChange={setSendDropdownOpen}
-                          selectedCurrency={sendCurrency}
-                          onSelect={setSendCurrency}
-                          currencies={currencies}
                           type="send"
+                          otherCurrency={receiveCurrency}
                         />
+                        {isCurrencyPickerEnabled(currencies, "send", receiveCurrency) ? (
+                          <CurrencyPickerSheet
+                            open={sendDropdownOpen}
+                            onOpenChange={setSendDropdownOpen}
+                            selectedCurrency={sendCurrency}
+                            onSelect={setSendCurrency}
+                            currencies={currencies}
+                            type="send"
+                            otherCurrency={receiveCurrency}
+                          />
+                        ) : null}
                       </div>
                       <div className="hidden shrink-0 md:block">
                         <CurrencyPickerPopover
@@ -602,6 +608,7 @@ export function ExpertSessionCheckoutPanel({
                           onSelect={setSendCurrency}
                           currencies={currencies}
                           type="send"
+                          otherCurrency={receiveCurrency}
                         />
                       </div>
                     </div>

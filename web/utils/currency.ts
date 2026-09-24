@@ -1,3 +1,4 @@
+import { formatExchangeRateDisplay } from "@ciuna/shared"
 import type { Currency, ExchangeRate } from "@/types"
 
 const STATIC_TS = "1970-01-01T00:00:00.000Z"
@@ -103,12 +104,8 @@ export function formatAmountPlain(amount: number, fractionDigits = 2): string {
 }
 
 export function formatExchangeRateForEmail(rate: number): string {
-  if (!Number.isFinite(rate)) return "0"
-  const cleaned = Number.parseFloat(Number(rate).toPrecision(12))
-  return cleaned.toLocaleString("en-US", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 8,
-  })
+  const s = formatExchangeRateDisplay(rate)
+  return s === "—" ? "0" : s
 }
 
 export const formatCurrency = (amount: number, currency: string): string => {

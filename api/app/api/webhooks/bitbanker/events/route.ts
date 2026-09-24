@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { bitbankerCredentials, isBitbankerConfigured } from "@/lib/bitbanker/config"
-import { verifyFullSign } from "@/lib/bitbanker/signing"
+import { isBitbankerConfigured } from "@/lib/bitbanker/config"
+import { verifyBitbankerWebhook } from "@/lib/bitbanker/webhook-verify"
 import { insertWebhookInbox, applyPartnerClientSnapshot } from "@/lib/bitbanker/db"
-import { getPartnerClient, readVerifiedForSbp } from "@/lib/bitbanker/partner-clients"
+import { getPartnerClient } from "@/lib/bitbanker/partner-clients"
 
 export async function POST(request: NextRequest) {
   if (!isBitbankerConfigured()) {
@@ -17,13 +17,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true })
   }
 
-  try {
-    const { apiSecret } = bitbankerCredentials()
-    if ("full_sign" in payload && !verifyFullSign(payload, apiSecret)) {
-      return NextResponse.json({ error: "invalid signature" }, { status: 401 })
-    }
-  } catch {
-    return NextResponse.json({ ok: true })
+  if (!verifyBitbankerWebhook(payload)) {
+    return NextResponse.json({ error: "invalid signature" }, { status: 401 })
   }
 
   const admin = createServerClient()
@@ -34,9 +29,19 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const eventType = String(payload.event ?? payload.type ?? "").trim()
+    const data =
+      payload.data && typeof payload.data === "object" && !Array.isArray(payload.data)
+        ? (payload.data as Record<string, unknown>)
+        : null
+    const eventType = String(
+      payload.event_type ?? payload.event ?? payload.type ?? "",
+    ).trim()
     const clientId = String(
-      payload.client_id ?? payload.partner_client_external_id ?? payload.external_client_ref ?? "",
+      data?.client_id ??
+        payload.client_id ??
+        payload.partner_client_external_id ??
+        payload.external_client_ref ??
+        "",
     ).trim()
 
     if (clientId && (eventType.includes("permission") || eventType.includes("sbp_client"))) {

@@ -1,9 +1,14 @@
-import { useMemo, useState } from "react"
-import { Pressable, Text, View } from "react-native"
+import { type ReactNode, useEffect, useMemo, useState } from "react"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
+import { Check, ChevronDown } from "lucide-react-native"
+import { CountryPicker } from "@/components/country-picker"
+import { FlagIcon } from "@/components/flag-icon"
 import { Field } from "@/components/field"
 import { PrimaryButton } from "@/components/primary-button"
 import { fetchWithAuth } from "@/lib/api"
+import { countryService, type Country } from "@/lib/country-service"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 import {
   isRussianPassportCountry,
   validateBitbankerVerificationInput,
@@ -17,10 +22,10 @@ type Props = {
   onSubmitted?: () => void
 }
 
-const emptyForm = (defaultEmail: string): BitbankerVerificationFormInput => ({
+const emptyForm = (defaultEmail: string, foreign: boolean): BitbankerVerificationFormInput => ({
   email: defaultEmail,
   phone: "",
-  passportCountry: "RU",
+  passportCountry: foreign ? "" : "RU",
   firstName: "",
   lastName: "",
   patronymic: "",
@@ -37,20 +42,44 @@ const emptyForm = (defaultEmail: string): BitbankerVerificationFormInput => ({
   consent: false,
 })
 
+function FormSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <View style={styles.sectionCard}>
+      <Text style={styles.sectionHeading}>{title}</Text>
+      <View style={styles.sectionInner}>{children}</View>
+    </View>
+  )
+}
+
 export function BitbankerVerificationForm({ defaultEmail = "", onSubmitted }: Props) {
   const { t } = useTranslation("app")
+  const [foreignPassport, setForeignPassport] = useState(false)
   const [busy, setBusy] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<BitbankerVerificationField, BitbankerVerificationErrorCode>>
   >({})
-  const [form, setForm] = useState(() => emptyForm(defaultEmail))
+  const [form, setForm] = useState(() => emptyForm(defaultEmail, false))
+  const [countries, setCountries] = useState<Country[]>([])
+  const [countryOpen, setCountryOpen] = useState(false)
 
-  const isForeign = useMemo(() => !isRussianPassportCountry(form.passportCountry), [form.passportCountry])
+  useEffect(() => {
+    void countryService.getAll().then(setCountries)
+  }, [])
+
+  const selectedPassportCountry = useMemo(
+    () => countries.find((c) => c.code === form.passportCountry) ?? null,
+    [countries, form.passportCountry],
+  )
+
+  const isForeign = useMemo(
+    () => foreignPassport || !isRussianPassportCountry(form.passportCountry || "RU"),
+    [foreignPassport, form.passportCountry],
+  )
 
   const err = (field: BitbankerVerificationField) => {
     const code = fieldErrors[field]
-    return code ? t(`verification.bitbanker.errors.${code}`) : null
+    return code ? t(`verification.bitbanker.errors.${code}`) : undefined
   }
 
   const set = <K extends keyof BitbankerVerificationFormInput>(key: K, value: BitbankerVerificationFormInput[K]) => {
@@ -63,9 +92,42 @@ export function BitbankerVerificationForm({ defaultEmail = "", onSubmitted }: Pr
     })
   }
 
+  const setPassportKind = (foreign: boolean) => {
+    setForeignPassport(foreign)
+    setForm((prev) => ({
+      ...prev,
+      passportCountry: foreign
+        ? isRussianPassportCountry(prev.passportCountry)
+          ? ""
+          : prev.passportCountry
+        : "RU",
+    }))
+  }
+
+  const onPassportCountrySelect = (country: Country) => {
+    if (isRussianPassportCountry(country.code)) {
+      setForeignPassport(false)
+      set("passportCountry", "RU")
+      return
+    }
+    setForeignPassport(true)
+    set("passportCountry", country.code)
+  }
+
   const submit = async () => {
     setFormError(null)
-    const validated = validateBitbankerVerificationInput(form)
+    const payload = {
+      ...form,
+      passportCountry: isForeign ? form.passportCountry : "RU",
+      ...(isForeign
+        ? {
+            firstName: form.firstNameNative?.trim() || form.firstName,
+            lastName: form.lastNameNative?.trim() || form.lastName,
+            registrationCountry: form.registrationCountry?.trim() || "RUS",
+          }
+        : {}),
+    }
+    const validated = validateBitbankerVerificationInput(payload)
     if (!validated.ok) {
       setFieldErrors(validated.errors)
       setFormError(t("verification.bitbanker.errors.validation_failed"))
@@ -77,8 +139,8 @@ export function BitbankerVerificationForm({ defaultEmail = "", onSubmitted }: Pr
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ...form,
-        idempotencyKey: `mobile-verify-${form.email.trim()}-${form.passportNumber.trim().replace(/\s+/g, "")}`,
+        ...payload,
+        idempotencyKey: `mobile-verify-${payload.email.trim()}-${payload.passportNumber.trim().replace(/\s+/g, "")}`,
       }),
     })
     const body = (await res.json().catch(() => ({}))) as {
@@ -94,66 +156,277 @@ export function BitbankerVerificationForm({ defaultEmail = "", onSubmitted }: Pr
     onSubmitted?.()
   }
 
-  const field = (label: string, key: keyof BitbankerVerificationFormInput, props?: { keyboardType?: "default" | "phone-pad" }) => (
-    <View className="mb-3">
-      <Field
-        label={label}
-        value={String(form[key] ?? "")}
-        onChangeText={(v) => {
-          if (key === "passportCountry" || key === "registrationCountry") set(key, v.toUpperCase() as never)
-          else if (key === "passportNumber") set(key, v.replace(/\s+/g, "") as never)
-          else set(key, v as never)
-        }}
-        keyboardType={props?.keyboardType}
-      />
-      {err(key as BitbankerVerificationField) ? (
-        <Text className="mt-1 text-sm text-red-600">{err(key as BitbankerVerificationField)}</Text>
-      ) : null}
-    </View>
-  )
-
   return (
-    <View>
-      {field(t("verification.bitbanker.passportCountry"), "passportCountry")}
-      <Text className="mb-3 text-xs text-muted">{t("verification.bitbanker.passportCountryHint")}</Text>
-      {isForeign ? (
-        <Text className="mb-3 text-sm text-muted">{t("verification.bitbanker.foreignBranchNote")}</Text>
+    <View style={styles.form}>
+      <View style={styles.segmentRow}>
+        <Pressable
+          onPress={() => setPassportKind(false)}
+          style={[styles.segment, !foreignPassport && styles.segmentActive]}
+        >
+          <Text style={[styles.segmentText, !foreignPassport && styles.segmentTextActive]}>
+            {t("verification.passportSegmentRu")}
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setPassportKind(true)}
+          style={[styles.segment, foreignPassport && styles.segmentActive]}
+        >
+          <Text style={[styles.segmentText, foreignPassport && styles.segmentTextActive]}>
+            {t("verification.passportSegmentForeign")}
+          </Text>
+        </Pressable>
+      </View>
+
+      {foreignPassport ? (
+        <View style={styles.foreignCountry}>
+          <Text style={styles.fieldLabel}>{t("verification.labelCountry")}</Text>
+          <Pressable onPress={() => setCountryOpen(true)} style={styles.selectBox}>
+            <View style={styles.selectValue}>
+              {selectedPassportCountry ? <FlagIcon code={selectedPassportCountry.code} size={18} /> : null}
+              <Text style={[styles.selectText, !selectedPassportCountry && styles.selectPlaceholder]}>
+                {selectedPassportCountry
+                  ? selectedPassportCountry.name
+                  : t("verification.placeholderSelectCountry")}
+              </Text>
+            </View>
+            <ChevronDown size={18} color={colors.muted} />
+          </Pressable>
+          {err("passportCountry") ? <Text style={styles.fieldError}>{err("passportCountry")}</Text> : null}
+        </View>
       ) : null}
-      {field(t("verification.bitbanker.firstNameCyrillic"), "firstName")}
-      {field(t("verification.bitbanker.lastNameCyrillic"), "lastName")}
-      {!isForeign ? field(t("verification.bitbanker.patronymic"), "patronymic") : null}
+
+      <FormSection title={t("verification.formSectionName")}>
+        {isForeign ? (
+          <>
+            <Field
+              label={t("verification.bitbanker.firstNameNative")}
+              value={form.firstNameNative ?? ""}
+              onChangeText={(v) => set("firstNameNative", v)}
+              error={err("firstNameNative")}
+            />
+            <Field
+              label={t("verification.bitbanker.lastNameNative")}
+              value={form.lastNameNative ?? ""}
+              onChangeText={(v) => set("lastNameNative", v)}
+              error={err("lastNameNative")}
+            />
+          </>
+        ) : (
+          <>
+            <Field
+              label={t("verification.formFirstName")}
+              value={form.firstName}
+              onChangeText={(v) => set("firstName", v)}
+              error={err("firstName")}
+            />
+            <Field
+              label={t("verification.formLastName")}
+              value={form.lastName}
+              onChangeText={(v) => set("lastName", v)}
+              error={err("lastName")}
+            />
+            <Field
+              label={t("verification.formPatronymic")}
+              value={form.patronymic ?? ""}
+              onChangeText={(v) => set("patronymic", v)}
+              error={err("patronymic")}
+            />
+          </>
+        )}
+      </FormSection>
+
       {isForeign ? (
-        <>
-          {field(t("verification.bitbanker.firstNameNative"), "firstNameNative")}
-          {field(t("verification.bitbanker.lastNameNative"), "lastNameNative")}
-          <Text className="mb-2 font-medium text-gray-900">{t("verification.bitbanker.registrationSection")}</Text>
-          {field(t("verification.bitbanker.registrationCountry"), "registrationCountry")}
-          {field(t("verification.bitbanker.registrationCity"), "registrationCity")}
-          {field(t("verification.bitbanker.registrationStreet"), "registrationStreet")}
-          {field(t("verification.bitbanker.registrationHouse"), "registrationHouse")}
-          {field(t("verification.bitbanker.registrationIndex"), "registrationIndex")}
-        </>
+        <FormSection title={t("verification.formSectionAddress")}>
+          <Field
+            label={t("verification.bitbanker.registrationCity")}
+            value={form.registrationCity ?? ""}
+            onChangeText={(v) => set("registrationCity", v)}
+            error={err("registrationCity")}
+          />
+          <Field
+            label={t("verification.bitbanker.registrationStreet")}
+            value={form.registrationStreet ?? ""}
+            onChangeText={(v) => set("registrationStreet", v)}
+            error={err("registrationStreet")}
+          />
+          <Field
+            label={t("verification.bitbanker.registrationHouse")}
+            value={form.registrationHouse ?? ""}
+            onChangeText={(v) => set("registrationHouse", v)}
+            error={err("registrationHouse")}
+          />
+        </FormSection>
       ) : null}
-      {field(t("verification.bitbanker.email"), "email")}
-      {field(t("verification.bitbanker.phone"), "phone", { keyboardType: "phone-pad" })}
-      <Text className="mb-3 text-xs text-muted">{t("verification.bitbanker.phoneHint")}</Text>
-      {field(t("verification.bitbanker.birthDate"), "birthDate")}
-      {field(t("verification.bitbanker.passportIssueDate"), "passportIssueDate")}
-      <Text className="mb-3 text-xs text-muted">{t("verification.bitbanker.dateHint")}</Text>
-      {field(t("verification.bitbanker.passportNumber"), "passportNumber")}
-      <Text className="mb-3 text-xs text-muted">{t("verification.bitbanker.passportNumberHint")}</Text>
-      <Pressable onPress={() => set("consent", !form.consent)} className="mb-4 flex-row items-start gap-2">
-        <View className={`mt-0.5 h-5 w-5 rounded border ${form.consent ? "bg-primary" : "bg-white"}`} />
-        <Text className="flex-1 text-sm text-gray-700">{t("verification.bitbanker.consent")}</Text>
+
+      <FormSection title={t("verification.formSectionPassport")}>
+        <Field
+          label={t("verification.formPassportNumber")}
+          value={form.passportNumber}
+          onChangeText={(v) => set("passportNumber", v.replace(/\s+/g, ""))}
+          error={err("passportNumber")}
+        />
+        <View style={styles.dateRow}>
+          <View style={styles.dateHalf}>
+            <Field
+              label={t("verification.formBirthDate")}
+              value={form.birthDate}
+              onChangeText={(v) => set("birthDate", v)}
+              placeholder={t("verification.formDatePlaceholder")}
+              error={err("birthDate")}
+            />
+          </View>
+          <View style={styles.dateHalf}>
+            <Field
+              label={t("verification.formPassportIssueDate")}
+              value={form.passportIssueDate}
+              onChangeText={(v) => set("passportIssueDate", v)}
+              placeholder={t("verification.formDatePlaceholder")}
+              error={err("passportIssueDate")}
+            />
+          </View>
+        </View>
+      </FormSection>
+
+      <FormSection title={t("verification.formSectionContact")}>
+        <Field
+          label={t("verification.bitbanker.phone")}
+          value={form.phone ?? ""}
+          onChangeText={(v) => set("phone", v)}
+          keyboardType="phone-pad"
+          placeholder="+79001234567"
+          error={err("phone")}
+        />
+        <Field
+          label={t("verification.bitbanker.email")}
+          value={form.email}
+          onChangeText={(v) => set("email", v)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          error={err("email")}
+        />
+      </FormSection>
+
+      <Pressable
+        onPress={() => set("consent", !form.consent)}
+        style={[styles.consentRow, form.consent && styles.consentRowOn]}
+      >
+        <View style={[styles.checkbox, form.consent && styles.checkboxOn]}>
+          {form.consent ? <Check size={14} color="#FFFFFF" strokeWidth={3} /> : null}
+        </View>
+        <Text style={styles.consentText}>{t("verification.formConsentShort")}</Text>
       </Pressable>
-      {err("consent") ? <Text className="mb-3 text-sm text-red-600">{err("consent")}</Text> : null}
-      {formError ? <Text className="mb-3 text-sm text-red-600">{formError}</Text> : null}
+      {err("consent") ? <Text style={styles.formError}>{err("consent")}</Text> : null}
+      {formError ? <Text style={styles.formError}>{formError}</Text> : null}
+
       <PrimaryButton
-        label={busy ? t("verification.bitbanker.submitting") : t("verification.bitbanker.submit")}
+        label={busy ? t("verification.bitbanker.submitting") : t("verification.submit")}
         onPress={() => void submit()}
         busy={busy}
         disabled={!form.consent}
       />
+
+      <CountryPicker
+        open={countryOpen}
+        title={t("verification.labelCountry")}
+        searchPlaceholder={t("verification.searchCountries")}
+        countries={countries}
+        selectedCode={form.passportCountry || null}
+        onSelect={onPassportCountrySelect}
+        onClose={() => setCountryOpen(false)}
+      />
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  form: { paddingBottom: 32, paddingTop: 4 },
+  segmentRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 16,
+    padding: 4,
+    borderRadius: radius.row,
+    backgroundColor: colors.border,
+  },
+  segment: {
+    flex: 1,
+    minHeight: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    paddingHorizontal: 8,
+  },
+  segmentActive: {
+    backgroundColor: colors.surface,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 1,
+  },
+  segmentText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.muted, textAlign: "center" },
+  segmentTextActive: { color: colors.text },
+  foreignCountry: { marginBottom: 12 },
+  fieldLabel: { marginBottom: 8, fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
+  selectBox: {
+    minHeight: 48,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: radius.row,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: 14,
+  },
+  selectValue: { flexDirection: "row", alignItems: "center", gap: 10, flexShrink: 1 },
+  selectText: { fontSize: typeSize.body, color: colors.text },
+  selectPlaceholder: { color: colors.muted },
+  fieldError: { marginTop: 6, fontSize: typeSize.meta, color: colors.danger },
+  sectionCard: {
+    marginBottom: 14,
+    borderRadius: radius.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    overflow: "hidden",
+  },
+  sectionHeading: {
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 6,
+    fontSize: typeSize.meta,
+    fontWeight: "700",
+    color: colors.text,
+  },
+  sectionInner: { paddingHorizontal: 16, paddingBottom: 8 },
+  dateRow: { flexDirection: "row", gap: 10 },
+  dateHalf: { flex: 1, minWidth: 0 },
+  consentRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+    marginBottom: 16,
+    marginTop: 4,
+    borderRadius: radius.row,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    padding: 14,
+  },
+  consentRowOn: { borderColor: "#FDBA74", backgroundColor: colors.heroBody },
+  checkbox: {
+    marginTop: 1,
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.paper,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxOn: { borderColor: colors.primary, backgroundColor: colors.primary },
+  consentText: { flex: 1, fontSize: typeSize.meta, lineHeight: 20, color: colors.text },
+  formError: { marginBottom: 12, fontSize: typeSize.meta, color: colors.danger },
+})

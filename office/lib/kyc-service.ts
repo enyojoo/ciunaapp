@@ -35,7 +35,7 @@ export interface CreateIdentitySubmission {
 export interface CreateAddressSubmission {
   country_code: string
   address: string
-  document_type: "utility_bill" | "bank_statement" | "lease_agreement"
+  document_type: "registration" | "utility_bill" | "bank_statement" | "lease_agreement"
   address_document_file: File
 }
 

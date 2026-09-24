@@ -44,13 +44,17 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   } else if (type === "address") {
     const document_type = formData.get("document_type") as string
 
-    const validDocumentTypes = ["utility_bill", "bank_statement", "lease_agreement"]
+    const validDocumentTypes = ["registration", "utility_bill", "bank_statement", "lease_agreement"]
     if (!document_type || !validDocumentTypes.includes(document_type)) {
       return createErrorResponse("Valid document type is required for address verification", 400)
     }
 
     const submission = await kycService.createAddressSubmission(user.id, {
-      document_type: document_type as "utility_bill" | "bank_statement" | "lease_agreement",
+      document_type: document_type as
+        | "registration"
+        | "utility_bill"
+        | "bank_statement"
+        | "lease_agreement",
       address_document_file: file,
     }, client)
 

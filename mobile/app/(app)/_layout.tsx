@@ -39,7 +39,7 @@ export default function AppTabs() {
       <Tabs.Screen
         name="transactions"
         options={{
-          title: t("nav.transactions", { defaultValue: "Transactions" }),
+          title: t("nav.transactions", { defaultValue: "Transfer" }),
           tabBarIcon: ({ color, size }) => <History size={size} color={color} />,
         }}
       />

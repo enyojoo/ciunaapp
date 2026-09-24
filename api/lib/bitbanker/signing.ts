@@ -25,11 +25,16 @@ export function computeFullSign(bodyWithoutSign: Record<string, unknown>, apiSec
   return createHmac("sha256", apiSecret).update(payload, "utf8").digest("hex")
 }
 
+function bodyForSign(payload: Record<string, unknown>): Record<string, unknown> {
+  const { full_sign: _fs, sign: _s, sign_2: _s2, ...rest } = payload
+  return rest
+}
+
 export function attachFullSign<T extends Record<string, unknown>>(
   body: T,
   apiSecret: string,
 ): T & { full_sign: string } {
-  const { full_sign: _fs, sign: _s, ...rest } = body as T & { full_sign?: string; sign?: string }
+  const rest = bodyForSign(body as Record<string, unknown>) as T
   const full_sign = computeFullSign(rest, apiSecret)
   return { ...rest, full_sign } as T & { full_sign: string }
 }
@@ -37,7 +42,7 @@ export function attachFullSign<T extends Record<string, unknown>>(
 export function verifyFullSign(payload: Record<string, unknown>, apiSecret: string): boolean {
   const provided = String(payload.full_sign ?? payload.sign ?? "").trim()
   if (!provided) return false
-  const { full_sign: _fs, sign: _s, ...rest } = payload
+  const rest = bodyForSign(payload)
   const expected = computeFullSign(rest, apiSecret)
   try {
     const a = Buffer.from(provided, "utf8")

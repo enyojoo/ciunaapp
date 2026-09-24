@@ -26,7 +26,7 @@ OpenAPI: https://api.aws.bitbanker.org/latest/docs/public/openapi
 
 **Adapter responsibilities:** env config, `X-API-KEY`, per-endpoint signing (`timestamp`, `nonce`, `full_sign`, idempotency where required), signature verification on responses and webhooks, RUB → RUBR, error mapping, sandbox vs prod base URL.
 
-**Env (server, gitignored):** `BITBANKER_ENVIRONMENT`, `BITBANKER_API_BASE_URL`, `BITBANKER_API_KEY`, `BITBANKER_API_SECRET`. Sandbox example base: `https://api.aws.dev.bitbanker.org/latest` — confirm with partner before prod.
+**Env (server, gitignored):** `BITBANKER_ENVIRONMENT`, `BITBANKER_API_BASE_URL`, `BITBANKER_API_KEY`, `BITBANKER_API_SECRET`. Sandbox base: `https://ext-api.dev.bitbanker.ru` (no `/latest`). Production: `https://api.aws.bitbanker.org/latest`. Optional `BITBANKER_DEV_ESTIMATE_FEES=1` only when sandbox API is unreachable.
 
 ## Ciuna API surface
 
@@ -146,3 +146,10 @@ Sandbox: IDX/SBP activation on partner side, invoice/QR lifecycle, residual RUBR
 Sandbox credentials in local `api/.env` only.
 
 **Local smoke (adapter only):** `cd api && npx tsx scripts/bitbanker-smoke.ts` (optional `BITBANKER_SMOKE_CLIENT_ID` for GET partner-client). Register webhooks in the Bitbanker dashboard: `{API_URL}/api/webhooks/bitbanker/payments` and `.../events`.
+
+
+## Verified sandbox connectivity — 24 September 2026
+
+Read-only `GET /api/v2/prediction-sbp` succeeded on `https://ext-api.dev.bitbanker.ru` with HTTP 200 using the locally saved credentials (`sbp_fee_pct=2.1`, `sbp_fee_abs=210`). Signed `POST /api/v2/exchange-prediction` with `volume=10000` returns gross ~10214.5 RUB (~214.5 RUB processing uplift). Updated local `api/.env` to `BITBANKER_API_BASE_URL=https://ext-api.dev.bitbanker.ru`; do not append `/latest`. Production host `api.aws.bitbanker.org` returned 401 with the same sandbox keys; `api.aws.dev.bitbanker.org` does not resolve here. **Note:** Ciuna’s local `full_sign` verifier still disagrees with sandbox responses; adapter logs a warning and continues in sandbox until canonical rules are aligned (or set `BITBANKER_VERIFY_RESPONSES=1` to fail hard).
+
+The production host `https://api.aws.bitbanker.org/latest` returned HTTP 401 for these credentials. The older documented `api.aws.dev.bitbanker.org` hostname failed DNS resolution from this environment. No verification attempt, client registration, invoice, payment, or withdrawal was created. IDX activation and complete payment capability still require separate testing. Restart the local API process to load the changed environment variable.

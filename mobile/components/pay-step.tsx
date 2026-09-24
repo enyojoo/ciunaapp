@@ -1,7 +1,13 @@
 import { useMemo, useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
+import { CurrencyFlag } from "@/components/currency-flag"
 import { Field } from "./field"
 import { SheetPicker } from "./sheet-picker"
+import {
+  currenciesForReceivePicker,
+  currenciesForSendPicker,
+  formatExchangeRateDisplay,
+} from "@ciuna/shared"
 import { formatMoney } from "@/lib/money"
 import { findRate, quoteSend, type RateRow } from "@/lib/fx"
 import type { CurrencyRow } from "@/lib/types"
@@ -36,8 +42,16 @@ export function PayStep({
 }) {
   const [openSend, setOpenSend] = useState(false)
   const [openRecv, setOpenRecv] = useState(false)
-  const sendable = useMemo(() => currencies.filter((c) => c.can_send !== false), [currencies])
-  const receivable = useMemo(() => currencies.filter((c) => c.can_receive !== false), [currencies])
+  const sendable = useMemo(
+    () => currenciesForSendPicker(currencies, receiveCurrency),
+    [currencies, receiveCurrency],
+  )
+  const receivable = useMemo(
+    () => currenciesForReceivePicker(currencies, sendCurrency),
+    [currencies, sendCurrency],
+  )
+  const sendPickerEnabled = sendable.length > 1
+  const receivePickerEnabled = receivable.length > 1
   const amt = Number(sendAmount)
   const rate = findRate(rates, sendCurrency, receiveCurrency)
   const quote = quoteSend(Number.isFinite(amt) ? amt : 0, rate)
@@ -54,21 +68,33 @@ export function PayStep({
         />
       ) : null}
       <View style={styles.row}>
-        <Pressable style={styles.flex} onPress={() => setOpenSend(true)}>
-          <View style={styles.passThrough}>
+        {sendPickerEnabled ? (
+          <Pressable style={styles.flex} onPress={() => setOpenSend(true)}>
+            <View style={styles.passThrough}>
+              <Field label="Pay in" value={sendCurrency} editable={false} />
+            </View>
+          </Pressable>
+        ) : (
+          <View style={styles.flex}>
             <Field label="Pay in" value={sendCurrency} editable={false} />
           </View>
-        </Pressable>
-        <Pressable style={styles.flex} onPress={() => setOpenRecv(true)}>
-          <View style={styles.passThrough}>
+        )}
+        {receivePickerEnabled ? (
+          <Pressable style={styles.flex} onPress={() => setOpenRecv(true)}>
+            <View style={styles.passThrough}>
+              <Field label="They get" value={receiveCurrency} editable={false} />
+            </View>
+          </Pressable>
+        ) : (
+          <View style={styles.flex}>
             <Field label="They get" value={receiveCurrency} editable={false} />
           </View>
-        </Pressable>
+        )}
       </View>
       {showQuote && quote ? (
         <View style={styles.quote}>
           <Text style={styles.meta}>
-            Rate 1 {sendCurrency} = {quote.rate.toFixed(4)} {receiveCurrency}
+            Rate 1 {sendCurrency} = {formatExchangeRateDisplay(quote.rate)} {receiveCurrency}
           </Text>
           <Text style={styles.meta}>
             {quote.feeAmount > 0
@@ -83,26 +109,32 @@ export function PayStep({
         <Text style={styles.error}>Exchange rate not available for this pair.</Text>
       ) : null}
 
-      <SheetPicker
-        open={openSend}
-        title="Pay in"
-        items={sendable}
-        keyExtractor={(c) => c.code}
-        labelExtractor={(c) => `${c.code}${c.name ? ` · ${c.name}` : ""}`}
-        selectedId={sendCurrency}
-        onSelect={(c) => onChangeSendCurrency(c.code)}
-        onClose={() => setOpenSend(false)}
-      />
-      <SheetPicker
-        open={openRecv}
-        title="They get"
-        items={receivable}
-        keyExtractor={(c) => c.code}
-        labelExtractor={(c) => `${c.code}${c.name ? ` · ${c.name}` : ""}`}
-        selectedId={receiveCurrency}
-        onSelect={(c) => onChangeReceiveCurrency(c.code)}
-        onClose={() => setOpenRecv(false)}
-      />
+      {sendPickerEnabled ? (
+        <SheetPicker
+          open={openSend}
+          title="Pay in"
+          items={sendable}
+          keyExtractor={(c) => c.code}
+          labelExtractor={(c) => `${c.code}${c.name ? ` · ${c.name}` : ""}`}
+          leadingExtractor={(c) => <CurrencyFlag code={c.code} flagSvg={c.flag_svg} size={20} />}
+          selectedId={sendCurrency}
+          onSelect={(c) => onChangeSendCurrency(c.code)}
+          onClose={() => setOpenSend(false)}
+        />
+      ) : null}
+      {receivePickerEnabled ? (
+        <SheetPicker
+          open={openRecv}
+          title="They get"
+          items={receivable}
+          keyExtractor={(c) => c.code}
+          labelExtractor={(c) => `${c.code}${c.name ? ` · ${c.name}` : ""}`}
+          leadingExtractor={(c) => <CurrencyFlag code={c.code} flagSvg={c.flag_svg} size={20} />}
+          selectedId={receiveCurrency}
+          onSelect={(c) => onChangeReceiveCurrency(c.code)}
+          onClose={() => setOpenRecv(false)}
+        />
+      ) : null}
     </View>
   )
 }

@@ -17,6 +17,7 @@ import { findRate } from "@/lib/fx"
 import { useFx } from "@/lib/use-fx"
 import { formatMoney } from "@/lib/money"
 import { openInAppBrowser } from "@/lib/in-app-browser"
+import { formatExchangeRateDisplay } from "@ciuna/shared"
 import { hubLineHomePath } from "@/lib/hub"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
@@ -178,7 +179,8 @@ export default function HubCartCheckoutScreen() {
         {totals ? (
           <View style={styles.quote}>
             <Text style={styles.meta}>
-              {t("send.rate", { defaultValue: "Rate" })} 1 {sendCurrency} = {totals.exchangeRate.toFixed(4)} {receiveCurrency}
+              {t("send.rate", { defaultValue: "Rate" })} 1 {sendCurrency} ={" "}
+              {formatExchangeRateDisplay(totals.exchangeRate)} {receiveCurrency}
             </Text>
             <Text style={styles.total}>
               {t("hub.checkout.totalToPay", { defaultValue: "Total to Pay" })}: {formatMoney(totals.total, sendCurrency)}

@@ -5,6 +5,7 @@ import { isBitbankerConfigured } from "@/lib/bitbanker/config"
 import { getOrCreateClientRef, applyPartnerClientSnapshot } from "@/lib/bitbanker/db"
 import { registerPartnerClient, getPartnerClient } from "@/lib/bitbanker/partner-clients"
 import { validateBitbankerVerificationInput, type BitbankerVerificationFormInput } from "@ciuna/shared"
+import { buildBitbankerFormSnapshot } from "@/lib/bitbanker/form-snapshot"
 
 type VerificationBody = BitbankerVerificationFormInput & {
   idempotencyKey?: string
@@ -60,6 +61,9 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     attemptId = attempt.id
   }
 
+  const formSnapshot = buildBitbankerFormSnapshot(body)
+  const submittedAt = new Date().toISOString()
+
   const partnerBody = {
     client_id: ref.client_id,
     ...validated.partner,
@@ -67,7 +71,11 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
 
   await admin
     .from("bitbanker_verification_attempts")
-    .update({ status: "submitted", updated_at: new Date().toISOString() })
+    .update({
+      status: "submitted",
+      form_snapshot: formSnapshot,
+      updated_at: submittedAt,
+    })
     .eq("id", attemptId)
 
   try {
@@ -78,8 +86,16 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     await applyPartnerClientSnapshot(admin, user.id, ref.client_id, response)
     await admin
       .from("bitbanker_verification_attempts")
-      .update({ status: "succeeded", updated_at: new Date().toISOString() })
+      .update({ status: "succeeded", updated_at: submittedAt })
       .eq("id", attemptId)
+    await admin
+      .from("bitbanker_client_refs")
+      .update({
+        last_form_snapshot: formSnapshot,
+        last_form_submitted_at: submittedAt,
+        updated_at: submittedAt,
+      })
+      .eq("id", ref.id)
     return NextResponse.json({ ok: true, clientId: ref.client_id })
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Verification failed"

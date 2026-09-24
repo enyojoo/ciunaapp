@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+import { subscribeOfficeConfigRevalidate } from "./config-revalidate-bus"
 import { apiFetch } from "./api"
 import { supabase } from "./supabase"
 import { useCachedQuery } from "./use-cached-query"
@@ -7,8 +9,9 @@ import type { CurrencyRow } from "./types"
 type FxData = { currencies: CurrencyRow[]; rates: RateRow[] }
 
 /** Public, not user-specific — one shared cache entry for the whole app. */
-const FX_CACHE_KEY = "ciuna_fx_v1"
-const FX_TTL_MS = 15 * 60_000
+const FX_CACHE_KEY = "ciuna_fx_v2"
+/** Short TTL; Office edits also push via {@link OfficeConfigLiveSync} Realtime. */
+const FX_TTL_MS = 60_000
 
 async function fetchFx(): Promise<FxData> {
   const [curRes, rateRes] = await Promise.all([
@@ -25,6 +28,9 @@ async function fetchFx(): Promise<FxData> {
 
 export function useFx() {
   const { data, loading, revalidate } = useCachedQuery<FxData>(FX_CACHE_KEY, fetchFx, { ttlMs: FX_TTL_MS })
+
+  useEffect(() => subscribeOfficeConfigRevalidate("fx", () => void revalidate()), [revalidate])
+
   return {
     currencies: data?.currencies ?? [],
     rates: data?.rates ?? [],

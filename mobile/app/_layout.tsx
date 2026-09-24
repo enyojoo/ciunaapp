@@ -11,6 +11,7 @@ import { ResponsiveAppShell } from "@/components/layout/responsive-app-shell"
 import { SessionRestoreCanvas } from "@/components/layout/session-restore-canvas"
 import { ShellAwareSafeArea } from "@/components/layout/shell-aware-safe-area"
 import { WebViewportFrame } from "@/components/layout/web-viewport-frame"
+import { OfficeConfigLiveSync } from "@/components/office-config-live-sync"
 import { ToastProvider } from "@/components/toast-provider"
 import { AuthProvider, useAuth } from "@/lib/auth-context"
 import { ExternalLinkProvider } from "@/lib/external-link"
@@ -51,6 +52,7 @@ export default function RootLayout() {
           <ShellAwareSafeArea>
             <ToastProvider>
               <ExternalLinkProvider>
+                <OfficeConfigLiveSync />
                 <StatusBar style="dark" />
                 <RootChrome>
                     <View style={styles.navRoot}>
@@ -80,6 +82,7 @@ export default function RootLayout() {
                       <Stack.Screen name="recipients/form" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="profile" options={{ headerShown: true, title: t("profile.title") }} />
                       <Stack.Screen name="verification/index" options={{ headerShown: true, title: t("verification.hubTitle") }} />
+                      <Stack.Screen name="verification/bitbanker" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="verification/identity" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="verification/address" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="referrals" options={{ headerShown: true, title: t("referrals.pageTitle") }} />

@@ -29,7 +29,7 @@ export async function getPartnerClient(clientId: string): Promise<PartnerClientR
     method: "GET",
     path: "/api/v2/partner-clients",
     query: { client_id: clientId },
-    signBody: false,
+    signQuery: true,
   })
 }
 

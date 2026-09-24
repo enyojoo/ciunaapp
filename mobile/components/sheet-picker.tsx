@@ -52,8 +52,10 @@ export function SheetPicker<T>({
                 }}
                 style={styles.item}
               >
-                {leadingExtractor ? leadingExtractor(item) : null}
-                <Text style={[styles.itemText, selected && styles.itemSelected]}>{labelExtractor(item)}</Text>
+                {leadingExtractor ? <View style={styles.leadingSlot}>{leadingExtractor(item)}</View> : null}
+                <Text style={[styles.itemText, selected && styles.itemSelected]} numberOfLines={1}>
+                  {labelExtractor(item)}
+                </Text>
               </Pressable>
             )
           })}
@@ -72,11 +74,13 @@ const styles = StyleSheet.create({
     minHeight: 48,
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
-  itemText: { fontSize: typeSize.body, color: colors.text },
+  /** Same as {@link CountryPicker} rows — natural flag width, no clipping. */
+  leadingSlot: { flexShrink: 0 },
+  itemText: { flex: 1, minWidth: 0, fontSize: typeSize.body, color: colors.text },
   itemSelected: { fontWeight: "600", color: colors.primary },
 })

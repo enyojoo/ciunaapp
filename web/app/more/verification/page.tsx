@@ -228,10 +228,6 @@ export default function VerificationPage() {
           {t("verification.hubSubtitle")}
         </p>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-          <p className="text-sm text-amber-900">{t("verification.sendGateNotice")}</p>
-        </div>
-
         {/* Info Message - Only show if both are not completed */}
         {!bothCompleted && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

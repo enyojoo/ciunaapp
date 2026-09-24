@@ -34,7 +34,8 @@ export async function PUT(request: NextRequest) {
       from_currency: rate.from_currency,
       to_currency: rate.to_currency,
       rate: rate.rate,
-      updated_at: new Date().toISOString()
+      ...(rate.metadata != null ? { metadata: rate.metadata } : {}),
+      updated_at: new Date().toISOString(),
     }))
 
     const { data, error } = await serverClient

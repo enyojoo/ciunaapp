@@ -1,9 +1,17 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { currencyService } from "@/lib/database"
 import { computeLogisticsFee, resolveFulfillment } from "@/lib/send-fulfillment"
+import { MIN_RUB_SEND_AMOUNT, SEND_QUOTE_ERROR_CODE } from "@ciuna/shared"
+import { SendQuoteError } from "./send-quote-errors"
 import { roundMoney } from "@/utils/currency"
 import { exchangePrediction, numField } from "./prediction"
 import { isBitbankerConfigured } from "./config"
+import {
+  assertLeg2UsdtCoverage,
+  type RubLocalSendLegSnapshot,
+  resolveUsdtDeskRate,
+  usdtForLocalPayout,
+} from "./rub-local-send-legs"
 
 const QUOTE_TTL_MS = 60_000
 
@@ -20,7 +28,27 @@ export type CreateSendQuoteInput = {
   deliveryAddressId?: string | null
 }
 
-export async function createSendQuote(admin: SupabaseClient, input: CreateSendQuoteInput) {
+export type SendQuoteBreakdown = {
+  sendAmount: number
+  receiveAmount: number
+  sendCurrency: string
+  receiveCurrency: string
+  exchangeRate: number
+  feeAmount: number
+  feeType: string
+  logisticsFeeAmount: number
+  paymentProcessingFee: number
+  totalAmount: number
+  invoiceBaseB: number
+  predictedGrossG: number
+  predictedUsdtU: number
+  fulfillment: "bank_transfer" | "cash_hand"
+  quoteSnapshot: { prediction: unknown; leg2?: RubLocalSendLegSnapshot }
+}
+
+export async function computeSendQuoteBreakdown(
+  input: CreateSendQuoteInput & { skipRecipientCheck?: boolean; skipMinContributionCheck?: boolean },
+): Promise<SendQuoteBreakdown> {
   if (!isBitbankerConfigured()) {
     throw new Error("Bitbanker is not configured")
   }
@@ -32,12 +60,16 @@ export async function createSendQuote(admin: SupabaseClient, input: CreateSendQu
   }
 
   const rateData = await currencyService.getRate(sendCurrency, receiveCurrency)
-  if (!rateData) throw new Error("Exchange rate not available")
+  if (!rateData) {
+    throw new SendQuoteError(SEND_QUOTE_ERROR_CODE.RATE_UNAVAILABLE, "Exchange rate not available")
+  }
 
   let sendAmount = input.sendAmount
   let receiveAmount = input.receiveAmount
   const rate = Number(rateData.rate)
-  if (!rate || rate <= 0) throw new Error("Invalid exchange rate")
+  if (!rate || rate <= 0) {
+    throw new SendQuoteError(SEND_QUOTE_ERROR_CODE.RATE_UNAVAILABLE, "Invalid exchange rate")
+  }
 
   if (sendAmount != null && sendAmount > 0) {
     receiveAmount = roundMoney(sendAmount * rate)
@@ -49,6 +81,13 @@ export async function createSendQuote(admin: SupabaseClient, input: CreateSendQu
 
   if (!sendAmount || !receiveAmount) throw new Error("Invalid amounts")
 
+  if (sendCurrency === "RUB" && sendAmount < MIN_RUB_SEND_AMOUNT) {
+    throw new SendQuoteError(
+      SEND_QUOTE_ERROR_CODE.MIN_SEND_AMOUNT,
+      `Minimum send amount is ${MIN_RUB_SEND_AMOUNT} RUB`,
+    )
+  }
+
   const fulfillmentCheck = resolveFulfillment(receiveAmount, rateData)
   const fulfillment =
     fulfillmentCheck.ok &&
@@ -57,7 +96,7 @@ export async function createSendQuote(admin: SupabaseClient, input: CreateSendQu
       ? "cash_hand"
       : "bank_transfer"
 
-  if (fulfillment === "bank_transfer" && !input.recipientId) {
+  if (!input.skipRecipientCheck && fulfillment === "bank_transfer" && !input.recipientId) {
     throw new Error("Recipient is required")
   }
 
@@ -75,23 +114,73 @@ export async function createSendQuote(admin: SupabaseClient, input: CreateSendQu
   const grossG = numField(prediction.volume_give_prediction)
   const usdtU = numField(prediction.volume_take_final)
   if (grossG == null || usdtU == null) {
-    throw new Error("Bitbanker prediction unavailable")
+    throw new SendQuoteError(SEND_QUOTE_ERROR_CODE.PREDICTION_UNAVAILABLE, "Bitbanker prediction unavailable")
   }
 
   const paymentProcessingFee = roundMoney(Math.max(0, grossG - invoiceBaseB))
   const totalAmount = roundMoney(grossG)
 
-  const minContribution = Number(process.env.BITBANKER_MIN_CONTRIBUTION_USDT || "0")
-  const deskRate = Number(process.env.BITBANKER_DESTINATION_DESK_RATE || "0")
-  const trc20Fee = Number(process.env.BITBANKER_TRC20_FEE_USDT || "0")
-  if (deskRate > 0) {
-    const payoutCost = receiveAmount / deskRate
-    const projected = usdtU - payoutCost - trc20Fee
-    if (projected < minContribution) {
-      throw new Error("Quote does not meet minimum contribution for this corridor")
-    }
+  const usdToLocalRow =
+    receiveCurrency === "USD" ? { rate: 1 } : await currencyService.getRate("USD", receiveCurrency)
+  const { desk: usdtDesk, source: usdtDeskSource } = resolveUsdtDeskRate(
+    receiveCurrency,
+    usdToLocalRow ? Number(usdToLocalRow.rate) : null,
+  )
+  const leg2UsdtNeeded = usdtForLocalPayout(receiveAmount, usdtDesk)
+  const leg2: RubLocalSendLegSnapshot = {
+    sendAmountRub: sendAmount,
+    receiveAmountLocal: receiveAmount,
+    receiveCurrency,
+    invoiceBaseB,
+    sbpGrossG: grossG,
+    usdtFromBitbanker: usdtU,
+    usdtForLocalPayout: leg2UsdtNeeded,
+    usdtDeskLocalPerUnit: usdtDesk,
+    usdtDeskSource,
   }
 
+  if (!input.skipMinContributionCheck) {
+    if (leg2UsdtNeeded == null) {
+      throw new SendQuoteError(
+        SEND_QUOTE_ERROR_CODE.DESK_RATE_NOT_CONFIGURED,
+        `USD to ${receiveCurrency} exchange rate is not configured`,
+      )
+    }
+    assertLeg2UsdtCoverage({
+      usdtFromBitbanker: usdtU,
+      usdtForLocalPayout: leg2UsdtNeeded,
+    })
+  }
+
+  return {
+    sendAmount,
+    receiveAmount,
+    sendCurrency,
+    receiveCurrency,
+    exchangeRate: rate,
+    feeAmount: roundMoney(feeAmount),
+    feeType,
+    logisticsFeeAmount: roundMoney(logisticsFeeAmount),
+    paymentProcessingFee,
+    totalAmount,
+    invoiceBaseB,
+    predictedGrossG: grossG,
+    predictedUsdtU: usdtU,
+    fulfillment,
+    quoteSnapshot: { prediction, leg2 },
+  }
+}
+
+export async function previewSendQuote(input: CreateSendQuoteInput) {
+  return computeSendQuoteBreakdown({
+    ...input,
+    skipRecipientCheck: true,
+    skipMinContributionCheck: true,
+  })
+}
+
+export async function createSendQuote(admin: SupabaseClient, input: CreateSendQuoteInput) {
+  const breakdown = await computeSendQuoteBreakdown(input)
   const expiresAt = new Date(Date.now() + QUOTE_TTL_MS).toISOString()
 
   const { data: quote, error } = await admin
@@ -99,26 +188,26 @@ export async function createSendQuote(admin: SupabaseClient, input: CreateSendQu
     .insert({
       user_id: input.userId,
       status: "open",
-      send_amount: sendAmount,
-      send_currency: sendCurrency,
-      receive_amount: receiveAmount,
-      receive_currency: receiveCurrency,
-      exchange_rate: rate,
-      fee_amount: roundMoney(feeAmount),
-      fee_type: feeType,
-      logistics_fee_amount: roundMoney(logisticsFeeAmount),
-      payment_processing_fee: paymentProcessingFee,
-      total_amount: totalAmount,
-      invoice_base_b: invoiceBaseB,
-      predicted_gross_g: grossG,
-      predicted_usdt_u: usdtU,
-      recipient_id: fulfillment === "cash_hand" ? null : input.recipientId ?? null,
-      fulfillment_type: fulfillment,
+      send_amount: breakdown.sendAmount,
+      send_currency: breakdown.sendCurrency,
+      receive_amount: breakdown.receiveAmount,
+      receive_currency: breakdown.receiveCurrency,
+      exchange_rate: breakdown.exchangeRate,
+      fee_amount: breakdown.feeAmount,
+      fee_type: breakdown.feeType,
+      logistics_fee_amount: breakdown.logisticsFeeAmount,
+      payment_processing_fee: breakdown.paymentProcessingFee,
+      total_amount: breakdown.totalAmount,
+      invoice_base_b: breakdown.invoiceBaseB,
+      predicted_gross_g: breakdown.predictedGrossG,
+      predicted_usdt_u: breakdown.predictedUsdtU,
+      recipient_id: breakdown.fulfillment === "cash_hand" ? null : input.recipientId ?? null,
+      fulfillment_type: breakdown.fulfillment,
       delivery_address_line: input.deliveryAddressLine ?? null,
       delivery_phone: input.deliveryPhone ?? null,
       delivery_address_id: input.deliveryAddressId ?? null,
       payment_method_intent: "bitbanker",
-      quote_snapshot: { prediction },
+      quote_snapshot: breakdown.quoteSnapshot,
       expires_at: expiresAt,
     })
     .select("*")

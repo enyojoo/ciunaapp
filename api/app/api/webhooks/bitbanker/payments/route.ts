@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { bitbankerCredentials, isBitbankerConfigured } from "@/lib/bitbanker/config"
-import { verifyFullSign } from "@/lib/bitbanker/signing"
+import { isBitbankerConfigured } from "@/lib/bitbanker/config"
+import { verifyBitbankerWebhook } from "@/lib/bitbanker/webhook-verify"
 import { insertWebhookInbox } from "@/lib/bitbanker/db"
 import { getInvoice } from "@/lib/bitbanker/invoices"
 
@@ -17,14 +17,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true })
   }
 
-  try {
-    const { apiSecret } = bitbankerCredentials()
-    if ("full_sign" in payload && !verifyFullSign(payload, apiSecret)) {
-      console.warn("bitbanker payments webhook: invalid signature")
-      return NextResponse.json({ error: "invalid signature" }, { status: 401 })
-    }
-  } catch {
-    return NextResponse.json({ ok: true })
+  if (!verifyBitbankerWebhook(payload)) {
+    console.warn("bitbanker payments webhook: missing or invalid signature")
+    return NextResponse.json({ error: "invalid signature" }, { status: 401 })
   }
 
   const admin = createServerClient()

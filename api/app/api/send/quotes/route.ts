@@ -3,6 +3,7 @@ import { createServerClient } from "@/lib/supabase"
 import { requireUser, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { requireBitbankerEligible } from "@/lib/bitbanker/eligibility-service"
 import { createSendQuote } from "@/lib/bitbanker/send-quote-service"
+import { sendQuoteErrorResponse } from "@/lib/bitbanker/send-quote-errors"
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
   const user = await requireUser(request)
@@ -47,7 +48,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       },
     })
   } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : "Failed to create quote"
-    return createErrorResponse(message, 400)
+    const { message, code, status } = sendQuoteErrorResponse(e)
+    return createErrorResponse(message, status, code)
   }
 })

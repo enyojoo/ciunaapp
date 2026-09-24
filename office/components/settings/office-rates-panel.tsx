@@ -178,6 +178,14 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
 
       for (const [toCurrency, rateData] of Object.entries(rateUpdates)) {
         const rateInfo = rateData as any
+        const existingRate = exchangeRates.find(
+          (r) => r.from_currency === selectedCurrency.code && r.to_currency === toCurrency,
+        )
+        const metadata =
+          existingRate?.metadata && typeof existingRate.metadata === "object" && !Array.isArray(existingRate.metadata)
+            ? { ...(existingRate.metadata as Record<string, unknown>) }
+            : ({} as Record<string, unknown>)
+
         updates.push({
           from_currency: selectedCurrency.code,
           to_currency: toCurrency,
@@ -192,6 +200,7 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
           cash_receive_max: optionalReceiveBound(rateInfo.cashReceiveMax),
           logistics_fee_type: rateInfo.logisticsFeeType ?? "free",
           logistics_fee_amount: Number.parseFloat(rateInfo.logisticsFeeAmount || "0"),
+          metadata,
           status: "active",
           updated_at: new Date().toISOString(),
         })

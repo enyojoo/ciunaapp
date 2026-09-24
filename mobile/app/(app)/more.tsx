@@ -29,9 +29,9 @@ export default function MoreScreen() {
   const { openLink } = useExternalLink()
   const router = useRouter()
   const [pinSet, setPinSet] = useState(false)
-  const { data: eligibility, mutate } = useBitbankerEligibility(user?.id)
+  const { data: eligibility, revalidate } = useBitbankerEligibility(user?.id)
 
-  useFocusRevalidate(() => void mutate())
+  useFocusRevalidate(() => void revalidate())
 
   useEffect(() => {
     if (!user) return

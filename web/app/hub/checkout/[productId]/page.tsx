@@ -30,6 +30,7 @@ import {
   CurrencyPickerPopover,
   CurrencyPickerSheet,
   CurrencyPickerTrigger,
+  isCurrencyPickerEnabled,
 } from "@/components/send/currency-picker-sheet"
 import { SendMakePaymentStep } from "@/components/send/send-make-payment-step"
 import type { HubProductRow } from "@/lib/hub-types"
@@ -715,15 +716,20 @@ export default function HubCheckoutPage() {
                               selectedCurrency={sendCurrency}
                               onOpen={() => setSendDropdownOpen(true)}
                               currencies={currencies}
-                            />
-                            <CurrencyPickerSheet
-                              open={sendDropdownOpen}
-                              onOpenChange={setSendDropdownOpen}
-                              selectedCurrency={sendCurrency}
-                              onSelect={setSendCurrency}
-                              currencies={currencies}
                               type="send"
+                              otherCurrency={receiveCurrency}
                             />
+                            {isCurrencyPickerEnabled(currencies, "send", receiveCurrency) ? (
+                              <CurrencyPickerSheet
+                                open={sendDropdownOpen}
+                                onOpenChange={setSendDropdownOpen}
+                                selectedCurrency={sendCurrency}
+                                onSelect={setSendCurrency}
+                                currencies={currencies}
+                                type="send"
+                                otherCurrency={receiveCurrency}
+                              />
+                            ) : null}
                           </div>
                           <div className="hidden md:block shrink-0">
                             <CurrencyPickerPopover
@@ -731,6 +737,7 @@ export default function HubCheckoutPage() {
                               onSelect={setSendCurrency}
                               currencies={currencies}
                               type="send"
+                              otherCurrency={receiveCurrency}
                             />
                           </div>
                         </div>

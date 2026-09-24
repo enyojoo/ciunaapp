@@ -193,13 +193,14 @@ export function requireUserAccess(user: AuthenticatedUser, resourceUserId: strin
 /**
  * Create standardized API error response
  */
-export function createErrorResponse(message: string, status: number = 500) {
+export function createErrorResponse(message: string, status: number = 500, errorCode?: string) {
   return Response.json(
-    { 
+    {
       error: message,
+      ...(errorCode ? { errorCode } : {}),
       timestamp: new Date().toISOString(),
-    }, 
-    { status }
+    },
+    { status },
   )
 }
 
