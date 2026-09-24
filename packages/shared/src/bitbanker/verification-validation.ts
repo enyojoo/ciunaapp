@@ -89,7 +89,15 @@ export type BitbankerPartnerClientPayload = {
 }
 
 const CYRILLIC = /[\u0400-\u04FF]/
+/** Full person-name string: Cyrillic letters, spaces, hyphens, apostrophes. */
+const CYRILLIC_PERSON_NAME = /^[\u0400-\u04FF\s'-]+$/
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export function isCyrillicPersonName(raw: string): boolean {
+  const s = raw.trim()
+  if (!s) return false
+  return CYRILLIC_PERSON_NAME.test(s) && CYRILLIC.test(s)
+}
 
 export function isRussianPassportCountry(code: string): boolean {
   const c = code.trim().toUpperCase()

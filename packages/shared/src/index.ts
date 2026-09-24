@@ -81,6 +81,7 @@ export {
   parseFlexibleDate,
   formatBitbankerDate,
   normalizeBitbankerPhone,
+  isCyrillicPersonName,
   isRussianPassportCountry,
   type BitbankerVerificationFormInput,
   type BitbankerVerificationField,
