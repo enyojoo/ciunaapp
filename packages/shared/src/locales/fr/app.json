@@ -434,7 +434,7 @@
     },
     "fee": "Frais de change",
     "processingFee": "Frais de traitement",
-    "rate": "Taux",
+    "rate": "Taux de change",
     "free": "Gratuit",
     "min": "Min. : {{amount}}",
     "max": "Max. : {{amount}}",

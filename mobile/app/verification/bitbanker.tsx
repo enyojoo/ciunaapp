@@ -6,7 +6,7 @@ import { CheckCircle2, Clock } from "lucide-react-native"
 import { useAuth } from "@/lib/auth-context"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import { PrimaryButton } from "@/components/primary-button"
-import { BitbankerVerificationForm } from "@/components/bitbanker-verification-form"
+import { BitbankerKycBridge } from "@/components/bitbanker-kyc-bridge"
 import { ScreenScroll } from "@/components/screen"
 import { colors, radius, type as typeSize, ui } from "@/lib/theme"
 
@@ -40,11 +40,11 @@ export default function BitbankerVerificationScreen() {
   const { t } = useTranslation("app")
   const navigation = useNavigation()
   const router = useRouter()
-  const { user, userProfile } = useAuth()
-  const { data, loading, revalidate } = useBitbankerEligibility(user?.id)
+  const { user } = useAuth()
+  const { data, loading } = useBitbankerEligibility(user?.id)
 
   useEffect(() => {
-    navigation.setOptions({ title: t("verification.sbpFormTitle") })
+    navigation.setOptions({ title: t("verification.kycBridge.screenTitle", { defaultValue: "Verify identity" }) })
   }, [navigation, t])
 
   const verified = data?.isVerifiedForSbp
@@ -66,7 +66,9 @@ export default function BitbankerVerificationScreen() {
         tone="success"
         icon={<CheckCircle2 size={32} color={colors.success} strokeWidth={2} />}
         title={t("verification.sbpSuccessTitle")}
-        body={t("verification.sbpSuccessBody")}
+        body={t("verification.kycBridge.successBody", {
+          defaultValue: "You can send money with SBP. Return to your transfer to continue.",
+        })}
         action={
           <PrimaryButton label={t("verification.bitbanker.goToSend")} onPress={() => router.replace("/send" as never)} />
         }
@@ -76,28 +78,28 @@ export default function BitbankerVerificationScreen() {
 
   if (checking) {
     return (
-      <StateCard
-        tone="pending"
-        icon={<Clock size={32} color="#B45309" strokeWidth={2} />}
-        title={t("verification.hubStatusPendingTitle")}
-        body={t("verification.sbpChecking")}
-      />
+      <ScreenScroll edges={["left", "right"]} keyboard>
+        <View style={[styles.stateCard, styles.stateCardPending, styles.inlinePending]}>
+          <Clock size={28} color="#B45309" strokeWidth={2} />
+          <Text style={styles.stateTitle}>{t("verification.hubStatusPendingTitle")}</Text>
+          <Text style={styles.stateBody}>{t("verification.kycBridge.reviewPending")}</Text>
+        </View>
+        <BitbankerKycBridge autoOpenVerification />
+      </ScreenScroll>
     )
   }
 
   return (
     <ScreenScroll edges={["left", "right"]} keyboard>
-      <Text style={ui.subtitle}>{t("verification.formLead")}</Text>
-      <BitbankerVerificationForm
-        defaultEmail={userProfile?.email ?? user?.email ?? ""}
-        onSubmitted={() => void revalidate()}
-      />
+      <Text style={ui.subtitle}>{t("verification.kycBridge.subtitle", { defaultValue: "Hosted verification" })}</Text>
+      <BitbankerKycBridge autoOpenVerification />
     </ScreenScroll>
   )
 }
 
 const styles = StyleSheet.create({
   center: { paddingVertical: 80, alignItems: "center" },
+  inlinePending: { marginTop: 8, marginBottom: 16 },
   stateCard: {
     marginTop: 8,
     alignItems: "center",

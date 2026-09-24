@@ -59,7 +59,7 @@ export function SendReviewStep({
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.label}>{t("send.processingFee", { defaultValue: "Processing fee" })}</Text>
+          <Text style={styles.label}>{t("send.processingFee", { defaultValue: "Processing Fee" })}</Text>
           {processingFeePending ? (
             <InlineSkeleton width={88} height={16} />
           ) : (

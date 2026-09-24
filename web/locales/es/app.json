@@ -385,7 +385,7 @@
     "sendMoneyHeroTitle": "Enviar dinero",
     "sendMoneyHeroSubtitle": "Elige monto y monedas para comenzar.",
     "fee": "Comisión de cambio",
-    "rate": "Tipo",
+    "rate": "Tipo de cambio",
     "free": "Gratis",
     "min": "Mín.: {{amount}}",
     "max": "Máx.: {{amount}}",

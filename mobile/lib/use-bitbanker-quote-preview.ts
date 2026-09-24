@@ -1,5 +1,9 @@
-import { useEffect, useRef, useState } from "react"
-import { minSendAmountForCurrency } from "@ciuna/shared"
+import { useEffect, useMemo, useRef, useState } from "react"
+import {
+  BITBANKER_QUOTE_PREVIEW_DEBOUNCE_MS,
+  bitbankerQuotePreviewMatchesInput,
+  minSendAmountForCurrency,
+} from "@ciuna/shared"
 import {
   noticeForQuotePreviewFailure,
   noticeForQuotePreviewNetworkFailure,
@@ -9,6 +13,8 @@ import { fetchWithAuth } from "./api"
 
 export type BitbankerQuotePreview = {
   sendAmount: number
+  sendCurrency: string
+  receiveCurrency: string
   receiveAmount: number
   exchangeRate: number
   feeAmount: number
@@ -28,6 +34,19 @@ export function useBitbankerQuotePreview(opts: {
   const [loading, setLoading] = useState(false)
   const requestId = useRef(0)
 
+  const parsedAmount = Number(opts.sendAmount)
+  const min = minSendAmountForCurrency(opts.sendCurrency)
+  const amountValid =
+    Number.isFinite(parsedAmount) &&
+    parsedAmount > 0 &&
+    (min == null || parsedAmount >= min)
+
+  const inputKey = useMemo(
+    () =>
+      `${opts.sendCurrency}:${opts.receiveCurrency}:${opts.sendAmount}`,
+    [opts.sendCurrency, opts.receiveCurrency, opts.sendAmount],
+  )
+
   useEffect(() => {
     if (!opts.enabled) {
       setPreview(null)
@@ -36,17 +55,19 @@ export function useBitbankerQuotePreview(opts: {
       return
     }
 
-    const amount = Number(opts.sendAmount)
-    const min = minSendAmountForCurrency(opts.sendCurrency)
-    if (!Number.isFinite(amount) || amount <= 0 || (min != null && amount < min)) {
+    if (!amountValid) {
       setPreview(null)
       setNotice(null)
       setLoading(false)
       return
     }
 
+    const amount = parsedAmount
+    const sendCurrency = opts.sendCurrency
+    const receiveCurrency = opts.receiveCurrency
     const id = ++requestId.current
     setLoading(true)
+
     const timer = setTimeout(() => {
       void (async () => {
         try {
@@ -55,8 +76,8 @@ export function useBitbankerQuotePreview(opts: {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               sendAmount: amount,
-              sendCurrency: opts.sendCurrency,
-              receiveCurrency: opts.receiveCurrency,
+              sendCurrency,
+              receiveCurrency,
             }),
           })
           const body = (await res.json().catch(() => ({}))) as {
@@ -89,16 +110,33 @@ export function useBitbankerQuotePreview(opts: {
           if (requestId.current === id) setLoading(false)
         }
       })()
-    }, 280)
+    }, BITBANKER_QUOTE_PREVIEW_DEBOUNCE_MS)
 
     return () => {
       clearTimeout(timer)
-      if (requestId.current === id) setLoading(false)
     }
-  }, [opts.enabled, opts.sendAmount, opts.sendCurrency, opts.receiveCurrency])
+  }, [opts.enabled, inputKey, amountValid])
 
-  const hasFreshPreview = Boolean(preview)
-  const feesConfirmed = hasFreshPreview && !loading && !notice
+  const previewForInput = useMemo(() => {
+    if (!preview || !amountValid) return null
+    return bitbankerQuotePreviewMatchesInput(preview, {
+      sendAmount: parsedAmount,
+      sendCurrency: opts.sendCurrency,
+      receiveCurrency: opts.receiveCurrency,
+    })
+      ? preview
+      : null
+  }, [preview, amountValid, parsedAmount, opts.sendCurrency, opts.receiveCurrency])
 
-  return { preview, notice, loading, hasFreshPreview, feesConfirmed }
+  const feesConfirmed = Boolean(previewForInput) && !loading && !notice
+  const feesPending = opts.enabled && amountValid && !feesConfirmed && !notice
+
+  return {
+    preview: previewForInput,
+    notice,
+    loading,
+    feesPending,
+    feesConfirmed,
+    hasFreshPreview: Boolean(previewForInput),
+  }
 }

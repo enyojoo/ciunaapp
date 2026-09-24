@@ -24,8 +24,15 @@ function resolveDevApiUrl() {
 
 module.exports = () => {
   const apiUrl = resolveDevApiUrl()
+  const gateRaw = (process.env.EXPO_PUBLIC_CIUNA_SEND_VERIFICATION_GATE || "on")
+    .trim()
+    .toLowerCase()
+  const sendVerificationGateOff = ["0", "false", "off", "no"].includes(gateRaw)
   if (process.env.NODE_ENV !== "production") {
     console.log("[expo] EXPO_PUBLIC_API_URL resolved to", apiUrl)
+    if (sendVerificationGateOff) {
+      console.log("[expo] Send Bitbanker verification gate: OFF (dev)")
+    }
   }
   return {
     expo: {
@@ -33,6 +40,7 @@ module.exports = () => {
       extra: {
         ...appJson.expo.extra,
         apiUrl,
+        sendVerificationGateOff,
       },
     },
   }

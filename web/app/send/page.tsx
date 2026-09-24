@@ -41,7 +41,7 @@ import {
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import { useBitbankerQuotePreview } from "@/lib/use-bitbanker-quote-preview"
 import { translateSendQuoteError } from "@/lib/translate-send-quote-error"
-import { minSendAmountForCurrency } from "@ciuna/shared"
+import { isBitbankerSendVerificationGateEnabled, minSendAmountForCurrency } from "@ciuna/shared"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   applyReceiveCurrencyChange,
@@ -495,6 +495,7 @@ export default function UserSendPage() {
   }, [bitbankerLiveFees, bitbankerPreview, lastEditedField])
 
   const bitbankerGateActive =
+    isBitbankerSendVerificationGateEnabled() &&
     Boolean(bitbankerEligibility) &&
     bitbankerEligibility?.status !== "unconfigured" &&
     !bitbankerEligibility?.isVerifiedForSbp
@@ -662,12 +663,17 @@ export default function UserSendPage() {
     return min == null || amount >= min
   }, [bitbankerLiveFees, sendAmount, sendCurrency])
 
+  const belowMinSendAmount = useMemo(() => {
+    if (!bitbankerLiveFees) return false
+    const amount = Number.parseFloat(sendAmount) || 0
+    const min = minSendAmountForCurrency(sendCurrency)
+    return min != null && (amount <= 0 || amount < min)
+  }, [bitbankerLiveFees, sendAmount, sendCurrency])
+
   const showBitbankerFeeSkeleton = Boolean(
     bitbankerLiveFees &&
-      bitbankerPreviewRequired &&
       !bitbankerErrorNotice &&
-      bitbankerPreviewLoading &&
-      !bitbankerPreview,
+      (belowMinSendAmount || !bitbankerFeesConfirmed),
   )
 
   useEffect(() => {
@@ -730,7 +736,7 @@ export default function UserSendPage() {
       }
       if (bitbankerGateActive) {
         setError(t("send.verificationRequired", { defaultValue: "Complete account verification to send money." }))
-        router.push("/more/verification")
+        router.push("/more/verification/bitbanker?returnTo=send")
         return
       }
       if (currentStep === 2 && fulfillmentResolution.ok && fulfillmentResolution.fulfillment === "cash_hand") {
@@ -1160,12 +1166,24 @@ export default function UserSendPage() {
                         <div className="border-t border-gray-200/80 pt-3 space-y-3">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
+                              <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
+                                <span className="text-primary text-xs">%</span>
+                              </div>
+                              <span className="text-sm text-gray-600">{t("send.rate")}</span>
+                            </div>
+                            <span className="font-medium text-primary">
+                              1 {sendCurrency} = {displayExchangeRate.toFixed(2) || "0.00"} {receiveCurrency}
+                            </span>
+                          </div>
+
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
                               <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
                                 <span className="text-green-600 text-xs">✓</span>
                               </div>
                               <span className="text-sm text-gray-600">
                                 {bitbankerLiveFees
-                                  ? t("send.processingFee", { defaultValue: "Processing fee" })
+                                  ? t("send.processingFee", { defaultValue: "Processing Fee" })
                                   : t("send.fee")}
                               </span>
                             </div>
@@ -1177,18 +1195,6 @@ export default function UserSendPage() {
                               ) : (
                                 formatCurrency(displayFee, sendCurrency)
                               )}
-                            </span>
-                          </div>
-
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-2">
-                              <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
-                                <span className="text-primary text-xs">%</span>
-                              </div>
-                              <span className="text-sm text-gray-600">{t("send.rate")}</span>
-                            </div>
-                            <span className="font-medium text-primary">
-                              1 {sendCurrency} = {displayExchangeRate.toFixed(2) || "0.00"} {receiveCurrency}
                             </span>
                           </div>
 

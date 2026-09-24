@@ -7,7 +7,7 @@ OpenAPI: https://api.aws.bitbanker.org/latest/docs/public/openapi
 ## Product shape
 
 - **Users:** Russia-focused; RUB send is primary payment rail.
-- **Account verification:** native Ciuna form → **`POST /api/v2/partner-clients`** (IDX through Bitbanker) → **`is_verified_for_sbp`** unlocks **all send** (every currency). Replaces legacy identity/address submission + Office manual KYC approval.
+- **Account verification:** hosted KYC bridge → **`POST /api/v1/kyc-request`** (unsigned) → customer completes Bitbanker/Sumsub/IIDX → **`GET /api/v2/partner-clients`** + **`sbp_client_permission_changed`** → **`is_verified_for_sbp`** unlocks send. Legacy **`POST /api/v2/partner-clients`** form onboarding is retired.
 - **Send payment (RUB):** Ciuna pricing → Bitbanker **prediction + SBP invoice** → Ciuna shows QR/amount → webhooks/poll → USDT on partner dashboard → Office manual TRC20 + recipient payout → **completed**.
 - **Send payment (non-RUB):** same verification gate; existing **manual** payment methods (Office `payment_methods`).
 - **RUB default method:** Bitbanker SBP (`payment_provider = bitbanker`); manual RUB remains Office-configurable (active/default).
@@ -19,7 +19,7 @@ OpenAPI: https://api.aws.bitbanker.org/latest/docs/public/openapi
 
 | Area | Bitbanker endpoints (representative) | Ciuna wrapper |
 |------|--------------------------------------|---------------|
-| Verification | `POST /api/v2/partner-clients`, `GET /api/v2/partner-clients` | `POST /api/bitbanker/verification`, `GET /api/bitbanker/eligibility` |
+| Verification | `POST /api/v1/kyc-request`, `GET /api/v2/partner-clients` | `POST/GET /api/bitbanker/kyc/session`, `GET /api/bitbanker/eligibility` |
 | SBP limits/pricing | `GET /api/v2/prediction-sbp`, `POST /api/v2/exchange-prediction` | Inside `POST /api/send/quotes` |
 | Pay-in | Invoice create/read (SBP), signed responses | `POST /api/send/transfers`, payment-status poll |
 | Webhooks | Payment/invoice callbacks; `sbp_client_permission_changed` | `POST /api/webhooks/bitbanker/payments`, `POST /api/webhooks/bitbanker/events` |
@@ -32,7 +32,8 @@ OpenAPI: https://api.aws.bitbanker.org/latest/docs/public/openapi
 
 | Route | Purpose |
 |-------|---------|
-| `POST /api/bitbanker/verification` | Submit identity; stable `client_id` per user; idempotent attempts |
+| `POST /api/bitbanker/kyc/session` | Start or reuse hosted KYC link (`kyc_url`); store session ~1h |
+| `GET /api/bitbanker/kyc/session` | Active session + eligibility refresh |
 | `GET /api/bitbanker/eligibility` | More badge, send gate |
 | `POST /api/webhooks/bitbanker/payments` | Invoice paid/conversion |
 | `POST /api/webhooks/bitbanker/events` | SBP permission changes |
@@ -41,6 +42,8 @@ OpenAPI: https://api.aws.bitbanker.org/latest/docs/public/openapi
 | `GET /api/send/transfers/:id/payment-status` | Order UI polling |
 
 Gate **`POST /api/transactions`** and send UI on `is_verified_for_sbp`. Expose RUB payment methods to clients (Bitbanker default + optional manual).
+
+**Dev bypass:** `CIUNA_SEND_VERIFICATION_GATE=off` skips Ciuna UI/API eligibility only. **`POST /api/v2/invoices` still requires** a partner client registered via `POST /api/v2/partner-clients` with **`is_verified_for_sbp`** in sandbox (IDX). Quotes/preview work without verification; invoice creation does not.
 
 ## RUB pricing (Policy A)
 

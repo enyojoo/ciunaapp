@@ -69,6 +69,10 @@ export function ExternalLinkModal({
             onLoadStart={() => setLoading(true)}
             onLoadEnd={() => setLoading(false)}
             onError={() => setLoading(false)}
+            allowsInlineMediaPlayback
+            mediaCapturePermissionGrantType="grant"
+            javaScriptEnabled
+            domStorageEnabled
           />
         )
       ) : null}

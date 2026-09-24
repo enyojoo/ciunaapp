@@ -385,7 +385,7 @@
     "sendMoneyHeroTitle": "Envoyer de l'argent",
     "sendMoneyHeroSubtitle": "Choisissez le montant et les devises pour commencer.",
     "fee": "Frais de change",
-    "rate": "Taux",
+    "rate": "Taux de change",
     "free": "Gratuit",
     "min": "Min. : {{amount}}",
     "max": "Max. : {{amount}}",

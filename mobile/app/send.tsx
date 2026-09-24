@@ -30,6 +30,7 @@ import { useRecipients } from "@/lib/use-recipients"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import { useBitbankerQuotePreview } from "@/lib/use-bitbanker-quote-preview"
 import { useSendPaymentMethods } from "@/lib/use-send-payment-methods"
+import { isSendVerificationGateEnabled } from "@/lib/send-verification-gate"
 import type { RecipientRow } from "@/lib/types"
 import { colors, radius } from "@/lib/theme"
 
@@ -135,7 +136,10 @@ export default function SendScreen() {
   })
 
   const bitbankerGateActive =
-    Boolean(eligibility) && eligibility?.status !== "unconfigured" && !eligibility?.isVerifiedForSbp
+    isSendVerificationGateEnabled() &&
+    Boolean(eligibility) &&
+    eligibility?.status !== "unconfigured" &&
+    !eligibility?.isVerifiedForSbp
 
   const processingFeeAmount =
     bitbankerLiveFees && bitbankerPreview
@@ -167,7 +171,7 @@ export default function SendScreen() {
 
   const requireVerification = () => {
     showError(t("send.mobile.verifyRequired", { defaultValue: "Complete identity verification to send money." }))
-    router.push("/verification/bitbanker" as never)
+    router.push("/verification/bitbanker?returnTo=send" as never)
   }
 
   const addRecipient = async () => {
@@ -328,7 +332,6 @@ export default function SendScreen() {
             quoteNotice={bitbankerLiveFees ? quoteNotice : null}
             quotePreviewLoading={bitbankerLiveFees ? quotePreviewLoading : false}
             bitbankerFeesConfirmed={bitbankerLiveFees ? feesConfirmed : true}
-            quotePreviewActive={bitbankerQuotePreviewActive}
           />
           <View style={styles.footer}>
             <PrimaryButton label={t("send.continue")} onPress={goRecipient} disabled={!canAmount} />

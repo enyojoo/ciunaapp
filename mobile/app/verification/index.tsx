@@ -5,6 +5,7 @@ import { Clock, House, IdCard, ShieldCheck } from "lucide-react-native"
 import { ScreenScroll } from "@/components/screen"
 import { GroupCard, Row } from "@/components/row"
 import { PrimaryButton } from "@/components/primary-button"
+import { BitbankerKycBridge } from "@/components/bitbanker-kyc-bridge"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useAuth } from "@/lib/auth-context"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
@@ -74,13 +75,16 @@ export default function VerificationHubScreen() {
     <ScreenScroll edges={["left", "right"]}>
       <StatusHero status={status} t={t} />
 
-      {status === "needed" ? (
-        <View style={styles.primaryAction}>
-          <PrimaryButton
-            label={t("verification.hubContinueCta")}
-            onPress={() => router.push("/verification/bitbanker")}
-          />
-        </View>
+      {status === "needed" || status === "checking" ? (
+        <BitbankerKycBridge
+          ui="minimal"
+          onVerified={() => void revalidate()}
+          renderTrigger={({ onPress, loading, label }) => (
+            <View style={styles.primaryAction}>
+              <PrimaryButton label={label} onPress={onPress} busy={loading} />
+            </View>
+          )}
+        />
       ) : null}
 
       {status === "verified" ? (

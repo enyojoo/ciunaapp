@@ -21,6 +21,8 @@ type RequestOptions = {
   /** Sign GET query params (timestamp, nonce, full_sign) per Bitbanker API. */
   signQuery?: boolean
   idempotencyKey?: string
+  /** When false, skip response full_sign verification (e.g. unsigned KYC bridge). Default true. */
+  verifyResponse?: boolean
 }
 
 function buildUrl(path: string, query?: RequestOptions["query"]): string {
@@ -100,7 +102,13 @@ export async function bitbankerRequest<T = unknown>(opts: RequestOptions): Promi
     )
   }
 
-  if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+  const shouldVerifyResponse = opts.verifyResponse !== false
+  if (
+    shouldVerifyResponse &&
+    parsed &&
+    typeof parsed === "object" &&
+    !Array.isArray(parsed)
+  ) {
     const record = parsed as Record<string, unknown>
     if ("full_sign" in record && !verifyFullSign(record, apiSecret)) {
       const strict =
@@ -117,4 +125,41 @@ export async function bitbankerRequest<T = unknown>(opts: RequestOptions): Promi
   }
 
   return parsed as T
+}
+
+/** User-facing detail from Bitbanker error JSON (400/403 on invoices, partner-clients, etc.). */
+export function formatBitbankerApiError(e: unknown): string {
+  if (!(e instanceof BitbankerApiError)) {
+    return e instanceof Error ? e.message : "Bitbanker request failed"
+  }
+  const body = e.body
+  if (typeof body === "string" && body.trim()) return body.trim()
+  if (body && typeof body === "object" && !Array.isArray(body)) {
+    const rec = body as Record<string, unknown>
+    for (const key of ["message", "error", "detail", "description", "title"]) {
+      const v = rec[key]
+      if (typeof v === "string" && v.trim()) return v.trim()
+    }
+    const errors = rec.errors
+    if (Array.isArray(errors)) {
+      const parts = errors
+        .map((item) => {
+          if (typeof item === "string") return item
+          if (item && typeof item === "object") {
+            const o = item as Record<string, unknown>
+            return [o.message, o.detail, o.field].filter((x) => typeof x === "string").join(": ")
+          }
+          return ""
+        })
+        .filter(Boolean)
+      if (parts.length) return parts.join("; ")
+    }
+    try {
+      const compact = JSON.stringify(body)
+      if (compact && compact !== "{}") return compact
+    } catch {
+      /* ignore */
+    }
+  }
+  return e.message
 }

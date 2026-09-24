@@ -4,6 +4,21 @@ import { roundMoney } from "@/utils/currency"
 import { getOrCreateClientRef } from "./db"
 import { createBitbankerSendInvoice, readSbpQrPayload } from "./invoices"
 import { getOpenQuote } from "./send-quote-service"
+import { getPartnerClient, readVerifiedForSbp } from "./partner-clients"
+
+const SBP_INVOICE_BLOCKED =
+  "Bitbanker SBP invoice requires a verified partner client. Complete identity verification once in sandbox (Bitbanker IDX), then retry. Ciuna’s verification gate bypass does not skip Bitbanker’s API."
+
+async function assertPartnerClientReadyForSbpInvoice(clientId: string, localVerified: boolean): Promise<void> {
+  if (localVerified) return
+  try {
+    const remote = await getPartnerClient(clientId)
+    if (readVerifiedForSbp(remote)) return
+  } catch {
+    /* fall through */
+  }
+  throw new Error(SBP_INVOICE_BLOCKED)
+}
 
 export async function acceptSendQuoteAndCreateInvoice(
   admin: SupabaseClient,
@@ -65,6 +80,8 @@ export async function acceptSendQuoteAndCreateInvoice(
     .single()
 
   if (attemptErr) throw attemptErr
+
+  await assertPartnerClientReadyForSbpInvoice(ref.client_id, ref.is_verified_for_sbp)
 
   let invoice: Record<string, unknown>
   try {
@@ -148,6 +165,8 @@ async function finishAttemptFromPendingInvoice(
   idempotencyKey: string,
 ) {
   const ref = await getOrCreateClientRef(admin, userId)
+  await assertPartnerClientReadyForSbpInvoice(ref.client_id, ref.is_verified_for_sbp)
+
   let invoice: Record<string, unknown>
   try {
     invoice = (await createBitbankerSendInvoice(
@@ -163,56 +182,70 @@ async function finishAttemptFromPendingInvoice(
     throw e
   }
 
+  return finishInvoiceAttempt(admin, quote, userId, attempt, invoice)
+}
+
+function finishInvoiceAttempt(
+  admin: SupabaseClient,
+  quote: Record<string, unknown>,
+  userId: string,
+  attempt: Record<string, unknown>,
+  invoice: Record<string, unknown>,
+) {
   const invoiceId = String(invoice.id ?? "").trim()
   const sbp = readSbpQrPayload(invoice)
   const payable = sbp.amount ?? quote.total_amount
   if (Math.abs(Number(payable) - Number(quote.total_amount)) > 0.02) {
-    await admin
+    return admin
       .from("bitbanker_payment_attempts")
       .update({ status: "failed", bitbanker_invoice_id: invoiceId || null, sbp_payload: invoice })
       .eq("id", attempt.id)
-    throw new Error("Payable amount mismatch; quote must be refreshed")
+      .then(() => {
+        throw new Error("Payable amount mismatch; quote must be refreshed")
+      })
   }
 
-  await admin
-    .from("bitbanker_payment_attempts")
-    .update({
+  return (async () => {
+    await admin
+      .from("bitbanker_payment_attempts")
+      .update({
+        bitbanker_invoice_id: invoiceId,
+        sbp_payable_amount: payable,
+        sbp_payload: invoice,
+        status: "invoice_created",
+      })
+      .eq("id", attempt.id)
+
+    const transaction = await insertTransactionFromQuote(admin, quote, userId, {
+      ...attempt,
       bitbanker_invoice_id: invoiceId,
       sbp_payable_amount: payable,
       sbp_payload: invoice,
-      status: "invoice_created",
     })
-    .eq("id", attempt.id)
 
-  const transaction = await insertTransactionFromQuote(admin, quote, userId, {
-    ...attempt,
-    bitbanker_invoice_id: invoiceId,
-    sbp_payable_amount: payable,
-    sbp_payload: invoice,
-  })
+    await admin.from("bitbanker_payment_attempts").update({ transaction_id: transaction.id }).eq("id", attempt.id)
 
-  await admin.from("bitbanker_payment_attempts").update({ transaction_id: transaction.id }).eq("id", attempt.id)
+    await admin
+      .from("send_quotes")
+      .update({ status: "accepted", accepted_at: new Date().toISOString() })
+      .eq("id", quote.id)
 
-  await admin
-    .from("send_quotes")
-    .update({ status: "accepted", accepted_at: new Date().toISOString() })
-    .eq("id", quote.id)
-
-  return {
-    transaction: {
-      ...transaction,
-      gateway_payment_id: invoiceId,
-      gateway_confirmation_url: sbp.link,
-    },
-    payment: {
-      amount: roundMoney(Number(payable)),
-      currency: "RUB",
-      link: sbp.link,
-      qrData: sbp.qrData,
-      invoiceId,
-    },
-    reused: false,
-  }
+    return {
+      transaction: {
+        ...transaction,
+        gateway_payment_id: invoiceId,
+        gateway_confirmation_url: sbp.link,
+      },
+      payment: {
+        amount: roundMoney(Number(payable)),
+        currency: "RUB",
+        link: sbp.link,
+        qrData: sbp.qrData,
+        invoiceId,
+      },
+      reused: false,
+    }
+  })()
 }
 
 async function insertTransactionFromQuote(

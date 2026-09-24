@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js"
+import { isBitbankerSendVerificationGateEnabled } from "@ciuna/shared"
 import { isBitbankerConfigured } from "./config"
 import { getPartnerClient } from "./partner-clients"
 import { applyPartnerClientSnapshot, getOrCreateClientRef, isUserVerifiedForSbp } from "./db"
@@ -67,6 +68,7 @@ export async function getEligibilityForUser(
 }
 
 export async function requireBitbankerEligible(admin: SupabaseClient, userId: string): Promise<void> {
+  if (!isBitbankerSendVerificationGateEnabled()) return
   const { isVerifiedForSbp, status } = await getEligibilityForUser(admin, userId)
   if (!isVerifiedForSbp) {
     const err = new Error("Account verification required for send")

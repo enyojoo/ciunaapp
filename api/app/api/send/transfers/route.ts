@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireUser, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { requireBitbankerEligible } from "@/lib/bitbanker/eligibility-service"
+import { BitbankerApiError, formatBitbankerApiError } from "@/lib/bitbanker/client"
 import { acceptSendQuoteAndCreateInvoice } from "@/lib/bitbanker/send-transfer-service"
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
@@ -34,7 +35,8 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       reused: result.reused,
     })
   } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : "Failed to create transfer"
-    return createErrorResponse(message, 400)
+    const message = formatBitbankerApiError(e)
+    const status = e instanceof BitbankerApiError ? e.status : 400
+    return createErrorResponse(message, status >= 400 && status < 600 ? status : 400)
   }
 })

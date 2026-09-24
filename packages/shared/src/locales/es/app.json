@@ -434,7 +434,7 @@
     },
     "fee": "Comisión de cambio",
     "processingFee": "Comisión de procesamiento",
-    "rate": "Tipo",
+    "rate": "Tipo de cambio",
     "free": "Gratis",
     "min": "Mín.: {{amount}}",
     "max": "Máx.: {{amount}}",

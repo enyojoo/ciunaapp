@@ -92,7 +92,6 @@ export function SendAmountStep({
   quoteNotice,
   quotePreviewLoading,
   bitbankerFeesConfirmed,
-  quotePreviewActive,
 }: {
   sendAmount: string
   onChangeAmount: (v: string) => void
@@ -108,8 +107,6 @@ export function SendAmountStep({
   quotePreviewLoading?: boolean
   /** From useBitbankerQuotePreview — do not re-derive (desk hint is not a failure). */
   bitbankerFeesConfirmed?: boolean
-  /** Live Bitbanker preview is expected (logged in, RUB corridor, valid amount). */
-  quotePreviewActive?: boolean
 }) {
   const { t } = useTranslation("app")
   const [openSend, setOpenSend] = useState(false)
@@ -128,12 +125,11 @@ export function SendAmountStep({
 
   const rate = findRate(rates, sendCurrency, receiveCurrency)
   const amtNum = Number(sendAmount)
-  const fallbackDefault = Number(defaultSendAmountForCurrency(sendCurrency))
-  const effectiveAmount =
-    Number.isFinite(amtNum) && amtNum > 0 ? amtNum : fallbackDefault
+  const hasSendAmount = Number.isFinite(amtNum) && amtNum > 0
+  const quoteAmount = hasSendAmount ? amtNum : 0
   const minSend = minSendAmountForCurrency(sendCurrency)
-  const belowMin = minSend != null && effectiveAmount < minSend
-  const fxQuote = quoteSend(effectiveAmount, rate)
+  const belowMin = minSend != null && (!hasSendAmount || amtNum < minSend)
+  const fxQuote = quoteSend(quoteAmount, rate)
   const corridorFee = fxQuote?.feeAmount ?? 0
   const processingFeeAmount =
     usesBitbanker && bitbankerPreview
@@ -145,15 +141,13 @@ export function SendAmountStep({
   const totalToPay =
     usesBitbanker && bitbankerPreview
       ? bitbankerPreview.totalAmount
-      : fxQuote?.totalAmount ?? roundMoney(effectiveAmount + corridorFee)
+      : fxQuote?.totalAmount ?? roundMoney(quoteAmount + corridorFee)
   const rateReady = Boolean(rate && displayRate > 0)
   const feesConfirmed = usesBitbanker ? Boolean(bitbankerFeesConfirmed) : true
-  const showProcessingFeeSkeleton = Boolean(
-    quotePreviewActive &&
-      !quoteNotice &&
-      quotePreviewLoading &&
-      bitbankerPreview == null,
+  const bitbankerFeesIndeterminate = Boolean(
+    usesBitbanker && !quoteNotice && (belowMin || !feesConfirmed),
   )
+  const showProcessingFeeSkeleton = bitbankerFeesIndeterminate
   const processingFeeDisplay = (() => {
     if (showProcessingFeeSkeleton) return ""
     if (!usesBitbanker) {
@@ -161,6 +155,7 @@ export function SendAmountStep({
       if (processingFeeAmount > 0) return formatMoney(processingFeeAmount, sendCurrency)
       return t("send.free")
     }
+    if (!feesConfirmed) return ""
     if (processingFeeAmount > 0) return formatMoney(processingFeeAmount, sendCurrency)
     return t("send.free")
   })()
@@ -251,7 +246,7 @@ export function SendAmountStep({
           </View>
         ) : null}
         <View style={styles.quoteRow}>
-          <Text style={styles.quoteLabel}>{t("send.processingFee", { defaultValue: "Processing fee" })}</Text>
+          <Text style={styles.quoteLabel}>{t("send.processingFee", { defaultValue: "Processing Fee" })}</Text>
           {showProcessingFeeSkeleton ? (
             <View style={styles.feeSkeletonSlot}>
               <InlineSkeleton width={92} height={16} />
