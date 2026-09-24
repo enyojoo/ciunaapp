@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import * as Clipboard from "expo-clipboard"
 import { ActivityIndicator, Image, Linking, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
@@ -62,8 +62,19 @@ export default function OrderScreen() {
   const { showError } = useToast()
   const { currencies } = useFx()
   const flagFor = (code?: string | null) => currencies.find((c) => c.code === code)?.flag_svg
-  const { data: tx, loading, error, revalidate } = useTransaction(id)
-  const missing = !loading && (Boolean(error) || !tx)
+  const { data: tx, loading, refreshing, error, revalidate } = useTransaction(id)
+  const retriedRef = useRef(false)
+  const [retryDone, setRetryDone] = useState(false)
+
+  useEffect(() => {
+    if (!error || tx || retriedRef.current || !id) return
+    retriedRef.current = true
+    void revalidate().finally(() => setRetryDone(true))
+  }, [error, tx, id, revalidate])
+
+  const pending = (loading || refreshing) && !tx
+  const missing = !pending && !tx && !error
+  const loadFailed = !pending && !tx && Boolean(error) && retryDone
   const [copied, setCopied] = useState(false)
   const [payBusy, setPayBusy] = useState(false)
   const [receiptBusy, setReceiptBusy] = useState(false)
@@ -80,13 +91,31 @@ export default function OrderScreen() {
     navigation.setOptions({ title: "" })
   }, [navigation])
 
-  if (loading && !tx) {
+  if (pending) {
     return (
       <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
         </View>
+      </ScreenScroll>
+    )
+  }
+
+  if (loadFailed) {
+    return (
+      <ScreenScroll edges={["left", "right"]}>
+        <StatusBar style="dark" />
+        <EmptyState
+          title={t("txDetail.loadFailed", { defaultValue: "Couldn't load this transfer" })}
+          body={t("txDetail.loadFailedHint", { defaultValue: "Check your connection and try again." })}
+          actionLabel={t("common.retry", { defaultValue: "Retry" })}
+          onAction={() => {
+            setRetryDone(false)
+            retriedRef.current = false
+            void revalidate().finally(() => setRetryDone(true))
+          }}
+        />
       </ScreenScroll>
     )
   }

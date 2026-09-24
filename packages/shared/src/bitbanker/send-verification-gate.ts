@@ -5,16 +5,26 @@ function readEnvOff(value: string | undefined): boolean {
   return OFF.has(value.trim().toLowerCase())
 }
 
+function firstGateEnv(): string | undefined {
+  const v =
+    process.env.CIUNA_SEND_VERIFICATION_GATE ??
+    process.env.EXPO_PUBLIC_CIUNA_SEND_VERIFICATION_GATE ??
+    process.env.NEXT_PUBLIC_CIUNA_SEND_VERIFICATION_GATE
+  if (v == null || v === "") return undefined
+  return v
+}
+
 /**
  * Bitbanker SBP identity gate on send (UI + API).
- * Set CIUNA_SEND_VERIFICATION_GATE=off on API; EXPO_PUBLIC_/NEXT_PUBLIC_ on clients.
- * Re-enable by removing the var or setting to on/1/true.
- *
- * Use static process.env.* reads so Metro/Next can inline public vars.
+ * Explicit off: CIUNA_SEND_VERIFICATION_GATE / EXPO_PUBLIC_ / NEXT_PUBLIC_ = off|0|false|no
+ * Explicit on: any other non-empty value (e.g. on, 1, true)
+ * Unset: on in production, off in development (send flow shape / sandbox work)
  */
 export function isBitbankerSendVerificationGateEnabled(): boolean {
-  if (readEnvOff(process.env.CIUNA_SEND_VERIFICATION_GATE)) return false
-  if (readEnvOff(process.env.EXPO_PUBLIC_CIUNA_SEND_VERIFICATION_GATE)) return false
-  if (readEnvOff(process.env.NEXT_PUBLIC_CIUNA_SEND_VERIFICATION_GATE)) return false
-  return true
+  const raw = firstGateEnv()
+  if (raw != null) {
+    if (readEnvOff(raw)) return false
+    return true
+  }
+  return process.env.NODE_ENV === "production"
 }

@@ -92,6 +92,7 @@ export function SendAmountStep({
   quoteNotice,
   quotePreviewLoading,
   bitbankerFeesConfirmed,
+  ratesLoading,
 }: {
   sendAmount: string
   onChangeAmount: (v: string) => void
@@ -107,6 +108,8 @@ export function SendAmountStep({
   quotePreviewLoading?: boolean
   /** From useBitbankerQuotePreview — do not re-derive (desk hint is not a failure). */
   bitbankerFeesConfirmed?: boolean
+  /** Office FX still loading — suppress false "rate unavailable" warnings. */
+  ratesLoading?: boolean
 }) {
   const { t } = useTranslation("app")
   const [openSend, setOpenSend] = useState(false)
@@ -128,7 +131,9 @@ export function SendAmountStep({
   const hasSendAmount = Number.isFinite(amtNum) && amtNum > 0
   const quoteAmount = hasSendAmount ? amtNum : 0
   const minSend = minSendAmountForCurrency(sendCurrency)
-  const belowMin = minSend != null && (!hasSendAmount || amtNum < minSend)
+  const belowMin = minSend != null && hasSendAmount && amtNum > 0 && amtNum < minSend
+  const showBelowMinNotice =
+    belowMin && !ratesLoading && !(usesBitbanker && quotePreviewLoading)
   const fxQuote = quoteSend(quoteAmount, rate)
   const corridorFee = fxQuote?.feeAmount ?? 0
   const processingFeeAmount =
@@ -271,15 +276,15 @@ export function SendAmountStep({
             <Text style={styles.totalValue}>{formatMoney(totalToPay, sendCurrency)}</Text>
           )}
         </View>
-        {belowMin && minSend != null ? (
+        {showBelowMinNotice ? (
           <SendQuoteNotice notice={{ kind: "warning", messageKey: "send.mobile.quoteBelowMinRub" }} />
         ) : null}
-        {!rateReady && sendCurrency && receiveCurrency ? (
+        {!ratesLoading && !rateReady && sendCurrency && receiveCurrency ? (
           <SendQuoteNotice
             notice={{ kind: "warning", messageKey: "send.rateUnavailable" }}
           />
         ) : null}
-        {quoteNotice ? <SendQuoteNotice notice={quoteNotice} /> : null}
+        {quoteNotice && !quotePreviewLoading ? <SendQuoteNotice notice={quoteNotice} /> : null}
       </View>
 
       {sendPickerEnabled ? (

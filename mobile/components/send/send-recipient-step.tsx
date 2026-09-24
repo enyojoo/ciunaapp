@@ -2,14 +2,13 @@ import { useMemo, useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { AppTextInput } from "@/components/app-text-input"
 import { useInputFocusRing } from "@/lib/focused-input-box"
-import { Check, Plus, Search, UserPlus } from "lucide-react-native"
+import { Check, ChevronRight, Plus, Search } from "lucide-react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { SvgXml } from "react-native-svg"
+import { LinearGradient } from "expo-linear-gradient"
 import { Avatar } from "@/components/avatar"
-import { Field } from "@/components/field"
-import { GroupCard } from "@/components/row"
-import { PrimaryButton } from "@/components/primary-button"
+import { AddRecipientSheet } from "@/components/send/add-recipient-sheet"
 import type { CurrencyRow, RecipientRow } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
@@ -19,33 +18,19 @@ export function SendRecipientStep({
   recipients,
   recipientId,
   onSelectRecipient,
-  name,
-  onChangeName,
-  account,
-  onChangeAccount,
-  bank,
-  onChangeBank,
-  onSaveRecipient,
-  saveBusy,
+  onRecipientCreated,
 }: {
   receiveCurrency: string
   currencies: CurrencyRow[]
   recipients: RecipientRow[]
   recipientId: string | null
   onSelectRecipient: (id: string) => void
-  name: string
-  onChangeName: (v: string) => void
-  account: string
-  onChangeAccount: (v: string) => void
-  bank: string
-  onChangeBank: (v: string) => void
-  onSaveRecipient: () => void
-  saveBusy: boolean
+  onRecipientCreated: (recipient: RecipientRow) => void
 }) {
   const { t } = useTranslation("app")
   const router = useRouter()
   const [query, setQuery] = useState("")
-  const [showAdd, setShowAdd] = useState(false)
+  const [addOpen, setAddOpen] = useState(false)
   const searchFocus = useInputFocusRing()
 
   const flagFor = (code?: string) => currencies.find((c) => c.code === code)?.flag_svg
@@ -79,9 +64,12 @@ export function SendRecipientStep({
         />
       </View>
 
-      <Pressable style={styles.manageLink} onPress={() => router.push("/recipients")}>
-        <UserPlus size={18} color={colors.primary} strokeWidth={2.2} />
-        <Text style={styles.manageLinkText}>{t("send.mobile.manageRecipients", { defaultValue: "Manage recipients" })}</Text>
+      <Pressable style={styles.addRow} onPress={() => setAddOpen(true)}>
+        <LinearGradient colors={["#34D399", "#3B82F6", "#9333EA"]} style={styles.addIcon}>
+          <Plus size={22} color="#fff" strokeWidth={2.5} />
+        </LinearGradient>
+        <Text style={styles.addRowLabel}>{t("send.addNewRecipient")}</Text>
+        <ChevronRight size={20} color={colors.muted} />
       </Pressable>
 
       {filtered.length === 0 ? (
@@ -94,77 +82,63 @@ export function SendRecipientStep({
           <Text style={styles.emptyBody}>{t("send.addRecipientHint")}</Text>
         </View>
       ) : (
-        filtered.map((r) => {
-          const selected = r.id === recipientId
-          return (
-            <Pressable
-              key={r.id}
-              onPress={() => onSelectRecipient(r.id)}
-              style={[styles.card, selected && styles.cardSelected]}
-            >
-              <View style={styles.avatarWrap}>
-                <Avatar name={r.full_name} size={44} />
-                {r.currency && flagFor(r.currency) ? (
-                  <View style={styles.flagBadge}>
-                    <SvgXml xml={flagFor(r.currency)!} width={18} height={12} />
+        <View style={styles.list}>
+          {filtered.map((r) => {
+            const selected = r.id === recipientId
+            return (
+              <Pressable
+                key={r.id}
+                onPress={() => onSelectRecipient(r.id)}
+                style={[styles.card, selected && styles.cardSelected]}
+              >
+                <View style={styles.avatarWrap}>
+                  <Avatar name={r.full_name} size={44} />
+                  {r.currency && flagFor(r.currency) ? (
+                    <View style={styles.flagBadge}>
+                      <SvgXml xml={flagFor(r.currency)!} width={18} height={12} />
+                    </View>
+                  ) : null}
+                </View>
+                <View style={styles.cardBody}>
+                  <Text style={styles.name} numberOfLines={1}>
+                    {r.full_name}
+                  </Text>
+                  {r.account_number ? (
+                    <Text style={styles.meta} numberOfLines={1}>
+                      {r.account_number}
+                    </Text>
+                  ) : null}
+                  {r.bank_name ? (
+                    <Text style={styles.meta} numberOfLines={1}>
+                      {r.bank_name}
+                    </Text>
+                  ) : null}
+                </View>
+                {selected ? (
+                  <View style={styles.check}>
+                    <Check size={18} color="#fff" strokeWidth={2.8} />
                   </View>
                 ) : null}
-              </View>
-              <View style={styles.cardBody}>
-                <Text style={styles.name} numberOfLines={1}>
-                  {r.full_name}
-                </Text>
-                {r.account_number ? (
-                  <Text style={styles.meta} numberOfLines={1}>
-                    {r.account_number}
-                  </Text>
-                ) : null}
-                {r.bank_name ? (
-                  <Text style={styles.meta} numberOfLines={1}>
-                    {r.bank_name}
-                  </Text>
-                ) : null}
-              </View>
-              {selected ? (
-                <View style={styles.check}>
-                  <Check size={18} color="#fff" strokeWidth={2.8} />
-                </View>
-              ) : null}
-            </Pressable>
-          )
-        })
+              </Pressable>
+            )
+          })}
+        </View>
       )}
 
-      <GroupCard title={t("send.addNewRecipient")}>
-        {!showAdd ? (
-          <Pressable style={styles.addToggle} onPress={() => setShowAdd(true)}>
-            <Plus size={18} color={colors.primary} strokeWidth={2.4} />
-            <Text style={styles.addToggleText}>{t("send.addNewRecipientTitle")}</Text>
-          </Pressable>
-        ) : (
-          <View style={styles.addForm}>
-            <Field label={t("send.accountName")} value={name} onChangeText={onChangeName} />
-            <Field
-              label={t("recipients.fieldLabels.account_number", { defaultValue: "Account Number" })}
-              value={account}
-              onChangeText={onChangeAccount}
-              keyboardType="number-pad"
-            />
-            <Field
-              label={t("recipients.fieldLabels.bank_name", { defaultValue: "Bank Name" })}
-              value={bank}
-              onChangeText={onChangeBank}
-            />
-            <PrimaryButton
-              label={t("send.mobile.saveRecipient", { defaultValue: "Save recipient" })}
-              variant="secondary"
-              onPress={onSaveRecipient}
-              busy={saveBusy}
-              disabled={!name.trim() || !account.trim() || !bank.trim()}
-            />
-          </View>
-        )}
-      </GroupCard>
+      <Pressable style={styles.manageLink} onPress={() => router.push("/recipients")}>
+        <Text style={styles.manageLinkText}>{t("send.mobile.manageRecipients", { defaultValue: "Manage all recipients" })}</Text>
+      </Pressable>
+
+      <AddRecipientSheet
+        open={addOpen}
+        receiveCurrency={receiveCurrency}
+        currencies={currencies}
+        onClose={() => setAddOpen(false)}
+        onCreated={(recipient) => {
+          onRecipientCreated(recipient)
+          onSelectRecipient(recipient.id)
+        }}
+      />
     </View>
   )
 }
@@ -184,11 +158,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   searchInput: { flex: 1, fontSize: typeSize.body, color: colors.text, paddingVertical: 10 },
-  manageLink: { flexDirection: "row", alignItems: "center", gap: 8, alignSelf: "flex-start" },
-  manageLinkText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary },
-  empty: { paddingVertical: 12, gap: 4 },
+  addRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    minHeight: 56,
+    borderRadius: radius.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  addIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  addRowLabel: { flex: 1, fontSize: typeSize.body, fontWeight: "600", color: colors.text },
+  list: { gap: 10 },
+  empty: { paddingVertical: 8, gap: 4 },
   emptyTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   emptyBody: { fontSize: typeSize.meta, color: colors.muted },
+  manageLink: { alignSelf: "center", paddingVertical: 8 },
+  manageLinkText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.muted },
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -221,7 +216,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  addToggle: { flexDirection: "row", alignItems: "center", gap: 10, minHeight: 48, paddingVertical: 8 },
-  addToggleText: { fontSize: typeSize.body, fontWeight: "600", color: colors.primary },
-  addForm: { gap: 12, paddingTop: 4 },
 })

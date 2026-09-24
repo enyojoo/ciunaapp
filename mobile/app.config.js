@@ -11,10 +11,14 @@ function pickLanIpv4() {
   return null
 }
 
-/** Expo Go on a phone cannot reach the dev machine via localhost. */
+/**
+ * Expo Go on a phone cannot reach the dev machine via localhost.
+ * Expo web in the browser must keep localhost (see mobile/lib/api.ts normalizeDevApiBase).
+ */
 function resolveDevApiUrl() {
   const explicit = (process.env.EXPO_PUBLIC_API_URL || "http://localhost:3002").trim().replace(/\/+$/, "")
   if (process.env.EXPO_PUBLIC_DEV_USE_LOCALHOST === "1") return explicit
+  if (process.env.EXPO_PUBLIC_DEV_WEB === "1") return explicit
   if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(explicit)) {
     const lan = pickLanIpv4()
     if (lan) return `http://${lan}:3002`
@@ -24,7 +28,9 @@ function resolveDevApiUrl() {
 
 module.exports = () => {
   const apiUrl = resolveDevApiUrl()
-  const gateRaw = (process.env.EXPO_PUBLIC_CIUNA_SEND_VERIFICATION_GATE || "on")
+  const gateDefault =
+    process.env.NODE_ENV === "production" ? "on" : "off"
+  const gateRaw = (process.env.EXPO_PUBLIC_CIUNA_SEND_VERIFICATION_GATE || gateDefault)
     .trim()
     .toLowerCase()
   const sendVerificationGateOff = ["0", "false", "off", "no"].includes(gateRaw)

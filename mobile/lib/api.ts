@@ -1,13 +1,25 @@
 import Constants from "expo-constants"
+import { Platform } from "react-native"
 import { joinApiPath, resolveApiUrl } from "@ciuna/shared/urls"
 import { supabase } from "./supabase"
+
+/** Expo web on localhost must call localhost:3002, not the LAN IP baked in for Expo Go. */
+function normalizeDevApiBase(url: string): string {
+  const trimmed = url.trim().replace(/\/+$/, "")
+  if (Platform.OS !== "web" || typeof window === "undefined") return trimmed
+  const pageHost = window.location.hostname
+  if (pageHost !== "localhost" && pageHost !== "127.0.0.1") return trimmed
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(trimmed)) return trimmed
+  const port = trimmed.match(/:(\d+)$/)?.[1] ?? "3002"
+  return `http://localhost:${port}`
+}
 
 function apiBaseUrl(): string {
   const fromExtra = Constants.expoConfig?.extra?.apiUrl
   if (typeof fromExtra === "string" && fromExtra.trim()) {
-    return fromExtra.trim().replace(/\/+$/, "")
+    return normalizeDevApiBase(fromExtra)
   }
-  return resolveApiUrl()
+  return normalizeDevApiBase(resolveApiUrl())
 }
 
 export function apiUrl(path: string): string {

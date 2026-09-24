@@ -53,14 +53,14 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
     const [sheetOpen, setSheetOpen] = useState(false)
 
     useEffect(() => {
-      if (!error) {
-        lastErrorToastRef.current = null
+      if (!error || loading) {
+        if (!error) lastErrorToastRef.current = null
         return
       }
       if (lastErrorToastRef.current === error) return
       lastErrorToastRef.current = error
       showError(error)
-    }, [error, showError])
+    }, [error, loading, showError])
 
     useEffect(() => {
       if (params.returnTo === "send") {

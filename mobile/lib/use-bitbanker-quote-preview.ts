@@ -67,6 +67,7 @@ export function useBitbankerQuotePreview(opts: {
     const receiveCurrency = opts.receiveCurrency
     const id = ++requestId.current
     setLoading(true)
+    setNotice(null)
 
     const timer = setTimeout(() => {
       void (async () => {

@@ -7,7 +7,7 @@
     "start": "expo start --go --port 8081",
     "android": "expo start --android --port 8081",
     "ios": "expo start --ios --port 8081",
-    "web": "expo start --web --port 8081",
+    "web": "EXPO_PUBLIC_DEV_USE_LOCALHOST=1 expo start --web --port 8082",
     "export:web": "expo export --platform web",
     "build:web": "expo export --platform web",
     "lint": "expo lint"

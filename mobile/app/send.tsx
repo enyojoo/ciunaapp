@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import {
@@ -29,9 +29,10 @@ import { useFx } from "@/lib/use-fx"
 import { useRecipients } from "@/lib/use-recipients"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
 import { useBitbankerQuotePreview } from "@/lib/use-bitbanker-quote-preview"
+import { seedTransactionCache } from "@/lib/use-transaction"
 import { useSendPaymentMethods } from "@/lib/use-send-payment-methods"
 import { isSendVerificationGateEnabled } from "@/lib/send-verification-gate"
-import type { RecipientRow } from "@/lib/types"
+import type { CombinedTransaction } from "@/lib/types"
 import { colors, radius } from "@/lib/theme"
 
 type BitbankerPayment = {
@@ -51,7 +52,7 @@ export default function SendScreen() {
     t("hub.serviceLineTiles.send.title", { defaultValue: "Send Money" }),
   )
   const backAria = t("hub.backToHub", { defaultValue: "Back to Hub" })
-  const { currencies, rates, reload: reloadFx } = useFx()
+  const { currencies, rates, loading: fxLoading, reload: reloadFx } = useFx()
   useFocusRevalidate(reloadFx)
   const { user, profile } = useAuth()
   const { data: eligibility } = useBitbankerEligibility(user?.id)
@@ -62,21 +63,21 @@ export default function SendScreen() {
   const { data: recipientsData, mutate: mutateRecipients } = useRecipients(user?.id)
   const recipients = recipientsData || []
   const [recipientId, setRecipientId] = useState<string | null>(null)
-  const [name, setName] = useState("")
-  const [account, setAccount] = useState("")
-  const [bank, setBank] = useState("")
   const { showError } = useToast()
   const [busy, setBusy] = useState(false)
   const { methods: sendMethods, loading: sendMethodsLoading } = useSendPaymentMethods(sendCurrency)
   const [bitbankerPayment, setBitbankerPayment] = useState<BitbankerPayment | null>(null)
+  const prevSendCurrencyRef = useRef("")
 
   useEffect(() => {
     if (currencies.length === 0) return
     if (!sendCurrency && !receiveCurrency) {
       const pair = initialSendReceivePair(currencies, profile?.base_currency)
       if (pair) {
+        prevSendCurrencyRef.current = pair.sendCurrency
         setSendCurrency(pair.sendCurrency)
         setReceiveCurrency(pair.receiveCurrency)
+        setSendAmount(defaultSendAmountForCurrency(pair.sendCurrency))
       }
       return
     }
@@ -160,47 +161,19 @@ export default function SendScreen() {
     displayQuote && meetsMin && (!bitbankerLiveFees || feesConfirmed),
   )
 
-  const prevSendCurrencyRef = useRef("")
   useEffect(() => {
     if (!sendCurrency || sendCurrency === prevSendCurrencyRef.current) return
     prevSendCurrencyRef.current = sendCurrency
     setSendAmount(defaultSendAmountForCurrency(sendCurrency))
   }, [sendCurrency])
 
+  const sendCorridorReady = Boolean(sendCurrency && receiveCurrency && !fxLoading)
+
   const canRecipient = Boolean(recipientId)
 
   const requireVerification = () => {
     showError(t("send.mobile.verifyRequired", { defaultValue: "Complete identity verification to send money." }))
     router.push("/verification/bitbanker?returnTo=send" as never)
-  }
-
-  const addRecipient = async () => {
-    if (!name.trim() || !account.trim() || !bank.trim()) return
-    setBusy(true)
-    const res = await fetchWithAuth("/api/recipients", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fullName: name.trim(),
-        accountNumber: account.trim(),
-        bankName: bank.trim(),
-        currency: receiveCurrency,
-      }),
-    })
-    const body = await res.json().catch(() => ({}))
-    setBusy(false)
-    if (!res.ok) {
-      showError((body as { error?: string }).error || t("send.failedAddRecipient"))
-      return
-    }
-    const rec = (body as { recipient?: RecipientRow }).recipient
-    if (rec) {
-      mutateRecipients((prev) => [rec, ...(prev || [])])
-      setRecipientId(rec.id)
-      setName("")
-      setAccount("")
-      setBank("")
-    }
   }
 
   const createBitbankerTransfer = async () => {
@@ -243,9 +216,10 @@ export default function SendScreen() {
     if (!transferRes.ok) {
       throw new Error((transferBody as { error?: string }).error || "Failed to create SBP invoice")
     }
-    const tx = (transferBody as { transaction?: { transaction_id: string } }).transaction
+    const tx = (transferBody as { transaction?: CombinedTransaction }).transaction
     const payment = (transferBody as { payment?: BitbankerPayment }).payment
     if (!tx?.transaction_id || !payment) throw new Error("Invalid transfer response")
+    seedTransactionCache([tx])
     setBitbankerPayment(payment)
     return tx.transaction_id
   }
@@ -317,6 +291,11 @@ export default function SendScreen() {
       <SendStepProgress step={step} />
 
       {step === "amount" ? (
+        !sendCorridorReady ? (
+          <View style={styles.sendLoading}>
+            <ActivityIndicator color={colors.primary} />
+          </View>
+        ) : (
         <>
           <SendAmountStep
             sendAmount={sendAmount}
@@ -332,11 +311,13 @@ export default function SendScreen() {
             quoteNotice={bitbankerLiveFees ? quoteNotice : null}
             quotePreviewLoading={bitbankerLiveFees ? quotePreviewLoading : false}
             bitbankerFeesConfirmed={bitbankerLiveFees ? feesConfirmed : true}
+            ratesLoading={fxLoading}
           />
           <View style={styles.footer}>
             <PrimaryButton label={t("send.continue")} onPress={goRecipient} disabled={!canAmount} />
           </View>
         </>
+        )
       ) : null}
 
       {step === "recipient" ? (
@@ -347,14 +328,7 @@ export default function SendScreen() {
             recipients={recipients}
             recipientId={recipientId}
             onSelectRecipient={setRecipientId}
-            name={name}
-            onChangeName={setName}
-            account={account}
-            onChangeAccount={setAccount}
-            bank={bank}
-            onChangeBank={setBank}
-            onSaveRecipient={() => void addRecipient()}
-            saveBusy={busy}
+            onRecipientCreated={(rec) => mutateRecipients((prev) => [rec, ...(prev || [])])}
           />
           <View style={styles.footer}>
             <PrimaryButton label={t("send.continue")} onPress={() => setStep("pay")} disabled={!canRecipient} />
@@ -396,6 +370,7 @@ export default function SendScreen() {
 }
 
 const styles = StyleSheet.create({
+  sendLoading: { paddingVertical: 48, alignItems: "center" },
   verifyBanner: {
     flexDirection: "row",
     alignItems: "center",

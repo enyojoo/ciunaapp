@@ -43,7 +43,7 @@ OpenAPI: https://api.aws.bitbanker.org/latest/docs/public/openapi
 
 Gate **`POST /api/transactions`** and send UI on `is_verified_for_sbp`. Expose RUB payment methods to clients (Bitbanker default + optional manual).
 
-**Dev bypass:** `CIUNA_SEND_VERIFICATION_GATE=off` skips Ciuna UI/API eligibility only. **`POST /api/v2/invoices` still requires** a partner client registered via `POST /api/v2/partner-clients` with **`is_verified_for_sbp`** in sandbox (IDX). Quotes/preview work without verification; invoice creation does not.
+**Dev bypass:** Gate is **off by default in development** (unset env). Set `CIUNA_SEND_VERIFICATION_GATE=on` (and client `EXPO_PUBLIC_` / `NEXT_PUBLIC_`) to test the gate locally. Explicit `=off` also skips Ciuna UI/API eligibility. **`POST /api/v2/invoices` still requires** a partner client registered via `POST /api/v2/partner-clients` with **`is_verified_for_sbp`** in sandbox (IDX). Quotes/preview work without verification; invoice creation does not.
 
 ## RUB pricing (Policy A)
 
