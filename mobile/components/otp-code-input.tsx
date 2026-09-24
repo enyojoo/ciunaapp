@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react"
-import { Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { Platform, Pressable, StyleSheet, Text, View, type TextInput } from "react-native"
+import { AppTextInput } from "@/components/app-text-input"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 const LENGTH = 6
@@ -49,7 +50,7 @@ export function OtpCodeInput({
           ))}
         </View>
       </Pressable>
-      <TextInput
+      <AppTextInput
         ref={inputRef}
         value={digits}
         onChangeText={apply}

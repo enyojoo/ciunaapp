@@ -480,7 +480,6 @@ export default function UserSendPage() {
   const {
     preview: bitbankerPreview,
     errorNotice: bitbankerErrorNotice,
-    infoNotice: bitbankerInfoNotice,
     loading: bitbankerPreviewLoading,
     feesConfirmed: bitbankerFeesConfirmed,
   } = useBitbankerQuotePreview({
@@ -666,7 +665,9 @@ export default function UserSendPage() {
   const showBitbankerFeeSkeleton = Boolean(
     bitbankerLiveFees &&
       bitbankerPreviewRequired &&
-      (bitbankerPreviewLoading || !bitbankerFeesConfirmed),
+      !bitbankerErrorNotice &&
+      bitbankerPreviewLoading &&
+      !bitbankerPreview,
   )
 
   useEffect(() => {
@@ -1228,13 +1229,6 @@ export default function UserSendPage() {
                         <p>{t(bitbankerErrorNotice.messageKey)}</p>
                       </div>
                     ) : null}
-                    {bitbankerInfoNotice ? (
-                      <div className="flex gap-2 rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
-                        <AlertCircle className="h-5 w-5 shrink-0" />
-                        <p>{t(bitbankerInfoNotice.messageKey)}</p>
-                      </div>
-                    ) : null}
-
                     </div>
                     </div>
 

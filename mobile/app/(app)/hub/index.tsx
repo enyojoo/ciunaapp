@@ -12,10 +12,12 @@ import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useHubServiceLines } from "@/lib/use-hub-service-line"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { lineHref } from "@/lib/hub"
+import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { colors, space } from "@/lib/theme"
 
 export default function HomeScreen() {
   const { t } = useTranslation("app")
+  const tabContentPadding = useTabContentPadding()
   const router = useRouter()
   const { openLink } = useExternalLink()
   const { data, loading, refreshing, refresh, revalidate } = useHubServiceLines()
@@ -40,7 +42,7 @@ export default function HomeScreen() {
       <AppHeader />
       <ScrollView
         style={styles.flex}
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[styles.scroll, { paddingBottom: tabContentPadding }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }

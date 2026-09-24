@@ -47,11 +47,11 @@ export function GroupCard({ title, children }: { title?: string; children: React
 
 const styles = StyleSheet.create({
   row: {
-    minHeight: 52,
+    minHeight: 48,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
   border: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   icon: {

@@ -30,8 +30,8 @@ async function webRemove(key: string): Promise<void> {
 }
 
 /**
- * Auth JWTs are too large for Expo Go SecureStore (~2KB). Easner keeps the
- * session in AsyncStorage; PIN secrets stay in SecureStore via secretGet/Set.
+ * Auth JWTs are too large for Expo Go SecureStore (~2KB); session uses AsyncStorage.
+ * PIN secrets stay in SecureStore via secretGet/Set.
  */
 export const supabaseAuthStorage = {
   getItem: (key: string) => AsyncStorage.getItem(key).catch(() => null),

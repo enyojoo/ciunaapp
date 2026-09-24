@@ -114,13 +114,21 @@ export default function SendScreen() {
   const bitbankerLiveFees =
     usesBitbanker || (sendCurrency === "RUB" && sendMethodsLoading)
 
+  const sendNum = Number(sendAmount)
+  const minSend = minSendAmountForCurrency(sendCurrency)
+  const meetsMin = minSend == null || (Number.isFinite(sendNum) && sendNum >= minSend)
+
+  const bitbankerQuotePreviewActive = Boolean(
+    bitbankerLiveFees && user?.id && meetsMin && sendCurrency && receiveCurrency,
+  )
+
   const {
     preview: bitbankerPreview,
     notice: quoteNotice,
     loading: quotePreviewLoading,
     feesConfirmed,
   } = useBitbankerQuotePreview({
-    enabled: bitbankerLiveFees && Boolean(user?.id),
+    enabled: bitbankerQuotePreviewActive,
     sendAmount,
     sendCurrency,
     receiveCurrency,
@@ -128,10 +136,6 @@ export default function SendScreen() {
 
   const bitbankerGateActive =
     Boolean(eligibility) && eligibility?.status !== "unconfigured" && !eligibility?.isVerifiedForSbp
-
-  const sendNum = Number(sendAmount)
-  const minSend = minSendAmountForCurrency(sendCurrency)
-  const meetsMin = minSend == null || (Number.isFinite(sendNum) && sendNum >= minSend)
 
   const processingFeeAmount =
     bitbankerLiveFees && bitbankerPreview
@@ -324,6 +328,7 @@ export default function SendScreen() {
             quoteNotice={bitbankerLiveFees ? quoteNotice : null}
             quotePreviewLoading={bitbankerLiveFees ? quotePreviewLoading : false}
             bitbankerFeesConfirmed={bitbankerLiveFees ? feesConfirmed : true}
+            quotePreviewActive={bitbankerQuotePreviewActive}
           />
           <View style={styles.footer}>
             <PrimaryButton label={t("send.continue")} onPress={goRecipient} disabled={!canAmount} />

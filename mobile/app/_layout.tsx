@@ -117,11 +117,11 @@ function RootChrome({ children }: { children: ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  chrome: { flex: 1, width: "100%", minHeight: Platform.OS === "web" ? "100%" : undefined },
+  chrome: { flex: 1, width: "100%", minHeight: 0, height: Platform.OS === "web" ? "100%" : undefined },
   navRoot: {
     flex: 1,
     width: "100%",
+    minHeight: 0,
     height: Platform.OS === "web" ? "100%" : undefined,
-    minHeight: Platform.OS === "web" ? "100%" : undefined,
   },
 })

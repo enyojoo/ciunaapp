@@ -1,28 +1,21 @@
-import { SEND_QUOTE_ERROR_CODE } from "@ciuna/shared"
 import { roundMoney } from "@/utils/currency"
-import { SendQuoteError } from "./send-quote-errors"
+import { exchangePrediction, numField, type ExchangePredictionResponse } from "./prediction"
 
 /**
- * RUB “send to local” = Easner direct-to-local shape:
- *   Leg 1: customer pays RUB via SBP → Bitbanker converts to USDT (prediction).
- *   Leg 2: USDT must fund the recipient’s local payout (e.g. NGN via Office).
- *
- * Leg-2 desk uses the same number as Office **USD → local** (`exchange_rates.rate`):
- * local units per 1 USD, treated as local per 1 USDT (USD ≈ USDT).
+ * RUB on-ramp + local payout:
+ *   Office RUB→local → recipient amount.
+ *   USDT needed for that payout (USD→local desk, USDT≈USD).
+ *   Minimize Bitbanker invoice B so prediction(B).U ≥ USDT target; customer pays G.
  */
 
-export type RubLocalSendLegSnapshot = {
-  sendAmountRub: number
-  /** NGN (etc.) from RUB→local Office rate before leg-2 cap. */
-  corridorReceiveLocal: number
-  receiveAmountLocal: number
-  receiveCurrency: string
-  receiveCappedByLeg2: boolean
+export type LocalPayoutFundingSnapshot = {
+  /** Principal + Ciuna fee + logistics (before USDT sizing). */
+  nominalInvoiceBaseB: number
+  /** Bitbanker exchange-prediction volume (≥ nominal). */
   invoiceBaseB: number
-  sbpGrossG: number
+  usdtRequiredForLocal: number
+  usdtTargetWithReserves: number
   usdtFromBitbanker: number
-  usdtForLocalPayout: number | null
-  /** Local per 1 USDT; sourced from USD→local Office rate when set. */
   usdtDeskLocalPerUnit: number | null
   usdtDeskSource: "USD_OFFICE_RATE" | "USD_PEG" | "env_fallback" | null
 }
@@ -34,25 +27,10 @@ export function leg2ReserveUsdt(): { minContributionUsdt: number; trc20FeeUsdt: 
   }
 }
 
-/** Max local payout fundable from `usdtFromBitbanker` at USD→local desk (after reserves). */
-export function maxLocalPayoutFromUsdt(
-  usdtFromBitbanker: number,
-  deskLocalPerUsdt: number,
-  reserves?: { minContributionUsdt?: number; trc20FeeUsdt?: number },
-): number {
-  const { minContributionUsdt, trc20FeeUsdt } = { ...leg2ReserveUsdt(), ...reserves }
-  const usdtForPayout = usdtFromBitbanker - trc20FeeUsdt - minContributionUsdt
-  if (!Number.isFinite(usdtForPayout) || usdtForPayout <= 0) return 0
-  return roundMoney(usdtForPayout * deskLocalPerUsdt)
-}
-
-/**
- * Local currency units per 1 USDT from Office USD→receive rate (or 1 when receive is USD).
- */
 export function resolveUsdtDeskRate(
   receiveCurrency: string,
   usdToLocalOfficeRate: number | null | undefined,
-): { desk: number | null; source: RubLocalSendLegSnapshot["usdtDeskSource"] } {
+): { desk: number | null; source: LocalPayoutFundingSnapshot["usdtDeskSource"] } {
   const recv = receiveCurrency.trim().toUpperCase()
   if (recv === "USD") {
     return { desk: 1, source: "USD_PEG" }
@@ -68,25 +46,81 @@ export function resolveUsdtDeskRate(
   return { desk: null, source: null }
 }
 
-/** USDT needed to deliver `receiveAmount` at the desk (local per 1 USDT). */
-export function usdtForLocalPayout(receiveAmount: number, deskLocalPerUsdt: number | null): number | null {
-  if (deskLocalPerUsdt == null || !Number.isFinite(receiveAmount) || receiveAmount <= 0) return null
+/** USDT to fund `receiveAmount` local at desk (local units per 1 USDT). */
+export function usdtForLocalPayout(receiveAmount: number, deskLocalPerUsdt: number): number {
   return roundMoney(receiveAmount / deskLocalPerUsdt)
 }
 
-export function assertLeg2UsdtCoverage(input: {
-  usdtFromBitbanker: number
-  usdtForLocalPayout: number
-  minContributionUsdt?: number
-  trc20FeeUsdt?: number
-}): void {
-  const minContribution = input.minContributionUsdt ?? Number(process.env.BITBANKER_MIN_CONTRIBUTION_USDT || "0")
-  const trc20Fee = input.trc20FeeUsdt ?? Number(process.env.BITBANKER_TRC20_FEE_USDT || "0")
-  const projected = input.usdtFromBitbanker - input.usdtForLocalPayout - trc20Fee
-  if (projected < minContribution) {
-    throw new SendQuoteError(
-      SEND_QUOTE_ERROR_CODE.MIN_CONTRIBUTION,
-      "Quote does not meet minimum contribution for this corridor",
-    )
+export function usdtTargetForLocalPayout(receiveAmount: number, deskLocalPerUsdt: number): number {
+  const base = usdtForLocalPayout(receiveAmount, deskLocalPerUsdt)
+  const { minContributionUsdt, trc20FeeUsdt } = leg2ReserveUsdt()
+  return roundMoney(base + trc20FeeUsdt + minContributionUsdt)
+}
+
+type PredictionAtB = {
+  invoiceBaseB: number
+  grossG: number
+  usdtU: number
+  prediction: ExchangePredictionResponse
+}
+
+async function predictAtB(volume: number): Promise<PredictionAtB> {
+  const prediction = await exchangePrediction({ volume })
+  const grossG = numField(prediction.volume_give_prediction)
+  const usdtU = numField(prediction.volume_take_final)
+  if (grossG == null || usdtU == null) {
+    throw new Error("Bitbanker prediction unavailable")
   }
+  return { invoiceBaseB: volume, grossG, usdtU, prediction }
+}
+
+const BINARY_STEPS_MAX = 6
+/** Skip minimize-B search when U is already within this USDT of target (saves Bitbanker round-trips). */
+const USDT_TARGET_SLACK = 0.2
+
+function scaleBForUsdtGap(b: number, usdtHave: number, usdtTarget: number): number {
+  if (usdtHave <= 0) return roundMoney(b + 1)
+  return roundMoney(Math.max(b + 1, b * (usdtTarget / usdtHave) * 1.002))
+}
+
+/** Smallest B ≥ nominalB with Bitbanker U ≥ usdtTarget (minimizes G; few Bitbanker calls). */
+export async function solveInvoiceBaseForUsdtTarget(
+  nominalB: number,
+  usdtTarget: number,
+  opts?: { floorPred?: PredictionAtB },
+): Promise<PredictionAtB & { nominalInvoiceBaseB: number }> {
+  const floorB = roundMoney(Math.max(nominalB, 1))
+  const floorPred = opts?.floorPred?.invoiceBaseB === floorB ? opts.floorPred : await predictAtB(floorB)
+  if (floorPred.usdtU >= usdtTarget) {
+    return { ...floorPred, nominalInvoiceBaseB: nominalB }
+  }
+
+  let hiPass = scaleBForUsdtGap(floorB, floorPred.usdtU, usdtTarget)
+  let hiPred = await predictAtB(hiPass)
+  for (let bump = 0; hiPred.usdtU < usdtTarget && bump < 2; bump++) {
+    hiPass = scaleBForUsdtGap(hiPass, hiPred.usdtU, usdtTarget)
+    hiPred = await predictAtB(hiPass)
+  }
+  if (hiPred.usdtU < usdtTarget) {
+    throw new Error("Quote does not meet minimum contribution for this corridor")
+  }
+
+  if (hiPred.usdtU - usdtTarget <= USDT_TARGET_SLACK) {
+    return { ...hiPred, nominalInvoiceBaseB: nominalB }
+  }
+
+  let loFail = floorB
+  for (let i = 0; i < BINARY_STEPS_MAX && roundMoney(hiPass - loFail) > 0.01; i++) {
+    const mid = roundMoney((loFail + hiPass) / 2)
+    if (mid <= loFail || mid >= hiPass) break
+    const midPred = await predictAtB(mid)
+    if (midPred.usdtU >= usdtTarget) {
+      hiPass = mid
+      hiPred = midPred
+    } else {
+      loFail = mid
+    }
+  }
+
+  return { ...hiPred, nominalInvoiceBaseB: nominalB }
 }

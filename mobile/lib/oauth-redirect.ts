@@ -9,7 +9,7 @@ const NATIVE_SCHEME_CALLBACK = "ciuna://auth/callback"
 
 /**
  * Deep link that actually opens this binary.
- * Expo Go cannot claim `ciuna://` (Easner uses a store/dev build, so `easner://` works there).
+ * Expo Go cannot claim `ciuna://`; store/dev builds use the native scheme.
  */
 export function getNativeOAuthDeepLink(): string {
   if (isExpoGo) {
@@ -36,7 +36,7 @@ export function getWebsiteOAuthBounceUri(): string {
 /**
  * OAuth return URL for Supabase `signInWithOAuth`.
  *
- * Store/dev builds: `ciuna://auth/callback` (same as Easner’s `easner://`).
+ * Store/dev builds: `ciuna://auth/callback`.
  * Expo Go cannot claim that scheme, so we return `exp://…/--/auth/callback`
  * (allow `exp://**` in Supabase Auth → Redirect URLs).
  */

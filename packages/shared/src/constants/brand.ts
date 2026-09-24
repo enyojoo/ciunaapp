@@ -1,6 +1,6 @@
 export const BRAND = {
   name: "Ciuna",
-  tagline: "One app, all your needs",
+  tagline: "Send, shop & book.",
   description: "Send money, order food, shop the mart, and hire experts — one Ciuna account.",
   logo: "https://seeqjiebmrnolcyydewj.supabase.co/storage/v1/object/public/brand/Ciuna.svg",
   domain: "ciuna.com",

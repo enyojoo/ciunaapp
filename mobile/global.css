@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Expo web: React Native TextInput renders as <input>/<textarea>.
+ * Remove the browser’s default focus ring; app containers use a primary focus ring instead.
+ */
+@layer base {
+  input,
+  textarea,
+  select {
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus,
+  input:focus-visible,
+  textarea:focus,
+  textarea:focus-visible,
+  select:focus,
+  select:focus-visible {
+    outline: none !important;
+    outline-width: 0 !important;
+    box-shadow: none !important;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    transition: background-color 9999s ease-out 0s;
+  }
+}
+
+/* Bottom tabs on Expo web: prevent label descenders clipping in fixed-height bar */
+@layer components {
+  [role="tablist"] {
+    overflow: visible !important;
+  }
+
+  [role="tablist"] [role="tab"] {
+    overflow: visible !important;
+  }
+}

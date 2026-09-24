@@ -31,8 +31,8 @@
   },
   "hub": {
     "hub": "Centre",
-    "heroTitle": "Une app, tout ce dont vous avez besoin",
-    "heroBody": "Faites vos courses, réservez des services, envoyez de l’argent au pays et gérez votre vie à l’étranger sur Ciuna.",
+    "heroTitle": "Envoyer, acheter et réserver.",
+    "heroBody": "Tout ce qu'il vous faut : courses, transferts et services au même endroit sur Ciuna.",
     "serviceLineTiles": {
       "food": { "title": "Restauration", "shortDescription": "Toutes vos envies, sans compromis" },
       "mart": { "title": "Épicerie", "shortDescription": "Produits alimentaires et bien plus encore" },
@@ -210,7 +210,7 @@
     "submitFailed": "Impossible d’envoyer. Réessayez."
   },
   "transactions": {
-    "title": "Liste des opérations",
+    "title": "Activités",
     "searchPlaceholder": "Rechercher des transactions…",
     "empty": "Aucune transaction",
     "emptyHint": "Commencez par votre premier transfert",
@@ -230,7 +230,7 @@
     "orderAmount": "Montant de la commande"
   },
   "orders": {
-    "title": "Transactions",
+    "title": "Activités",
     "totalVolume": "Total dépensé",
     "totalTransactions": "Transactions",
     "rowSentTo": "Envoyé à {{name}}",

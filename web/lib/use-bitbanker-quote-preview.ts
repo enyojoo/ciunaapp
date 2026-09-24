@@ -19,14 +19,6 @@ export type BitbankerQuotePreview = {
   totalAmount: number
 }
 
-export type BitbankerQuotePreviewLeg2 = {
-  usdtDeskConfigured?: boolean
-  receiveCappedByLeg2?: boolean
-  corridorReceiveAmount?: number
-  usdtForLocalPayout: number | null
-  usdtFromBitbanker: number
-}
-
 export function useBitbankerQuotePreview(opts: {
   enabled: boolean
   sendAmount: string
@@ -34,18 +26,14 @@ export function useBitbankerQuotePreview(opts: {
   receiveCurrency: string
 }) {
   const [preview, setPreview] = useState<BitbankerQuotePreview | null>(null)
-  const [leg2, setLeg2] = useState<BitbankerQuotePreviewLeg2 | null>(null)
   const [errorNotice, setErrorNotice] = useState<SendQuotePreviewNotice | null>(null)
-  const [infoNotice, setInfoNotice] = useState<SendQuotePreviewNotice | null>(null)
   const [loading, setLoading] = useState(false)
   const requestId = useRef(0)
 
   useEffect(() => {
     if (!opts.enabled) {
       setPreview(null)
-      setLeg2(null)
       setErrorNotice(null)
-      setInfoNotice(null)
       setLoading(false)
       return
     }
@@ -54,9 +42,7 @@ export function useBitbankerQuotePreview(opts: {
     const min = minSendAmountForCurrency(opts.sendCurrency)
     if (!Number.isFinite(amount) || amount <= 0 || (min != null && amount < min)) {
       setPreview(null)
-      setLeg2(null)
       setErrorNotice(null)
-      setInfoNotice(null)
       setLoading(false)
       return
     }
@@ -79,43 +65,30 @@ export function useBitbankerQuotePreview(opts: {
             error?: string
             errorCode?: string
             preview?: BitbankerQuotePreview
-            leg2?: BitbankerQuotePreviewLeg2
           }
           if (requestId.current !== id) return
           if (!res.ok) {
             setPreview(null)
-            setLeg2(null)
-            setInfoNotice(null)
             setErrorNotice(noticeForQuotePreviewFailure(res.status, body.error, body.errorCode))
             return
           }
           const p = body.preview
           if (!p) {
             setPreview(null)
-            setLeg2(null)
-            setInfoNotice(null)
             setErrorNotice(noticeForQuotePreviewFailure(400, "Invalid preview response"))
             return
           }
           setPreview(p)
-          setLeg2(body.leg2 ?? null)
           setErrorNotice(null)
-          setInfoNotice(
-            body.leg2?.receiveCappedByLeg2
-              ? { kind: "info", messageKey: "send.quoteReceiveCappedByUsdt" }
-              : null,
-          )
         } catch {
           if (requestId.current !== id) return
           setPreview(null)
-          setLeg2(null)
-          setInfoNotice(null)
           setErrorNotice(noticeForQuotePreviewNetworkFailure())
         } finally {
           if (requestId.current === id) setLoading(false)
         }
       })()
-    }, 400)
+    }, 280)
 
     return () => {
       clearTimeout(timer)
@@ -125,5 +98,5 @@ export function useBitbankerQuotePreview(opts: {
 
   const feesConfirmed = Boolean(preview) && !loading && !errorNotice
 
-  return { preview, leg2, errorNotice, infoNotice, loading, feesConfirmed }
+  return { preview, errorNotice, loading, feesConfirmed }
 }

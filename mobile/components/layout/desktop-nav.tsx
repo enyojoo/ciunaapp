@@ -26,7 +26,7 @@ export function DesktopNav() {
 
   const items = [
     { ...NAV[0], label: t("nav.home", { defaultValue: "Home" }), icon: Home },
-    { ...NAV[1], label: t("nav.transactions", { defaultValue: "Transfer" }), icon: History },
+    { ...NAV[1], label: t("nav.transactions", { defaultValue: "Activities" }), icon: History },
     { ...NAV[2], label: t("nav.more", { defaultValue: "More" }), icon: Grip },
   ]
 

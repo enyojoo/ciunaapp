@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react"
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
+import { AppTextInput } from "@/components/app-text-input"
+import { useInputFocusRing } from "@/lib/focused-input-box"
 import { useTranslation } from "react-i18next"
 import {
   clampSendAmountForCurrency,
@@ -90,6 +92,7 @@ export function SendAmountStep({
   quoteNotice,
   quotePreviewLoading,
   bitbankerFeesConfirmed,
+  quotePreviewActive,
 }: {
   sendAmount: string
   onChangeAmount: (v: string) => void
@@ -105,10 +108,13 @@ export function SendAmountStep({
   quotePreviewLoading?: boolean
   /** From useBitbankerQuotePreview — do not re-derive (desk hint is not a failure). */
   bitbankerFeesConfirmed?: boolean
+  /** Live Bitbanker preview is expected (logged in, RUB corridor, valid amount). */
+  quotePreviewActive?: boolean
 }) {
   const { t } = useTranslation("app")
   const [openSend, setOpenSend] = useState(false)
   const [openRecv, setOpenRecv] = useState(false)
+  const sendAmountFocus = useInputFocusRing()
   const sendable = useMemo(
     () => currenciesForSendPicker(currencies, receiveCurrency),
     [currencies, receiveCurrency],
@@ -143,7 +149,10 @@ export function SendAmountStep({
   const rateReady = Boolean(rate && displayRate > 0)
   const feesConfirmed = usesBitbanker ? Boolean(bitbankerFeesConfirmed) : true
   const showProcessingFeeSkeleton = Boolean(
-    usesBitbanker && (quotePreviewLoading || !feesConfirmed),
+    quotePreviewActive &&
+      !quoteNotice &&
+      quotePreviewLoading &&
+      bitbankerPreview == null,
   )
   const processingFeeDisplay = (() => {
     if (showProcessingFeeSkeleton) return ""
@@ -190,12 +199,16 @@ export function SendAmountStep({
               label={t("send.youSend")}
               pickerEnabled={sendPickerEnabled}
             />
-            <View style={styles.amountField}>
+            <View style={[styles.amountField, sendAmountFocus.boxStyle]}>
               <Text style={styles.amountSymbol}>{sendSymbol}</Text>
-              <TextInput
+              <AppTextInput
                 value={sendAmount}
                 onChangeText={(v) => onChangeAmount(sanitizeAmountInput(v))}
-                onBlur={() => commitAmount(sendAmount)}
+                onFocus={sendAmountFocus.onFocus}
+                onBlur={() => {
+                  sendAmountFocus.onBlur()
+                  commitAmount(sendAmount)
+                }}
                 keyboardType="decimal-pad"
                 placeholder={amountPlaceholder}
                 placeholderTextColor="#9CA3AF"

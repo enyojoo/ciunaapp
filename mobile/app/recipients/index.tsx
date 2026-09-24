@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react"
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from "react-native"
+import { AppTextInput } from "@/components/app-text-input"
+import { useInputFocusRing } from "@/lib/focused-input-box"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { SvgXml } from "react-native-svg"
@@ -25,6 +27,7 @@ export default function RecipientsScreen() {
   const rows = data || []
   const [query, setQuery] = useState("")
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const searchFocus = useInputFocusRing()
 
   useFocusRevalidate(revalidate)
 
@@ -71,11 +74,13 @@ export default function RecipientsScreen() {
         <Text style={styles.addBtnText}>{t("recipients.addRecipient")}</Text>
       </Pressable>
 
-      <View style={styles.searchBox}>
+      <View style={[styles.searchBox, searchFocus.boxStyle]}>
         <Search size={16} color={colors.muted} />
-        <TextInput
+        <AppTextInput
           value={query}
           onChangeText={setQuery}
+          onFocus={searchFocus.onFocus}
+          onBlur={searchFocus.onBlur}
           placeholder={t("recipients.searchPlaceholder")}
           placeholderTextColor="#9CA3AF"
           style={styles.searchInput}

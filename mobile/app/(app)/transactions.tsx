@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react"
-import { ActivityIndicator, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
+import { ActivityIndicator, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
+import { AppTextInput } from "@/components/app-text-input"
+import { useInputFocusRing } from "@/lib/focused-input-box"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { ArrowDownLeft, ArrowUpRight, Search, ShoppingBag, Sparkles, UtensilsCrossed, Wallet } from "lucide-react-native"
@@ -20,6 +22,7 @@ import {
 } from "@/lib/transactions"
 import { useCachedQuery } from "@/lib/use-cached-query"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { seedTransactionCache } from "@/lib/use-transaction"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -85,6 +88,8 @@ export default function TransactionsScreen() {
   const { user } = useAuth()
   const [chip, setChip] = useState<FilterChip>("all")
   const [query, setQuery] = useState("")
+  const searchFocus = useInputFocusRing()
+  const tabContentPadding = useTabContentPadding()
 
   const txKey = user ? `ciuna_transactions_${user.id}` : null
   const volKey = user ? `ciuna_completed_volume_${user.id}` : null
@@ -121,7 +126,7 @@ export default function TransactionsScreen() {
 
   return (
     <Screen>
-      <Text style={styles.title}>{t("transactions.title", { defaultValue: "Transfer" })}</Text>
+      <Text style={styles.title}>{t("transactions.title", { defaultValue: "Activities" })}</Text>
 
       <View style={styles.summaryRow}>
         <View style={styles.summaryCard}>
@@ -142,11 +147,13 @@ export default function TransactionsScreen() {
         </View>
       </View>
 
-      <View style={styles.searchBox}>
+      <View style={[styles.searchBox, searchFocus.boxStyle]}>
         <Search size={16} color={colors.muted} />
-        <TextInput
+        <AppTextInput
           value={query}
           onChangeText={setQuery}
+          onFocus={searchFocus.onFocus}
+          onBlur={searchFocus.onBlur}
           placeholder={t("orders.searchPlaceholder", { defaultValue: "Search transactions..." })}
           placeholderTextColor="#9CA3AF"
           style={styles.searchInput}
@@ -175,7 +182,7 @@ export default function TransactionsScreen() {
 
       <ScrollView
         style={styles.list}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, { paddingBottom: tabContentPadding }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refreshAll} tintColor={colors.primary} />
         }

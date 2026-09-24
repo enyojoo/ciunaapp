@@ -3,6 +3,24 @@ import { requireUser, withErrorHandling, createErrorResponse } from "@/lib/auth-
 import { isBitbankerConfigured } from "@/lib/bitbanker/config"
 import { previewSendQuote } from "@/lib/bitbanker/send-quote-service"
 import { sendQuoteErrorResponse } from "@/lib/bitbanker/send-quote-errors"
+import { roundMoney } from "@/utils/currency"
+
+const PREVIEW_CACHE_MS = 30_000
+const previewCache = new Map<string, { expiresAt: number; preview: Record<string, unknown> }>()
+
+function previewCacheKey(body: Record<string, unknown>): string {
+  const sendCurrency = String(body.sendCurrency || "").trim().toUpperCase()
+  const receiveCurrency = String(body.receiveCurrency || "").trim().toUpperCase()
+  const sendPart =
+    body.sendAmount != null && Number(body.sendAmount) > 0
+      ? `s${roundMoney(Number(body.sendAmount))}`
+      : ""
+  const recvPart =
+    body.receiveAmount != null && Number(body.receiveAmount) > 0
+      ? `r${roundMoney(Number(body.receiveAmount))}`
+      : ""
+  return `${sendCurrency}:${receiveCurrency}:${sendPart}:${recvPart}`
+}
 
 /** Live Bitbanker fee breakdown for send UI (no persisted quote, no recipient required). */
 export const POST = withErrorHandling(async (request: NextRequest) => {
@@ -12,7 +30,13 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     return createErrorResponse("Bitbanker is not configured", 503)
   }
 
-  const body = await request.json()
+  const body = (await request.json()) as Record<string, unknown>
+  const cacheKey = previewCacheKey(body)
+  const cached = previewCache.get(cacheKey)
+  if (cached && cached.expiresAt > Date.now()) {
+    return NextResponse.json({ preview: cached.preview })
+  }
+
   try {
     const breakdown = await previewSendQuote({
       userId: "",
@@ -23,27 +47,19 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       fulfillmentType: "bank_transfer",
     })
 
-    const leg2 = breakdown.quoteSnapshot.leg2
-    return NextResponse.json({
-      preview: {
-        sendAmount: breakdown.sendAmount,
-        sendCurrency: breakdown.sendCurrency,
-        receiveAmount: breakdown.receiveAmount,
-        receiveCurrency: breakdown.receiveCurrency,
-        exchangeRate: breakdown.exchangeRate,
-        feeAmount: breakdown.feeAmount,
-        feeType: breakdown.feeType,
-        paymentProcessingFee: breakdown.paymentProcessingFee,
-        totalAmount: breakdown.totalAmount,
-      },
-      leg2: {
-        usdtDeskConfigured: leg2?.usdtDeskLocalPerUnit != null,
-        receiveCappedByLeg2: Boolean(leg2?.receiveCappedByLeg2),
-        corridorReceiveAmount: leg2?.corridorReceiveLocal ?? breakdown.receiveAmount,
-        usdtForLocalPayout: leg2?.usdtForLocalPayout ?? null,
-        usdtFromBitbanker: leg2?.usdtFromBitbanker ?? breakdown.predictedUsdtU,
-      },
-    })
+    const preview = {
+      sendAmount: breakdown.sendAmount,
+      sendCurrency: breakdown.sendCurrency,
+      receiveAmount: breakdown.receiveAmount,
+      receiveCurrency: breakdown.receiveCurrency,
+      exchangeRate: breakdown.exchangeRate,
+      feeAmount: breakdown.feeAmount,
+      feeType: breakdown.feeType,
+      paymentProcessingFee: breakdown.paymentProcessingFee,
+      totalAmount: breakdown.totalAmount,
+    }
+    previewCache.set(cacheKey, { expiresAt: Date.now() + PREVIEW_CACHE_MS, preview })
+    return NextResponse.json({ preview })
   } catch (e: unknown) {
     const { message, code, status } = sendQuoteErrorResponse(e)
     return createErrorResponse(message, status, code)

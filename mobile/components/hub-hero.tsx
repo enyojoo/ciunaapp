@@ -14,11 +14,11 @@ export function HubHero() {
       style={styles.hero}
     >
       <Text style={styles.title}>
-        {t("hub.heroTitle", { defaultValue: "One App, All Your Needs" })}
+        {t("hub.heroTitle", { defaultValue: "Send, Shop & Book." })}
       </Text>
       <Text style={styles.body}>
         {t("hub.heroBody", {
-          defaultValue: "Shop foodstuffs, book services, send money home and handle life abroad on Ciuna.",
+          defaultValue: "Everything you need: groceries, transfers, and services in one place on Ciuna.",
         })}
       </Text>
     </LinearGradient>
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.card,
     paddingHorizontal: 20,
     paddingVertical: 20,
+    alignItems: "center",
   },
   title: {
     fontSize: typeSize.title,
@@ -39,11 +40,14 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
     lineHeight: 30,
     color: "#FFFFFF",
+    textAlign: "center",
   },
   body: {
     marginTop: 8,
+    maxWidth: 280,
     fontSize: typeSize.meta,
     lineHeight: 20,
     color: colors.heroBody,
+    textAlign: "center",
   },
 })

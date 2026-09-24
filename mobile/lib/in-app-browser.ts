@@ -11,7 +11,7 @@ const OPTIONS = {
 } as const
 
 /**
- * Same in-app browser Easner uses for Legal and hosted pages.
+ * In-app browser for Legal and other hosted pages.
  * iOS: SFSafariViewController. Android: Chrome Custom Tab (`createTask: false`
  * so OAuth/deep links stay in the app task). Web should use `useExternalLink`.
  */

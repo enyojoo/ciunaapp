@@ -1,21 +1,34 @@
 import { type ReactNode } from "react"
-import { StyleSheet, Text, TextInput, View, type TextInputProps } from "react-native"
+import { StyleSheet, Text, View, type TextInputProps } from "react-native"
+import { AppTextInput } from "@/components/app-text-input"
+import { useInputFocusRing } from "@/lib/focused-input-box"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
 export function Field({
   label,
   error,
   trailing,
+  onFocus,
+  onBlur,
   ...props
 }: TextInputProps & { label?: string; error?: string; trailing?: ReactNode }) {
+  const { onFocus: ringFocus, onBlur: ringBlur, boxStyle } = useInputFocusRing()
+
   return (
     <View style={styles.wrap}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
-      <View style={styles.box}>
-        <TextInput
+      <View style={[styles.box, boxStyle]}>
+        <AppTextInput
           {...props}
+          onFocus={(e) => {
+            ringFocus()
+            onFocus?.(e)
+          }}
+          onBlur={(e) => {
+            ringBlur()
+            onBlur?.(e)
+          }}
           placeholderTextColor="#9CA3AF"
-          selectionColor={colors.primary}
           style={[styles.input, props.style]}
         />
         {trailing}

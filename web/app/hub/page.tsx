@@ -117,12 +117,14 @@ export default function HubHomePage() {
         <HubShellHeader />
 
         <div className="space-y-6 px-4 sm:px-6">
-          <section className="rounded-2xl bg-gradient-to-br from-orange-600 via-orange-500 to-amber-400 p-5 text-white shadow-sm sm:p-6">
-            <div className="space-y-1.5 sm:space-y-2">
+          <section className="rounded-2xl bg-gradient-to-br from-orange-600 via-orange-500 to-amber-400 p-5 text-center text-white shadow-sm sm:p-6">
+            <div className="mx-auto space-y-1.5 sm:space-y-2">
               <h1 className="text-balance text-2xl font-bold leading-tight sm:text-3xl md:text-4xl">
                 {hubHeroTitle}
               </h1>
-              <p className="max-w-2xl text-sm/6 text-orange-50 sm:text-base/7">{hubHeroBody}</p>
+              <p className="mx-auto max-w-xs text-sm/6 text-orange-50 sm:max-w-sm sm:text-base/7">
+                {hubHeroBody}
+              </p>
             </div>
           </section>
 

@@ -31,8 +31,8 @@
   },
   "hub": {
     "hub": "Centre",
-    "heroTitle": "Une app, tout ce dont vous avez besoin",
-    "heroBody": "Faites vos courses, réservez des services, envoyez de l’argent au pays et gérez votre vie à l’étranger sur Ciuna.",
+    "heroTitle": "Envoyer, acheter et réserver.",
+    "heroBody": "Tout ce qu'il vous faut : courses, transferts et services au même endroit sur Ciuna.",
     "serviceLineTiles": {
       "food": {
         "title": "Restauration",
@@ -234,7 +234,7 @@
     "submitFailed": "Impossible d’envoyer. Réessayez."
   },
   "transactions": {
-    "title": "Transferts",
+    "title": "Activités",
     "searchPlaceholder": "Rechercher des transactions…",
     "empty": "Aucune transaction",
     "emptyHint": "Commencez par votre premier transfert",

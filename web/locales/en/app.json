@@ -31,8 +31,8 @@
   },
   "hub": {
     "hub": "Hub",
-    "heroTitle": "One App, All Your Needs",
-    "heroBody": "Shop foodstuffs, book services, send money home and handle life abroad on Ciuna.",
+    "heroTitle": "Send, Shop & Book.",
+    "heroBody": "Everything you need: groceries, transfers, and services in one place on Ciuna.",
     "serviceLineTiles": {
       "food": { "title": "Food", "shortDescription": "Have all your cravings" },
       "mart": { "title": "Mart", "shortDescription": "Find foodstuffs and more" },
@@ -285,7 +285,7 @@
     }
   },
   "transactions": {
-    "title": "Transactions",
+    "title": "Activities",
     "searchPlaceholder": "Search transactions...",
     "empty": "No transactions found",
     "emptyHint": "Start by sending your first transfer",
@@ -305,7 +305,7 @@
     "orderAmount": "Order Amount"
   },
   "orders": {
-    "title": "Transactions",
+    "title": "Activities",
     "totalVolume": "Total Spent",
     "totalTransactions": "Transactions",
     "rowSentTo": "Sent to {{name}}",

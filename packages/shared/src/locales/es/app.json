@@ -31,8 +31,8 @@
   },
   "hub": {
     "hub": "Centro",
-    "heroTitle": "Una app, todo lo que necesitas",
-    "heroBody": "Compra víveres, reserva servicios, envía dinero a casa y gestiona tu vida en el extranjero con Ciuna.",
+    "heroTitle": "Envía, compra y reserva.",
+    "heroBody": "Todo lo que necesitas: compras, transferencias y servicios en un solo lugar en Ciuna.",
     "serviceLineTiles": {
       "food": {
         "title": "Comida",
@@ -234,7 +234,7 @@
     "submitFailed": "No se pudo enviar. Inténtalo de nuevo."
   },
   "transactions": {
-    "title": "Envíos",
+    "title": "Actividades",
     "searchPlaceholder": "Buscar transacciones…",
     "empty": "No hay transacciones",
     "emptyHint": "Empieza enviando tu primera transferencia",

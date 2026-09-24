@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { AppTextInput } from "@/components/app-text-input"
+import { useInputFocusRing } from "@/lib/focused-input-box"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Search, X } from "lucide-react-native"
 import { FlagIcon } from "@/components/flag-icon"
@@ -26,6 +28,7 @@ export function CountryPicker({
   onClose: () => void
 }) {
   const [query, setQuery] = useState("")
+  const searchFocus = useInputFocusRing()
   const dialog = useWebCenteredModal()
 
   const filtered = useMemo(() => {
@@ -43,11 +46,13 @@ export function CountryPicker({
             <X size={20} color={colors.text} />
           </Pressable>
         </View>
-        <View style={styles.searchBox}>
+        <View style={[styles.searchBox, searchFocus.boxStyle]}>
           <Search size={16} color={colors.muted} />
-          <TextInput
+          <AppTextInput
             value={query}
             onChangeText={setQuery}
+            onFocus={searchFocus.onFocus}
+            onBlur={searchFocus.onBlur}
             placeholder={searchPlaceholder}
             placeholderTextColor="#9CA3AF"
             style={styles.searchInput}

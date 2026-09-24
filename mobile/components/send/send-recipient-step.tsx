@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react"
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
+import { AppTextInput } from "@/components/app-text-input"
+import { useInputFocusRing } from "@/lib/focused-input-box"
 import { Check, Plus, Search, UserPlus } from "lucide-react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -44,6 +46,7 @@ export function SendRecipientStep({
   const router = useRouter()
   const [query, setQuery] = useState("")
   const [showAdd, setShowAdd] = useState(false)
+  const searchFocus = useInputFocusRing()
 
   const flagFor = (code?: string) => currencies.find((c) => c.code === code)?.flag_svg
 
@@ -63,11 +66,13 @@ export function SendRecipientStep({
     <View style={styles.root}>
       <Text style={styles.headline}>{t("send.mobile.recipientHeadline", { defaultValue: "Who receives it?" })}</Text>
 
-      <View style={styles.searchBox}>
+      <View style={[styles.searchBox, searchFocus.boxStyle]}>
         <Search size={16} color={colors.muted} />
-        <TextInput
+        <AppTextInput
           value={query}
           onChangeText={setQuery}
+          onFocus={searchFocus.onFocus}
+          onBlur={searchFocus.onBlur}
           placeholder={t("send.searchRecipients")}
           placeholderTextColor="#9CA3AF"
           style={styles.searchInput}

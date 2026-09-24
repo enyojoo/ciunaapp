@@ -2,6 +2,7 @@ import { type ReactNode } from "react"
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, type ViewStyle } from "react-native"
 import { SafeAreaView, type Edge } from "react-native-safe-area-context"
 import { useOptionalResponsiveLayout } from "@/lib/responsive-layout"
+import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { colors } from "@/lib/theme"
 
 export function Screen({
@@ -46,12 +47,13 @@ export function ScreenScroll({
   contentStyle?: ViewStyle
   edges?: Edge[]
 }) {
+  const tabContentPadding = useTabContentPadding()
   return (
     <Screen keyboard={keyboard} edges={edges}>
       <ScrollView
         style={styles.flex}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[styles.content, contentStyle]}
+        contentContainerStyle={[styles.content, { paddingBottom: tabContentPadding }, contentStyle]}
         showsVerticalScrollIndicator={false}
       >
         {children}
@@ -61,8 +63,8 @@ export function ScreenScroll({
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper },
+  screen: { flex: 1, minHeight: 0, backgroundColor: colors.paper },
   padded: { paddingHorizontal: 24 },
-  flex: { flex: 1 },
+  flex: { flex: 1, minHeight: 0 },
   content: { paddingHorizontal: 24, paddingBottom: 40 },
 })

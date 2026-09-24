@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native"
 import { colors } from "@/lib/theme"
 
-/** Easner `AuthFlowLoadingShell`: flat paper + spinner, no phone frame or sidebar. */
+/** Auth restore: flat paper + spinner, no phone frame or sidebar. */
 export function SessionRestoreCanvas() {
   return (
     <View style={styles.fill} accessibilityLabel="Restoring session">
