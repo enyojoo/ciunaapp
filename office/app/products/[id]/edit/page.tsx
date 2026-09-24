@@ -63,6 +63,8 @@ export default function OfficeEditProductPage() {
     form_schema_json: "[]",
     sort_order: "0",
     image_url: "",
+    stock_quantity: "",
+    sold_out: false,
   })
 
   const hubProductsListHref = useMemo(() => {
@@ -104,6 +106,8 @@ export default function OfficeEditProductPage() {
           form_schema_json: JSON.stringify(product.form_schema || [], null, 2),
           sort_order: String(product.sort_order ?? 0),
           image_url: product.image_url || "",
+          stock_quantity: product.stock_quantity != null ? String(product.stock_quantity) : "",
+          sold_out: Boolean(product.sold_out),
         })
       } catch {
         if (!cancelled) router.push(hubProductsPath("food"))
@@ -168,6 +172,10 @@ export default function OfficeEditProductPage() {
         form_schema,
         sort_order: Number(form.sort_order) || 0,
         image_url: form.image_url || null,
+        stock_quantity: String(form.stock_quantity || "").trim()
+          ? Number(form.stock_quantity)
+          : null,
+        sold_out: Boolean(form.sold_out),
       }
 
       const res = await officeFetch(`/api/admin/hub/products/${id}`, {
@@ -352,6 +360,30 @@ export default function OfficeEditProductPage() {
                   </div>
                 </div>
               )}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Stock quantity (optional)</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={form.stock_quantity}
+                    onChange={(e) => setForm({ ...form, stock_quantity: e.target.value })}
+                    placeholder="Unlimited if empty"
+                  />
+                </div>
+                <div className="flex items-end pb-2">
+                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={form.sold_out}
+                      onChange={(e) => setForm({ ...form, sold_out: e.target.checked })}
+                      className="h-4 w-4 rounded border-gray-300"
+                    />
+                    Mark sold out
+                  </label>
+                </div>
+              </div>
               <div>
                 <Label>Billing context (ops only)</Label>
                 <Select

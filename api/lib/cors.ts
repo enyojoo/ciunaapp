@@ -15,7 +15,7 @@ function allowedOrigins(): string[] {
     new Set([
       APP_URLS.app,
       APP_URLS.office,
-      "https://m.ciuna.com",
+      "https://app.ciuna.com",
       "https://ciunaapp.vercel.app",
       "https://ciunaoffice.vercel.app",
       LOCAL_URLS.web,

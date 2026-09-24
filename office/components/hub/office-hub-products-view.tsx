@@ -41,6 +41,13 @@ type HubProduct = {
   fee_percent: number | null
   is_featured?: boolean
   updated_at: string
+  stock_quantity?: number | null
+  sold_out?: boolean | null
+  funded_min?: number | null
+  funded_max?: number | null
+  default_input_currency?: string | null
+  sla_text?: string | null
+  short_description?: string | null
 }
 
 const HUB_PRODUCTS_CACHE_VERSION = 3
@@ -189,6 +196,8 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
     sla_text: "",
     image_url: "",
     is_featured: false,
+    stock_quantity: "",
+    sold_out: false,
   })
 
   const DEFAULT_CATEGORIES = ["Connectivity", "Card Payment", "AI Tools", "Entertainment", "Experts", "Other"]
@@ -263,6 +272,8 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
       sla_text: "",
       image_url: "",
       is_featured: false,
+      stock_quantity: "",
+      sold_out: false,
     })
     setSlaTimer({ hours: 1, minutes: 0, seconds: 0 })
     setVendorSearch("")
@@ -340,6 +351,8 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
         sla_text: product.sla_text || "",
         image_url: product.image_url || "",
         is_featured: Boolean(product.is_featured),
+        stock_quantity: product.stock_quantity != null ? String(product.stock_quantity) : "",
+        sold_out: Boolean(product.sold_out),
       })
       const vendorLabel =
         hubVendors
@@ -396,6 +409,8 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
         sla_text: `${slaTimer.hours}:${String(slaTimer.minutes).padStart(2, "0")}:${String(slaTimer.seconds).padStart(2, "0")}`,
         image_url: form.image_url || null,
         is_featured: form.is_featured,
+        stock_quantity: String(form.stock_quantity || "").trim() ? Number(form.stock_quantity) : null,
+        sold_out: Boolean(form.sold_out),
       }
       body.vendor_id = categoryMatchesSlug(form.category, fixedLineSlug) ? (form.vendor_id || null) : null
 
@@ -724,6 +739,30 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                     </div>
                   </div>
                 )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Stock quantity (optional)</Label>
+                    <Input
+                      type="number"
+                      min={0}
+                      step={1}
+                      value={form.stock_quantity}
+                      onChange={(e) => setForm({ ...form, stock_quantity: e.target.value })}
+                      placeholder="Unlimited if empty"
+                    />
+                  </div>
+                  <div className="flex items-end pb-2">
+                    <label className="flex items-center gap-2 text-sm text-gray-700">
+                      <input
+                        type="checkbox"
+                        checked={form.sold_out}
+                        onChange={(e) => setForm({ ...form, sold_out: e.target.checked })}
+                        className="h-4 w-4 rounded border-gray-300"
+                      />
+                      Mark sold out
+                    </label>
+                  </div>
+                </div>
                 <div>
                   <Label>Delivery time</Label>
                   <div className="mt-2 grid grid-cols-3 gap-2">

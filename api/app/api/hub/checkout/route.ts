@@ -35,6 +35,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     const idempotencyKey = body.idempotencyKey != null ? String(body.idempotencyKey) : undefined
     const paymentMethod = body.paymentMethod === "yookassa" ? "yookassa" : "manual"
     const returnUrl = body.returnUrl != null ? String(body.returnUrl) : undefined
+    const gatewayMode = body.gatewayMode === "native" ? "native" : "embedded"
 
     if (!sendCurrency || !contactName || !contactPhone) {
       return createErrorResponse("Missing required fields", 400)
@@ -52,6 +53,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
         idempotencyKey,
         paymentMethod,
         returnUrl,
+        gatewayMode,
       })
 
       if (!duplicate) await sendCheckoutEmails(String(transaction.transaction_id))

@@ -62,6 +62,11 @@ export interface CreateYooKassaPaymentParams {
   /** Where the customer lands after a redirect-type confirmation (the embedded widget also wants this for its own return handling). */
   returnUrl: string
   confirmationType?: "embedded" | "redirect"
+  /**
+   * Payment token from the native iOS/Android SDK. When set, YooKassa creates the payment from
+   * the tokenized instrument instead of returning an embedded confirmation_token.
+   */
+  paymentToken?: string
   /** Auto-capture on payment (default true) — false if a manual capture step is ever needed. */
   capture?: boolean
 }
@@ -74,8 +79,22 @@ export async function createYooKassaPayment(params: CreateYooKassaPaymentParams)
     metadata,
     returnUrl,
     confirmationType = "embedded",
+    paymentToken,
     capture = true,
   } = params
+
+  const bodyPayload: Record<string, unknown> = {
+    amount: { value: amountValue.toFixed(2), currency: "RUB" },
+    capture,
+    description: description.slice(0, 128),
+    metadata,
+  }
+
+  if (paymentToken) {
+    bodyPayload.payment_token = paymentToken
+  } else {
+    bodyPayload.confirmation = { type: confirmationType, return_url: returnUrl }
+  }
 
   const res = await fetch(`${YOOKASSA_API_BASE}/payments`, {
     method: "POST",
@@ -84,13 +103,7 @@ export async function createYooKassaPayment(params: CreateYooKassaPaymentParams)
       "Content-Type": "application/json",
       "Idempotence-Key": idempotenceKey,
     },
-    body: JSON.stringify({
-      amount: { value: amountValue.toFixed(2), currency: "RUB" },
-      capture,
-      confirmation: { type: confirmationType, return_url: returnUrl },
-      description: description.slice(0, 128),
-      metadata,
-    }),
+    body: JSON.stringify(bodyPayload),
   })
 
   const body = await res.json().catch(() => ({}))

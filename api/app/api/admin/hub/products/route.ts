@@ -60,6 +60,11 @@ export async function POST(request: NextRequest) {
       fee_percent: body.fee_percent != null ? Number(body.fee_percent) : null,
       funded_min: body.funded_min != null ? Number(body.funded_min) : null,
       funded_max: body.funded_max != null ? Number(body.funded_max) : null,
+      stock_quantity:
+        body.stock_quantity === null || body.stock_quantity === "" || body.stock_quantity === undefined
+          ? null
+          : Number(body.stock_quantity),
+      sold_out: Boolean(body.sold_out),
       sla_text: body.sla_text ?? null,
       image_url: body.image_url != null ? String(body.image_url) : null,
       updated_at: new Date().toISOString(),

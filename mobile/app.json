@@ -80,7 +80,8 @@
           "backgroundColor": "#F97316"
         }
       ],
-      "expo-image"
+      "expo-image",
+      "./modules/yookassa-payment/plugin/withYooKassa.js"
     ],
     "experiments": {
       "typedRoutes": true

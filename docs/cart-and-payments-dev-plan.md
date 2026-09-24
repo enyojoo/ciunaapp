@@ -209,29 +209,24 @@ before any UI exists.
 
 ---
 
-## Phase 6 — Native YooKassa SDK (mobile) + dev workflow cutover
+## Phase 6 — Native YooKassa SDK (mobile) + store / EAS cutover
 
-**Not started, and deliberately so.** This phase needs Xcode and Android Studio to write, build, and
-verify real Swift/Kotlin native-module code (CocoaPods/Gradle dependency wiring, an `expo-modules-core`
-bridge, a config plugin) — none of that exists in this text-based environment, and there is no way to
-compile or test it here. Fabricating untested native code would be worse than not writing it. What
-shipped instead: mobile's online-payment path (Phase 3) is **fully functional today** via
-`openInAppBrowser` opening the same `/pay/[transactionId]` hosted widget page web uses — real, working,
-just not the native card sheet / Apple Pay / Google Pay experience this phase would add.
+**In progress / largely code-complete.** See [cart-payments-gaps-plan.md](./cart-payments-gaps-plan.md) Gaps H + G.
 
-Remaining, for whoever picks this up with Xcode/Android Studio available:
-- [ ] Expo config plugin registering `yookassa-payments-swift` (CocoaPods) and `yookassa-payments-android`
-  (Gradle) as native dependencies at prebuild.
-- [ ] Thin `expo-modules-core` native module exposing `startYooKassaPayment(...)` to JS, iOS + Android.
-- [ ] Build `mobile/eas.json`'s existing `development` profile once the native module lands, and switch
-  local iteration from the Expo Go app to that dev-client build.
-- [ ] `DESIGN.md`'s "Expo Go after each slice" line — still accurate today (nothing in this pass added a
-  native dependency), update it only once this phase actually lands.
-- [ ] Swap the checkout screen's `openInAppBrowser` call for the native module.
+**Web / Expo web:** inline Checkout.js on the checkout pay step (Gap H) — shipped in code.
+**Downloaded iOS/Android:** native YooKassa SDK sheet via `react-native-yookassa` + config plugin; `gatewayMode: "native"` + payment_token confirm route (Gap G) — shipped in code. Physical EAS device sandbox still operator-owned.
+
+`/pay/[transactionId]` stays as deep-link/resume fallback, not the primary checkout UX.
+
+Remaining:
+- [x] Gap H: inline widget on web (+ Expo web) Hub cart + Experts pay step.
+- [x] Gap G: config plugin + JS bridge; Hub/Experts prefer native when linked.
+- [x] DESIGN.md: inline web vs native store.
+- [ ] EAS development/preview builds + sandbox on physical devices.
 
 ### Verify Phase 6
-- [ ] A real (sandbox) card payment completes through the native sheet on both an iOS simulator/device and an Android emulator/device.
-
+- [ ] Web: RUB Pay online completes **on** the checkout page (inline widget) — needs `YOOKASSA_*` sandbox keys.
+- [ ] iOS + Android store builds: sandbox payment through the **native** sheet.
 ---
 
 ## Phase 7 — Docs
@@ -267,10 +262,11 @@ is still needed for the online-payment path).
 
 1. Single-active-cart-per-line enforced via auto-abandon + toast notice, not a blocking confirm dialog.
 2. `returnUrl` for YooKassa built server-side from `NEXT_PUBLIC_APP_URL`, not passed by the client.
-3. Web's online-pay UI is a shared hosted `/pay/[transactionId]` page (navigated to), not an inline widget
-   on the checkout page itself — reused as-is for mobile's in-app browser.
-4. Mobile's online payment ships via `openInAppBrowser`, not a native SDK (Phase 6 is explicitly deferred —
-   see that section for why).
+3. ~~Web's online-pay UI is a shared hosted `/pay/[transactionId]` page (navigated to), not an inline widget
+   on the checkout page itself — reused as-is for mobile's in-app browser.~~ **Superseded (2026-09-24):**
+   product decision is **inline Checkout.js on web / Expo web checkout pay step**; `/pay/[id]` is
+   deep-link/resume only. Native SDK for iOS/Android store builds. See [cart-payments-gaps-plan.md](./cart-payments-gaps-plan.md).
+4. Mobile's online payment interim ships via `openInAppBrowser`; store target is native SDK (Gap G).
 5. Experts' online-payment branch was inlined into the existing checkout panel rather than extracted into
    a shared component (the de-duplication itself, not the payment feature, was cut).
 6. Mobile's mixed/featured product catalog (as opposed to the single-vendor storefront) did not get

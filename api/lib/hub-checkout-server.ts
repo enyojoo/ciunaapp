@@ -5,7 +5,7 @@ import { computeHubFeeFromReceive } from "@/lib/hub-fee"
 import { hubPayMatchesProductCurrency, hubSyntheticSameCurrencyRateRow } from "@/lib/hub-same-currency-rate"
 import { computeHubCartTotals } from "@/lib/hub-cart-pricing"
 import { getCartById, markCartConverted } from "@/lib/hub-cart-server"
-import { attachYooKassaPayment, type GatewayConfirmation } from "@/lib/gateway-checkout"
+import { attachYooKassaPayment, resolveYooKassaReturnUrl, type GatewayConfirmation } from "@/lib/gateway-checkout"
 import type { HubTransactionSnapshot, HubProductRow } from "@/lib/hub-types"
 import type { ExchangeRate } from "@/types"
 import { hubProductEffectivePrice } from "@/lib/hub-product-price"
@@ -226,6 +226,11 @@ export interface HubCartCheckoutPayload {
    * origin). The transaction id is appended server-side once it's generated.
    */
   returnUrl?: string
+  /**
+   * `native` = create the order for the iOS/Android SDK (no embedded confirmation_token yet);
+   * client will POST a payment_token to the gateway confirm route. Default `embedded` for web.
+   */
+  gatewayMode?: "embedded" | "native"
 }
 
 export interface HubCartCheckoutResult {
@@ -255,6 +260,7 @@ export async function createHubCartCheckoutTransaction(
     idempotencyKey,
     paymentMethod,
     returnUrl,
+    gatewayMode = "embedded",
   } = payload
 
   if (idempotencyKey?.trim()) {
@@ -393,14 +399,24 @@ export async function createHubCartCheckoutTransaction(
   }
 
   if (paymentMethod === "yookassa") {
+    if (gatewayMode === "native") {
+      await markCartConverted(cartId)
+      return {
+        transaction: inserted as Record<string, unknown>,
+        gateway: {
+          confirmationType: "native",
+          amount: totals.total,
+          currency: "RUB",
+        },
+      }
+    }
     try {
-      const appUrl = (returnUrl?.trim() || process.env.NEXT_PUBLIC_APP_URL || "https://app.ciuna.com").replace(/\/$/, "")
       const gateway = await attachYooKassaPayment({
         transactionRowId: String(inserted.id),
         transactionId,
         amount: totals.total,
         description: snapshot.productTitle,
-        returnUrl: `${appUrl}/pay/${transactionId.toLowerCase()}`,
+        returnUrl: resolveYooKassaReturnUrl(returnUrl, transactionId),
         metadata: { transactionId, userId },
       })
       await markCartConverted(cartId)

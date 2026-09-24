@@ -23,6 +23,12 @@ Food and Mart share one marketplace engine. No map or live courier this pass (we
 
 **Two payment rails, same checkout shell:** contact/delivery is shared; the pay step then offers **Bank transfer** (manual — FX-convert, show a bank/mobile-money/crypto/QR method, customer uploads a receipt, office reviews it) or, when the charge is RUB, **Pay online** via YooKassa (card/SBP, instant, webhook-confirmed, no office review). Food/Mart cart checkout and Experts booking both get both rails; Send stays manual-transfer-only.
 
+**Where Pay online runs:**
+| Surface | UX |
+| --- | --- |
+| Next.js web + Expo web | Inline Checkout.js widget on the checkout pay step (stay on page; `/pay/[id]` is resume/deep-link only) |
+| iOS / Android store builds (EAS) | Native YooKassa SDK sheet (`react-native-yookassa`); payment_token posted to the API |
+
 ### Grid vs engines (do both)
 
 Office **Settings → Hub Services** (`/settings?tab=hubServices`) is the CMS for the **Home grid only**: on/off, sort, title, description, **icon image**, `grid_kind`, `route_path`, external `href`. Web already works this way. **Expo must too**.

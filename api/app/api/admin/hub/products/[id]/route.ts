@@ -91,6 +91,15 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       image_url: body.image_url != null ? String(body.image_url) : null,
       updated_at: new Date().toISOString(),
     }
+    if (body.stock_quantity !== undefined) {
+      row.stock_quantity =
+        body.stock_quantity === null || body.stock_quantity === ""
+          ? null
+          : Number(body.stock_quantity)
+    }
+    if (body.sold_out !== undefined) {
+      row.sold_out = Boolean(body.sold_out)
+    }
     if (vendorId !== undefined) {
       row.vendor_id = vendorId
     }

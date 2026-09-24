@@ -3,7 +3,7 @@ import { generateTransactionId } from "@/lib/transaction-id"
 import { roundMoney } from "@/utils/currency"
 import { computeHubFeeFromReceive } from "@/lib/hub-fee"
 import { hubPayMatchesProductCurrency, hubSyntheticSameCurrencyRateRow } from "@/lib/hub-same-currency-rate"
-import { attachYooKassaPayment, type GatewayConfirmation } from "@/lib/gateway-checkout"
+import { attachYooKassaPayment, resolveYooKassaReturnUrl, type GatewayConfirmation } from "@/lib/gateway-checkout"
 import type { HubTransactionSnapshot } from "@/lib/hub-types"
 import type { ExchangeRate } from "@/types"
 
@@ -29,6 +29,8 @@ export interface ExpertCheckoutPayload {
   paymentMethod?: "manual" | "yookassa"
   /** App origin override for the hosted `/pay/[transactionId]` page — see `hub-checkout-server.ts`. */
   returnUrl?: string
+  /** `native` defers YooKassa create until the client posts a payment_token. */
+  gatewayMode?: "embedded" | "native"
 }
 
 export function computeExpertFundedAmount(params: {
@@ -77,6 +79,7 @@ export async function createExpertBookingCheckoutTransaction(
     idempotencyKey,
     paymentMethod = "manual",
     returnUrl,
+    gatewayMode = "embedded",
   } = payload
 
   const sendCur = sendCurrency.trim()
@@ -306,14 +309,24 @@ export async function createExpertBookingCheckoutTransaction(
   }
 
   if (paymentMethod === "yookassa") {
+    if (gatewayMode === "native") {
+      return {
+        transaction: insertedTx as Record<string, unknown>,
+        booking: booking as Record<string, unknown>,
+        gateway: {
+          confirmationType: "native",
+          amount: totalAmount,
+          currency: "RUB",
+        },
+      }
+    }
     try {
-      const appUrl = (returnUrl?.trim() || process.env.NEXT_PUBLIC_APP_URL || "https://app.ciuna.com").replace(/\/$/, "")
       const gateway = await attachYooKassaPayment({
         transactionRowId: String(insertedTx.id),
         transactionId,
         amount: totalAmount,
         description: snapshot.productTitle,
-        returnUrl: `${appUrl}/pay/${transactionId.toLowerCase()}`,
+        returnUrl: resolveYooKassaReturnUrl(returnUrl, transactionId),
         metadata: { transactionId, userId },
       })
       return { transaction: insertedTx as Record<string, unknown>, booking: booking as Record<string, unknown>, gateway }

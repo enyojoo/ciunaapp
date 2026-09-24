@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent } from "react"
 import { useRouter } from "next/navigation"
 import { useTranslation } from "react-i18next"
-import { AlertCircle, Check, Clock, CreditCard, Landmark, MapPin, Package2, Phone, Search, UserRound, X } from "lucide-react"
+import { AlertCircle, Check, Clock, MapPin, Package2, Phone, Search, UserRound, X } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { useUserData } from "@/hooks/use-user-data"
 import { fetchWithAuth } from "@/lib/fetch-with-auth"
@@ -31,6 +31,7 @@ import { generateTransactionId } from "@/lib/transaction-id"
 import { formatCurrency } from "@/utils/currency"
 import { pickDefaultPaymentMethod } from "@/lib/pick-default-payment-method"
 import { hubLineHomePath, hubCartPath } from "@/lib/hub-public-paths"
+import { CheckoutPayRails } from "@/components/hub/checkout-pay-rails"
 
 export function HubCartCheckoutPage({ lineSlug }: { lineSlug: "food" | "mart" }) {
   const { t } = useTranslation("app")
@@ -64,6 +65,10 @@ export function HubCartCheckoutPage({ lineSlug }: { lineSlug: "food" | "mart" })
   const [transactionIdNote, setTransactionIdNote] = useState("")
   const [payChoice, setPayChoice] = useState<"manual" | "yookassa">("manual")
   const [yookassaEnabled, setYookassaEnabled] = useState(false)
+  const [onlinePayment, setOnlinePayment] = useState<{
+    transactionId: string
+    confirmationToken: string | null
+  } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const items = useMemo(() => (cart?.items || []).filter((i) => !i.unavailable && i.product), [cart])
@@ -286,7 +291,9 @@ export function HubCartCheckoutPage({ lineSlug }: { lineSlug: "food" | "mart" })
       if (!transactionId) throw new Error(t("hub.checkout.errors.missingTransaction"))
 
       if (payChoice === "yookassa") {
-        router.replace(`/pay/${String(transactionId).toLowerCase()}`)
+        const token =
+          (data.gateway as { confirmationToken?: string } | undefined)?.confirmationToken ?? null
+        setOnlinePayment({ transactionId: String(transactionId), confirmationToken: token })
         return
       }
 
@@ -629,58 +636,30 @@ export function HubCartCheckoutPage({ lineSlug }: { lineSlug: "food" | "mart" })
                 </Card>
               ) : null}
 
-              {step === 3 && yookassaEnabled && sendCurrency.toUpperCase() === "RUB" ? (
-                <Card className="mb-4">
-                  <CardContent className="grid grid-cols-2 gap-3 pt-4">
-                    <button
-                      type="button"
-                      onClick={() => setPayChoice("manual")}
-                      className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-sm font-medium transition-colors ${
-                        payChoice === "manual" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 text-gray-600"
-                      }`}
-                    >
-                      <Landmark className="h-5 w-5" />
-                      {t("hub.checkout.payManual", { defaultValue: "Bank transfer" })}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPayChoice("yookassa")}
-                      className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-sm font-medium transition-colors ${
-                        payChoice === "yookassa" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 text-gray-600"
-                      }`}
-                    >
-                      <CreditCard className="h-5 w-5" />
-                      {t("hub.checkout.payOnline", { defaultValue: "Pay online" })}
-                    </button>
-                  </CardContent>
-                </Card>
-              ) : null}
-
-              {step === 3 && payChoice === "yookassa" ? (
-                <Card>
-                  <CardContent className="space-y-4 pt-6">
-                    <p className="text-sm text-gray-600">
-                      {t("hub.checkout.onlinePayHint", {
-                        defaultValue: "You'll be taken to a secure payment page to pay by card or SBP.",
-                      })}
-                    </p>
-                    <div className="flex gap-3">
-                      <Button type="button" variant="outline" onClick={() => setStep(2)} className="min-h-12 flex-1">
-                        {t("hub.checkout.back")}
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => void handlePay()}
-                        disabled={submitting || !totals}
-                        className="min-h-12 flex-1 rounded-xl bg-primary text-base font-semibold hover:bg-primary/90"
-                      >
-                        {submitting
-                          ? t("hub.checkout.creating")
-                          : `${t("hub.checkout.payOnline", { defaultValue: "Pay online" })} · ${totals ? formatCurrency(totals.total, sendCurrency) : ""}`}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+              {step === 3 ? (
+                <CheckoutPayRails
+                  yookassaEnabled={yookassaEnabled}
+                  sendCurrency={sendCurrency}
+                  payChoice={payChoice}
+                  onPayChoice={setPayChoice}
+                  onlinePayment={onlinePayment}
+                  amount={totals?.total}
+                  submitting={submitting}
+                  canSubmit={Boolean(totals)}
+                  onPay={() => void handlePay()}
+                  onBack={() => setStep(2)}
+                  onSwitchToManual={() => {
+                    setOnlinePayment(null)
+                    setPayChoice("manual")
+                    setError(null)
+                    idempotencyKeyRef.current =
+                      typeof crypto !== "undefined" && crypto.randomUUID
+                        ? crypto.randomUUID()
+                        : String(Date.now())
+                  }}
+                  onCompleted={(id) => router.replace(`/hub/orders/${id.toLowerCase()}`)}
+                  onFailed={(msg) => setError(msg)}
+                />
               ) : null}
 
               {step === 3 && payChoice === "manual" ? (
