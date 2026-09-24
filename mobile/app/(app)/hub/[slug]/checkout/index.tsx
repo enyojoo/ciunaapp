@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
@@ -38,7 +38,7 @@ export default function HubCartCheckoutScreen() {
   )
   const [contactPhone, setContactPhone] = useState("")
   const [delivery, setDelivery] = useState("")
-  const [sendCurrency, setSendCurrency] = useState("USD")
+  const [sendCurrency, setSendCurrency] = useState("")
   const [payChoice, setPayChoice] = useState<"manual" | "yookassa">("manual")
   const [yookassaEnabled, setYookassaEnabled] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -64,13 +64,34 @@ export default function HubCartCheckoutScreen() {
     })()
   }, [])
 
+  const items = useMemo(() => (cart?.items || []).filter((i) => !i.unavailable && i.product), [cart])
+  const receiveCurrency = items[0]?.product?.fixed_currency || ""
+  const fulfillmentType = items[0]?.product?.fulfillment_type === "in_person" ? "in_person" : "vendor"
+
+  // Prefer RUB so Pay online rails show when YooKassa is enabled (product currency often RUB).
+  useEffect(() => {
+    if (!currencies.length || sendCurrency) return
+    const preferred =
+      currencies.find((c) => c.can_send !== false && c.code === "RUB") ||
+      currencies.find((c) => c.can_send !== false && c.code === receiveCurrency) ||
+      currencies.find((c) => c.can_send !== false && c.code === "USD") ||
+      currencies.find((c) => c.can_send !== false)
+    if (preferred) setSendCurrency(preferred.code)
+  }, [currencies, sendCurrency, receiveCurrency])
+
   useEffect(() => {
     if (sendCurrency.toUpperCase() !== "RUB" && payChoice === "yookassa") setPayChoice("manual")
   }, [sendCurrency, payChoice])
 
-  const items = useMemo(() => (cart?.items || []).filter((i) => !i.unavailable && i.product), [cart])
-  const receiveCurrency = items[0]?.product?.fixed_currency || ""
-  const fulfillmentType = items[0]?.product?.fulfillment_type === "in_person" ? "in_person" : "vendor"
+  // First time rails appear, land on Pay online (user can still switch to Bank transfer).
+  const didPreferOnline = useRef(false)
+  useEffect(() => {
+    if (didPreferOnline.current) return
+    if (yookassaEnabled && sendCurrency.toUpperCase() === "RUB") {
+      didPreferOnline.current = true
+      setPayChoice("yookassa")
+    }
+  }, [yookassaEnabled, sendCurrency])
 
   const rateRow = findRate(rates, sendCurrency, receiveCurrency)
   const totals = useMemo(() => {
