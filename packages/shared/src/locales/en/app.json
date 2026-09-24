@@ -506,7 +506,7 @@
       "quoteMinContribution": "Send a higher amount to continue."
     },
     "quoteDeskRateNotConfigured": "This corridor isn't ready yet. Set the USD → receive currency rate in Office (used as USDT payout desk).",
-    "quoteDeskRatePreviewHint": "Bitbanker fees are live. Firm send also needs an active USD → {{currency}} rate in Office.",
+    "quoteReceiveCappedByUsdt": "Recipient amount reflects what this payment can fund after Bitbanker fees (USD payout rate from Office).",
     "quoteMinContribution": "Send a higher amount to continue.",
     "fee": "Exchange fee",
     "processingFee": "Processing fee",

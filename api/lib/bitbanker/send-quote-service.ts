@@ -8,6 +8,7 @@ import { exchangePrediction, numField } from "./prediction"
 import { isBitbankerConfigured } from "./config"
 import {
   assertLeg2UsdtCoverage,
+  maxLocalPayoutFromUsdt,
   type RubLocalSendLegSnapshot,
   resolveUsdtDeskRate,
   usdtForLocalPayout,
@@ -71,6 +72,7 @@ export async function computeSendQuoteBreakdown(
     throw new SendQuoteError(SEND_QUOTE_ERROR_CODE.RATE_UNAVAILABLE, "Invalid exchange rate")
   }
 
+  const receiveLed = !(sendAmount != null && sendAmount > 0) && receiveAmount != null && receiveAmount > 0
   if (sendAmount != null && sendAmount > 0) {
     receiveAmount = roundMoney(sendAmount * rate)
   } else if (receiveAmount != null && receiveAmount > 0) {
@@ -81,94 +83,129 @@ export async function computeSendQuoteBreakdown(
 
   if (!sendAmount || !receiveAmount) throw new Error("Invalid amounts")
 
-  if (sendCurrency === "RUB" && sendAmount < MIN_RUB_SEND_AMOUNT) {
-    throw new SendQuoteError(
-      SEND_QUOTE_ERROR_CODE.MIN_SEND_AMOUNT,
-      `Minimum send amount is ${MIN_RUB_SEND_AMOUNT} RUB`,
+  const corridorReceiveAmount = receiveAmount
+  let receiveCappedByLeg2 = false
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (sendCurrency === "RUB" && sendAmount < MIN_RUB_SEND_AMOUNT) {
+      throw new SendQuoteError(
+        SEND_QUOTE_ERROR_CODE.MIN_SEND_AMOUNT,
+        `Minimum send amount is ${MIN_RUB_SEND_AMOUNT} RUB`,
+      )
+    }
+
+    let feeAmount = 0
+    const feeType = rateData.fee_type || "free"
+    if (feeType === "fixed") feeAmount = Number(rateData.fee_amount) || 0
+    else if (feeType === "percentage") feeAmount = (sendAmount * (Number(rateData.fee_amount) || 0)) / 100
+
+    const fulfillmentCheck = resolveFulfillment(receiveAmount, rateData)
+    const fulfillment =
+      fulfillmentCheck.ok &&
+      fulfillmentCheck.fulfillment === "cash_hand" &&
+      input.fulfillmentType === "cash_hand"
+        ? "cash_hand"
+        : "bank_transfer"
+
+    if (!input.skipRecipientCheck && fulfillment === "bank_transfer" && !input.recipientId) {
+      throw new Error("Recipient is required")
+    }
+
+    const logisticsFeeAmount =
+      fulfillment === "cash_hand" ? computeLogisticsFee(receiveAmount, fulfillment, rateData) : 0
+
+    const invoiceBaseB = roundMoney(sendAmount + feeAmount + logisticsFeeAmount)
+
+    const prediction = await exchangePrediction({ volume: invoiceBaseB })
+    const grossG = numField(prediction.volume_give_prediction)
+    const usdtU = numField(prediction.volume_take_final)
+    if (grossG == null || usdtU == null) {
+      throw new SendQuoteError(SEND_QUOTE_ERROR_CODE.PREDICTION_UNAVAILABLE, "Bitbanker prediction unavailable")
+    }
+
+    const paymentProcessingFee = roundMoney(Math.max(0, grossG - invoiceBaseB))
+    const totalAmount = roundMoney(grossG)
+
+    const usdToLocalRow =
+      receiveCurrency === "USD" ? { rate: 1 } : await currencyService.getRate("USD", receiveCurrency)
+    const { desk: usdtDesk, source: usdtDeskSource } = resolveUsdtDeskRate(
+      receiveCurrency,
+      usdToLocalRow ? Number(usdToLocalRow.rate) : null,
     )
-  }
 
-  const fulfillmentCheck = resolveFulfillment(receiveAmount, rateData)
-  const fulfillment =
-    fulfillmentCheck.ok &&
-    fulfillmentCheck.fulfillment === "cash_hand" &&
-    input.fulfillmentType === "cash_hand"
-      ? "cash_hand"
-      : "bank_transfer"
-
-  if (!input.skipRecipientCheck && fulfillment === "bank_transfer" && !input.recipientId) {
-    throw new Error("Recipient is required")
-  }
-
-  let feeAmount = 0
-  const feeType = rateData.fee_type || "free"
-  if (feeType === "fixed") feeAmount = Number(rateData.fee_amount) || 0
-  else if (feeType === "percentage") feeAmount = (sendAmount * (Number(rateData.fee_amount) || 0)) / 100
-
-  const logisticsFeeAmount =
-    fulfillment === "cash_hand" ? computeLogisticsFee(receiveAmount, fulfillment, rateData) : 0
-
-  const invoiceBaseB = roundMoney(sendAmount + feeAmount + logisticsFeeAmount)
-
-  const prediction = await exchangePrediction({ volume: invoiceBaseB })
-  const grossG = numField(prediction.volume_give_prediction)
-  const usdtU = numField(prediction.volume_take_final)
-  if (grossG == null || usdtU == null) {
-    throw new SendQuoteError(SEND_QUOTE_ERROR_CODE.PREDICTION_UNAVAILABLE, "Bitbanker prediction unavailable")
-  }
-
-  const paymentProcessingFee = roundMoney(Math.max(0, grossG - invoiceBaseB))
-  const totalAmount = roundMoney(grossG)
-
-  const usdToLocalRow =
-    receiveCurrency === "USD" ? { rate: 1 } : await currencyService.getRate("USD", receiveCurrency)
-  const { desk: usdtDesk, source: usdtDeskSource } = resolveUsdtDeskRate(
-    receiveCurrency,
-    usdToLocalRow ? Number(usdToLocalRow.rate) : null,
-  )
-  const leg2UsdtNeeded = usdtForLocalPayout(receiveAmount, usdtDesk)
-  const leg2: RubLocalSendLegSnapshot = {
-    sendAmountRub: sendAmount,
-    receiveAmountLocal: receiveAmount,
-    receiveCurrency,
-    invoiceBaseB,
-    sbpGrossG: grossG,
-    usdtFromBitbanker: usdtU,
-    usdtForLocalPayout: leg2UsdtNeeded,
-    usdtDeskLocalPerUnit: usdtDesk,
-    usdtDeskSource,
-  }
-
-  if (!input.skipMinContributionCheck) {
-    if (leg2UsdtNeeded == null) {
+    if (usdtDesk == null) {
       throw new SendQuoteError(
         SEND_QUOTE_ERROR_CODE.DESK_RATE_NOT_CONFIGURED,
         `USD to ${receiveCurrency} exchange rate is not configured`,
       )
     }
-    assertLeg2UsdtCoverage({
+
+    const maxLocal = maxLocalPayoutFromUsdt(usdtU, usdtDesk)
+    if (maxLocal <= 0) {
+      throw new SendQuoteError(
+        SEND_QUOTE_ERROR_CODE.MIN_CONTRIBUTION,
+        "Quote does not meet minimum contribution for this corridor",
+      )
+    }
+
+    if (receiveAmount > maxLocal + 0.01) {
+      receiveCappedByLeg2 = true
+      if (receiveLed && corridorReceiveAmount > maxLocal + 0.01) {
+        const scale = corridorReceiveAmount / maxLocal
+        sendAmount = roundMoney(Math.max(sendAmount * scale * 1.01, sendAmount + 1))
+        receiveAmount = roundMoney(sendAmount * rate)
+        continue
+      }
+      receiveAmount = maxLocal
+    }
+
+    const leg2UsdtNeeded = usdtForLocalPayout(receiveAmount, usdtDesk)
+    const leg2: RubLocalSendLegSnapshot = {
+      sendAmountRub: sendAmount,
+      corridorReceiveLocal: corridorReceiveAmount,
+      receiveAmountLocal: receiveAmount,
+      receiveCurrency,
+      receiveCappedByLeg2,
+      invoiceBaseB,
+      sbpGrossG: grossG,
       usdtFromBitbanker: usdtU,
       usdtForLocalPayout: leg2UsdtNeeded,
-    })
+      usdtDeskLocalPerUnit: usdtDesk,
+      usdtDeskSource,
+    }
+
+    if (!input.skipMinContributionCheck && leg2UsdtNeeded != null) {
+      assertLeg2UsdtCoverage({
+        usdtFromBitbanker: usdtU,
+        usdtForLocalPayout: leg2UsdtNeeded,
+      })
+    }
+
+    const effectiveRate = sendAmount > 0 ? roundMoney(receiveAmount / sendAmount) : rate
+
+    return {
+      sendAmount,
+      receiveAmount,
+      sendCurrency,
+      receiveCurrency,
+      exchangeRate: effectiveRate,
+      feeAmount: roundMoney(feeAmount),
+      feeType,
+      logisticsFeeAmount: roundMoney(logisticsFeeAmount),
+      paymentProcessingFee,
+      totalAmount,
+      invoiceBaseB,
+      predictedGrossG: grossG,
+      predictedUsdtU: usdtU,
+      fulfillment,
+      quoteSnapshot: { prediction, leg2 },
+    }
   }
 
-  return {
-    sendAmount,
-    receiveAmount,
-    sendCurrency,
-    receiveCurrency,
-    exchangeRate: rate,
-    feeAmount: roundMoney(feeAmount),
-    feeType,
-    logisticsFeeAmount: roundMoney(logisticsFeeAmount),
-    paymentProcessingFee,
-    totalAmount,
-    invoiceBaseB,
-    predictedGrossG: grossG,
-    predictedUsdtU: usdtU,
-    fulfillment,
-    quoteSnapshot: { prediction, leg2 },
-  }
+  throw new SendQuoteError(
+    SEND_QUOTE_ERROR_CODE.MIN_CONTRIBUTION,
+    "Quote does not meet minimum contribution for this corridor",
+  )
 }
 
 export async function previewSendQuote(input: CreateSendQuoteInput) {

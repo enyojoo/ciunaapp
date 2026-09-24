@@ -415,7 +415,7 @@
     },
     "rateUnavailable": "Taux de change indisponible pour cette paire.",
     "quoteDeskRateNotConfigured": "Corridor indisponible. Définissez le taux USD → devise de réception dans Office (desk USDT).",
-    "quoteDeskRatePreviewHint": "Frais Bitbanker à jour. L'envoi ferme exige un taux USD → {{currency}} actif dans Office.",
+    "quoteReceiveCappedByUsdt": "Le montant reçu reflète ce que ce paiement peut financer (taux USD dans Office).",
     "quoteMinContribution": "Envoyez un montant plus élevé pour continuer.",
     "mobile": {
       "amountHeadline": "Combien envoyez-vous ?",

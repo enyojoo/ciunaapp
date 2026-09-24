@@ -415,7 +415,7 @@
     },
     "rateUnavailable": "Курс для этой пары валют недоступен.",
     "quoteDeskRateNotConfigured": "Коридор не готов. Задайте курс USD → валюта получателя в Office (desk для USDT).",
-    "quoteDeskRatePreviewHint": "Комиссии Bitbanker актуальны. Для отправки нужен активный USD → {{currency}} в Office.",
+    "quoteReceiveCappedByUsdt": "Сумма получателя — сколько можно выплатить после комиссий Bitbanker (курс USD из Office).",
     "quoteMinContribution": "Увеличьте сумму отправки, чтобы продолжить.",
     "mobile": {
       "amountHeadline": "Сколько вы отправляете?",

@@ -37,7 +37,9 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
         totalAmount: breakdown.totalAmount,
       },
       leg2: {
-        deskConfigured: leg2?.usdtForLocalPayout != null,
+        usdtDeskConfigured: leg2?.usdtDeskLocalPerUnit != null,
+        receiveCappedByLeg2: Boolean(leg2?.receiveCappedByLeg2),
+        corridorReceiveAmount: leg2?.corridorReceiveLocal ?? breakdown.receiveAmount,
         usdtForLocalPayout: leg2?.usdtForLocalPayout ?? null,
         usdtFromBitbanker: leg2?.usdtFromBitbanker ?? breakdown.predictedUsdtU,
       },

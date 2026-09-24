@@ -9,7 +9,7 @@ const DEFAULT_COPY: Record<string, string> = {
   "send.mobile.quoteBelowMinRub": "Send at least 1,000 RUB.",
   "send.mobile.quoteMinContribution": "Send a higher amount to continue.",
   "send.quoteDeskRateNotConfigured": "This corridor isn't ready for RUB sends yet.",
-  "send.quoteDeskRatePreviewHint": "Fees are from Bitbanker; corridor setup may be required before payment.",
+  "send.quoteReceiveCappedByUsdt": "Recipient amount reflects USDT-funded payout at the Office USD rate.",
   "send.quoteMinContribution": "Send a higher amount to continue.",
   "send.mobile.verifyRequired": "Complete verification to send.",
   "send.rateUnavailable": "No exchange rate for this pair.",

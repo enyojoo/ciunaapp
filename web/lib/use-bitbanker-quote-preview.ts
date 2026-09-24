@@ -20,7 +20,9 @@ export type BitbankerQuotePreview = {
 }
 
 export type BitbankerQuotePreviewLeg2 = {
-  deskConfigured: boolean
+  usdtDeskConfigured?: boolean
+  receiveCappedByLeg2?: boolean
+  corridorReceiveAmount?: number
   usdtForLocalPayout: number | null
   usdtFromBitbanker: number
 }
@@ -34,7 +36,7 @@ export function useBitbankerQuotePreview(opts: {
   const [preview, setPreview] = useState<BitbankerQuotePreview | null>(null)
   const [leg2, setLeg2] = useState<BitbankerQuotePreviewLeg2 | null>(null)
   const [errorNotice, setErrorNotice] = useState<SendQuotePreviewNotice | null>(null)
-  const [deskHint, setDeskHint] = useState(false)
+  const [infoNotice, setInfoNotice] = useState<SendQuotePreviewNotice | null>(null)
   const [loading, setLoading] = useState(false)
   const requestId = useRef(0)
 
@@ -43,7 +45,7 @@ export function useBitbankerQuotePreview(opts: {
       setPreview(null)
       setLeg2(null)
       setErrorNotice(null)
-      setDeskHint(false)
+      setInfoNotice(null)
       setLoading(false)
       return
     }
@@ -54,7 +56,7 @@ export function useBitbankerQuotePreview(opts: {
       setPreview(null)
       setLeg2(null)
       setErrorNotice(null)
-      setDeskHint(false)
+      setInfoNotice(null)
       setLoading(false)
       return
     }
@@ -83,7 +85,7 @@ export function useBitbankerQuotePreview(opts: {
           if (!res.ok) {
             setPreview(null)
             setLeg2(null)
-            setDeskHint(false)
+            setInfoNotice(null)
             setErrorNotice(noticeForQuotePreviewFailure(res.status, body.error, body.errorCode))
             return
           }
@@ -91,19 +93,23 @@ export function useBitbankerQuotePreview(opts: {
           if (!p) {
             setPreview(null)
             setLeg2(null)
-            setDeskHint(false)
+            setInfoNotice(null)
             setErrorNotice(noticeForQuotePreviewFailure(400, "Invalid preview response"))
             return
           }
           setPreview(p)
           setLeg2(body.leg2 ?? null)
-          setDeskHint(Boolean(body.leg2 && !body.leg2.deskConfigured))
           setErrorNotice(null)
+          setInfoNotice(
+            body.leg2?.receiveCappedByLeg2
+              ? { kind: "info", messageKey: "send.quoteReceiveCappedByUsdt" }
+              : null,
+          )
         } catch {
           if (requestId.current !== id) return
           setPreview(null)
           setLeg2(null)
-          setDeskHint(false)
+          setInfoNotice(null)
           setErrorNotice(noticeForQuotePreviewNetworkFailure())
         } finally {
           if (requestId.current === id) setLoading(false)
@@ -119,13 +125,5 @@ export function useBitbankerQuotePreview(opts: {
 
   const feesConfirmed = Boolean(preview) && !loading && !errorNotice
 
-  const deskHintNotice: SendQuotePreviewNotice | null = deskHint
-    ? {
-        kind: "info",
-        messageKey: "send.quoteDeskRatePreviewHint",
-        messageParams: { currency: opts.receiveCurrency },
-      }
-    : null
-
-  return { preview, leg2, errorNotice, deskHintNotice, loading, feesConfirmed }
+  return { preview, leg2, errorNotice, infoNotice, loading, feesConfirmed }
 }

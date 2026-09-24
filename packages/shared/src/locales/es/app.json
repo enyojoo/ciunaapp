@@ -415,7 +415,7 @@
     },
     "rateUnavailable": "Tipo de cambio no disponible para este par.",
     "quoteDeskRateNotConfigured": "Corredor no listo. Configura el tipo USD → moneda de recepción en Office (desk USDT).",
-    "quoteDeskRatePreviewHint": "Comisiones Bitbanker en vivo. El envío firme requiere USD → {{currency}} activo en Office.",
+    "quoteReceiveCappedByUsdt": "El importe del destinatario refleja lo que este pago puede financiar (tipo USD en Office).",
     "quoteMinContribution": "Envía un monto mayor para continuar.",
     "mobile": {
       "amountHeadline": "¿Cuánto envías?",

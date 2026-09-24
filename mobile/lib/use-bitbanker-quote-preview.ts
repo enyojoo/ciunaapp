@@ -63,7 +63,7 @@ export function useBitbankerQuotePreview(opts: {
             error?: string
             errorCode?: string
             preview?: BitbankerQuotePreview
-            leg2?: { deskConfigured?: boolean }
+            leg2?: { receiveCappedByLeg2?: boolean }
           }
           if (requestId.current !== id) return
           if (!res.ok) {
@@ -81,12 +81,8 @@ export function useBitbankerQuotePreview(opts: {
             return
           }
           setPreview(p)
-          if (body.leg2 && body.leg2.deskConfigured === false) {
-            setNotice({
-              kind: "info",
-              messageKey: "send.quoteDeskRatePreviewHint",
-              messageParams: { currency: opts.receiveCurrency },
-            })
+          if (body.leg2?.receiveCappedByLeg2) {
+            setNotice({ kind: "info", messageKey: "send.quoteReceiveCappedByUsdt" })
           } else {
             setNotice(null)
           }
@@ -110,7 +106,7 @@ export function useBitbankerQuotePreview(opts: {
   const feesConfirmed =
     hasFreshPreview &&
     !loading &&
-    (!notice || notice.messageKey === "send.quoteDeskRatePreviewHint")
+    (!notice || notice.messageKey === "send.quoteReceiveCappedByUsdt")
 
   return { preview, notice, loading, hasFreshPreview, feesConfirmed }
 }

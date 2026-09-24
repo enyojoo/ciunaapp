@@ -13,8 +13,11 @@ import { SendQuoteError } from "./send-quote-errors"
 
 export type RubLocalSendLegSnapshot = {
   sendAmountRub: number
+  /** NGN (etc.) from RUB→local Office rate before leg-2 cap. */
+  corridorReceiveLocal: number
   receiveAmountLocal: number
   receiveCurrency: string
+  receiveCappedByLeg2: boolean
   invoiceBaseB: number
   sbpGrossG: number
   usdtFromBitbanker: number
@@ -22,6 +25,25 @@ export type RubLocalSendLegSnapshot = {
   /** Local per 1 USDT; sourced from USD→local Office rate when set. */
   usdtDeskLocalPerUnit: number | null
   usdtDeskSource: "USD_OFFICE_RATE" | "USD_PEG" | "env_fallback" | null
+}
+
+export function leg2ReserveUsdt(): { minContributionUsdt: number; trc20FeeUsdt: number } {
+  return {
+    minContributionUsdt: Number(process.env.BITBANKER_MIN_CONTRIBUTION_USDT || "0"),
+    trc20FeeUsdt: Number(process.env.BITBANKER_TRC20_FEE_USDT || "0"),
+  }
+}
+
+/** Max local payout fundable from `usdtFromBitbanker` at USD→local desk (after reserves). */
+export function maxLocalPayoutFromUsdt(
+  usdtFromBitbanker: number,
+  deskLocalPerUsdt: number,
+  reserves?: { minContributionUsdt?: number; trc20FeeUsdt?: number },
+): number {
+  const { minContributionUsdt, trc20FeeUsdt } = { ...leg2ReserveUsdt(), ...reserves }
+  const usdtForPayout = usdtFromBitbanker - trc20FeeUsdt - minContributionUsdt
+  if (!Number.isFinite(usdtForPayout) || usdtForPayout <= 0) return 0
+  return roundMoney(usdtForPayout * deskLocalPerUsdt)
 }
 
 /**
