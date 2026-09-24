@@ -66,7 +66,7 @@ export default function SendScreen() {
   const [bank, setBank] = useState("")
   const { showError } = useToast()
   const [busy, setBusy] = useState(false)
-  const { methods: sendMethods } = useSendPaymentMethods(sendCurrency)
+  const { methods: sendMethods, loading: sendMethodsLoading } = useSendPaymentMethods(sendCurrency)
   const [bitbankerPayment, setBitbankerPayment] = useState<BitbankerPayment | null>(null)
 
   useEffect(() => {
@@ -110,6 +110,9 @@ export default function SendScreen() {
   const defaultMethod = sendMethods.find((m) => m.isDefault) || sendMethods[0]
   const usesBitbanker =
     sendCurrency === "RUB" && String(defaultMethod?.provider || "").toLowerCase() === "bitbanker"
+  /** RUB send: assume Bitbanker pricing until payment methods finish loading (avoids “Free” flash). */
+  const bitbankerLiveFees =
+    usesBitbanker || (sendCurrency === "RUB" && sendMethodsLoading)
 
   const {
     preview: bitbankerPreview,
@@ -117,7 +120,7 @@ export default function SendScreen() {
     loading: quotePreviewLoading,
     feesConfirmed,
   } = useBitbankerQuotePreview({
-    enabled: usesBitbanker,
+    enabled: bitbankerLiveFees && Boolean(user?.id),
     sendAmount,
     sendCurrency,
     receiveCurrency,
@@ -131,7 +134,7 @@ export default function SendScreen() {
   const meetsMin = minSend == null || (Number.isFinite(sendNum) && sendNum >= minSend)
 
   const processingFeeAmount =
-    usesBitbanker && bitbankerPreview
+    bitbankerLiveFees && bitbankerPreview
       ? roundMoney(bitbankerPreview.feeAmount + bitbankerPreview.paymentProcessingFee)
       : quote?.feeAmount ?? 0
 
@@ -146,7 +149,7 @@ export default function SendScreen() {
     : null
 
   const canAmount = Boolean(
-    displayQuote && meetsMin && (!usesBitbanker || feesConfirmed),
+    displayQuote && meetsMin && (!bitbankerLiveFees || feesConfirmed),
   )
 
   const prevSendCurrencyRef = useRef("")
@@ -316,10 +319,11 @@ export default function SendScreen() {
             onChangeReceiveCurrency={handleReceiveCurrencyChange}
             currencies={currencies}
             rates={rates}
-            usesBitbanker={usesBitbanker}
-            bitbankerPreview={usesBitbanker ? bitbankerPreview : null}
-            quoteNotice={usesBitbanker ? quoteNotice : null}
-            quotePreviewLoading={usesBitbanker ? quotePreviewLoading : false}
+            usesBitbanker={bitbankerLiveFees}
+            bitbankerPreview={bitbankerLiveFees ? bitbankerPreview : null}
+            quoteNotice={bitbankerLiveFees ? quoteNotice : null}
+            quotePreviewLoading={bitbankerLiveFees ? quotePreviewLoading : false}
+            bitbankerFeesConfirmed={bitbankerLiveFees ? feesConfirmed : true}
           />
           <View style={styles.footer}>
             <PrimaryButton label={t("send.continue")} onPress={goRecipient} disabled={!canAmount} />
@@ -362,6 +366,7 @@ export default function SendScreen() {
             recipient={selected}
             currencies={currencies}
             usesBitbanker={usesBitbanker}
+            processingFeePending={bitbankerLiveFees && !feesConfirmed}
             qrData={bitbankerPayment?.qrData}
           />
           <View style={styles.footer}>

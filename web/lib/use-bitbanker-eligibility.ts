@@ -1,6 +1,6 @@
 "use client"
 
-import useSWR from "swr"
+import { useCallback, useEffect, useState } from "react"
 import { fetchWithAuth } from "@/lib/fetch-with-auth"
 
 export type BitbankerEligibility = {
@@ -22,14 +22,39 @@ async function load(refresh = false): Promise<BitbankerEligibility> {
 }
 
 export function useBitbankerEligibility(userId: string | undefined) {
-  const key = userId ? `bitbanker-eligibility-${userId}` : null
-  const swr = useSWR(key, () => load(false), { revalidateOnFocus: true })
-  return {
-    ...swr,
-    refresh: async () => {
-      const next = await load(true)
-      await swr.mutate(next, false)
-      return next
-    },
-  }
+  const [data, setData] = useState<BitbankerEligibility | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | undefined>(undefined)
+
+  useEffect(() => {
+    if (!userId) {
+      setData(undefined)
+      setIsLoading(false)
+      return
+    }
+    let cancelled = false
+    setIsLoading(true)
+    setError(undefined)
+    void load(false)
+      .then((next) => {
+        if (!cancelled) setData(next)
+      })
+      .catch((e: unknown) => {
+        if (!cancelled) setError(e instanceof Error ? e : new Error(String(e)))
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [userId])
+
+  const refresh = useCallback(async () => {
+    const next = await load(true)
+    setData(next)
+    return next
+  }, [])
+
+  return { data, isLoading, error, refresh, mutate: refresh }
 }

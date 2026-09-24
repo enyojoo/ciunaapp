@@ -11,17 +11,27 @@ export type SendPaymentMethod = {
 
 export function useSendPaymentMethods(currency: string) {
   const [methods, setMethods] = useState<SendPaymentMethod[]>([])
+  const [loading, setLoading] = useState(false)
 
   const reload = useCallback(async () => {
     const code = currency.trim()
     if (!code) {
       setMethods([])
+      setLoading(false)
       return
     }
-    const res = await fetchWithAuth(`/api/payment-methods/send?currency=${encodeURIComponent(code)}`)
-    if (!res.ok) return
-    const body = (await res.json()) as { methods?: SendPaymentMethod[] }
-    setMethods(body.methods || [])
+    setLoading(true)
+    try {
+      const res = await fetchWithAuth(`/api/payment-methods/send?currency=${encodeURIComponent(code)}`)
+      if (!res.ok) {
+        setMethods([])
+        return
+      }
+      const body = (await res.json()) as { methods?: SendPaymentMethod[] }
+      setMethods(body.methods || [])
+    } finally {
+      setLoading(false)
+    }
   }, [currency])
 
   useEffect(() => {
@@ -37,5 +47,5 @@ export function useSendPaymentMethods(currency: string) {
 
   useEffect(() => subscribeOfficeConfigRevalidate("paymentMethods", () => void reload()), [reload])
 
-  return { methods, reload }
+  return { methods, loading, reload }
 }

@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { formatExchangeRateDisplay } from "@ciuna/shared"
 import { CurrencyFlag } from "@/components/currency-flag"
+import { InlineSkeleton } from "@/components/inline-skeleton"
 import { formatMoney } from "@/lib/money"
 import type { CurrencyRow, RecipientRow } from "@/lib/types"
 import type { Quote } from "@/lib/fx"
@@ -16,6 +17,7 @@ export function SendReviewStep({
   recipient,
   currencies,
   usesBitbanker,
+  processingFeePending,
   qrData,
 }: {
   sendAmount: string
@@ -26,6 +28,7 @@ export function SendReviewStep({
   recipient: RecipientRow | undefined
   currencies: CurrencyRow[]
   usesBitbanker: boolean
+  processingFeePending?: boolean
   qrData?: string | null
 }) {
   const { t } = useTranslation("app")
@@ -57,9 +60,13 @@ export function SendReviewStep({
 
         <View style={styles.row}>
           <Text style={styles.label}>{t("send.processingFee", { defaultValue: "Processing fee" })}</Text>
-          <Text style={styles.value}>
-            {processingFeeAmount > 0 ? formatMoney(processingFeeAmount, sendCurrency) : t("send.free")}
-          </Text>
+          {processingFeePending ? (
+            <InlineSkeleton width={88} height={16} />
+          ) : (
+            <Text style={styles.value}>
+              {processingFeeAmount > 0 ? formatMoney(processingFeeAmount, sendCurrency) : t("send.free")}
+            </Text>
+          )}
         </View>
 
         <View style={styles.row}>

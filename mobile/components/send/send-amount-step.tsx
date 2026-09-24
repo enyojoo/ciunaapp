@@ -89,6 +89,7 @@ export function SendAmountStep({
   bitbankerPreview,
   quoteNotice,
   quotePreviewLoading,
+  bitbankerFeesConfirmed,
 }: {
   sendAmount: string
   onChangeAmount: (v: string) => void
@@ -102,6 +103,8 @@ export function SendAmountStep({
   bitbankerPreview?: BitbankerQuotePreview | null
   quoteNotice?: SendQuotePreviewNotice | null
   quotePreviewLoading?: boolean
+  /** From useBitbankerQuotePreview — do not re-derive (desk hint is not a failure). */
+  bitbankerFeesConfirmed?: boolean
 }) {
   const { t } = useTranslation("app")
   const [openSend, setOpenSend] = useState(false)
@@ -138,13 +141,17 @@ export function SendAmountStep({
       ? bitbankerPreview.totalAmount
       : fxQuote?.totalAmount ?? roundMoney(effectiveAmount + corridorFee)
   const rateReady = Boolean(rate && displayRate > 0)
-  const bitbankerFeesConfirmed =
-    Boolean(usesBitbanker && bitbankerPreview && !quoteNotice && !quotePreviewLoading)
+  const feesConfirmed = usesBitbanker ? Boolean(bitbankerFeesConfirmed) : true
   const showProcessingFeeSkeleton = Boolean(
-    usesBitbanker && rateReady && !bitbankerFeesConfirmed,
+    usesBitbanker && (quotePreviewLoading || !feesConfirmed),
   )
   const processingFeeDisplay = (() => {
-    if (!rateReady) return t("send.free")
+    if (showProcessingFeeSkeleton) return ""
+    if (!usesBitbanker) {
+      if (!rateReady) return t("send.free")
+      if (processingFeeAmount > 0) return formatMoney(processingFeeAmount, sendCurrency)
+      return t("send.free")
+    }
     if (processingFeeAmount > 0) return formatMoney(processingFeeAmount, sendCurrency)
     return t("send.free")
   })()
@@ -248,7 +255,13 @@ export function SendAmountStep({
         </View>
         <View style={[styles.quoteRow, styles.quoteTotalRow]}>
           <Text style={styles.totalLabel}>{t("send.totalToPay")}</Text>
-          <Text style={styles.totalValue}>{formatMoney(totalToPay, sendCurrency)}</Text>
+          {showProcessingFeeSkeleton ? (
+            <View style={styles.feeSkeletonSlot}>
+              <InlineSkeleton width={100} height={18} />
+            </View>
+          ) : (
+            <Text style={styles.totalValue}>{formatMoney(totalToPay, sendCurrency)}</Text>
+          )}
         </View>
         {belowMin && minSend != null ? (
           <SendQuoteNotice notice={{ kind: "warning", messageKey: "send.mobile.quoteBelowMinRub" }} />

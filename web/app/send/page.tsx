@@ -113,6 +113,7 @@ export default function UserSendPage() {
   const [fee, setFee] = useState<number>(0)
 
   const [paymentMethods, setPaymentMethods] = useState<any[]>([])
+  const [paymentMethodsLoading, setPaymentMethodsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showEmailVerificationModal, setShowEmailVerificationModal] = useState(false)
   const [isResendingVerification, setIsResendingVerification] = useState(false)
@@ -178,11 +179,14 @@ export default function UserSendPage() {
   // Load payment methods
   useEffect(() => {
     const loadPaymentMethods = async () => {
+      setPaymentMethodsLoading(true)
       try {
         const paymentMethodsData = await paymentMethodService.getAll()
         setPaymentMethods(paymentMethodsData || [])
       } catch (error) {
         console.error("Error loading payment methods:", error)
+      } finally {
+        setPaymentMethodsLoading(false)
       }
     }
 
@@ -468,6 +472,11 @@ export default function UserSendPage() {
     return sendCurrency === "RUB" && String(dm?.provider || "").toLowerCase() === "bitbanker"
   }, [sendCurrency, paymentMethods])
 
+  const bitbankerLiveFees = useMemo(
+    () => usesBitbankerPayment || (sendCurrency === "RUB" && paymentMethodsLoading),
+    [usesBitbankerPayment, sendCurrency, paymentMethodsLoading],
+  )
+
   const {
     preview: bitbankerPreview,
     errorNotice: bitbankerErrorNotice,
@@ -475,16 +484,16 @@ export default function UserSendPage() {
     loading: bitbankerPreviewLoading,
     feesConfirmed: bitbankerFeesConfirmed,
   } = useBitbankerQuotePreview({
-    enabled: usesBitbankerPayment && Boolean(user),
+    enabled: bitbankerLiveFees && Boolean(user),
     sendAmount,
     sendCurrency,
     receiveCurrency,
   })
 
   useEffect(() => {
-    if (!usesBitbankerPayment || !bitbankerPreview || lastEditedField !== "send") return
+    if (!bitbankerLiveFees || !bitbankerPreview || lastEditedField !== "send") return
     setReceiveAmount(bitbankerPreview.receiveAmount.toFixed(2))
-  }, [usesBitbankerPayment, bitbankerPreview, lastEditedField])
+  }, [bitbankerLiveFees, bitbankerPreview, lastEditedField])
 
   const bitbankerGateActive =
     Boolean(bitbankerEligibility) &&
@@ -626,36 +635,38 @@ export default function UserSendPage() {
   )
 
   const displayFee = useMemo(() => {
-    if (usesBitbankerPayment && bitbankerPreview) {
+    if (bitbankerLiveFees && bitbankerPreview) {
       return roundMoney(bitbankerPreview.feeAmount + bitbankerPreview.paymentProcessingFee)
     }
     return fee
-  }, [usesBitbankerPayment, bitbankerPreview, fee])
+  }, [bitbankerLiveFees, bitbankerPreview, fee])
 
   const displayTotalToPay = useMemo(() => {
-    if (usesBitbankerPayment && bitbankerPreview) return bitbankerPreview.totalAmount
+    if (bitbankerLiveFees && bitbankerPreview) return bitbankerPreview.totalAmount
     return totalToPay
-  }, [usesBitbankerPayment, bitbankerPreview, totalToPay])
+  }, [bitbankerLiveFees, bitbankerPreview, totalToPay])
 
   const displayReceiveAmount = useMemo(() => {
-    if (usesBitbankerPayment && bitbankerPreview) return bitbankerPreview.receiveAmount
+    if (bitbankerLiveFees && bitbankerPreview) return bitbankerPreview.receiveAmount
     return Number.parseFloat(receiveAmount) || 0
-  }, [usesBitbankerPayment, bitbankerPreview, receiveAmount])
+  }, [bitbankerLiveFees, bitbankerPreview, receiveAmount])
 
   const displayExchangeRate = useMemo(() => {
-    if (usesBitbankerPayment && bitbankerPreview) return bitbankerPreview.exchangeRate
+    if (bitbankerLiveFees && bitbankerPreview) return bitbankerPreview.exchangeRate
     return exchangeRateData?.rate || 0
-  }, [usesBitbankerPayment, bitbankerPreview, exchangeRateData?.rate])
+  }, [bitbankerLiveFees, bitbankerPreview, exchangeRateData?.rate])
 
   const bitbankerPreviewRequired = useMemo(() => {
-    if (!usesBitbankerPayment) return false
+    if (!bitbankerLiveFees) return false
     const amount = Number.parseFloat(sendAmount) || 0
     const min = minSendAmountForCurrency(sendCurrency)
     return min == null || amount >= min
-  }, [usesBitbankerPayment, sendAmount, sendCurrency])
+  }, [bitbankerLiveFees, sendAmount, sendCurrency])
 
   const showBitbankerFeeSkeleton = Boolean(
-    usesBitbankerPayment && bitbankerPreviewRequired && !bitbankerFeesConfirmed,
+    bitbankerLiveFees &&
+      bitbankerPreviewRequired &&
+      (bitbankerPreviewLoading || !bitbankerFeesConfirmed),
   )
 
   useEffect(() => {
@@ -1151,7 +1162,11 @@ export default function UserSendPage() {
                               <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
                                 <span className="text-green-600 text-xs">✓</span>
                               </div>
-                              <span className="text-sm text-gray-600">{t("send.fee")}</span>
+                              <span className="text-sm text-gray-600">
+                                {bitbankerLiveFees
+                                  ? t("send.processingFee", { defaultValue: "Processing fee" })
+                                  : t("send.fee")}
+                              </span>
                             </div>
                             <span className={`font-medium ${displayFee === 0 && !showBitbankerFeeSkeleton ? "text-green-600" : "text-gray-900"}`}>
                               {showBitbankerFeeSkeleton ? (
