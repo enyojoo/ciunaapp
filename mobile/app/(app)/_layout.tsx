@@ -26,9 +26,8 @@ export default function AppTabs() {
 
   const hideForCheckout = pathname.includes("/checkout")
   const hideTabBar = showSidebarShell || (isWeb && mode !== "mobile") || hideForCheckout
-  const webPhoneFrame = isWeb && mode === "mobile"
-  const bottomInset = tabBarBottomInset(insets.bottom, webPhoneFrame)
-  const barHeight = tabBarHeight(insets.bottom, webPhoneFrame)
+  const bottomInset = tabBarBottomInset(insets.bottom, false)
+  const barHeight = tabBarHeight(insets.bottom, false)
 
   return (
     <Tabs
@@ -56,7 +55,6 @@ export default function AppTabs() {
               paddingTop: tabBarPaddingTop(),
               paddingBottom: bottomInset,
               overflow: "visible",
-              ...(webPhoneFrame ? { position: "relative" as const } : {}),
             },
         tabBarItemStyle: {
           paddingVertical: 0,

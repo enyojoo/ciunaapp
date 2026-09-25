@@ -49,3 +49,18 @@ export function readWebViewport(rnWidth: number, rnHeight: number): { width: num
 
   return { width: DESKTOP_MIN_WIDTH, height: 800 }
 }
+
+/**
+ * Decorative phone chrome is for desktop browsers resized to mobile width.
+ * Real phones/tablets (coarse pointer / no hover) should fill the viewport.
+ */
+export function isDesktopLikeWebBrowser(): boolean {
+  if (Platform.OS !== "web" || typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false
+  }
+  try {
+    return window.matchMedia("(hover: hover) and (pointer: fine)").matches
+  } catch {
+    return false
+  }
+}

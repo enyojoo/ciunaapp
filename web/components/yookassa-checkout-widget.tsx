@@ -188,6 +188,12 @@ export function YooKassaCheckoutWidget({
         const widget = new Widget({
           confirmation_token: token,
           return_url: returnUrl || (typeof window !== "undefined" ? window.location.href : ""),
+          customization: {
+            colors: {
+              background: "#FFFFFF",
+              control_primary: "#F97316",
+            },
+          },
           error_callback: () => {
             const msg = t("hub.pay.widgetError", { defaultValue: "Payment could not be started." })
             setError(msg)
@@ -248,7 +254,7 @@ export function YooKassaCheckoutWidget({
   }
 
   return (
-    <div className="relative min-h-[320px] space-y-4">
+    <div className="relative w-full min-w-0 max-w-full overflow-hidden min-h-[320px] space-y-4">
       {showAmount && displayAmount != null && displayCurrency ? (
         <p className="text-center text-sm text-muted-foreground">{formatCurrency(Number(displayAmount), String(displayCurrency))}</p>
       ) : null}
@@ -259,7 +265,7 @@ export function YooKassaCheckoutWidget({
           />
         </div>
       ) : null}
-      <div id={containerId} className="min-h-[280px]" />
+      <div id={containerId} className="w-full min-w-0 max-w-full min-h-[280px] overflow-hidden [&_iframe]:!w-full [&_iframe]:!max-w-full" />
     </div>
   )
 }

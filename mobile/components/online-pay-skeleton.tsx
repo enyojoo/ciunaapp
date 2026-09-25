@@ -24,11 +24,13 @@ export function OnlinePaySkeleton({
 const styles = StyleSheet.create({
   frame: {
     minHeight: 280,
+    width: "100%",
+    alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
     gap: 12,
-    paddingHorizontal: 20,
-    paddingVertical: 28,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
     borderRadius: radius.row,
     backgroundColor: colors.paper,
     borderWidth: StyleSheet.hairlineWidth,

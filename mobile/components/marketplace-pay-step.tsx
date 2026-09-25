@@ -174,7 +174,7 @@ export function MarketplacePayStep({
       ) : null}
 
       {showOnline ? (
-        <View style={styles.panel}>
+        <View style={[styles.panel, styles.onlinePanel]}>
           {onlinePayment?.confirmationToken ? (
             <YooKassaCheckoutWidget
               transactionId={onlinePayment.transactionId}
@@ -277,7 +277,7 @@ export function MarketplacePayStep({
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: 12 },
+  wrap: { gap: 12, width: "100%", alignSelf: "stretch", minWidth: 0 },
   sectionTitle: {
     fontSize: typeSize.label,
     fontWeight: "700",
@@ -313,6 +313,15 @@ const styles = StyleSheet.create({
     ...ui.card,
     gap: 14,
     padding: 16,
+    width: "100%",
+    minWidth: 0,
+    alignSelf: "stretch",
+  },
+  /** Less inset so YooKassa (≥288px) can fit on narrow phones. */
+  onlinePanel: {
+    gap: 0,
+    padding: 8,
+    overflow: "hidden",
   },
   hint: { fontSize: typeSize.meta, lineHeight: 18, color: colors.muted },
   methodRow: {

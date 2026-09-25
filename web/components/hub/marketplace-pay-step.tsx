@@ -219,7 +219,7 @@ export function MarketplacePayStep({
       ) : null}
 
       {showOnline ? (
-        <div className="space-y-4 rounded-2xl border border-[#E8E4DC] bg-white p-5">
+        <div className="w-full min-w-0 overflow-hidden rounded-2xl border border-[#E8E4DC] bg-white p-2 sm:p-4">
           {onlinePayment?.confirmationToken ? (
             <YooKassaCheckoutWidget
               transactionId={onlinePayment.transactionId}

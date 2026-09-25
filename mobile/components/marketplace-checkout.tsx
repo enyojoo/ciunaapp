@@ -924,7 +924,7 @@ export function MarketplaceOrderView({
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingTop: 8 },
+  scroll: { paddingTop: 8, paddingHorizontal: 16 },
   stack: { gap: 20, paddingBottom: 16 },
   footerPad: { padding: 20 },
   loading: { fontSize: typeSize.body, color: colors.muted },

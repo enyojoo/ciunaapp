@@ -154,13 +154,36 @@ export function YooKassaCheckoutWidget({
         host.innerHTML = ""
         const mount = document.createElement("div")
         mount.id = containerId
+        mount.style.width = "100%"
+        mount.style.maxWidth = "100%"
+        mount.style.minWidth = "0"
+        mount.style.boxSizing = "border-box"
+        mount.style.overflow = "hidden"
         host.appendChild(mount)
+
+        // Keep Checkout.js iframes / roots inside the pay card on narrow phones.
+        const styleId = `${containerId}-fit`
+        if (!document.getElementById(styleId)) {
+          const style = document.createElement("style")
+          style.id = styleId
+          style.textContent = `
+            #${containerId}, #${containerId} * { max-width: 100% !important; box-sizing: border-box; }
+            #${containerId} iframe { width: 100% !important; max-width: 100% !important; }
+          `
+          document.head.appendChild(style)
+        }
 
         const Widget = window.YooMoneyCheckoutWidget
         if (!Widget) throw new Error("widget unavailable")
         const widget = new Widget({
           confirmation_token: token,
           return_url: typeof window !== "undefined" ? window.location.href : "",
+          customization: {
+            colors: {
+              background: "#FFFFFF",
+              control_primary: "#F97316",
+            },
+          },
           error_callback: () => {
             const msg = t("hub.pay.widgetError", { defaultValue: "Payment could not be started." })
             setError(msg)
@@ -225,13 +248,21 @@ export function YooKassaCheckoutWidget({
           />
         </View>
       ) : null}
-      <View ref={hostRef as never} style={styles.host} />
+      <View ref={hostRef as never} style={styles.host} collapsable={false} />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  wrap: { minHeight: 320, position: "relative" },
+  wrap: {
+    width: "100%",
+    maxWidth: "100%",
+    minWidth: 0,
+    minHeight: 320,
+    position: "relative",
+    alignSelf: "stretch",
+    overflow: "hidden",
+  },
   skeletonLayer: {
     position: "absolute",
     left: 0,
@@ -240,7 +271,14 @@ const styles = StyleSheet.create({
     zIndex: 1,
     backgroundColor: colors.surface,
   },
-  host: { minHeight: 280, width: "100%" },
+  host: {
+    width: "100%",
+    maxWidth: "100%",
+    minWidth: 0,
+    minHeight: 280,
+    alignSelf: "stretch",
+    overflow: "hidden",
+  },
   boxError: {
     padding: 16,
     borderRadius: 12,
