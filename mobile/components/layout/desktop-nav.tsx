@@ -8,7 +8,7 @@ import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { colors, shadow } from "@/lib/theme"
 
 const NAV = [
-  { id: "home", href: "/hub" as Href, match: ["/hub", "/food", "/mart", "/experts", "/send"] },
+  { id: "home", href: "/(app)/hub" as Href, match: ["/hub", "/food", "/mart", "/experts", "/send"] },
   { id: "transactions", href: "/transactions" as Href, match: ["/transactions", "/orders"] },
   { id: "more", href: "/more" as Href, match: ["/more", "/profile", "/verification", "/referrals", "/support", "/recipients"] },
 ] as const
@@ -45,7 +45,11 @@ export function DesktopNav() {
             <Pressable
               key={item.id}
               style={[styles.navItem, active && styles.navItemActive]}
-              onPress={() => router.push(item.href)}
+              onPress={() => {
+                // Home must reset nested hub stack; replace avoids /hub?slug=… leftovers on web.
+                if (item.id === "home") router.replace(item.href)
+                else router.push(item.href)
+              }}
               accessibilityRole="button"
               accessibilityState={{ selected: active }}
             >

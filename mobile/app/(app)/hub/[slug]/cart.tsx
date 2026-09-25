@@ -1,13 +1,21 @@
-import { useEffect } from "react"
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native"
+import { useEffect, useMemo } from "react"
+import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
+import * as Crypto from "expo-crypto"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { Minus, Plus, Trash2 } from "lucide-react-native"
+import {
+  prefetchCheckoutQuote,
+  warmCartCheckout,
+} from "@ciuna/shared/marketplace/checkout-warm"
 import { EmptyState } from "@/components/empty-state"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
+import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
+import { fetchWithAuth } from "@/lib/api"
+import { useAuth } from "@/lib/auth-context"
 import { hubCartCheckoutPath, hubLineHomePath } from "@/lib/hub"
 import { removeHubCartItem, updateHubCartItemQuantity, useHubCartByLine } from "@/lib/hub-cart"
 import { hubProductEffectivePrice, formatMoney } from "@/lib/money"
@@ -20,16 +28,38 @@ export default function HubCartScreen() {
   const router = useRouter()
   const { t } = useTranslation("app")
   const { showError } = useToast()
+  const { profile } = useAuth()
   const { cart, loading } = useHubCartByLine(line)
 
   useEffect(() => {
     navigation.setOptions({ title: t("hub.cart.title", { defaultValue: "Cart" }) })
   }, [navigation, t])
 
+  const fingerprint = useMemo(() => {
+    if (!cart) return ""
+    return cart.items
+      .map((i) => `${i.hub_product_id}:${i.quantity}`)
+      .sort()
+      .join("|")
+  }, [cart])
+
   const items = cart?.items || []
   const availableItems = items.filter((i) => !i.unavailable && i.product)
   const currency = availableItems[0]?.product?.fixed_currency || ""
   const subtotal = availableItems.reduce((sum, i) => sum + hubProductEffectivePrice(i.product!) * i.quantity, 0)
+
+  useEffect(() => {
+    prefetchYooKassaWidgetScript()
+  }, [])
+
+  useEffect(() => {
+    if (!cart?.id || !fingerprint || availableItems.length === 0) return
+    void prefetchCheckoutQuote({
+      cartId: cart.id,
+      fingerprint,
+      fetcher: fetchWithAuth,
+    })
+  }, [cart?.id, fingerprint, availableItems.length])
 
   const onQuantityChange = (itemId: string, quantity: number) => {
     if (!cart) return
@@ -43,6 +73,24 @@ export default function HubCartScreen() {
     void removeHubCartItem(cart.vendor_id, itemId).catch((e) => {
       showError(e instanceof Error ? e.message : t("errors.generic", { defaultValue: "Something went wrong." }))
     })
+  }
+
+  const goCheckout = () => {
+    if (!cart?.id || availableItems.length === 0) return
+    const contactName =
+      [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
+      profile?.email?.split("@")[0] ||
+      ""
+    void warmCartCheckout({
+      cartId: cart.id,
+      fingerprint,
+      fetcher: fetchWithAuth,
+      uuid: Crypto.randomUUID,
+      gatewayMode: Platform.OS === "web" ? "embedded" : "native",
+      contactName,
+      contactPhone: profile?.phone || "",
+    })
+    router.push(hubCartCheckoutPath(line) as never)
   }
 
   if (loading && !cart) {
@@ -135,7 +183,7 @@ export default function HubCartScreen() {
       <View style={styles.checkoutBtn}>
         <PrimaryButton
           label={t("hub.cart.checkout", { defaultValue: "Checkout" })}
-          onPress={() => router.push(hubCartCheckoutPath(line) as never)}
+          onPress={goCheckout}
           disabled={availableItems.length === 0}
         />
       </View>

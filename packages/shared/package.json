@@ -11,6 +11,7 @@
       "types": "./src/index.ts"
     },
     "./marketplace/use-checkout": "./src/marketplace/use-checkout.ts",
+    "./marketplace/checkout-warm": "./src/marketplace/checkout-warm.ts",
     "./locales/*": "./src/locales/*",
     "./urls": "./src/constants/urls.ts"
   },

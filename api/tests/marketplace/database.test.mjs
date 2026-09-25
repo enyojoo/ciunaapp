@@ -13,6 +13,12 @@ async function setup(stock = 1) {
   await db.exec(
     fs.readFileSync(root + "supabase/migrations/20260925090000_marketplace_lifecycle.sql", "utf8"),
   )
+  await db.exec(
+    fs.readFileSync(root + "supabase/migrations/20260925143000_marketplace_notify_gate.sql", "utf8"),
+  )
+  await db.exec(
+    fs.readFileSync(root + "supabase/migrations/20260925152000_marketplace_cancel_restore_cart.sql", "utf8"),
+  )
   await db.query("insert into users(id,email,first_name,last_name) values($1,$2,'Test','Customer')", [
     uid,
     "test@example.com",
@@ -166,7 +172,13 @@ test("expired reservation accepts late payment as an exception", async () => {
 test("jobs are leased, reclaimed and not claimed twice", async () => {
   const db = await setup()
   try {
-    await create(db)
+    const id = await create(db)
+    // Expire jobs are scheduled at payment_deadline; make one due so claim_jobs has work
+    // (pre-pay notify emails are no longer enqueued on create).
+    await db.query(
+      "update marketplace_jobs set available_at=now() where kind='expire' and (payload->>'orderId')::uuid=$1",
+      [id],
+    )
     const first = (await db.query("select * from marketplace_claim_jobs(20)")).rows
     assert.ok(first.length)
     assert.equal((await db.query("select * from marketplace_claim_jobs(20)")).rows.length, 0)
@@ -391,23 +403,169 @@ test("converted cart is frozen, reservations resist stock edits, overdue detecti
       db.query("update hub_products set stock_quantity=1 where id=$1", [pid]),
       /STOCK_RESERVED/,
     )
-    const a = await attempt(db, id)
-    await action(db, id, "paid", { attemptId: a.id })
+    await action(db, id, "cancel")
+    assert.equal(
+      (await db.query("select status from hub_carts where id=$1", [cart])).rows[0].status,
+      "active",
+    )
+    assert.equal(
+      (await db.query("select cart_id from marketplace_orders where id=$1", [id])).rows[0].cart_id,
+      null,
+    )
+    assert.equal(
+      (await db.query("select count(*)::int as n from hub_cart_items where cart_id=$1", [cart])).rows[0]
+        .n,
+      1,
+    )
+    // Re-checkout must be allowed against the restored cart.
+    const q2 = (
+      await db.query(
+        "insert into marketplace_quotes(user_id,payload,expires_at) values($1,$2,now()+interval '5 minutes') returning id",
+        [uid, payload],
+      )
+    ).rows[0].id
+    const again = (
+      await db.query(
+        "select marketplace_create_order($1,$2,'cart-request-2','cart-hash-2','{}','manual',$3,'embedded','CART-ORDER-2') as id",
+        [uid, q2, mid],
+      )
+    ).rows[0].id
+    assert.ok(again)
+    assert.equal(
+      (await db.query("select status from hub_carts where id=$1", [cart])).rows[0].status,
+      "converted",
+    )
+    const a = await attempt(db, again)
+    await action(db, again, "paid", { attemptId: a.id })
     await db.query("update marketplace_orders set attention_due_at=now()-interval '1 minute' where id=$1", [
-      id,
+      again,
     ])
     await db.exec("select marketplace_detect_overdue(); select marketplace_detect_overdue()")
     assert.equal(
       (
         await db.query(
           "select count(*)::int as n from marketplace_events where order_id=$1 and kind='overdue'",
+          [again],
+        )
+      ).rows[0].n,
+      1,
+    )
+    await action(db, again, "accept")
+    assert.equal((await order(db, again)).overdue_at, null)
+  } finally {
+    await db.close()
+  }
+})
+
+test("created writes timeline without notify; paid and proof enqueue notify", async () => {
+  const db = await setup(2)
+  try {
+    const id = await create(db)
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_events where order_id=$1 and kind='created'",
           [id],
         )
       ).rows[0].n,
       1,
     )
-    await action(db, id, "accept")
-    assert.equal((await order(db, id)).overdue_at, null)
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_jobs j join marketplace_events e on e.id=(j.payload->>'eventId')::uuid where j.kind='notify' and e.kind='created' and e.order_id=$1",
+          [id],
+        )
+      ).rows[0].n,
+      0,
+    )
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_jobs where kind='notify' and state='ready' and (payload->>'orderId')::uuid=$1",
+          [id],
+        )
+      ).rows[0].n,
+      0,
+    )
+
+    const a = await attempt(db, id)
+    await action(db, id, "proof", { attemptId: a.id, path: "proofs/test.pdf" })
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_jobs j join marketplace_events e on e.id=(j.payload->>'eventId')::uuid where j.kind='notify' and e.kind='proof' and e.order_id=$1 and j.state='ready'",
+          [id],
+        )
+      ).rows[0].n,
+      1,
+    )
+
+    const id2 = await create(db, "pay-notify-key")
+    const a2 = await attempt(db, id2)
+    await action(db, id2, "paid", { attemptId: a2.id })
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_jobs j join marketplace_events e on e.id=(j.payload->>'eventId')::uuid where j.kind='notify' and e.kind='paid' and e.order_id=$1 and j.state='ready'",
+          [id2],
+        )
+      ).rows[0].n,
+      1,
+    )
+  } finally {
+    await db.close()
+  }
+})
+
+test("notify gate drains queued created notify jobs", async () => {
+  const db = new PGlite()
+  try {
+    await db.exec(fs.readFileSync(root + "supabase/tests/marketplace-baseline.sql", "utf8"))
+    await db.exec(
+      fs.readFileSync(root + "supabase/migrations/20260925090000_marketplace_lifecycle.sql", "utf8"),
+    )
+    await db.query("insert into users(id,email,first_name,last_name) values($1,$2,'Test','Customer')", [
+      uid,
+      "test@example.com",
+    ])
+    await db.query(
+      "insert into hub_products(id,title,status,pricing_type,fixed_amount,fixed_currency,fulfillment_mode,stock_quantity,service_line_slug,category) values($1,'Digital purchase','live','fixed',100,'RUB','digital',1,'mart','Other')",
+      [pid],
+    )
+    await db.query(
+      "insert into payment_methods(id,currency,status,provider,name,type) values($1,'RUB','active','manual','Bank','bank_transfer')",
+      [mid],
+    )
+    const id = await create(db, "pre-gate-order")
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_jobs j join marketplace_events e on e.id=(j.payload->>'eventId')::uuid where j.kind='notify' and e.kind='created' and j.state='ready'",
+        )
+      ).rows[0].n,
+      1,
+    )
+    await db.exec(
+      fs.readFileSync(root + "supabase/migrations/20260925143000_marketplace_notify_gate.sql", "utf8"),
+    )
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_jobs j join marketplace_events e on e.id=(j.payload->>'eventId')::uuid where j.kind='notify' and e.kind='created' and j.state='ready'",
+        )
+      ).rows[0].n,
+      0,
+    )
+    assert.equal(
+      (
+        await db.query(
+          "select count(*)::int as n from marketplace_jobs j join marketplace_events e on e.id=(j.payload->>'eventId')::uuid where j.kind='notify' and e.kind='created' and j.state='done' and j.last_error='suppressed_prepay_notify'",
+        )
+      ).rows[0].n,
+      1,
+    )
+    void id
   } finally {
     await db.close()
   }

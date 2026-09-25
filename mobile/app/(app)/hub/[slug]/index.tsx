@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router"
 import { ChevronRight } from "lucide-react-native"
@@ -11,6 +11,7 @@ import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { StoreChip, StoreChipSkeleton } from "@/components/store-item"
+import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { attachVendorsToProducts } from "@/lib/hub-catalog"
 import {
   hubMarketplaceStoresPath,
@@ -37,6 +38,10 @@ export default function HubLineCatalog() {
   const marketplace = isHubMarketplaceSlug(line)
   const engineRedirect = isHubExpertsSlug(line) ? "/experts" : isHubSendSlug(line) ? "/send" : null
   const backAria = t("hub.backToHub", { defaultValue: "Back to Hub" })
+
+  useEffect(() => {
+    if (marketplace) prefetchYooKassaWidgetScript()
+  }, [marketplace])
 
   const { data, loading, refreshing, refresh, revalidate } = useHubCatalog(
     engineRedirect ? "" : line,

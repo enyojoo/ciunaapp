@@ -1,4 +1,4 @@
-import { Redirect, Tabs } from "expo-router"
+import { Redirect, Tabs, usePathname, useRouter } from "expo-router"
 import { Home, History, LayoutDashboard } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -12,15 +12,20 @@ import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { tabBarBottomInset, tabBarHeight, tabBarPaddingTop } from "@/lib/tab-bar-layout"
 import { colors } from "@/lib/theme"
 
+const HOME_HREF = "/(app)/hub" as const
+
 export default function AppTabs() {
   const { t } = useTranslation("common")
   const { user, loading, pinUnlocked } = useAuth()
   const { showSidebarShell, isWeb, mode } = useResponsiveLayout()
   const insets = useSafeAreaInsets()
+  const router = useRouter()
+  const pathname = usePathname()
   if (!loading && !user) return <Redirect href="/auth/login" />
   if (!loading && user && !pinUnlocked) return <Redirect href="/pin" />
 
-  const hideTabBar = showSidebarShell || (isWeb && mode !== "mobile")
+  const hideForCheckout = pathname.includes("/checkout")
+  const hideTabBar = showSidebarShell || (isWeb && mode !== "mobile") || hideForCheckout
   const webPhoneFrame = isWeb && mode === "mobile"
   const bottomInset = tabBarBottomInset(insets.bottom, webPhoneFrame)
   const barHeight = tabBarHeight(insets.bottom, webPhoneFrame)
@@ -71,6 +76,13 @@ export default function AppTabs() {
     >
       <Tabs.Screen
         name="hub"
+        listeners={{
+          tabPress: (e) => {
+            // Reset nested hub stack and clear leftover [slug] params (Expo web → /hub?slug=…).
+            e.preventDefault()
+            router.replace(HOME_HREF)
+          },
+        }}
         options={{
           title: t("nav.home", { defaultValue: "Home" }),
           tabBarIcon: ({ color }) => <Home size={TAB_BAR_ICON_SIZE} color={color} strokeWidth={2} />,

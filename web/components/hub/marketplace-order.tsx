@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next"
 import type { MarketplaceOrder } from "@ciuna/shared"
 import { fetchWithAuth } from "@/lib/fetch-with-auth"
 import { Button } from "@/components/ui/button"
-import { YooKassaCheckoutWidget } from "@/components/yookassa-checkout-widget"
+import { formatCurrencySymbolOnly } from "@/utils/currency"
+import { MarketplacePayStep, type MarketplacePayTab } from "./marketplace-pay-step"
+
 export function MarketplaceOrderView({
   order: initial,
   onChange,
@@ -15,9 +17,16 @@ export function MarketplaceOrderView({
   const [order, setOrder] = useState(initial),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
+    [payTab, setPayTab] = useState<MarketplacePayTab>("yookassa"),
+    [methodId, setMethodId] = useState(""),
+    [receiptFile, setReceiptFile] = useState<File | null>(null),
     errorRef = useRef<HTMLDivElement>(null),
     { t } = useTranslation("app")
   const label = (key: string) => t(`marketplace.${key}`)
+  const methods = order.snapshot.methods
+  const attempt = order.attempts[0]
+  const methodKey = methods.map((m) => `${m.id}:${m.rail}`).join(",")
+
   async function load() {
     const r = await fetchWithAuth(`/api/hub/orders/${initial.id}`)
     if (r.ok) {
@@ -36,6 +45,22 @@ export function MarketplaceOrderView({
   useEffect(() => {
     if (error) errorRef.current?.focus()
   }, [error])
+  useEffect(() => {
+    const hasOnline = methods.some((m) => m.rail === "yookassa")
+    const hasManual = methods.some((m) => m.rail === "manual")
+    if (attempt?.rail === "yookassa" || (!attempt && hasOnline)) setPayTab("yookassa")
+    else if (hasManual) setPayTab("manual")
+    if (attempt?.rail === "manual") {
+      const mid =
+        methods.find((m) => m.rail === "manual" && m.id === (attempt as any).method_id)?.id ||
+        methods.find((m) => m.rail === "manual")?.id ||
+        ""
+      setMethodId(mid)
+    } else {
+      setMethodId(methods.find((m) => m.rail === "yookassa")?.id || methods[0]?.id || "")
+    }
+  }, [methodKey, attempt?.rail, attempt?.id])
+
   async function action(path: string, body: unknown = {}) {
     setBusy(true)
     setError("")
@@ -55,10 +80,12 @@ export function MarketplaceOrderView({
       setBusy(false)
     }
   }
-  async function upload(file: File) {
+
+  async function uploadProof(file: File) {
     const a = order.attempts[0]
     if (!a) return
     setBusy(true)
+    setError("")
     try {
       if (file.size > 10 * 1024 * 1024) throw Error("INVALID_PROOF")
       const init = await action("payment-proof", {
@@ -73,20 +100,55 @@ export function MarketplaceOrderView({
       })
       if (!response.ok) throw Error("UPLOAD_FAILED")
       await action("payment-proof", { attemptId: a.id, path: init.path })
+      setReceiptFile(null)
     } catch (e) {
       setError((e as Error).message)
     } finally {
       setBusy(false)
     }
   }
-  const a = order.attempts[0],
-    pay = order.nextAction === "pay" && !["failed", "superseded", "succeeded"].includes(a?.state || "")
+
+  const pay = order.nextAction === "pay" && !["failed", "superseded", "succeeded"].includes(attempt?.state || "")
+  const onlinePayment =
+    pay && attempt?.rail === "yookassa" && attempt.confirmation_token
+      ? { transactionId: order.public_id, confirmationToken: attempt.confirmation_token }
+      : null
+  const activePayTab: MarketplacePayTab =
+    methods.some((m) => m.rail === "yookassa")
+      ? payTab === "manual"
+        ? "manual"
+        : "yookassa"
+      : "manual"
+
+  async function selectTab(tab: MarketplacePayTab) {
+    setPayTab(tab)
+    if (tab === "yookassa") {
+      const online = methods.find((m) => m.rail === "yookassa")
+      if (online) setMethodId(online.id)
+      if (order.nextAction === "pay" && attempt?.rail !== "yookassa") {
+        await action("payment-attempts", { rail: "yookassa", gatewayMode: "embedded" })
+      }
+      return
+    }
+    const manuals = methods.filter((m) => m.rail === "manual")
+    const pick = manuals.find((m) => m.id === methodId) || manuals[0]
+    if (pick) setMethodId(pick.id)
+    if (order.nextAction === "pay" && attempt?.rail !== "manual") {
+      await action("payment-attempts", {
+        rail: "manual",
+        paymentMethodId: pick?.id,
+        gatewayMode: "embedded",
+      })
+    }
+  }
+
   return (
     <main className="mx-auto max-w-2xl space-y-5 p-4 pb-24">
       <h1 className="text-2xl font-semibold">{order.snapshot.title}</h1>
       <p className="text-sm text-gray-500">{order.public_id}</p>
       <p className="text-xl font-semibold">
-        {label("total")}: {order.snapshot.totals.total.toFixed(2)} {order.snapshot.totals.payCurrency}
+        {label("total")}:{" "}
+        {formatCurrencySymbolOnly(order.snapshot.totals.total, order.snapshot.totals.payCurrency)}
       </p>
       <div className="rounded-xl bg-gray-50 p-4" aria-live="polite">
         <p>
@@ -102,73 +164,52 @@ export function MarketplaceOrderView({
         </div>
       )}
       {order.exception_reason && <p role="status">{label("review")}</p>}
-      {["pay", "checking"].includes(order.nextAction) && (
-        <p>
-          {label("deadline")}: {new Date(order.payment_deadline).toLocaleString()}
-        </p>
-      )}
-      {pay && a?.rail === "yookassa" && a.confirmation_token && (
-        <YooKassaCheckoutWidget
-          transactionId={order.public_id}
-          confirmationToken={a.confirmation_token}
-          onCompleted={() => void load()}
-          onFailed={() => void load()}
+
+      {pay && methods.length > 0 && (
+        <MarketplacePayStep
+          methods={methods}
+          payTab={activePayTab}
+          onPayTab={(tab) => void selectTab(tab)}
+          methodId={methodId}
+          onMethodId={(id) => {
+            setMethodId(id)
+            void action("payment-attempts", {
+              rail: "manual",
+              paymentMethodId: id,
+              gatewayMode: "embedded",
+            })
+          }}
+          amount={order.snapshot.totals.total}
+          currency={order.snapshot.totals.payCurrency}
+          amountLabel={formatCurrencySymbolOnly(
+            order.snapshot.totals.total,
+            order.snapshot.totals.payCurrency,
+          )}
+          reference={order.public_id}
+          onlinePayment={onlinePayment}
+          proofSubmitted={attempt?.state === "proof_submitted"}
+          receiptFile={receiptFile}
+          onReceiptFile={setReceiptFile}
+          busy={busy}
+          canAct
+          onPay={() => {
+            if (attempt?.rail !== "yookassa") {
+              void action("payment-attempts", { rail: "yookassa", gatewayMode: "embedded" })
+            }
+          }}
+          onIvePaid={() => {
+            if (receiptFile) void uploadProof(receiptFile)
+          }}
+          onWidgetCompleted={() => void load()}
+          onWidgetFailed={() => void load()}
+          hideOnlineCta
+          onlineCreating={payTab === "yookassa" && !onlinePayment?.confirmationToken && busy}
         />
       )}
-      {pay && a?.rail === "yookassa" && a.confirmation_mode === "native" && (
-        <a className="block underline" href={`ciuna://orders/${order.public_id}`}>
-          {label("resumeNative")}
-        </a>
+
+      {order.snapshot.instructions && (
+        <p className="whitespace-pre-wrap text-sm text-gray-600">{order.snapshot.instructions}</p>
       )}
-      {pay && a?.rail === "manual" && (
-        <section className="space-y-3">
-          <h2 className="font-semibold">{label("instructions")}</h2>
-          {Object.entries(a.instructions)
-            .filter(([k]) => !["type", "name"].includes(k))
-            .map(([k, v]) => (
-              <p key={k} className="break-words whitespace-pre-wrap">
-                <span className="font-medium">
-                  {t(`marketplace.instructionsLabels.${k}`, { defaultValue: k.replaceAll("_", " ") })}:{" "}
-                </span>
-                {String(v)}
-              </p>
-            ))}
-          <p>
-            {label("reference")}: {order.public_id}
-          </p>
-          <label className="block">
-            {label("proof")}
-            <input
-              className="block py-3"
-              type="file"
-              accept="image/jpeg,image/png,application/pdf"
-              disabled={busy}
-              onChange={(e) => {
-                if (e.target.files?.[0]) void upload(e.target.files[0])
-              }}
-            />
-          </label>
-          {a.state === "proof_submitted" && <p>{label("proof_submitted")}</p>}
-        </section>
-      )}
-      {order.nextAction === "pay" &&
-        order.snapshot.methods.map((m) => (
-          <Button
-            key={m.id}
-            variant="outline"
-            disabled={busy}
-            onClick={() =>
-              void action("payment-attempts", {
-                rail: m.rail,
-                paymentMethodId: m.rail === "manual" ? m.id : undefined,
-                gatewayMode: "embedded",
-              })
-            }
-          >
-            {label("payWith")} {m.rail === "yookassa" ? label("online") : m.name}
-          </Button>
-        ))}
-      {order.snapshot.instructions && <p className="whitespace-pre-wrap">{order.snapshot.instructions}</p>}
       {order.digital_content && (
         <section className="rounded-xl border p-4">
           <h2 className="font-semibold">{label("digitalDelivery")}</h2>

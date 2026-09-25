@@ -81,7 +81,7 @@ export interface ReferralPayoutEmailData {
   /** pending = user just submitted; completed / cancelled = Office action */
   status: "pending" | "completed" | "cancelled"
   payoutRequestId?: string
-  /** ETID reserved at request time (matches completed send row). */
+  /** CTID reserved at request time (matches completed send row). */
   payoutTransactionId?: string
   linkedTransactionId?: string
   dashboardUrl: string

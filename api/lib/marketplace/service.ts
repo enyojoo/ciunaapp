@@ -297,6 +297,11 @@ export async function buildQuote(userId: string, input: MarketplacePreviewInput)
   }
   const fulfillmentMode = input.fulfillmentMode || modes[0]
   assert(modes.includes(fulfillmentMode), "INVALID_FULFILLMENT", 400)
+  const pickupLocation =
+    fulfillmentMode === "pickup" && vendor?.pickup_location ? String(vendor.pickup_location) : undefined
+  const pickupHours =
+    fulfillmentMode === "pickup" && vendor?.pickup_hours ? String(vendor.pickup_hours) : undefined
+  const fulfillmentNotes = vendor?.fulfillment_notes ? String(vendor.fulfillment_notes) : undefined
   const { data: zoneRows, error: zoneError } = vendor
     ? await db().from("marketplace_zones").select("*").eq("vendor_id", vendor.id).eq("active", true)
     : { data: [], error: null }
@@ -371,6 +376,9 @@ export async function buildQuote(userId: string, input: MarketplacePreviewInput)
     methods: available.options,
     payCurrencies,
     instructions,
+    ...(pickupLocation ? { pickupLocation } : {}),
+    ...(pickupHours ? { pickupHours } : {}),
+    ...(fulfillmentNotes ? { fulfillmentNotes } : {}),
     ...(slot ? { slotStart: slot.slot_start, slotEnd: slot.slot_end, timezone: service.timezone } : {}),
     fulfillmentMinutes: Math.max(
       1,

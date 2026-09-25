@@ -3,9 +3,10 @@
  */
 
 import { useCallback, useEffect, useId, useRef, useState } from "react"
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { fetchWithAuth } from "@/lib/api"
+import { OnlinePaySkeleton } from "@/components/online-pay-skeleton"
 import { colors, type as typeSize } from "@/lib/theme"
 
 const WIDGET_SCRIPT_SRC = "https://yookassa.ru/checkout-widget/v1/checkout-widget.js"
@@ -47,6 +48,12 @@ function loadWidgetScript(): Promise<void> {
     script.onerror = () => reject(new Error("widget script failed to load"))
     document.head.appendChild(script)
   })
+}
+
+/** Warm the Checkout.js script before the confirmation token is ready. */
+export function prefetchYooKassaWidgetScript() {
+  if (typeof window === "undefined") return
+  void loadWidgetScript().catch(() => {})
 }
 
 export function YooKassaCheckoutWidget({
@@ -125,28 +132,23 @@ export function YooKassaCheckoutWidget({
     completedRef.current = false
 
     ;(async () => {
-      let data = await fetchGateway()
-      if (cancelled) return
-      if (!data) {
-        const msg = t("hub.pay.widgetError", { defaultValue: "Payment could not be started." })
-        setError(msg)
-        onFailed?.(msg)
-        return
-      }
-      if (data.status === "completed" || data.status === "processing") {
-        finishCompleted(data.transactionId)
-        return
-      }
-      const token = data.confirmationToken || initialToken
-      if (!token) {
-        const msg = t("hub.pay.missingToken", { defaultValue: "This payment link has expired." })
-        setError(msg)
-        onFailed?.(msg)
-        return
-      }
       try {
-        await loadWidgetScript()
+        const [gateway] = await Promise.all([
+          fetchGateway().catch(() => null),
+          loadWidgetScript(),
+        ])
         if (cancelled) return
+        if (gateway && (gateway.status === "completed" || gateway.status === "processing")) {
+          finishCompleted(gateway.transactionId)
+          return
+        }
+        const token = initialToken || gateway?.confirmationToken || null
+        if (!token) {
+          const msg = t("hub.pay.missingToken", { defaultValue: "This payment link has expired." })
+          setError(msg)
+          onFailed?.(msg)
+          return
+        }
         const host = hostRef.current
         if (!host) throw new Error("no host")
         host.innerHTML = ""
@@ -196,7 +198,7 @@ export function YooKassaCheckoutWidget({
       if (hostRef.current) hostRef.current.innerHTML = ""
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactionId])
+  }, [transactionId, initialToken])
 
   if (error) {
     return (
@@ -217,9 +219,10 @@ export function YooKassaCheckoutWidget({
   return (
     <View style={styles.wrap}>
       {!widgetReady ? (
-        <View style={styles.loading}>
-          <ActivityIndicator color={colors.primary} />
-          <Text style={styles.meta}>{t("hub.pay.loading", { defaultValue: "Loading secure payment…" })}</Text>
+        <View style={styles.skeletonLayer}>
+          <OnlinePaySkeleton
+            caption={t("hub.pay.loading", { defaultValue: "Loading secure payment…" })}
+          />
         </View>
       ) : null}
       <View ref={hostRef as never} style={styles.host} />
@@ -228,10 +231,16 @@ export function YooKassaCheckoutWidget({
 }
 
 const styles = StyleSheet.create({
-  wrap: { minHeight: 120, gap: 8 },
-  host: { minHeight: 200, width: "100%" },
-  loading: { alignItems: "center", gap: 8, paddingVertical: 24 },
-  meta: { fontSize: typeSize.meta, color: colors.muted },
+  wrap: { minHeight: 320, position: "relative" },
+  skeletonLayer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    zIndex: 1,
+    backgroundColor: colors.surface,
+  },
+  host: { minHeight: 280, width: "100%" },
   boxError: {
     padding: 16,
     borderRadius: 12,

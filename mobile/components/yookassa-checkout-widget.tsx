@@ -10,3 +10,7 @@ export function YooKassaCheckoutWidget(_props: {
 }) {
   return null
 }
+
+export function prefetchYooKassaWidgetScript() {
+  /* web-only */
+}

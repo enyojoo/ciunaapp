@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { useTranslation } from "react-i18next"
-import { formatSlaDuration, fulfillmentModeI18nKey } from "@ciuna/shared"
+import { catalogFulfillmentCueKey, formatSlaDuration } from "@ciuna/shared"
 import { MarketplaceCheckout } from "@/components/hub/marketplace-checkout"
 import { fetchWithAuth } from "@/lib/fetch-with-auth"
 
@@ -18,7 +18,7 @@ export default function ProductCheckout() {
 
   if (!product) return <p>{t("marketplace.loading")}</p>
 
-  const modeKey = fulfillmentModeI18nKey(product.fulfillment_mode)
+  const modeKey = catalogFulfillmentCueKey(product.fulfillment_mode)
   const sla = formatSlaDuration(product.sla_text)
 
   return (
@@ -32,18 +32,20 @@ export default function ProductCheckout() {
           />
         )}
         <h1 className="text-2xl font-semibold">{product.title}</h1>
-        <div className="flex flex-wrap gap-2">
-          {modeKey ? (
-            <span className="rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-700">
-              {t(modeKey)}
-            </span>
-          ) : null}
-          {sla ? (
-            <span className="rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-700">
-              {t("marketplace.usuallyWithin", { duration: sla })}
-            </span>
-          ) : null}
-        </div>
+        {(modeKey || sla) && (
+          <div className="flex flex-wrap gap-2">
+            {modeKey ? (
+              <span className="rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                {t(modeKey)}
+              </span>
+            ) : null}
+            {sla ? (
+              <span className="rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                {t("marketplace.usuallyWithin", { duration: sla })}
+              </span>
+            ) : null}
+          </div>
+        )}
         {product.long_description || product.short_description ? (
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
             {product.long_description || product.short_description}
@@ -53,6 +55,18 @@ export default function ProductCheckout() {
       <MarketplaceCheckout
         source={{ kind: "product", hubProductId: productId }}
         customAmount={product.pricing_type === "user_input"}
+        seed={{
+          title: product.title,
+          lines: [
+            {
+              id: product.id,
+              quantity: 1,
+              title: product.title,
+              unitPrice: Number(product.sale_price || product.list_price || product.fixed_amount || 0),
+            },
+          ],
+          currency: String(product.fixed_currency || product.default_input_currency || ""),
+        }}
       />
     </>
   )

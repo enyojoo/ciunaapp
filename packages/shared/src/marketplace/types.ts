@@ -72,6 +72,9 @@ export interface MarketplaceQuote {
   methods: MarketplaceMethod[]
   payCurrencies: string[]
   instructions: string
+  pickupLocation?: string
+  pickupHours?: string
+  fulfillmentNotes?: string
   slotStart?: string
   slotEnd?: string
   timezone?: string

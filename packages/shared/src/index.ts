@@ -60,7 +60,7 @@ export {
 export * from "./types"
 export * from "./marketplace/types"
 export { marketplaceTotals, marketplaceDeadline } from "./marketplace/pricing"
-export { formatSlaDuration, fulfillmentModeI18nKey } from "./marketplace/fulfillment-labels"
+export { formatSlaDuration, fulfillmentModeI18nKey, catalogFulfillmentCueKey } from "./marketplace/fulfillment-labels"
 export {
   SEND_QUOTE_ERROR_CODE,
   i18nKeyForSendQuoteErrorCode,

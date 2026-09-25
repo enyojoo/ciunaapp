@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useTranslation } from "react-i18next"
@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { HubVendorCardNameRow } from "@/components/hub/hub-vendor-card-name-row"
+import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { hubLineHomePath, hubMarketplaceCheckoutPath, hubMarketplaceStoresPath, hubMarketplaceVendorPath } from "@/lib/hub-public-paths"
 import { hubVendorRowToProductSummary } from "@/lib/hub-vendor-types"
 import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart-client"
@@ -100,10 +101,14 @@ function MarketplaceProductCard({
       <p className="line-clamp-1 text-[13px] font-semibold leading-snug text-gray-900 transition-colors group-hover/title:text-orange-700 sm:text-sm">
         {p.title}
       </p>
-      {p.fulfillment_mode ? (
+      {p.fulfillment_mode === "delivery" || p.fulfillment_mode === "pickup" ? (
         <p className="mt-1 text-[11px] font-medium capitalize text-orange-700/90">
           {String(p.fulfillment_mode).replace(/_/g, " ")}
           {p.sla_text ? ` · ${String(p.sla_text).replace(/^(\d+):(\d{2}):\d{2}$/, "$1h $2m")}` : ""}
+        </p>
+      ) : p.sla_text ? (
+        <p className="mt-1 text-[11px] font-medium text-orange-700/90">
+          {String(p.sla_text).replace(/^(\d+):(\d{2}):\d{2}$/, "$1h $2m")}
         </p>
       ) : null}
       {p.short_description ? (
@@ -237,6 +242,10 @@ export function HubMarketplaceLineHome({
   const searchParams = useSearchParams()
   const lineBase = hubLineHomePath(lineSlug)
   const storesHref = hubMarketplaceStoresPath(lineSlug)
+
+  useEffect(() => {
+    prefetchYooKassaWidgetScript()
+  }, [])
 
   const selectedCategory = (searchParams.get("category") || "").trim()
 

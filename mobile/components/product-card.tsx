@@ -111,104 +111,122 @@ export function ProductCard({
       <Text style={styles.title} numberOfLines={1}>
         {product.title}
       </Text>
-      {product.fulfillment_mode ? (
+      {product.fulfillment_mode === "delivery" || product.fulfillment_mode === "pickup" ? (
         <Text style={styles.fulfillmentCue} numberOfLines={1}>
           {t(`marketplace.${product.fulfillment_mode}`, {
             defaultValue: String(product.fulfillment_mode).replace(/_/g, " "),
           })}
         </Text>
       ) : null}
-      {showVendor && vendor?.name ? (
-        onVendorPress ? (
-          <Pressable onPress={onVendorPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={vendor.name} style={styles.vendorHit}>
-            <VendorChip vendor={vendor} />
-          </Pressable>
-        ) : (
-          <View style={styles.vendorHit}>
-            <VendorChip vendor={vendor} />
-          </View>
-        )
-      ) : null}
     </>
+  )
+
+  const vendorBlock =
+    showVendor && vendor?.name ? (
+      onVendorPress ? (
+        <Pressable
+          onPress={onVendorPress}
+          hitSlop={4}
+          accessibilityRole="button"
+          accessibilityLabel={vendor.name}
+          style={styles.vendorHit}
+        >
+          <VendorChip vendor={vendor} />
+        </Pressable>
+      ) : (
+        <View style={styles.vendorHit}>
+          <VendorChip vendor={vendor} />
+        </View>
+      )
+    ) : null
+
+  const priceRow = userInput ? (
+    <View style={styles.priceRow}>
+      <Text style={styles.pricePrefix}>
+        {hasMin
+          ? t("hub.payFrom", { defaultValue: "Pay from" })
+          : t("hub.setAmount", { defaultValue: "Set amount" })}
+      </Text>
+      {hasMin ? <Text style={styles.price}>{formatCardPrice(min, currency)}</Text> : null}
+    </View>
+  ) : (
+    <View style={styles.priceRow}>
+      <Text style={styles.pricePrefix}>{t("hub.sellPrice", { defaultValue: "Sell price" })}</Text>
+      {strike && list != null ? <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text> : null}
+      <Text style={styles.price}>{formatCardPrice(price, currency)}</Text>
+    </View>
+  )
+
+  const cartOrCta = cartMode ? (
+    cartQuantity > 0 ? (
+      <View style={styles.stepper}>
+        <Pressable
+          onPress={() => handleQuantityChange(cartQuantity - 1)}
+          hitSlop={6}
+          accessibilityRole="button"
+          accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
+          style={styles.stepperBtn}
+        >
+          <Minus size={14} color={colors.primary} strokeWidth={2.4} />
+        </Pressable>
+        <Text style={styles.stepperValue}>{cartQuantity}</Text>
+        <Pressable
+          onPress={() => handleQuantityChange(cartQuantity + 1)}
+          hitSlop={6}
+          accessibilityRole="button"
+          accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
+          style={styles.stepperBtn}
+        >
+          <Plus size={14} color={colors.primary} strokeWidth={2.4} />
+        </Pressable>
+      </View>
+    ) : (
+      <Pressable
+        onPress={() => handleAddToCart()}
+        disabled={soldOut}
+        accessibilityRole="button"
+        accessibilityLabel={t("hub.cart.addToCart", { defaultValue: "Add to cart" })}
+        style={[styles.cta, soldOut && styles.ctaDisabled]}
+      >
+        {soldOut ? (
+          <Text style={styles.ctaText}>{t("hub.soldOut", { defaultValue: "Sold out" })}</Text>
+        ) : (
+          <View style={styles.ctaWithIcon}>
+            <ShoppingCart size={13} color="#FFFFFF" strokeWidth={2.4} />
+            <Text style={styles.ctaText}>{t("hub.cart.addToCart", { defaultValue: "Add to cart" })}</Text>
+          </View>
+        )}
+      </Pressable>
+    )
+  ) : (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={cta}
+      style={styles.cta}
+    >
+      <Text style={styles.ctaText}>{cta}</Text>
+    </Pressable>
   )
 
   return (
     <View style={[styles.hit, { width: catalogCardWidth(columns) }, style]}>
-      <Pressable
-        style={styles.card}
-        onPress={onPress}
-        accessibilityRole="button"
-        accessibilityLabel={product.title}
-      >
-        {media}
+      {/* View shell — nested Pressables become nested <button>s on web and throw. */}
+      <View style={styles.card}>
+        <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={product.title}>
+          {media}
+          <View style={styles.bodyTop}>{titleBlock}</View>
+        </Pressable>
         <View style={styles.body}>
-          {titleBlock}
+          {vendorBlock}
           <View style={styles.priceBlock}>
-            {userInput ? (
-              <View style={styles.priceRow}>
-                <Text style={styles.pricePrefix}>
-                  {hasMin
-                    ? t("hub.payFrom", { defaultValue: "Pay from" })
-                    : t("hub.setAmount", { defaultValue: "Set amount" })}
-                </Text>
-                {hasMin ? <Text style={styles.price}>{formatCardPrice(min, currency)}</Text> : null}
-              </View>
-            ) : (
-              <View style={styles.priceRow}>
-                <Text style={styles.pricePrefix}>{t("hub.sellPrice", { defaultValue: "Sell price" })}</Text>
-                {strike && list != null ? <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text> : null}
-                <Text style={styles.price}>{formatCardPrice(price, currency)}</Text>
-              </View>
-            )}
-            {cartMode ? (
-              cartQuantity > 0 ? (
-                <View style={styles.stepper}>
-                  <Pressable
-                    onPress={() => handleQuantityChange(cartQuantity - 1)}
-                    hitSlop={6}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
-                    style={styles.stepperBtn}
-                  >
-                    <Minus size={14} color={colors.primary} strokeWidth={2.4} />
-                  </Pressable>
-                  <Text style={styles.stepperValue}>{cartQuantity}</Text>
-                  <Pressable
-                    onPress={() => handleQuantityChange(cartQuantity + 1)}
-                    hitSlop={6}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
-                    style={styles.stepperBtn}
-                  >
-                    <Plus size={14} color={colors.primary} strokeWidth={2.4} />
-                  </Pressable>
-                </View>
-              ) : (
-                <Pressable
-                  onPress={() => handleAddToCart()}
-                  disabled={soldOut}
-                  accessibilityRole="button"
-                  accessibilityLabel={t("hub.cart.addToCart", { defaultValue: "Add to cart" })}
-                  style={[styles.cta, soldOut && styles.ctaDisabled]}
-                >
-                  {soldOut ? (
-                    <Text style={styles.ctaText}>{t("hub.soldOut", { defaultValue: "Sold out" })}</Text>
-                  ) : (
-                    <View style={styles.ctaWithIcon}>
-                      <ShoppingCart size={13} color="#FFFFFF" strokeWidth={2.4} />
-                      <Text style={styles.ctaText}>{t("hub.cart.addToCart", { defaultValue: "Add to cart" })}</Text>
-                    </View>
-                  )}
-                </Pressable>
-              )
-            ) : (
-              <View style={styles.cta}>
-                <Text style={styles.ctaText}>{cta}</Text>
-              </View>
-            )}
+            <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={product.title}>
+              {priceRow}
+            </Pressable>
+            {cartOrCta}
           </View>
         </View>
-      </Pressable>
+      </View>
     </View>
   )
 }
@@ -279,7 +297,8 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   catBadgeText: { fontSize: 9, fontWeight: "600", color: "#374151" },
-  body: { paddingHorizontal: 10, paddingTop: 8, paddingBottom: 10 },
+  body: { paddingHorizontal: 10, paddingTop: 0, paddingBottom: 10 },
+  bodyTop: { paddingHorizontal: 10, paddingTop: 8 },
   title: { fontSize: 13, fontWeight: "600", lineHeight: 17, color: colors.text },
   fulfillmentCue: {
     marginTop: 2,

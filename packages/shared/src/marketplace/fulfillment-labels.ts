@@ -22,3 +22,9 @@ export function fulfillmentModeI18nKey(mode: ProductFulfillmentMode | null | und
   if (mode === "online_appointment" || mode === "in_person_appointment") return `marketplace.${mode}`
   return null
 }
+
+/** Catalog/PDP cue: delivery/pickup only — never surface “digital” on cards. */
+export function catalogFulfillmentCueKey(mode: ProductFulfillmentMode | null | undefined): string | null {
+  if (mode === "delivery" || mode === "pickup") return `marketplace.${mode}`
+  return null
+}

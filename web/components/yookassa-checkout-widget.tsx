@@ -9,9 +9,10 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { CheckCircle2, Loader2, XCircle } from "lucide-react"
+import { CheckCircle2, XCircle } from "lucide-react"
 import { fetchWithAuth } from "@/lib/fetch-with-auth"
 import { Button } from "@/components/ui/button"
+import { OnlinePaySkeleton } from "@/components/hub/online-pay-skeleton"
 import { formatCurrency } from "@/utils/currency"
 
 const WIDGET_SCRIPT_SRC = "https://yookassa.ru/checkout-widget/v1/checkout-widget.js"
@@ -53,6 +54,12 @@ function loadWidgetScript(): Promise<void> {
     script.onerror = () => reject(new Error("widget script failed to load"))
     document.head.appendChild(script)
   })
+}
+
+/** Warm the Checkout.js script before the confirmation token is ready. */
+export function prefetchYooKassaWidgetScript() {
+  if (typeof window === "undefined") return
+  void loadWidgetScript().catch(() => {})
 }
 
 export function YooKassaCheckoutWidget({
@@ -150,32 +157,32 @@ export function YooKassaCheckoutWidget({
     completedRef.current = false
 
     ;(async () => {
-      let data = gateway
-      if (!data?.confirmationToken || data.amount === 0) {
-        data = await fetchGateway()
-      }
-      if (cancelled || !data) {
-        if (!cancelled) {
+      try {
+        const tokenHint = initialToken || gateway?.confirmationToken || null
+        const [data] = await Promise.all([
+          tokenHint && gateway?.confirmationToken
+            ? Promise.resolve(gateway)
+            : fetchGateway().catch(() => gateway),
+          loadWidgetScript(),
+        ])
+        if (cancelled) return
+        if (!data && !tokenHint) {
           const msg = t("hub.pay.widgetError", { defaultValue: "Payment could not be started." })
           setError(msg)
           onFailed?.(msg)
+          return
         }
-        return
-      }
-      if (data.status === "completed" || data.status === "processing") {
-        finishCompleted(data.transactionId)
-        return
-      }
-      const token = data.confirmationToken || initialToken
-      if (!token) {
-        const msg = t("hub.pay.missingToken", { defaultValue: "This payment link has expired." })
-        setError(msg)
-        onFailed?.(msg)
-        return
-      }
-      try {
-        await loadWidgetScript()
-        if (cancelled) return
+        if (data && (data.status === "completed" || data.status === "processing")) {
+          finishCompleted(data.transactionId)
+          return
+        }
+        const token = tokenHint || data?.confirmationToken || null
+        if (!token) {
+          const msg = t("hub.pay.missingToken", { defaultValue: "This payment link has expired." })
+          setError(msg)
+          onFailed?.(msg)
+          return
+        }
         const Widget = window.YooMoneyCheckoutWidget
         if (!Widget) throw new Error("widget unavailable")
         const widget = new Widget({
@@ -217,7 +224,7 @@ export function YooKassaCheckoutWidget({
       widgetRef.current = null
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactionId])
+  }, [transactionId, initialToken])
 
   const displayAmount = gateway?.amount ?? amount
   const displayCurrency = gateway?.currency ?? currency
@@ -241,17 +248,18 @@ export function YooKassaCheckoutWidget({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="relative min-h-[320px] space-y-4">
       {showAmount && displayAmount != null && displayCurrency ? (
         <p className="text-center text-sm text-muted-foreground">{formatCurrency(Number(displayAmount), String(displayCurrency))}</p>
       ) : null}
       {!widgetReady ? (
-        <div className="flex flex-col items-center gap-3 py-10 text-center text-sm text-muted-foreground">
-          <Loader2 className="h-6 w-6 animate-spin" />
-          {t("hub.pay.loading", { defaultValue: "Loading secure payment…" })}
+        <div className="absolute inset-x-0 top-0 z-10 bg-white">
+          <OnlinePaySkeleton
+            caption={t("hub.pay.loading", { defaultValue: "Loading secure payment…" })}
+          />
         </div>
       ) : null}
-      <div id={containerId} />
+      <div id={containerId} className="min-h-[280px]" />
     </div>
   )
 }

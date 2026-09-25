@@ -258,7 +258,7 @@ export function VendorHubCatalog({
                         <p className="line-clamp-1 text-[13px] font-semibold leading-snug text-gray-900 transition-colors group-hover/title:text-orange-700 sm:text-sm">
                           {p.title}
                         </p>
-                        {p.fulfillment_mode ? (
+                        {p.fulfillment_mode === "delivery" || p.fulfillment_mode === "pickup" ? (
                           <p className="mt-1 text-[11px] font-medium capitalize text-orange-700/90">
                             {String(p.fulfillment_mode).replace(/_/g, " ")}
                           </p>

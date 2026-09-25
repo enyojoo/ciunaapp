@@ -148,9 +148,11 @@ export default function HubProductDetailScreen() {
           </View>
         )}
         <Text style={styles.title}>{product.title}</Text>
-        {product.fulfillment_mode || product.sla_text ? (
+        {(product.fulfillment_mode === "delivery" ||
+          product.fulfillment_mode === "pickup" ||
+          product.sla_text) ? (
           <View style={styles.cueRow}>
-            {product.fulfillment_mode ? (
+            {product.fulfillment_mode === "delivery" || product.fulfillment_mode === "pickup" ? (
               <View style={styles.cueChip}>
                 <Text style={styles.cueText}>
                   {t(`marketplace.${product.fulfillment_mode}`, {
