@@ -1,3 +1,5 @@
+import { validateProduct, productExtras } from "@/lib/marketplace/catalog"
+import { MarketplaceError } from "@/lib/marketplace/service"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin } from "@/lib/admin-auth-utils"
@@ -8,7 +10,12 @@ import { resolveAdminHubFixedPricing } from "@/lib/hub-product-pricing-server"
 
 function getErrorMessage(e: unknown, fallback: string): string {
   if (e instanceof Error && e.message) return e.message
-  if (e && typeof e === "object" && "message" in e && typeof (e as { message?: unknown }).message === "string") {
+  if (
+    e &&
+    typeof e === "object" &&
+    "message" in e &&
+    typeof (e as { message?: unknown }).message === "string"
+  ) {
     return (e as { message: string }).message
   }
   return fallback
@@ -23,6 +30,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (error) throw error
     return NextResponse.json({ product: data })
   } catch (e) {
+    if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub product GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Not found" }, { status })
@@ -45,7 +53,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     const pricingType = body.pricing_type === "user_input" ? "user_input" : "fixed"
 
-    let existingPricing: { list_price: number | null; sale_price: number | null; fixed_amount: number | null } | null = null
+    let existingPricing: {
+      list_price: number | null
+      sale_price: number | null
+      fixed_amount: number | null
+    } | null = null
     if (id !== "new") {
       const { data: ex } = await server
         .from("hub_products")
@@ -61,12 +73,17 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       }
     }
 
-    const fixedResolved = resolveAdminHubFixedPricing(pricingType, body as Record<string, unknown>, existingPricing)
+    const fixedResolved = resolveAdminHubFixedPricing(
+      pricingType,
+      body as Record<string, unknown>,
+      existingPricing,
+    )
     if (fixedResolved.error) {
       return NextResponse.json({ error: fixedResolved.error }, { status: 400 })
     }
 
     const row: Record<string, unknown> = {
+      ...productExtras(body),
       title: String(body.title || "").trim() || "Untitled",
       short_description: body.short_description ?? null,
       category: String(body.category || "Other"),
@@ -82,7 +99,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       list_price: fixedResolved.list_price,
       sale_price: fixedResolved.sale_price,
       fixed_amount: fixedResolved.fixed_amount,
-      fixed_currency: pricingType === "fixed" ? body.fixed_currency ?? null : null,
+      fixed_currency: pricingType === "fixed" ? (body.fixed_currency ?? null) : null,
       default_input_currency: body.default_input_currency ?? "USD",
       fee_percent: body.fee_percent != null ? Number(body.fee_percent) : null,
       funded_min: body.funded_min != null ? Number(body.funded_min) : null,
@@ -93,9 +110,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
     if (body.stock_quantity !== undefined) {
       row.stock_quantity =
-        body.stock_quantity === null || body.stock_quantity === ""
-          ? null
-          : Number(body.stock_quantity)
+        body.stock_quantity === null || body.stock_quantity === "" ? null : Number(body.stock_quantity)
     }
     if (body.sold_out !== undefined) {
       row.sold_out = Boolean(body.sold_out)
@@ -109,17 +124,25 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ error: imageReject }, { status: 400 })
     }
 
-    const catCheck = await assertHubProductCategoryAllowed(server, row.category as string)
+    const catCheck = ["food", "mart"].includes(body.service_line_slug)
+      ? { ok: true as const }
+      : await assertHubProductCategoryAllowed(server, row.category as string)
     if (!catCheck.ok) {
       return NextResponse.json({ error: catCheck.message }, { status: 400 })
     }
 
-    row.service_line_slug = hubMarketplaceLineFromCategory(row.category as string)
+    row.service_line_slug = ["food", "mart"].includes(body.service_line_slug)
+      ? body.service_line_slug
+      : hubMarketplaceLineFromCategory(row.category as string)
 
     if (row.fulfillment_type === "vendor") {
       let vid: string | null = vendorId !== undefined ? vendorId : null
       if (vendorId === undefined && id !== "new") {
-        const { data: existing } = await server.from("hub_products").select("vendor_id").eq("id", id).maybeSingle()
+        const { data: existing } = await server
+          .from("hub_products")
+          .select("vendor_id")
+          .eq("id", id)
+          .maybeSingle()
         const ev = existing?.vendor_id
         vid = ev != null && String(ev).trim() !== "" ? String(ev).trim() : null
       }
@@ -129,18 +152,27 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     if (vendorId) {
-      const { data: v, error: vErr } = await server.from("hub_vendors").select("id, service_line_slug").eq("id", vendorId).maybeSingle()
+      const { data: v, error: vErr } = await server
+        .from("hub_vendors")
+        .select("id, service_line_slug")
+        .eq("id", vendorId)
+        .maybeSingle()
       if (vErr || !v) {
         return NextResponse.json({ error: "Invalid vendor_id" }, { status: 400 })
       }
       const mline = row.service_line_slug as "food" | "mart" | null
       if (!mline || v.service_line_slug !== mline) {
         return NextResponse.json(
-          { error: "Vendor must be a Food or Mart storefront vendor matching this product’s marketplace line." },
+          {
+            error:
+              "Vendor must be a Food or Mart storefront vendor matching this product’s marketplace line.",
+          },
           { status: 400 },
         )
       }
     }
+
+    await validateProduct(row)
 
     // Office "new product" should POST, but tolerate accidental PATCH /products/new.
     if (id === "new") {
@@ -156,6 +188,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
     return NextResponse.json({ product: data })
   } catch (e) {
+    if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub product PATCH", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     const message = getErrorMessage(e, "Failed to update")
@@ -168,10 +201,14 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     await requireAdmin(request)
     const { id } = await params
     const server = createServerClient()
-    const { error } = await server.from("hub_products").delete().eq("id", id)
+    const { error } = await server
+      .from("hub_products")
+      .update({ status: "archived", updated_at: new Date().toISOString() })
+      .eq("id", id)
     if (error) throw error
     return NextResponse.json({ ok: true })
   } catch (e) {
+    if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub product DELETE", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to delete" }, { status })

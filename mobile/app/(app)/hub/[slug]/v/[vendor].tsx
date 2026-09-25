@@ -75,6 +75,9 @@ export default function VendorScreen() {
 
   const bio = (vendor?.short_bio || "").trim()
   const location = (vendor?.location || "").trim()
+  const notes = (vendor?.fulfillment_notes || "").trim()
+  const pickupLocation = (vendor?.pickup_location || "").trim()
+  const pickupHours = (vendor?.pickup_hours || "").trim()
 
   return (
     <View style={{ flex: 1 }}>
@@ -117,6 +120,29 @@ export default function VendorScreen() {
         {bio ? (
           <View style={styles.bioFrame}>
             <Text style={styles.bio}>{bio}</Text>
+          </View>
+        ) : null}
+
+        {notes || pickupLocation || pickupHours ? (
+          <View style={styles.notesFrame}>
+            {notes ? (
+              <>
+                <Text style={styles.notesLabel}>
+                  {t("marketplace.fulfillmentNotes", { defaultValue: "Fulfillment notes" })}
+                </Text>
+                <Text style={styles.notesBody}>{notes}</Text>
+              </>
+            ) : null}
+            {pickupLocation ? (
+              <Text style={styles.notesBody}>
+                {t("marketplace.pickupLocation", { defaultValue: "Pickup location" })}: {pickupLocation}
+              </Text>
+            ) : null}
+            {pickupHours ? (
+              <Text style={styles.notesBody}>
+                {t("marketplace.pickupHours", { defaultValue: "Pickup hours" })}: {pickupHours}
+              </Text>
+            ) : null}
           </View>
         ) : null}
 
@@ -166,4 +192,16 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   bio: { fontSize: typeSize.body, lineHeight: 22, color: colors.text },
+  notesFrame: {
+    marginBottom: 24,
+    borderRadius: radius.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.paper,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 6,
+  },
+  notesLabel: { fontSize: 12, fontWeight: "700", color: colors.text },
+  notesBody: { fontSize: typeSize.meta, lineHeight: 18, color: colors.text },
 })

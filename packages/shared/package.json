@@ -10,6 +10,7 @@
       "require": "./src/index.ts",
       "types": "./src/index.ts"
     },
+    "./marketplace/use-checkout": "./src/marketplace/use-checkout.ts",
     "./locales/*": "./src/locales/*",
     "./urls": "./src/constants/urls.ts"
   },

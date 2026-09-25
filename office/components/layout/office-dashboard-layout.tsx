@@ -45,42 +45,60 @@ function hubPathActive(pathname: string | null, prefix: string): boolean {
   return pathname === prefix || pathname.startsWith(`${prefix}/`)
 }
 
-function HubSectionSubnav({
-  pathname,
-  onNavigate,
-}: {
-  pathname: string | null
-  onNavigate: () => void
-}) {
+function HubSectionSubnav({ pathname, onNavigate }: { pathname: string | null; onNavigate: () => void }) {
   const linkClass = (active: boolean) =>
     cn(
       "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200",
-      active ? "bg-accent text-accent-foreground font-medium" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+      active
+        ? "bg-accent text-accent-foreground font-medium"
+        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
     )
 
   return (
     <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
-      <p className="px-3 pt-2 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Food</p>
-      <Link href={hubProductsPath("food")} className={linkClass(hubPathActive(pathname, hubProductsPath("food")))} onClick={onNavigate}>
+      <p className="px-3 pt-2 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+        Food
+      </p>
+      <Link
+        href={hubProductsPath("food")}
+        className={linkClass(hubPathActive(pathname, hubProductsPath("food")))}
+        onClick={onNavigate}
+      >
         <Package className="h-4 w-4 shrink-0 opacity-80" />
         <span className="truncate">Products</span>
       </Link>
-      <Link href={hubVendorsPath("food")} className={linkClass(hubPathActive(pathname, hubVendorsPath("food")))} onClick={onNavigate}>
+      <Link
+        href={hubVendorsPath("food")}
+        className={linkClass(hubPathActive(pathname, hubVendorsPath("food")))}
+        onClick={onNavigate}
+      >
         <Store className="h-4 w-4 shrink-0 opacity-80" />
         <span className="truncate">Vendors</span>
       </Link>
 
-      <p className="px-3 pt-2 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Mart</p>
-      <Link href={hubProductsPath("mart")} className={linkClass(hubPathActive(pathname, hubProductsPath("mart")))} onClick={onNavigate}>
+      <p className="px-3 pt-2 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+        Mart
+      </p>
+      <Link
+        href={hubProductsPath("mart")}
+        className={linkClass(hubPathActive(pathname, hubProductsPath("mart")))}
+        onClick={onNavigate}
+      >
         <Package className="h-4 w-4 shrink-0 opacity-80" />
         <span className="truncate">Products</span>
       </Link>
-      <Link href={hubVendorsPath("mart")} className={linkClass(hubPathActive(pathname, hubVendorsPath("mart")))} onClick={onNavigate}>
+      <Link
+        href={hubVendorsPath("mart")}
+        className={linkClass(hubPathActive(pathname, hubVendorsPath("mart")))}
+        onClick={onNavigate}
+      >
         <Store className="h-4 w-4 shrink-0 opacity-80" />
         <span className="truncate">Vendors</span>
       </Link>
 
-      <p className="px-3 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Experts</p>
+      <p className="px-3 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+        Experts
+      </p>
       <Link
         href="/experts/profiles"
         className={linkClass(hubPathActive(pathname, "/experts/profiles"))}
@@ -111,11 +129,21 @@ function OperationsSectionSubnav({
   const linkClass = (active: boolean) =>
     cn(
       "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200",
-      active ? "bg-accent text-accent-foreground font-medium" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+      active
+        ? "bg-accent text-accent-foreground font-medium"
+        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
     )
 
   return (
     <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
+      <Link
+        href="/marketplace"
+        className={linkClass(Boolean(pathname?.startsWith("/marketplace")))}
+        onClick={onNavigate}
+      >
+        <Package className="h-4 w-4 shrink-0 opacity-80" />
+        <span>Marketplace orders</span>
+      </Link>
       <Link
         href="/transactions"
         className={linkClass(pathname === "/transactions" || Boolean(pathname?.startsWith("/transactions/")))}
@@ -175,7 +203,9 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
   const [operationsNavOpen, setOperationsNavOpen] = useState(false)
   const { signOut, isSuperAdmin } = useAuth()
 
-  const navigation = isSuperAdmin ? baseNavigation : baseNavigation.filter((item) => item.href !== "/settings")
+  const navigation = isSuperAdmin
+    ? baseNavigation
+    : baseNavigation.filter((item) => item.href !== "/settings")
 
   useEffect(() => {
     if (isHubSectionPath(pathname)) {
@@ -246,7 +276,9 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
                   aria-label={operationsNavOpen ? "Collapse Operations menu" : "Expand Operations menu"}
                   onClick={() => setOperationsNavOpen((o) => !o)}
                 >
-                  <ChevronRight className={cn("h-4 w-4 transition-transform", operationsNavOpen && "rotate-90")} />
+                  <ChevronRight
+                    className={cn("h-4 w-4 transition-transform", operationsNavOpen && "rotate-90")}
+                  />
                 </Button>
                 <Link
                   href="/transactions"
@@ -285,7 +317,9 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
                   href={hubProductsPath("food")}
                   className={cn(
                     "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200",
-                    isHubSectionPath(pathname) ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                    isHubSectionPath(pathname)
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                   )}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -294,7 +328,9 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
                 </Link>
               </div>
 
-              {hubNavOpen ? <HubSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} /> : null}
+              {hubNavOpen ? (
+                <HubSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
+              ) : null}
             </div>
 
             {navigation.map((item) => {

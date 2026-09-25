@@ -34,7 +34,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const body = await request.json()
     const server = createServerClient()
 
-    const service_line_slug = String(body.service_line_slug || "").trim().toLowerCase()
+    const service_line_slug = String(body.service_line_slug || "")
+      .trim()
+      .toLowerCase()
     if (body.service_line_slug != null && !ALLOWED_LINES.has(service_line_slug)) {
       return NextResponse.json({ error: "service_line_slug must be food or mart" }, { status: 400 })
     }
@@ -49,9 +51,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       if (!slug) return NextResponse.json({ error: "Invalid slug" }, { status: 400 })
       row.slug = slug
     }
-    if (body.photo_url !== undefined) row.photo_url = body.photo_url != null ? String(body.photo_url).trim() || null : null
-    if (body.short_bio !== undefined) row.short_bio = body.short_bio != null ? String(body.short_bio).trim() || null : null
-    if (body.location !== undefined) row.location = body.location != null ? String(body.location).trim() || null : null
+    if (body.photo_url !== undefined)
+      row.photo_url = body.photo_url != null ? String(body.photo_url).trim() || null : null
+    if (body.short_bio !== undefined)
+      row.short_bio = body.short_bio != null ? String(body.short_bio).trim() || null : null
+    if (body.location !== undefined)
+      row.location = body.location != null ? String(body.location).trim() || null : null
     if (body.is_published !== undefined) row.is_published = Boolean(body.is_published)
     if (body.is_verified !== undefined) row.is_verified = Boolean(body.is_verified)
     if (body.service_line_slug != null) row.service_line_slug = service_line_slug
@@ -77,7 +82,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     await requireAdmin(request)
     const { id } = await params
     const server = createServerClient()
-    const { error } = await server.from("hub_vendors").delete().eq("id", id)
+    const { error } = await server
+      .from("hub_vendors")
+      .update({ is_published: false, updated_at: new Date().toISOString() })
+      .eq("id", id)
     if (error) throw error
     return NextResponse.json({ ok: true })
   } catch (e) {

@@ -9,6 +9,9 @@ export interface HubVendorRow {
   short_bio: string | null
   /** Shown on the hub vendor storefront (e.g. city or “Online”). */
   location?: string | null
+  pickup_location?: string | null
+  pickup_hours?: string | null
+  fulfillment_notes?: string | null
   is_published: boolean
   /** Ciuna-verified vendor badge on product cards (optional until DB column exists). */
   is_verified?: boolean | null

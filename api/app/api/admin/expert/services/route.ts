@@ -33,9 +33,25 @@ export async function GET(request: NextRequest) {
         }
       }
     }
+    const serviceIds = list.map((s) => s.id).filter(Boolean) as string[]
+    const upcomingByService: Record<string, number> = {}
+    if (serviceIds.length > 0) {
+      const { data: slots, error: se } = await server
+        .from("expert_service_slots")
+        .select("expert_service_id")
+        .in("expert_service_id", serviceIds)
+        .eq("status", "available")
+        .gt("slot_start", new Date().toISOString())
+      if (se) throw se
+      for (const slot of slots || []) {
+        const sid = String((slot as { expert_service_id: string }).expert_service_id)
+        upcomingByService[sid] = (upcomingByService[sid] || 0) + 1
+      }
+    }
     const enriched = list.map((s) => ({
       ...s,
       expert_profile: profilesById[String(s.expert_profile_id)] ?? null,
+      upcoming_slots: upcomingByService[String(s.id)] || 0,
     }))
     return NextResponse.json({ services: enriched })
   } catch (e) {

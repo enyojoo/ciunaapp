@@ -12,7 +12,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { id } = await params
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 })
     const server = createServerClient()
-    const { data, error } = await server.from("expert_profiles").select(PROFILE_SELECT).eq("id", id).maybeSingle()
+    const { data, error } = await server
+      .from("expert_profiles")
+      .select(PROFILE_SELECT)
+      .eq("id", id)
+      .maybeSingle()
     if (error) throw error
     if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 })
     return NextResponse.json({ profile: data })
@@ -32,24 +36,32 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const server = createServerClient()
     const patch: Record<string, unknown> = { updated_at: new Date().toISOString() }
     if (body.display_name != null) patch.display_name = String(body.display_name).trim() || "Expert"
-    if (body.headline !== undefined) patch.headline = body.headline != null ? String(body.headline).trim() || null : null
+    if (body.headline !== undefined)
+      patch.headline = body.headline != null ? String(body.headline).trim() || null : null
     if (body.bio !== undefined) patch.bio = body.bio != null ? String(body.bio).trim() || null : null
     if (body.is_published !== undefined) patch.is_published = Boolean(body.is_published)
     if (body.category != null) patch.category = String(body.category).trim() || "Other"
-    if (body.image_url !== undefined) patch.image_url = body.image_url != null ? String(body.image_url).trim() || null : null
+    if (body.image_url !== undefined)
+      patch.image_url = body.image_url != null ? String(body.image_url).trim() || null : null
     if (body.capabilities !== undefined)
-      patch.capabilities = typeof body.capabilities === "object" && body.capabilities !== null ? body.capabilities : {}
-    if (body.service_area !== undefined) patch.service_area = body.service_area != null ? String(body.service_area).trim() || null : null
-    if (body.meeting_hint !== undefined) patch.meeting_hint = body.meeting_hint != null ? String(body.meeting_hint).trim() || null : null
+      patch.capabilities =
+        typeof body.capabilities === "object" && body.capabilities !== null ? body.capabilities : {}
+    if (body.service_area !== undefined)
+      patch.service_area = body.service_area != null ? String(body.service_area).trim() || null : null
+    if (body.meeting_hint !== undefined)
+      patch.meeting_hint = body.meeting_hint != null ? String(body.meeting_hint).trim() || null : null
 
     if (body.slug !== undefined) {
-      const { data: existing } = await server.from("expert_profiles").select("display_name").eq("id", id).maybeSingle()
+      const { data: existing } = await server
+        .from("expert_profiles")
+        .select("display_name")
+        .eq("id", id)
+        .maybeSingle()
       const baseName =
         patch.display_name != null && typeof patch.display_name === "string"
           ? patch.display_name
           : String(existing?.display_name || "").trim() || "Expert"
-      const slugSource =
-        body.slug != null && String(body.slug).trim() !== "" ? String(body.slug) : baseName
+      const slugSource = body.slug != null && String(body.slug).trim() !== "" ? String(body.slug) : baseName
       try {
         patch.slug = await allocateExpertSlug(server, slugSource, id)
       } catch (e) {
@@ -58,7 +70,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       }
     }
 
-    const { data, error } = await server.from("expert_profiles").update(patch).eq("id", id).select(PROFILE_SELECT).single()
+    const { data, error } = await server
+      .from("expert_profiles")
+      .update(patch)
+      .eq("id", id)
+      .select(PROFILE_SELECT)
+      .single()
     if (error) throw error
     return NextResponse.json({ profile: data })
   } catch (e) {
@@ -74,7 +91,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const { id } = await params
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 })
     const server = createServerClient()
-    const { error } = await server.from("expert_profiles").delete().eq("id", id)
+    const { error } = await server
+      .from("expert_profiles")
+      .update({ is_published: false, updated_at: new Date().toISOString() })
+      .eq("id", id)
     if (error) throw error
     return NextResponse.json({ ok: true })
   } catch (e) {

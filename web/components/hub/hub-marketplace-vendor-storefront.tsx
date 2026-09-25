@@ -295,6 +295,13 @@ export function HubMarketplaceVendorStorefront({ lineSlug: lineProp, vendorSlug:
       ? (displayVendor.short_bio || "").trim() || null
       : (line?.short_description || "").trim() || null
   const heroLocation = (displayVendor?.location || "").trim() || null
+  const fulfillmentNotes = (displayVendor?.fulfillment_notes || "").trim()
+  const pickupLocation = (displayVendor?.pickup_location || "").trim()
+  const pickupHours = (displayVendor?.pickup_hours || "").trim()
+  const heroFulfillment =
+    [fulfillmentNotes, pickupLocation && `Pickup: ${pickupLocation}`, pickupHours && `Hours: ${pickupHours}`]
+      .filter(Boolean)
+      .join(" · ") || null
 
   if (!MARKETPLACE.has(lineSlug)) {
     return (
@@ -343,6 +350,7 @@ export function HubMarketplaceVendorStorefront({ lineSlug: lineProp, vendorSlug:
       backHref={hubLineHomePath(lineSlug)}
       heroPhotoUrl={displayVendor?.photo_url ?? null}
       heroLocation={heroLocation}
+      heroFulfillment={heroFulfillment}
       heroTitleVerified={Boolean(displayVendor?.is_verified)}
       heroTitleVerifiedAriaLabel={t("hub.verifiedVendor", { defaultValue: "Verified vendor" })}
       heroLoading={false}

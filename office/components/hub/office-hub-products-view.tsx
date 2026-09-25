@@ -19,10 +19,7 @@ import { type HubMarketplaceLineSlug } from "@/lib/hub-office-paths"
 import { useOfficeData } from "@/hooks/use-office-data"
 import { uploadHubProductImage } from "@/lib/upload-hub-assets"
 import { OFFICE_UI_CACHE_TTL_MS } from "@/lib/office-ui-cache"
-import {
-  OFFICE_HUB_PRODUCTS_CACHE_KEY,
-  OFFICE_HUB_VENDORS_CACHE_KEY,
-} from "@/lib/hub-office-client-cache"
+import { OFFICE_HUB_PRODUCTS_CACHE_KEY, OFFICE_HUB_VENDORS_CACHE_KEY } from "@/lib/hub-office-client-cache"
 
 type HubProduct = {
   id: string
@@ -132,7 +129,11 @@ function writeHubVendorsCache(vendors: { id: string; name: string; service_line_
   }
 }
 
-function parseSlaTextToTimer(sla: string | null | undefined): { hours: number; minutes: number; seconds: number } {
+function parseSlaTextToTimer(sla: string | null | undefined): {
+  hours: number
+  minutes: number
+  seconds: number
+} {
   const raw = String(sla || "").trim()
   if (!raw) return { hours: 1, minutes: 0, seconds: 0 }
 
@@ -159,15 +160,24 @@ function parseSlaTextToTimer(sla: string | null | undefined): { hours: number; m
   return { hours: 1, minutes: 0, seconds: 0 }
 }
 
-export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMarketplaceLineSlug }) {
+export function OfficeHubProductsView({
+  fixedLineSlug,
+  initialCreate = false,
+  initialEditId,
+}: {
+  fixedLineSlug: HubMarketplaceLineSlug
+  initialCreate?: boolean
+  initialEditId?: string
+}) {
   const serviceLineSlug = fixedLineSlug
   const { data: officeData } = useOfficeData()
   const initialProducts = typeof window !== "undefined" ? readHubProductsCacheEntry().products : []
-  const initialVendorsEntry = typeof window !== "undefined" ? readHubVendorsCacheEntry() : { vendors: [], fresh: false }
+  const initialVendorsEntry =
+    typeof window !== "undefined" ? readHubVendorsCacheEntry() : { vendors: [], fresh: false }
   const [products, setProducts] = useState<HubProduct[]>(initialProducts)
   const [loading, setLoading] = useState(() => initialProducts.length === 0)
   const [error, setError] = useState<string | null>(null)
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(initialCreate)
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
@@ -181,6 +191,10 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
   const [form, setForm] = useState({
     title: "",
     short_description: "",
+    long_description: "",
+    form_schema_text: "[]",
+    fulfillment_mode: "digital",
+    require_phone: false,
     category: "Other",
     vendor_id: "",
     status: "draft",
@@ -200,13 +214,11 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
     sold_out: false,
   })
 
-  const DEFAULT_CATEGORIES = ["Connectivity", "Card Payment", "AI Tools", "Entertainment", "Experts", "Other"]
-  const CATEGORIES = useMemo(() => {
-    const fromProducts = products
-      .map((p) => String(p.category || "").trim())
-      .filter(Boolean)
-    return Array.from(new Set([...DEFAULT_CATEGORIES, ...fromProducts]))
-  }, [products])
+  const DEFAULT_CATEGORIES =
+    fixedLineSlug === "food"
+      ? ["Meals", "Snacks", "Drinks", "Other"]
+      : ["Groceries", "Household", "Electronics", "Other"]
+  const CATEGORIES = DEFAULT_CATEGORIES
 
   const displayedProducts = useMemo(() => {
     return products.filter((p) => hubProductBelongsToServiceLine(p, fixedLineSlug))
@@ -257,6 +269,10 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
     setForm({
       title: "",
       short_description: "",
+      long_description: "",
+      form_schema_text: "[]",
+      fulfillment_mode: "digital",
+      require_phone: false,
       category: "Other",
       vendor_id: "",
       status: "draft",
@@ -326,6 +342,10 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
       setForm({
         title: product.title || "",
         short_description: product.short_description || "",
+        long_description: product.long_description || "",
+        form_schema_text: JSON.stringify(product.form_schema || [], null, 2),
+        fulfillment_mode: product.fulfillment_mode || "",
+        require_phone: product.require_phone ?? product.fulfillment_mode !== "digital",
         category: product.category || "Other",
         vendor_id: product.vendor_id ? String(product.vendor_id) : "",
         status: product.status || "draft",
@@ -393,6 +413,11 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
         title: form.title,
         short_description: form.short_description || null,
         category: form.category,
+        service_line_slug: fixedLineSlug,
+        long_description: form.long_description || null,
+        form_schema: JSON.parse(form.form_schema_text),
+        fulfillment_mode: form.fulfillment_mode,
+        require_phone: form.require_phone,
         status: form.status,
         pricing_type: form.pricing_type,
         fulfillment_type: form.fulfillment_type,
@@ -412,7 +437,7 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
         stock_quantity: String(form.stock_quantity || "").trim() ? Number(form.stock_quantity) : null,
         sold_out: Boolean(form.sold_out),
       }
-      body.vendor_id = categoryMatchesSlug(form.category, fixedLineSlug) ? (form.vendor_id || null) : null
+      body.vendor_id = form.vendor_id || null
 
       const path = editingId ? `/api/admin/hub/products/${editingId}` : "/api/admin/hub/products"
       const method = editingId ? "PATCH" : "POST"
@@ -432,6 +457,10 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
     }
   }
 
+  useEffect(() => {
+    if (initialEditId) void openEdit(initialEditId)
+  }, [initialEditId])
+
   return (
     <OfficeDashboardLayout>
       <div className="p-6 space-y-6">
@@ -450,51 +479,62 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
             </DialogTrigger>
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto [&_input[type=number]]:[-moz-appearance:textfield] [&_input[type=number]::-webkit-inner-spin-button]:appearance-none [&_input[type=number]::-webkit-outer-spin-button]:appearance-none">
               <DialogHeader>
-                <DialogTitle>{editingId ? `Edit ${lineTitle} product` : `New ${lineTitle} product`}</DialogTitle>
+                <DialogTitle>
+                  {editingId ? `Edit ${lineTitle} product` : `New ${lineTitle} product`}
+                </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="title">Title</Label>
-                  <Input id="title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+                  <Input
+                    id="title"
+                    value={form.title}
+                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                    required
+                  />
                 </div>
                 <div>
                   <Label htmlFor="short">Short description</Label>
-                  <Input id="short" value={form.short_description} onChange={(e) => setForm({ ...form, short_description: e.target.value })} />
+                  <Input
+                    id="short"
+                    value={form.short_description}
+                    onChange={(e) => setForm({ ...form, short_description: e.target.value })}
+                  />
                 </div>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:items-stretch">
                   <div className="space-y-2 flex flex-col">
-                  <Label htmlFor="image">Product image</Label>
-                  <label
-                    htmlFor="image"
-                    className="flex h-[220px] w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center hover:bg-gray-100"
-                  >
-                    <ImagePlus className="h-5 w-5 text-gray-500" />
-                    <span className="text-sm font-medium text-gray-700">
-                      {uploadingImage ? "Uploading..." : "Click to upload product image"}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      PNG, JPG, WEBP - max 5MB. Recommended 4:3 ratio (1200 x 900px), not square.
-                    </span>
-                  </label>
-                  <Input
-                    id="image"
-                    type="file"
-                    className="hidden"
-                    accept="image/png,image/jpeg,image/webp,image/svg+xml,.svg"
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0]
-                      if (!file) return
-                      try {
-                        setUploadingImage(true)
-                        const url = await uploadHubProductImage(file)
-                        setForm((prev) => ({ ...prev, image_url: url }))
-                      } catch (err) {
-                        alert(err instanceof Error ? err.message : "Image upload failed")
-                      } finally {
-                        setUploadingImage(false)
-                      }
-                    }}
-                  />
+                    <Label htmlFor="image">Product image</Label>
+                    <label
+                      htmlFor="image"
+                      className="flex h-[220px] w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-5 text-center hover:bg-gray-100"
+                    >
+                      <ImagePlus className="h-5 w-5 text-gray-500" />
+                      <span className="text-sm font-medium text-gray-700">
+                        {uploadingImage ? "Uploading..." : "Click to upload product image"}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        PNG, JPG, WEBP - max 5MB. Recommended 4:3 ratio (1200 x 900px), not square.
+                      </span>
+                    </label>
+                    <Input
+                      id="image"
+                      type="file"
+                      className="hidden"
+                      accept="image/png,image/jpeg,image/webp,image/svg+xml,.svg"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        try {
+                          setUploadingImage(true)
+                          const url = await uploadHubProductImage(file)
+                          setForm((prev) => ({ ...prev, image_url: url }))
+                        } catch (err) {
+                          alert(err instanceof Error ? err.message : "Image upload failed")
+                        } finally {
+                          setUploadingImage(false)
+                        }
+                      }}
+                    />
                   </div>
                   <div className="space-y-2 flex flex-col">
                     <Label>Preview</Label>
@@ -502,7 +542,11 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                       {form.image_url ? (
                         <div className="h-full w-full flex items-center justify-center p-2">
                           <div className="h-full w-full overflow-hidden rounded-md bg-gray-200">
-                            <img src={form.image_url} alt="Product preview" className="h-full w-full object-contain" />
+                            <img
+                              src={form.image_url}
+                              alt="Product preview"
+                              className="h-full w-full object-contain"
+                            />
                           </div>
                         </div>
                       ) : (
@@ -547,11 +591,33 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                               </button>
                             ))
                           ) : (
-                            <div className="px-3 py-2 text-sm text-gray-500">No suggestion. Press save to use custom value.</div>
+                            <div className="px-3 py-2 text-sm text-gray-500">
+                              No suggestion. Press save to use custom value.
+                            </div>
                           )}
                         </div>
                       ) : null}
                     </div>
+                  </div>
+                  <div className="col-span-full space-y-2">
+                    <Label>Full description</Label>
+                    <Textarea
+                      value={form.long_description}
+                      onChange={(e) => setForm({ ...form, long_description: e.target.value })}
+                    />
+                    <label className="flex gap-2">
+                      <input
+                        type="checkbox"
+                        checked={form.require_phone}
+                        onChange={(e) => setForm({ ...form, require_phone: e.target.checked })}
+                      />
+                      Require phone
+                    </label>
+                    <Label>Checkout fields (JSON: key, label, type, required, options)</Label>
+                    <Textarea
+                      value={form.form_schema_text}
+                      onChange={(e) => setForm({ ...form, form_schema_text: e.target.value })}
+                    />
                   </div>
                   <div>
                     <Label>Status</Label>
@@ -567,20 +633,26 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                     </Select>
                   </div>
                   <div>
-                    <Label>Fulfillment type</Label>
+                    <Label>Fulfillment</Label>
                     <Select
-                      value={form.fulfillment_type}
-                      onValueChange={(v: "online" | "in_person" | "vendor") =>
-                        setForm({ ...form, fulfillment_type: v })
+                      value={form.fulfillment_mode}
+                      onValueChange={(v: "digital" | "delivery" | "pickup") =>
+                        setForm({
+                          ...form,
+                          fulfillment_mode: v,
+                          fulfillment_type:
+                            v === "digital" ? "online" : v === "delivery" ? "in_person" : "vendor",
+                          require_phone: v !== "digital",
+                        })
                       }
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="online">Online</SelectItem>
-                        <SelectItem value="in_person">In-person</SelectItem>
-                        <SelectItem value="vendor">Vendor</SelectItem>
+                        <SelectItem value="digital">Digital — Office delivers privately</SelectItem>
+                        <SelectItem value="delivery">Delivery — eligible address required</SelectItem>
+                        <SelectItem value="pickup">Pickup — vendor location</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -640,7 +712,10 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label>Pricing type</Label>
-                    <Select value={form.pricing_type} onValueChange={(v) => setForm({ ...form, pricing_type: v })}>
+                    <Select
+                      value={form.pricing_type}
+                      onValueChange={(v) => setForm({ ...form, pricing_type: v })}
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -687,18 +762,28 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                     </div>
                     <div>
                       <Label>Currency</Label>
-                      <Select value={form.fixed_currency} onValueChange={(v) => setForm({ ...form, fixed_currency: v })}>
+                      <Select
+                        value={form.fixed_currency}
+                        onValueChange={(v) => setForm({ ...form, fixed_currency: v })}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select currency" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[220px] overflow-y-auto">
                           {(officeData?.currencies?.length
-                            ? officeData.currencies.filter((c: { code?: string; status?: string }) => c?.code && c.status !== "inactive")
+                            ? officeData.currencies.filter(
+                                (c: { code?: string; status?: string }) => c?.code && c.status !== "inactive",
+                              )
                             : [{ code: "USD", name: "US Dollar", flag_svg: "" }]
                           ).map((c: { code: string; name?: string; flag_svg?: string }) => (
                             <SelectItem key={c.code} value={c.code}>
                               <span className="inline-flex items-center gap-2">
-                                {c.flag_svg ? <span className="h-4 w-4 shrink-0" dangerouslySetInnerHTML={{ __html: c.flag_svg }} /> : null}
+                                {c.flag_svg ? (
+                                  <span
+                                    className="h-4 w-4 shrink-0"
+                                    dangerouslySetInnerHTML={{ __html: c.flag_svg }}
+                                  />
+                                ) : null}
                                 <span>{c.code}</span>
                                 {c.name ? <span className="text-gray-500">— {c.name}</span> : null}
                               </span>
@@ -712,15 +797,28 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label>Default input currency</Label>
-                      <Select value={form.default_input_currency} onValueChange={(v) => setForm({ ...form, default_input_currency: v })}>
+                      <Select
+                        value={form.default_input_currency}
+                        onValueChange={(v) => setForm({ ...form, default_input_currency: v })}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select currency" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[220px] overflow-y-auto">
-                          {(officeData?.currencies?.length ? officeData.currencies.filter((c: { code?: string; status?: string }) => c?.code && c.status !== "inactive") : [{ code: "USD", name: "US Dollar", flag_svg: "" }]).map((c: any) => (
+                          {(officeData?.currencies?.length
+                            ? officeData.currencies.filter(
+                                (c: { code?: string; status?: string }) => c?.code && c.status !== "inactive",
+                              )
+                            : [{ code: "USD", name: "US Dollar", flag_svg: "" }]
+                          ).map((c: any) => (
                             <SelectItem key={c.code} value={c.code}>
                               <span className="inline-flex items-center gap-2">
-                                {c.flag_svg ? <span className="h-4 w-4 shrink-0" dangerouslySetInnerHTML={{ __html: c.flag_svg }} /> : null}
+                                {c.flag_svg ? (
+                                  <span
+                                    className="h-4 w-4 shrink-0"
+                                    dangerouslySetInnerHTML={{ __html: c.flag_svg }}
+                                  />
+                                ) : null}
                                 <span>{c.code}</span>
                                 {c.name ? <span className="text-gray-500">— {c.name}</span> : null}
                               </span>
@@ -731,11 +829,21 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                     </div>
                     <div>
                       <Label>Funded min (optional)</Label>
-                      <Input type="number" step="0.01" value={form.funded_min} onChange={(e) => setForm({ ...form, funded_min: e.target.value })} />
+                      <Input
+                        type="number"
+                        step="0.01"
+                        value={form.funded_min}
+                        onChange={(e) => setForm({ ...form, funded_min: e.target.value })}
+                      />
                     </div>
                     <div>
                       <Label>Funded max (optional)</Label>
-                      <Input type="number" step="0.01" value={form.funded_max} onChange={(e) => setForm({ ...form, funded_max: e.target.value })} />
+                      <Input
+                        type="number"
+                        step="0.01"
+                        value={form.funded_max}
+                        onChange={(e) => setForm({ ...form, funded_max: e.target.value })}
+                      />
                     </div>
                   </div>
                 )}
@@ -813,7 +921,12 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button type="button" variant="outline" onClick={() => setDialogOpen(false)} disabled={saving}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setDialogOpen(false)}
+                    disabled={saving}
+                  >
                     Cancel
                   </Button>
                   <Button type="submit" disabled={saving}>
@@ -868,7 +981,9 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                       <TableCell className="font-medium">{p.title}</TableCell>
                       <TableCell>{p.category}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">{p.pricing_type === "user_input" ? "User input" : "Fixed"}</Badge>
+                        <Badge variant="outline">
+                          {p.pricing_type === "user_input" ? "User input" : "Fixed"}
+                        </Badge>
                       </TableCell>
                       <TableCell>
                         <Badge
@@ -884,11 +999,13 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        {p.fulfillment_type === "in_person"
-                          ? "In-person"
-                          : p.fulfillment_type === "vendor"
-                            ? "Vendor"
-                            : "Online"}
+                        {!p.fulfillment_mode ? (
+                          <Badge variant="destructive">Needs review</Badge>
+                        ) : (
+                          <span className="capitalize text-sm">
+                            {String(p.fulfillment_mode).replace(/_/g, " ")}
+                          </span>
+                        )}
                       </TableCell>
                       <TableCell>
                         {p.is_featured ? (
@@ -898,30 +1015,41 @@ export function OfficeHubProductsView({ fixedLineSlug }: { fixedLineSlug: HubMar
                         )}
                       </TableCell>
                       <TableCell className="text-sm text-gray-700">
-                        {p.pricing_type === "fixed" ? (
-                          (() => {
-                            const list = p.list_price != null ? Number(p.list_price) : p.fixed_amount != null ? Number(p.fixed_amount) : null
-                            const sale = p.sale_price != null ? Number(p.sale_price) : null
-                            const cur = p.fixed_currency ?? ""
-                            if (list == null || !Number.isFinite(list)) return "—"
-                            if (sale != null && Number.isFinite(sale) && sale > 0 && sale !== list) {
-                              return (
-                                <span>
-                                  <span className="font-medium">{sale}</span> {cur}
-                                  <span className="text-gray-500">
-                                    {" "}
-                                    (list {list} {cur})
+                        {p.pricing_type === "fixed"
+                          ? (() => {
+                              const list =
+                                p.list_price != null
+                                  ? Number(p.list_price)
+                                  : p.fixed_amount != null
+                                    ? Number(p.fixed_amount)
+                                    : null
+                              const sale = p.sale_price != null ? Number(p.sale_price) : null
+                              const cur = p.fixed_currency ?? ""
+                              if (list == null || !Number.isFinite(list)) return "—"
+                              if (sale != null && Number.isFinite(sale) && sale > 0 && sale !== list) {
+                                return (
+                                  <span>
+                                    <span className="font-medium">{sale}</span> {cur}
+                                    <span className="text-gray-500">
+                                      {" "}
+                                      (list {list} {cur})
+                                    </span>
                                   </span>
-                                </span>
-                              )
-                            }
-                            return `${list} ${cur}`.trim()
-                          })()
-                        ) : (
-                          `Fee ${p.fee_percent ?? 0}%`
-                        )}
+                                )
+                              }
+                              return `${list} ${cur}`.trim()
+                            })()
+                          : `Fee ${p.fee_percent ?? 0}%`}
                       </TableCell>
                       <TableCell>
+                        <a
+                          className="mr-2 text-sm underline"
+                          href={`${process.env.NEXT_PUBLIC_APP_URL || "https://app.ciuna.com"}/hub/checkout/${p.id}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Preview
+                        </a>
                         <Button variant="outline" size="sm" onClick={() => void openEdit(p.id)}>
                           <Pencil className="h-4 w-4" />
                         </Button>

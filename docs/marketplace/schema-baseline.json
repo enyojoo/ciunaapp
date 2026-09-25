@@ -1,0 +1,1168 @@
+{
+  "users": {
+    "required": [
+      "id",
+      "email",
+      "first_name",
+      "last_name"
+    ],
+    "properties": {
+      "id": {
+        "default": "extensions.uuid_generate_v4()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "email": {
+        "format": "character varying",
+        "maxLength": 255,
+        "type": "string"
+      },
+      "first_name": {
+        "format": "character varying",
+        "maxLength": 100,
+        "type": "string"
+      },
+      "last_name": {
+        "format": "character varying",
+        "maxLength": 100,
+        "type": "string"
+      },
+      "phone": {
+        "format": "character varying",
+        "maxLength": 20,
+        "type": "string"
+      },
+      "base_currency": {
+        "default": "NGN",
+        "format": "character varying",
+        "maxLength": 3,
+        "type": "string"
+      },
+      "status": {
+        "default": "active",
+        "format": "character varying",
+        "maxLength": 20,
+        "type": "string"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "pin_hash": {
+        "description": "Bcrypt hash of 6-digit PIN for mobile app authentication. Only used by mobile app, web app continues to use email/password.",
+        "format": "text",
+        "type": "string"
+      },
+      "kyc_status": {
+        "description": "Bridge KYC status: pending, in_review, approved, rejected",
+        "format": "text",
+        "type": "string"
+      },
+      "kyc_rejection_reasons": {
+        "description": "Array of rejection reasons from Bridge if KYC is rejected",
+        "format": "jsonb"
+      },
+      "kyc_signed_agreement_id": {
+        "description": "Bridge TOS signed agreement ID",
+        "format": "text",
+        "type": "string"
+      },
+      "bridge_usd_virtual_account_id": {
+        "description": "Bridge virtual account ID for USD deposits",
+        "format": "text",
+        "type": "string"
+      },
+      "bridge_eur_virtual_account_id": {
+        "description": "Bridge virtual account ID for EUR deposits",
+        "format": "text",
+        "type": "string"
+      },
+      "kyc_endorsements": {
+        "description": "JSONB object storing Bridge endorsement statuses (base, sepa)",
+        "format": "jsonb"
+      },
+      "country_code": {
+        "description": "2-letter country code from Bridge KYC verification",
+        "format": "text",
+        "type": "string"
+      },
+      "residential_address": {
+        "description": "JSONB object storing residential address for Bridge KYC",
+        "format": "jsonb"
+      },
+      "kyc_external_customer_id": {
+        "description": "Bridge customer ID (primary identifier for Bridge API)",
+        "format": "text",
+        "type": "string"
+      },
+      "middle_name": {
+        "description": "Middle name from Bridge KYC verification",
+        "format": "text",
+        "type": "string"
+      },
+      "date_of_birth": {
+        "description": "User date of birth in ISO format (YYYY-MM-DD). Used for KYC compliance and age verification.",
+        "format": "date",
+        "type": "string"
+      },
+      "address": {
+        "description": "Residential address from Bridge KYC verification",
+        "format": "text",
+        "type": "string"
+      },
+      "kyc_metadata": {
+        "description": "JSON metadata containing Bridge KYC data (SSN, passport, employment, etc.)",
+        "format": "jsonb"
+      },
+      "referral_slug": {
+        "description": "Opaque public slug for referral URLs; set once.",
+        "format": "text",
+        "type": "string"
+      },
+      "referred_by_user_id": {
+        "description": "User who referred this account; set once at signup.\n\nNote:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "referral_percent_window_ends_at": {
+        "description": "When set: percent- and tier-mode referral rewards for this user as referee only apply to completed sends with completed_at <= this instant. Set once from first qualifying send min(completed_at) + duration at snapshot.",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "referral_first_qualifying_completed_at": {
+        "description": "Chronologically first qualifying completed send for this user as referee (non-payout reference). Set once when first computed.",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "preferred_language": {
+        "format": "text",
+        "type": "string"
+      },
+      "avatar_url": {
+        "format": "text",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "transactions": {
+    "required": [
+      "id",
+      "transaction_id",
+      "user_id",
+      "send_amount",
+      "send_currency",
+      "receive_amount",
+      "receive_currency",
+      "exchange_rate",
+      "total_amount",
+      "fulfillment_type",
+      "logistics_fee_amount",
+      "transaction_source",
+      "hub_fee_amount",
+      "payment_provider"
+    ],
+    "properties": {
+      "id": {
+        "default": "extensions.uuid_generate_v4()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "transaction_id": {
+        "format": "character varying",
+        "maxLength": 50,
+        "type": "string"
+      },
+      "user_id": {
+        "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "recipient_id": {
+        "description": "Bank recipient for bank_transfer; NULL for cash_hand when no bank recipient is used.\n\nNote:\nThis is a Foreign Key to `recipients.id`.<fk table='recipients' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "send_amount": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "send_currency": {
+        "description": "Note:\nThis is a Foreign Key to `currencies.code`.<fk table='currencies' column='code'/>",
+        "format": "character varying",
+        "maxLength": 3,
+        "type": "string"
+      },
+      "receive_amount": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "receive_currency": {
+        "description": "Note:\nThis is a Foreign Key to `currencies.code`.<fk table='currencies' column='code'/>",
+        "format": "character varying",
+        "maxLength": 3,
+        "type": "string"
+      },
+      "exchange_rate": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "fee_amount": {
+        "default": 0,
+        "format": "numeric",
+        "type": "number"
+      },
+      "fee_type": {
+        "default": "free",
+        "format": "character varying",
+        "maxLength": 20,
+        "type": "string"
+      },
+      "total_amount": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "status": {
+        "default": "pending",
+        "format": "character varying",
+        "maxLength": 20,
+        "type": "string"
+      },
+      "receipt_url": {
+        "description": "URL to the uploaded payment receipt in Supabase Storage",
+        "format": "text",
+        "type": "string"
+      },
+      "receipt_filename": {
+        "description": "Original filename of the uploaded receipt",
+        "format": "character varying",
+        "maxLength": 255,
+        "type": "string"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "reference": {
+        "format": "text",
+        "type": "string"
+      },
+      "completed_at": {
+        "description": "When the transfer reached completed status; may be null if only updated_at is used.",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "fulfillment_type": {
+        "default": "bank_transfer",
+        "format": "text",
+        "type": "string"
+      },
+      "logistics_fee_amount": {
+        "default": 0,
+        "description": "Resolved logistics charge in send_currency included in total_amount (0 for bank_transfer).",
+        "format": "numeric",
+        "type": "number"
+      },
+      "logistics_fee_type_snapshot": {
+        "format": "text",
+        "type": "string"
+      },
+      "delivery_address_line": {
+        "format": "text",
+        "type": "string"
+      },
+      "delivery_phone": {
+        "format": "text",
+        "type": "string"
+      },
+      "delivery_address_id": {
+        "description": "Note:\nThis is a Foreign Key to `delivery_addresses.id`.<fk table='delivery_addresses' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "transaction_source": {
+        "default": "send",
+        "description": "send | hub",
+        "format": "text",
+        "type": "string"
+      },
+      "hub_product_id": {
+        "description": "Note:\nThis is a Foreign Key to `hub_products.id`.<fk table='hub_products' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "hub_snapshot": {
+        "description": "Immutable Hub order snapshot for UI/support",
+        "format": "jsonb"
+      },
+      "hub_fee_amount": {
+        "default": 0,
+        "format": "numeric",
+        "type": "number"
+      },
+      "payment_provider": {
+        "default": "manual",
+        "format": "text",
+        "type": "string"
+      },
+      "gateway_payment_id": {
+        "format": "text",
+        "type": "string"
+      },
+      "gateway_status": {
+        "format": "text",
+        "type": "string"
+      },
+      "gateway_confirmation_url": {
+        "format": "text",
+        "type": "string"
+      },
+      "send_quote_id": {
+        "description": "Note:\nThis is a Foreign Key to `send_quotes.id`.<fk table='send_quotes' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "payment_processing_fee": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "bitbanker_conversion_snapshot": {
+        "format": "jsonb"
+      },
+      "settlement_metadata": {
+        "format": "jsonb"
+      }
+    },
+    "type": "object"
+  },
+  "hub_products": {
+    "required": [
+      "id",
+      "title",
+      "category",
+      "status",
+      "pricing_type",
+      "created_at",
+      "updated_at",
+      "is_featured",
+      "fulfillment_type",
+      "sold_out"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": {
+        "format": "text",
+        "type": "string"
+      },
+      "short_description": {
+        "format": "text",
+        "type": "string"
+      },
+      "category": {
+        "format": "text",
+        "type": "string"
+      },
+      "status": {
+        "default": "draft",
+        "format": "text",
+        "type": "string"
+      },
+      "pricing_type": {
+        "format": "text",
+        "type": "string"
+      },
+      "fixed_amount": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "fixed_currency": {
+        "format": "text",
+        "type": "string"
+      },
+      "default_input_currency": {
+        "default": "USD",
+        "format": "text",
+        "type": "string"
+      },
+      "fee_percent": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "funded_min": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "funded_max": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "sla_text": {
+        "format": "text",
+        "type": "string"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "image_url": {
+        "format": "text",
+        "type": "string"
+      },
+      "is_featured": {
+        "default": false,
+        "format": "boolean",
+        "type": "boolean"
+      },
+      "fulfillment_type": {
+        "default": "online",
+        "format": "text",
+        "type": "string"
+      },
+      "vendor_id": {
+        "description": "Note:\nThis is a Foreign Key to `hub_vendors.id`.<fk table='hub_vendors' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "list_price": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "sale_price": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "service_line_slug": {
+        "format": "text",
+        "type": "string"
+      },
+      "stock_quantity": {
+        "format": "integer",
+        "type": "integer"
+      },
+      "sold_out": {
+        "default": false,
+        "format": "boolean",
+        "type": "boolean"
+      }
+    },
+    "type": "object"
+  },
+  "hub_vendors": {
+    "required": [
+      "id",
+      "service_line_slug",
+      "name",
+      "slug",
+      "is_published",
+      "created_at",
+      "updated_at",
+      "is_verified"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "service_line_slug": {
+        "format": "text",
+        "type": "string"
+      },
+      "name": {
+        "format": "text",
+        "type": "string"
+      },
+      "slug": {
+        "format": "text",
+        "type": "string"
+      },
+      "photo_url": {
+        "format": "text",
+        "type": "string"
+      },
+      "short_bio": {
+        "format": "text",
+        "type": "string"
+      },
+      "is_published": {
+        "default": false,
+        "format": "boolean",
+        "type": "boolean"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "is_verified": {
+        "default": false,
+        "format": "boolean",
+        "type": "boolean"
+      },
+      "location": {
+        "description": "Display location for the hub vendor storefront (free text; suggested values in Office UI).",
+        "format": "text",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "hub_carts": {
+    "required": [
+      "id",
+      "user_id",
+      "service_line_slug",
+      "vendor_id",
+      "status",
+      "created_at",
+      "updated_at"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "user_id": {
+        "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "service_line_slug": {
+        "format": "text",
+        "type": "string"
+      },
+      "vendor_id": {
+        "description": "Note:\nThis is a Foreign Key to `hub_vendors.id`.<fk table='hub_vendors' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "status": {
+        "default": "active",
+        "format": "text",
+        "type": "string"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "hub_cart_items": {
+    "required": [
+      "id",
+      "cart_id",
+      "hub_product_id",
+      "quantity",
+      "created_at",
+      "updated_at"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "cart_id": {
+        "description": "Note:\nThis is a Foreign Key to `hub_carts.id`.<fk table='hub_carts' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "hub_product_id": {
+        "description": "Note:\nThis is a Foreign Key to `hub_products.id`.<fk table='hub_products' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "quantity": {
+        "default": 1,
+        "format": "integer",
+        "type": "integer"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "hub_order_items": {
+    "required": [
+      "id",
+      "transaction_id",
+      "title",
+      "unit_price",
+      "currency",
+      "quantity",
+      "line_total",
+      "created_at"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "transaction_id": {
+        "description": "Note:\nThis is a Foreign Key to `transactions.id`.<fk table='transactions' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "hub_product_id": {
+        "description": "Note:\nThis is a Foreign Key to `hub_products.id`.<fk table='hub_products' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": {
+        "format": "text",
+        "type": "string"
+      },
+      "unit_price": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "currency": {
+        "format": "text",
+        "type": "string"
+      },
+      "quantity": {
+        "default": 1,
+        "format": "integer",
+        "type": "integer"
+      },
+      "line_total": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "expert_profiles": {
+    "required": [
+      "id",
+      "display_name",
+      "is_published",
+      "created_at",
+      "updated_at",
+      "category",
+      "capabilities",
+      "fulfillment_type"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "display_name": {
+        "format": "text",
+        "type": "string"
+      },
+      "headline": {
+        "format": "text",
+        "type": "string"
+      },
+      "bio": {
+        "format": "text",
+        "type": "string"
+      },
+      "is_published": {
+        "default": false,
+        "format": "boolean",
+        "type": "boolean"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "category": {
+        "default": "Other",
+        "format": "text",
+        "type": "string"
+      },
+      "image_url": {
+        "format": "text",
+        "type": "string"
+      },
+      "capabilities": {
+        "format": "jsonb"
+      },
+      "fulfillment_type": {
+        "default": "online",
+        "format": "text",
+        "type": "string"
+      },
+      "service_area": {
+        "format": "text",
+        "type": "string"
+      },
+      "meeting_hint": {
+        "format": "text",
+        "type": "string"
+      },
+      "slug": {
+        "description": "URL segment for /experts/:slug (lowercase kebab-case); optional legacy rows may backfill from display_name.",
+        "format": "text",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "expert_services": {
+    "required": [
+      "id",
+      "expert_profile_id",
+      "title",
+      "sort_order",
+      "is_published",
+      "pricing_type",
+      "created_at",
+      "updated_at",
+      "fulfillment_type"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "expert_profile_id": {
+        "description": "Note:\nThis is a Foreign Key to `expert_profiles.id`.<fk table='expert_profiles' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": {
+        "format": "text",
+        "type": "string"
+      },
+      "short_description": {
+        "format": "text",
+        "type": "string"
+      },
+      "sort_order": {
+        "default": 0,
+        "format": "integer",
+        "type": "integer"
+      },
+      "is_published": {
+        "default": false,
+        "format": "boolean",
+        "type": "boolean"
+      },
+      "pricing_type": {
+        "default": "quote",
+        "format": "text",
+        "type": "string"
+      },
+      "hourly_rate": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "hourly_currency": {
+        "format": "text",
+        "type": "string"
+      },
+      "fixed_amount": {
+        "format": "numeric",
+        "type": "number"
+      },
+      "fixed_currency": {
+        "format": "text",
+        "type": "string"
+      },
+      "package_label": {
+        "format": "text",
+        "type": "string"
+      },
+      "default_duration_minutes": {
+        "format": "integer",
+        "type": "integer"
+      },
+      "min_session_minutes": {
+        "format": "integer",
+        "type": "integer"
+      },
+      "max_session_minutes": {
+        "format": "integer",
+        "type": "integer"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "fulfillment_type": {
+        "default": "online",
+        "description": "online | in_person | both — delivery mode for this service.",
+        "format": "text",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "expert_service_slots": {
+    "required": [
+      "id",
+      "expert_service_id",
+      "slot_start",
+      "slot_end",
+      "status",
+      "created_at",
+      "updated_at",
+      "source"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "expert_service_id": {
+        "description": "Note:\nThis is a Foreign Key to `expert_services.id`.<fk table='expert_services' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "slot_start": {
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "slot_end": {
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "status": {
+        "default": "available",
+        "format": "text",
+        "type": "string"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "source": {
+        "default": "manual",
+        "format": "text",
+        "type": "string"
+      },
+      "schedule_id": {
+        "description": "Note:\nThis is a Foreign Key to `expert_service_schedules.id`.<fk table='expert_service_schedules' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "expert_bookings": {
+    "required": [
+      "id",
+      "user_id",
+      "expert_profile_id",
+      "status",
+      "created_at",
+      "updated_at"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "user_id": {
+        "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "expert_profile_id": {
+        "description": "Note:\nThis is a Foreign Key to `expert_profiles.id`.<fk table='expert_profiles' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "status": {
+        "default": "pending",
+        "format": "text",
+        "type": "string"
+      },
+      "slot_start": {
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "slot_end": {
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "message": {
+        "format": "text",
+        "type": "string"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "expert_service_id": {
+        "description": "Note:\nThis is a Foreign Key to `expert_services.id`.<fk table='expert_services' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "expert_service_slot_id": {
+        "description": "Note:\nThis is a Foreign Key to `expert_service_slots.id`.<fk table='expert_service_slots' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "pricing_type_snapshot": {
+        "format": "text",
+        "type": "string"
+      },
+      "transaction_id": {
+        "description": "transactions.transaction_id once checkout creates payment",
+        "format": "text",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "payment_methods": {
+    "required": [
+      "id",
+      "currency",
+      "type",
+      "name",
+      "provider"
+    ],
+    "properties": {
+      "id": {
+        "default": "extensions.uuid_generate_v4()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "currency": {
+        "description": "Note:\nThis is a Foreign Key to `currencies.code`.<fk table='currencies' column='code'/>",
+        "format": "character varying",
+        "maxLength": 3,
+        "type": "string"
+      },
+      "type": {
+        "format": "character varying",
+        "maxLength": 20,
+        "type": "string"
+      },
+      "name": {
+        "format": "character varying",
+        "maxLength": 200,
+        "type": "string"
+      },
+      "account_name": {
+        "format": "character varying",
+        "maxLength": 200,
+        "type": "string"
+      },
+      "account_number": {
+        "format": "character varying",
+        "maxLength": 100,
+        "type": "string"
+      },
+      "bank_name": {
+        "format": "character varying",
+        "maxLength": 200,
+        "type": "string"
+      },
+      "qr_code_data": {
+        "format": "text",
+        "type": "string"
+      },
+      "instructions": {
+        "format": "text",
+        "type": "string"
+      },
+      "status": {
+        "default": "active",
+        "format": "character varying",
+        "maxLength": 20,
+        "type": "string"
+      },
+      "is_default": {
+        "default": false,
+        "format": "boolean",
+        "type": "boolean"
+      },
+      "created_at": {
+        "default": "CURRENT_TIMESTAMP",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "CURRENT_TIMESTAMP",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "routing_number": {
+        "description": "9-digit routing number for US accounts (USD)",
+        "format": "text",
+        "type": "string"
+      },
+      "sort_code": {
+        "description": "6-digit sort code for UK accounts (GBP)",
+        "format": "text",
+        "type": "string"
+      },
+      "iban": {
+        "description": "International Bank Account Number for UK/EURO accounts",
+        "format": "text",
+        "type": "string"
+      },
+      "swift_bic": {
+        "description": "SWIFT/BIC code for UK/EURO accounts",
+        "format": "text",
+        "type": "string"
+      },
+      "completion_timer_seconds": {
+        "default": 3600,
+        "description": "Completion timer in seconds for the payment method (default: 3600 = 1 hour)",
+        "format": "integer",
+        "type": "integer"
+      },
+      "crypto_asset": {
+        "description": "Stablecoin ticker, e.g. USDC",
+        "format": "text",
+        "type": "string"
+      },
+      "crypto_network": {
+        "description": "Chain name, e.g. Solana, Ethereum",
+        "format": "text",
+        "type": "string"
+      },
+      "wallet_address": {
+        "description": "Deposit address; QR generated client-side from this value",
+        "format": "text",
+        "type": "string"
+      },
+      "provider": {
+        "default": "manual",
+        "description": "manual | bitbanker (SBP API) | etc.",
+        "format": "text",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  },
+  "delivery_addresses": {
+    "required": [
+      "id",
+      "user_id",
+      "address_line",
+      "phone",
+      "created_at",
+      "updated_at"
+    ],
+    "properties": {
+      "id": {
+        "default": "gen_random_uuid()",
+        "description": "Note:\nThis is a Primary Key.<pk/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "user_id": {
+        "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+        "format": "uuid",
+        "type": "string"
+      },
+      "address_line": {
+        "format": "text",
+        "type": "string"
+      },
+      "phone": {
+        "format": "text",
+        "type": "string"
+      },
+      "created_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      },
+      "updated_at": {
+        "default": "now()",
+        "format": "timestamp with time zone",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

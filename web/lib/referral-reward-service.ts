@@ -49,9 +49,11 @@ type CompletedTxRow = {
  * sit in `total_amount` with principal but must not increase referrer payout.
  *
  * @see `web/app/send/page.tsx` — `totalToPay = sendAmount + fee + logisticsFee`
- * @see `web/lib/hub-checkout-server.ts` — `totalAmount = sendAmount + corridor + hubFee`
+ * @see `packages/shared/src/marketplace/pricing.ts` for marketplace totals
  */
-function referralPrincipalInSendCurrency(row: Pick<Transaction, "send_amount"> | Pick<CompletedTxRow, "send_amount">): number {
+function referralPrincipalInSendCurrency(
+  row: Pick<Transaction, "send_amount"> | Pick<CompletedTxRow, "send_amount">,
+): number {
   const n = Number(row.send_amount)
   return Number.isFinite(n) && n > 0 ? n : 0
 }
@@ -195,7 +197,9 @@ export async function processReferralRewardsOnCompletedSend(transaction: Transac
 
     const { data: referee, error: refereeErr } = await supabase
       .from("users")
-      .select("id, referred_by_user_id, referral_percent_window_ends_at, referral_first_qualifying_completed_at")
+      .select(
+        "id, referred_by_user_id, referral_percent_window_ends_at, referral_first_qualifying_completed_at",
+      )
       .eq("id", transaction.user_id)
       .single()
 
@@ -203,7 +207,11 @@ export async function processReferralRewardsOnCompletedSend(transaction: Transac
     const referrerId = referee.referred_by_user_id as string
     if (referrerId === transaction.user_id) return
 
-    const { data: referrer } = await supabase.from("users").select("id, base_currency").eq("id", referrerId).single()
+    const { data: referrer } = await supabase
+      .from("users")
+      .select("id, base_currency")
+      .eq("id", referrerId)
+      .single()
 
     if (!referrer) return
     const referrerBase = (referrer.base_currency as string) || "USD"
@@ -377,7 +385,11 @@ export async function rollbackReferralRewardsForTransaction(transaction: Transac
     const rows = await listCompletedNonPayoutTransactions(supabase, transaction.user_id)
     let sumPolicy = 0
     for (const row of rows) {
-      sumPolicy += resolveTransactionAmountInPolicyCurrency(row as Transaction, program.policy_currency, rateMap)
+      sumPolicy += resolveTransactionAmountInPolicyCurrency(
+        row as Transaction,
+        program.policy_currency,
+        rateMap,
+      )
     }
     if (sumPolicy >= program.threshold_send_amount) return
 

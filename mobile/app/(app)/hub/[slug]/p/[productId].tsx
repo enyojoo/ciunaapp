@@ -14,12 +14,22 @@ import { VendorChip } from "@/components/product-card"
 import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
 import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
-import { hubMarketplaceCheckoutPath, hubMarketplaceVendorPath, hubProductDetailPath, isHubMarketplaceSlug } from "@/lib/hub"
+import {
+  hubMarketplaceCheckoutPath,
+  hubMarketplaceVendorPath,
+  hubProductDetailPath,
+  isHubMarketplaceSlug,
+} from "@/lib/hub"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useHubProduct } from "@/lib/use-hub-product"
 import { useHubVendorProducts } from "@/lib/use-hub-vendor"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
-import { formatCardPrice, hubProductEffectivePrice, hubProductListPrice, hubProductShowListStrike } from "@/lib/money"
+import {
+  formatCardPrice,
+  hubProductEffectivePrice,
+  hubProductListPrice,
+  hubProductShowListStrike,
+} from "@/lib/money"
 import type { HubProduct } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
@@ -46,7 +56,9 @@ export default function HubProductDetailScreen() {
     // No title — the product name is already the big heading in the body; a repeated header title is redundant.
     navigation.setOptions({
       title: "",
-      headerRight: marketplace ? () => <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : undefined,
+      headerRight: marketplace
+        ? () => <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" />
+        : undefined,
     })
   }, [navigation, marketplace, line])
 
@@ -64,7 +76,8 @@ export default function HubProductDetailScreen() {
   const list = product ? hubProductListPrice(product) : null
   const strike = product ? hubProductShowListStrike(product) : false
   const currency = product?.fixed_currency || product?.default_input_currency || ""
-  const soldOut = Boolean(product?.sold_out) || (product?.stock_quantity != null && Number(product.stock_quantity) <= 0)
+  const soldOut =
+    Boolean(product?.sold_out) || (product?.stock_quantity != null && Number(product.stock_quantity) <= 0)
 
   const handleAddToCart = () => {
     if (!product?.vendor_id) return
@@ -77,19 +90,26 @@ export default function HubProductDetailScreen() {
       .then(({ clearedVendorName }) => {
         if (clearedVendorName) {
           showInfo(
-            t("hub.cart.clearedOtherVendor", { defaultValue: "Your {{vendor}} cart was cleared.", vendor: clearedVendorName }),
+            t("hub.cart.clearedOtherVendor", {
+              defaultValue: "Your {{vendor}} cart was cleared.",
+              vendor: clearedVendorName,
+            }),
           )
         }
       })
       .catch((e) => {
-        showError(e instanceof Error ? e.message : t("hub.cart.addFailed", { defaultValue: "Couldn't add to cart" }))
+        showError(
+          e instanceof Error ? e.message : t("hub.cart.addFailed", { defaultValue: "Couldn't add to cart" }),
+        )
       })
   }
 
   const handleQuantityChange = (quantity: number) => {
     if (!product?.vendor_id || !cartItem) return
     void updateHubCartItemQuantity(product.vendor_id, cartItem.id, quantity).catch((e) => {
-      showError(e instanceof Error ? e.message : t("hub.cart.updateFailed", { defaultValue: "Couldn't update cart" }))
+      showError(
+        e instanceof Error ? e.message : t("hub.cart.updateFailed", { defaultValue: "Couldn't update cart" }),
+      )
     })
   }
 
@@ -116,7 +136,10 @@ export default function HubProductDetailScreen() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
-      <ScreenScroll edges={["left", "right"]} contentStyle={marketplace ? styles.contentWithCartBar : undefined}>
+      <ScreenScroll
+        edges={["left", "right"]}
+        contentStyle={marketplace ? styles.contentWithCartBar : undefined}
+      >
         {product.image_url ? (
           <Image source={{ uri: product.image_url }} style={styles.image} contentFit="cover" />
         ) : (
@@ -125,6 +148,29 @@ export default function HubProductDetailScreen() {
           </View>
         )}
         <Text style={styles.title}>{product.title}</Text>
+        {product.fulfillment_mode || product.sla_text ? (
+          <View style={styles.cueRow}>
+            {product.fulfillment_mode ? (
+              <View style={styles.cueChip}>
+                <Text style={styles.cueText}>
+                  {t(`marketplace.${product.fulfillment_mode}`, {
+                    defaultValue: String(product.fulfillment_mode).replace(/_/g, " "),
+                  })}
+                </Text>
+              </View>
+            ) : null}
+            {product.sla_text ? (
+              <View style={styles.cueChip}>
+                <Text style={styles.cueText}>
+                  {t("marketplace.usuallyWithin", {
+                    defaultValue: "Usually within {{duration}}",
+                    duration: String(product.sla_text).replace(/^(\d+):(\d{2}):\d{2}$/, "$1h $2m"),
+                  })}
+                </Text>
+              </View>
+            ) : null}
+          </View>
+        ) : null}
         {product.vendor ? (
           marketplace && product.vendor.slug ? (
             <Pressable
@@ -142,7 +188,9 @@ export default function HubProductDetailScreen() {
             </View>
           )
         ) : null}
-        {product.short_description ? <Text style={styles.desc}>{product.short_description}</Text> : null}
+        {product.long_description || product.short_description ? (
+          <Text style={styles.desc}>{product.long_description || product.short_description}</Text>
+        ) : null}
 
         <View style={styles.priceRow}>
           {product.pricing_type === "user_input" ? (
@@ -154,7 +202,9 @@ export default function HubProductDetailScreen() {
           ) : (
             <Text style={styles.pricePrefix}>{t("hub.sellPrice", { defaultValue: "Sell price" })}</Text>
           )}
-          {strike && list != null ? <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text> : null}
+          {strike && list != null ? (
+            <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text>
+          ) : null}
           <Text style={styles.price}>
             {product.pricing_type === "user_input" && product.funded_min
               ? formatCardPrice(product.funded_min, currency)
@@ -193,7 +243,11 @@ export default function HubProductDetailScreen() {
               </View>
             ) : (
               <PrimaryButton
-                label={soldOut ? t("hub.soldOut", { defaultValue: "Sold out" }) : t("hub.cart.addToCart", { defaultValue: "Add to cart" })}
+                label={
+                  soldOut
+                    ? t("hub.soldOut", { defaultValue: "Sold out" })
+                    : t("hub.cart.addToCart", { defaultValue: "Add to cart" })
+                }
                 onPress={() => handleAddToCart()}
                 disabled={soldOut}
               />
@@ -228,7 +282,13 @@ const styles = StyleSheet.create({
   // A small gap so the last content (the recommendations rail) doesn't end up pressed right up
   // against the floating cart bar — not a big empty void at the end of the scroll.
   contentWithCartBar: { paddingBottom: 56 },
-  image: { width: "100%", aspectRatio: 4 / 3, borderRadius: radius.card, marginBottom: 12, backgroundColor: colors.paper },
+  image: {
+    width: "100%",
+    aspectRatio: 4 / 3,
+    borderRadius: radius.card,
+    marginBottom: 12,
+    backgroundColor: colors.paper,
+  },
   imageFallback: {
     width: "100%",
     aspectRatio: 4 / 3,
@@ -242,6 +302,16 @@ const styles = StyleSheet.create({
   },
   noImage: { fontSize: typeSize.meta, color: colors.muted },
   title: { fontSize: 20, fontWeight: "600", color: colors.text },
+  cueRow: { marginTop: 8, flexDirection: "row", flexWrap: "wrap", gap: 6 },
+  cueChip: {
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    backgroundColor: colors.surface,
+  },
+  cueText: { fontSize: 11, fontWeight: "600", color: colors.text, textTransform: "capitalize" },
   vendorHit: { marginTop: 6, alignSelf: "flex-start", maxWidth: "100%" },
   desc: { marginTop: 10, fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   priceRow: { marginTop: 20, flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 6 },

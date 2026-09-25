@@ -44,6 +44,10 @@ export interface HubProductVendorSummary {
 }
 
 export interface HubProductRow {
+  long_description?: string | null
+  fulfillment_mode?: "digital" | "delivery" | "pickup" | null
+  require_phone?: boolean | null
+
   id: string
   /** When set, product belongs to a Food/Mart vendor storefront. */
   vendor_id?: string | null

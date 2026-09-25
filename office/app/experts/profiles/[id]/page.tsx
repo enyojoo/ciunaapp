@@ -286,21 +286,32 @@ export default function OfficeExpertProfileDetailPage() {
           </div>
           <div className="flex items-end justify-between rounded-md border p-3">
             <span className="text-sm font-medium">Published</span>
-            <Switch checked={pub} onCheckedChange={setPub} />
+            <Switch checked={pub} onCheckedChange={setPub} disabled={pricingType === "quote"} />
           </div>
         </div>
         <div className="space-y-2">
           <Label>Pricing type</Label>
-          <Select value={pricingType} onValueChange={setPricingType}>
+          <Select
+            value={pricingType}
+            onValueChange={(v) => {
+              setPricingType(v)
+              if (v === "quote") setPub(false)
+            }}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="hourly">Hourly</SelectItem>
               <SelectItem value="fixed">Fixed package</SelectItem>
-              <SelectItem value="quote">Quote (price later)</SelectItem>
+              <SelectItem value="quote">Quote (not bookable online)</SelectItem>
             </SelectContent>
           </Select>
+          {pricingType === "quote" ? (
+            <p className="text-xs text-muted-foreground">
+              Quote services stay draft and have no online payment CTA.
+            </p>
+          ) : null}
         </div>
         {pricingType === "hourly" ? (
           <div className="grid grid-cols-2 gap-3">
@@ -591,7 +602,14 @@ export default function OfficeExpertProfileDetailPage() {
                                 ? formatCurrencySymbolOnly(Number(s.fixed_amount), s.fixed_currency)
                                 : s.pricing_type}
                           </TableCell>
-                          <TableCell>{s.is_published ? <Badge>On</Badge> : <Badge variant="secondary">Off</Badge>}</TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-1">
+                              {s.is_published ? <Badge>On</Badge> : <Badge variant="secondary">Off</Badge>}
+                              {s.pricing_type === "quote" ? (
+                                <Badge variant="outline">Not bookable online</Badge>
+                              ) : null}
+                            </div>
+                          </TableCell>
                           <TableCell className="space-x-2 text-right">
                             <Button size="sm" variant="outline" onClick={() => openEditService(s)}>
                               Edit

@@ -22,6 +22,7 @@ import {
 } from "@/lib/transactions-combined-cache"
 
 interface CombinedTransaction {
+  marketplace_order?: { id: string; line: string; payment_state: string; fulfillment_state: string } | null
   id: string
   transaction_id: string
   type: "send" | "hub"
@@ -184,7 +185,9 @@ export default function TransactionsPage() {
   }, [userProfile?.id, refreshTransactions])
 
   const baseCurrency = userProfile?.base_currency || "NGN"
-  const completedCount = displayTransactions.filter((t) => t && (t.status === "completed" || t.status === "deposited")).length
+  const completedCount = displayTransactions.filter(
+    (t) => t && (t.status === "completed" || t.status === "deposited"),
+  ).length
 
   const formatCurrencyValue = (amount: number, currencyCode: string) => {
     try {
@@ -207,7 +210,9 @@ export default function TransactionsPage() {
 
     const searchLower = searchTerm.toLowerCase()
     const hubTitle =
-      transaction.type === "hub" && transaction.hub_snapshot && typeof transaction.hub_snapshot.productTitle === "string"
+      transaction.type === "hub" &&
+      transaction.hub_snapshot &&
+      typeof transaction.hub_snapshot.productTitle === "string"
         ? String(transaction.hub_snapshot.productTitle).toLowerCase()
         : ""
     const amt = String(transaction.send_amount ?? "")
@@ -282,7 +287,9 @@ export default function TransactionsPage() {
 
     const subtitle = formatLocaleDateTimeLine(transaction.created_at, dateLocale)
     const amountStr = formatAmount(transaction.send_amount || 0, transaction.send_currency || baseCurrency)
-    const statusLabel = transactionRowStatusLabel(transaction.status)
+    const statusLabel = transaction.marketplace_order
+      ? `${t(`marketplace.${transaction.marketplace_order.payment_state}`)} · ${t(`marketplace.${transaction.marketplace_order.fulfillment_state}`)}`
+      : transactionRowStatusLabel(transaction.status)
     const statusLower = transaction.status.toLowerCase()
     const done = statusLower === "completed" || statusLower === "deposited"
     const statusClass = done
@@ -355,7 +362,9 @@ export default function TransactionsPage() {
             <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-xs">
               {t("orders.totalTransactions")}
             </p>
-            <p className="mt-1.5 text-lg font-bold tabular-nums text-foreground sm:text-xl">{completedCount}</p>
+            <p className="mt-1.5 text-lg font-bold tabular-nums text-foreground sm:text-xl">
+              {completedCount}
+            </p>
           </CardContent>
         </Card>
       </div>

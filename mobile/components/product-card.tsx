@@ -111,6 +111,13 @@ export function ProductCard({
       <Text style={styles.title} numberOfLines={1}>
         {product.title}
       </Text>
+      {product.fulfillment_mode ? (
+        <Text style={styles.fulfillmentCue} numberOfLines={1}>
+          {t(`marketplace.${product.fulfillment_mode}`, {
+            defaultValue: String(product.fulfillment_mode).replace(/_/g, " "),
+          })}
+        </Text>
+      ) : null}
       {showVendor && vendor?.name ? (
         onVendorPress ? (
           <Pressable onPress={onVendorPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={vendor.name} style={styles.vendorHit}>
@@ -274,6 +281,13 @@ const styles = StyleSheet.create({
   catBadgeText: { fontSize: 9, fontWeight: "600", color: "#374151" },
   body: { paddingHorizontal: 10, paddingTop: 8, paddingBottom: 10 },
   title: { fontSize: 13, fontWeight: "600", lineHeight: 17, color: colors.text },
+  fulfillmentCue: {
+    marginTop: 2,
+    fontSize: 11,
+    fontWeight: "600",
+    color: colors.primary,
+    textTransform: "capitalize",
+  },
   vendorHit: { marginTop: 6, alignSelf: "flex-start", maxWidth: "100%" },
   vendorRow: { flexDirection: "row", alignItems: "center", gap: 6, maxWidth: "100%" },
   vendorPhoto: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.paper },

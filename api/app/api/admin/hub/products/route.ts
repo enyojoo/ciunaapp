@@ -1,3 +1,5 @@
+import { validateProduct, productExtras } from "@/lib/marketplace/catalog"
+import { MarketplaceError } from "@/lib/marketplace/service"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin } from "@/lib/admin-auth-utils"
@@ -12,11 +14,15 @@ export async function GET(request: NextRequest) {
     await requireAdmin(request)
     const server = createServerClient()
     // Order only by columns that always exist; `is_featured` may be missing until migration runs.
-    const { data, error } = await server.from("hub_products").select("*").order("updated_at", { ascending: false })
+    const { data, error } = await server
+      .from("hub_products")
+      .select("*")
+      .order("updated_at", { ascending: false })
 
     if (error) throw error
     return NextResponse.json({ products: sortHubProductRows(data || []) })
   } catch (e) {
+    if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub products GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to load hub products" }, { status })
@@ -39,6 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     const row = {
+      ...productExtras(body),
       title: String(body.title || "").trim() || "Untitled",
       short_description: body.short_description ?? null,
       category: String(body.category || "Other"),
@@ -55,7 +62,7 @@ export async function POST(request: NextRequest) {
       list_price: fixedResolved.list_price,
       sale_price: fixedResolved.sale_price,
       fixed_amount: fixedResolved.fixed_amount,
-      fixed_currency: pricingType === "fixed" ? body.fixed_currency ?? null : null,
+      fixed_currency: pricingType === "fixed" ? (body.fixed_currency ?? null) : null,
       default_input_currency: body.default_input_currency ?? "USD",
       fee_percent: body.fee_percent != null ? Number(body.fee_percent) : null,
       funded_min: body.funded_min != null ? Number(body.funded_min) : null,
@@ -79,31 +86,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Vendor fulfillment requires a vendor" }, { status: 400 })
     }
 
-    const catCheck = await assertHubProductCategoryAllowed(server, row.category)
+    const catCheck = ["food", "mart"].includes(body.service_line_slug)
+      ? { ok: true as const }
+      : await assertHubProductCategoryAllowed(server, row.category)
     if (!catCheck.ok) {
       return NextResponse.json({ error: catCheck.message }, { status: 400 })
     }
 
-    const serviceLineSlug = hubMarketplaceLineFromCategory(row.category)
+    const serviceLineSlug = ["food", "mart"].includes(body.service_line_slug)
+      ? body.service_line_slug
+      : hubMarketplaceLineFromCategory(row.category)
     ;(row as Record<string, unknown>).service_line_slug = serviceLineSlug
 
     if (vendorId) {
-      const { data: v, error: vErr } = await server.from("hub_vendors").select("id, service_line_slug").eq("id", vendorId).maybeSingle()
+      const { data: v, error: vErr } = await server
+        .from("hub_vendors")
+        .select("id, service_line_slug")
+        .eq("id", vendorId)
+        .maybeSingle()
       if (vErr || !v) {
         return NextResponse.json({ error: "Invalid vendor_id" }, { status: 400 })
       }
       if (!serviceLineSlug || v.service_line_slug !== serviceLineSlug) {
         return NextResponse.json(
-          { error: "Vendor must be a Food or Mart storefront vendor matching this product’s marketplace line." },
+          {
+            error:
+              "Vendor must be a Food or Mart storefront vendor matching this product’s marketplace line.",
+          },
           { status: 400 },
         )
       }
     }
 
+    await validateProduct(row)
     const { data, error } = await server.from("hub_products").insert(row).select().single()
     if (error) throw error
     return NextResponse.json({ product: data })
   } catch (e) {
+    if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub products POST", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to create hub product" }, { status })

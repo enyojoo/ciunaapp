@@ -10,22 +10,40 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const { id } = await params
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 })
     const body = await request.json().catch(() => ({}))
-    const status = String(body.status || "").trim().toLowerCase()
+    const status = String(body.status || "")
+      .trim()
+      .toLowerCase()
     if (!ALLOWED.has(status)) return NextResponse.json({ error: "Invalid status" }, { status: 400 })
 
     const server = createServerClient()
     const { data: booking, error: be } = await server
       .from("expert_bookings")
-      .select("id, expert_service_slot_id, status")
+      .select("id, expert_service_slot_id, status, transaction_id")
       .eq("id", id)
       .maybeSingle()
     if (be || !booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 })
+
+    const { data: marketplace } = await server
+      .from("marketplace_orders")
+      .select("id")
+      .eq("public_id", booking.transaction_id)
+      .maybeSingle()
+    if (marketplace)
+      return NextResponse.json(
+        { error: "Use Marketplace operations to update this booking." },
+        { status: 409 },
+      )
 
     const prev = String(booking.status || "")
     const patch: Record<string, unknown> = { status, updated_at: new Date().toISOString() }
     if (body.message !== undefined) patch.message = body.message != null ? String(body.message) : null
 
-    const { data, error } = await server.from("expert_bookings").update(patch).eq("id", id).select("*").single()
+    const { data, error } = await server
+      .from("expert_bookings")
+      .update(patch)
+      .eq("id", id)
+      .select("*")
+      .single()
     if (error) throw error
 
     if (status === "cancelled" && booking.expert_service_slot_id && prev !== "cancelled") {

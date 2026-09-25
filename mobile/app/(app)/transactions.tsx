@@ -1,10 +1,26 @@
 import { useMemo, useState } from "react"
-import { ActivityIndicator, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
+import {
+  ActivityIndicator,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native"
 import { AppTextInput } from "@/components/app-text-input"
 import { useInputFocusRing } from "@/lib/focused-input-box"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { ArrowDownLeft, ArrowUpRight, Search, ShoppingBag, Sparkles, UtensilsCrossed, Wallet } from "lucide-react-native"
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Search,
+  ShoppingBag,
+  Sparkles,
+  UtensilsCrossed,
+  Wallet,
+} from "lucide-react-native"
 import { resolveTransactionListLine, transactionListLineIconKind } from "@ciuna/shared"
 import { EmptyState } from "@/components/empty-state"
 import { Screen } from "@/components/screen"
@@ -49,12 +65,18 @@ async function fetchVolume(): Promise<Volume | null> {
   return { amount: data.volume, currency: data.baseCurrency }
 }
 
-function counterparty(tx: CombinedTransaction, t: (key: string, options?: Record<string, unknown>) => string): string {
+function counterparty(
+  tx: CombinedTransaction,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
   if (isReferralPayout(tx)) return t("transactions.referralPayout")
   const snap = tx.hub_snapshot
   if (snap && typeof snap.productTitle === "string" && snap.productTitle.trim()) return snap.productTitle
   if (tx.recipient?.full_name?.trim()) {
-    return t("orders.rowSentTo", { name: tx.recipient.full_name, defaultValue: `Sent to ${tx.recipient.full_name}` })
+    return t("orders.rowSentTo", {
+      name: tx.recipient.full_name,
+      defaultValue: `Sent to ${tx.recipient.full_name}`,
+    })
   }
   if (tx.delivery_address_line?.trim()) return tx.delivery_address_line
   return t("orders.rowHubOrder", { defaultValue: "Hub order" })
@@ -211,7 +233,7 @@ export default function TransactionsScreen() {
           <View key={group.heading} style={styles.group}>
             <Text style={styles.groupHeading}>{group.heading}</Text>
             {group.rows.map((tx) => {
-              const amount = isReferralPayout(tx) ? tx.send_amount : tx.send_amount ?? tx.total_amount
+              const amount = isReferralPayout(tx) ? tx.send_amount : (tx.send_amount ?? tx.total_amount)
               return (
                 <Pressable
                   key={tx.transaction_id || tx.id}
@@ -233,7 +255,14 @@ export default function TransactionsScreen() {
                     <Text style={styles.rowAmount} numberOfLines={1}>
                       {formatMoney(amount, tx.send_currency)}
                     </Text>
-                    <StatusChip status={tx.status} />
+                    {tx.marketplace_order ? (
+                      <Text>
+                        {t(`marketplace.${tx.marketplace_order.payment_state}`)} ·{" "}
+                        {t(`marketplace.${tx.marketplace_order.fulfillment_state}`)}
+                      </Text>
+                    ) : (
+                      <StatusChip status={tx.status} />
+                    )}
                   </View>
                 </Pressable>
               )
@@ -246,7 +275,14 @@ export default function TransactionsScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 12, fontSize: 24, fontWeight: "700", color: colors.text },
+  title: {
+    paddingHorizontal: 20,
+    paddingTop: 4,
+    paddingBottom: 12,
+    fontSize: 24,
+    fontWeight: "700",
+    color: colors.text,
+  },
   summaryRow: { flexDirection: "row", gap: 12, paddingHorizontal: 20, marginBottom: 12 },
   summaryCard: {
     flex: 1,

@@ -1,3 +1,4 @@
+import { marketplaceTotals } from "@ciuna/shared"
 import { roundMoney } from "@/lib/money"
 import { hubProductEffectivePrice } from "@/lib/money"
 import type { RateRow } from "@/lib/fx"
@@ -24,45 +25,55 @@ export interface HubCartPricingTotals {
   exchangeRate: number
 }
 
-function hubFeeFromReceive(fundedReceiveAmount: number, rate: number, feePercent: number): number {
-  if (!Number.isFinite(fundedReceiveAmount) || fundedReceiveAmount <= 0 || rate <= 0 || feePercent <= 0) return 0
-  return roundMoney((fundedReceiveAmount * feePercent) / 100 / rate)
-}
-
-function corridorFee(sendAmount: number, rateRow: RateRow): number {
-  if (rateRow.fee_type === "fixed") return Number(rateRow.fee_amount) || 0
-  if (rateRow.fee_type === "percentage") return (sendAmount * (Number(rateRow.fee_amount) || 0)) / 100
-  return 0
-}
-
-/** Mirrors `api/lib/hub-cart-pricing.ts` — kept in sync by hand since mobile has no shared build step with api/web. */
 export function computeHubCartTotals(
   items: { product: HubProduct; quantity: number }[],
   rateRow: RateRow,
 ): HubCartPricingTotals {
   if (!items.length) throw new Error("Cart is empty")
 
-  const currency = String(items[0].product.fixed_currency || "").trim().toUpperCase()
+  const currency = String(items[0].product.fixed_currency || "")
+    .trim()
+    .toUpperCase()
   if (!currency) throw new Error("Product is missing a price currency")
 
   const lines: HubCartPricingLine[] = items.map(({ product, quantity }) => {
-    const lineCurrency = String(product.fixed_currency || "").trim().toUpperCase()
+    const lineCurrency = String(product.fixed_currency || "")
+      .trim()
+      .toUpperCase()
     if (lineCurrency !== currency) throw new Error("Cart items must share the same price currency")
     const unitPrice = roundMoney(hubProductEffectivePrice(product))
     const lineTotal = roundMoney(unitPrice * quantity)
-    const hubFeeReceive = hubFeeFromReceive(lineTotal, Number(rateRow.rate) || 0, Number(product.fee_percent) || 0)
+    const hubFeeReceive = marketplaceTotals({
+      lines: [{ unitPrice, quantity, feePercent: Number(product.fee_percent) || 0 }],
+      productCurrency: currency,
+      payCurrency: currency,
+      rate: 1,
+    }).marketplaceFee
     return { hubProductId: product.id, title: product.title, unitPrice, quantity, lineTotal, hubFeeReceive }
   })
 
-  const subtotalReceive = roundMoney(lines.reduce((sum, l) => sum + l.lineTotal, 0))
-  const hubFeeReceive = roundMoney(lines.reduce((sum, l) => sum + l.hubFeeReceive, 0))
-  const totalReceive = roundMoney(subtotalReceive + hubFeeReceive)
-
-  const rate = Number(rateRow.rate) || 0
-  if (rate <= 0) throw new Error("Invalid exchange rate")
-  const totalSend = roundMoney(totalReceive / rate)
-  const transferFee = roundMoney(corridorFee(totalSend, rateRow))
-  const total = roundMoney(totalSend + transferFee)
-
-  return { currency, lines, subtotalReceive, hubFeeReceive, totalReceive, totalSend, transferFee, total, exchangeRate: rate }
+  const rate = Number(rateRow.rate)
+  const totals = marketplaceTotals({
+    lines: items.map(({ product, quantity }) => ({
+      unitPrice: hubProductEffectivePrice(product),
+      quantity,
+      feePercent: Number(product.fee_percent) || 0,
+    })),
+    productCurrency: currency,
+    payCurrency: rateRow.from_currency,
+    rate,
+    corridorFeeType: rateRow.fee_type || undefined,
+    corridorFeeAmount: Number(rateRow.fee_amount) || 0,
+  })
+  return {
+    currency,
+    lines,
+    subtotalReceive: totals.subtotal,
+    hubFeeReceive: totals.marketplaceFee,
+    totalReceive: roundMoney(totals.subtotal + totals.marketplaceFee),
+    totalSend: totals.convertedSubtotal,
+    transferFee: totals.corridorFee,
+    total: totals.total,
+    exchangeRate: rate,
+  }
 }

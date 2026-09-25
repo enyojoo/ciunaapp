@@ -54,7 +54,11 @@ async function hydrateCart(server: HubServer, cart: Record<string, unknown>): Pr
   })
 
   let vendor: HubCartRow["vendor"]
-  const { data: vendorRow } = await server.from("hub_vendors").select("*").eq("id", cart.vendor_id as string).maybeSingle()
+  const { data: vendorRow } = await server
+    .from("hub_vendors")
+    .select("*")
+    .eq("id", cart.vendor_id as string)
+    .maybeSingle()
   if (vendorRow) {
     vendor = {
       id: String(vendorRow.id),
@@ -91,14 +95,14 @@ export async function getCartById(userId: string, cartId: string): Promise<HubCa
 /** Marks a cart converted after a successful checkout. */
 export async function markCartConverted(cartId: string): Promise<void> {
   const server = createServerClient()
-  await server.from("hub_carts").update({ status: "converted", updated_at: new Date().toISOString() }).eq("id", cartId)
+  await server
+    .from("hub_carts")
+    .update({ status: "converted", updated_at: new Date().toISOString() })
+    .eq("id", cartId)
 }
 
 /** Fetches the user's active cart for a vendor, hydrated. Returns null when none exists yet. */
-export async function getActiveCart(
-  userId: string,
-  vendorId: string,
-): Promise<HubCartRow | null> {
+export async function getActiveCart(userId: string, vendorId: string): Promise<HubCartRow | null> {
   const server = createServerClient()
   const { data: cart, error } = await server
     .from("hub_carts")
@@ -157,8 +161,13 @@ export async function createOrGetActiveCart(
 ): Promise<{ cart: HubCartRow; clearedVendorName?: string }> {
   const server = createServerClient()
 
-  const { data: vendor, error: vErr } = await server.from("hub_vendors").select("id, name, service_line_slug").eq("id", vendorId).single()
-  if (vErr || !vendor) throw new Error("Vendor not found")
+  const { data: vendor, error: vErr } = await server
+    .from("hub_vendors")
+    .select("id, name, service_line_slug, is_published")
+    .eq("id", vendorId)
+    .single()
+  if (vErr || !vendor || !vendor.is_published || vendor.service_line_slug !== serviceLineSlug)
+    throw new Error("Vendor not found")
 
   const { data: existing } = await server
     .from("hub_carts")
@@ -180,12 +189,19 @@ export async function createOrGetActiveCart(
     .neq("vendor_id", vendorId)
 
   if (otherActive?.length) {
-    const { data: otherVendor } = await server.from("hub_vendors").select("name").eq("id", otherActive[0].vendor_id).maybeSingle()
+    const { data: otherVendor } = await server
+      .from("hub_vendors")
+      .select("name")
+      .eq("id", otherActive[0].vendor_id)
+      .maybeSingle()
     clearedVendorName = otherVendor?.name ? String(otherVendor.name) : undefined
     await server
       .from("hub_carts")
       .update({ status: "abandoned", updated_at: new Date().toISOString() })
-      .in("id", otherActive.map((c) => c.id))
+      .in(
+        "id",
+        otherActive.map((c) => c.id),
+      )
   }
 
   const { data: inserted, error: insErr } = await server
@@ -204,7 +220,8 @@ export async function createOrGetActiveCart(
         .eq("vendor_id", vendorId)
         .eq("status", "active")
         .maybeSingle()
-      if (raced) return { cart: await hydrateCart(server, raced as Record<string, unknown>), clearedVendorName }
+      if (raced)
+        return { cart: await hydrateCart(server, raced as Record<string, unknown>), clearedVendorName }
     }
     console.error("createOrGetActiveCart insert", insErr)
     throw new Error("Failed to create cart")
@@ -234,18 +251,40 @@ export async function addCartItem(
   params: { vendorId: string; serviceLineSlug: "food" | "mart"; hubProductId: string; quantity?: number },
 ): Promise<{ cart: HubCartRow; clearedVendorName?: string }> {
   const server = createServerClient()
-  const quantity = Math.max(1, Math.floor(Number(params.quantity) || 1))
+  const quantity = params.quantity ?? 1
+  if (!Number.isSafeInteger(quantity) || quantity < 1 || quantity > 10000) throw new Error("Invalid quantity")
 
-  const { data: product, error: pErr } = await server.from("hub_products").select("*").eq("id", params.hubProductId).single()
+  const { data: product, error: pErr } = await server
+    .from("hub_products")
+    .select("*")
+    .eq("id", params.hubProductId)
+    .single()
   if (pErr || !product) throw new Error("Product not found")
   if (product.status !== "live") throw new Error("Product is not available")
   if (product.pricing_type !== "fixed") throw new Error("Only fixed-price products can be added to a cart")
-  if (String(product.vendor_id || "") !== params.vendorId) throw new Error("Product does not belong to this vendor")
+  if (String(product.vendor_id || "") !== params.vendorId)
+    throw new Error("Product does not belong to this vendor")
+  if (product.service_line_slug !== params.serviceLineSlug)
+    throw new Error("Product is not in this service line")
   if (product.sold_out || (product.stock_quantity != null && Number(product.stock_quantity) <= 0)) {
     throw new Error("Product is sold out")
   }
 
-  const { cart, clearedVendorName } = await createOrGetActiveCart(userId, params.vendorId, params.serviceLineSlug)
+  const { cart, clearedVendorName } = await createOrGetActiveCart(
+    userId,
+    params.vendorId,
+    params.serviceLineSlug,
+  )
+
+  if (
+    cart.items.some(
+      (i) =>
+        i.product &&
+        (i.product.fixed_currency !== product.fixed_currency ||
+          (i.product as any).fulfillment_mode !== product.fulfillment_mode),
+    )
+  )
+    throw new Error("Cart items must share currency and fulfillment mode")
 
   const { data: existingItem } = await server
     .from("hub_cart_items")
@@ -278,9 +317,14 @@ export async function addCartItem(
 }
 
 /** Sets a cart item's quantity (removing it when set to 0). Verifies the item's cart belongs to the caller. */
-export async function updateCartItemQuantity(userId: string, itemId: string, quantity: number): Promise<HubCartRow> {
+export async function updateCartItemQuantity(
+  userId: string,
+  itemId: string,
+  quantity: number,
+): Promise<HubCartRow> {
   const server = createServerClient()
-  const qty = Math.floor(Number(quantity) || 0)
+  const qty = quantity
+  if (!Number.isSafeInteger(qty) || qty < 0 || qty > 10000) throw new Error("Invalid quantity")
 
   const { data: item, error: itemErr } = await server
     .from("hub_cart_items")

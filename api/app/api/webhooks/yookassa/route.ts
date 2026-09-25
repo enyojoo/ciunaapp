@@ -1,7 +1,11 @@
+import { providerWebhook } from "@/lib/marketplace/payments"
 import { NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { getYooKassaPayment, type YooKassaPaymentStatus } from "@/lib/yookassa"
-import { processReferralRewardsOnCompletedSend, rollbackReferralRewardsForTransaction } from "@/lib/referral-reward-service"
+import {
+  processReferralRewardsOnCompletedSend,
+  rollbackReferralRewardsForTransaction,
+} from "@/lib/referral-reward-service"
 import type { Transaction } from "@/types"
 
 /**
@@ -34,6 +38,8 @@ export async function POST(request: NextRequest) {
       // Nothing we can verify without a payment id — ack so YooKassa doesn't keep retrying garbage.
       return NextResponse.json({ ok: true })
     }
+
+    if (await providerWebhook(paymentId)) return NextResponse.json({ ok: true })
 
     const payment = await getYooKassaPayment(paymentId)
     const nextStatus = targetStatus(payment.status)
@@ -91,8 +97,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error("yookassa webhook error", error)
-    // 200 even on our own errors — YooKassa's retry policy is not something we want to fight;
-    // failures here should be caught by monitoring, not by hammering this endpoint.
-    return NextResponse.json({ ok: true })
+    // Acknowledge only committed processing; provider retry and the durable worker recover errors.
+    return NextResponse.json({ error: "Payment reconciliation unavailable" }, { status: 503 })
   }
 }

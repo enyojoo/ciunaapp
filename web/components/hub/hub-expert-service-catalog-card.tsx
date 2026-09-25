@@ -101,11 +101,22 @@ export function HubExpertServiceCatalogCard({ service: s }: { service: ExpertCat
         </div>
         <ExpertServicePriceRow service={s} />
         <div className="mt-auto flex flex-col gap-2 pt-0.5">
-          <Button asChild size="sm" className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm">
-            <Link href={user ? bookHref : "/auth/login"} prefetch={Boolean(user)} onClick={user ? undefined : onGuestBookNav}>
-              {t("experts.profile.bookSession")}
-            </Link>
-          </Button>
+          {s.pricing_type === "quote" ? (
+            <Button
+              size="sm"
+              variant="outline"
+              disabled
+              className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm"
+            >
+              {t("experts.profile.notBookableOnline", { defaultValue: "Not bookable online" })}
+            </Button>
+          ) : (
+            <Button asChild size="sm" className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm">
+              <Link href={user ? bookHref : "/auth/login"} prefetch={Boolean(user)} onClick={user ? undefined : onGuestBookNav}>
+                {t("experts.profile.bookSession")}
+              </Link>
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

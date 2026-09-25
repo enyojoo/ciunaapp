@@ -43,6 +43,12 @@ export function buildExpertServiceRow(body: Record<string, unknown>): {
   }
 
   if (pricingType === "quote") {
+    if (row.is_published)
+      return {
+        row: {},
+        error: "Quote services cannot be published for online booking. Keep as draft or switch to hourly/fixed pricing.",
+      }
+    row.is_published = false
     return { row }
   }
   if (pricingType === "hourly") {

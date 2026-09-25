@@ -1,4 +1,8 @@
 export type HubProduct = {
+  long_description?: string | null
+  fulfillment_mode?: "digital" | "delivery" | "pickup" | null
+  require_phone?: boolean | null
+
   id: string
   title: string
   short_description?: string | null
@@ -68,11 +72,15 @@ export type HubVendor = {
   photo_url?: string | null
   short_bio?: string | null
   location?: string | null
+  pickup_location?: string | null
+  pickup_hours?: string | null
+  fulfillment_notes?: string | null
   is_verified?: boolean
   service_line_slug?: string
 }
 
 export type CombinedTransaction = {
+  marketplace_order?: { id: string; line: string; payment_state: string; fulfillment_state: string } | null
   id?: string
   transaction_id: string
   user_id?: string

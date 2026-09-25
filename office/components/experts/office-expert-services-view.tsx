@@ -40,6 +40,7 @@ type ExpertServiceRow = {
   max_session_minutes?: number | null
   updated_at: string
   expert_profile: ExpertProfilePick | null
+  upcoming_slots?: number
 }
 
 function pricingSummary(s: ExpertServiceRow): string {
@@ -279,6 +280,7 @@ export function OfficeExpertServicesView() {
                     <TableHead>Fulfillment</TableHead>
                     <TableHead>Pricing</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Availability</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -296,7 +298,23 @@ export function OfficeExpertServicesView() {
                         {(s.fulfillment_type || "online").replace("_", " ")}
                       </TableCell>
                       <TableCell className="text-xs">{pricingSummary(s)}</TableCell>
-                      <TableCell>{s.is_published ? <Badge>Published</Badge> : <Badge variant="secondary">Draft</Badge>}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-wrap gap-1">
+                          {s.is_published ? <Badge>Published</Badge> : <Badge variant="secondary">Draft</Badge>}
+                          {s.pricing_type === "quote" ? (
+                            <Badge variant="outline">Not bookable online</Badge>
+                          ) : null}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {s.is_published && s.pricing_type !== "quote" && (s.upcoming_slots ?? 0) === 0 ? (
+                          <Badge variant="destructive">No slots</Badge>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">
+                            {s.upcoming_slots ?? 0} upcoming
+                          </span>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right">
                         <Button size="sm" variant="outline" onClick={() => openEdit(s)}>
                           Edit
@@ -393,21 +411,36 @@ export function OfficeExpertServicesView() {
                   </div>
                   <div className="flex items-end justify-between rounded-md border p-3">
                     <span className="text-sm font-medium">Published</span>
-                    <Switch checked={pub} onCheckedChange={setPub} />
+                    <Switch
+                      checked={pub}
+                      onCheckedChange={setPub}
+                      disabled={pricingType === "quote"}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label>Pricing type</Label>
-                  <Select value={pricingType} onValueChange={setPricingType}>
+                  <Select
+                    value={pricingType}
+                    onValueChange={(v) => {
+                      setPricingType(v)
+                      if (v === "quote") setPub(false)
+                    }}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="hourly">Hourly</SelectItem>
                       <SelectItem value="fixed">Fixed package</SelectItem>
-                      <SelectItem value="quote">Quote</SelectItem>
+                      <SelectItem value="quote">Quote (not bookable online)</SelectItem>
                     </SelectContent>
                   </Select>
+                  {pricingType === "quote" ? (
+                    <p className="text-xs text-muted-foreground">
+                      Quote services stay draft and have no online payment CTA. Use hourly or fixed to publish.
+                    </p>
+                  ) : null}
                 </div>
                 {pricingType === "hourly" ? (
                   <div className="grid grid-cols-2 gap-3">

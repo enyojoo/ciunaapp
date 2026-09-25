@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/admin-auth-utils"
 import { buildExpertServiceRow } from "@/lib/expert-admin-validation"
 
 const SERVICE_SELECT =
-  "id, expert_profile_id, title, short_description, sort_order, is_published, fulfillment_type, pricing_type, hourly_rate, hourly_currency, fixed_amount, fixed_currency, package_label, default_duration_minutes, min_session_minutes, max_session_minutes, created_at, updated_at"
+  "id, expert_profile_id, title, short_description, sort_order, is_published, fulfillment_type, pricing_type, hourly_rate, hourly_currency, fixed_amount, fixed_currency, package_label, default_duration_minutes, min_session_minutes, max_session_minutes, booking_lead_minutes, payment_cutoff_minutes, timezone, meeting_instructions, created_at, updated_at"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -12,7 +12,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { id: profileId } = await params
     if (!profileId) return NextResponse.json({ error: "Missing profile id" }, { status: 400 })
     const server = createServerClient()
-    const { data: prof, error: pe } = await server.from("expert_profiles").select("id").eq("id", profileId).maybeSingle()
+    const { data: prof, error: pe } = await server
+      .from("expert_profiles")
+      .select("id")
+      .eq("id", profileId)
+      .maybeSingle()
     if (pe || !prof) return NextResponse.json({ error: "Profile not found" }, { status: 404 })
     const { data, error } = await server
       .from("expert_services")
@@ -36,7 +40,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!profileId) return NextResponse.json({ error: "Missing profile id" }, { status: 400 })
     const body = await request.json().catch(() => ({}))
     const server = createServerClient()
-    const { data: prof, error: pe } = await server.from("expert_profiles").select("id").eq("id", profileId).maybeSingle()
+    const { data: prof, error: pe } = await server
+      .from("expert_profiles")
+      .select("id")
+      .eq("id", profileId)
+      .maybeSingle()
     if (pe || !prof) return NextResponse.json({ error: "Profile not found" }, { status: 404 })
 
     const built = buildExpertServiceRow(body as Record<string, unknown>)

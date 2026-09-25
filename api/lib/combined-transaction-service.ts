@@ -5,6 +5,7 @@ import { createServerClient } from "@/lib/supabase"
 import { adminService } from "./database"
 
 export interface CombinedTransaction {
+  marketplace_order?: { id: string; line: string; payment_state: string; fulfillment_state: string } | null
   id: string
   transaction_id: string
   type: "send" | "hub"
@@ -70,10 +71,12 @@ export const combinedTransactionService = {
     const supabase = createServerClient()
     const { data: sendTransactions, error } = await supabase
       .from("transactions")
-      .select(`
+      .select(
+        `
         *,
         recipient:recipients(*)
-      `)
+      `,
+      )
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(limit)
@@ -104,7 +107,8 @@ export const combinedTransactionService = {
         logistics_fee_amount: (tx as { logistics_fee_amount?: number | null }).logistics_fee_amount ?? null,
         logistics_fee_type_snapshot:
           (tx as { logistics_fee_type_snapshot?: string | null }).logistics_fee_type_snapshot ?? null,
-        payment_provider: (tx as { payment_provider?: "manual" | "yookassa" | "bitbanker" | null }).payment_provider ?? null,
+        payment_provider:
+          (tx as { payment_provider?: "manual" | "yookassa" | "bitbanker" | null }).payment_provider ?? null,
         gateway_status: (tx as { gateway_status?: string | null }).gateway_status ?? null,
         gateway_confirmation_url:
           (tx as { gateway_confirmation_url?: string | null }).gateway_confirmation_url ?? null,
@@ -129,9 +133,7 @@ export const combinedTransactionService = {
     /** Hub food vs mart list badges: join `hub_products.category` by `hub_product_id`. */
     const hubProductIds = [
       ...new Set(
-        sendTxns
-          .map((t) => (t.hub_product_id ? String(t.hub_product_id).trim() : ""))
-          .filter(Boolean),
+        sendTxns.map((t) => (t.hub_product_id ? String(t.hub_product_id).trim() : "")).filter(Boolean),
       ),
     ]
     let categoryByProductId = new Map<string, string>()
@@ -142,7 +144,10 @@ export const combinedTransactionService = {
         .in("id", hubProductIds)
       if (!pErr && products?.length) {
         categoryByProductId = new Map(
-          products.map((p: { id: string; category?: string | null }) => [String(p.id), String(p.category ?? "")]),
+          products.map((p: { id: string; category?: string | null }) => [
+            String(p.id),
+            String(p.category ?? ""),
+          ]),
         )
       }
     }
@@ -150,6 +155,21 @@ export const combinedTransactionService = {
       const pid = t.hub_product_id ? String(t.hub_product_id).trim() : ""
       if (pid && categoryByProductId.has(pid)) {
         t.hub_product_category = categoryByProductId.get(pid) ?? null
+      }
+    }
+
+    const ids = sendTxns.filter((t) => t.type === "hub").map((t) => t.id)
+    if (ids.length) {
+      const { data: orders, error: orderError } = await supabase
+        .from("marketplace_orders")
+        .select("id,transaction_id,line,payment_state,fulfillment_state")
+        .in("transaction_id", ids)
+        .eq("user_id", userId)
+      if (orderError) throw new Error("Failed to load marketplace progress")
+      const byTransaction = new Map((orders || []).map((o) => [o.transaction_id, o]))
+      for (const tx of sendTxns) {
+        tx.marketplace_order = byTransaction.get(tx.id) || null
+        if (tx.marketplace_order) tx.hub_product_category = tx.marketplace_order.line
       }
     }
 
@@ -165,9 +185,7 @@ export const combinedTransactionService = {
       combined = combined.filter((tx) => tx.status === filters.status)
     }
 
-    combined.sort(
-      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-    )
+    combined.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
     return combined.slice(0, limit)
   },
@@ -224,9 +242,7 @@ export const combinedTransactionService = {
 
     const hubProductIdsAdmin = [
       ...new Set(
-        sendTxns
-          .map((t) => (t.hub_product_id ? String(t.hub_product_id).trim() : ""))
-          .filter(Boolean),
+        sendTxns.map((t) => (t.hub_product_id ? String(t.hub_product_id).trim() : "")).filter(Boolean),
       ),
     ]
     let categoryByProductIdAdmin = new Map<string, string>()
@@ -238,7 +254,10 @@ export const combinedTransactionService = {
         .in("id", hubProductIdsAdmin)
       if (!pErr && products?.length) {
         categoryByProductIdAdmin = new Map(
-          products.map((p: { id: string; category?: string | null }) => [String(p.id), String(p.category ?? "")]),
+          products.map((p: { id: string; category?: string | null }) => [
+            String(p.id),
+            String(p.category ?? ""),
+          ]),
         )
       }
     }

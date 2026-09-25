@@ -1,10 +1,22 @@
+import type { MarketplaceOrder } from "@ciuna/shared"
+import { MarketplaceOrderView } from "@/components/marketplace-checkout"
 import { useEffect, useRef, useState } from "react"
 import * as Clipboard from "expo-clipboard"
 import { ActivityIndicator, Image, Linking, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { Check, Clock, Copy, FileCheck, MapPin, Package2, Phone, UserRound, XCircle } from "lucide-react-native"
+import {
+  Check,
+  Clock,
+  Copy,
+  FileCheck,
+  MapPin,
+  Package2,
+  Phone,
+  UserRound,
+  XCircle,
+} from "lucide-react-native"
 import { SvgXml } from "react-native-svg"
 import { Avatar } from "@/components/avatar"
 import { EmptyState } from "@/components/empty-state"
@@ -45,7 +57,8 @@ function hubFeeReceiveAmount(tx: CombinedTransaction, snap?: HubSnapshot): numbe
     snap?.fundedAmount != null && Number.isFinite(Number(snap.fundedAmount))
       ? Number(snap.fundedAmount)
       : Number(tx.receive_amount) || 0
-  const pct = snap?.feePercent != null && Number.isFinite(Number(snap.feePercent)) ? Number(snap.feePercent) : null
+  const pct =
+    snap?.feePercent != null && Number.isFinite(Number(snap.feePercent)) ? Number(snap.feePercent) : null
   if (pct != null && pct > 0 && productPrice > 0) return roundMoney((productPrice * pct) / 100)
   const rate = Number(tx.exchange_rate) || 0
   const hubSend = Number(tx.hub_fee_amount) || 0
@@ -53,7 +66,7 @@ function hubFeeReceiveAmount(tx: CombinedTransaction, snap?: HubSnapshot): numbe
   return 0
 }
 
-export default function OrderScreen() {
+function LegacyOrderScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { t, i18n } = useTranslation("app")
   const locale = i18n.resolvedLanguage || i18n.language || "en"
@@ -134,7 +147,8 @@ export default function OrderScreen() {
   const showTimeline = tone === "pending" || tone === "processing" || tone === "completed"
   const showTxId = showTimeline
   const createdMs = tx.created_at ? new Date(tx.created_at).getTime() : 0
-  const overdue = (tone === "pending" || tone === "processing") && createdMs > 0 && Date.now() - createdMs > 3600_000
+  const overdue =
+    (tone === "pending" || tone === "processing") && createdMs > 0 && Date.now() - createdMs > 3600_000
   const canPayNow = tx.payment_provider === "yookassa" && tone === "pending"
   const showBitbankerPay = tx.payment_provider === "bitbanker" && tone === "pending" && !isHub && !referral
 
@@ -142,16 +156,24 @@ export default function OrderScreen() {
     const key = (suffix: string) => `txDetail.${suffix}`
     if (referral) {
       if (tone === "failed") return { title: t(key("payoutFailed")), description: t(key("payoutFailedDesc")) }
-      if (tone === "cancelled") return { title: t(key("payoutCancelled")), description: t(key("payoutCancelledDesc")) }
+      if (tone === "cancelled")
+        return { title: t(key("payoutCancelled")), description: t(key("payoutCancelledDesc")) }
       return { title: t(key("payoutProcessingGeneric")), description: t(key("payoutProcessingGenericDesc")) }
     }
     if (isHub) {
-      if (tone === "failed") return { title: t(key("statusTxnFailed")), description: t(key("statusTxnFailedDesc")) }
-      if (tone === "cancelled") return { title: t(key("statusTxnCancelled")), description: t(key("statusTxnCancelledDesc")) }
-      return { title: t(key("hubStatusFulfillmentStarted")), description: t(key("hubStatusFulfillmentStartedDesc")) }
+      if (tone === "failed")
+        return { title: t(key("statusTxnFailed")), description: t(key("statusTxnFailedDesc")) }
+      if (tone === "cancelled")
+        return { title: t(key("statusTxnCancelled")), description: t(key("statusTxnCancelledDesc")) }
+      return {
+        title: t(key("hubStatusFulfillmentStarted")),
+        description: t(key("hubStatusFulfillmentStartedDesc")),
+      }
     }
-    if (tone === "failed") return { title: t(key("statusTxnFailed")), description: t(key("statusTxnFailedDesc")) }
-    if (tone === "cancelled") return { title: t(key("statusTxnCancelled")), description: t(key("statusTxnCancelledDesc")) }
+    if (tone === "failed")
+      return { title: t(key("statusTxnFailed")), description: t(key("statusTxnFailedDesc")) }
+    if (tone === "cancelled")
+      return { title: t(key("statusTxnCancelled")), description: t(key("statusTxnCancelledDesc")) }
     return { title: t(key("statusProcessing")), description: t(key("statusProcessingDesc")) }
   })()
 
@@ -178,7 +200,9 @@ export default function OrderScreen() {
       const res = await fetchWithAuth(`/api/receipts/documents?path=${encodeURIComponent(tx.receipt_url)}`)
       const body = (await res.json().catch(() => ({}))) as { url?: string; error?: string }
       if (!res.ok || !body.url) {
-        showError(body.error || t("errors.generic", { defaultValue: "Something went wrong. Please try again." }))
+        showError(
+          body.error || t("errors.generic", { defaultValue: "Something went wrong. Please try again." }),
+        )
         return
       }
       await openInAppBrowser(body.url)
@@ -203,13 +227,16 @@ export default function OrderScreen() {
   const contactPhone = String(snap?.contactPhone || "").trim()
   const addressLine = String(snap?.deliveryAddressLine || "").trim()
   const inPerson = snap?.fulfillmentType === "in_person"
-  const commentText = typeof snap?.formAnswers?.comment === "string" ? String(snap.formAnswers.comment).trim() : ""
+  const commentText =
+    typeof snap?.formAnswers?.comment === "string" ? String(snap.formAnswers.comment).trim() : ""
 
   return (
     <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
 
-      <Text style={styles.eyebrow}>{referral ? t("txDetail.payoutStatus") : t("txDetail.transactionStatus")}</Text>
+      <Text style={styles.eyebrow}>
+        {referral ? t("txDetail.payoutStatus") : t("txDetail.transactionStatus")}
+      </Text>
       <Text style={styles.amount}>{formatMoney(headlineAmount, sendCur)}</Text>
 
       {showTxId ? (
@@ -248,7 +275,11 @@ export default function OrderScreen() {
       {tx.receipt_url ? (
         <Pressable onPress={() => void viewReceipt()} disabled={receiptBusy} style={styles.receiptCard}>
           <View style={styles.receiptIcon}>
-            {receiptBusy ? <ActivityIndicator size="small" color={colors.success} /> : <FileCheck size={18} color={colors.success} />}
+            {receiptBusy ? (
+              <ActivityIndicator size="small" color={colors.success} />
+            ) : (
+              <FileCheck size={18} color={colors.success} />
+            )}
           </View>
           <View style={styles.receiptBody}>
             <Text style={styles.receiptTitle}>{t("txDetail.receiptUploaded")}</Text>
@@ -267,17 +298,27 @@ export default function OrderScreen() {
         </View>
       ) : null}
 
-      {showBitbankerPay ? <MobileBitbankerPayCard transactionId={tx.transaction_id} totalRub={tx.total_amount} /> : null}
+      {showBitbankerPay ? (
+        <MobileBitbankerPayCard transactionId={tx.transaction_id} totalRub={Number(tx.total_amount || 0)} />
+      ) : null}
 
       <View style={styles.actions}>
         {!referral && !isHub ? (
           <View style={styles.actionHalf}>
-            <PrimaryButton label={t("txDetail.sendAgain")} variant="secondary" onPress={() => router.push("/send" as never)} />
+            <PrimaryButton
+              label={t("txDetail.sendAgain")}
+              variant="secondary"
+              onPress={() => router.push("/send" as never)}
+            />
           </View>
         ) : null}
         {isHub ? (
           <View style={styles.actionHalf}>
-            <PrimaryButton label={t("hub.backToHub")} variant="secondary" onPress={() => router.replace("/(app)/hub" as never)} />
+            <PrimaryButton
+              label={t("hub.backToHub")}
+              variant="secondary"
+              onPress={() => router.replace("/(app)/hub" as never)}
+            />
           </View>
         ) : null}
         {referral ? (
@@ -291,9 +332,15 @@ export default function OrderScreen() {
         ) : null}
         <View style={styles.actionHalf}>
           {overdue ? (
-            <PrimaryButton label={t("txDetail.contactSupport")} onPress={() => router.push("/support" as never)} />
+            <PrimaryButton
+              label={t("txDetail.contactSupport")}
+              onPress={() => router.push("/support" as never)}
+            />
           ) : (
-            <PrimaryButton label={t("txDetail.dashboard")} onPress={() => router.replace("/(app)/hub" as never)} />
+            <PrimaryButton
+              label={t("txDetail.dashboard")}
+              onPress={() => router.replace("/(app)/hub" as never)}
+            />
           )}
         </View>
       </View>
@@ -310,7 +357,11 @@ export default function OrderScreen() {
         {isHub ? (
           <>
             <SummaryRow
-              label={items ? t("hub.checkout.orderLabel", { defaultValue: "Order" }) : t("hub.checkout.productLabel")}
+              label={
+                items
+                  ? t("hub.checkout.orderLabel", { defaultValue: "Order" })
+                  : t("hub.checkout.productLabel")
+              }
               value={typeof snap?.productTitle === "string" ? snap.productTitle : "—"}
               bold
             />
@@ -326,7 +377,10 @@ export default function OrderScreen() {
                 ))}
               </View>
             ) : null}
-            <SummaryRow label={t("hub.checkout.productPrice")} value={formatMoney(productPrice, receiveCur)} />
+            <SummaryRow
+              label={t("hub.checkout.productPrice")}
+              value={formatMoney(productPrice, receiveCur)}
+            />
             <SummaryRow
               label={t("hub.checkout.hubFee")}
               value={hubFeeRecv === 0 ? t("send.free") : formatMoney(hubFeeRecv, receiveCur)}
@@ -340,7 +394,9 @@ export default function OrderScreen() {
             <SummaryRow label={t("hub.checkout.subtotal")} value={formatMoney(subtotalRecv, receiveCur)} />
             <SummaryRow
               label={t("hub.checkout.exchangeRate", { defaultValue: "Exchange Rate" })}
-              value={Number.isFinite(rate) && rate > 0 ? `1 ${sendCur} = ${rate.toFixed(2)} ${receiveCur}` : "—"}
+              value={
+                Number.isFinite(rate) && rate > 0 ? `1 ${sendCur} = ${rate.toFixed(2)} ${receiveCur}` : "—"
+              }
             />
             <SummaryRow
               label={t("txDetail.hubTotalToPaid", { defaultValue: "Total to paid" })}
@@ -367,10 +423,18 @@ export default function OrderScreen() {
               value={feeAmount === 0 ? t("txDetail.free") : formatMoney(feeAmount, sendCur)}
               tone={feeAmount === 0 ? "success" : undefined}
             />
-            <SummaryRow label={t("txDetail.recipientGets")} value={formatMoney(tx.receive_amount, tx.receive_currency)} bold />
+            <SummaryRow
+              label={t("txDetail.recipientGets")}
+              value={formatMoney(tx.receive_amount, tx.receive_currency)}
+              bold
+            />
             <SummaryRow
               label={t("txDetail.exchangeRate")}
-              value={Number.isFinite(rate) && rate > 0 ? `1 ${sendCur} = ${rate.toFixed(2)} ${tx.receive_currency}` : "—"}
+              value={
+                Number.isFinite(rate) && rate > 0
+                  ? `1 ${sendCur} = ${rate.toFixed(2)} ${tx.receive_currency}`
+                  : "—"
+              }
             />
             {tx.fulfillment_type === "cash_hand" ? (
               <SummaryRow
@@ -383,7 +447,12 @@ export default function OrderScreen() {
                 tone={(tx.logistics_fee_amount ?? 0) === 0 ? "success" : undefined}
               />
             ) : null}
-            <SummaryRow label={t("txDetail.totalPaid")} value={formatMoney(tx.total_amount, sendCur)} bold border />
+            <SummaryRow
+              label={t("txDetail.totalPaid")}
+              value={formatMoney(tx.total_amount, sendCur)}
+              bold
+              border
+            />
             {tx.payment_provider === "bitbanker" ? (
               <SummaryRow label="Payment" value="SBP (Bitbanker)" />
             ) : null}
@@ -426,7 +495,9 @@ export default function OrderScreen() {
             {tx.fulfillment_type === "cash_hand" && (tx.delivery_address_line || tx.delivery_phone) ? (
               <View style={styles.recipientBlock}>
                 <Text style={styles.recipientHeading}>{t("txDetail.cashDelivery")}</Text>
-                {tx.delivery_address_line ? <Text style={styles.recipientText}>{tx.delivery_address_line}</Text> : null}
+                {tx.delivery_address_line ? (
+                  <Text style={styles.recipientText}>{tx.delivery_address_line}</Text>
+                ) : null}
                 {tx.delivery_phone ? <Text style={styles.recipientMeta}>{tx.delivery_phone}</Text> : null}
               </View>
             ) : null}
@@ -498,9 +569,11 @@ function SummaryRow({
 }
 
 function MobileBitbankerPayCard({ transactionId, totalRub }: { transactionId: string; totalRub: number }) {
-  const [payment, setPayment] = useState<{ qrData: string | null; link: string | null; amount: number | null } | null>(
-    null,
-  )
+  const [payment, setPayment] = useState<{
+    qrData: string | null
+    link: string | null
+    amount: number | null
+  } | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -534,9 +607,7 @@ function MobileBitbankerPayCard({ transactionId, totalRub }: { transactionId: st
     <View style={styles.bitbankerCard}>
       <Text style={styles.bitbankerTitle}>Pay with SBP</Text>
       <Text style={styles.bitbankerAmount}>{formatMoney(amount, "RUB")}</Text>
-      {payment?.qrData ? (
-        <Image source={{ uri: payment.qrData }} style={styles.bitbankerQr} />
-      ) : null}
+      {payment?.qrData ? <Image source={{ uri: payment.qrData }} style={styles.bitbankerQr} /> : null}
       {payment?.link ? (
         <Pressable onPress={() => void Linking.openURL(payment.link!)} style={styles.bitbankerLink}>
           <Text style={styles.bitbankerLinkText}>Open payment link</Text>
@@ -548,7 +619,14 @@ function MobileBitbankerPayCard({ transactionId, totalRub }: { transactionId: st
 
 const styles = StyleSheet.create({
   center: { paddingVertical: 80, alignItems: "center" },
-  eyebrow: { marginTop: 4, fontSize: 12, fontWeight: "700", color: colors.muted, textTransform: "uppercase", textAlign: "center" },
+  eyebrow: {
+    marginTop: 4,
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.muted,
+    textTransform: "uppercase",
+    textAlign: "center",
+  },
   amount: { marginTop: 6, fontSize: 32, fontWeight: "700", color: colors.text, textAlign: "center" },
   txIdRow: {
     marginTop: 16,
@@ -627,13 +705,36 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   summaryHeading: { fontSize: 16, fontWeight: "700", color: colors.text, marginBottom: 12 },
-  summaryRow: { flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between", gap: 8, paddingVertical: 6 },
-  summaryRowBorder: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border, marginTop: 4, paddingTop: 10 },
+  summaryRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: 8,
+    paddingVertical: 6,
+  },
+  summaryRowBorder: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    marginTop: 4,
+    paddingTop: 10,
+  },
   summaryLabel: { flexShrink: 1, fontSize: typeSize.meta, color: colors.muted },
-  summaryValue: { flexShrink: 1, textAlign: "right", fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
+  summaryValue: {
+    flexShrink: 1,
+    textAlign: "right",
+    fontSize: typeSize.meta,
+    fontWeight: "600",
+    color: colors.text,
+  },
   summaryValueBold: { fontSize: typeSize.body, fontWeight: "700" },
   summaryValueSuccess: { color: colors.success },
-  itemsBox: { backgroundColor: colors.paper, borderRadius: radius.row, padding: 10, marginVertical: 6, gap: 6 },
+  itemsBox: {
+    backgroundColor: colors.paper,
+    borderRadius: radius.row,
+    padding: 10,
+    marginVertical: 6,
+    gap: 6,
+  },
   itemRow: { flexDirection: "row", justifyContent: "space-between", gap: 8 },
   itemText: { flex: 1, fontSize: 13, color: colors.muted },
   itemAmount: { fontSize: 13, fontWeight: "600", color: colors.text },
@@ -650,7 +751,12 @@ const styles = StyleSheet.create({
   fulfillmentTitle: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text },
   fulfillmentRow: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
   fulfillmentText: { flex: 1, fontSize: typeSize.meta, color: "#374151" },
-  recipientBlock: { marginTop: 14, paddingTop: 14, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  recipientBlock: {
+    marginTop: 14,
+    paddingTop: 14,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+  },
   recipientHeading: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text, marginBottom: 6 },
   recipientText: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   recipientMeta: { fontSize: typeSize.meta, color: colors.muted, marginTop: 2 },
@@ -678,3 +784,32 @@ const styles = StyleSheet.create({
   recipientName: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
   recipientAccount: { fontSize: 12, fontFamily: "Courier", color: colors.muted },
 })
+
+export default function OrderScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>(),
+    [order, setOrder] = useState<MarketplaceOrder | null>(null),
+    [legacy, setLegacy] = useState(false),
+    [failed, setFailed] = useState(false),
+    { t } = useTranslation("app")
+  useEffect(() => {
+    void fetchWithAuth(`/api/hub/orders/${id}`)
+      .then(async (r) => {
+        if (r.status === 404) {
+          setLegacy(true)
+          return
+        }
+        if (!r.ok) throw Error()
+        setOrder((await r.json()).order)
+      })
+      .catch(() => setFailed(true))
+  }, [id])
+  return order ? (
+    <MarketplaceOrderView order={order} onChange={setOrder} />
+  ) : legacy ? (
+    <LegacyOrderScreen />
+  ) : (
+    <ScreenScroll>
+      <Text>{t(failed ? "marketplace.retryError" : "marketplace.loading")}</Text>
+    </ScreenScroll>
+  )
+}

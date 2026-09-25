@@ -56,6 +56,7 @@ export function isYooKassaNativeAvailable(): boolean {
 export async function startYooKassaPayment(params: {
   confirmationToken?: string
   transactionId: string
+  attemptId?: string
   amount?: number
   currency?: string
   shopName?: string
@@ -78,14 +79,15 @@ export async function startYooKassaPayment(params: {
   if (!paymentToken?.token) return "failed"
 
   try {
-    const res = await fetchWithAuth(
-      `/api/hub/checkout/gateway/${encodeURIComponent(params.transactionId)}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paymentToken: paymentToken.token }),
-      },
-    )
+    const res = await fetchWithAuth(`/api/hub/checkout/gateway/${encodeURIComponent(params.transactionId)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        paymentToken: paymentToken.token,
+        attemptId: params.attemptId,
+        paymentType: paymentToken.type,
+      }),
+    })
     const body = (await res.json().catch(() => ({}))) as {
       gateway?: { confirmationUrl?: string }
       error?: string
@@ -105,4 +107,19 @@ export async function startYooKassaPayment(params: {
   } catch {
     return "failed"
   }
+}
+
+/** Resume a previously submitted payment after the app restarts. No new token/charge. */
+export async function resumeYooKassaPayment(
+  confirmationUrl: string,
+  paymentType: string,
+): Promise<YooKassaNativeResult> {
+  const mod = getNative()
+  if (!mod?.show3ds) return "failed"
+  return mod.show3ds({
+    confirmationUrl,
+    paymentType,
+    clientApplicationKey: process.env.EXPO_PUBLIC_YOOKASSA_CLIENT_KEY,
+    shopId: process.env.EXPO_PUBLIC_YOOKASSA_SHOP_ID,
+  })
 }

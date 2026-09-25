@@ -100,6 +100,12 @@ function MarketplaceProductCard({
       <p className="line-clamp-1 text-[13px] font-semibold leading-snug text-gray-900 transition-colors group-hover/title:text-orange-700 sm:text-sm">
         {p.title}
       </p>
+      {p.fulfillment_mode ? (
+        <p className="mt-1 text-[11px] font-medium capitalize text-orange-700/90">
+          {String(p.fulfillment_mode).replace(/_/g, " ")}
+          {p.sla_text ? ` · ${String(p.sla_text).replace(/^(\d+):(\d{2}):\d{2}$/, "$1h $2m")}` : ""}
+        </p>
+      ) : null}
       {p.short_description ? (
         <p className="mb-2 mt-1 line-clamp-2 text-xs leading-relaxed text-gray-500 sm:text-sm">{p.short_description}</p>
       ) : null}

@@ -251,27 +251,40 @@ export function ExpertProfileView({ slugOrId }: { slugOrId: string }) {
                       </div>
                       <ExpertServicePriceRow service={s} />
                       <div className="mt-auto flex flex-col gap-2 pt-0.5">
-                        <Button asChild size="sm" className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm">
-                          <Link
-                            href={
-                              user
-                                ? appendExpertsBookEntryFrom(expertsBookServicePath(p, s.id), true)
-                                : "/auth/login"
-                            }
-                            prefetch={Boolean(user)}
-                            onClick={
-                              user
-                                ? undefined
-                                : (e) =>
-                                    onGuestBookNav(
-                                      e,
-                                      appendExpertsBookEntryFrom(expertsBookServicePath(p, s.id), true),
-                                    )
-                            }
+                        {s.pricing_type === "quote" ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled
+                            className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm"
                           >
-                            {t("experts.profile.bookSession")}
-                          </Link>
-                        </Button>
+                            {t("experts.profile.notBookableOnline", {
+                              defaultValue: "Not bookable online",
+                            })}
+                          </Button>
+                        ) : (
+                          <Button asChild size="sm" className="h-9 w-full rounded-xl text-xs font-semibold sm:h-10 sm:text-sm">
+                            <Link
+                              href={
+                                user
+                                  ? appendExpertsBookEntryFrom(expertsBookServicePath(p, s.id), true)
+                                  : "/auth/login"
+                              }
+                              prefetch={Boolean(user)}
+                              onClick={
+                                user
+                                  ? undefined
+                                  : (e) =>
+                                      onGuestBookNav(
+                                        e,
+                                        appendExpertsBookEntryFrom(expertsBookServicePath(p, s.id), true),
+                                      )
+                              }
+                            >
+                              {t("experts.profile.bookSession")}
+                            </Link>
+                          </Button>
+                        )}
                       </div>
                     </CardContent>
                   </Card>

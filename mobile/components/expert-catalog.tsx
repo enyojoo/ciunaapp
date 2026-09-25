@@ -185,15 +185,23 @@ export function ExpertServiceCard({
         </View>
         <View style={styles.svcBottom}>
           <ServicePriceRow service={service} />
-          <Pressable
-            onPress={() => router.push(bookHref as never)}
-            accessibilityRole="button"
-            accessibilityLabel={bookLabel}
-          >
-            <View style={styles.cta}>
-              <Text style={styles.ctaText}>{bookLabel}</Text>
+          {service.pricing_type === "quote" ? (
+            <View style={[styles.cta, styles.ctaDisabled]}>
+              <Text style={[styles.ctaText, styles.ctaTextDisabled]}>
+                {t("experts.profile.notBookableOnline", { defaultValue: "Not bookable online" })}
+              </Text>
             </View>
-          </Pressable>
+          ) : (
+            <Pressable
+              onPress={() => router.push(bookHref as never)}
+              accessibilityRole="button"
+              accessibilityLabel={bookLabel}
+            >
+              <View style={styles.cta}>
+                <Text style={styles.ctaText}>{bookLabel}</Text>
+              </View>
+            </Pressable>
+          )}
         </View>
       </Pressable>
     </View>
@@ -304,5 +312,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: colors.primary,
   },
+  ctaDisabled: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
   ctaText: { fontSize: 12, fontWeight: "600", color: "#FFFFFF" },
+  ctaTextDisabled: { color: colors.muted },
 })

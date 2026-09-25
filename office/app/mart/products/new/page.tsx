@@ -1,8 +1,5 @@
 "use client"
-
-import { OfficeHubNewProductForm } from "@/components/hub/office-hub-new-product-form"
-import { hubProductsPath } from "@/lib/hub-office-paths"
-
-export default function OfficeMartNewProductPage() {
-  return <OfficeHubNewProductForm backHref={hubProductsPath("mart")} />
+import { OfficeHubProductsView } from "@/components/hub/office-hub-products-view"
+export default function NewProduct() {
+  return <OfficeHubProductsView fixedLineSlug="mart" initialCreate />
 }

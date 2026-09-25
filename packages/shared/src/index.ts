@@ -58,6 +58,9 @@ export {
   type HubServiceLineCopyInput,
 } from "./hub/service-lines"
 export * from "./types"
+export * from "./marketplace/types"
+export { marketplaceTotals, marketplaceDeadline } from "./marketplace/pricing"
+export { formatSlaDuration, fulfillmentModeI18nKey } from "./marketplace/fulfillment-labels"
 export {
   SEND_QUOTE_ERROR_CODE,
   i18nKeyForSendQuoteErrorCode,
@@ -88,3 +91,5 @@ export {
   type BitbankerVerificationErrorCode,
   type BitbankerPartnerClientPayload,
 } from "./bitbanker/verification-validation"
+// React hook: import from `@ciuna/shared/marketplace/use-checkout` (not this barrel).
+// The API middleware imports this package and must not pull React Client Components.

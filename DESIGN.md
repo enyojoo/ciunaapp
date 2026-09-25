@@ -21,7 +21,11 @@ Food and Mart share one marketplace engine. No map or live courier this pass (we
 
 **Food and Mart are a cart, single-vendor.** Browse a vendor storefront → add fixed-price items to a server-synced cart (adding from a different vendor abandons the current one, with a notice) → Cart → Checkout. Custom-amount (`user_input`) products skip the cart and keep the direct one-item Order flow. Experts stays single-booking (one expert, one slot) — no cart.
 
-**Two payment rails, same checkout shell:** contact/delivery is shared; the pay step then offers **Bank transfer** (manual — FX-convert, show a bank/mobile-money/crypto/QR method, customer uploads a receipt, office reviews it) or, when the charge is RUB, **Pay online** via YooKassa (card/SBP, instant, webhook-confirmed, no office review). Food/Mart cart checkout and Experts booking both get both rails; Send stays manual-transfer-only.
+**Marketplace checkout ≠ Send.** Food/Mart/Experts checkout is a **merchant** flow: order summary, contact only as fulfillment needs it (digital/`online` uses profile email — no delivery address; `in_person` asks for address), then **pay with** methods for the pay currency (office bank/QR/etc. + Pay online via YooKassa when RUB). Do not show Send’s Pay in / They get FX shell on these screens.
+
+**Office Hub is the marketplace CMS:** `/food|/mart/products`, `/food|/mart/vendors`, `/experts/profiles`, `/experts/services` (and slots) control what appears on web and mobile. Fulfillment, pricing, stock, publish, and content must stay aligned with checkout rules — see [docs/marketplace-checkout-plan.md](docs/marketplace-checkout-plan.md).
+
+**Pay step:** methods available for the pay currency — office **Bank transfer** / QR / mobile money / crypto (receipt review), plus **Pay online** (YooKassa) when RUB and configured. Send stays its own transfer wizard (manual / Bitbanker), not this shell.
 
 **Where Pay online runs:**
 | Surface | UX |
