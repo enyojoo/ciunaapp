@@ -63,7 +63,13 @@ Customer lines: principal, recipient amount, Ciuna rate, **Ciuna fee**, logistic
 ## Customer flows
 
 **Verification (More → Account verification)**  
-Hub at `/more/verification` (web) or `/verification` (mobile) with an **SBP identity** entry → native form → `POST /api/bitbanker/verification` → Bitbanker `POST /api/v2/partner-clients` → poll `GET /api/bitbanker/eligibility` + events webhook → unlock send. Legacy identity/address upload flows remain for Office history only.
+Hub at `/more/verification` (web) or `/verification` (mobile) → **Verify identity** opens hosted KYC (`POST /api/bitbanker/kyc/session` → Bitbanker `POST /api/v1/kyc-request`) → customer completes Sumsub/IIDX on `kyc_url` → poll `GET /api/bitbanker/eligibility` + events webhook → unlock send. Legacy identity/address upload flows remain for Office history only.
+
+**Bitbanker DEV note (2026-10-11):** KYC bridge is installed on the partner DEV account. IIDX/Sumsub routing may be unavailable temporarily; `kyc-request` is expected to return a **Sumsub widget** `kyc_url`. Smoke: `cd api && npx tsx scripts/bitbanker-kyc-request-smoke.ts`.
+
+**Live test (2026-10-14):** `POST /api/bitbanker/kyc/session` → Bitbanker `kyc-request` returned **`KYCProxyNotAvailable`** (HTTP 400). Ciuna wiring is fine; Bitbanker must enable/restore the KYC proxy on the environment matching `BITBANKER_API_BASE_URL` on `api.ciuna.com` (confirm sandbox vs prod keys/host).
+
+**Framing (2026-10-14):** Bitbanker KYC hosts send `Content-Security-Policy: frame-ancestors 'none'`. Do **not** embed `kyc_url` in a WebView/iframe. Open top-level: Safari VC / Chrome Custom Tabs on native; `window.open` on web. Poll eligibility when the user returns.
 
 ### Verification field map (Ciuna → Bitbanker)
 

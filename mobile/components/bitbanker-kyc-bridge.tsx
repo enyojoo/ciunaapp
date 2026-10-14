@@ -4,16 +4,15 @@ import {
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
   type ReactNode,
 } from "react"
-import { AppState, StyleSheet, Text, View } from "react-native"
+import { AppState, Linking, Platform, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { PrimaryButton } from "@/components/primary-button"
-import { ExternalLinkModal } from "@/components/external-link-modal"
 import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
+import { openInAppBrowser } from "@/lib/in-app-browser"
 import { consumeSendReturnPath, setSendReturnPath } from "@/lib/send-return-path"
 import { useBitbankerKycBridge } from "@/lib/use-bitbanker-kyc-bridge"
 import { colors, type as typeSize } from "@/lib/theme"
@@ -25,13 +24,29 @@ export type BitbankerKycBridgeHandle = {
 }
 
 type BitbankerKycBridgeProps = {
-  /** No inline copy/buttons — only hosted sheet + polling (verification hub). */
+  /** No inline copy/buttons — only hosted open + polling (verification hub). */
   ui?: "full" | "minimal"
   /** Hub: custom primary control; receives label that reflects continue vs start. */
   renderTrigger?: (props: { onPress: () => void; loading: boolean; label: string }) => ReactNode
   /** Dedicated screen: open hosted KYC as soon as session state is loaded. */
   autoOpenVerification?: boolean
   onVerified?: () => void
+}
+
+/**
+ * Bitbanker KYC pages send `Content-Security-Policy: frame-ancestors 'none'`.
+ * Never iframe / WebView them — open top-level (Safari VC / new tab).
+ */
+async function openHostedKycUrl(url: string) {
+  if (Platform.OS === "web") {
+    if (typeof window !== "undefined") {
+      window.open(url, "_blank", "noopener,noreferrer")
+      return
+    }
+    await Linking.openURL(url)
+    return
+  }
+  await openInAppBrowser(url)
 }
 
 export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, BitbankerKycBridgeProps>(
@@ -44,13 +59,11 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
     const params = useLocalSearchParams<{ returnTo?: string }>()
     const { user, profile } = useAuth()
     const email = profile?.email ?? user?.email ?? ""
-    const { showError } = useToast()
+    const { showError, showInfo } = useToast()
     const { state, loading, error, refresh, startSession } = useBitbankerKycBridge()
     const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
     const autoOpenedRef = useRef(false)
     const lastErrorToastRef = useRef<string | null>(null)
-    const [hostedUrl, setHostedUrl] = useState<string | null>(null)
-    const [sheetOpen, setSheetOpen] = useState(false)
 
     useEffect(() => {
       if (!error || loading) {
@@ -92,10 +105,6 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
       }, POLL_MS)
     }, [refresh, stopPoll])
 
-    const closeSheet = useCallback(() => {
-      setSheetOpen(false)
-    }, [])
-
     const openHosted = useCallback(
       async (url: string, paymentUrl: string | null) => {
         if (paymentUrl) {
@@ -103,12 +112,16 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
           router.replace("/send" as never)
           return
         }
-        setHostedUrl(url)
-        setSheetOpen(true)
         startPoll()
+        await openHostedKycUrl(url)
+        showInfo(
+          t("verification.kycBridge.openedInBrowser", {
+            defaultValue: "Verification opened in your browser. Return here when you’re done.",
+          }),
+        )
         void refresh({ poll: true })
       },
-      [refresh, router, startPoll],
+      [refresh, router, showInfo, startPoll, t],
     )
 
     const startVerification = useCallback(async () => {
@@ -126,8 +139,6 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
     useEffect(() => {
       if (state?.eligibility.isVerifiedForSbp) {
         stopPoll()
-        setSheetOpen(false)
-        setHostedUrl(null)
         onVerified?.()
         void (async () => {
           const returnPath = (await consumeSendReturnPath()) ?? (params.returnTo === "send" ? "/send" : null)
@@ -161,8 +172,6 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
     const primaryLabel = hasActiveSession
       ? t("verification.kycBridge.continueCta", { defaultValue: "Continue verification" })
       : t("verification.kycBridge.verifyCta", { defaultValue: "Verify identity" })
-
-    const sheetTitle = t("verification.kycBridge.screenTitle", { defaultValue: "Verify identity" })
 
     const trigger =
       renderTrigger?.({
@@ -214,16 +223,6 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
         ) : (
           trigger
         )}
-
-        <ExternalLinkModal
-          visible={sheetOpen && Boolean(hostedUrl)}
-          url={hostedUrl ?? ""}
-          title={sheetTitle}
-          onClose={() => {
-            closeSheet()
-            void refresh({ poll: true })
-          }}
-        />
       </>
     )
   },

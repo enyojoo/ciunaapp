@@ -79,8 +79,23 @@ export function BitbankerKycBridge() {
       router.push("/send")
       return
     }
+    // Bitbanker sends CSP frame-ancestors 'none' — never iframe the KYC URL.
     startPoll()
-    window.open(url, "_blank", "noopener,noreferrer")
+    const opened = window.open(url, "_blank", "noopener,noreferrer")
+    if (!opened) {
+      toast.message(
+        t("verification.kycBridge.openedInBrowser", {
+          defaultValue: "Allow pop-ups, or open the verification link from your browser.",
+        }),
+      )
+      window.location.assign(url)
+      return
+    }
+    toast.message(
+      t("verification.kycBridge.openedInBrowser", {
+        defaultValue: "Verification opened in a new tab. Return here when you’re done.",
+      }),
+    )
   }
 
   const onVerify = async () => {

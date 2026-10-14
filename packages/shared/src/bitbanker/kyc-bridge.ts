@@ -2,6 +2,7 @@
 
 export type BitbankerKycBridgeErrorCode =
   | "kyc_bridge_disabled"
+  | "kyc_proxy_not_available"
   | "access_locked_contact_manager"
   | "session_unavailable"
   | "unknown"
@@ -22,6 +23,13 @@ export function parseBitbankerKycBridgeError(body: unknown): {
     return {
       code: "kyc_bridge_disabled",
       message: "Hosted verification is not enabled for this environment.",
+    }
+  }
+  if (lower.includes("kycproxynotavailable") || lower.includes("kyc_proxy_not_available")) {
+    return {
+      code: "kyc_proxy_not_available",
+      message:
+        "Bitbanker’s KYC service is temporarily unavailable (KYCProxyNotAvailable). Please try again later or contact Bitbanker if this persists.",
     }
   }
   if (lower.includes("access_locked_contact_manager")) {
