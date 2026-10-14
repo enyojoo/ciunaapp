@@ -69,7 +69,7 @@ Hub at `/more/verification` (web) or `/verification` (mobile) → **Verify ident
 
 **Live test (2026-10-14):** `POST /api/bitbanker/kyc/session` → Bitbanker `kyc-request` returned **`KYCProxyNotAvailable`** (HTTP 400). Ciuna wiring is fine; Bitbanker must enable/restore the KYC proxy on the environment matching `BITBANKER_API_BASE_URL` on `api.ciuna.com` (confirm sandbox vs prod keys/host).
 
-**Framing (2026-10-14):** Bitbanker KYC hosts send `Content-Security-Policy: frame-ancestors 'none'`. Do **not** embed `kyc_url` in a WebView/iframe. Open top-level: Safari VC / Chrome Custom Tabs on native; `window.open` on web. Poll eligibility when the user returns.
+**Embed / CSP (2026-10-14):** Bitbanker DEV pages send `Content-Security-Policy: frame-ancestors 'none'`, so browsers refuse to load `kyc_url` in our iframe. Ciuna keeps the **Verify identity** sheet and opens KYC in the system/in-app browser on web. True in-sheet iframe needs Bitbanker to allow our origins in `frame-ancestors` (e.g. `https://m.ciuna.com`, `https://app.ciuna.com`, local Expo web). Native WebView loads as a top-level document and is usually unaffected.
 
 ### Verification field map (Ciuna → Bitbanker)
 

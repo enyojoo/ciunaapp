@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js"
 import { BITBANKER_KYC_LINK_TTL_MS, parseBitbankerKycBridgeError } from "@ciuna/shared"
 import { BitbankerApiError } from "./client"
 import { getOrCreateClientRef } from "./db"
-import { requestHostedKycSession } from "./kyc-bridge"
+import { requestHostedKycSession, resolveBitbankerKycOpenUrl } from "./kyc-bridge"
 
 export type KycSessionDto = {
   sessionId: string
@@ -30,11 +30,13 @@ export async function getActiveKycSession(
     .maybeSingle()
 
   if (!data?.kyc_url) return null
+  const rawStored = String(data.raw_response?._ciuna_raw_kyc_url || data.kyc_url)
+  const resolved = resolveBitbankerKycOpenUrl(rawStored)
   return {
     sessionId: data.id,
-    kycUrl: data.kyc_url,
+    kycUrl: resolved.openUrl,
     paymentUrl: data.payment_url ?? null,
-    provider: data.provider ?? null,
+    provider: data.provider ?? resolved.provider,
     expiresAt: data.expires_at,
     reused: true,
     status: "active",
@@ -72,14 +74,18 @@ export async function startHostedKycSession(
     throw e
   }
 
-  const kycUrl = String(response.kyc_url ?? "").trim()
-  if (!kycUrl) {
+  const rawKycUrl = String(response.kyc_url ?? "").trim()
+  if (!rawKycUrl) {
     throw new Error("Bitbanker did not return a verification link")
   }
 
+  const resolved = resolveBitbankerKycOpenUrl(rawKycUrl)
+  /** Persist the URL we actually open (redirect_url when partner-kyc 404s). */
+  const kycUrl = resolved.openUrl
   const expiresAt = new Date(Date.now() + BITBANKER_KYC_LINK_TTL_MS).toISOString()
   const paymentUrl = response.payment_url ? String(response.payment_url).trim() : null
-  const provider = response.provider ? String(response.provider).trim() : null
+  const provider =
+    (response.provider ? String(response.provider).trim() : null) || resolved.provider
 
   await admin
     .from("bitbanker_kyc_sessions")
@@ -98,7 +104,11 @@ export async function startHostedKycSession(
       provider,
       bridge_status: "active",
       expires_at: expiresAt,
-      raw_response: response as Record<string, unknown>,
+      raw_response: {
+        ...(response as Record<string, unknown>),
+        _ciuna_raw_kyc_url: rawKycUrl,
+        _ciuna_used_redirect_from_token: resolved.usedRedirectFromToken,
+      },
     })
     .select("id, expires_at")
     .single()
