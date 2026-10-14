@@ -11,7 +11,7 @@ import { AppState, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { PrimaryButton } from "@/components/primary-button"
-import { ExternalLinkModal } from "@/components/external-link-modal"
+import { BitbankerKycSheet } from "@/components/bitbanker-kyc-sheet"
 import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
 import { consumeSendReturnPath, setSendReturnPath } from "@/lib/send-return-path"
@@ -162,8 +162,6 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
       ? t("verification.kycBridge.continueCta", { defaultValue: "Continue verification" })
       : t("verification.kycBridge.verifyCta", { defaultValue: "Verify identity" })
 
-    const sheetTitle = t("verification.kycBridge.screenTitle", { defaultValue: "Verify identity" })
-
     const trigger =
       renderTrigger?.({
         onPress: () => void startVerification(),
@@ -215,12 +213,11 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
           trigger
         )}
 
-        <ExternalLinkModal
+        <BitbankerKycSheet
           visible={sheetOpen && Boolean(hostedUrl)}
           url={hostedUrl ?? ""}
-          title={sheetTitle}
-          /** Bitbanker sets frame-ancestors 'none' — web cannot iframe; keep Ciuna sheet + open browser. */
-          presentation="auto"
+          waitingForPartner={Boolean(sheetOpen && !state?.eligibility.isVerifiedForSbp)}
+          onRefreshStatus={() => void refresh({ poll: true })}
           onClose={() => {
             closeSheet()
             void refresh({ poll: true })

@@ -69,7 +69,32 @@ Hub at `/more/verification` (web) or `/verification` (mobile) → **Verify ident
 
 **Live test (2026-10-14):** `POST /api/bitbanker/kyc/session` → Bitbanker `kyc-request` returned **`KYCProxyNotAvailable`** (HTTP 400). Ciuna wiring is fine; Bitbanker must enable/restore the KYC proxy on the environment matching `BITBANKER_API_BASE_URL` on `api.ciuna.com` (confirm sandbox vs prod keys/host).
 
-**Embed / CSP (2026-10-14):** Bitbanker DEV pages send `Content-Security-Policy: frame-ancestors 'none'`, so browsers refuse to load `kyc_url` in our iframe. Ciuna keeps the **Verify identity** sheet and opens KYC in the system/in-app browser on web. True in-sheet iframe needs Bitbanker to allow our origins in `frame-ancestors` (e.g. `https://m.ciuna.com`, `https://app.ciuna.com`, local Expo web). Native WebView loads as a top-level document and is usually unaffected.
+**Embed / CSP (2026-10-14):** Bitbanker KYC pages send `frame-ancestors 'none'` and `X-Frame-Options: DENY`, so **web iframes are blocked**. Ciuna UX:
+
+- **Native (iOS/Android):** KYC loads **inside** the Ciuna sheet via WebView (top-level document — not an iframe).
+- **Web / Expo web:** Ciuna **Verify identity** sheet stays open as the control surface; partner page opens in a protected browser tab; we poll eligibility until verified.
+
+True web in-sheet embed requires Bitbanker to allowlist our origins (see message below). Also prefer JWT `redirect_url` on `ext-kyc…` when `…/partner-kyc/…` returns 404.
+
+### Message to Bitbanker (iframe / in-app embed)
+
+> Hi — KYC bridge works for us: we receive a link and users can complete Sumsub via `ext-kyc.dev.bitbanker.ru`.  
+>  
+> Product requirement: verification must stay **inside the Ciuna app** (our Verify identity sheet), not a separate browser tab.  
+>  
+> Today your KYC pages send:  
+> - `Content-Security-Policy: frame-ancestors 'none'`  
+> - `X-Frame-Options: DENY`  
+>  
+> So browsers block embedding on web. Native WebView works; web does not.  
+>  
+> Please allowlist our partner origins for the KYC / Sumsub host pages (DEV now, production later), e.g.:  
+> `Content-Security-Policy: frame-ancestors https://m.ciuna.com https://app.ciuna.com http://localhost:8081 http://localhost:8082;`  
+> and remove or relax `X-Frame-Options: DENY` for those same allowlisted embeds.  
+>  
+> Also: `kyc_url` on `ext-api…/latest/partner-kyc/{token}` still returns **404**; the JWT `redirect_url` on `ext-kyc…` works — please make `kyc_url` point at the working page.  
+>  
+> Thanks.
 
 ### Verification field map (Ciuna → Bitbanker)
 

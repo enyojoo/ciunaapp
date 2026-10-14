@@ -1,16 +1,22 @@
 "use client"
 
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useTranslation } from "react-i18next"
+import { ExternalLink, Loader2, ShieldCheck, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
 import { useBitbankerKycBridge } from "@/lib/use-bitbanker-kyc-bridge"
+import { cn } from "@/lib/utils"
 
 const POLL_MS = 8000
 const RETURN_KEY = "ciuna:send-return-path"
 
+/**
+ * Web cannot iframe Bitbanker (frame-ancestors none / X-Frame-Options DENY).
+ * Keep a Ciuna modal as the verification surface; open partner KYC in a new tab and poll.
+ */
 export function BitbankerKycBridge() {
   const { t } = useTranslation("app")
   const router = useRouter()
@@ -21,6 +27,8 @@ export function BitbankerKycBridge() {
   const { state, loading, error, refresh, startSession } = useBitbankerKycBridge()
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const lastErrorToastRef = useRef<string | null>(null)
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [hostedUrl, setHostedUrl] = useState<string | null>(null)
 
   useEffect(() => {
     if (!error) {
@@ -62,6 +70,13 @@ export function BitbankerKycBridge() {
   useEffect(() => {
     if (state?.eligibility.isVerifiedForSbp) {
       stopPoll()
+      setSheetOpen(false)
+      setHostedUrl(null)
+      toast.success(
+        t("verification.kycBridge.verifiedToast", {
+          defaultValue: "Identity verified. You can send with SBP.",
+        }),
+      )
       const stored =
         typeof window !== "undefined" ? sessionStorage.getItem(RETURN_KEY) : null
       if (stored) {
@@ -69,9 +84,20 @@ export function BitbankerKycBridge() {
         router.push(stored)
       }
     }
-  }, [state?.eligibility.isVerifiedForSbp, router, stopPoll])
+  }, [state?.eligibility.isVerifiedForSbp, router, stopPoll, t])
 
   useEffect(() => () => stopPoll(), [stopPoll])
+
+  const openPartnerTab = (url: string) => {
+    const opened = window.open(url, "_blank", "noopener,noreferrer")
+    if (!opened) {
+      toast.message(
+        t("verification.kycBridge.allowPopups", {
+          defaultValue: "Allow pop-ups to open verification, or tap Open verification again.",
+        }),
+      )
+    }
+  }
 
   const openHosted = async (url: string, paymentUrl: string | null) => {
     if (paymentUrl) {
@@ -79,23 +105,11 @@ export function BitbankerKycBridge() {
       router.push("/send")
       return
     }
-    // Bitbanker sends CSP frame-ancestors 'none' — never iframe the KYC URL.
+    setHostedUrl(url)
+    setSheetOpen(true)
     startPoll()
-    const opened = window.open(url, "_blank", "noopener,noreferrer")
-    if (!opened) {
-      toast.message(
-        t("verification.kycBridge.openedInBrowser", {
-          defaultValue: "Allow pop-ups, or open the verification link from your browser.",
-        }),
-      )
-      window.location.assign(url)
-      return
-    }
-    toast.message(
-      t("verification.kycBridge.openedInBrowser", {
-        defaultValue: "Verification opened in a new tab. Return here when you’re done.",
-      }),
-    )
+    openPartnerTab(url)
+    void refresh({ poll: true })
   }
 
   const onVerify = async () => {
@@ -115,6 +129,11 @@ export function BitbankerKycBridge() {
     ? t("verification.kycBridge.continueCta", { defaultValue: "Continue verification" })
     : t("verification.kycBridge.verifyCta", { defaultValue: "Verify identity" })
 
+  const closeSheet = () => {
+    setSheetOpen(false)
+    void refresh({ poll: true })
+  }
+
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground leading-relaxed">
@@ -128,7 +147,13 @@ export function BitbankerKycBridge() {
         {primaryLabel}
       </Button>
 
-      <Button type="button" variant="outline" className="w-full" disabled={loading} onClick={() => void refresh({ poll: true })}>
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full"
+        disabled={loading}
+        onClick={() => void refresh({ poll: true })}
+      >
         {t("verification.bitbanker.refreshStatus", { defaultValue: "Refresh status" })}
       </Button>
 
@@ -144,9 +169,68 @@ export function BitbankerKycBridge() {
       {state?.eligibility.status === "checking" ? (
         <p className="text-xs text-muted-foreground">
           {t("verification.kycBridge.reviewPending", {
-            defaultValue: "Verification in progress or under review. We will unlock send when Bitbanker confirms SBP.",
+            defaultValue:
+              "Verification in progress or under review. We will unlock send when Bitbanker confirms SBP.",
           })}
         </p>
+      ) : null}
+
+      {sheetOpen && hostedUrl ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
+          <div
+            className={cn(
+              "relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-xl",
+            )}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="kyc-sheet-title"
+          >
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <h2 id="kyc-sheet-title" className="text-base font-semibold text-foreground">
+                {t("verification.kycBridge.screenTitle", { defaultValue: "Verify identity" })}
+              </h2>
+              <button
+                type="button"
+                onClick={closeSheet}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted/40"
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex flex-col items-center gap-3 px-6 py-8 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-50">
+                <ShieldCheck className="h-7 w-7 text-orange-700" />
+              </div>
+              <p className="text-lg font-semibold text-foreground">
+                {t("verification.kycBridge.inAppSecureTitle", {
+                  defaultValue: "Continue securely with our partner",
+                })}
+              </p>
+              <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
+                {t("verification.kycBridge.inAppSecureBody", {
+                  defaultValue:
+                    "For security, Bitbanker opens verification in a protected window. Finish KYC there — this screen stays open and updates when you’re verified.",
+                })}
+              </p>
+              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {t("verification.kycBridge.waitingPartner", {
+                  defaultValue: "Waiting for verification…",
+                })}
+              </div>
+              <Button type="button" className="mt-2 w-full" onClick={() => openPartnerTab(hostedUrl)}>
+                <ExternalLink className="mr-2 h-4 w-4" />
+                {t("verification.kycBridge.openPartner", { defaultValue: "Open verification" })}
+              </Button>
+              <Button type="button" variant="ghost" className="w-full" onClick={closeSheet}>
+                {t("verification.kycBridge.refreshAfter", {
+                  defaultValue: "I’ve finished — check status",
+                })}
+              </Button>
+            </div>
+          </div>
+        </div>
       ) : null}
     </div>
   )
