@@ -15,7 +15,7 @@ import { writeLastKnownUserId, clearLastKnownUserId } from "./last-user-id"
 import i18n from "./i18n/config"
 import { apiFetch } from "@/lib/api-client"
 
-const SUPPORTED_LOCALES = new Set(["en", "ru", "fr", "es"])
+const SUPPORTED_LOCALES = new Set(["en", "ru", "fr", "es", "zh", "pt"])
 
 function syncI18nFromProfile(profile: { preferred_language?: string | null } | null | undefined) {
   const pref = profile?.preferred_language

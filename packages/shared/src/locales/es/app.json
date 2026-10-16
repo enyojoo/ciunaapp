@@ -430,7 +430,8 @@
       "verifyRequired": "Completa la verificación de identidad para enviar dinero.",
       "quoteFeesUnavailable": "No pudimos confirmar la comisión. Inténtalo de nuevo.",
       "quoteBelowMinRub": "Envía al menos 1.000 RUB.",
-      "quoteMinContribution": "Envía un importe mayor para continuar."
+      "quoteMinContribution": "Envía un importe mayor para continuar.",
+      "swapCurrencies": "Intercambiar monedas"
     },
     "fee": "Comisión de cambio",
     "processingFee": "Comisión de procesamiento",
@@ -818,6 +819,16 @@
         "validation_failed": "Please fix the highlighted fields.",
         "submit_failed": "Verification could not be submitted. Try again later."
       }
+    },
+    "kycBridge": {
+      "screenTitle": "Verificar identidad",
+      "subtitle": "Verificación alojada",
+      "verifyCta": "Verificar identidad",
+      "continueCta": "Continuar verificación",
+      "lead": "Verifica tu identidad con nuestro socio de pagos (Bitbanker). Se aceptan pasaportes rusos y extranjeros; el enrutamiento a IIDX o Sumsub se hace en su página segura, no en Ciuna.",
+      "linkExpires": "El enlace de verificación vence a las {{time}} (aproximadamente una hora).",
+      "reviewPending": "Verificación en curso o en revisión. Desbloquearemos el envío cuando Bitbanker confirme el SBP.",
+      "successBody": "Ya puedes enviar dinero por SBP. Vuelve a tu transferencia para continuar."
     }
   },
   "auth": {

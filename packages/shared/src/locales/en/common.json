@@ -42,7 +42,9 @@
     "en": "English",
     "ru": "Russian",
     "fr": "French",
-    "es": "Spanish"
+    "es": "Spanish",
+    "zh": "Chinese",
+    "pt": "Portuguese"
   },
   "app": {
     "language": "Language"

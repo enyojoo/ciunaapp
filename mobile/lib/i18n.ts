@@ -7,12 +7,16 @@ import enCommon from "@ciuna/shared/locales/en/common.json"
 import ruCommon from "@ciuna/shared/locales/ru/common.json"
 import frCommon from "@ciuna/shared/locales/fr/common.json"
 import esCommon from "@ciuna/shared/locales/es/common.json"
+import zhCommon from "@ciuna/shared/locales/zh/common.json"
+import ptCommon from "@ciuna/shared/locales/pt/common.json"
 import enApp from "@ciuna/shared/locales/en/app.json"
 import ruApp from "@ciuna/shared/locales/ru/app.json"
 import frApp from "@ciuna/shared/locales/fr/app.json"
 import esApp from "@ciuna/shared/locales/es/app.json"
+import zhApp from "@ciuna/shared/locales/zh/app.json"
+import ptApp from "@ciuna/shared/locales/pt/app.json"
 
-export const SUPPORTED_LOCALES = ["en", "ru", "fr", "es"] as const
+export const SUPPORTED_LOCALES = ["en", "ru", "fr", "es", "zh", "pt"] as const
 export type AppLocale = (typeof SUPPORTED_LOCALES)[number]
 
 const resources = {
@@ -20,6 +24,8 @@ const resources = {
   ru: { common: ruCommon, app: ruApp },
   fr: { common: frCommon, app: frApp },
   es: { common: esCommon, app: esApp },
+  zh: { common: zhCommon, app: zhApp },
+  pt: { common: ptCommon, app: ptApp },
 }
 
 const STORAGE_KEY = "ciuna_locale"

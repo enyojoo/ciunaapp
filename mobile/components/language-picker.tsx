@@ -14,6 +14,8 @@ const LANG_LABEL: Record<AppLocale, string> = {
   ru: "Русский",
   fr: "Français",
   es: "Español",
+  zh: "中文",
+  pt: "Português",
 }
 
 /** Country whose nucleo-flags icon represents each language, matching web's LanguagePicker choices. */
@@ -22,6 +24,8 @@ const LANG_FLAG_COUNTRY: Record<AppLocale, string> = {
   ru: "RU",
   fr: "FR",
   es: "ES",
+  zh: "CN",
+  pt: "BR",
 }
 
 export function LanguagePicker({ last }: { last?: boolean }) {

@@ -1,7 +1,7 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
-import { IconFrance, IconRussia, IconSpain, IconUnitedKingdom } from "nucleo-flags"
+import { IconBrazil, IconChina, IconFrance, IconRussia, IconSpain, IconUnitedKingdom } from "nucleo-flags"
 import {
   Select,
   SelectContent,
@@ -18,11 +18,13 @@ const FLAGS = {
   ru: IconRussia,
   fr: IconFrance,
   es: IconSpain,
+  zh: IconChina,
+  pt: IconBrazil,
 } as const
 
 type LocaleCode = keyof typeof FLAGS
 
-const CODES: LocaleCode[] = ["en", "ru", "fr", "es"]
+const CODES: LocaleCode[] = ["en", "ru", "fr", "es", "zh", "pt"]
 
 function normalizeLng(lng: string): LocaleCode {
   const base = (lng.split("-")[0] ?? "en") as LocaleCode

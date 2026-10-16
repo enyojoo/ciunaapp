@@ -20,7 +20,7 @@ export const userService = {
       lastName?: string
       phone?: string
       baseCurrency?: string
-      preferredLanguage?: "en" | "ru" | "fr" | "es"
+      preferredLanguage?: "en" | "ru" | "fr" | "es" | "zh" | "pt"
     },
   ) {
     // Check if user has approved KYC - if so, prevent name updates

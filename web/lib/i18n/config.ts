@@ -6,16 +6,22 @@ import enCommon from "@ciuna/shared/locales/en/common.json"
 import ruCommon from "@ciuna/shared/locales/ru/common.json"
 import frCommon from "@ciuna/shared/locales/fr/common.json"
 import esCommon from "@ciuna/shared/locales/es/common.json"
+import zhCommon from "@ciuna/shared/locales/zh/common.json"
+import ptCommon from "@ciuna/shared/locales/pt/common.json"
 import enApp from "@ciuna/shared/locales/en/app.json"
 import ruApp from "@ciuna/shared/locales/ru/app.json"
 import frApp from "@ciuna/shared/locales/fr/app.json"
 import esApp from "@ciuna/shared/locales/es/app.json"
+import zhApp from "@ciuna/shared/locales/zh/app.json"
+import ptApp from "@ciuna/shared/locales/pt/app.json"
 
 const resources = {
   en: { common: enCommon, app: enApp },
   ru: { common: ruCommon, app: ruApp },
   fr: { common: frCommon, app: frApp },
   es: { common: esCommon, app: esApp },
+  zh: { common: zhCommon, app: zhApp },
+  pt: { common: ptCommon, app: ptApp },
 } as const
 
 const isBrowser = typeof window !== "undefined"
@@ -29,7 +35,7 @@ if (!i18n.isInitialized) {
   void instance.init({
     resources: resources as unknown as Record<string, Record<string, Record<string, string>>>,
     fallbackLng: "en",
-    supportedLngs: ["en", "ru", "fr", "es"],
+    supportedLngs: ["en", "ru", "fr", "es", "zh", "pt"],
     load: "languageOnly",
     nonExplicitSupportedLngs: true,
     ns: ["common", "app"],
