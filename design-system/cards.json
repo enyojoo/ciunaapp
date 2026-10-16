@@ -431,8 +431,8 @@
   {
    "name": "OrderSummary",
    "group": "Marketplace",
-   "subtitle": "Order summary at checkout: items, delivery fee, total in the pay currency and the list of pay methods, for delivery, pickup and an expert booking",
-   "height": 747,
+   "subtitle": "Order summary at checkout: items, delivery fee, total and one Pay button; the method is chosen in the payment frame and shown after payment",
+   "height": 673,
    "width": 1300,
    "page": false,
    "readme": true
@@ -791,8 +791,8 @@
   {
    "name": "ExpertBooking",
    "group": "Customer app · Screens",
-   "subtitle": "Booking flow in five steps: choose service, date and slot with both time zones, details, pay in RUB, awaiting confirmation then confirmed with meeting link, plus slot taken and declined states",
-   "height": 2829,
+   "subtitle": "Booking flow in five steps: choose service, date and slot with both time zones, details, pay (summary, payment frame, checking, failed, closed), awaiting confirmation then confirmed with meeting link, plus slot taken and declined states",
+   "height": 3771,
    "width": 1300,
    "page": true,
    "readme": true
@@ -836,8 +836,8 @@
   {
    "name": "MarketCheckout",
    "group": "Customer app · Screens",
-   "subtitle": "Marketplace checkout as a merchant flow: details and delivery or pickup, ruble payment methods, review and place order; address, zone, loading and pending states",
-   "height": 2910,
+   "subtitle": "Marketplace checkout: details, review with one Pay button, then the provider payment frame, waiting, paid, failed and closed states; address and zone errors",
+   "height": 3864,
    "width": 1300,
    "page": true,
    "readme": true
