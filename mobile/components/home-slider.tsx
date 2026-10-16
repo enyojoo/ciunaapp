@@ -41,7 +41,9 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { width, height } = useWindowDimensions()
-  const itemWidth = width - space.page * 2
+  // Measured from the container, not the window: on web the content column is narrower than the window.
+  const [boxWidth, setBoxWidth] = useState(0)
+  const itemWidth = (boxWidth || width) - space.page * 2
   const h = bannerHeight(height)
   const [index, setIndex] = useState(0)
   const listRef = useRef<FlatList<HomeSlide>>(null)
@@ -75,7 +77,7 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
   if (slides.length === 0) return null
 
   return (
-    <View style={styles.wrap}>
+    <View style={styles.wrap} onLayout={(e) => setBoxWidth(e.nativeEvent.layout.width)}>
       <FlatList
         ref={listRef}
         data={slides}
