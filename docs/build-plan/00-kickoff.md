@@ -38,7 +38,7 @@ Task D0 (design-system, customer-facing cards only):
 4. Only then update tokens if the current app uses values the tokens lack (for example native radii or shadows): change `design-system/tokens.json`, run `npm run design:sync`, keep `design:check` green. Do not change the app's look to match the old cards.
 5. Each card's README Upgrade section lists: Current (what the app does), Improved (what we changed and why), and Build notes.
 6. Mark in `docs/build-plan/customer-app.md` that WP2 to WP10 (primitives, discovery, store and product pages, cart, orders) start from these reconciled cards.
-Started: `design-system/reference/current-app/product-card.md` has the extracted current ProductCard (structure, exact styles, tokens, improvement candidates). Repeat that extraction for each card listed above, then rebuild the cards.
+Started: `design-system/reference/current-app/product-card.md` and `store-card.md` have the extracted current ProductCard and store card (expert-card.md is a stub to fill) (structure, exact styles, tokens, improvement candidates). Repeat that extraction for each card listed above, then rebuild the cards.
 Exit: for each rebuilt card, the "Current" frame is visually indistinguishable from the app screenshot at the same width, and the "Improved" frame passes `design:check`, `design:cards` and `design:audit`.
 
 ## Stage A task list (start here; items are independent unless noted)
