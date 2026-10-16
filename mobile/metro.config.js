@@ -1,5 +1,12 @@
 const fs = require("fs")
 const path = require("path")
+
+// On a workspace-filtered install (Vercel) `nativewind` is hoisted to the repo root while `react-native` stays in
+// mobile/node_modules, so nativewind's own `require("react-native/package.json")` cannot find it. Making this
+// package's node_modules resolvable fixes that without changing any dependency.
+process.env.NODE_PATH = [path.join(__dirname, "node_modules"), process.env.NODE_PATH].filter(Boolean).join(path.delimiter)
+require("module").Module._initPaths()
+
 const { getDefaultConfig } = require("expo/metro-config")
 const { withNativeWind } = require("nativewind/metro")
 
