@@ -1,3 +1,5 @@
+import { LinearGradient } from "expo-linear-gradient"
+import { tileArtFor } from "@/components/tile"
 import { useEffect } from "react"
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
@@ -96,11 +98,22 @@ export default function VendorScreen() {
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
       <ScreenScroll edges={["left", "right"]} contentStyle={cartMode ? styles.contentWithCartBar : undefined}>
-        <View style={styles.identityRow}>
+        {/* Cover: the line's art until stores upload covers. The logo overlaps its bottom edge. */}
+        <View style={styles.cover}>
+          <LinearGradient
+            colors={[tileArtFor(line).from, tileArtFor(line).to]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
+        </View>
+        <View style={[styles.identityRow, styles.identityOverCover]}>
           <View style={styles.logoWrap}>
             {vendor?.photo_url ? (
               <Image source={{ uri: vendor.photo_url }} style={styles.logo} resizeMode="cover" />
-            ) : null}
+            ) : (
+              <Text style={styles.logoInitial}>{(vendor?.name || "?").trim().charAt(0).toUpperCase()}</Text>
+            )}
           </View>
           <View style={styles.identityBody}>
             <View style={styles.nameRow}>
@@ -178,6 +191,9 @@ export default function VendorScreen() {
 }
 
 const styles = StyleSheet.create({
+  cover: { height: 128, borderRadius: 20, overflow: "hidden" },
+  identityOverCover: { marginTop: -40, paddingHorizontal: 4 },
+  logoInitial: { fontSize: 22, fontWeight: "700", color: colors.primaryText, textAlign: "center" },
   headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
   headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
   center: { paddingVertical: 60, alignItems: "center" },
@@ -186,11 +202,13 @@ const styles = StyleSheet.create({
   logoWrap: {
     width: 76,
     height: 76,
-    borderRadius: radius.card,
+    borderRadius: 38,
     overflow: "hidden",
-    backgroundColor: colors.paper,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    borderWidth: 3,
+    borderColor: colors.surface,
+    alignItems: "center",
+    justifyContent: "center",
   },
   logo: { width: "100%", height: "100%" },
   identityBody: { flex: 1, minWidth: 0, justifyContent: "center", gap: 4 },

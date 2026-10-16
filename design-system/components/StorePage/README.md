@@ -13,6 +13,8 @@ Open; closed (muted cover, banner with opening time in MSK, clock in place of Ad
 Verified is a success badge with an icon. Closed stores can be browsed but not added to. One store per cart. Descriptions are shown in the customer's language when the seller has translated them, otherwise the seller's language.
 
 ## Upgrade
+Built so far: cover band (line art until stores upload covers), round logo with white ring and initial fallback, verified mark, location, product count, rating line when reviews exist. Still New: hours and open or closed badge, delivery fee and minimum order (need API fields), reviews preview with See all, category jump chips, desktop layout.
+
 Differs from the built app: cover, logo, Verified badge, hours, rating, reviews preview and the info plate are New (today a title and a plain product list); favourite on the store is New; the closed state and desktop layout are New.
 
 ## Code
