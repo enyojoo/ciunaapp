@@ -195,7 +195,11 @@
       "deliveryAtCheckout": "配送费在结算时添加。",
       "checkoutWithTotal": "结算 · {{total}}",
       "unavailable": "已不可用",
-      "unavailableNote": "请移除不可用商品后再结账。"
+      "unavailableNote": "请移除不可用商品后再结账。",
+      "lockTitle": "开始新购物车？",
+      "lockBody": "购物车中有来自 {{vendor}} 的商品。一个购物车只能放一家店的商品，添加后将清空原购物车。",
+      "lockConfirm": "新建购物车",
+      "lockCancel": "保留当前购物车"
     }
   },
   "assistant": {

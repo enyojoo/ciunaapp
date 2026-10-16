@@ -11,7 +11,8 @@ import {
 import type { HubProduct } from "@/lib/types"
 import { catalogCardWidth, useCatalogGridColumns } from "@/lib/responsive-layout"
 import { colors, radius, shadow, shadowNone } from "@/lib/theme"
-import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
+import { updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
+import { useGuardedAdd } from "@/lib/use-guarded-add"
 import { useToast } from "@/components/toast-provider"
 import { FavouriteHeart } from "@/components/favourite-heart"
 
@@ -43,7 +44,7 @@ export function ProductCard({
   style?: StyleProp<ViewStyle>
 }) {
   const { t } = useTranslation("app")
-  const { showInfo, showError } = useToast()
+  const { showError } = useToast()
   const columns = useCatalogGridColumns()
   const price = hubProductEffectivePrice(product)
   const list = hubProductListPrice(product)
@@ -61,24 +62,10 @@ export function ProductCard({
   const cartItem = cart?.items.find((i) => i.hub_product_id === product.id) || null
   const cartQuantity = cartItem?.quantity ?? 0
 
+  const guard = useGuardedAdd()
   const handleAddToCart = () => {
     if (!product.vendor_id || !cartLineSlug) return
-    void addToHubCart({
-      vendorId: product.vendor_id,
-      serviceLineSlug: cartLineSlug,
-      hubProductId: product.id,
-      product,
-    })
-      .then(({ clearedVendorName }) => {
-        if (clearedVendorName) {
-          showInfo(
-            t("hub.cart.clearedOtherVendor", { defaultValue: "Your {{vendor}} cart was cleared.", vendor: clearedVendorName }),
-          )
-        }
-      })
-      .catch((e) => {
-        showError(e instanceof Error ? e.message : t("hub.cart.addFailed", { defaultValue: "Couldn't add to cart" }))
-      })
+    guard.add({ vendorId: product.vendor_id, serviceLineSlug: cartLineSlug, hubProductId: product.id, product })
   }
 
   const handleQuantityChange = (quantity: number) => {
@@ -230,6 +217,7 @@ export function ProductCard({
         </View>
         <FavouriteHeart type="product" id={product.id} style={showCategory ? styles.heartLeft : undefined} />
       </View>
+      {guard.dialog}
     </View>
   )
 }

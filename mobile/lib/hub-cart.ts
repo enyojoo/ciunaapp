@@ -77,6 +77,11 @@ function restoreSnapshot(snap: ReturnType<typeof snapshotCarts>, vendorId: strin
   if (snap.otherVendorId) setState(snap.otherVendorId, { cart: snap.otherVendorCart, loading: false })
 }
 
+/** The cart currently held for a line (Food or Mart), if any. */
+export function getLineCart(lineSlug: "food" | "mart"): HubCart | null {
+  return getState(lineKey(lineSlug)).cart
+}
+
 function clearLineVendor(lineSlug: "food" | "mart", exceptVendorId: string): string | undefined {
   const existing = getState(lineKey(lineSlug)).cart
   if (!existing || existing.vendor_id === exceptVendorId) return undefined

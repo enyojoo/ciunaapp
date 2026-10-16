@@ -13,7 +13,8 @@ import { PrimaryButton } from "@/components/primary-button"
 import { VendorChip } from "@/components/product-card"
 import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
-import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
+import { updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
+import { useGuardedAdd } from "@/lib/use-guarded-add"
 import {
   hubMarketplaceCheckoutPath,
   hubMarketplaceVendorPath,
@@ -45,7 +46,7 @@ export default function HubProductDetailScreen() {
   const navigation = useNavigation()
   const router = useRouter()
   const { t } = useTranslation("app")
-  const { showInfo, showError } = useToast()
+  const { showError } = useToast()
   const { data: product, loading, error, revalidate } = useHubProduct(productId)
   const notFound = !loading && (Boolean(error) || !product)
 
@@ -79,29 +80,10 @@ export default function HubProductDetailScreen() {
   const soldOut =
     Boolean(product?.sold_out) || (product?.stock_quantity != null && Number(product.stock_quantity) <= 0)
 
+  const guard = useGuardedAdd()
   const handleAddToCart = () => {
     if (!product?.vendor_id) return
-    void addToHubCart({
-      vendorId: product.vendor_id,
-      serviceLineSlug: line as "food" | "mart",
-      hubProductId: product.id,
-      product,
-    })
-      .then(({ clearedVendorName }) => {
-        if (clearedVendorName) {
-          showInfo(
-            t("hub.cart.clearedOtherVendor", {
-              defaultValue: "Your {{vendor}} cart was cleared.",
-              vendor: clearedVendorName,
-            }),
-          )
-        }
-      })
-      .catch((e) => {
-        showError(
-          e instanceof Error ? e.message : t("hub.cart.addFailed", { defaultValue: "Couldn't add to cart" }),
-        )
-      })
+    guard.add({ vendorId: product.vendor_id, serviceLineSlug: line as "food" | "mart", hubProductId: product.id, product })
   }
 
   const handleQuantityChange = (quantity: number) => {
@@ -136,6 +118,7 @@ export default function HubProductDetailScreen() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
+      {guard.dialog}
       <ScreenScroll
         edges={["left", "right"]}
         contentStyle={marketplace ? styles.contentWithCartBar : undefined}

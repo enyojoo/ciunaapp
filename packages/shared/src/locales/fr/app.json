@@ -195,7 +195,11 @@
       "deliveryAtCheckout": "La livraison est ajoutée à la commande.",
       "checkoutWithTotal": "Commander · {{total}}",
       "unavailable": "N’est plus disponible",
-      "unavailableNote": "Retirez les articles indisponibles pour commander."
+      "unavailableNote": "Retirez les articles indisponibles pour commander.",
+      "lockTitle": "Commencer un nouveau panier ?",
+      "lockBody": "Votre panier contient des articles de {{vendor}}. Un panier ne contient qu’une boutique : il sera vidé.",
+      "lockConfirm": "Nouveau panier",
+      "lockCancel": "Garder le panier actuel"
     }
   },
   "assistant": {

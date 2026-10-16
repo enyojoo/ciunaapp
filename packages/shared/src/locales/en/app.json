@@ -195,7 +195,11 @@
       "deliveryAtCheckout": "Delivery is added at checkout.",
       "checkoutWithTotal": "Checkout · {{total}}",
       "unavailable": "No longer available",
-      "unavailableNote": "Remove unavailable items to check out."
+      "unavailableNote": "Remove unavailable items to check out.",
+      "lockTitle": "Start a new cart?",
+      "lockBody": "Your cart has items from {{vendor}}. A cart holds one store, so adding this will clear it.",
+      "lockConfirm": "Start new cart",
+      "lockCancel": "Keep current cart"
     }
   },
   "assistant": {

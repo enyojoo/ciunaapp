@@ -195,7 +195,11 @@
       "deliveryAtCheckout": "A entrega é adicionada no checkout.",
       "checkoutWithTotal": "Finalizar · {{total}}",
       "unavailable": "Não está mais disponível",
-      "unavailableNote": "Remova os itens indisponíveis para finalizar."
+      "unavailableNote": "Remova os itens indisponíveis para finalizar.",
+      "lockTitle": "Começar um novo carrinho?",
+      "lockBody": "Seu carrinho tem itens de {{vendor}}. Um carrinho aceita uma só loja, então ele será esvaziado.",
+      "lockConfirm": "Novo carrinho",
+      "lockCancel": "Manter carrinho atual"
     }
   },
   "assistant": {

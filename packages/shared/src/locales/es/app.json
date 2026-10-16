@@ -195,7 +195,11 @@
       "deliveryAtCheckout": "El envío se añade al pagar.",
       "checkoutWithTotal": "Pagar · {{total}}",
       "unavailable": "Ya no está disponible",
-      "unavailableNote": "Elimina los artículos no disponibles para continuar."
+      "unavailableNote": "Elimina los artículos no disponibles para continuar.",
+      "lockTitle": "¿Empezar un carrito nuevo?",
+      "lockBody": "Tu carrito tiene artículos de {{vendor}}. Un carrito admite una sola tienda, así que se vaciará.",
+      "lockConfirm": "Carrito nuevo",
+      "lockCancel": "Mantener el carrito actual"
     }
   },
   "assistant": {
