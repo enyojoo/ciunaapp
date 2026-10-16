@@ -15,7 +15,7 @@ export function PublicHeader() {
 
           <div className="flex items-center space-x-3">
             <a href="https://t.me/ciunabot" target="_blank" rel="noopener noreferrer">
-              <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200">
                 Open App
               </Button>
             </a>

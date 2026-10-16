@@ -1,0 +1,5 @@
+{
+  "entries": [
+    { "date": "2026-10-16", "title": "Design system created", "detail": "tokens.json as single source; generated CSS for web, Office and Seller; Expo theme and Tailwind read the same tokens; ink-on-orange rule; contrast gate; 21 component specs." }
+  ]
+}

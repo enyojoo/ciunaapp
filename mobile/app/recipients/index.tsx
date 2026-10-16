@@ -70,7 +70,7 @@ export default function RecipientsScreen() {
   return (
     <ScreenScroll edges={["left", "right"]}>
       <Pressable style={styles.addBtn} onPress={() => router.push("/recipients/form")}>
-        <Plus size={18} color="#fff" strokeWidth={2.4} />
+        <Plus size={18} color={colors.onPrimary} strokeWidth={2.4} />
         <Text style={styles.addBtnText}>{t("recipients.addRecipient")}</Text>
       </Pressable>
 
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.row,
     backgroundColor: colors.primary,
   },
-  addBtnText: { fontSize: typeSize.body, fontWeight: "600", color: "#fff" },
+  addBtnText: { fontSize: typeSize.body, fontWeight: "600", color: colors.onPrimary },
   searchBox: {
     marginBottom: 16,
     flexDirection: "row",

@@ -28,7 +28,7 @@ export function PrimaryButton({
         ]}
       >
         {busy ? (
-          <ActivityIndicator color={variant === "primary" ? "#fff" : colors.primary} />
+          <ActivityIndicator color={variant === "primary" ? colors.onPrimary : colors.primaryText} />
         ) : (
           <Text
             style={[
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
   ghost: { backgroundColor: "transparent" },
   disabled: { opacity: 0.45 },
   label: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  labelOnPrimary: { color: "#FFFFFF" },
+  labelOnPrimary: { color: colors.onPrimary },
   labelDanger: { color: colors.danger },
 })

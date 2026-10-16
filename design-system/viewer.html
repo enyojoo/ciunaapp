@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ciuna design system</title>
+<style>
+body{margin:0;font:15px/1.5 system-ui,sans-serif;background:#FAFAF8;color:#111827;padding:24px;max-width:1100px;margin-inline:auto}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:17px;margin:32px 0 12px}p{color:#52596B;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.sw{background:#fff;border:1px solid #E8E4DC;border-radius:16px;overflow:hidden}.sw i{display:block;height:56px}
+.sw div{padding:10px 12px;font-size:13px}.sw b{display:block;font-size:14px}.sw code{color:#52596B}
+table{border-collapse:collapse;width:100%;background:#fff;border:1px solid #E8E4DC;border-radius:16px;overflow:hidden}
+td,th{padding:8px 12px;text-align:left;font-size:13px;border-bottom:1px solid #E8E4DC}
+.pass{color:#065F46;font-weight:600}.fail{color:#991B1B;font-weight:600}
+.btn{display:inline-block;padding:12px 20px;border-radius:12px;font-weight:600;margin:0 8px 8px 0;border:0}
+.badge{display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;margin:0 8px 8px 0}
+</style></head><body>
+<h1>Ciuna design system</h1><p>Rendered live from tokens.json. Edit the JSON, run <code>npm run design:sync</code>.</p>
+<div id="app"></div>
+<script>
+fetch("tokens.json").then(r=>r.json()).then(t=>{
+const c=Object.fromEntries(Object.entries(t.color).map(([k,v])=>[k,v.value]));
+const lum=h=>{const n=h.replace("#","");const[r,g,b]=[0,2,4].map(i=>parseInt(n.slice(i,i+2),16)/255).map(x=>x<=.03928?x/12.92:((x+.055)/1.055)**2.4);return .2126*r+.7152*g+.0722*b};
+const ratio=(a,b)=>{const[x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return (x+.05)/(y+.05)};
+const res=v=>v[0]=="#"?v:c[v];
+let h=`<h2>Buttons</h2><span class="btn" style="background:${c["brand-primary"]};color:${c["primary-foreground"]}">Accept order</span><span class="btn" style="background:${c["primary-hover"]};color:${c["primary-foreground"]}">Hover</span><span class="btn" style="background:#fff;border:1px solid ${c["input-edge"]}">Secondary</span><span class="btn" style="background:${c.destructive};color:#fff">Reject order</span><a style="color:${c["primary-text"]};font-weight:600">Link</a>`;
+h+=`<h2>Status</h2>`+[["Completed","success"],["Live","success"],["Pending","warning"],["Preparing","warning"],["Failed","destructive"],["Rejected","destructive"],["Draft","neutral"],["Paused","neutral"]].map(([w,k])=>`<span class="badge" style="background:${c[k+"-surface"]};color:${c[k+"-text"]}">${w}</span>`).join("");
+h+=`<h2>Colours</h2><div class="grid">`+Object.entries(t.color).map(([k,v])=>`<div class="sw"><i style="background:${v.value}"></i><div><b>${k}</b><code>${v.value}</code><br>${v.usage}</div></div>`).join("")+`</div>`;
+h+=`<h2>Contrast gate</h2><table><tr><th>Pair</th><th>Ratio</th><th>Min</th><th></th></tr>`+t.pairs.map(p=>{const r=ratio(res(p.fg),res(p.bg));return `<tr><td>${p.label}</td><td>${r.toFixed(2)}:1</td><td>${p.min}:1</td><td class="${r>=p.min?"pass":"fail"}">${r>=p.min?"Pass":"Fail"}</td></tr>`}).join("")+`</table>`;
+document.getElementById("app").innerHTML=h});
+</script></body></html>

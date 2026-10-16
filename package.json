@@ -11,6 +11,9 @@
     "mobile"
   ],
   "scripts": {
+    "design:sync": "node design-system/scripts/sync-tokens.mjs",
+    "design:check": "node design-system/scripts/sync-tokens.mjs --check",
+    "design:cards": "node design-system/scripts/check-cards.mjs",
     "dev": "turbo run dev --filter=api --filter=web",
     "dev:web": "turbo run dev --filter=web",
     "dev:api": "turbo run dev --filter=api",

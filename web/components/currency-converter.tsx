@@ -530,7 +530,7 @@ export function CurrencyConverter({ onSendMoney }: CurrencyConverterProps) {
 
         <Button
           onClick={handleSendMoney}
-          className="w-full bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200 h-12 text-lg font-semibold"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200 h-12 text-lg font-semibold"
         >
           Send Money
         </Button>

@@ -1,0 +1,52 @@
+{
+  "color": {
+    "brand-primary": "#F97316",
+    "primary-foreground": "#111827",
+    "primary-hover": "#EA580C",
+    "primary-text": "#C2410C",
+    "primary-tint": "#FFF3E8",
+    "primary-border": "#FDBA74",
+    "ink": "#111827",
+    "paper": "#FAFAF8",
+    "surface": "#FFFFFF",
+    "muted": "#52596B",
+    "subtle": "#8A8F9C",
+    "hairline": "#E8E4DC",
+    "input-edge": "#8A8578",
+    "success": "#047857",
+    "success-surface": "#ECFDF5",
+    "success-text": "#065F46",
+    "warning": "#B45309",
+    "warning-surface": "#FFFBEB",
+    "warning-text": "#92400E",
+    "destructive": "#B91C1C",
+    "destructive-surface": "#FEF2F2",
+    "destructive-text": "#991B1B",
+    "neutral-surface": "#F3F4F6",
+    "neutral-text": "#374151",
+    "refer": "#0F766E",
+    "refer-surface": "#F0FDFA",
+    "scrim": "#111827"
+  },
+  "radius": {
+    "control": 12,
+    "card": 16,
+    "sheet": 24,
+    "pill": 999
+  },
+  "space": {
+    "tap": 48,
+    "page": 20
+  },
+  "motion": {
+    "fast": 150,
+    "sheet": 180,
+    "normal": 220
+  },
+  "type": {
+    "title": 24,
+    "body": 16,
+    "label": 15,
+    "meta": 13
+  }
+}

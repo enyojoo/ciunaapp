@@ -12,6 +12,7 @@
     },
     "./marketplace/use-checkout": "./src/marketplace/use-checkout.ts",
     "./marketplace/checkout-warm": "./src/marketplace/checkout-warm.ts",
+    "./design": "./src/design/index.ts",
     "./locales/*": "./src/locales/*",
     "./urls": "./src/constants/urls.ts"
   },

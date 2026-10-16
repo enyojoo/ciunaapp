@@ -1,4 +1,5 @@
 import { Platform, StyleSheet, type ViewStyle } from "react-native"
+import { designColors } from "@ciuna/shared/design"
 
 function hexToRgba(hex: string, opacity: number): string {
   const h = hex.replace("#", "")
@@ -39,18 +40,35 @@ export const shadowNone: ViewStyle =
 
 /** Native canvas tokens. Web stays Geist + oklch(0.99); Expo uses paper + system type. */
 export const colors = {
-  primary: "#F97316",
-  primaryHover: "#EA580C",
-  primaryDeep: "#C2410C",
-  paper: "#FAFAF8",
-  surface: "#FFFFFF",
-  text: "#111827",
-  muted: "#6B7280",
-  border: "#E8E4DC",
-  danger: "#DC2626",
-  success: "#059669",
-  refer: "#059669",
-  referBg: "#F0FDFA",
+  primary: designColors.brandPrimary,
+  /** Label colour on any orange fill. Never white on orange (2.8:1). */
+  onPrimary: designColors.primaryForeground,
+  primaryHover: designColors.primaryHover,
+  /** Orange as text/link on paper or white (5.2:1). */
+  primaryText: designColors.primaryText,
+  primaryDeep: designColors.primaryText,
+  primaryTint: designColors.primaryTint,
+  primaryBorder: designColors.primaryBorder,
+  paper: designColors.paper,
+  surface: designColors.surface,
+  text: designColors.ink,
+  muted: designColors.muted,
+  subtle: designColors.subtle,
+  border: designColors.hairline,
+  inputEdge: designColors.inputEdge,
+  danger: designColors.destructive,
+  dangerText: designColors.destructiveText,
+  dangerSurface: designColors.destructiveSurface,
+  success: designColors.success,
+  successText: designColors.successText,
+  successSurface: designColors.successSurface,
+  warning: designColors.warning,
+  warningText: designColors.warningText,
+  warningSurface: designColors.warningSurface,
+  neutralText: designColors.neutralText,
+  neutralSurface: designColors.neutralSurface,
+  refer: designColors.refer,
+  referBg: designColors.referSurface,
   referBgEnd: "#ECFDF5",
   referBorder: "#99F6E4",
   referText: "#134E4A",

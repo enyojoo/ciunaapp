@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   },
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 13, fontWeight: "600", color: colors.muted },
-  chipTextActive: { color: "#fff" },
+  chipTextActive: { color: colors.onPrimary },
   list: { flex: 1 },
   listContent: { paddingHorizontal: 20, paddingBottom: 40 },
   center: { paddingVertical: 40, alignItems: "center" },

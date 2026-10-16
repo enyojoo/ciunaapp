@@ -7,6 +7,63 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ciuna-tokens:start (generated from design-system/tokens.json; run `npm run design:sync`) */
+:root {
+  --primary: #F97316;
+  --primary-foreground: #111827;
+  --primary-hover: #EA580C;
+  --primary-text: #C2410C;
+  --primary-tint: #FFF3E8;
+  --primary-border: #FDBA74;
+  --ring: #F97316;
+  --chart-1: #F97316;
+  --sidebar-primary: #F97316;
+  --sidebar-primary-foreground: #111827;
+  --sidebar-ring: #F97316;
+  --destructive: #B91C1C;
+  --destructive-foreground: #ffffff;
+  --success: #047857;
+  --success-surface: #ECFDF5;
+  --success-text: #065F46;
+  --warning: #B45309;
+  --warning-surface: #FFFBEB;
+  --warning-text: #92400E;
+  --destructive-surface: #FEF2F2;
+  --destructive-text: #991B1B;
+  --neutral-surface: #F3F4F6;
+  --neutral-text: #374151;
+  --refer: #0F766E;
+  --refer-surface: #F0FDFA;
+  --paper: #FAFAF8;
+  --ink: #111827;
+  --hairline: #E8E4DC;
+  --input-edge: #8A8578;
+}
+
+@theme inline {
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-text: var(--primary-text);
+  --color-primary-tint: var(--primary-tint);
+  --color-primary-border: var(--primary-border);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-success-text: var(--success-text);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-warning-text: var(--warning-text);
+  --color-destructive-surface: var(--destructive-surface);
+  --color-destructive-text: var(--destructive-text);
+  --color-neutral-surface: var(--neutral-surface);
+  --color-neutral-text: var(--neutral-text);
+  --color-refer: var(--refer);
+  --color-refer-surface: var(--refer-surface);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-hairline: var(--hairline);
+  --color-input-edge: var(--input-edge);
+}
+/* ciuna-tokens:end */
+
 /* Installed PWA: html[data-pwa-standalone="true"] — set by PwaStandaloneRoot for optional overrides */
 
 @media (display-mode: standalone) {
@@ -42,20 +99,14 @@ html[data-pwa-standalone="true"] body {
   --card-foreground: oklch(0.15 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0 0);
-  --primary: #f97316;
-  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.15 0 0);
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.5 0 0);
   --accent: oklch(0.96 0 0);
   --accent-foreground: oklch(0.15 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.93 0 0);
   --input: oklch(0.93 0 0);
-  --ring: #f97316;
-  --chart-1: #f97316;
   --chart-2: oklch(0.6 0.15 180);
   --chart-3: oklch(0.65 0.2 140);
   --chart-4: oklch(0.7 0.15 80);
@@ -63,12 +114,9 @@ html[data-pwa-standalone="true"] body {
   --radius: 0.5rem;
   --sidebar: oklch(0.98 0 0);
   --sidebar-foreground: oklch(0.15 0 0);
-  --sidebar-primary: #f97316;
-  --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.96 0 0);
   --sidebar-accent-foreground: oklch(0.15 0 0);
   --sidebar-border: oklch(0.93 0 0);
-  --sidebar-ring: #f97316;
   --status-pending: oklch(0.65 0.12 85);
   --status-processing: oklch(0.55 0.12 250);
   --status-completed: oklch(0.55 0.15 150);

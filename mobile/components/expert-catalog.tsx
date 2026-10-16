@@ -317,6 +317,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  ctaText: { fontSize: 12, fontWeight: "600", color: "#FFFFFF" },
+  ctaText: { fontSize: 12, fontWeight: "600", color: colors.onPrimary },
   ctaTextDisabled: { color: colors.muted },
 })

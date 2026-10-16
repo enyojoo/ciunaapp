@@ -192,7 +192,7 @@ export function ProductCard({
           <Text style={styles.ctaText}>{t("hub.soldOut", { defaultValue: "Sold out" })}</Text>
         ) : (
           <View style={styles.ctaWithIcon}>
-            <ShoppingCart size={13} color="#FFFFFF" strokeWidth={2.4} />
+            <ShoppingCart size={13} color={colors.onPrimary} strokeWidth={2.4} />
             <Text style={styles.ctaText}>{t("hub.cart.addToCart", { defaultValue: "Add to cart" })}</Text>
           </View>
         )}
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   ctaDisabled: { opacity: 0.5 },
-  ctaText: { fontSize: 12, fontWeight: "600", color: "#FFFFFF" },
+  ctaText: { fontSize: 12, fontWeight: "600", color: colors.onPrimary },
   ctaWithIcon: { flexDirection: "row", alignItems: "center", gap: 5 },
   stepper: {
     minHeight: 32,
