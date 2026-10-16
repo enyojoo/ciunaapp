@@ -1278,7 +1278,8 @@
       "where": "¿Dónde está mi pedido?",
       "changeTime": "Cambiar la hora de entrega",
       "allergy": "Pregunta sobre alergias"
-    }
+    },
+    "openUntil": "El chat con el vendedor sigue abierto hasta el {{date}}."
   },
   "reviews": {
     "promptTitle": "Valora tu pedido",
@@ -1320,7 +1321,8 @@
     "count_one": "{{count}} reseña",
     "count_other": "{{count}} reseñas",
     "readMore": "Leer más",
-    "readLess": "Mostrar menos"
+    "readLess": "Mostrar menos",
+    "verifiedOrder": "Pedido verificado"
   },
   "home": {
     "slide": {

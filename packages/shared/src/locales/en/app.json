@@ -1278,7 +1278,8 @@
       "where": "Where is my order?",
       "changeTime": "Change delivery time",
       "allergy": "Allergy question"
-    }
+    },
+    "openUntil": "Chat with the seller stays open until {{date}}."
   },
   "reviews": {
     "promptTitle": "Rate your order",
@@ -1320,7 +1321,8 @@
     "count_one": "{{count}} review",
     "count_other": "{{count}} reviews",
     "readMore": "Read more",
-    "readLess": "Show less"
+    "readLess": "Show less",
+    "verifiedOrder": "Verified order"
   },
   "home": {
     "slide": {

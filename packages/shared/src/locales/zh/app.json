@@ -1278,7 +1278,8 @@
       "where": "我的订单在哪里？",
       "changeTime": "更改配送时间",
       "allergy": "过敏问题"
-    }
+    },
+    "openUntil": "与卖家的聊天将开放至 {{date}}。"
   },
   "reviews": {
     "promptTitle": "为您的订单评分",
@@ -1320,7 +1321,8 @@
     "count_one": "{{count}} 条评价",
     "count_other": "{{count}} 条评价",
     "readMore": "展开",
-    "readLess": "收起"
+    "readLess": "收起",
+    "verifiedOrder": "已验证订单"
   },
   "home": {
     "slide": {

@@ -743,7 +743,7 @@ export function MarketplaceOrderView({
     [payTab, setPayTab] = useState<MarketplacePayTab>("yookassa"),
     [methodId, setMethodId] = useState(""),
     [receiptFile, setReceiptFile] = useState<ReceiptAsset | null>(null),
-    { t } = useTranslation("app")
+    { t, i18n } = useTranslation("app")
   const label = (key: string, fallback: string) => t(`marketplace.${key}`, { defaultValue: fallback })
   const methods = order.snapshot.methods
   const attempt = order.attempts[0]
@@ -859,6 +859,9 @@ export function MarketplaceOrderView({
     }
   }
 
+  const chatClosesRaw = (order as { chat?: { closesAt?: string | null } }).chat?.closesAt
+  const chatClosesAt = chatClosesRaw && !Number.isNaN(new Date(chatClosesRaw).getTime()) ? new Date(chatClosesRaw) : null
+
   const pay =
     order.nextAction === "pay" && !["failed", "superseded", "succeeded"].includes(attempt?.state || "")
   const onlinePayment =
@@ -904,6 +907,11 @@ export function MarketplaceOrderView({
           sellerName={(order as { seller?: { name?: string } }).seller?.name}
           photoUrl={(order as { seller?: { photoUrl?: string | null } }).seller?.photoUrl}
         />
+        {chatClosesAt ? (
+          <Text style={styles.meta}>
+            {t("chat.openUntil", { date: chatClosesAt.toLocaleDateString(i18n.language, { dateStyle: "medium" }), defaultValue: "Chat with the seller stays open until {{date}}." })}
+          </Text>
+        ) : null}
         {!!error && (
           <View style={styles.errorBox}>
             <Text style={styles.errorText}>

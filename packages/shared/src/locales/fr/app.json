@@ -1278,7 +1278,8 @@
       "where": "Où est ma commande ?",
       "changeTime": "Changer l’heure de livraison",
       "allergy": "Question sur les allergies"
-    }
+    },
+    "openUntil": "Le chat avec le vendeur reste ouvert jusqu’au {{date}}."
   },
   "reviews": {
     "promptTitle": "Évaluez votre commande",
@@ -1320,7 +1321,8 @@
     "count_one": "{{count}} avis",
     "count_other": "{{count}} avis",
     "readMore": "Lire la suite",
-    "readLess": "Réduire"
+    "readLess": "Réduire",
+    "verifiedOrder": "Commande vérifiée"
   },
   "home": {
     "slide": {

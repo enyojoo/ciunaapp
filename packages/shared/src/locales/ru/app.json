@@ -1278,7 +1278,8 @@
       "where": "Где мой заказ?",
       "changeTime": "Изменить время доставки",
       "allergy": "Вопрос об аллергии"
-    }
+    },
+    "openUntil": "Чат с продавцом открыт до {{date}}."
   },
   "reviews": {
     "promptTitle": "Оцените заказ",
@@ -1322,7 +1323,8 @@
     "count_few": "{{count}} отзыва",
     "count_many": "{{count}} отзывов",
     "readMore": "Читать полностью",
-    "readLess": "Свернуть"
+    "readLess": "Свернуть",
+    "verifiedOrder": "Подтверждённый заказ"
   },
   "home": {
     "slide": {

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
+import { BadgeCheck } from "lucide-react-native"
 import { LoadError } from "@/components/load-error"
 import { PrimaryButton } from "@/components/primary-button"
 import { RatingStars } from "@/components/rating-stars"
@@ -61,7 +62,13 @@ export function ReviewCard({ review, locale }: { review: PublicReview; locale: s
         </Text>
         <Text style={styles.date}>{date}</Text>
       </View>
-      <RatingStars value={review.rating} size={13} />
+      <View style={styles.starsRow}>
+        <RatingStars value={review.rating} size={13} />
+        <View style={styles.verified}>
+          <BadgeCheck size={13} color={colors.success} strokeWidth={2.2} />
+          <Text style={styles.verifiedText}>{t("reviews.verifiedOrder", { defaultValue: "Verified order" })}</Text>
+        </View>
+      </View>
       {review.body ? (
         <Text style={styles.body} numberOfLines={long && !open ? 4 : undefined}>
           {review.body}
@@ -132,6 +139,9 @@ export function ReviewsSection({ state }: { state: ReviewsState }) {
 }
 
 const styles = StyleSheet.create({
+  starsRow: { flexDirection: "row", alignItems: "center", gap: 10, flexWrap: "wrap" },
+  verified: { flexDirection: "row", alignItems: "center", gap: 4 },
+  verifiedText: { fontSize: 12, fontWeight: "600", color: colors.success },
   more: { alignSelf: "flex-start", minHeight: 32, justifyContent: "center" },
   moreText: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText },
   wrap: { marginTop: 28 },
