@@ -2,6 +2,7 @@ import { type NextRequest } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { createClient } from "@supabase/supabase-js"
 import { getAccessTokenFromRequest } from "@/lib/supabase-server-helpers"
+import { adminCanLegacy, legacyAdminPermission } from "@/lib/admin-roles"
 
 export const SUPER_ADMIN_ROLE = "super_admin" as const
 
@@ -79,11 +80,21 @@ export async function getAdminUser(request: NextRequest): Promise<AdminUser | nu
   }
 }
 
+export class AdminForbiddenError extends Error {
+  constructor(public permission: string) {
+    super("Admin permission required")
+    this.name = "AdminForbiddenError"
+  }
+}
+
 export async function requireAdmin(request: NextRequest): Promise<AdminUser> {
   const user = await getAdminUser(request)
   if (!user) {
     throw new Error("Admin access required")
   }
+  // Legacy routes get their permission from the path, so no route can be reached by a role the matrix excludes.
+  const needed = legacyAdminPermission(new URL(request.url).pathname, request.method)
+  if (needed && !adminCanLegacy(user.role, needed)) throw new AdminForbiddenError(needed)
   return user
 }
 
