@@ -34,6 +34,9 @@ Marketplace checkout does not show a Ciuna-drawn list of payment methods. The cu
 ### Open fix for D0: payment frame placement (do first, verify in the running app)
 The `MarketCheckout`, `OrderSummary` and `ExpertBooking` cards currently draw the provider frame as a separate full screen. That is wrong. The current app opens the provider frame inline, under the order details, on the same screen. Task: run the Expo app (native and web build) through marketplace checkout, screenshot it, and redraw those frames to match: summary on top, frame beneath it, then the states (opening, waiting, paid, failed, cancelled). Check whether the frame mounts automatically or after a button press and whether native uses the same inline layout, and draw exactly that. Then look for improvements (sticky total, clearer failed state) as "Improved" frames. Do not re-decide this from code search alone.
 
+## Rule for all surfaces: the current product wins over a weaker card
+See "Rule: the current product wins over a weaker card" in `design-system/guides/80-decisions.md`. D0 below is written for the customer app, but the same method applies to Seller and Office: capture the running screen, extract real styles, rebuild the card as Current plus Improved. Build agents log where the product beats a card in `docs/build-plan/design-reconciliation-seller.md`, `-office.md` and `-customer.md`; the design-system update pass reads those logs and rewrites the cards.
+
 ## Priority design task: start customer cards from the current Expo UI (do this before Stage B customer work)
 Decision: the current customer app in `mobile/` (Expo) looks better than the customer cards in the design system. The cards are not the contract for the customer app's visual style until they are reconciled. Rule: **current product first, then improve.**
 
