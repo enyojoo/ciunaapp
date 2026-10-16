@@ -23,5 +23,7 @@ Loaded; Loading (photo and text skeletons); No availability (warning banner, Boo
 ## Upgrade
 Built today: profile page in `mobile/app/experts/[slug].tsx` and `web/components/hub/expert-profile-view.tsx` with services. New: verified badge, credentials block, intro video slot, availability hint, no-availability and unpublished states, review summary.
 
+Not built (design proposal only): "Notify me when she opens times" on the no-availability state, and the "Video coming soon" intro video slot. Treat both as New and confirm before building.
+
 ## Code
 `mobile/app/experts/[slug].tsx`, `web/components/hub/expert-profile-view.tsx`
