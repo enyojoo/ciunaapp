@@ -23,7 +23,7 @@ export function ThreadRow({ thread }: { thread: Thread }) {
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {thread.unread ? (
-            <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-ink" aria-label={t("messages.unread", { count: thread.unread })}>{thread.unread}</span>
+            <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground" aria-label={t("messages.unread", { count: thread.unread })}>{thread.unread}</span>
           ) : null}
         </div>
       </div>

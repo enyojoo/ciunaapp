@@ -1,29 +1,75 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ciuna design system</title>
+<link rel="icon" href="assets/logos/ciuna-mark.svg">
+<link rel="stylesheet" href="components/tokens.css">
 <style>
-body{margin:0;font:15px/1.5 system-ui,sans-serif;background:#FAFAF8;color:#111827;padding:24px;max-width:1100px;margin-inline:auto}
-h1{font-size:24px;margin:0 0 4px}h2{font-size:17px;margin:32px 0 12px}p{color:#52596B;margin:0 0 16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.sw{background:#fff;border:1px solid #E8E4DC;border-radius:16px;overflow:hidden}.sw i{display:block;height:56px}
-.sw div{padding:10px 12px;font-size:13px}.sw b{display:block;font-size:14px}.sw code{color:#52596B}
-table{border-collapse:collapse;width:100%;background:#fff;border:1px solid #E8E4DC;border-radius:16px;overflow:hidden}
-td,th{padding:8px 12px;text-align:left;font-size:13px;border-bottom:1px solid #E8E4DC}
-.pass{color:#065F46;font-weight:600}.fail{color:#991B1B;font-weight:600}
-.btn{display:inline-block;padding:12px 20px;border-radius:12px;font-weight:600;margin:0 8px 8px 0;border:0}
-.badge{display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;margin:0 8px 8px 0}
-</style></head><body>
-<h1>Ciuna design system</h1><p>Rendered live from tokens.json. Edit the JSON, run <code>npm run design:sync</code>.</p>
-<div id="app"></div>
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:var(--font-web);background:var(--paper);color:var(--ink);display:flex;-webkit-font-smoothing:antialiased}
+aside{width:272px;flex-shrink:0;height:100vh;overflow:auto;background:var(--surface);border-right:1px solid var(--hairline);padding:18px 12px 40px}
+aside .logo{display:flex;align-items:center;gap:10px;padding:4px 10px 14px}
+aside .logo img{height:22px}
+aside .logo span{font:600 12px/1 var(--font-web);color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+aside input{width:100%;height:38px;border:1px solid var(--input-edge);border-radius:10px;padding:0 12px;font:400 14px var(--font-web);margin:4px 0 10px}
+.grp{font:600 11px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:16px 10px 6px}
+.lnk{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;font:500 14px/20px var(--font-web);color:var(--ink);text-decoration:none;cursor:pointer}
+.lnk:hover{background:var(--neutral-surface)}.lnk.on{background:var(--primary-tint);color:var(--primary-text);font-weight:600}
+.lnk small{color:var(--muted);font-size:12px}
+main{flex:1;min-width:0;height:100vh;overflow:auto;padding:32px 40px 80px}
+h1{font:700 30px/36px var(--font-web);letter-spacing:-.5px;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 28px;max-width:720px}
+.cardwrap{margin:0 0 36px}
+.cardhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:10px}
+.cardhead h2{font:600 17px/24px var(--font-web);margin:0}
+.cardhead p{margin:2px 0 0;color:var(--muted);font-size:14px;max-width:760px}
+.cardhead a{font:500 13px var(--font-web);color:var(--primary-text);margin-left:12px;white-space:nowrap}
+iframe{display:block;width:100%;border:1px solid var(--hairline);border-radius:16px;background:var(--paper)}
+.home{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:0 0 32px}
+.tile{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:16px;text-decoration:none;color:var(--ink);display:block}
+.tile b{display:block;font:600 16px/22px var(--font-web)}.tile span{color:var(--muted);font-size:13px}
+.log{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:6px 18px}
+.log div{padding:12px 0;border-bottom:1px solid var(--hairline)}.log div:last-child{border:0}
+.log b{font-weight:600}.log span{display:block;color:var(--muted);font-size:14px}
+@media(max-width:800px){aside{display:none}main{padding:20px}}
+</style></head>
+<body>
+<aside><div class="logo"><img src="assets/logos/ciuna.svg" alt="Ciuna"><span>Design system</span></div><input id="q" placeholder="Search components and screens" aria-label="Search"><nav id="nav"></nav></aside>
+<main id="main"></main>
 <script>
-fetch("tokens.json").then(r=>r.json()).then(t=>{
-const c=Object.fromEntries(Object.entries(t.color).map(([k,v])=>[k,v.value]));
-const lum=h=>{const n=h.replace("#","");const[r,g,b]=[0,2,4].map(i=>parseInt(n.slice(i,i+2),16)/255).map(x=>x<=.03928?x/12.92:((x+.055)/1.055)**2.4);return .2126*r+.7152*g+.0722*b};
-const ratio=(a,b)=>{const[x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return (x+.05)/(y+.05)};
-const res=v=>v[0]=="#"?v:c[v];
-let h=`<h2>Buttons</h2><span class="btn" style="background:${c.primary};color:${c["primary-foreground"]}">Accept order</span><span class="btn" style="background:${c["primary-hover"]};color:${c["primary-foreground"]}">Hover</span><span class="btn" style="background:#fff;border:1px solid ${c["input-edge"]}">Secondary</span><span class="btn" style="background:${c.destructive};color:#fff">Reject order</span><a style="color:${c["primary-text"]};font-weight:600">Link</a>`;
-h+=`<h2>Status</h2>`+[["Completed","success"],["Live","success"],["Pending","warning"],["Preparing","warning"],["Failed","destructive"],["Rejected","destructive"],["Draft","neutral"],["Paused","neutral"]].map(([w,k])=>`<span class="badge" style="background:${c[k+"-surface"]};color:${c[k+"-text"]}">${w}</span>`).join("");
-h+=`<h2>Colours</h2><div class="grid">`+Object.entries(t.color).map(([k,v])=>`<div class="sw"><i style="background:${v.value}"></i><div><b>${k}</b><code>${v.value}</code><br>${v.usage}</div></div>`).join("")+`</div>`;
-h+=`<h2>Contrast gate</h2><table><tr><th>Pair</th><th>Ratio</th><th>Min</th><th></th></tr>`+t.pairs.map(p=>{const r=ratio(res(p.fg),res(p.bg));return `<tr><td>${p.label}</td><td>${r.toFixed(2)}:1</td><td>${p.min}:1</td><td class="${r>=p.min?"pass":"fail"}">${r>=p.min?"Pass":"Fail"}</td></tr>`}).join("")+`</table>`;
-document.getElementById("app").innerHTML=h});
+var DATA, LOG;
+Promise.all([fetch("cards.json").then(function(r){return r.json()}), fetch("changelog.json").then(function(r){return r.json()})]).then(function(r){DATA=r[0];LOG=r[1];nav();route();});
+var $=function(s){return document.querySelector(s)};
+function nav(){
+  var q=($("#q").value||"").toLowerCase(), h="";
+  h+='<a class="lnk'+(location.hash===""||location.hash==="#home"?" on":"")+'" href="#home">Home</a>';
+  DATA.groups.forEach(function(g){
+    var cs=DATA.cards.filter(function(c){return c.group===g&&(!q||(c.name+" "+c.subtitle).toLowerCase().indexOf(q)>=0)});
+    if(!cs.length) return;
+    h+='<div class="grp">'+g+'</div>';
+    cs.forEach(function(c){h+='<a class="lnk'+(location.hash==="#"+c.name?" on":"")+'" href="#'+c.name+'">'+c.name+'</a>'});
+  });
+  $("#nav").innerHTML=h;
+}
+function card(c){
+  var w=c.width?c.width+"px":"100%";
+  return '<section class="cardwrap" id="c-'+c.name+'"><div class="cardhead"><div><h2>'+c.name+'</h2><p>'+c.subtitle+'</p></div><div style="white-space:nowrap"><a href="components/'+c.name+'/preview.html" target="_blank">Open</a>'+(c.readme?'<a href="components/'+c.name+'/README.md" target="_blank">Spec</a>':'')+'</div></div><iframe loading="lazy" src="components/'+c.name+'/preview.html" style="height:'+c.height+'px;max-width:100%;width:'+w+'" title="'+c.name+'"></iframe></section>';
+}
+function route(){
+  nav();var hash=location.hash.slice(1), m=$("#main"), h="";
+  if(!hash||hash==="home"){
+    h+='<h1>Ciuna design system</h1><p class="sub">One system for the customer app, Ciuna Seller and Office. Orange marks the one thing to do; neutrals carry the rest. Everything on this page is rendered from <code>tokens.json</code>.</p>';
+    h+='<div class="home">'+DATA.groups.map(function(g){var n=DATA.cards.filter(function(c){return c.group===g}).length;if(!n)return"";var f=DATA.cards.find(function(c){return c.group===g});return '<a class="tile" href="#'+f.name+'"><b>'+g+'</b><span>'+n+' card'+(n>1?"s":"")+'</span></a>'}).join("")+'</div>';
+    h+='<h1 style="font-size:20px;margin:24px 0 10px">Recent changes</h1><div class="log">'+LOG.entries.map(function(e){return '<div><b>'+e.title+'</b> <span style="display:inline;margin-left:8px">'+e.date+'</span><span>'+e.detail+'</span></div>'}).join("")+'</div>';
+  } else {
+    var c=DATA.cards.find(function(x){return x.name===hash});
+    if(!c){h='<h1>Not found</h1>'} else {
+      var sibs=DATA.cards.filter(function(x){return x.group===c.group});
+      h='<h1>'+c.group+'</h1><p class="sub">'+sibs.length+' card'+(sibs.length>1?"s":"")+' in this group.</p>'+sibs.map(card).join("");
+      setTimeout(function(){var el=document.getElementById("c-"+hash);if(el)el.scrollIntoView()},50);
+    }
+  }
+  m.innerHTML=h;
+}
+window.addEventListener("hashchange",route);
+$("#q").addEventListener("input",nav);
 </script></body></html>

@@ -108,7 +108,7 @@ function Thread() {
             <React.Fragment key={m.id}>
               {showDay ? <li className="py-2 text-center text-xs font-semibold text-muted" aria-hidden>{day}</li> : null}
               <li className={cn("flex", mine ? "justify-end" : "justify-start")}>
-                <div className={cn("max-w-[85%] rounded-2xl px-3.5 py-2.5 sm:max-w-[70%]", mine ? "rounded-br-md bg-primary text-ink" : "rounded-bl-md bg-neutral-surface text-ink")}>
+                <div className={cn("max-w-[85%] rounded-2xl px-3.5 py-2.5 sm:max-w-[70%]", mine ? "rounded-br-md bg-primary text-primary-foreground" : "rounded-bl-md bg-neutral-surface text-ink")}>
                   <p className="sr-only">{t(mine ? "messages.you" : "messages.customer")}</p>
                   <p className="whitespace-pre-wrap break-words text-[15px]">{m.body}</p>
                   <p className={cn("mt-1 text-right text-xs", mine ? "text-ink/70" : "text-muted")}>

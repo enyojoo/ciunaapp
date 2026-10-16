@@ -32,7 +32,8 @@
     "dev:mobile": "npm run start -w mobile",
     "dev:mobile:web": "npm run web -w mobile",
     "export:mobile:web": "npm run export:web -w mobile",
-    "sync:rates:debug": "npm run sync:debug -w @ciuna/rate-sync --"
+    "sync:rates:debug": "npm run sync:debug -w @ciuna/rate-sync --",
+    "design:cards-build": "node design-system/scripts/build-cards.mjs"
   },
   "devDependencies": {
     "turbo": "^2.8.12"

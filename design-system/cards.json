@@ -1,0 +1,36 @@
+{
+ "groups": [
+  "Foundations",
+  "Actions",
+  "Forms",
+  "Feedback",
+  "Data display",
+  "Navigation",
+  "Marketplace",
+  "Money",
+  "Customer app · Screens",
+  "Seller · Screens",
+  "Office · Screens",
+  "Documents and email"
+ ],
+ "cards": [
+  {
+   "name": "Button",
+   "group": "Actions",
+   "subtitle": "White label on the primary orange: default, secondary, ghost, destructive, link, sizes, icon, busy and disabled",
+   "height": 560,
+   "width": null,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "SellerOrders",
+   "group": "Seller · Screens",
+   "subtitle": "Orders on a phone: new orders with one-tap accept, due timers, tabs with counts, and the empty state",
+   "height": 980,
+   "width": 900,
+   "page": true,
+   "readme": true
+  }
+ ]
+}
