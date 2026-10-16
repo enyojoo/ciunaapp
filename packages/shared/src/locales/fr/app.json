@@ -273,7 +273,8 @@
     "orderLabel": "COMMANDE",
     "sendBadge": "ENVOI",
     "amountPaid": "Montant payé",
-    "orderAmount": "Montant de la commande"
+    "orderAmount": "Montant de la commande",
+    "offline": "Affichage de votre activité enregistrée. Tirez pour actualiser une fois en ligne."
   },
   "orders": {
     "title": "Transferts",

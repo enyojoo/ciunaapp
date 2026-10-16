@@ -363,7 +363,8 @@
     "orderLabel": "ORDER",
     "sendBadge": "SEND",
     "amountPaid": "Amount Paid",
-    "orderAmount": "Order Amount"
+    "orderAmount": "Order Amount",
+    "offline": "Showing your saved activity. Pull down to refresh when you are back online."
   },
   "orders": {
     "title": "Transfer",

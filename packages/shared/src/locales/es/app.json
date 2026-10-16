@@ -273,7 +273,8 @@
     "orderLabel": "PEDIDO",
     "sendBadge": "ENVÍO",
     "amountPaid": "Monto pagado",
-    "orderAmount": "Monto del pedido"
+    "orderAmount": "Monto del pedido",
+    "offline": "Mostrando tu actividad guardada. Desliza hacia abajo para actualizar cuando vuelvas a tener conexión."
   },
   "orders": {
     "title": "Envíos",

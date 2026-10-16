@@ -363,7 +363,8 @@
     "orderLabel": "订单",
     "sendBadge": "汇款",
     "amountPaid": "已付金额",
-    "orderAmount": "订单金额"
+    "orderAmount": "订单金额",
+    "offline": "正在显示已保存的记录。恢复网络后下拉刷新。"
   },
   "orders": {
     "title": "转账",

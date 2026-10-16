@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react"
 import {
-  ActivityIndicator,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -23,6 +22,7 @@ import {
 } from "lucide-react-native"
 import { resolveTransactionListLine, transactionListLineIconKind } from "@ciuna/shared"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { Screen } from "@/components/screen"
 import { StatusChip } from "@/components/status-chip"
 import { fetchWithAuth } from "@/lib/api"
@@ -209,13 +209,17 @@ export default function TransactionsScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={refreshAll} tintColor={colors.primary} />
         }
       >
-        {loading ? (
-          <View style={styles.center}>
-            <ActivityIndicator color={colors.primary} />
-          </View>
+        {loading && rows.length === 0
+          ? [0, 1, 2, 3, 4].map((i) => <View key={i} style={[styles.row, styles.skeletonRow]} />)
+          : null}
+
+        {!loading && tx.error && rows.length === 0 ? <LoadError onRetry={revalidateAll} /> : null}
+
+        {!loading && tx.error && rows.length > 0 ? (
+          <Text style={styles.offline}>{t("transactions.offline", { defaultValue: "Showing your saved activity. Pull down to refresh when you are back online." })}</Text>
         ) : null}
 
-        {!loading && rows.length === 0 ? (
+        {!loading && !tx.error && rows.length === 0 ? (
           <EmptyState
             title={t("transactions.empty", { defaultValue: "No transactions found" })}
             body={t("transactions.emptyHint", { defaultValue: "Start by sending your first transfer" })}
@@ -334,7 +338,8 @@ const styles = StyleSheet.create({
   chipTextActive: { color: colors.onPrimary },
   list: { flex: 1 },
   listContent: { paddingHorizontal: 20, paddingBottom: 40 },
-  center: { paddingVertical: 40, alignItems: "center" },
+  skeletonRow: { height: 64, backgroundColor: colors.paper, borderColor: colors.paper },
+  offline: { fontSize: 12, color: colors.muted, textAlign: "center", marginBottom: 8 },
   group: { marginBottom: 8 },
   groupHeading: {
     marginTop: 12,

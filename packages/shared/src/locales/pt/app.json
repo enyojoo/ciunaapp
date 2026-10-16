@@ -363,7 +363,8 @@
     "orderLabel": "PEDIDO",
     "sendBadge": "ENVIO",
     "amountPaid": "Valor pago",
-    "orderAmount": "Valor do pedido"
+    "orderAmount": "Valor do pedido",
+    "offline": "Mostrando sua atividade salva. Puxe para atualizar quando voltar a ficar online."
   },
   "orders": {
     "title": "Transferência",
