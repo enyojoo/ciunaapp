@@ -5,7 +5,8 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { BadgeCheck, Clock, Info, MapPin } from "lucide-react-native"
+import { Clock, Info, MapPin } from "lucide-react-native"
+import { VerifiedBadge } from "@/components/verified-badge"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import { RatingLine, ReviewsSection } from "@/components/reviews-section"
 import { useReviews } from "@/lib/use-reviews"
@@ -121,12 +122,7 @@ export default function VendorScreen() {
                 {vendor?.name}
               </Text>
               {vendor?.is_verified ? (
-                <BadgeCheck
-                  size={18}
-                  color={colors.primary}
-                  strokeWidth={2.2}
-                  accessibilityLabel={t("hub.verifiedVendor", { defaultValue: "Verified vendor" })}
-                />
+                <VerifiedBadge size={18} />
               ) : null}
             </View>
             {location ? (

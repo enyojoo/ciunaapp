@@ -4,7 +4,7 @@ import { Image } from "expo-image"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { BadgeCheck } from "lucide-react-native"
+import { VerifiedBadge } from "@/components/verified-badge"
 import { EmptyState } from "@/components/empty-state"
 import {
   ExpertServiceCard,
@@ -91,12 +91,7 @@ export default function ExpertServiceDetailScreen() {
           {expert.display_name}
         </Text>
         {expert.is_verified ? (
-          <BadgeCheck
-            size={16}
-            color={colors.primary}
-            strokeWidth={2.2}
-            accessibilityLabel={t("hub.expertVerified", { defaultValue: "Verified expert" })}
-          />
+          <VerifiedBadge size={16} kind="expert" />
         ) : null}
       </Pressable>
 

@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
-import { BadgeCheck, MapPin } from "lucide-react-native"
+import { MapPin } from "lucide-react-native"
+import { VerifiedBadge } from "@/components/verified-badge"
 import { LinearGradient } from "expo-linear-gradient"
 import { tileArtFor } from "@/components/tile"
 import { useTranslation } from "react-i18next"
@@ -88,7 +89,7 @@ function StoreFace({
           <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
             {vendor.name}
           </Text>
-          {vendor.is_verified ? <BadgeCheck size={14} color={colors.success} strokeWidth={2.4} accessibilityLabel={verifiedLabel} /> : null}
+          {vendor.is_verified ? <VerifiedBadge size={14} label={verifiedLabel} /> : null}
         </View>
         <Text style={styles.rating} numberOfLines={1}>
           {rated

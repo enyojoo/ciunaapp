@@ -12,7 +12,8 @@ import {
 import { Image } from "expo-image"
 import { StatusBar } from "expo-status-bar"
 import { useRouter } from "expo-router"
-import { ArrowLeft, BadgeCheck, ChevronLeft, MapPin } from "lucide-react-native"
+import { ArrowLeft, ChevronLeft, MapPin } from "lucide-react-native"
+import { VerifiedBadge } from "@/components/verified-badge"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { SearchHeroButton } from "@/components/search-entry"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
@@ -84,7 +85,7 @@ function LineHero({
             {title}
           </Text>
           {verified ? (
-            <BadgeCheck size={18} color={colors.success} strokeWidth={2} accessibilityLabel={verifiedAriaLabel} />
+            <VerifiedBadge size={18} label={verifiedAriaLabel} />
           ) : null}
         </View>
         {loc ? (
@@ -161,7 +162,7 @@ function StorefrontHero({
                 {title}
               </Text>
               {verified ? (
-                <BadgeCheck size={16} color={colors.success} strokeWidth={2.2} accessibilityLabel={verifiedAriaLabel} />
+                <VerifiedBadge size={16} label={verifiedAriaLabel} />
               ) : null}
             </View>
             {loc ? (

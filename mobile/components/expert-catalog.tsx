@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
-import { BadgeCheck } from "lucide-react-native"
+import { VerifiedBadge } from "@/components/verified-badge"
 import { useTranslation } from "react-i18next"
 import { formatCardPrice } from "@/lib/money"
 import { FavouriteHeart } from "@/components/favourite-heart"
@@ -184,12 +184,7 @@ export function ExpertServiceCard({
                 {expert.display_name}
               </Text>
               {expert.is_verified ? (
-                <BadgeCheck
-                  size={14}
-                  color={colors.primary}
-                  strokeWidth={2.2}
-                  accessibilityLabel={t("hub.expertVerified", { defaultValue: "Verified expert" })}
-                />
+                <VerifiedBadge size={14} kind="expert" />
               ) : null}
             </Pressable>
           ) : null}

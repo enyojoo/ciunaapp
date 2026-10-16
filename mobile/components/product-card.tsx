@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from "react-native"
 import { Image } from "expo-image"
-import { BadgeCheck, Minus, Plus, ShoppingCart } from "lucide-react-native"
+import { Minus, Plus, ShoppingCart } from "lucide-react-native"
+import { VerifiedBadge } from "@/components/verified-badge"
 import { useTranslation } from "react-i18next"
 import {
   formatCardPrice,
@@ -236,7 +237,7 @@ export function VendorChip({ vendor }: { vendor: NonNullable<HubProduct["vendor"
       <Text style={styles.vendorName} numberOfLines={1}>
         {vendor.name}
       </Text>
-      {vendor.is_verified ? <BadgeCheck size={12} color={colors.primary} strokeWidth={2.2} /> : null}
+      {vendor.is_verified ? <VerifiedBadge size={12} /> : null}
     </View>
   )
 }
