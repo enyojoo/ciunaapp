@@ -55,7 +55,7 @@ function ExpertProfileBody() {
 
   if (loading && !profile) {
     return (
-      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -66,7 +66,7 @@ function ExpertProfileBody() {
 
   if (error && !profile && !(error instanceof Error && error.message === EXPERT_NOT_FOUND)) {
     return (
-      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
         <LoadError onRetry={() => void revalidate()} />
       </ScreenScroll>
@@ -75,7 +75,7 @@ function ExpertProfileBody() {
 
   if (notFound || !profile) {
     return (
-      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
         <EmptyState
           title={t("hub.expertNotFound", { defaultValue: "Expert not found" })}
@@ -87,7 +87,7 @@ function ExpertProfileBody() {
   }
 
   return (
-    <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+    <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
       <View style={styles.identityRow}>
         <View style={styles.avatarWrap}>
@@ -180,8 +180,6 @@ function ExpertProfileBody() {
   )
 }
 
-/** Space between the top bar and the first content block. */
-const AFTER_BAR = { paddingTop: 16 }
 
 /** Same top bar as the hub screens: back chip and the favourite heart. */
 export default function ExpertProfileScreen() {

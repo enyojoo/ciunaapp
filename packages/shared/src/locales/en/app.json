@@ -1206,7 +1206,9 @@
     "storeOpensAt": "It opens {{day}} {{time}}.",
     "free": "Free",
     "continueToReview": "Continue to review",
-    "edit": "Edit"
+    "edit": "Edit",
+    "fromFee": "From {{fee}}",
+    "progressTime": "Time"
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

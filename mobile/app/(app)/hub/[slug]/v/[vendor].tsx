@@ -67,7 +67,7 @@ export default function VendorScreen() {
       <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
         {topBar}
-        <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+        <ScreenScroll edges={["left", "right"]}>
           <StoreHeader vendor={null} line={line} summary={null} productCount={0} skeleton />
         </ScreenScroll>
       </View>
@@ -79,7 +79,7 @@ export default function VendorScreen() {
       <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
         {topBar}
-        <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+        <ScreenScroll edges={["left", "right"]}>
           <EmptyState
             title={t("hub.vendorStoreNotFound", { defaultValue: "Store not found" })}
             body={t("hub.vendorStoreNotFoundBody", {
@@ -105,7 +105,7 @@ export default function VendorScreen() {
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
       {topBar}
-      <ScreenScroll edges={["left", "right"]} contentStyle={cartMode ? { ...AFTER_BAR, ...styles.contentWithCartBar } : AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={cartMode ? styles.contentWithCartBar : undefined}>
         <StoreHeader vendor={vendor} line={line} summary={reviews.summary} productCount={products.length} />
 
         {bio ? (
@@ -179,8 +179,6 @@ export default function VendorScreen() {
   )
 }
 
-/** Space between the top bar and the first content block. */
-const AFTER_BAR = { paddingTop: 16 }
 
 const styles = StyleSheet.create({
   infoPlate: { marginTop: 16, marginBottom: 20, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 14 },

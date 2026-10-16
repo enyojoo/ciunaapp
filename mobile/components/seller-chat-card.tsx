@@ -3,6 +3,7 @@ import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { ChevronRight, MessageCircle } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
+import { PrimaryButton } from "@/components/primary-button"
 import { useChatUnread } from "@/lib/order-chat"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
@@ -41,7 +42,24 @@ export function SellerChatCard({ orderId, sellerName, photoUrl }: { orderId: str
   )
 }
 
+/** Bottom bar with the same Message seller action, shown while an order is live. */
+export function StickyMessageSeller({ orderId }: { orderId: string }) {
+  const { t } = useTranslation("app")
+  const router = useRouter()
+  const { unread, unavailable } = useChatUnread(orderId)
+  if (unavailable) return null
+  return (
+    <View style={styles.sticky}>
+      <PrimaryButton
+        label={(unread > 0 ? "● " : "") + t("chat.messageSeller", { defaultValue: "Message seller" })}
+        onPress={() => router.push(`/orders/${orderId}/chat` as never)}
+      />
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
+  sticky: { position: "absolute", left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 14, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border },
   card: {
     flexDirection: "row",
     alignItems: "center",

@@ -1206,7 +1206,9 @@
     "storeOpensAt": "Ouverture {{day}} à {{time}}.",
     "free": "Gratuit",
     "continueToReview": "Continuer vers la vérification",
-    "edit": "Modifier"
+    "edit": "Modifier",
+    "fromFee": "À partir de {{fee}}",
+    "progressTime": "Heure"
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

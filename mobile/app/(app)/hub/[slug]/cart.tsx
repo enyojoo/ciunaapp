@@ -101,7 +101,7 @@ function HubCartScreen() {
 
   if (loading && !cart) {
     return (
-      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
         <View style={styles.list}>
           {[0, 1, 2].map((i) => (
@@ -114,7 +114,7 @@ function HubCartScreen() {
 
   if (!cart || items.length === 0) {
     return (
-      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
         <EmptyState
           icon={<ShoppingCart size={26} color={colors.primaryText} strokeWidth={2} />}
@@ -128,7 +128,7 @@ function HubCartScreen() {
   }
 
   return (
-    <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+    <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
       {/* Store plate: who the cart is from, and a way back to add more. */}
       <View style={styles.storePlate}>
@@ -279,8 +279,6 @@ export default function HubCartScreenScreen() {
   )
 }
 
-/** Space between the top bar and the first content block. */
-const AFTER_BAR = { paddingTop: 16 }
 
 const styles = StyleSheet.create({
   storePlate: { flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 12, marginBottom: 12 },

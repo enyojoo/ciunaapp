@@ -1206,7 +1206,9 @@
     "storeOpensAt": "Откроется {{day}} в {{time}}.",
     "free": "Бесплатно",
     "continueToReview": "Перейти к проверке",
-    "edit": "Изменить"
+    "edit": "Изменить",
+    "fromFee": "От {{fee}}",
+    "progressTime": "Время"
   },
   "social": {
     "loadFailed": "Не удалось загрузить, попробуйте ещё раз",

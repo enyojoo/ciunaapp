@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.paper },
   strip: {
     marginHorizontal: 16,
-    marginTop: 4,
+    marginTop: 0,
     marginBottom: 4,
     borderRadius: radius.row,
     borderWidth: 1,

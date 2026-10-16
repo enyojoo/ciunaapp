@@ -1206,7 +1206,9 @@
     "storeOpensAt": "将于{{day}} {{time}}开门。",
     "free": "免费",
     "continueToReview": "继续确认",
-    "edit": "编辑"
+    "edit": "编辑",
+    "fromFee": "{{fee}} 起",
+    "progressTime": "时间"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

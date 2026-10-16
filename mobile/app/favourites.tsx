@@ -174,7 +174,7 @@ export default function FavouritesScreen() {
 const styles = StyleSheet.create({
   tabs: {
     flexDirection: "row",
-    marginTop: 8,
+    marginTop: 0,
     marginBottom: 16,
     padding: 4,
     gap: 4,

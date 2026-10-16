@@ -40,7 +40,7 @@ function ExpertServiceDetailBody() {
 
   if (loading) {
     return (
-      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -51,7 +51,7 @@ function ExpertServiceDetailBody() {
 
   if (notFound || !service) {
     return (
-      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+      <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
         <EmptyState
           title={t("hub.serviceUnavailable", { defaultValue: "This service is currently unavailable." })}
@@ -68,7 +68,7 @@ function ExpertServiceDetailBody() {
   const bookLabel = t("experts.profile.bookSession", { defaultValue: "Book a session" })
 
   return (
-    <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
+    <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
       <Text style={styles.title}>{service.title}</Text>
       <Pressable
@@ -127,8 +127,6 @@ function ExpertServiceDetailBody() {
   )
 }
 
-/** Space between the top bar and the first content block. */
-const AFTER_BAR = { paddingTop: 16 }
 
 /** Same top bar as the hub screens. */
 export default function ExpertServiceDetailScreen() {

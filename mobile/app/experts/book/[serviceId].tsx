@@ -6,6 +6,7 @@ import { useExpertSlots } from "@/lib/use-expert-slots"
 import { ScreenScroll } from "@/components/screen"
 import { HubTopBar } from "@/components/hub-top-bar"
 import { SlotPicker } from "@/components/slot-picker"
+import { StepBar } from "@/components/step-bar"
 import { MarketplaceCheckout } from "@/components/marketplace-checkout"
 import { colors, type as typeSize } from "@/lib/theme"
 
@@ -16,7 +17,8 @@ function ExpertBookBody() {
     { t } = useTranslation("app")
   if (slotId) return <MarketplaceCheckout source={{ kind: "expert", expertServiceSlotId: slotId }} />
   return (
-    <ScreenScroll contentStyle={{ paddingTop: 16 }}>
+    <ScreenScroll>
+      <StepBar steps={[t("marketplace.progressTime", { defaultValue: "Time" }), t("marketplace.progressDetails", { defaultValue: "Details" }), t("marketplace.progressReview", { defaultValue: "Review" })]} active={0} />
       <Text style={styles.title}>{data?.service?.title}</Text>
       {data?.service?.short_description ? <Text style={styles.sub}>{data.service.short_description}</Text> : null}
       <SlotPicker slots={data?.slots || []} loading={loading && !data} onConfirm={setSlotId} expertZone={data?.expertTimeZone} />

@@ -20,8 +20,9 @@ import { MarketplacePayStep, type MarketplacePayTab } from "@/components/marketp
 import { useToast } from "@/components/toast-provider"
 import { OrderReviewCard } from "@/components/review-sheet"
 import { OrderTimeline } from "@/components/order-timeline"
+import { StepBar } from "@/components/step-bar"
 import { OrderPlaceCard, OrderStatusHeader } from "@/components/order-status-header"
-import { SellerChatCard } from "@/components/seller-chat-card"
+import { SellerChatCard, StickyMessageSeller } from "@/components/seller-chat-card"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { startYooKassaPayment, resumeYooKassaPayment, isYooKassaNativeAvailable } from "@/lib/yookassa-native"
 import { hubCartPath } from "@/lib/hub"
@@ -31,10 +32,13 @@ import { colors, radius, space, type as typeSize, ui } from "@/lib/theme"
 
 function Choice({
   label,
+  hint,
   selected,
   onPress,
 }: {
   label: string
+  /** A second, muted line: the fee and time, or the pickup hours. */
+  hint?: string
   selected: boolean
   onPress: () => void
 }) {
@@ -47,6 +51,7 @@ function Choice({
       style={[styles.choice, selected && styles.choiceActive]}
     >
       <Text style={[styles.choiceLabel, selected && styles.choiceLabelActive]}>{label}</Text>
+      {hint ? <Text style={styles.choiceHint}>{hint}</Text> : null}
     </Pressable>
   )
 }
@@ -327,6 +332,19 @@ export function MarketplaceCheckout({
       </>
     )
 
+  /** Fee and time for delivery, cost and hours for pickup, from the quote (shown under each option). */
+  function modeHint(mode: string): string | undefined {
+    if (!q) return undefined
+    if (mode === "delivery" && q.zones.length > 0) {
+      const cheapest = q.zones.reduce((a, z) => (z.fee < a.fee ? z : a), q.zones[0])
+      const etas = q.zones.map((z) => z.etaMinutes).filter((n): n is number => typeof n === "number")
+      const fee = t("marketplace.fromFee", { fee: formatMoney(cheapest.fee, cheapest.currency), defaultValue: "From {{fee}}" })
+      return etas.length ? fee + " · " + t("marketplace.etaMinutes", { n: Math.min(...etas), defaultValue: "{{n}} min" }) : fee
+    }
+    if (mode === "pickup") return [label("free", "Free"), q.pickupHours].filter(Boolean).join(" · ")
+    return undefined
+  }
+
   async function selectTab(tab: MarketplacePayTab) {
     setPayTab(tab)
     if (tab === "yookassa") {
@@ -441,20 +459,14 @@ export function MarketplaceCheckout({
         />
       )}
 
-      <View style={styles.progress} accessibilityRole="progressbar">
-        <View style={styles.progressStep}>
-          <View style={[styles.progressBar, styles.progressBarOn]} />
-          <Text style={[styles.progressText, styles.progressTextOn]}>
-            {label("progressDetails", "Details")}
-          </Text>
-        </View>
-        <View style={styles.progressStep}>
-          <View style={[styles.progressBar, (inReview || doneOrder) && styles.progressBarOn]} />
-          <Text style={[styles.progressText, (inReview || doneOrder) && styles.progressTextOn]}>
-            {label("progressReview", "Review")}
-          </Text>
-        </View>
-      </View>
+      <StepBar
+        steps={
+          source.kind === "expert"
+            ? [label("progressTime", "Time"), label("progressDetails", "Details"), label("progressReview", "Review")]
+            : [label("progressDetails", "Details"), label("progressReview", "Review")]
+        }
+        active={(source.kind === "expert" ? 1 : 0) + (inReview || doneOrder ? 1 : 0)}
+      />
 
       {!q && !c.order && !c.error && !seed ? (
         <View style={styles.boot}>
@@ -500,6 +512,7 @@ export function MarketplaceCheckout({
                       <Choice
                         key={mode}
                         label={label(mode, mode)}
+                        hint={modeHint(mode)}
                         selected={q.fulfillmentMode === mode}
                         onPress={() => c.setFulfillmentMode(mode)}
                       />
@@ -889,6 +902,9 @@ export function MarketplaceOrderView({
   const chatClosesRaw = (order as { chat?: { closesAt?: string | null } }).chat?.closesAt
   const chatClosesAt = chatClosesRaw && !Number.isNaN(new Date(chatClosesRaw).getTime()) ? new Date(chatClosesRaw) : null
 
+  /** While the seller is still working on it, Message seller also sits in a bar at the bottom. */
+  const live = order.payment_state === "paid" && ["awaiting_acceptance", "accepted", "in_progress"].includes(order.fulfillment_state)
+
   const pay =
     order.nextAction === "pay" && !["failed", "superseded", "succeeded"].includes(attempt?.state || "")
   const onlinePayment =
@@ -903,7 +919,8 @@ export function MarketplaceOrderView({
       : "manual"
 
   return (
-    <ScreenScroll keyboard edges={["left", "right", "bottom"]} contentStyle={styles.scroll}>
+    <View style={{ flex: 1 }}>
+    <ScreenScroll keyboard edges={["left", "right", "bottom"]} contentStyle={live ? { ...styles.scroll, paddingBottom: 96 } : styles.scroll}>
       <View style={styles.stack}>
         <OrderStatusHeader
           order={order}
@@ -1053,11 +1070,13 @@ export function MarketplaceOrderView({
         />
       </View>
     </ScreenScroll>
+    {live ? <StickyMessageSeller orderId={order.id} /> : null}
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingTop: 16, paddingHorizontal: 16 },
+  scroll: { paddingTop: 0, paddingHorizontal: 16 },
   stack: { gap: 20, paddingBottom: 16 },
   footerPad: { padding: 20 },
   loading: { fontSize: typeSize.body, color: colors.muted },
@@ -1070,13 +1089,8 @@ const styles = StyleSheet.create({
   },
   errorText: { fontSize: typeSize.meta, color: colors.danger, fontWeight: "600" },
   timelineCard: { backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },
-  progress: { flexDirection: "row", gap: 8, marginBottom: 16 },
+  choiceHint: { marginTop: 2, fontSize: typeSize.meta, color: colors.muted },
   recapHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  progressStep: { flex: 1, gap: 6 },
-  progressBar: { height: 4, borderRadius: 2, backgroundColor: colors.border },
-  progressBarOn: { backgroundColor: colors.primary },
-  progressText: { fontSize: 12, fontWeight: "600", color: colors.muted },
-  progressTextOn: { color: colors.text },
   summary: {
     ...ui.card,
     padding: 18,

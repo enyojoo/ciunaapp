@@ -23,6 +23,7 @@ export function HubTopBar({
   const router = useRouter()
   const { t } = useTranslation("app")
   return (
+    <View style={styles.wrap}>
     <View style={heroBarStyle.hero}>
       <SafeAreaView edges={["top"]}>
         <View style={[heroBarStyle.bar, styles.barHeight]}>
@@ -38,10 +39,13 @@ export function HubTopBar({
         </View>
       </SafeAreaView>
     </View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  // 16px of page background under the bar, so no screen needs its own top padding.
+  wrap: { paddingBottom: 16, backgroundColor: colors.paper },
   // Food and Mart's bar is this tall (its title block is a touch taller than the back chip), so the chip, cart and hairline line up across screens.
   barHeight: { minHeight: 70 },
   middle: { flex: 1, minWidth: 0 },
