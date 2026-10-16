@@ -15,6 +15,7 @@ export type AdminPermission =
   | "roles.manage"
   | "audit.read"
   | "support.read"
+  | "support.manage"
   | "users.read"
   | "users.manage"
   | "rates.manage"
@@ -25,14 +26,14 @@ export type AdminPermission =
 
 const ALL: AdminPermission[] = [
   "merchants.read", "merchants.review", "merchants.manage", "listings.review", "orders.manage", "finance.manage",
-  "fees.manage", "kyb.manage", "roles.manage", "audit.read", "support.read",
+  "fees.manage", "kyb.manage", "roles.manage", "audit.read", "support.read", "support.manage",
   "users.read", "users.manage", "rates.manage", "settings.manage", "transactions.manage", "catalog.manage", "experts.manage",
 ]
 
 export const ADMIN_ROLE_PERMISSIONS: Record<AdminRole, ReadonlySet<AdminPermission>> = {
   super_admin: new Set(ALL),
-  ops: new Set<AdminPermission>(["merchants.read", "merchants.review", "merchants.manage", "listings.review", "orders.manage", "audit.read", "support.read", "users.read", "users.manage", "transactions.manage", "catalog.manage", "experts.manage"]),
-  support: new Set<AdminPermission>(["merchants.read", "orders.manage", "support.read", "users.read"]),
+  ops: new Set<AdminPermission>(["merchants.read", "merchants.review", "merchants.manage", "listings.review", "orders.manage", "audit.read", "support.read", "support.manage", "users.read", "users.manage", "transactions.manage", "catalog.manage", "experts.manage"]),
+  support: new Set<AdminPermission>(["merchants.read", "orders.manage", "support.read", "support.manage", "users.read"]),
   finance: new Set<AdminPermission>(["merchants.read", "finance.manage", "orders.manage", "audit.read", "support.read", "users.read", "rates.manage", "transactions.manage"]),
   compliance: new Set<AdminPermission>(["merchants.read", "merchants.review", "kyb.manage", "audit.read", "support.read", "users.read", "users.manage"]),
 }

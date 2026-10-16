@@ -24,6 +24,7 @@ export const LIMITS = {
   upload: { limit: 20, windowSeconds: 60 },
   cart: { limit: 60, windowSeconds: 60 },
   favourite: { limit: 60, windowSeconds: 60 },
+  support: { limit: 20, windowSeconds: 60 },
 } as const
 
 /**
