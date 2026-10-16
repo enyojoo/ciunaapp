@@ -37,7 +37,7 @@ Defaults chosen for Ciuna's interest: protect money and customers first, launch 
 6. **Account deletion:** blocked while there are open orders, pending transfers or a referral balance. Otherwise personal data is erased or anonymised; ledger, transfer and tax records are kept as the law requires and the dialog says so in plain words (legal reviews the text).
 7. **KYC:** three levels (verified email and phone; government ID; ID plus address proof). Limits per level are Office compliance settings; seed values are conservative and compliance must confirm before launch. Rejection uses templated reasons.
 8. **Expert bookings:** the expert must accept (Awaiting, then Confirmed). The customer is refunded in full if the expert declines or does not reply in 24 hours. Customer cancellation is free until 24 hours before the session. The meeting link is entered by the expert.
-9. **Chat quick replies:** seller-only. Customers type free text.
+9. **Chat quick replies:** customer-visible (owner decision, 2026-10-17). They fill the composer and never send on their own; customers can still type free text.
 10. **Desktop Home greeting and referral plate:** not built.
 11. **Favourites:** live under More and as hearts on cards, not in Activity.
 12. **Web UI kit:** `web/` adopts `@ciuna/ui-web` for all new and touched screens; old `web/components/ui/*` are removed as screens migrate. `web/locales/*` is deleted once `packages/shared/src/locales` is the only source.

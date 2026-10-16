@@ -175,7 +175,7 @@ Parallelism: WP1, WP4, WP2 can proceed together. After them: WP3 || WP5 || WP8 |
 7. Account deletion rules: what is blocked (open orders, referral balance, pending transfers) and what is retained.
 8. KYC: levels count, limits source (Office compliance settings), hosted provider replacement or keep with provider name removed from copy.
 9. Expert booking: auto-confirm vs seller-confirm ("awaiting" vs "confirmed" requires seller accept flow); cancellation and refund window; meeting link source.
-10. Chat quick replies on ChatBubble: customer-visible? Seller-only?
+10. Chat quick replies: answered, customer-visible (see 80-decisions item 9).
 11. Desktop greeting and referral plate on Home (New).
 12. Favourites on stores and experts: show in Activity or More only?
 13. Does `web/` adopt `@ciuna/ui-web` fully or only for new screens? What happens to `web/locales/*`?
