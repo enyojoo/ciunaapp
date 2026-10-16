@@ -2,7 +2,7 @@ import { APP_URLS, LOCAL_URLS } from "@ciuna/shared"
 import { type NextRequest } from "next/server"
 
 function extraOriginsFromEnv(): string[] {
-  const named = [process.env.NEXT_PUBLIC_APP_URL, process.env.NEXT_PUBLIC_OFFICE_URL]
+  const named = [process.env.NEXT_PUBLIC_APP_URL, process.env.NEXT_PUBLIC_OFFICE_URL, process.env.NEXT_PUBLIC_SELLER_URL]
   const csv = (process.env.CORS_ALLOWED_ORIGINS || "")
     .split(",")
     .map((s) => s.trim())
@@ -15,11 +15,13 @@ function allowedOrigins(): string[] {
     new Set([
       APP_URLS.app,
       APP_URLS.office,
+      APP_URLS.seller,
       "https://app.ciuna.com",
       "https://ciunaapp.vercel.app",
       "https://ciunaoffice.vercel.app",
       LOCAL_URLS.web,
       LOCAL_URLS.office,
+      LOCAL_URLS.seller,
       LOCAL_URLS.expo,
       ...extraOriginsFromEnv(),
     ]),

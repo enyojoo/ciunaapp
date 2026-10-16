@@ -6,6 +6,7 @@ export {
   resolveApiUrl,
   resolveAppUrl,
   resolveOfficeUrl,
+  resolveSellerUrl,
   joinApiPath,
 } from "./constants/urls"
 export { roundMoney } from "./money/round"

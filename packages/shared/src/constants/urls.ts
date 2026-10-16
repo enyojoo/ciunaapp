@@ -1,6 +1,6 @@
 /**
  * Canonical production hosts.
- * Local defaults: web 3000, office 3001, api 3002, Expo 8081.
+ * Local defaults: web 3000, office 3001, api 3002, seller 3003, Expo 8081.
  *
  * Env split (names only — never commit secrets):
  * - All clients (web, office, mobile): NEXT_PUBLIC_API_URL, NEXT_PUBLIC_APP_URL,
@@ -16,6 +16,7 @@ export const APP_URLS = {
   app: "https://app.ciuna.com",
   api: "https://api.ciuna.com",
   office: "https://bk.ciuna.com",
+  seller: "https://seller.ciuna.com",
 } as const
 
 export const LOCAL_URLS = {
@@ -23,6 +24,7 @@ export const LOCAL_URLS = {
   office: "http://localhost:3001",
   api: "http://localhost:3002",
   expo: "http://localhost:8081",
+  seller: "http://localhost:3003",
 } as const
 
 export function resolveApiUrl(): string {
@@ -47,6 +49,12 @@ export function resolveOfficeUrl(): string {
   const fromEnv = process.env.NEXT_PUBLIC_OFFICE_URL
   if (fromEnv) return fromEnv.replace(/\/+$/, "")
   return process.env.NODE_ENV === "production" ? APP_URLS.office : LOCAL_URLS.office
+}
+
+export function resolveSellerUrl(): string {
+  const fromEnv = process.env.NEXT_PUBLIC_SELLER_URL
+  if (fromEnv) return fromEnv.replace(/\/+$/, "")
+  return process.env.NODE_ENV === "production" ? APP_URLS.seller : LOCAL_URLS.seller
 }
 
 export function joinApiPath(path: string, base = resolveApiUrl()): string {
