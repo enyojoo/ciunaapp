@@ -93,3 +93,10 @@ Defaults chosen for Ciuna's interest: protect money and customers first, launch 
   - Blocked: "You can't delete your account yet. Finish or cancel open orders and transfers and withdraw or use your referral balance, then try again."
   - Buttons: "Delete account" (destructive), "Keep my account".
   - Retention is a setting (`retention_years`, default 5) so it can follow legal advice without a code change.
+
+### Marketplace payment (corrected)
+- Marketplace orders (Food, Mart, expert bookings) are paid in YooKassa's payment frame, not in a method list drawn by Ciuna. Web uses the embedded widget; native uses the YooKassa SDK (`gatewayMode` embedded or native in `mobile/components/marketplace-checkout.tsx`). The customer picks bank card, SBP or another method inside that frame.
+- Our checkout therefore has no "Pay with" list. The last step shows the order summary, the total in RUB and one primary button "Pay ₽X" that opens the payment frame. After it closes we show the states: opening, waiting for confirmation ("Checking payment. Please don't pay again."), paid, failed with "Try again", cancelled. The method chosen is shown afterwards only as the name YooKassa returns (for example "Bank card ····4242" or "SBP").
+- Customer copy still avoids naming the provider in our own text ("Pay securely", "Payment"); the frame carries its own branding, which is expected. Office may name YooKassa.
+- Send is different: its payment methods (SBP QR, bank transfer) are drawn by Ciuna and stay as designed.
+- Design cards to change: `MarketCheckout`, `OrderSummary`, `ExpertBooking` (pay step), `Cart` (no methods), `ProductPage` and `CustomerTransactions` only if they show a method list.
