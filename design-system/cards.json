@@ -18,7 +18,7 @@
    "name": "Colour",
    "group": "Foundations",
    "subtitle": "Every colour token with hex, usage and AA ratio; brand orange vs primary vs primary-text; the live contrast gate",
-   "height": 2300,
+   "height": 4596,
    "width": null,
    "page": false,
    "readme": true
@@ -27,7 +27,7 @@
    "name": "Icons",
    "group": "Foundations",
    "subtitle": "The whole Lucide icon set in use, labelled, with sizes, stroke and colour rules",
-   "height": 1700,
+   "height": 1800,
    "width": null,
    "page": false,
    "readme": true
@@ -36,7 +36,7 @@
    "name": "Languages",
    "group": "Foundations",
    "subtitle": "One order card, booking confirmation and error in en, ru, fr, es, zh and pt, plus the language picker and text expansion",
-   "height": 1560,
+   "height": 2440,
    "width": null,
    "page": false,
    "readme": true
@@ -45,7 +45,7 @@
    "name": "Logo",
    "group": "Foundations",
    "subtitle": "Wordmark, mark and white version: clear space, minimum sizes, approved backgrounds, app icon tile and misuse",
-   "height": 1500,
+   "height": 1784,
    "width": null,
    "page": false,
    "readme": true
@@ -54,7 +54,7 @@
    "name": "ShapeAndSpace",
    "group": "Foundations",
    "subtitle": "Radii, shadows, the 4px spacing scale, 48px tap target, breakpoints, motion durations and the focus ring",
-   "height": 1850,
+   "height": 1987,
    "width": null,
    "page": false,
    "readme": true
@@ -63,7 +63,7 @@
    "name": "Typography",
    "group": "Foundations",
    "subtitle": "Web scale in Geist, native scale in the system font, weights, tabular numerals, line length and long-language strings",
-   "height": 1900,
+   "height": 2410,
    "width": null,
    "page": false,
    "readme": true
@@ -72,7 +72,7 @@
    "name": "Voice",
    "group": "Foundations",
    "subtitle": "Plain, calm, specific: do and don't pairs for casing, buttons, errors, money states, providers, dates, languages and seller words",
-   "height": 2250,
+   "height": 3047,
    "width": null,
    "page": false,
    "readme": true
@@ -81,7 +81,7 @@
    "name": "Button",
    "group": "Actions",
    "subtitle": "White label on the primary orange: default, secondary, ghost, destructive, link, sizes, icon, busy and disabled",
-   "height": 560,
+   "height": 864,
    "width": null,
    "page": false,
    "readme": true
@@ -90,7 +90,7 @@
    "name": "Field",
    "group": "Forms",
    "subtitle": "Label, hint and error wrapper around any control, plus a full store-profile form with validation",
-   "height": 1176,
+   "height": 1184,
    "width": null,
    "page": false,
    "readme": true
@@ -99,7 +99,7 @@
    "name": "FileDrop",
    "group": "Forms",
    "subtitle": "Upload zone in idle, dragging, uploading, done and error; document variant (PDF, JPG, PNG) and 4:3 image variant with replace and remove",
-   "height": 1204,
+   "height": 1214,
    "width": null,
    "page": false,
    "readme": true
@@ -108,7 +108,7 @@
    "name": "FilterChips",
    "group": "Forms",
    "subtitle": "Single-select and multi-select chips, chips with counts, and a horizontally scrolling row on a phone",
-   "height": 891,
+   "height": 898,
    "width": null,
    "page": false,
    "readme": true
@@ -117,7 +117,7 @@
    "name": "ImageUpload",
    "group": "Forms",
    "subtitle": "Store logo (square), cover image (wide) and product gallery grid with eight slots, primary photo and reorder handles",
-   "height": 1184,
+   "height": 1192,
    "width": null,
    "page": false,
    "readme": true
@@ -126,7 +126,7 @@
    "name": "Input",
    "group": "Forms",
    "subtitle": "Text, number with prefix and suffix, password, search, textarea and select, each in default, focus, filled, error, disabled and read-only",
-   "height": 1080,
+   "height": 1089,
    "width": null,
    "page": false,
    "readme": true
@@ -135,7 +135,7 @@
    "name": "LanguageTabs",
    "group": "Forms",
    "subtitle": "Language tabs en ru fr es zh pt with default marker, filled dot and missing-translation state, shown on a product form",
-   "height": 1374,
+   "height": 1381,
    "width": null,
    "page": false,
    "readme": true
@@ -144,7 +144,7 @@
    "name": "SearchField",
    "group": "Forms",
    "subtitle": "Search input with clear button, grouped results dropdown, no-results state and recent searches",
-   "height": 731,
+   "height": 739,
    "width": null,
    "page": false,
    "readme": true
@@ -153,7 +153,7 @@
    "name": "Switch",
    "group": "Forms",
    "subtitle": "Switch, checkbox, radio and segmented choice in on, off and disabled, with the Accepting orders settings row",
-   "height": 976,
+   "height": 983,
    "width": null,
    "page": false,
    "readme": true
@@ -162,7 +162,7 @@
    "name": "Alert",
    "group": "Feedback",
    "subtitle": "Inline banners: neutral, warning, destructive and success with title, body and action, plus the seller store status banners",
-   "height": 1301,
+   "height": 1308,
    "width": null,
    "page": false,
    "readme": true
@@ -171,7 +171,7 @@
    "name": "Dialog",
    "group": "Feedback",
    "subtitle": "Confirm dialog with a direct question and reason field, plain information dialog, and the bottom-sheet version on a phone",
-   "height": 1489,
+   "height": 1496,
    "width": null,
    "page": false,
    "readme": true
@@ -180,7 +180,7 @@
    "name": "EmptyState",
    "group": "Feedback",
    "subtitle": "First use, filtered empty, error with retry and no access: icon, title that says what is missing, one sentence, one action",
-   "height": 1369,
+   "height": 1376,
    "width": null,
    "page": false,
    "readme": true
@@ -189,7 +189,7 @@
    "name": "Sheet",
    "group": "Feedback",
    "subtitle": "Bottom sheet on a phone with grabber: picker list and form sheet with sticky footer, plus the centred sheet on desktop",
-   "height": 1753,
+   "height": 1760,
    "width": null,
    "page": false,
    "readme": true
@@ -198,7 +198,7 @@
    "name": "Skeleton",
    "group": "Feedback",
    "subtitle": "Loading placeholders for card, row and table, and the rule that skeletons appear on a true first load only",
-   "height": 1103,
+   "height": 1111,
    "width": null,
    "page": false,
    "readme": true
@@ -207,7 +207,7 @@
    "name": "StatusBadge",
    "group": "Feedback",
    "subtitle": "One word, one colour pair, always with an icon: the full status vocabulary, sizes, dot variant, badges in rows",
-   "height": 1750,
+   "height": 1981,
    "width": null,
    "page": false,
    "readme": true
@@ -216,7 +216,7 @@
    "name": "Toast",
    "group": "Feedback",
    "subtitle": "Brief confirmations: success, error, with an action, and stacked on a phone above the bottom nav",
-   "height": 1542,
+   "height": 1549,
    "width": null,
    "page": false,
    "readme": true
@@ -225,7 +225,7 @@
    "name": "Avatar",
    "group": "Data display",
    "subtitle": "Initials, photo placeholder and square logo avatars in five sizes, group stack and verified badge overlay",
-   "height": 920,
+   "height": 928,
    "width": null,
    "page": false,
    "readme": true
@@ -234,7 +234,7 @@
    "name": "Card",
    "group": "Data display",
    "subtitle": "Plain, selected and interactive cards with header action and footer, and the one-level nesting rule",
-   "height": 1311,
+   "height": 1319,
    "width": null,
    "page": false,
    "readme": true
@@ -243,7 +243,7 @@
    "name": "DataTable",
    "group": "Data display",
    "subtitle": "Desktop table with sticky and sortable header, money right-aligned, selection, row actions, pagination, loading and empty rows; stacked cards on phones",
-   "height": 2116,
+   "height": 2123,
    "width": null,
    "page": false,
    "readme": true
@@ -252,7 +252,7 @@
    "name": "KeyValue",
    "group": "Data display",
    "subtitle": "Definition lists for order detail, payment breakdown and receipts: plain, with totals, stacked on phones",
-   "height": 1251,
+   "height": 1259,
    "width": null,
    "page": false,
    "readme": true
@@ -261,7 +261,7 @@
    "name": "Pagination",
    "group": "Data display",
    "subtitle": "Numbered pagination for tables and a load-more button for phone lists, with first, middle, last and loading states",
-   "height": 928,
+   "height": 936,
    "width": null,
    "page": false,
    "readme": true
@@ -270,7 +270,7 @@
    "name": "ProgressBar",
    "group": "Data display",
    "subtitle": "Linear progress with label, stepped progress and the profile-completion checklist progress",
-   "height": 1019,
+   "height": 1027,
    "width": null,
    "page": false,
    "readme": true
@@ -279,7 +279,7 @@
    "name": "AlertChannelRow",
    "group": "Marketplace",
    "subtitle": "Order alert channels: email, and Telegram not linked, link opened and waiting, linked, each with mute toggles per alert type",
-   "height": 865,
+   "height": 867,
    "width": null,
    "page": false,
    "readme": true
@@ -288,8 +288,8 @@
    "name": "AvailabilityEditor",
    "group": "Marketplace",
    "subtitle": "Expert availability: schedule settings, weekly hours with several ranges per day, copy to days, overlap error, 14-day slot preview, on desktop and phone",
-   "height": 3039,
-   "width": null,
+   "height": 3045,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -297,7 +297,7 @@
    "name": "BusinessSwitcher",
    "group": "Marketplace",
    "subtitle": "Business switcher in the Seller shell: one business, several, store and expert labels with the signed-in role, and the open list",
-   "height": 660,
+   "height": 665,
    "width": null,
    "page": false,
    "readme": true
@@ -306,7 +306,7 @@
    "name": "CartLine",
    "group": "Marketplace",
    "subtitle": "Cart item row with quantity stepper, remove and price, sold out and price changed lines, and the other-store notice",
-   "height": 665,
+   "height": 670,
    "width": 1300,
    "page": false,
    "readme": true
@@ -315,7 +315,7 @@
    "name": "ChatBubble",
    "group": "Marketplace",
    "subtitle": "Customer and seller bubbles, timestamps, Seen, day separator, closed-chat notice, quick replies and the composer with 2000-character counter and disabled states",
-   "height": 1360,
+   "height": 1811,
    "width": null,
    "page": false,
    "readme": true
@@ -324,7 +324,7 @@
    "name": "DocumentUpload",
    "group": "Marketplace",
    "subtitle": "One verification document row: required or optional, upload, in review, approved, rejected with the Office reason, expiry and a locked approved file",
-   "height": 1179,
+   "height": 1184,
    "width": 900,
    "page": false,
    "readme": true
@@ -333,7 +333,7 @@
    "name": "DueTimer",
    "group": "Marketplace",
    "subtitle": "The SLA countdown chip: running, warning under 5 minutes, overdue in words, hours and minutes, and no timer",
-   "height": 877,
+   "height": 883,
    "width": 900,
    "page": false,
    "readme": true
@@ -342,7 +342,7 @@
    "name": "EarningsTile",
    "group": "Marketplace",
    "subtitle": "Balance tiles: pending, available, in payout and paid out with help text; the display-size available balance, zero and loading",
-   "height": 692,
+   "height": 698,
    "width": null,
    "page": false,
    "readme": true
@@ -351,7 +351,7 @@
    "name": "ExpertCard",
    "group": "Marketplace",
    "subtitle": "Expert in the directory: photo, headline, language codes, rating, from-price and next availability; unavailable, long text and compact variants",
-   "height": 1080,
+   "height": 1137,
    "width": null,
    "page": false,
    "readme": true
@@ -360,7 +360,7 @@
    "name": "FavouriteHeart",
    "group": "Marketplace",
    "subtitle": "Save button on card corners and in headers: off, on, pressed, disabled, focus and the sign-in needed state",
-   "height": 760,
+   "height": 1046,
    "width": null,
    "page": false,
    "readme": true
@@ -369,7 +369,7 @@
    "name": "FeeBreakdown",
    "group": "Marketplace",
    "subtitle": "What the seller sees on an order and in earnings detail: items, delivery, Ciuna fee with its rule name, what you keep, and when it becomes available",
-   "height": 888,
+   "height": 894,
    "width": null,
    "page": false,
    "readme": true
@@ -378,7 +378,7 @@
    "name": "FulfilmentChip",
    "group": "Marketplace",
    "subtitle": "How an order reaches the customer: delivery, pickup, digital, online booking and in-person booking",
-   "height": 782,
+   "height": 788,
    "width": 900,
    "page": false,
    "readme": true
@@ -387,7 +387,7 @@
    "name": "FulfilmentPicker",
    "group": "Marketplace",
    "subtitle": "Checkout fulfilment choice: delivery with fee, ETA and address, pickup with location and hours, digital with instant access, and an unavailable option",
-   "height": 685,
+   "height": 687,
    "width": 1300,
    "page": false,
    "readme": true
@@ -396,8 +396,8 @@
    "name": "ListingEditor",
    "group": "Marketplace",
    "subtitle": "Product editor as a desktop screen: basics with language tabs, photos, price, stock, fulfilment, visibility, validation errors, review-pending hint and sticky save bar",
-   "height": 2331,
-   "width": null,
+   "height": 2337,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -405,7 +405,7 @@
    "name": "OnboardingChecklist",
    "group": "Marketplace",
    "subtitle": "Set up and verify checklist: seven steps in done, to do, blocked, in review and rejected states, on desktop and phone",
-   "height": 1064,
+   "height": 1070,
    "width": null,
    "page": false,
    "readme": true
@@ -414,8 +414,8 @@
    "name": "OrderCard",
    "group": "Marketplace",
    "subtitle": "Seller order card: every status, fulfilment type and overdue state with its single primary action, plus the desktop board column",
-   "height": 1934,
-   "width": null,
+   "height": 1940,
+   "width": 1160,
    "page": false,
    "readme": true
   },
@@ -423,7 +423,7 @@
    "name": "OrderSummary",
    "group": "Marketplace",
    "subtitle": "Order summary at checkout: items, delivery fee, total in the pay currency and the list of pay methods, for delivery, pickup and an expert booking",
-   "height": 745,
+   "height": 747,
    "width": 1300,
    "page": false,
    "readme": true
@@ -432,7 +432,7 @@
    "name": "OrderTimeline",
    "group": "Marketplace",
    "subtitle": "Order stages with times and actors: in progress, delivery, pickup, cancelled, refunded and the booking variant with a meeting link",
-   "height": 1050,
+   "height": 2180,
    "width": null,
    "page": false,
    "readme": true
@@ -441,7 +441,7 @@
    "name": "PayoutMethodRow",
    "group": "Marketplace",
    "subtitle": "Saved payout methods: SBP and bank account, verified and waiting for verification, with the default marker and row actions",
-   "height": 490,
+   "height": 494,
    "width": null,
    "page": false,
    "readme": true
@@ -450,7 +450,7 @@
    "name": "PayoutRow",
    "group": "Marketplace",
    "subtitle": "Withdrawal history row: requested with cancel, approved, paid with reference, rejected with reason and cancelled, wide and stacked",
-   "height": 780,
+   "height": 784,
    "width": null,
    "page": false,
    "readme": true
@@ -459,7 +459,7 @@
    "name": "PriceTag",
    "group": "Marketplace",
    "subtitle": "Every way a price appears: list, sale with strike-through, from-price, per hour, unit price, free, sold out, and sizes",
-   "height": 700,
+   "height": 996,
    "width": null,
    "page": false,
    "readme": true
@@ -468,7 +468,7 @@
    "name": "ProductCard",
    "group": "Marketplace",
    "subtitle": "Grid tile and list row: default, sale, sold out, low stock, in cart with stepper, long Russian and Chinese titles, skeleton",
-   "height": 1180,
+   "height": 1611,
    "width": null,
    "page": false,
    "readme": true
@@ -477,7 +477,7 @@
    "name": "RatingStars",
    "group": "Marketplace",
    "subtitle": "Display sizes, count, no-reviews state and the input stars with hover, selected and focus states, plus the aria rule",
-   "height": 760,
+   "height": 1207,
    "width": null,
    "page": false,
    "readme": true
@@ -486,7 +486,7 @@
    "name": "ReviewCard",
    "group": "Marketplace",
    "subtitle": "A customer review: first name, stars, date, text, seller reply, long text clamp, rating-only; moderation-hidden reviews never render for customers",
-   "height": 900,
+   "height": 1411,
    "width": null,
    "page": false,
    "readme": true
@@ -495,7 +495,7 @@
    "name": "ReviewReplyCard",
    "group": "Marketplace",
    "subtitle": "Seller view of a customer review: reply button, reply sheet with character counter, an existing reply with the edit-window note, and a review with no text",
-   "height": 1295,
+   "height": 1298,
    "width": null,
    "page": false,
    "readme": true
@@ -504,7 +504,7 @@
    "name": "ReviewSummary",
    "group": "Marketplace",
    "subtitle": "Average, five-bar distribution and count with the write-a-review call to action; own review, cannot review and no-reviews states",
-   "height": 800,
+   "height": 1548,
    "width": null,
    "page": false,
    "readme": true
@@ -513,7 +513,7 @@
    "name": "ServiceCard",
    "group": "Marketplace",
    "subtitle": "A bookable service on an expert profile: hourly, fixed and quote pricing, online or in person, long title, fully booked",
-   "height": 760,
+   "height": 1133,
    "width": null,
    "page": false,
    "readme": true
@@ -522,7 +522,7 @@
    "name": "SlotPicker",
    "group": "Marketplace",
    "subtitle": "Expert booking time picker: date strip, time slot grid, selected, unavailable and empty day, with the time zone line",
-   "height": 770,
+   "height": 774,
    "width": 1300,
    "page": false,
    "readme": true
@@ -531,7 +531,7 @@
    "name": "StatementRow",
    "group": "Marketplace",
    "subtitle": "Statement line per order: items, delivery, Ciuna fee as a negative and net, with pending, available and reversed statuses as a table row and a stacked phone row",
-   "height": 779,
+   "height": 784,
    "width": null,
    "page": false,
    "readme": true
@@ -540,7 +540,7 @@
    "name": "StatTile",
    "group": "Marketplace",
    "subtitle": "Seller home tiles: new orders, in progress, today's earnings and rating, with delta, loading, zero and phone layouts",
-   "height": 718,
+   "height": 1022,
    "width": null,
    "page": false,
    "readme": true
@@ -549,7 +549,7 @@
    "name": "StoreCard",
    "group": "Marketplace",
    "subtitle": "Store in the catalog: rail and full-width variants, verified, favourite, closed with opening time, long Russian name, skeleton",
-   "height": 1130,
+   "height": 1590,
    "width": null,
    "page": false,
    "readme": true
@@ -558,7 +558,7 @@
    "name": "TeamMemberRow",
    "group": "Marketplace",
    "subtitle": "Team list: owner, manager, staff and finance with a permissions summary, a pending invite, and the role picker",
-   "height": 695,
+   "height": 698,
    "width": null,
    "page": false,
    "readme": true
@@ -567,7 +567,7 @@
    "name": "ThreadRow",
    "group": "Marketplace",
    "subtitle": "Seller inbox row per order conversation: unread badge, last message preview, order number, order status and the closed chip",
-   "height": 610,
+   "height": 612,
    "width": null,
    "page": false,
    "readme": true
@@ -576,7 +576,7 @@
    "name": "TimeOffPanel",
    "group": "Marketplace",
    "subtitle": "Block a date range for one service or all: form, confirm dialog with scope and time zone, and the result",
-   "height": 771,
+   "height": 777,
    "width": 900,
    "page": false,
    "readme": true
@@ -585,7 +585,7 @@
    "name": "VerifiedBadge",
    "group": "Marketplace",
    "subtitle": "Verified seller tiers (individual, registered business), compact icon, inline with a name, and the tooltip explaining what was checked",
-   "height": 700,
+   "height": 945,
    "width": null,
    "page": false,
    "readme": true
@@ -594,7 +594,7 @@
    "name": "WithdrawSheet",
    "group": "Marketplace",
    "subtitle": "Withdraw sheet: amount with Withdraw all, method, fee preview and you receive, minimum and timing, and the three errors",
-   "height": 1295,
+   "height": 1299,
    "width": null,
    "page": false,
    "readme": true
@@ -603,7 +603,7 @@
    "name": "Amount",
    "group": "Money",
    "subtitle": "Money at body, large and display sizes: cents shrink, minus, zero-minor currencies, breakdown vs list, long values and nine currencies",
-   "height": 1650,
+   "height": 1767,
    "width": null,
    "page": false,
    "readme": true
@@ -612,7 +612,7 @@
    "name": "CurrencyFlag",
    "group": "Money",
    "subtitle": "Round inline-SVG flags with currency codes: set, picker row, selected state, size scale, fallback and the currency sheet",
-   "height": 1500,
+   "height": 1810,
    "width": null,
    "page": false,
    "readme": true
@@ -621,7 +621,7 @@
    "name": "MoneyFormat",
    "group": "Money",
    "subtitle": "The money format rules with correct and incorrect examples, rates, converted amounts, fee lines and an earnings statement",
-   "height": 1750,
+   "height": 1864,
    "width": null,
    "page": false,
    "readme": true
@@ -630,7 +630,7 @@
    "name": "Cart",
    "group": "Customer app · Screens",
    "subtitle": "Single-store cart: lines with steppers, subtotal and delivery fee, minimum-order warning, the vendor-lock prompt and the empty cart",
-   "height": 1848,
+   "height": 1898,
    "width": 1300,
    "page": true,
    "readme": true
@@ -639,7 +639,7 @@
    "name": "CustomerAuth",
    "group": "Customer app · Screens",
    "subtitle": "Sign in, register and PIN screens with wrong-password, locked, duplicate-email and wrong-PIN errors, plus Russian and Chinese with the language row",
-   "height": 2959,
+   "height": 2967,
    "width": 1300,
    "page": true,
    "readme": true
@@ -648,7 +648,7 @@
    "name": "CustomerHome",
    "group": "Customer app · Screens",
    "subtitle": "Home with Office-driven two-column service tiles, loading, a tile hidden in Office, Russian and Chinese, and the desktop web layout",
-   "height": 2496,
+   "height": 2596,
    "width": 1300,
    "page": true,
    "readme": true
@@ -657,7 +657,7 @@
    "name": "CustomerMore",
    "group": "Customer app · Screens",
    "subtitle": "Account tab: identity first, grouped Account and App rows, verification chip, language picker with six languages, sign-out confirmation",
-   "height": 1978,
+   "height": 1986,
    "width": 900,
    "page": true,
    "readme": true
@@ -666,7 +666,7 @@
    "name": "CustomerTransactions",
    "group": "Customer app · Screens",
    "subtitle": "Orders tab activity list: transfers, marketplace orders and expert bookings with filters, empty, no match, loading, error, offline and Russian",
-   "height": 2940,
+   "height": 2948,
    "width": 1300,
    "page": true,
    "readme": true
@@ -675,7 +675,7 @@
    "name": "ExpertBooking",
    "group": "Customer app · Screens",
    "subtitle": "Booking flow in five steps: choose service, date and slot with both time zones, details, pay in RUB, awaiting confirmation then confirmed with meeting link, plus slot taken and declined states",
-   "height": 400,
+   "height": 2829,
    "width": 1300,
    "page": true,
    "readme": true
@@ -684,7 +684,7 @@
    "name": "ExpertProfile",
    "group": "Customer app · Screens",
    "subtitle": "Expert profile: photo, headline, verified badge, languages, rating, about, credentials, intro video, services with Book, availability hint, no-availability and unpublished states",
-   "height": 400,
+   "height": 1917,
    "width": 900,
    "page": true,
    "readme": true
@@ -693,7 +693,7 @@
    "name": "ExpertsDirectory",
    "group": "Customer app · Screens",
    "subtitle": "Experts directory: search, language and category chips, expert cards with rating and from-price, filtered, empty and loading states, on phone and desktop",
-   "height": 400,
+   "height": 2694,
    "width": 1300,
    "page": true,
    "readme": true
@@ -702,7 +702,7 @@
    "name": "Favourites",
    "group": "Customer app · Screens",
    "subtitle": "Saved stores, products and experts in tabs, with hearts to remove, the undo toast, an empty tab and the signed-out state",
-   "height": 1848,
+   "height": 1910,
    "width": 1300,
    "page": true,
    "readme": true
@@ -711,7 +711,7 @@
    "name": "FoodHome",
    "group": "Customer app · Screens",
    "subtitle": "The Food line page: search, category chips, Stores rail and featured products with cart bar; loaded, loading, empty, offline and desktop",
-   "height": 1744,
+   "height": 2756,
    "width": 1300,
    "page": true,
    "readme": true
@@ -720,7 +720,7 @@
    "name": "MarketCheckout",
    "group": "Customer app · Screens",
    "subtitle": "Marketplace checkout as a merchant flow: details and delivery or pickup, ruble payment methods, review and place order; address, zone, loading and pending states",
-   "height": 2760,
+   "height": 2910,
    "width": 1300,
    "page": true,
    "readme": true
@@ -729,7 +729,7 @@
    "name": "OrderChat",
    "group": "Customer app · Screens",
    "subtitle": "Chat with the seller on an order: bubbles, Seen, quick replies and counter, plus empty, closed, not yet available, rate-limited and send-error states, and the desktop side panel",
-   "height": 400,
+   "height": 2713,
    "width": 1300,
    "page": true,
    "readme": true
@@ -738,7 +738,7 @@
    "name": "OrderTracking",
    "group": "Customer app · Screens",
    "subtitle": "Order detail: status header, timeline, items, delivery or pickup, seller card with Message seller, payment, rate prompt, and the cancelled and refunded variants",
-   "height": 400,
+   "height": 1886,
    "width": 900,
    "page": true,
    "readme": true
@@ -747,7 +747,7 @@
    "name": "ProductPage",
    "group": "Customer app · Screens",
    "subtitle": "Product detail: gallery, price and sale, vendor, delivery or pickup, stock, translation hint, reviews teaser and the sticky add-to-cart bar",
-   "height": 936,
+   "height": 986,
    "width": 1300,
    "page": true,
    "readme": true
@@ -756,7 +756,7 @@
    "name": "ReviewFlow",
    "group": "Customer app · Screens",
    "subtitle": "Rate your order sheet: first time, edit within 48 hours, locked after 48 hours, window closed, thank-you toast, and how the review appears on the store page with the seller reply",
-   "height": 400,
+   "height": 1898,
    "width": 1300,
    "page": true,
    "readme": true
@@ -765,7 +765,7 @@
    "name": "SearchResults",
    "group": "Customer app · Screens",
    "subtitle": "Search page: recent and popular, typing suggestions, results grouped by Products, Stores and Experts, no results with suggestions, minimum characters and loading",
-   "height": 1848,
+   "height": 1929,
    "width": 1300,
    "page": true,
    "readme": true
@@ -774,7 +774,7 @@
    "name": "StorePage",
    "group": "Customer app · Screens",
    "subtitle": "A store: cover, logo, verified badge, rating, hours, delivery info, menu by category, reviews preview; open, closed and unavailable, phone and desktop",
-   "height": 2656,
+   "height": 2756,
    "width": 1300,
    "page": true,
    "readme": true
@@ -783,8 +783,8 @@
    "name": "SellerAlerts",
    "group": "Seller · Screens",
    "subtitle": "Alert settings: email switch, the Telegram connect flow (not linked, waiting, linked as @username, unavailable) and per-kind mute switches for stores and experts",
-   "height": 2720,
-   "width": null,
+   "height": 2723,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -792,8 +792,8 @@
    "name": "SellerAuth",
    "group": "Seller · Screens",
    "subtitle": "Sign in and register on phone and desktop with the language select, wrong password and field errors, a Russian variant and check-your-email",
-   "height": 5348,
-   "width": null,
+   "height": 6309,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -801,8 +801,8 @@
    "name": "SellerAvailability",
    "group": "Seller · Screens",
    "subtitle": "Weekly hours editor with ranges, copy-to-days and overlap error, time zone, slot length, booking window, 14-day preview, time off and upcoming slots, on desktop and phone",
-   "height": 3022,
-   "width": null,
+   "height": 3731,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -810,8 +810,8 @@
    "name": "SellerBookings",
    "group": "Seller · Screens",
    "subtitle": "Expert bookings: Requests, Upcoming and Past tabs, detail with session and device time zones, meeting link form, Mark as completed and Decline with refund note",
-   "height": 1000,
-   "width": null,
+   "height": 3230,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -819,8 +819,8 @@
    "name": "SellerCatalog",
    "group": "Seller · Screens",
    "subtitle": "Catalog list: search, status tabs, product rows with sale price, stock chip and review state, inline Sold out and Pause or Publish, empty and loading states",
-   "height": 3508,
-   "width": null,
+   "height": 3516,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -828,8 +828,8 @@
    "name": "SellerEarnings",
    "group": "Seller · Screens",
    "subtitle": "Earnings overview: four balances with the hold note, Withdraw, the statement as a table or stacked cards with statuses, CSV download with a date error, the empty state and every Withdraw sheet state",
-   "height": 3300,
-   "width": null,
+   "height": 5377,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -837,8 +837,8 @@
    "name": "SellerFulfilment",
    "group": "Seller · Screens",
    "subtitle": "Delivery and pickup: pickup address, hours and notes, delivery zone rows with fee, currency and active switch, duplicate error, and what each part unlocks",
-   "height": 4195,
-   "width": null,
+   "height": 4203,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -846,8 +846,8 @@
    "name": "SellerHome",
    "group": "Seller · Screens",
    "subtitle": "Seller Home: live (new orders, in progress, to-do, today's earnings), setup checklist, five status banners, loading skeleton, phone and desktop",
-   "height": 3994,
-   "width": null,
+   "height": 4002,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -855,8 +855,8 @@
    "name": "SellerImport",
    "group": "Seller · Screens",
    "subtitle": "Import products from CSV: template download, upload, preview with per-row errors, progress and a created or failed summary",
-   "height": 5402,
-   "width": null,
+   "height": 5408,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -864,8 +864,8 @@
    "name": "SellerMessages",
    "group": "Seller · Screens",
    "subtitle": "Customer chat: thread list with unread badges, order number and status, thread view with bubbles, quick replies and a 2000-character composer, and the closed notice",
-   "height": 1000,
-   "width": null,
+   "height": 2810,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -873,8 +873,8 @@
    "name": "SellerOnboarding",
    "group": "Seller · Screens",
    "subtitle": "Create a business: choose type, name, section, country and languages, with an invite banner and validation states on phone and desktop",
-   "height": 2000,
-   "width": null,
+   "height": 4485,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -882,8 +882,8 @@
    "name": "SellerOrderDetail",
    "group": "Seller · Screens",
    "subtitle": "Order detail: items, customer, delivery or pickup, note, timeline, Accept, Start preparing, fulfil and reject sheets, exception banner and completed state",
-   "height": 5749,
-   "width": null,
+   "height": 5757,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -900,8 +900,8 @@
    "name": "SellerPayoutMethods",
    "group": "Seller · Screens",
    "subtitle": "Payout methods: Verified and Waiting for verification, default marker, add sheet for SBP and bank accounts with a card-number error, Ciuna Send as Coming soon, remove confirm and empty state",
-   "height": 2630,
-   "width": null,
+   "height": 3528,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -909,8 +909,8 @@
    "name": "SellerPayouts",
    "group": "Seller · Screens",
    "subtitle": "Payout history as cards: requested with cancel, approved, paid with reference, rejected with reason, cancelled, the cancel confirm and the empty state",
-   "height": 2880,
-   "width": null,
+   "height": 2876,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -918,8 +918,8 @@
    "name": "SellerProductEditor",
    "group": "Seller · Screens",
    "subtitle": "Product editor: basics with English, Русский and 中文 tabs, photos, price, stock, fulfilment, visibility, validation errors, sticky save bar and archive confirm",
-   "height": 5975,
-   "width": null,
+   "height": 5983,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -927,8 +927,8 @@
    "name": "SellerProfile",
    "group": "Seller · Screens",
    "subtitle": "Business profile for a store and an expert: name, per-language description with tabs, logo and cover, contact, currency and countries, credentials, languages spoken, intro video and a sticky save bar",
-   "height": 3560,
-   "width": null,
+   "height": 4458,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -936,8 +936,8 @@
    "name": "SellerReviews",
    "group": "Seller · Screens",
    "subtitle": "Reviews: average and 5-bar distribution, All and Needs reply tabs, review cards with Reply, the public-reply sheet with a 600 counter and edit window, and empty states",
-   "height": 1000,
-   "width": null,
+   "height": 2780,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -945,8 +945,8 @@
    "name": "SellerServiceEditor",
    "group": "Seller · Screens",
    "subtitle": "Service editor: pricing, duration, booking rules in hours or minutes, meeting instructions required to publish, sticky bar, and the unpublish confirm",
-   "height": 2693,
-   "width": null,
+   "height": 2740,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -954,8 +954,8 @@
    "name": "SellerServices",
    "group": "Seller · Screens",
    "subtitle": "Expert services list: price, duration, online or in-person chip, open-slot count with a warning at zero, and the publish switch",
-   "height": 1784,
-   "width": null,
+   "height": 1792,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -963,8 +963,8 @@
    "name": "SellerSetup",
    "group": "Seller · Screens",
    "subtitle": "Set up and verify: profile, logo, verification type and country requirements, details, per-document status, first listing and submit, in draft, rejected, in review and approved",
-   "height": 9000,
-   "width": null,
+   "height": 10836,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -972,8 +972,8 @@
    "name": "SellerShellStates",
    "group": "Seller · Screens",
    "subtitle": "Seller shell: desktop sidebar, tablet width, phone top bar and bottom nav, More sheet, business switcher, permission-limited staff view and status banners in context",
-   "height": 6152,
-   "width": null,
+   "height": 6160,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -981,8 +981,8 @@
    "name": "SellerTeam",
    "group": "Seller · Screens",
    "subtitle": "Team: members with roles, owner locked, invite form with role help and a permissions table, pending invites with copy link, an invite error and the remove confirm",
-   "height": 2210,
-   "width": null,
+   "height": 3110,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -990,8 +990,8 @@
    "name": "OfficeAnalytics",
    "group": "Office · Screens",
    "subtitle": "Marketplace analytics: period presets, eight tiles, daily GMV bars with accessible table, orders by section, top sellers, applications, payouts, zero state, currency toggle",
-   "height": 2831,
-   "width": null,
+   "height": 2885,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -999,8 +999,8 @@
    "name": "OfficeAudit",
    "group": "Office · Screens",
    "subtitle": "Audit log: filters, actor role chips, expandable details JSON, saved views, pagination, no-match state",
-   "height": 1566,
-   "width": null,
+   "height": 1568,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1008,8 +1008,8 @@
    "name": "OfficeFees",
    "group": "Office · Screens",
    "subtitle": "Fees and commissions: rules by scope with dates and active toggle, rule dialog, payout fees with waive-above, plans not billed yet, fee calculator, money settings",
-   "height": 4201,
-   "width": null,
+   "height": 4526,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1017,8 +1017,8 @@
    "name": "OfficeKyb",
    "group": "Office · Screens",
    "subtitle": "KYB requirements by country: grouped list, edit dialog with field and document row editors, validation, read-only for support",
-   "height": 3351,
-   "width": null,
+   "height": 3641,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1026,8 +1026,8 @@
    "name": "OfficeMerchantMoney",
    "group": "Office · Screens",
    "subtitle": "One merchant: balances per currency, payout methods with verify switch, earnings and payouts tables, link back to the review page",
-   "height": 2691,
-   "width": null,
+   "height": 2756,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1035,8 +1035,8 @@
    "name": "OfficeMerchantReview",
    "group": "Office · Screens",
    "subtitle": "Merchant review: profile, answers against KYB, documents with Open/Approve/Reject, sticky decision panel and the reason dialog",
-   "height": 2559,
-   "width": null,
+   "height": 3025,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1044,8 +1044,8 @@
    "name": "OfficeMerchantsQueue",
    "group": "Office · Screens",
    "subtitle": "Merchant applications queue: In review default, tabs, type filter, age and SLA, country base to operating, empty queue",
-   "height": 1682,
-   "width": null,
+   "height": 1684,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1053,8 +1053,8 @@
    "name": "OfficePayouts",
    "group": "Office · Screens",
    "subtitle": "Payout queue: tabs, age over 48h, Verified or Unverified method, detail with logged reveal, verify switch, approve, mark paid, reject",
-   "height": 4066,
-   "width": null,
+   "height": 4760,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1062,8 +1062,8 @@
    "name": "OfficeReviewsModeration",
    "group": "Office · Screens",
    "subtitle": "Reviews moderation: ratings table with excerpt, merchant, status and reply flag; hide with reason chips; unhide; filters; read-only for support",
-   "height": 2876,
-   "width": null,
+   "height": 3193,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1071,8 +1071,8 @@
    "name": "OfficeShell",
    "group": "Office · Screens",
    "subtitle": "Office shell: grouped sidebar, role chip, Cmd-K search open, and what ops, finance and support see",
-   "height": 2978,
-   "width": null,
+   "height": 2980,
+   "width": 1170,
    "page": true,
    "readme": true
   },
@@ -1089,7 +1089,7 @@
    "name": "EmailLayout",
    "group": "Documents and email",
    "subtitle": "The shared email frame: logo, title, one orange button with a white label, muted text, support footer, and the plain-text fallback beside it",
-   "height": 820,
+   "height": 636,
    "width": null,
    "page": false,
    "readme": true
@@ -1125,7 +1125,7 @@
    "name": "SellerStatement",
    "group": "Documents and email",
    "subtitle": "Seller earnings statement as a PDF-style page: per-order items, delivery, Ciuna fee and net, totals, payouts in the period and closing balance, plus the CSV export with its exact columns",
-   "height": 930,
+   "height": 934,
    "width": 1360,
    "page": false,
    "readme": true
