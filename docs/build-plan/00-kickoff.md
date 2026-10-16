@@ -28,6 +28,18 @@ Follow-ups found while doing it:
 - Pre-existing TypeScript errors in `mobile` (`sceneContainerStyle`, `app-text-input.tsx`) and `web` (`auth-context.tsx`, `i18n/config.ts`) were present before this work; clear them in A4.
 Remaining in Stage A: A1, A2, A4, A5 harness, A6 (apply to the other routes), A7 (customer emails), V1, V2, V4.
 
+## Priority design task: start customer cards from the current Expo UI (do this before Stage B customer work)
+Decision: the current customer app in `mobile/` (Expo) looks better than the customer cards in the design system. The cards are not the contract for the customer app's visual style until they are reconciled. Rule: **current product first, then improve.**
+
+Task D0 (design-system, customer-facing cards only):
+1. Capture the real app: run the Expo app (web build or iOS simulator) and screenshot the current screens and components: product card, store item/store card, expert card/catalog, cart bar and cart lines, checkout, order tracking, home tiles, more/account, send flow, language picker. Save under `design-system/reference/current-app/` (gitignored if large).
+2. Extract the real styling from code, not by eye: `mobile/components/product-card.tsx`, `store-item.tsx`, `expert-catalog.tsx`, `marketplace-checkout.tsx`, `status-chip.tsx`, `mobile/lib/theme.ts`, header and tab components, `web/components/hub/*` for web equivalents. Record radii, spacing, type sizes, shadows, image ratios, button heights, chip styles, and what each does on press.
+3. Rebuild these cards so each shows the **current design faithfully first**, then an "Improved" variant beside it with the changes listed: `ProductCard`, `StoreCard`, `ExpertCard`, `ServiceCard`, `CartLine`, `OrderSummary`, `FulfilmentPicker`, `SlotPicker`, `PriceTag`, `FavouriteHeart`, `RatingStars`, `ReviewCard`, `OrderTimeline`, `ChatBubble`, and the customer screens (`CustomerHome`, `FoodHome`, `MartHome`, `StorePage`, `ProductPage`, `Cart`, `MarketCheckout`, `OrderTracking`, `CustomerMore`, `CustomerSend`).
+4. Only then update tokens if the current app uses values the tokens lack (for example native radii or shadows): change `design-system/tokens.json`, run `npm run design:sync`, keep `design:check` green. Do not change the app's look to match the old cards.
+5. Each card's README Upgrade section lists: Current (what the app does), Improved (what we changed and why), and Build notes.
+6. Mark in `docs/build-plan/customer-app.md` that WP2 to WP10 (primitives, discovery, store and product pages, cart, orders) start from these reconciled cards.
+Exit: for each rebuilt card, the "Current" frame is visually indistinguishable from the app screenshot at the same width, and the "Improved" frame passes `design:check`, `design:cards` and `design:audit`.
+
 ## Stage A task list (start here; items are independent unless noted)
 | # | Task | Plan section | Exit test |
 | --- | --- | --- | --- |
@@ -68,5 +80,5 @@ Numbers are Office-editable seeds, translation is Azure AI Translator, Telegram 
 
 ## Prompt to paste into the new session
 ```
-Work in /Users/a1/Projects/ciunaapp. Read docs/build-plan/00-kickoff.md, then docs/design-to-build-plan.md and design-system/guides/80-decisions.md. Execute Stage A of the plan: tasks A1 to A7 and verification tasks V1 to V4 (V1 right after A1), using the surface plans in docs/build-plan/ for detail. Decisions are already made; do not ask about them. Follow the working rules in the kickoff file. Start with A1 and A2 (API and data), run A3 to A7 as parallel work where files do not overlap, verify each with its exit test, commit per task, and report what is done, what failed, and anything that needs an outside input (only provider keys: Azure Translator, Expo push; Telegram is deferred).
+Work in /Users/a1/Projects/ciunaapp. Read docs/build-plan/00-kickoff.md, then docs/design-to-build-plan.md and design-system/guides/80-decisions.md. Do task D0 (customer cards start from the current Expo UI) first, in a separate session if possible, then execute Stage A of the plan: tasks A1 to A7 and verification tasks V1 to V4 (V1 right after A1), using the surface plans in docs/build-plan/ for detail. Decisions are already made; do not ask about them. Follow the working rules in the kickoff file. Start with A1 and A2 (API and data), run A3 to A7 as parallel work where files do not overlap, verify each with its exit test, commit per task, and report what is done, what failed, and anything that needs an outside input (only provider keys: Azure Translator, Expo push; Telegram is deferred).
 ```

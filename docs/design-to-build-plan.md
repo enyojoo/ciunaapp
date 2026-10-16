@@ -32,6 +32,9 @@ Verification tasks V1 to V4 in `build-plan/00-kickoff.md` run inside stage A (mi
 
 Exit for stage A: migration chain reproducible, matrix test green, six languages selectable on native and web, Seller smoke tests green at 375, 768, 1280.
 
+### Stage A0: reconcile customer cards with the current Expo UI
+Task D0 in `build-plan/00-kickoff.md`. The Expo app's current look is the baseline; customer cards are rebuilt as Current plus Improved before any customer screen is built or restyled. Seller and Office cards are unaffected.
+
 ### Stage B: first user-visible slice (APIs that exist but no client calls)
 1. Customer: favourites, search, order chat, reviews, order cancel (customer WP5, WP8; endpoints exist).
 2. API field additions (API WP3 partial, customer WP4): vendor cover, hours, delivery zones, minimum order; expert languages, next slot, timezone.
