@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Users, CreditCard, TrendingUp, AlertCircle, Activity, Clock, CheckCircle, XCircle } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton"
+import { NeedsAction } from "@/components/dashboard/needs-action"
 import { useOfficeData } from "@/hooks/use-office-data"
 import { formatCurrency as formatMoney } from "@/utils/currency"
 
@@ -122,6 +123,8 @@ export default function AdminDashboardPage() {
             <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
           </div>
         </div>
+
+        <NeedsAction pendingTransactions={data?.stats.pendingTransactions ?? null} />
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

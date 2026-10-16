@@ -57,7 +57,6 @@ export async function fapi<T = any>(path: string, init?: RequestInit): Promise<F
 
 const norm = (role: string | null | undefined) => (!role || role === "admin" ? "ops" : role)
 /** finance.manage: finance and super_admin. The API enforces; this only hides controls. */
-export const canFinance = (role: string | null | undefined) => ["finance", "super_admin"].includes(norm(role))
 /** fees.manage: super_admin only. */
 export const canFees = (role: string | null | undefined) => norm(role) === "super_admin"
 
@@ -87,6 +86,8 @@ export interface PayoutRow {
   decided_at?: string | null
   paid_at?: string | null
   merchants?: { display_name: string; country: string } | null
+  /** Joined by the list route; an object or a one-item array depending on the relation shape. */
+  merchant_payout_methods?: { verified: boolean | null } | { verified: boolean | null }[] | null
 }
 
 export interface PayoutMethod {

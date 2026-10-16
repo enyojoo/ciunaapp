@@ -4,190 +4,41 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import {
-  LayoutDashboard,
-  CreditCard,
-  Users,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  ShieldCheck,
-  Gift,
-  Store,
-  HandHelping,
-  UserCircle,
-  ChevronRight,
-  Package,
-  Calendar,
-  Briefcase,
-  Building2,
-  ListChecks,
-  ScrollText,
-  Wallet,
-  Percent,
-  Settings2,
-  Star,
-} from "lucide-react"
+import { LayoutDashboard, LogOut, Menu, X, ChevronRight, Lock } from "lucide-react"
 import { BrandLogo } from "@ciuna/shared"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
 import { officeDataStore } from "@/lib/office-data-store"
-import { hubProductsPath, hubVendorsPath } from "@/lib/hub-office-paths"
 import { cn } from "@/lib/utils"
 import { usePermissions } from "@/lib/permissions"
+import { NAV_GROUPS, ROLE_LABELS, permissionForPath, type NavGroup, type NavItem } from "@/lib/office-nav"
 
 interface OfficeDashboardLayoutProps {
   children: React.ReactNode
 }
 
-const baseNavigation = [
-  { name: "Users", href: "/users", icon: Users },
-  { name: "Referrals", href: "/referrals", icon: Gift },
-  { name: "Compliance", href: "/compliance", icon: ShieldCheck },
-  { name: "Settings", href: "/settings", icon: Settings },
-]
-
-function hubPathActive(pathname: string | null, prefix: string): boolean {
+function pathMatches(pathname: string | null, href: string, exact?: boolean): boolean {
   if (!pathname) return false
-  return pathname === prefix || pathname.startsWith(`${prefix}/`)
+  return exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`)
 }
 
-function HubSectionSubnav({ pathname, onNavigate }: { pathname: string | null; onNavigate: () => void }) {
-  const linkClass = (active: boolean) =>
-    cn(
-      "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200",
-      active
-        ? "bg-accent text-accent-foreground font-medium"
-        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-    )
-
+function RoleChip({ role }: { role: string | null }) {
+  if (!role) return null
   return (
-    <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
-      <p className="px-3 pt-2 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-        Food
-      </p>
-      <Link
-        href={hubProductsPath("food")}
-        className={linkClass(hubPathActive(pathname, hubProductsPath("food")))}
-        onClick={onNavigate}
-      >
-        <Package className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Products</span>
-      </Link>
-      <Link
-        href={hubVendorsPath("food")}
-        className={linkClass(hubPathActive(pathname, hubVendorsPath("food")))}
-        onClick={onNavigate}
-      >
-        <Store className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Vendors</span>
-      </Link>
-
-      <p className="px-3 pt-2 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-        Mart
-      </p>
-      <Link
-        href={hubProductsPath("mart")}
-        className={linkClass(hubPathActive(pathname, hubProductsPath("mart")))}
-        onClick={onNavigate}
-      >
-        <Package className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Products</span>
-      </Link>
-      <Link
-        href={hubVendorsPath("mart")}
-        className={linkClass(hubPathActive(pathname, hubVendorsPath("mart")))}
-        onClick={onNavigate}
-      >
-        <Store className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Vendors</span>
-      </Link>
-
-      <p className="px-3 pt-3 pb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-        Experts
-      </p>
-      <Link
-        href="/experts/profiles"
-        className={linkClass(hubPathActive(pathname, "/experts/profiles"))}
-        onClick={onNavigate}
-      >
-        <UserCircle className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Profiles</span>
-      </Link>
-      <Link
-        href="/experts/services"
-        className={linkClass(hubPathActive(pathname, "/experts/services"))}
-        onClick={onNavigate}
-      >
-        <Package className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Services</span>
-      </Link>
-    </div>
+    <span
+      className="inline-flex items-center rounded-full bg-primary-tint px-2.5 py-0.5 text-xs font-medium text-primary-text"
+      data-testid="role-chip"
+    >
+      {ROLE_LABELS[role] ?? role}
+    </span>
   )
 }
 
-function OperationsSectionSubnav({
-  pathname,
-  onNavigate,
-}: {
-  pathname: string | null
-  onNavigate: () => void
-}) {
-  const linkClass = (active: boolean) =>
-    cn(
-      "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200",
-      active
-        ? "bg-accent text-accent-foreground font-medium"
-        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-    )
-
-  return (
-    <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
-      <Link
-        href="/marketplace"
-        className={linkClass(Boolean(pathname?.startsWith("/marketplace")))}
-        onClick={onNavigate}
-      >
-        <Package className="h-4 w-4 shrink-0 opacity-80" />
-        <span>Marketplace orders</span>
-      </Link>
-      <Link
-        href="/transactions"
-        className={linkClass(pathname === "/transactions" || Boolean(pathname?.startsWith("/transactions/")))}
-        onClick={onNavigate}
-      >
-        <CreditCard className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Transactions</span>
-      </Link>
-      <Link
-        href="/assistant"
-        className={linkClass(pathname === "/assistant" || Boolean(pathname?.startsWith("/assistant/")))}
-        onClick={onNavigate}
-      >
-        <HandHelping className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Assistant</span>
-      </Link>
-      <Link
-        href="/bookings"
-        className={linkClass(pathname === "/bookings" || Boolean(pathname?.startsWith("/bookings/")))}
-        onClick={onNavigate}
-      >
-        <Calendar className="h-4 w-4 shrink-0 opacity-80" />
-        <span className="truncate">Bookings</span>
-      </Link>
-    </div>
-  )
-}
-
-function MerchantsSectionSubnav({ pathname, onNavigate }: { pathname: string | null; onNavigate: () => void }) {
-  const { ready, can } = usePermissions()
-  const items = [
-    { name: "Merchants", href: "/merchants", icon: Store, permission: "merchants.read" },
-    { name: "KYB requirements", href: "/kyb", icon: ListChecks, permission: "kyb.manage" },
-    { name: "Audit log", href: "/audit", icon: ScrollText, permission: "audit.read" },
-    { name: "Reviews", href: "/reviews", icon: Star, permission: "merchants.read" },
-  ].filter((item) => !ready || can(item.permission))
+function GroupLinks({ items, pathname, onNavigate }: { items: NavItem[]; pathname: string | null; onNavigate: () => void }) {
+  // the longest matching href is the active one, so /fees/settings does not also light up /fees
+  const active = items
+    .filter((i) => pathMatches(pathname, i.href, i.exact))
+    .sort((a, b) => b.href.length - a.href.length)[0]
   return (
     <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
       {items.map((item) => (
@@ -196,7 +47,7 @@ function MerchantsSectionSubnav({ pathname, onNavigate }: { pathname: string | n
           href={item.href}
           className={cn(
             "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200",
-            hubPathActive(pathname, item.href)
+            active?.href === item.href
               ? "bg-accent text-accent-foreground font-medium"
               : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
           )}
@@ -210,62 +61,54 @@ function MerchantsSectionSubnav({ pathname, onNavigate }: { pathname: string | n
   )
 }
 
-function FinanceSectionSubnav({ pathname, onNavigate }: { pathname: string | null; onNavigate: () => void }) {
-  const items = [
-    { name: "Payouts", href: "/finance/payouts", icon: Wallet },
-    { name: "Fees and commissions", href: "/fees", icon: Percent, exact: true },
-    { name: "Marketplace money settings", href: "/fees/settings", icon: Settings2 },
-  ]
+function NavGroupBlock({ group, items, pathname, open, onToggle, onNavigate }: { group: NavGroup; items: NavItem[]; pathname: string | null; open: boolean; onToggle: () => void; onNavigate: () => void }) {
+  const inGroup = items.some((i) => pathMatches(pathname, i.href, i.exact))
   return (
-    <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
-      {items.map((item) => (
+    <div className="pt-1" data-nav-group={group.key}>
+      <div className="flex items-center gap-0.5 rounded-md">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 shrink-0 text-muted-foreground"
+          aria-expanded={open}
+          aria-label={open ? `Collapse ${group.name} menu` : `Expand ${group.name} menu`}
+          onClick={onToggle}
+        >
+          <ChevronRight className={cn("h-4 w-4 transition-transform", open && "rotate-90")} />
+        </Button>
         <Link
-          key={item.href}
-          href={item.href}
+          href={items[0].href}
           className={cn(
-            "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200",
-            (item.exact ? pathname === item.href : hubPathActive(pathname, item.href))
-              ? "bg-accent text-accent-foreground font-medium"
-              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+            "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200",
+            inGroup ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
           )}
           onClick={onNavigate}
         >
-          <item.icon className="h-4 w-4 shrink-0 opacity-80" />
-          <span className="truncate">{item.name}</span>
+          <group.icon className="h-5 w-5 shrink-0" />
+          <span className="truncate">{group.name}</span>
         </Link>
-      ))}
+      </div>
+      {open ? <GroupLinks items={items} pathname={pathname} onNavigate={onNavigate} /> : null}
     </div>
   )
 }
 
-function isFinanceSectionPath(pathname: string | null): boolean {
-  return hubPathActive(pathname, "/finance") || hubPathActive(pathname, "/fees")
-}
-
-function isMerchantsSectionPath(pathname: string | null): boolean {
-  return hubPathActive(pathname, "/merchants") || hubPathActive(pathname, "/kyb") || hubPathActive(pathname, "/audit") || hubPathActive(pathname, "/reviews")
-}
-
-function isHubSectionPath(pathname: string | null): boolean {
-  if (!pathname) return false
+/** Shown in place of a page the signed-in role has no permission for. */
+function NoAccessPage({ role }: { role: string | null }) {
   return (
-    pathname.startsWith("/food/") ||
-    pathname.startsWith("/mart/") ||
-    pathname.startsWith("/products/") ||
-    pathname === "/experts" ||
-    pathname.startsWith("/experts/")
-  )
-}
-
-function isOperationsSectionPath(pathname: string | null): boolean {
-  if (!pathname) return false
-  return (
-    pathname === "/transactions" ||
-    pathname.startsWith("/transactions/") ||
-    pathname === "/assistant" ||
-    pathname.startsWith("/assistant/") ||
-    pathname === "/bookings" ||
-    pathname.startsWith("/bookings/")
+    <div role="status" className="flex flex-col items-center px-6 py-24 text-center" data-testid="no-access">
+      <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-surface text-neutral-text">
+        <Lock className="h-6 w-6" aria-hidden />
+      </div>
+      <h2 className="text-lg font-semibold">You do not have access to this page</h2>
+      <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
+        {role ? `The ${ROLE_LABELS[role] ?? role} role cannot use this area. ` : ""}Ask a super admin if you need it.
+      </p>
+      <Button asChild variant="outline" className="mt-5">
+        <Link href="/dashboard">Back to dashboard</Link>
+      </Button>
+    </div>
   )
 }
 
@@ -273,32 +116,20 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
   const pathname = usePathname()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [hubNavOpen, setHubNavOpen] = useState(false)
-  const [operationsNavOpen, setOperationsNavOpen] = useState(false)
-  const [merchantsNavOpen, setMerchantsNavOpen] = useState(false)
-  const [financeNavOpen, setFinanceNavOpen] = useState(false)
-  const { signOut, isSuperAdmin } = useAuth()
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({})
+  const { signOut } = useAuth()
   const perms = usePermissions()
-  const showFinance = !perms.ready || perms.can("finance.manage")
 
-  const navigation = isSuperAdmin
-    ? baseNavigation
-    : baseNavigation.filter((item) => item.href !== "/settings")
+  // while permissions load show every link (the API still enforces); once loaded, hide what the role cannot use
+  const groups = NAV_GROUPS.map((g) => ({ group: g, items: g.items.filter((i) => !perms.ready || perms.can(i.permission)) })).filter((g) => g.items.length > 0)
 
   useEffect(() => {
-    if (isHubSectionPath(pathname)) {
-      setHubNavOpen(true)
-      setOperationsNavOpen(false)
-    } else if (isFinanceSectionPath(pathname)) {
-      setFinanceNavOpen(true)
-    } else if (isMerchantsSectionPath(pathname)) {
-      setMerchantsNavOpen(true)
-    } else if (isOperationsSectionPath(pathname)) {
-      setOperationsNavOpen(true)
-      setHubNavOpen(false)
-    }
+    const hit = NAV_GROUPS.find((g) => g.items.some((i) => pathMatches(pathname, i.href, i.exact)))
+    if (hit) setOpenGroups((o) => (o[hit.key] ? o : { ...o, [hit.key]: true }))
   }, [pathname])
 
+  const needed = permissionForPath(pathname)
+  const blocked = perms.ready && needed !== null && !perms.can(needed)
   const handleLogout = async () => {
     try {
       officeDataStore.clearDataCache()
@@ -310,12 +141,13 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
       router.push("/auth/login")
     }
   }
+  const close = () => setSidebarOpen(false)
 
   return (
     <div className="flex h-screen bg-background">
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={close} />
         </div>
       )}
 
@@ -328,177 +160,34 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
               <BrandLogo size="sm" />
               <span className="text-sm text-primary font-medium">Office</span>
             </div>
-            <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(false)}>
+            <Button variant="ghost" size="sm" className="lg:hidden" onClick={close}>
               <X className="h-5 w-5" />
             </Button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-6 space-y-1">
+          <nav className="flex-1 overflow-y-auto px-3 py-6 space-y-1" aria-label="Office">
             <Link
               href="/dashboard"
               className={`flex items-center w-full px-3 py-3 text-sm font-medium rounded-md transition-all duration-200 ${
-                pathname === "/dashboard" || Boolean(pathname?.startsWith("/dashboard/"))
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                pathMatches(pathname, "/dashboard") ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
-              onClick={() => setSidebarOpen(false)}
+              onClick={close}
             >
               <LayoutDashboard className="mr-3 h-5 w-5 flex-shrink-0" />
               <span className="truncate">Dashboard</span>
             </Link>
 
-            <div className="pt-1">
-              <div className="flex items-center gap-0.5 rounded-md">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 shrink-0 text-muted-foreground"
-                  aria-expanded={operationsNavOpen}
-                  aria-label={operationsNavOpen ? "Collapse Operations menu" : "Expand Operations menu"}
-                  onClick={() => setOperationsNavOpen((o) => !o)}
-                >
-                  <ChevronRight
-                    className={cn("h-4 w-4 transition-transform", operationsNavOpen && "rotate-90")}
-                  />
-                </Button>
-                <Link
-                  href="/transactions"
-                  className={cn(
-                    "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200",
-                    isOperationsSectionPath(pathname)
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                  )}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <Briefcase className="h-5 w-5 shrink-0" />
-                  <span className="truncate">Operations</span>
-                </Link>
-              </div>
-
-              {operationsNavOpen ? (
-                <OperationsSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
-              ) : null}
-            </div>
-
-            <div className="pt-1">
-              <div className="flex items-center gap-0.5 rounded-md">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 shrink-0 text-muted-foreground"
-                  aria-expanded={merchantsNavOpen}
-                  aria-label={merchantsNavOpen ? "Collapse Merchants menu" : "Expand Merchants menu"}
-                  onClick={() => setMerchantsNavOpen((o) => !o)}
-                >
-                  <ChevronRight className={cn("h-4 w-4 transition-transform", merchantsNavOpen && "rotate-90")} />
-                </Button>
-                <Link
-                  href="/merchants"
-                  className={cn(
-                    "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200",
-                    isMerchantsSectionPath(pathname)
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                  )}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <Building2 className="h-5 w-5 shrink-0" />
-                  <span className="truncate">Merchants</span>
-                </Link>
-              </div>
-              {merchantsNavOpen ? (
-                <MerchantsSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
-              ) : null}
-            </div>
-
-            {showFinance ? (
-<div className="pt-1">
-              <div className="flex items-center gap-0.5 rounded-md">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 shrink-0 text-muted-foreground"
-                  aria-expanded={financeNavOpen}
-                  aria-label={financeNavOpen ? "Collapse Finance menu" : "Expand Finance menu"}
-                  onClick={() => setFinanceNavOpen((o) => !o)}
-                >
-                  <ChevronRight className={cn("h-4 w-4 transition-transform", financeNavOpen && "rotate-90")} />
-                </Button>
-                <Link
-                  href="/finance/payouts"
-                  className={cn(
-                    "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200",
-                    isFinanceSectionPath(pathname)
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                  )}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <Wallet className="h-5 w-5 shrink-0" />
-                  <span className="truncate">Finance</span>
-                </Link>
-              </div>
-              {financeNavOpen ? (
-                <FinanceSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
-              ) : null}
-            </div>
-) : null}
-
-            <div className="pt-1">
-              <div className="flex items-center gap-0.5 rounded-md">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 shrink-0 text-muted-foreground"
-                  aria-expanded={hubNavOpen}
-                  aria-label={hubNavOpen ? "Collapse Hub menu" : "Expand Hub menu"}
-                  onClick={() => setHubNavOpen((o) => !o)}
-                >
-                  <ChevronRight className={cn("h-4 w-4 transition-transform", hubNavOpen && "rotate-90")} />
-                </Button>
-                <Link
-                  href={hubProductsPath("food")}
-                  className={cn(
-                    "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200",
-                    isHubSectionPath(pathname)
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                  )}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <Store className="h-5 w-5 shrink-0" />
-                  <span className="truncate">Hub</span>
-                </Link>
-              </div>
-
-              {hubNavOpen ? (
-                <HubSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
-              ) : null}
-            </div>
-
-            {navigation.map((item) => {
-              const isActive = pathname === item.href || Boolean(pathname?.startsWith(item.href + "/"))
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`flex items-center w-full px-3 py-3 text-sm font-medium rounded-md transition-all duration-200 ${
-                    isActive
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  }`}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-                  <span className="truncate">{item.name}</span>
-                </Link>
-              )
-            })}
+            {groups.map(({ group, items }) => (
+              <NavGroupBlock
+                key={group.key}
+                group={group}
+                items={items}
+                pathname={pathname}
+                open={!!openGroups[group.key]}
+                onToggle={() => setOpenGroups((o) => ({ ...o, [group.key]: !o[group.key] }))}
+                onNavigate={close}
+              />
+            ))}
           </nav>
 
           <div className="px-3 py-4 border-t border-sidebar-border">
@@ -521,10 +210,14 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
               <Menu className="h-5 w-5" />
             </Button>
             <div className="flex-1"></div>
+            <div className="flex items-center gap-3 text-sm">
+              {perms.me ? <span className="hidden text-muted-foreground sm:inline">{perms.me.name || perms.me.email}</span> : null}
+              <RoleChip role={perms.role} />
+            </div>
           </div>
         </div>
 
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto">{blocked ? <NoAccessPage role={perms.role} /> : children}</main>
       </div>
     </div>
   )

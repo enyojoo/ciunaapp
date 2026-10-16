@@ -19,6 +19,15 @@ const PROTECTED_PATHS = [
   "/transactions",
   "/orders",
   "/referrals",
+  "/marketplace",
+  "/merchants",
+  "/kyb",
+  "/finance",
+  "/fees",
+  "/audit",
+  "/reviews",
+  "/analytics",
+  "/rates",
 ]
 
 function isProtectedPath(pathname: string | null): boolean {

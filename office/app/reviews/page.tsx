@@ -10,11 +10,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DecisionDialog } from "@/components/merchants/decision-dialog"
-import { api, canDecide, formatDate, jsonBody } from "@/components/merchants/merchant-lib"
+import { api, formatDate, jsonBody } from "@/components/merchants/merchant-lib"
 import { RatingStars } from "@/components/reviews/rating-stars"
 import { ReviewStatusBadge } from "@/components/reviews/review-status-badge"
 import { HIDE_REASONS, excerpt, type OfficeReview } from "@/components/reviews/review-lib"
-import { useAuth } from "@/lib/auth-context"
+import { usePermissions } from "@/lib/permissions"
 
 const PAGE = 50
 const TABS = [
@@ -24,8 +24,8 @@ const TABS = [
 ]
 
 export default function ReviewsPage() {
-  const { adminRole } = useAuth()
-  const canModerate = canDecide(adminRole)
+  const { can } = usePermissions()
+  const canModerate = can("merchants.review")
   const [tab, setTab] = useState("published")
   const [rating, setRating] = useState("all")
   const [search, setSearch] = useState("")

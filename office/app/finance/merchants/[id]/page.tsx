@@ -9,8 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ErrorBanner, FinanceStatusBadge, NoticeBanner, VerifiedBadge } from "@/components/finance/finance-ui"
-import { canFinance, fapi, formatDateTime, formatMoney, jsonBody, kindLabel, type PayoutMethod } from "@/components/finance/finance-lib"
-import { useAuth } from "@/lib/auth-context"
+import { fapi, formatDateTime, formatMoney, jsonBody, kindLabel, type PayoutMethod } from "@/components/finance/finance-lib"
+import { usePermissions } from "@/lib/permissions"
 
 interface Balance { currency: string; pending: number; available: number; inPayout: number; paidOut: number; lifetimeNet: number }
 interface Earning {
@@ -26,8 +26,7 @@ const Num = ({ children }: { children: React.ReactNode }) => <TableCell classNam
 
 export default function MerchantMoneyPage() {
   const { id } = useParams<{ id: string }>()
-  const { adminRole } = useAuth()
-  const act = canFinance(adminRole)
+  const act = usePermissions().can("finance.manage")
   const [name, setName] = useState<string>("")
   const [d, setD] = useState<Ledger | null>(null)
   const [error, setError] = useState<string | null>(null)

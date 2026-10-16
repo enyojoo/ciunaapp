@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
+import { AlertCircle, ArrowLeft } from "lucide-react"
 import { OfficeDashboardLayout } from "@/components/layout/office-dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -12,9 +12,9 @@ import { MerchantStatusBadge } from "@/components/merchants/merchant-status-badg
 import { DocumentRow, type MerchantDocument } from "@/components/merchants/document-row"
 import { DecisionDialog } from "@/components/merchants/decision-dialog"
 import { RelativeAge } from "@/components/merchants/relative-age"
-import { api, canDecide, canManage, formatDateTime, jsonBody, type MerchantRow } from "@/components/merchants/merchant-lib"
+import { api, formatDateTime, jsonBody, type MerchantRow } from "@/components/merchants/merchant-lib"
 import type { KybRequirements } from "@/components/merchants/requirements-editor"
-import { useAuth } from "@/lib/auth-context"
+import { usePermissions } from "@/lib/permissions"
 
 interface Detail {
   merchant: MerchantRow
@@ -47,9 +47,9 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 
 export default function MerchantDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { adminRole } = useAuth()
-  const decide = canDecide(adminRole)
-  const manage = canManage(adminRole)
+  const { can } = usePermissions()
+  const decide = can("merchants.review")
+  const manage = can("merchants.manage")
   const [d, setD] = useState<Detail | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
@@ -101,9 +101,14 @@ export default function MerchantDetailPage() {
   const missingDocs = docDefs.filter((r) => r.required && !d.documents.some((x) => x.kind === r.kind))
   const docLabel = (kind: string) => docDefs.find((r) => r.kind === kind)?.label || kind
   const inReview = m.status === "in_review"
+  const missingAnswers = fieldDefs.filter((f) => f.required && !String(answers.fields?.[f.key] ?? "").trim())
   const approveBlock = !allApproved
-    ? d.documents.length === 0 ? "No documents uploaded." : "Approve every document first."
-    : null
+    ? d.documents.length === 0 ? "Approve is off: no documents uploaded." : "Approve is off: approve every document first."
+    : missingDocs.length > 0
+      ? `Approve is off: required document missing (${missingDocs.map((x) => x.label).join(", ")}).`
+      : missingAnswers.length > 0
+        ? `Approve is off: required answer not provided (${missingAnswers.map((x) => x.label).join(", ")}).`
+        : null
 
   return (
     <OfficeDashboardLayout>
@@ -158,7 +163,7 @@ export default function MerchantDetailPage() {
                       const v = String(answers.fields?.[f.key] ?? "").trim()
                       return (
                         <Row key={f.key} label={f.label}>
-                          {v || (f.required ? <span className="font-medium text-destructive-text">Missing (required)</span> : null)}
+                          {v || (f.required ? <span className="inline-flex items-center gap-1 font-medium text-destructive-text"><AlertCircle className="h-3.5 w-3.5" aria-hidden />Required, not provided</span> : null)}
                         </Row>
                       )
                     })}
@@ -235,6 +240,11 @@ export default function MerchantDetailPage() {
 
           <div className="lg:col-span-1">
             <div className="space-y-4 lg:sticky lg:top-4">
+              {!decide ? (
+                <p className="rounded-md bg-neutral-surface px-3 py-2 text-xs text-neutral-text">
+                  Your role can view this merchant and its trail but not decide. Status: <MerchantStatusBadge status={m.status} />
+                </p>
+              ) : (
               <Card>
                 <CardHeader><CardTitle className="text-base">Decision</CardTitle></CardHeader>
                 <CardContent className="space-y-3">
@@ -246,15 +256,13 @@ export default function MerchantDetailPage() {
                     <p className="rounded-md bg-muted p-2 text-xs">Merchant sees: {m.rejection_reason}</p>
                   )}
 
-                  {!decide && <p className="text-xs text-muted-foreground">Your role can view this merchant but not decide.</p>}
-
                   {decide && inReview && (
                     <div className="space-y-2">
                       <Button className="w-full bg-primary text-primary-foreground" disabled={busy || !!approveBlock}
                         onClick={() => decision("approve", "", "Merchant approved and live.")}>
                         Approve
                       </Button>
-                      {approveBlock && <p className="text-xs text-muted-foreground">{approveBlock}</p>}
+                      {approveBlock && <p className="text-xs text-warning-text" role="status">{approveBlock}</p>}
                       <Button variant="outline" className="w-full" disabled={busy} onClick={() => { setDialogError(null); setPending({ kind: "decision", action: "request_changes" }) }}>Request changes</Button>
                       <Button variant="destructive" className="w-full" disabled={busy} onClick={() => { setDialogError(null); setPending({ kind: "decision", action: "reject" }) }}>Reject</Button>
                     </div>
@@ -271,6 +279,7 @@ export default function MerchantDetailPage() {
                   )}
                 </CardContent>
               </Card>
+              )}
 
               {manage && (
                 <Card>

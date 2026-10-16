@@ -11,8 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { RequirementsEditor, validateRequirements, type KybRequirements } from "@/components/merchants/requirements-editor"
 import { MerchantStatusBadge } from "@/components/merchants/merchant-status-badge"
-import { api, canEditKyb, jsonBody } from "@/components/merchants/merchant-lib"
-import { useAuth } from "@/lib/auth-context"
+import { api, jsonBody } from "@/components/merchants/merchant-lib"
+import { usePermissions } from "@/lib/permissions"
 
 interface Profile {
   id: string
@@ -41,8 +41,8 @@ const EMPTY: Draft = {
 }
 
 export default function KybPage() {
-  const { adminRole } = useAuth()
-  const editable = canEditKyb(adminRole)
+  const { can } = usePermissions()
+  const editable = can("kyb.manage")
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

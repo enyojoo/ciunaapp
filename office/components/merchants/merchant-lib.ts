@@ -54,21 +54,6 @@ export function formatDate(iso?: string | null): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
 }
 
-/** Roles allowed to decide on merchants. Null and legacy 'admin' are treated as ops. */
-export function canDecide(role: string | null | undefined): boolean {
-  const r = !role || role === "admin" ? "ops" : role
-  return ["ops", "compliance", "super_admin"].includes(r)
-}
-
-export function canManage(role: string | null | undefined): boolean {
-  const r = !role || role === "admin" ? "ops" : role
-  return ["ops", "super_admin"].includes(r)
-}
-
-export function canEditKyb(role: string | null | undefined): boolean {
-  return role === "compliance" || role === "super_admin"
-}
-
 export interface MerchantRow {
   id: string
   type: "store" | "expert"

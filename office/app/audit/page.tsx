@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { api, formatDateTime } from "@/components/merchants/merchant-lib"
 import { cn } from "@/lib/utils"
+import { ROLE_LABELS } from "@/lib/office-nav"
 
 const PAGE = 50
 
@@ -80,7 +81,12 @@ export default function AuditPage() {
           <Button type="button" variant="outline" onClick={() => { setDraft({}); setApplied({}); setOffset(0) }}>Clear</Button>
         </form>
 
-        {error && <p className="rounded-md bg-destructive-surface px-3 py-2 text-sm text-destructive-text" role="alert">{error}</p>}
+        {error && (
+          <div className="flex items-center justify-between gap-3 rounded-md bg-destructive-surface px-3 py-2 text-sm text-destructive-text" role="alert">
+            <span>{error}</span>
+            <Button variant="outline" size="sm" onClick={load}>Try again</Button>
+          </div>
+        )}
 
         <Card className="overflow-hidden">
           <div className="max-h-[calc(100vh-18rem)] overflow-auto">
@@ -97,14 +103,14 @@ export default function AuditPage() {
               </TableHeader>
               <TableBody>
                 {loading && entries.length === 0 && <TableRow><TableCell colSpan={6} className="py-10 text-center text-muted-foreground">Loading...</TableCell></TableRow>}
-                {!loading && entries.length === 0 && !error && <TableRow><TableCell colSpan={6} className="py-10 text-center text-muted-foreground">No entries.</TableCell></TableRow>}
+                {!loading && entries.length === 0 && !error && <TableRow><TableCell colSpan={6} className="py-10 text-center text-muted-foreground">{Object.keys(applied).length ? "No entries match these filters." : "Nothing has been recorded yet."}</TableCell></TableRow>}
                 {entries.map((e) => (
                   <Fragment key={e.id}>
                     <TableRow className="cursor-pointer" onClick={() => setOpen(open === e.id ? null : e.id)}>
                       <TableCell><ChevronRight className={cn("h-4 w-4 transition-transform", open === e.id && "rotate-90")} /></TableCell>
                       <TableCell className="whitespace-nowrap text-sm">{formatDateTime(e.created_at)}</TableCell>
                       <TableCell className="text-sm">
-                        <span className="capitalize">{e.actor_kind}</span>{e.actor_role ? ` (${e.actor_role})` : ""}
+                        <span className="capitalize">{e.actor_kind}</span>{e.actor_role ? <span className="ml-1.5 inline-flex items-center rounded-full bg-primary-tint px-2 py-0.5 text-xs font-medium text-primary-text">{ROLE_LABELS[e.actor_role] ?? e.actor_role}</span> : null}
                         {e.actor_id && <div className="font-mono text-xs text-muted-foreground">{e.actor_id.slice(0, 8)}</div>}
                       </TableCell>
                       <TableCell className="font-mono text-xs">{e.action}</TableCell>

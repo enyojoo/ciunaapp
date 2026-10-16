@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
 import { REJECTION_TEMPLATES } from "./merchant-lib"
 
 interface Props {
@@ -42,7 +43,8 @@ export function DecisionDialog({
                 key={t}
                 type="button"
                 onClick={() => setReason(t)}
-                className="rounded-full border px-3 py-1 text-left text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                aria-pressed={reason === t}
+                className={cn("rounded-full border px-3 py-1 text-left text-xs hover:bg-accent hover:text-accent-foreground", reason === t ? "border-primary bg-primary-tint text-primary-text" : "text-muted-foreground")}
               >
                 {t}
               </button>

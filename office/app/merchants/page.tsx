@@ -98,7 +98,12 @@ export default function MerchantsPage() {
           </div>
         </div>
 
-        {error && <p className="rounded-md bg-destructive-surface px-3 py-2 text-sm text-destructive-text" role="alert">{error}</p>}
+        {error && (
+          <div className="flex items-center justify-between gap-3 rounded-md bg-destructive-surface px-3 py-2 text-sm text-destructive-text" role="alert">
+            <span>{error}</span>
+            <Button variant="outline" size="sm" onClick={load}>Try again</Button>
+          </div>
+        )}
 
         <Card className="overflow-hidden">
           <div className="max-h-[calc(100vh-18rem)] overflow-auto">
@@ -109,8 +114,8 @@ export default function MerchantsPage() {
                   <TableHead>Country</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Tier</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead>Managed</TableHead>
+                  <TableHead>Age</TableHead>
+                  <TableHead>Owner</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -119,7 +124,11 @@ export default function MerchantsPage() {
                 )}
                 {!loading && rows.length === 0 && !error && (
                   <TableRow><TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                    {tab === "in_review" ? "Nothing waiting for review." : "No merchants match."}
+                    {q || type !== "all"
+                      ? "No merchants match these filters."
+                      : tab === "in_review"
+                        ? "Nothing is waiting for review. New applications appear here."
+                        : "No merchants in this tab yet."}
                   </TableCell></TableRow>
                 )}
                 {rows.map((m) => (
@@ -137,8 +146,8 @@ export default function MerchantsPage() {
                     <TableCell className="text-sm">{m.country} {"→"} {m.operating_country}</TableCell>
                     <TableCell><MerchantStatusBadge status={m.status} /></TableCell>
                     <TableCell className="tabular-nums">{m.kyb_tier ? `Tier ${m.kyb_tier}` : "-"}</TableCell>
-                    <TableCell><RelativeAge iso={m.submitted_at} warn={m.status === "in_review"} /></TableCell>
-                    <TableCell>{m.office_managed ? <span className="rounded-full bg-neutral-surface px-2 py-0.5 text-xs text-neutral-text">Office-managed</span> : null}</TableCell>
+                    <TableCell><RelativeAge iso={m.submitted_at ?? m.created_at} warn={m.status === "in_review"} /></TableCell>
+                    <TableCell>{m.office_managed ? <span className="rounded-full bg-neutral-surface px-2 py-0.5 text-xs text-neutral-text">Office-managed</span> : m.owner_team ? <span className="text-xs capitalize text-muted-foreground">{m.owner_team}</span> : <span className="text-muted-foreground">-</span>}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

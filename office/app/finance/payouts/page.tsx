@@ -7,10 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { RelativeAge } from "@/components/merchants/relative-age"
-import { ErrorBanner, FinanceStatusBadge } from "@/components/finance/finance-ui"
-import { PayoutPanel, payoutNet } from "@/components/finance/payout-panel"
+import { ErrorBanner, FinanceStatusBadge, VerifiedBadge } from "@/components/finance/finance-ui"
+import { PayoutPanel, payoutNet, rowVerified } from "@/components/finance/payout-panel"
 import { fapi, formatDateTime, formatMoney, kindLabel, type PayoutRow } from "@/components/finance/finance-lib"
-import { useAuth } from "@/lib/auth-context"
 
 const PAGE = 50
 const TABS = [
@@ -21,7 +20,6 @@ const TABS = [
 ]
 
 export default function PayoutsPage() {
-  const { adminRole } = useAuth()
   const [tab, setTab] = useState("open")
   const [offset, setOffset] = useState(0)
   const [rows, setRows] = useState<PayoutRow[]>([])
@@ -72,7 +70,12 @@ export default function PayoutsPage() {
           </TabsList>
         </Tabs>
 
-        <ErrorBanner message={error} />
+        {error && (
+          <div className="flex items-center justify-between gap-3 rounded-md bg-destructive-surface px-3 py-2 text-sm text-destructive-text" role="alert">
+            <span>{error}</span>
+            <Button variant="outline" size="sm" onClick={load}>Try again</Button>
+          </div>
+        )}
 
         <Card className="overflow-hidden">
           <div className="max-h-[calc(100vh-18rem)] overflow-auto">
@@ -94,12 +97,11 @@ export default function PayoutsPage() {
                 )}
                 {!loading && rows.length === 0 && !error && (
                   <TableRow><TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
-                    {tab === "open" ? "No payouts waiting." : "No payouts here."}
+                    {tab === "open" ? "No payouts are waiting. Requests from merchants appear here." : "No payouts in this tab yet."}
                   </TableCell></TableRow>
                 )}
                 {rows.map((r) => {
                   const m = r.method_snapshot || {}
-                  const old = Date.now() - new Date(r.requested_at).getTime() > 48 * 3600 * 1000
                   const when = tab === "paid" ? r.paid_at : r.decided_at
                   return (
                     <TableRow key={r.id} tabIndex={0} className="cursor-pointer" onClick={() => setSelected(r)}
@@ -113,13 +115,12 @@ export default function PayoutsPage() {
                       <TableCell className="text-right font-medium tabular-nums">{formatMoney(payoutNet(r), r.currency)}</TableCell>
                       <TableCell>
                         <div className="text-sm">{kindLabel(m.kind)}{m.last4 ? ` ****${m.last4}` : ""}</div>
-                        <div className="text-xs text-muted-foreground">{m.label}</div>
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">{m.label}{rowVerified(r) !== undefined ? <VerifiedBadge verified={!!rowVerified(r)} /> : null}</div>
                       </TableCell>
                       <TableCell>
                         {tab === "open"
-                          ? <RelativeAge iso={r.requested_at} warn={old} />
+                          ? <RelativeAge iso={r.requested_at} warn limitHours={48} />
                           : <span className="text-sm text-muted-foreground">{formatDateTime(when || r.requested_at)}</span>}
-                        {tab === "open" && old && <span className="ml-1 text-xs text-warning-text">over 48h</span>}
                       </TableCell>
                       <TableCell><FinanceStatusBadge status={r.status} /></TableCell>
                     </TableRow>
@@ -139,7 +140,7 @@ export default function PayoutsPage() {
         </div>
       </div>
 
-      <PayoutPanel payout={selected} role={adminRole} onClose={() => setSelected(null)} onChanged={changed} />
+      <PayoutPanel payout={selected} onClose={() => setSelected(null)} onChanged={changed} />
     </OfficeDashboardLayout>
   )
 }

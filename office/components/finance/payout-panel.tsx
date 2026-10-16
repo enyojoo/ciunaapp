@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { usePermissions } from "@/lib/permissions"
 import { DecisionDialog } from "@/components/merchants/decision-dialog"
 import { DetailRow, ErrorBanner, FinanceStatusBadge, NoticeBanner, VerifiedBadge } from "./finance-ui"
-import { canFinance, fapi, formatDateTime, formatMoney, jsonBody, kindLabel, type PayoutRow } from "./finance-lib"
+import { fapi, formatDateTime, formatMoney, jsonBody, kindLabel, type PayoutRow } from "./finance-lib"
 
 const REJECT_CHIPS = ["Payout details could not be verified.", "Name on the account doesn't match the business."]
 
@@ -18,6 +19,13 @@ interface Reveal { payout: PayoutRow & { method_id?: string }; verified: boolean
 export const payoutNet = (p: PayoutRow) => {
   const n = Number(p.amount) - Number(p.fee)
   return Number.isFinite(n) ? Math.max(0, Math.round(n * 100) / 100) : Number(p.net)
+}
+
+/** Reads the joined method verification from a list row; undefined when the API did not send it. */
+export function rowVerified(r: PayoutRow): boolean | undefined {
+  const j = r.merchant_payout_methods
+  const m = Array.isArray(j) ? j[0] : j
+  return m && typeof m.verified === "boolean" ? m.verified : undefined
 }
 
 function ReferenceDialog({ open, onOpenChange, busy, error, onConfirm }: {
@@ -52,9 +60,9 @@ function ReferenceDialog({ open, onOpenChange, busy, error, onConfirm }: {
 
 /** Payout detail dialog: amounts, audited reveal of the destination, method verification, decisions. */
 export function PayoutPanel({ payout, role, onClose, onChanged }: {
-  payout: PayoutRow | null; role: string | null | undefined; onClose: () => void; onChanged: () => void
+  payout: PayoutRow | null; role?: string | null; onClose: () => void; onChanged: () => void
 }) {
-  const act = canFinance(role)
+  const act = usePermissions().can("finance.manage")
   const [reveal, setReveal] = useState<Reveal | null>(null)
   const [revealing, setRevealing] = useState(false)
   const [busy, setBusy] = useState(false)
