@@ -1,12 +1,13 @@
 import { useEffect } from "react"
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { MapPin } from "lucide-react-native"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import { RatingLine, ReviewsSection } from "@/components/reviews-section"
 import { useReviews } from "@/lib/use-reviews"
+import { HubTopBar } from "@/components/hub-top-bar"
 import { EmptyState } from "@/components/empty-state"
 import { LoadError } from "@/components/load-error"
 import {
@@ -27,9 +28,8 @@ import { colors, radius, type as typeSize } from "@/lib/theme"
  * hero: the gradient is reserved for service-line screens (Home → Experts). A real profile-style
  * body underneath: a proper avatar, name, headline/category, location, bio, then bookable services.
  */
-export default function ExpertProfileScreen() {
+function ExpertProfileBody() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
-  const navigation = useNavigation()
   const router = useRouter()
   const { t, i18n } = useTranslation("app")
   const { data, loading, error, revalidate } = useExpertProfile(slug)
@@ -43,15 +43,7 @@ export default function ExpertProfileScreen() {
   const reviews = useReviews(profile ? { kind: "expert", slug: String(slug) } : null)
   const profileId = profile?.id ?? null
 
-  // No title — the expert's name is already the big heading in the body; a repeated header title is redundant.
-  useEffect(() => {
-    navigation.setOptions({
-      title: "",
-      headerRight: profileId
-        ? () => <FavouriteHeart type="expert" id={profileId} style={styles.headerHeart} />
-        : undefined,
-    })
-  }, [navigation, profileId])
+
 
   const bio = (profile?.bio || "").trim()
   const meeting = (profile?.meeting_hint || "").trim()
@@ -63,7 +55,7 @@ export default function ExpertProfileScreen() {
 
   if (loading && !profile) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
         <StatusBar style="dark" />
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -74,7 +66,7 @@ export default function ExpertProfileScreen() {
 
   if (error && !profile && !(error instanceof Error && error.message === EXPERT_NOT_FOUND)) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
         <StatusBar style="dark" />
         <LoadError onRetry={() => void revalidate()} />
       </ScreenScroll>
@@ -83,7 +75,7 @@ export default function ExpertProfileScreen() {
 
   if (notFound || !profile) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
         <StatusBar style="dark" />
         <EmptyState
           title={t("hub.expertNotFound", { defaultValue: "Expert not found" })}
@@ -95,7 +87,7 @@ export default function ExpertProfileScreen() {
   }
 
   return (
-    <ScreenScroll edges={["left", "right"]}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
       <StatusBar style="dark" />
       <View style={styles.identityRow}>
         <View style={styles.avatarWrap}>
@@ -188,8 +180,28 @@ export default function ExpertProfileScreen() {
   )
 }
 
+/** Space between the top bar and the first content block. */
+const AFTER_BAR = { paddingTop: 16 }
+
+/** Same top bar as the hub screens: back chip and the favourite heart. */
+export default function ExpertProfileScreen() {
+  const { slug } = useLocalSearchParams<{ slug: string }>()
+  const { data } = useExpertProfile(slug)
+  const profileId = data?.profile?.id ?? null
+  return (
+    <View style={{ flex: 1 }}>
+      <HubTopBar
+        backHref="/experts"
+        trailing={profileId ? <FavouriteHeart type="expert" id={profileId} style={styles.barHeart} /> : null}
+      />
+      <ExpertProfileBody />
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
-  headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
+  // A plain 40px icon button in the top bar, the same size as the back chip.
+  barHeart: { position: "relative", top: 0, right: 0, width: 40, height: 40, borderRadius: 20, backgroundColor: "transparent", shadowOpacity: 0, elevation: 0 },
   center: { paddingVertical: 60, alignItems: "center" },
   identityRow: { flexDirection: "row", gap: 14, marginBottom: 20 },
   avatarWrap: {

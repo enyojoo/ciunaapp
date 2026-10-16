@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from "react"
+import { HubTopBar } from "@/components/hub-top-bar"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
 import { StatusBar } from "expo-status-bar"
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { VerifiedBadge } from "@/components/verified-badge"
 import { EmptyState } from "@/components/empty-state"
@@ -19,10 +20,9 @@ import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors, type as typeSize } from "@/lib/theme"
 
-export default function ExpertServiceDetailScreen() {
+function ExpertServiceDetailBody() {
   const { serviceId } = useLocalSearchParams<{ serviceId: string }>()
   const id = String(serviceId || "")
-  const navigation = useNavigation()
   const router = useRouter()
   const { t } = useTranslation("app")
   const { data: service, loading, error, revalidate } = useExpertCatalogService(id)
@@ -32,9 +32,6 @@ export default function ExpertServiceDetailScreen() {
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
 
-  useEffect(() => {
-    navigation.setOptions({ title: "" })
-  }, [navigation])
 
   const moreFromExpert = useMemo(() => {
     if (!service) return []
@@ -43,7 +40,7 @@ export default function ExpertServiceDetailScreen() {
 
   if (loading) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
         <StatusBar style="dark" />
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -54,7 +51,7 @@ export default function ExpertServiceDetailScreen() {
 
   if (notFound || !service) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
         <StatusBar style="dark" />
         <EmptyState
           title={t("hub.serviceUnavailable", { defaultValue: "This service is currently unavailable." })}
@@ -71,7 +68,7 @@ export default function ExpertServiceDetailScreen() {
   const bookLabel = t("experts.profile.bookSession", { defaultValue: "Book a session" })
 
   return (
-    <ScreenScroll edges={["left", "right"]}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
       <StatusBar style="dark" />
       <Text style={styles.title}>{service.title}</Text>
       <Pressable
@@ -127,6 +124,19 @@ export default function ExpertServiceDetailScreen() {
         </View>
       ) : null}
     </ScreenScroll>
+  )
+}
+
+/** Space between the top bar and the first content block. */
+const AFTER_BAR = { paddingTop: 16 }
+
+/** Same top bar as the hub screens. */
+export default function ExpertServiceDetailScreen() {
+  return (
+    <View style={{ flex: 1 }}>
+      <HubTopBar backHref="/experts" />
+      <ExpertServiceDetailBody />
+    </View>
   )
 }
 

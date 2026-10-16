@@ -18,10 +18,10 @@ export default function ExpertsLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen name="browse" />
-      {/* No title — same reasoning as the vendor storefront: the expert's name is already big in the body. */}
-      <Stack.Screen name="[slug]" options={{ headerShown: true, title: "" }} />
-      <Stack.Screen name="s/[serviceId]" options={{ headerShown: true, title: "" }} />
-      <Stack.Screen name="book/[serviceId]" options={{ headerShown: true, title: "Book" }} />
+      {/* These screens draw the shared hub top bar themselves, so the native header stays off. */}
+      <Stack.Screen name="[slug]" />
+      <Stack.Screen name="s/[serviceId]" />
+      <Stack.Screen name="book/[serviceId]" />
     </Stack>
   )
 }
