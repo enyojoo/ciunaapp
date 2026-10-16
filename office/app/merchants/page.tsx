@@ -13,6 +13,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { MerchantStatusBadge } from "@/components/merchants/merchant-status-badge"
 import { RelativeAge } from "@/components/merchants/relative-age"
 import { api, type MerchantRow } from "@/components/merchants/merchant-lib"
+import { OwnerCell } from "@/components/office/owner-cell"
+import { SlaChip } from "@/components/office/sla-chip"
+import { SavedViews, type ViewFilters } from "@/components/office/saved-views"
+import { usePermissions } from "@/lib/permissions"
+import { refreshQueues } from "@/lib/office-queues"
 
 const PAGE = 50
 const TABS = [
@@ -34,6 +39,10 @@ export default function MerchantsPage() {
   const [rows, setRows] = useState<MerchantRow[]>([])
   const [total, setTotal] = useState(0)
   const [reviewCount, setReviewCount] = useState<number | null>(null)
+  const [mine, setMine] = useState(false)
+  const [overSla, setOverSla] = useState(false)
+  const { can } = usePermissions()
+  const canClaim = can("merchants.review")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -49,14 +58,16 @@ export default function MerchantsPage() {
     if (tab !== "all") p.set("status", tab)
     if (type !== "all") p.set("type", type)
     if (q) p.set("q", q)
+    if (mine) p.set("mine", "1")
+    if (overSla) p.set("over_sla", "1")
     const res = await api<{ merchants: MerchantRow[]; total: number }>(`/api/admin/merchants?${p}`)
     if (res.ok) {
       setRows(res.data.merchants)
       setTotal(res.data.total)
-      if (tab === "in_review" && !q && type === "all") setReviewCount(res.data.total)
+      if (tab === "in_review" && !q && type === "all" && !mine && !overSla) setReviewCount(res.data.total)
     } else setError(res.error)
     setLoading(false)
-  }, [tab, type, q, offset])
+  }, [tab, type, q, offset, mine, overSla])
 
   useEffect(() => { load() }, [load])
 
@@ -65,6 +76,13 @@ export default function MerchantsPage() {
     if (tab === "in_review") return
     api<{ total: number }>("/api/admin/merchants?status=in_review&limit=1").then((r) => { if (r.ok) setReviewCount(r.data.total) })
   }, [tab])
+
+  const changed = () => { void load(); void refreshQueues() }
+  const current: ViewFilters = { tab, type: type === "all" ? "" : type, q, mine, over_sla: overSla }
+  const applyView = (f: ViewFilters) => {
+    setTab(String(f.tab || "in_review")); setType(String(f.type || "all")); setSearch(String(f.q || "")); setQ(String(f.q || ""))
+    setMine(f.mine === true); setOverSla(f.over_sla === true); setOffset(0)
+  }
 
   return (
     <OfficeDashboardLayout>
@@ -92,6 +110,9 @@ export default function MerchantsPage() {
               <SelectItem value="expert">Expert</SelectItem>
             </SelectContent>
           </Select>
+          <Button variant={mine ? "default" : "outline"} size="sm" aria-pressed={mine} onClick={() => { setMine(!mine); setOffset(0) }}>Mine</Button>
+          <Button variant={overSla ? "default" : "outline"} size="sm" aria-pressed={overSla} onClick={() => { setOverSla(!overSla); setOffset(0) }}>Over SLA</Button>
+          <SavedViews scope="merchants" current={current} onApply={applyView} />
           <div className="relative ml-auto w-full max-w-xs">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input className="pl-9" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -115,16 +136,17 @@ export default function MerchantsPage() {
                   <TableHead>Status</TableHead>
                   <TableHead>Tier</TableHead>
                   <TableHead>Age</TableHead>
+                  <TableHead>SLA</TableHead>
                   <TableHead>Owner</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {loading && rows.length === 0 && (
-                  <TableRow><TableCell colSpan={6} className="py-10 text-center text-muted-foreground">Loading...</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={7} className="py-10 text-center text-muted-foreground">Loading...</TableCell></TableRow>
                 )}
                 {!loading && rows.length === 0 && !error && (
-                  <TableRow><TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                    {q || type !== "all"
+                  <TableRow><TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
+                    {q || type !== "all" || mine || overSla
                       ? "No merchants match these filters."
                       : tab === "in_review"
                         ? "Nothing is waiting for review. New applications appear here."
@@ -147,7 +169,12 @@ export default function MerchantsPage() {
                     <TableCell><MerchantStatusBadge status={m.status} /></TableCell>
                     <TableCell className="tabular-nums">{m.kyb_tier ? `Tier ${m.kyb_tier}` : "-"}</TableCell>
                     <TableCell><RelativeAge iso={m.submitted_at ?? m.created_at} warn={m.status === "in_review"} /></TableCell>
-                    <TableCell>{m.office_managed ? <span className="rounded-full bg-neutral-surface px-2 py-0.5 text-xs text-neutral-text">Office-managed</span> : m.owner_team ? <span className="text-xs capitalize text-muted-foreground">{m.owner_team}</span> : <span className="text-muted-foreground">-</span>}</TableCell>
+                    <TableCell>{m.status === "in_review" ? <SlaChip sla={m.sla} /> : <span className="text-muted-foreground">-</span>}</TableCell>
+                    <TableCell>
+                      {m.status === "in_review"
+                        ? <OwnerCell owner={m.owner ?? null} claimUrl={`/api/admin/merchants/${m.id}/claim`} canClaim={canClaim} onChanged={changed} onError={setError} />
+                        : m.office_managed ? <span className="rounded-full bg-neutral-surface px-2 py-0.5 text-xs text-neutral-text">Office-managed</span> : m.owner_team ? <span className="text-xs capitalize text-muted-foreground">{m.owner_team}</span> : <span className="text-muted-foreground">-</span>}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

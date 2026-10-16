@@ -45,6 +45,11 @@ export default function MarketplaceOperations() {
   useEffect(() => {
     void load()
   }, [queue])
+  // deep link from search: /marketplace?order=<order id> opens that order
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("order")
+    if (id) void select(id)
+  }, [])
   async function action(action: string, extra: Record<string, unknown> = {}) {
     setBusy(true)
     setError("")

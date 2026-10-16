@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { RelativeAge } from "@/components/merchants/relative-age"
 import { ErrorBanner, FinanceStatusBadge, VerifiedBadge } from "@/components/finance/finance-ui"
 import { PayoutPanel, payoutNet, rowVerified } from "@/components/finance/payout-panel"
+import { SavedViews, type ViewFilters } from "@/components/office/saved-views"
+import { refreshQueues } from "@/lib/office-queues"
 import { fapi, formatDateTime, formatMoney, kindLabel, type PayoutRow } from "@/components/finance/finance-lib"
 
 const PAGE = 50
@@ -47,9 +49,16 @@ export default function PayoutsPage() {
   }, [tab, offset])
 
   useEffect(() => { load() }, [load])
+
+  // deep link from search: /finance/payouts?id=<payout id> opens that payout
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("id")
+    if (!id) return
+    fapi<{ payouts: PayoutRow[] }>(`/api/admin/payouts?id=${encodeURIComponent(id)}`).then((r) => { if (r.ok && r.data.payouts[0]) setSelected(r.data.payouts[0]) })
+  }, [])
   useEffect(() => { if (tab !== "open") countOpen() }, [tab, countOpen])
 
-  const changed = () => { load(); countOpen() }
+  const changed = () => { load(); countOpen(); void refreshQueues() }
   const dateCol = tab === "paid" ? "Paid" : tab === "open" ? "Requested" : "Decided"
 
   return (
@@ -60,15 +69,18 @@ export default function PayoutsPage() {
           <p className="text-sm text-muted-foreground">Review merchant payout requests, then pay them out by bank transfer or SBP and record the reference.</p>
         </div>
 
-        <Tabs value={tab} onValueChange={(v) => { setTab(v); setOffset(0) }}>
-          <TabsList>
-            {TABS.map((t) => (
-              <TabsTrigger key={t.value} value={t.value}>
-                {t.label}{t.value === "open" && openCount !== null ? ` (${openCount})` : ""}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <div className="flex flex-wrap items-center gap-3">
+          <Tabs value={tab} onValueChange={(v) => { setTab(v); setOffset(0) }}>
+            <TabsList>
+              {TABS.map((t) => (
+                <TabsTrigger key={t.value} value={t.value}>
+                  {t.label}{t.value === "open" && openCount !== null ? ` (${openCount})` : ""}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+          <SavedViews scope="payouts" current={{ tab } as ViewFilters} onApply={(f) => { setTab(TABS.some((t) => t.value === f.tab) ? String(f.tab) : "open"); setOffset(0) }} />
+        </div>
 
         {error && (
           <div className="flex items-center justify-between gap-3 rounded-md bg-destructive-surface px-3 py-2 text-sm text-destructive-text" role="alert">

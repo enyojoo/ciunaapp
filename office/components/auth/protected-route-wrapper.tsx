@@ -26,6 +26,7 @@ const PROTECTED_PATHS = [
   "/fees",
   "/audit",
   "/reviews",
+  "/catalog-review",
   "/analytics",
   "/rates",
 ]
@@ -35,20 +36,14 @@ function isProtectedPath(pathname: string | null): boolean {
   return PROTECTED_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))
 }
 
-function settingsPath(pathname: string | null): boolean {
-  if (!pathname) return false
-  return pathname === "/settings" || pathname.startsWith("/settings/")
-}
-
 export function ProtectedRouteWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const requireSuperAdmin = settingsPath(pathname)
+  // Who may open a page is decided by the layout guard (`permissionForPath` in lib/office-nav.ts: /settings needs
+  // settings.manage), which shows the no-access screen. Redirecting here sent non-super-admins to the dashboard instead.
   const { isChecking } = useRouteProtection({
     requireAuth: true,
     adminOnly: true,
-    requireSuperAdmin,
     redirectTo: "/auth/login",
-    forbiddenRedirectTo: "/dashboard",
   })
 
   if (!isProtectedPath(pathname)) {

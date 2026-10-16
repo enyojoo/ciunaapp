@@ -4,13 +4,15 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, LogOut, Menu, X, ChevronRight, Lock } from "lucide-react"
+import { LayoutDashboard, LogOut, Menu, X, ChevronRight, Lock, Search } from "lucide-react"
 import { BrandLogo } from "@ciuna/shared"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
 import { officeDataStore } from "@/lib/office-data-store"
 import { cn } from "@/lib/utils"
 import { usePermissions } from "@/lib/permissions"
+import { useQueues, type QueueKey } from "@/lib/office-queues"
+import { CommandPalette } from "@/components/office/command-palette"
 import { NAV_GROUPS, ROLE_LABELS, permissionForPath, type NavGroup, type NavItem } from "@/lib/office-nav"
 
 interface OfficeDashboardLayoutProps {
@@ -30,6 +32,22 @@ function RoleChip({ role }: { role: string | null }) {
       data-testid="role-chip"
     >
       {ROLE_LABELS[role] ?? role}
+    </span>
+  )
+}
+
+function CountBadge({ queue }: { queue?: QueueKey }) {
+  const { queues, ready } = useQueues()
+  const q = queue ? queues[queue] : undefined
+  if (!ready || !q || q.unavailable || q.count === 0) return null
+  const late = (q.over_sla ?? 0) > 0
+  return (
+    <span
+      data-testid={`count-${queue}`}
+      aria-label={`${q.count} waiting${late ? `, ${q.over_sla} over target` : ""}`}
+      className={cn("ml-auto inline-flex min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-medium tabular-nums", late ? "bg-warning-surface text-warning-text" : "bg-neutral-surface text-neutral-text")}
+    >
+      {q.count > 99 ? "99+" : q.count}
     </span>
   )
 }
@@ -55,6 +73,7 @@ function GroupLinks({ items, pathname, onNavigate }: { items: NavItem[]; pathnam
         >
           <item.icon className="h-4 w-4 shrink-0 opacity-80" />
           <span className="truncate">{item.name}</span>
+          <CountBadge queue={item.queue} />
         </Link>
       ))}
     </div>
@@ -119,6 +138,15 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({})
   const { signOut } = useAuth()
   const perms = usePermissions()
+  const [searchOpen, setSearchOpen] = useState(false)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setSearchOpen((o) => !o) }
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [])
 
   // while permissions load show every link (the API still enforces); once loaded, hide what the role cannot use
   const groups = NAV_GROUPS.map((g) => ({ group: g, items: g.items.filter((i) => !perms.ready || perms.can(i.permission)) })).filter((g) => g.items.length > 0)
@@ -209,7 +237,19 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
             <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
               <Menu className="h-5 w-5" />
             </Button>
-            <div className="flex-1"></div>
+            <div className="flex flex-1 items-center">
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="hidden h-9 w-72 items-center gap-2 rounded-md border bg-background px-3 text-sm text-muted-foreground hover:bg-accent sm:flex"
+                aria-label="Search merchants, orders and payouts (Cmd or Ctrl K)"
+              >
+                <Search className="h-4 w-4" aria-hidden />
+                <span className="flex-1 text-left">Search</span>
+                <kbd className="rounded border px-1.5 text-xs">⌘K</kbd>
+              </button>
+              <Button variant="ghost" size="icon" className="sm:hidden" aria-label="Search" onClick={() => setSearchOpen(true)}><Search className="h-5 w-5" /></Button>
+            </div>
             <div className="flex items-center gap-3 text-sm">
               {perms.me ? <span className="hidden text-muted-foreground sm:inline">{perms.me.name || perms.me.email}</span> : null}
               <RoleChip role={perms.role} />
@@ -219,6 +259,7 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
 
         <main className="flex-1 overflow-y-auto">{blocked ? <NoAccessPage role={perms.role} /> : children}</main>
       </div>
+      <CommandPalette open={searchOpen} onOpenChange={setSearchOpen} />
     </div>
   )
 }

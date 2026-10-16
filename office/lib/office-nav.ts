@@ -1,10 +1,10 @@
 import {
   Briefcase, Building2, Calendar, Gift, HandHelping, ListChecks, Package, Percent, ScrollText, Settings, Settings2,
-  ShieldCheck, Star, Store, TrendingUp, Users, UserCircle, Wallet, CreditCard, ClipboardList, BarChart3,
+  ShieldCheck, ClipboardCheck, Star, Store, TrendingUp, Users, UserCircle, Wallet, CreditCard, ClipboardList, BarChart3,
   type LucideIcon,
 } from "lucide-react"
 
-export interface NavItem { name: string; href: string; icon: LucideIcon; permission: string; exact?: boolean }
+export interface NavItem { name: string; href: string; icon: LucideIcon; permission: string; exact?: boolean; /** queue whose open count shows as a badge */ queue?: "merchants" | "payouts" | "listings" | "kyc" | "transactions" | "support" }
 export interface NavGroup { key: string; name: string; icon: LucideIcon; items: NavItem[] }
 
 /**
@@ -16,16 +16,17 @@ export const NAV_GROUPS: NavGroup[] = [
     key: "operations", name: "Operations", icon: Briefcase,
     items: [
       { name: "Users", href: "/users", icon: Users, permission: "users.read" },
-      { name: "KYC", href: "/kyc", icon: ShieldCheck, permission: "users.read" },
+      { name: "KYC", href: "/kyc", icon: ShieldCheck, permission: "users.read", queue: "kyc" },
       { name: "Compliance", href: "/compliance", icon: ClipboardList, permission: "users.read" },
-      { name: "Transactions", href: "/transactions", icon: CreditCard, permission: "support.read" },
-      { name: "Assistant", href: "/assistant", icon: HandHelping, permission: "support.read" },
+      { name: "Transactions", href: "/transactions", icon: CreditCard, permission: "support.read", queue: "transactions" },
+      { name: "Assistant", href: "/assistant", icon: HandHelping, permission: "support.read", queue: "support" },
     ],
   },
   {
     key: "marketplace", name: "Marketplace", icon: Store,
     items: [
       { name: "Orders", href: "/marketplace", icon: Package, permission: "orders.manage" },
+      { name: "Catalog review", href: "/catalog-review", icon: ClipboardCheck, permission: "listings.review", queue: "listings" },
       { name: "Bookings", href: "/bookings", icon: Calendar, permission: "support.read" },
       { name: "Reviews", href: "/reviews", icon: Star, permission: "merchants.read" },
       { name: "Food products", href: "/food/products", icon: Package, permission: "catalog.manage" },
@@ -37,7 +38,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     key: "merchants", name: "Merchants", icon: Building2,
     items: [
-      { name: "Applications", href: "/merchants", icon: Building2, permission: "merchants.read" },
+      { name: "Applications", href: "/merchants", icon: Building2, permission: "merchants.read", queue: "merchants" },
       { name: "KYB requirements", href: "/kyb", icon: ListChecks, permission: "kyb.manage" },
       { name: "Expert profiles", href: "/experts/profiles", icon: UserCircle, permission: "experts.manage" },
       { name: "Expert services", href: "/experts/services", icon: Package, permission: "experts.manage" },
@@ -47,7 +48,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     key: "finance", name: "Finance", icon: Wallet,
     items: [
-      { name: "Payouts", href: "/finance/payouts", icon: Wallet, permission: "finance.manage" },
+      { name: "Payouts", href: "/finance/payouts", icon: Wallet, permission: "finance.manage", queue: "payouts" },
       { name: "Fees and commissions", href: "/fees", icon: Percent, permission: "finance.manage", exact: true },
       { name: "Marketplace money settings", href: "/fees/settings", icon: Settings2, permission: "finance.manage" },
       { name: "Referrals", href: "/referrals", icon: Gift, permission: "finance.manage" },
@@ -67,7 +68,7 @@ export const NAV_GROUPS: NavGroup[] = [
 const ROUTE_PERMISSIONS: Array<[string, string]> = [
   ["/users", "users.read"], ["/kyc", "users.read"], ["/compliance", "users.read"],
   ["/transactions", "support.read"], ["/assistant", "support.read"], ["/orders", "support.read"],
-  ["/marketplace", "orders.manage"], ["/bookings", "support.read"], ["/reviews", "merchants.read"],
+  ["/marketplace", "orders.manage"], ["/bookings", "support.read"], ["/reviews", "merchants.read"], ["/catalog-review", "listings.review"],
   ["/food", "catalog.manage"], ["/mart", "catalog.manage"], ["/products", "catalog.manage"],
   ["/merchants", "merchants.read"], ["/kyb", "kyb.manage"], ["/experts", "experts.manage"], ["/audit", "audit.read"],
   ["/finance", "finance.manage"], ["/fees", "finance.manage"], ["/referrals", "finance.manage"], ["/analytics", "finance.manage"],

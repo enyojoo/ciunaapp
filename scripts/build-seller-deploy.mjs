@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Regenerates supabase/deploy/seller-portal-all.sql (the 7 Seller migrations) and supabase/deploy/rate-limits.sql
+// Regenerates supabase/deploy/seller-portal-all.sql (the 7 Seller migrations), supabase/deploy/rate-limits.sql and supabase/deploy/office-queues.sql
 // from supabase/migrations. Never edit the deploy files by hand: edit the migrations, then run this.
 //   node scripts/build-seller-deploy.mjs          write both files
 //   node scripts/build-seller-deploy.mjs --check  exit 1 if a deploy file is out of date
@@ -18,6 +18,7 @@ const SELLER = [
   "20261016160000_discovery.sql",
 ]
 const RATE = "20261017100000_rate_limits.sql"
+const OFFICE = "20261017120000_office_queues.sql"
 
 const header = `-- Ciuna Seller portal: all 7 new migrations in order. Paste into the Supabase SQL Editor and run.
 -- BEFORE: take a backup (Dashboard > Database > Backups) and read the pre-check results below.
@@ -103,9 +104,15 @@ const rateOut = `-- Ciuna API rate limiting (table + function). Paste into the S
 -- Verified by scripts/verify-baseline.mjs. Verify after: select rate_limit_hit('test', 2, 60), rate_limit_hit('test', 2, 60), rate_limit_hit('test', 2, 60);  -- true, true, false
 ` + rate
 
+const officeOut = `-- Ciuna Office queues: claim and SLA for merchant applications and listing review, rejection reason templates, saved views.
+-- Paste into the Supabase SQL Editor and run AFTER seller-portal-all.sql. Safe to re-run; additive only; gives up after 5 s if it cannot lock a table.
+-- Verified by scripts/verify-baseline.mjs. Verify after: select count(*) = 8 as templates from reason_templates; select value from marketplace_settings where key = 'office_sla';
+` + strip(fs.readFileSync(MIG + OFFICE, "utf8"))
+
 const targets = [
   [root + "supabase/deploy/seller-portal-all.sql", out],
   [root + "supabase/deploy/rate-limits.sql", rateOut],
+  [root + "supabase/deploy/office-queues.sql", officeOut],
 ]
 if (process.argv.includes("--check")) {
   let bad = 0

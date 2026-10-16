@@ -7,7 +7,7 @@
 //   node scripts/verify-baseline.mjs --file=path  use another schema dump
 //
 // What it checks (exit 1 on any failure):
-//   1. supabase/deploy/seller-portal-all.sql and supabase/deploy/rate-limits.sql run clean on the base schema.
+//   1. supabase/deploy/seller-portal-all.sql, rate-limits.sql and office-queues.sql run clean on the base schema.
 //   2. Running them a second time changes nothing (schema fingerprint identical, data counts identical).
 //   3. The deploy file is exactly the 7 migrations in order: applying the migration files one by one gives the same schema.
 //   4. The verify queries at the end of the deploy file return 0.
@@ -41,6 +41,7 @@ const SELLER = [
   "20261016160000_discovery.sql",
 ]
 const RATE = "20261017100000_rate_limits.sql"
+const OFFICE = "20261017120000_office_queues.sql"
 const older = fs.readdirSync(root + "supabase/migrations").sort().filter((f) => f < SELLER[0])
 
 if (!synthetic && !fs.existsSync(dumpPath)) {
@@ -237,6 +238,7 @@ async function buildBase() {
 console.log(synthetic ? "Mode: synthetic production approximation" : `Mode: schema dump ${dumpPath.replace(root, "")}`)
 const deploy = read("supabase/deploy/seller-portal-all.sql")
 const rate = read("supabase/deploy/rate-limits.sql")
+const office = read("supabase/deploy/office-queues.sql")
 
 process.on("uncaughtException", (e) => { console.log("ERROR: " + (e?.message || e)); process.exit(1) })
 const dbA = await buildBase()
@@ -253,7 +255,7 @@ if (p3.length) fail("pre-check 3: names already exist before the first run " + J
 console.log("pre-check 4:", JSON.stringify((await dbA.query(pre[3])).rows[0]))
 
 const runDeploy = async (db, label) => {
-  try { await db.exec(deploy); await db.exec(rate); ok(`${label}: seller-portal-all.sql + rate-limits.sql ran clean`) }
+  try { await db.exec(deploy); await db.exec(rate); await db.exec(office); ok(`${label}: seller-portal-all.sql + rate-limits.sql + office-queues.sql ran clean`) }
   catch (e) { fail(`${label}: ${e.message}`); throw e }
 }
 await runDeploy(dbA, "run 1")
@@ -279,11 +281,11 @@ if (trgm) {
 
 // the deploy file must equal the migrations applied one by one
 const dbB = await buildBase()
-for (const f of [...SELLER, RATE]) await dbB.exec(read("supabase/migrations/" + f))
+for (const f of [...SELLER, RATE, OFFICE]) await dbB.exec(read("supabase/migrations/" + f))
 compare("deploy files vs migration files", after1, await fingerprint(dbB))
 
 // the migrations themselves must also be re-runnable one by one
-for (const f of [...SELLER, RATE]) await dbB.exec(read("supabase/migrations/" + f))
+for (const f of [...SELLER, RATE, OFFICE]) await dbB.exec(read("supabase/migrations/" + f))
 compare("migration files applied twice", after1, await fingerprint(dbB))
 
 console.log(failures ? `\n${failures} problem(s)` : "\nall checks passed")

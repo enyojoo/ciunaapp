@@ -13,6 +13,17 @@ export const ERROR_TEXT: Record<string, string> = {
   NOTHING_TO_UPDATE: "Nothing to update.",
   DATABASE_ERROR: "Something went wrong on our side. Try again.",
   FORBIDDEN: "Your role can't do that.",
+  CLAIMED_BY_OTHER: "Someone else already claimed this.",
+  NOT_FOUND: "This item is no longer in the queue.",
+  QUEUES_NOT_AVAILABLE: "Queues are not set up on this environment yet.",
+  VIEWS_NOT_AVAILABLE: "Saved views are not set up on this environment yet.",
+  TOO_MANY_VIEWS: "You have too many saved views here. Delete one first.",
+  VIEW_NAME_INVALID: "Give the view a name of up to 60 characters.",
+  VIEW_NOT_FOUND: "That view no longer exists.",
+  LISTING_NOT_FOUND: "Listing not found.",
+  LISTING_NOT_IN_REVIEW: "This listing is no longer in review.",
+  REASON_TEMPLATE_REQUIRED: "Choose a reason.",
+  SLA_INVALID: "That target is not valid.",
   UNAUTHORIZED: "Your session expired. Sign in again.",
 }
 
@@ -21,13 +32,16 @@ export function errorText(code?: string | null): string {
   return ERROR_TEXT[code] || `Request failed (${code}).`
 }
 
-export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: string }
+export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: string; code?: string; details?: Record<string, any> }
 
 export async function api<T = any>(path: string, init?: RequestInit): Promise<ApiResult<T>> {
   try {
     const res = await officeFetch(path, init)
     const body = await res.json().catch(() => ({}))
-    if (!res.ok) return { ok: false, error: errorText(body?.errorCode || (res.status === 403 ? "FORBIDDEN" : res.status === 401 ? "UNAUTHORIZED" : undefined)) }
+    if (!res.ok) {
+      const code: string | undefined = body?.errorCode || (res.status === 403 ? "FORBIDDEN" : res.status === 401 ? "UNAUTHORIZED" : undefined)
+      return { ok: false, error: errorText(code), code, details: body?.details }
+    }
     return { ok: true, data: body as T }
   } catch {
     return { ok: false, error: "Network error. Try again." }
@@ -74,6 +88,9 @@ export interface MerchantRow {
   submitted_at: string | null
   approved_at: string | null
   created_at: string
+  /** Owner of the open application (queue views). */
+  owner?: { id: string; name: string | null; email: string | null; claimed_at: string | null; mine: boolean } | null
+  sla?: { limit_hours: number; business?: boolean; waited_hours: number; over_by_hours: number | null; breached: boolean } | null
 }
 
 export const REJECTION_TEMPLATES = [
