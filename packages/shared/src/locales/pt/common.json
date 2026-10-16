@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "home": "Início",
+    "sendMoney": "Enviar dinheiro",
+    "send": "Enviar",
+    "hub": "Início",
+    "recipients": "Destinatários",
+    "transactions": "Atividades",
+    "more": "Mais",
+    "logout": "Sair",
+    "login": "Entrar"
+  },
+  "more": {
+    "title": "Mais",
+    "open": "Abrir",
+    "account": "Conta",
+    "yourProfile": "Seu perfil",
+    "accountVerification": "Verificação de identidade",
+    "affiliatesReferrals": "Afiliados e indicações",
+    "loginPin": "PIN de acesso",
+    "app": "Aplicativo",
+    "recipients": "Destinatários",
+    "support": "Suporte",
+    "privacyPolicy": "Política de Privacidade",
+    "termsOfService": "Termos de Serviço",
+    "version": "Versão {{version}}",
+    "logout": "Sair",
+    "signOutTitle": "Sair da conta",
+    "signOutDescription": "Tem certeza de que deseja sair? Você precisará entrar novamente para acessar sua conta.",
+    "cancel": "Cancelar",
+    "signOut": "Sair",
+    "signingOut": "Saindo..."
+  },
+  "kyc": {
+    "verified": "Verificada",
+    "inReview": "Em análise",
+    "rejected": "Recusada",
+    "pending": "Pendente",
+    "takeAction": "Agir agora"
+  },
+  "languages": {
+    "en": "Inglês",
+    "ru": "Russo",
+    "fr": "Francês",
+    "es": "Espanhol"
+  },
+  "app": {
+    "language": "Idioma"
+  },
+  "pinSetup": {
+    "createTitle": "Crie o PIN do aplicativo",
+    "createSubtitle": "Digite seu PIN de 4 dígitos",
+    "confirmTitle": "Confirme seu PIN",
+    "confirmSubtitle": "Digite o mesmo PIN novamente",
+    "benefitLine": "Use-o para acessar rapidamente quando voltar. Se sair da conta por completo, você ainda usará sua senha.",
+    "mismatch": "Os PINs não coincidem. Tente novamente.",
+    "saving": "Salvando…"
+  },
+  "pinDialog": {
+    "createTitle": "Criar PIN",
+    "changeTitle": "Alterar PIN",
+    "createDescription": "Escolha um PIN de 4 dígitos para acessar rapidamente quando abrir o aplicativo de novo. Após o bloqueio por inatividade, digite o PIN em vez da senha. Se você sair da conta, ainda entrará com a senha.",
+    "changeDescription": "Digite seu PIN atual e depois escolha um novo PIN de 4 dígitos.",
+    "currentPin": "PIN atual",
+    "pin": "PIN",
+    "newPin": "Novo PIN",
+    "confirmPin": "Confirmar PIN",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "saving": "Salvando…",
+    "errorBothFields": "Digite um PIN de 4 dígitos nos dois campos.",
+    "errorPinsNoMatch": "Os PINs não coincidem.",
+    "errorSave": "Não foi possível salvar o PIN.",
+    "errorCurrentRequired": "Digite seu PIN atual de 4 dígitos.",
+    "errorNewBothFields": "Digite um novo PIN de 4 dígitos nos dois campos.",
+    "errorNewNoMatch": "Os novos PINs não coincidem.",
+    "errorNewSameAsOld": "O novo PIN deve ser diferente do PIN atual.",
+    "errorWrongCurrent": "O PIN atual está incorreto.",
+    "errorUpdate": "Não foi possível atualizar o PIN."
+  },
+  "pinLock": {
+    "welcomeBack": "Bem-vindo de volta",
+    "enterPin": "Digite seu PIN de 4 dígitos",
+    "incorrectPin": "PIN incorreto",
+    "verifying": "Verificando…",
+    "tooManyAttempts": "Muitas tentativas. Tente novamente em {{minutes}} minuto(s).",
+    "tooManyAttemptsOne": "Muitas tentativas. Tente novamente em 1 minuto.",
+    "notYourAccount": "Não é a sua conta?",
+    "logOut": "Sair",
+    "backspaceAria": "Apagar"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "home": "首页",
+    "sendMoney": "汇款",
+    "send": "汇款",
+    "hub": "首页",
+    "recipients": "收款人",
+    "transactions": "动态",
+    "more": "更多",
+    "logout": "退出登录",
+    "login": "登录"
+  },
+  "more": {
+    "title": "更多",
+    "open": "打开",
+    "account": "账户",
+    "yourProfile": "个人资料",
+    "accountVerification": "账户身份验证",
+    "affiliatesReferrals": "合作伙伴与推荐",
+    "loginPin": "登录 PIN 码",
+    "app": "应用",
+    "recipients": "收款人",
+    "support": "客服",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "version": "版本 {{version}}",
+    "logout": "退出登录",
+    "signOutTitle": "退出登录",
+    "signOutDescription": "您确定要退出登录吗？退出后需要重新登录才能访问您的账户。",
+    "cancel": "取消",
+    "signOut": "退出登录",
+    "signingOut": "正在退出…"
+  },
+  "kyc": {
+    "verified": "已验证",
+    "inReview": "审核中",
+    "rejected": "未通过",
+    "pending": "待处理",
+    "takeAction": "去处理"
+  },
+  "languages": {
+    "en": "英语",
+    "ru": "俄语",
+    "fr": "法语",
+    "es": "西班牙语"
+  },
+  "app": {
+    "language": "语言"
+  },
+  "pinSetup": {
+    "createTitle": "创建应用 PIN 码",
+    "createSubtitle": "请输入 4 位 PIN 码",
+    "confirmTitle": "确认 PIN 码",
+    "confirmSubtitle": "请再次输入相同的 PIN 码",
+    "benefitLine": "下次回到应用时可用它快速进入。如果您完全退出登录，仍需使用密码。",
+    "mismatch": "两次输入的 PIN 码不一致，请重试。",
+    "saving": "正在保存…"
+  },
+  "pinDialog": {
+    "createTitle": "创建 PIN 码",
+    "changeTitle": "修改 PIN 码",
+    "createDescription": "请设置一个 4 位 PIN 码，以便再次打开应用时快速进入。闲置锁定后，请输入 PIN 码而非密码。如果您退出登录，仍需使用密码登录。",
+    "changeDescription": "请输入当前 PIN 码，然后设置新的 4 位 PIN 码。",
+    "currentPin": "当前 PIN 码",
+    "pin": "PIN 码",
+    "newPin": "新 PIN 码",
+    "confirmPin": "确认 PIN 码",
+    "cancel": "取消",
+    "save": "保存",
+    "saving": "正在保存…",
+    "errorBothFields": "请在两个输入框中都输入 4 位 PIN 码。",
+    "errorPinsNoMatch": "两次输入的 PIN 码不一致。",
+    "errorSave": "无法保存 PIN 码。",
+    "errorCurrentRequired": "请输入当前的 4 位 PIN 码。",
+    "errorNewBothFields": "请在两个输入框中都输入新的 4 位 PIN 码。",
+    "errorNewNoMatch": "两次输入的新 PIN 码不一致。",
+    "errorNewSameAsOld": "新 PIN 码不能与当前 PIN 码相同。",
+    "errorWrongCurrent": "当前 PIN 码不正确。",
+    "errorUpdate": "无法更新 PIN 码。"
+  },
+  "pinLock": {
+    "welcomeBack": "欢迎回来",
+    "enterPin": "请输入 4 位 PIN 码",
+    "incorrectPin": "PIN 码不正确",
+    "verifying": "正在验证…",
+    "tooManyAttempts": "尝试次数过多，请在 {{minutes}} 分钟后重试。",
+    "tooManyAttemptsOne": "尝试次数过多，请在 1 分钟后重试。",
+    "notYourAccount": "不是您的账户？",
+    "logOut": "退出登录",
+    "backspaceAria": "删除"
+  }
+}
