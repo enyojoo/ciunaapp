@@ -6,7 +6,7 @@ The design system for every Ciuna surface: the **customer app** (Expo on iPhone,
 
 - **Start here:** this file, then `guides/` and `tokens.json`.
 - **Components:** `components/<Name>/README.md` specs each component, with an **Upgrade** line for what differs from today's code. `npm run design:cards` checks every spec has the required sections.
-- **See it:** `python3 -m http.server 4871 -d design-system`, open http://localhost:4871/viewer.html (colours, contrast and status vocabulary rendered from `tokens.json`).
+- **See it:** `python3 -m http.server 4871 -d design-system`, open http://localhost:4871/viewer.html. Every component and screen is a card (`components/<Name>/preview.html`); `guides/70-preview-authoring.md` explains how to add one, `scripts/check-previews.mjs` and `scripts/build-cards.mjs` check and index them.
 - **Order of work:** `guides/60-implementation-plan.md`.
 
 Ciuna is a super app for **foreigners living in Russia** — African, Chinese, Latin American, Central Asian and other communities. It should feel warm, trustworthy and quick: a market you trust with your money.

@@ -1,5 +1,19 @@
 {
   "entries": [
-    { "date": "2026-10-16", "title": "Design system created", "detail": "tokens.json as single source; generated CSS for web, Office and Seller; Expo theme and Tailwind read the same tokens; ink-on-orange rule; contrast gate; 21 component specs." }
+    {
+      "date": "2026-10-16",
+      "title": "Viewer with component and screen cards",
+      "detail": "Preview kit (tokens.css, bundle.css, icons, phone/tablet/desktop frames), viewer with search, foundations, primitives, marketplace components and customer, Seller and Office screens, documents and email."
+    },
+    {
+      "date": "2026-10-16",
+      "title": "Buttons use white labels",
+      "detail": "Controls use primary #CD4B0E (white label 4.56:1, hover #B8420B 5.7:1). The logo orange #F97316 stays for the logo, illustrations and large decorative shapes."
+    },
+    {
+      "date": "2026-10-16",
+      "title": "Design system created",
+      "detail": "tokens.json as single source; generated CSS for web, Office and Seller; Expo theme and Tailwind read the same tokens; ink-on-orange rule; contrast gate; 21 component specs."
+    }
   ]
 }
