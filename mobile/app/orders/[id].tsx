@@ -454,7 +454,7 @@ function LegacyOrderScreen() {
               border
             />
             {tx.payment_provider === "bitbanker" ? (
-              <SummaryRow label="Payment" value="SBP (Bitbanker)" />
+              <SummaryRow label="Payment" value="SBP" />
             ) : null}
           </>
         )}

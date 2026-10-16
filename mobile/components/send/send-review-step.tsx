@@ -97,7 +97,7 @@ export function SendReviewStep({
 
         {usesBitbanker ? (
           <View style={styles.sbpBadge}>
-            <Text style={styles.sbpText}>{t("send.mobile.paymentSbp", { defaultValue: "Payment: SBP (Bitbanker)" })}</Text>
+            <Text style={styles.sbpText}>{t("send.mobile.paymentSbp", { defaultValue: "Payment: SBP" })}</Text>
           </View>
         ) : null}
       </View>

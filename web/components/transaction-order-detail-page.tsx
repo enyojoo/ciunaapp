@@ -1043,7 +1043,7 @@ function TransactionOrderDetailPage() {
                               {transaction.payment_provider === "bitbanker" ? (
                                 <div className="flex min-w-0 items-start justify-between gap-2">
                                   <span className="min-w-0 text-gray-600">Payment method</span>
-                                  <span className="shrink-0 text-right font-medium text-gray-900">SBP (Bitbanker)</span>
+                                  <span className="shrink-0 text-right font-medium text-gray-900">SBP</span>
                                 </div>
                               ) : null}
                             </>
