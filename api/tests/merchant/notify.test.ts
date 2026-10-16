@@ -16,7 +16,10 @@ test("new order alert has id, amount, link to the order, in every language", () 
 
 test("booking, payout and status alerts render without leftovers and escape HTML", () => {
   const b = renderAlert("booking_new", { orderId: "o", publicId: "CIU-2", title: "<b>Consult</b>", slotStart: "2026-10-20T09:00:00Z" }, opts("ru"))
-  assert.ok(b.body.includes("2026-10-20 09:00 UTC"))
+  assert.ok(b.body.includes("20 Oct 12:00 MSK"))
+  const lagos = renderAlert("booking_new", { orderId: "o", publicId: "CIU-2", title: "x", slotStart: "2026-10-20T09:00:00Z" }, { ...opts("en"), timeZone: "Africa/Lagos" })
+  assert.ok(lagos.body.includes("20 Oct 10:00 WAT"))
+  assert.ok(b.html.includes("<img"))
   assert.ok(b.html.includes("&lt;b&gt;Consult&lt;/b&gt;"))
   assert.equal(b.url, "https://seller.ciuna.com/bookings/o")
   const p = renderAlert("payout_update", { status: "paid", net: "2970", currency: "RUB", reference: "REF-1" }, opts("fr"))

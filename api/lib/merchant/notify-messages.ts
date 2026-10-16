@@ -16,8 +16,23 @@ const fill = (s: string, v: Record<string, string>) => s.replace(/\{(\w+)\}/g, (
 const pick = (lang: string): Lang => (ALERT_LANGS.includes(lang as Lang) ? (lang as Lang) : "en")
 
 import { formatMoneyDisplay } from "@ciuna/shared"
+import { SEO_EMAIL_LOGO_LIGHT_URL } from "../seo"
 
-export function renderAlert(kind: AlertKind, payload: Record<string, any>, opts: { lang: string; merchantName: string; portalUrl: string }) {
+const ZONE_BY_COUNTRY: Record<string, string> = { RU: "Europe/Moscow", NG: "Africa/Lagos", GH: "Africa/Accra", KE: "Africa/Nairobi", CN: "Asia/Shanghai", UZ: "Asia/Tashkent", KZ: "Asia/Almaty", BR: "America/Sao_Paulo", MX: "America/Mexico_City", CO: "America/Bogota" }
+const ZONE_LABEL: Record<string, string> = { "Europe/Moscow": "MSK", "Africa/Lagos": "WAT", "Africa/Accra": "GMT", "Africa/Nairobi": "EAT", "Asia/Shanghai": "CST", "Asia/Tashkent": "UZT", "Asia/Almaty": "ALMT", "America/Sao_Paulo": "BRT", "America/Mexico_City": "CST", "America/Bogota": "COT" }
+/** Default recipient zone when the user has none stored: the business's operating country, else Moscow. */
+export function zoneForCountry(country?: string | null) { return ZONE_BY_COUNTRY[String(country || "").toUpperCase()] || "Europe/Moscow" }
+/** "20 Oct 12:00 MSK": always names the zone. */
+export function formatWhen(iso: string, zone: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ""
+  const parts = new Intl.DateTimeFormat("en-GB", { timeZone: zone, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(d)
+  const g = (t: string) => parts.find((p) => p.type === t)?.value ?? ""
+  const label = ZONE_LABEL[zone] ?? new Intl.DateTimeFormat("en-GB", { timeZone: zone, timeZoneName: "short" }).formatToParts(d).find((p) => p.type === "timeZoneName")?.value ?? zone
+  return `${g("day")} ${g("month")} ${g("hour")}:${g("minute")} ${label}`
+}
+
+export function renderAlert(kind: AlertKind, payload: Record<string, any>, opts: { lang: string; merchantName: string; portalUrl: string; timeZone?: string }) {
   const l = pick(opts.lang)
   const t = (k: string) => T[l][k] ?? T.en[k] ?? k
   let title = "", body = "", path = "/"
@@ -27,7 +42,7 @@ export function renderAlert(kind: AlertKind, payload: Record<string, any>, opts:
     body = fill(t("order_new_body"), { amount: money(payload.amount, payload.currency), title: payload.title || "" })
     path = `/orders/${payload.orderId}`
   } else if (kind === "booking_new") {
-    const when = payload.slotStart ? ` · ${new Date(payload.slotStart).toISOString().replace("T", " ").slice(0, 16)} UTC` : ""
+    const when = payload.slotStart ? ` · ${formatWhen(payload.slotStart, opts.timeZone || "Europe/Moscow")}` : ""
     title = fill(t("booking_new"), { id: payload.publicId })
     body = fill(t("booking_new_body"), { title: payload.title || "", when })
     path = `/bookings/${payload.orderId}`
@@ -49,6 +64,6 @@ export function renderAlert(kind: AlertKind, payload: Record<string, any>, opts:
   const url = `${opts.portalUrl.replace(/\/+$/, "")}${path}`
   const footer = fill(t("footer"), { name: opts.merchantName })
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-  const html = `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#111827"><h1 style="font-size:20px;margin:0 0 8px">${esc(title)}</h1><p style="font-size:16px;line-height:1.5;color:#52596B;margin:0 0 20px">${esc(body)}</p><a href="${esc(url)}" style="display:inline-block;background:#CD4B0E;color:#FFFFFF;font-weight:600;padding:12px 20px;border-radius:12px;text-decoration:none">${esc(t("open"))}</a><p style="font-size:13px;color:#52596B;margin:24px 0 0">${esc(footer)}</p></div>`
+  const html = `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#111827"><img src="${SEO_EMAIL_LOGO_LIGHT_URL}" alt="Ciuna" width="96" style="display:block;height:auto;margin:0 0 20px"><h1 style="font-size:20px;margin:0 0 8px">${esc(title)}</h1><p style="font-size:16px;line-height:1.5;color:#52596B;margin:0 0 20px">${esc(body)}</p><a href="${esc(url)}" style="display:inline-block;background:#CD4B0E;color:#FFFFFF;font-weight:600;padding:12px 20px;border-radius:12px;text-decoration:none">${esc(t("open"))}</a><p style="font-size:13px;color:#52596B;margin:24px 0 0">${esc(footer)}</p></div>`
   return { title, body, url, openLabel: t("open"), footer, html, text: `${title}\n${body}\n${url}\n\n${footer}` }
 }

@@ -1,7 +1,7 @@
 import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2"
 import { resolveSellerUrl } from "@ciuna/shared"
 import { createServerClient } from "@/lib/supabase"
-import { renderAlert, type AlertKind } from "./notify-messages"
+import { zoneForCountry, renderAlert, type AlertKind } from "./notify-messages"
 
 const db = () => createServerClient()
 
@@ -46,7 +46,7 @@ export async function processSellerOutbox(limit = 25, senders: Senders = default
     try {
       const [{ data: user }, { data: merchant }, { data: link }] = await Promise.all([
         db().from("users").select("email,preferred_language").eq("id", row.user_id).maybeSingle(),
-        db().from("merchants").select("display_name").eq("id", row.merchant_id).maybeSingle(),
+        db().from("merchants").select("display_name,operating_country").eq("id", row.merchant_id).maybeSingle(),
         db().from("telegram_links").select("chat_id").eq("user_id", row.user_id).maybeSingle(),
       ])
       if (!user || !merchant || (row.channel === "telegram" && !link)) {
@@ -54,7 +54,7 @@ export async function processSellerOutbox(limit = 25, senders: Senders = default
         skipped++
         continue
       }
-      const msg = renderAlert(row.kind as AlertKind, row.payload, { lang: user.preferred_language || "en", merchantName: merchant.display_name, portalUrl: resolveSellerUrl() })
+      const msg = renderAlert(row.kind as AlertKind, row.payload, { lang: user.preferred_language || "en", merchantName: merchant.display_name, portalUrl: resolveSellerUrl(), timeZone: zoneForCountry((merchant as any).operating_country) })
       if (row.channel === "email") await senders.email(user.email, msg.title, msg.html, msg.text)
       else await senders.telegram(link!.chat_id, `${msg.title}\n${msg.body}`, msg.url, msg.openLabel)
       await db().rpc("seller_outbox_done", { p_id: row.id, p_status: "sent" })
