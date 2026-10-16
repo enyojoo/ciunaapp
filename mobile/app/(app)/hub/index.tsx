@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next"
 import { hubServiceLineTileCopy, type HubServiceLineRow } from "@ciuna/shared"
 import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
-import { HubHero } from "@/components/hub-hero"
 import { SearchEntryField } from "@/components/search-entry"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
@@ -49,7 +48,6 @@ export default function HomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
       >
-        <HubHero />
         {loading ? (
           <View style={styles.grid}>
             {Array.from({ length: 6 }).map((_, i) => (
@@ -69,7 +67,7 @@ export default function HomeScreen() {
               const { title, shortDescription } = hubServiceLineTileCopy(line, t)
               return (
                 <View key={line.id} style={styles.cell}>
-                  <Tile title={title} description={shortDescription} iconUrl={line.icon_url} slug={line.slug} onPress={() => open(line)} />
+                  <Tile title={title} description={shortDescription} slug={line.slug} onPress={() => open(line)} />
                 </View>
               )
             })}

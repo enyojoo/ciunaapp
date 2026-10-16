@@ -6,7 +6,7 @@ import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /**
  * Service-line tile (Home grid), as in design-system/components/CustomerHome: 4:3 gradient artwork with a white
- * line icon, then title and one short line. Office `icon_url` replaces the drawn icon when set.
+ * line icon, then title and one short line. Home always uses these drawn icons; Office image uploads are not shown.
  */
 export type TileArt = { from: string; to: string; icon: LucideIcon }
 

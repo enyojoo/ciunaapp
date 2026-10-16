@@ -116,4 +116,5 @@ The customer app (Expo `mobile/` and `web/`) is to match `design-system/` and is
 - Build screens to the Improved frame of each card, using the design tokens and `components/bundle.css` shapes.
 - Native stores cannot be force-updated: changes ship additively, and screens that change behaviour sit behind flags until the store build has them.
 - Checkout and payment contracts stay frozen; only presentation changes.
-- Open question for the owner: the orange "Send, Shop & Book." hero on Home. DESIGN.md and the CustomerHome card say no hero billboard; the current app shows one. Remove it, or keep a restrained version?
+- Exception (owner, 2026-10-16): ProductCard and StoreCard in the customer app stay as they are today. Every other customer surface matches the design system.
+- Home has no orange hero billboard, and Home tiles always use the drawn service-line icons. Office image uploads (`icon_url`) are not shown on Home.
