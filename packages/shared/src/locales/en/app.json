@@ -1225,7 +1225,8 @@
     "recent": "Recent searches",
     "searchAll": "Search everywhere",
     "stores": "Stores",
-    "placeholderLine": "Search products and stores"
+    "placeholderLine": "Search products and stores",
+    "seeAll": "See all ({{count}})"
   },
   "favourites": {
     "title": "Favourites",

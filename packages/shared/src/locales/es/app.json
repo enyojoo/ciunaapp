@@ -1225,7 +1225,8 @@
     "recent": "Búsquedas recientes",
     "searchAll": "Buscar en todo",
     "stores": "Tiendas",
-    "placeholderLine": "Buscar productos y tiendas"
+    "placeholderLine": "Buscar productos y tiendas",
+    "seeAll": "Ver todo ({{count}})"
   },
   "favourites": {
     "title": "Favoritos",

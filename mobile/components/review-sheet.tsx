@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Star, X } from "lucide-react-native"
+import { X } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { AppTextInput } from "@/components/app-text-input"
 import { PrimaryButton } from "@/components/primary-button"
-import { RatingStars } from "@/components/rating-stars"
+import { RatingInput, RatingStars } from "@/components/rating-stars"
 import { useToast } from "@/components/toast-provider"
 import { WebAwareModal } from "@/components/web-aware-modal"
 import { useAuth } from "@/lib/auth-context"
@@ -25,7 +25,6 @@ type OwnReview = {
 type ReviewState = { review: OwnReview | null; canReview: boolean; canEdit: boolean; reason: string | null }
 
 const chars = (s: string) => [...s].length
-const EMPTY = "#D1D5DB"
 
 function useOrderReview(orderId: string, enabled: boolean) {
   const [state, setState] = useState<ReviewState | null>(null)
@@ -226,26 +225,7 @@ function ReviewSheet({
         </Pressable>
       </View>
       <ScrollView contentContainerStyle={styles.sheetBody} keyboardShouldPersistTaps="handled">
-        <View style={styles.stars} accessibilityRole="radiogroup">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <Pressable
-              key={n}
-              disabled={locked}
-              onPress={() => setRating(n)}
-              accessibilityRole="radio"
-              accessibilityState={{ checked: rating === n }}
-              accessibilityLabel={t("reviews.starsAria", { n, defaultValue: "{{n}} of 5 stars" })}
-              style={styles.starHit}
-            >
-              <Star
-                size={34}
-                strokeWidth={1.8}
-                color={n <= rating ? colors.primaryText : EMPTY}
-                fill={n <= rating ? colors.primaryText : "transparent"}
-              />
-            </Pressable>
-          ))}
-        </View>
+        <RatingInput value={rating} onChange={setRating} locked={locked} />
         <Text style={styles.word}>{rating ? words[rating - 1] : " "}</Text>
 
         {locked ? (
@@ -337,8 +317,6 @@ const styles = StyleSheet.create({
   sheetTitle: { fontSize: 18, fontWeight: "600", color: colors.text },
   close: { height: 44, width: 44, alignItems: "center", justifyContent: "center" },
   sheetBody: { paddingHorizontal: 20, paddingBottom: 28 },
-  stars: { flexDirection: "row", justifyContent: "center", gap: 4 },
-  starHit: { width: 48, height: 48, alignItems: "center", justifyContent: "center" },
   word: { marginTop: 2, marginBottom: 14, textAlign: "center", fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   input: {
     minHeight: 110,

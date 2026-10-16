@@ -1225,7 +1225,8 @@
     "recent": "最近搜索",
     "searchAll": "搜索全部",
     "stores": "店铺",
-    "placeholderLine": "搜索商品和店铺"
+    "placeholderLine": "搜索商品和店铺",
+    "seeAll": "查看全部（{{count}}）"
   },
   "favourites": {
     "title": "收藏",

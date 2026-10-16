@@ -1225,7 +1225,8 @@
     "recent": "Недавние запросы",
     "searchAll": "Искать везде",
     "stores": "Магазины",
-    "placeholderLine": "Поиск товаров и магазинов"
+    "placeholderLine": "Поиск товаров и магазинов",
+    "seeAll": "Все ({{count}})"
   },
   "favourites": {
     "title": "Избранное",

@@ -99,6 +99,20 @@ export default function SearchScreen() {
   const showStores = vendors.length > 0 && (group === "all" || group === "stores")
   const showExperts = experts.length > 0 && (group === "all" || group === "experts")
 
+  // In "All" each group shows its first few results with a See all link; a single group shows everything.
+  const LIMIT = 4
+  const shown = <T,>(list: T[]) => (group === "all" ? list.slice(0, LIMIT) : list)
+  const head = (title: string, count: number, target: Group) => (
+    <View style={styles.sectionHead}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      {group === "all" && count > LIMIT ? (
+        <Pressable onPress={() => setGroup(target)} accessibilityRole="button" hitSlop={8}>
+          <Text style={styles.link}>{t("search.seeAll", { count, defaultValue: "See all ({{count}})" })}</Text>
+        </Pressable>
+      ) : null}
+    </View>
+  )
+
   const chips: { id: Group; label: string }[] = [
     { id: "all", label: t("search.all", { defaultValue: "All" }) },
     ...(products.length ? [{ id: "products" as Group, label: t("search.products", { defaultValue: "Products" }) }] : []),
@@ -241,9 +255,9 @@ export default function SearchScreen() {
             ) : null}
             {showProducts ? (
               <View style={styles.group}>
-                <Text style={styles.sectionTitle}>{t("search.products", { defaultValue: "Products" })}</Text>
+                {head(t("search.products", { defaultValue: "Products" }), products.length, "products")}
                 {grid(
-                  products.map((p) => {
+                  shown(products).map((p) => {
                     const lineSlug = p.service_line_slug as "food" | "mart"
                     return (
                       <ProductCard
@@ -269,9 +283,9 @@ export default function SearchScreen() {
             ) : null}
             {showStores ? (
               <View style={styles.group}>
-                <Text style={styles.sectionTitle}>{t("search.stores", { defaultValue: "Stores" })}</Text>
+                {head(t("search.stores", { defaultValue: "Stores" }), vendors.length, "stores")}
                 {grid(
-                  vendors.map((v) => (
+                  shown(vendors).map((v) => (
                     <StoreGridCard
                       key={v.id}
                       vendor={v}
@@ -286,9 +300,9 @@ export default function SearchScreen() {
             ) : null}
             {showExperts ? (
               <View style={styles.group}>
-                <Text style={styles.sectionTitle}>{t("search.experts", { defaultValue: "Experts" })}</Text>
+                {head(t("search.experts", { defaultValue: "Experts" }), experts.length, "experts")}
                 {grid(
-                  experts.map((ex) => (
+                  shown(experts).map((ex) => (
                     <ExpertDirectoryCard key={ex.id} expert={ex} onBeforeNavigate={remember} />
                   )),
                 )}
