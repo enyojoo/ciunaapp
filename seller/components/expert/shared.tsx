@@ -84,3 +84,5 @@ export const FULFILLMENT_KEYS = { online: "expert.delivery.online", in_person: "
 
 /** BCP-47 locale for Intl from the app locale. */
 export const intlLocale = (l: string) => (l === "zh" ? "zh-CN" : l === "pt" ? "pt-BR" : l)
+
+export const bookingStatusLabel = (t: (k: string) => string, b: { status: string }) => t(`expert.bookings.status.${b.status}`)

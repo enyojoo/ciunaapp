@@ -9,7 +9,7 @@ export function Tabs<T extends string>({ value, onChange, items, className }: { 
       {items.map((it) => {
         const active = it.value === value
         return (
-          <button key={it.value} role="tab" aria-selected={active} type="button" onClick={() => onChange(it.value)} className={cn("flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-sm font-semibold outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50", active ? "bg-white text-ink shadow-sm" : "text-muted hover:text-ink")}>
+          <button key={it.value} role="tab" aria-selected={active} type="button" onClick={() => onChange(it.value)} className={cn("flex h-11 shrink-0 items-center gap-2 rounded-xl px-4 text-sm font-semibold outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50", active ? "bg-white text-ink shadow-sm" : "text-muted hover:text-ink")}>
             {it.label}
             {typeof it.count === "number" && it.count > 0 ? <span className="min-w-5 rounded-full bg-primary px-1.5 text-center text-xs font-bold text-primary-foreground">{it.count}</span> : null}
           </button>

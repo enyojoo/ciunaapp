@@ -4,9 +4,11 @@ import * as Dialog from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 import { cn } from "./cn"
 import { Button } from "./button"
+import { useUiStrings } from "./strings"
 
 /** Bottom sheet on phones, centred dialog from `sm`. */
 export function Sheet({ open, onOpenChange, title, description, children, footer }: { open: boolean; onOpenChange: (o: boolean) => void; title: string; description?: string; children?: React.ReactNode; footer?: React.ReactNode }) {
+  const strings = useUiStrings()
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -23,7 +25,7 @@ export function Sheet({ open, onOpenChange, title, description, children, footer
               <Dialog.Title className="text-lg font-semibold text-ink">{title}</Dialog.Title>
               {description ? <Dialog.Description className="mt-0.5 text-sm text-muted">{description}</Dialog.Description> : <Dialog.Description className="sr-only">{title}</Dialog.Description>}
             </div>
-            <Dialog.Close className="-mr-2 flex size-10 items-center justify-center rounded-full text-muted hover:bg-neutral-surface" aria-label="Close">
+            <Dialog.Close className="-mr-2 flex size-10 items-center justify-center rounded-full text-muted hover:bg-neutral-surface" aria-label={strings.close}>
               <X className="size-5" />
             </Dialog.Close>
           </div>

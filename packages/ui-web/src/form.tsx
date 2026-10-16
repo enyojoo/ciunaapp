@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
 import { cn } from "./cn"
+import { useUiStrings } from "./strings"
 
 const control =
   "w-full rounded-xl border border-input-edge bg-white px-3.5 text-[15px] text-ink placeholder:text-subtle outline-none transition-shadow focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/30 disabled:cursor-not-allowed disabled:bg-neutral-surface aria-[invalid=true]:border-destructive-text"
@@ -30,12 +31,13 @@ export function Label({ className, ...props }: React.LabelHTMLAttributes<HTMLLab
 /** Label above, control, helper or error below. The control is cloned with id, aria-invalid and aria-describedby. */
 export function Field({ label, hint, error, required, children, className }: { label: string; hint?: string; error?: string | null; required?: boolean; children: React.ReactElement<any>; className?: string }) {
   const id = React.useId()
+  const strings = useUiStrings()
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined
   return (
     <div className={className}>
       <Label htmlFor={id}>
         {label}
-        {required ? <span className="ml-1 text-xs font-medium text-muted">Required</span> : null}
+        {required ? <span className="ml-1 text-xs font-medium text-muted">{strings.required}</span> : null}
       </Label>
       {React.cloneElement(children, { id, "aria-invalid": error ? true : undefined, "aria-describedby": describedBy })}
       {error ? (
