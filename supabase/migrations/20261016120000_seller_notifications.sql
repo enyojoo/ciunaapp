@@ -1,6 +1,9 @@
 -- Seller alerts: preferences, Telegram link, and an outbox the notification worker drains (email + Telegram).
 -- Rows are created by database triggers so an alert is never lost if the API is busy; the worker sends them.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 create table if not exists merchant_notification_prefs (
   user_id uuid not null references users(id) on delete cascade,

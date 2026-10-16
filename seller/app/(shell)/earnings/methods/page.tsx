@@ -1,7 +1,8 @@
 "use client"
 import * as React from "react"
-import { Landmark, Lock, Plus, Trash2 } from "lucide-react"
+import { Landmark, Plus, Trash2 } from "lucide-react"
 import { Banner, Button, Card, ConfirmDialog, EmptyState, PageHeader, Skeleton, StatusBadge, useToast } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -21,10 +22,7 @@ export default function MethodsPage() {
   const [busy, setBusy] = React.useState(false)
   if (!merchant) return null
   if (!can("payouts")) return (
-    <>
-      <PageHeader title={t("earnings.methods.title")} />
-      <EmptyState icon={<Lock />} title={t("earnings.payouts.noAccess.title")} description={t("earnings.payouts.noAccess.body")} />
-    </>
+    <SellerNoAccess pageTitle={t("earnings.methods.title")} titleKey="earnings.payouts.noAccess.title" bodyKey="earnings.payouts.noAccess.body" />
   )
 
   async function makeDefault(id: string) {

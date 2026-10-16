@@ -223,7 +223,7 @@ export default function AddressVerificationPage() {
       const newSubmission = await kycService.createAddressSubmission(userProfile.id, {
         document_type: selectedDocumentType,
         address_document_file: addressFile,
-      })
+      } as unknown as Parameters<typeof kycService.createAddressSubmission>[1])
 
       // Ensure status is in_review after upload
       if (newSubmission.status !== "in_review") {

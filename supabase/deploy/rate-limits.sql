@@ -1,3 +1,5 @@
+-- Ciuna API rate limiting (table + function). Paste into the Supabase SQL Editor and run. Safe to re-run; new objects only.
+-- Verified by scripts/verify-baseline.mjs. Verify after: select rate_limit_hit('test', 2, 60), rate_limit_hit('test', 2, 60), rate_limit_hit('test', 2, 60);  -- true, true, false
 -- Fixed-window rate limiting for public and user-facing API routes. Service-role only (RLS on, no policies).
 begin;
 

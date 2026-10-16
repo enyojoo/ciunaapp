@@ -224,7 +224,7 @@ class AdminDataStore {
         return dateB - dateA
       })
       const recentActivity = this.processRecentActivity(sortedTransactions.slice(0, 10))
-      const currencyPairs = this.processCurrencyPairs(transactionsResult.filter((t) => t.status === "completed"))
+      const currencyPairs = this.processCurrencyPairs(transactionsResult.filter((t: any) => t.status === "completed"))
 
       // Create initial data structure with critical data - preserve existing data to prevent flickering
       this.data = {
@@ -290,7 +290,7 @@ class AdminDataStore {
       // Try to load from cache as fallback
       if (this.loadFromCache()) {
         this.notify()
-        return this.data
+        return this.data as unknown as AdminData
       }
       // If no existing data, return minimal structure
       throw error
@@ -315,7 +315,7 @@ class AdminDataStore {
       console.log("AdminDataStore: Users loaded successfully:", users?.length || 0)
 
       // Get auth users data to include email_confirmed_at
-      let authUsers = null
+      let authUsers: { users: any[] } | null = null
       try {
         const response = await apiFetch('/api/admin/auth-users')
         if (response.ok) {

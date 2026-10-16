@@ -1,7 +1,8 @@
 "use client"
 import * as React from "react"
-import { Lock, Wallet } from "lucide-react"
+import { Wallet } from "lucide-react"
 import { Banner, Button, Card, EmptyState, PageHeader, Skeleton } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -24,10 +25,7 @@ export default function EarningsPage() {
   const [statementKey, setStatementKey] = React.useState(0)
   if (!merchant) return null
   if (!can("earnings")) return (
-    <>
-      <PageHeader title={t("earnings.title")} />
-      <EmptyState icon={<Lock />} title={t("earnings.noAccess.title")} description={t("earnings.noAccess.body")} />
-    </>
+    <SellerNoAccess pageTitle={t("earnings.title")} titleKey="earnings.noAccess.title" bodyKey="earnings.noAccess.body" />
   )
 
   const balances = groupBalances(earnings.data?.balances)

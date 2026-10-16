@@ -705,6 +705,9 @@ function TransactionOrderDetailPage() {
     )
   }
 
+  // Unreachable: the skeleton and not-found branches above cover every null case. Narrows the type.
+  if (!transaction) return null
+
   const isReferralPayout =
     typeof transaction.reference === "string" && transaction.reference.startsWith(REFERRAL_PAYOUT_PREFIX)
   const isHub = isHubOrderTx(transaction)

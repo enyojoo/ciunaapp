@@ -1,6 +1,9 @@
 -- Order-scoped chat between a customer and the seller of a paid order.
 -- Service role only (RLS on, no policies). Messages are append-only; the only change allowed is read_by_other_at.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 create table if not exists order_messages (
   id bigint generated always as identity primary key,

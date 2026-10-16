@@ -68,5 +68,8 @@
   "action.upload": "Загрузить",
   "action.submit": "Отправить",
   "action.done": "Готово",
-  "state.default": "по умолчанию"
+  "state.default": "по умолчанию",
+  "noAccess.title": "У вас нет доступа к этой странице",
+  "noAccess.body": "Попросите владельца бизнеса дать вам доступ.",
+  "noAccess.back": "На главную"
 }

@@ -3,8 +3,9 @@ import * as React from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { format, formatDistanceToNow } from "date-fns"
-import { ArrowLeft, Lock, Mail, MapPin, MessageSquare, Phone, SearchX } from "lucide-react"
+import { ArrowLeft, Mail, MapPin, MessageSquare, Phone, SearchX } from "lucide-react"
 import { Amount, Banner, Button, Card, CardBody, CardHeader, EmptyState, PageHeader, Skeleton, StatusBadge } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -19,7 +20,7 @@ interface DetailResponse { order: SellerOrder; events: SellerOrderEvent[] }
 export default function OrderDetailPage() {
   const { t } = useT()
   const { can } = useSeller()
-  if (!can("orders")) return <EmptyState icon={<Lock />} title={t("orders.noAccess.title")} description={t("orders.noAccess.body")} />
+  if (!can("orders")) return <SellerNoAccess titleKey="orders.noAccess.title" bodyKey="orders.noAccess.body" />
   return <OrderDetail />
 }
 

@@ -1,6 +1,9 @@
 -- Customer discovery: favourites and search indexes. Search itself is a plain ILIKE over trigram indexes for now;
 -- the API hides the implementation so a dedicated engine can replace it later.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 do $$ begin
   create extension if not exists pg_trgm;
@@ -26,6 +29,9 @@ do $$ begin
     create index if not exists hub_vendors_name_trgm on hub_vendors using gin (lower(name) gin_trgm_ops);
     create index if not exists expert_profiles_name_trgm on expert_profiles using gin (lower(display_name) gin_trgm_ops);
   end if;
+exception when others then
+  -- e.g. the operator class is in a schema that is not on the search_path; search still works, just without the index
+  raise notice 'trigram indexes skipped: %', sqlerrm;
 end $$;
 
 commit;

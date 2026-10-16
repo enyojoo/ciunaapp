@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Briefcase, Plus } from "lucide-react"
 import { Amount, Banner, Button, Card, ConfirmDialog, EmptyState, PageHeader, Skeleton, StatusBadge, Switch, useToast } from "@ciuna/ui-web"
+import { RequirePermission } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { invalidate } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -12,6 +13,10 @@ import { Chip, ExpertOnly, FULFILLMENT_KEYS, useExpertError, useServices, type E
 import { formatDuration } from "@/components/expert/logic"
 
 export default function ServicesPage() {
+  return <RequirePermission permission="catalog"><ServicesPageContent /></RequirePermission>
+}
+
+function ServicesPageContent() {
   return <ExpertOnly><Services /></ExpertOnly>
 }
 

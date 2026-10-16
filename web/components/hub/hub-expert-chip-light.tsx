@@ -11,6 +11,7 @@ export type HubExpertChipSummary = {
   display_name: string
   image_url?: string | null
   is_verified?: boolean | null
+  category?: string | null
 }
 
 /** Expert row: avatar + name + optional verified (same pattern as HubProductVendorChipLight). */

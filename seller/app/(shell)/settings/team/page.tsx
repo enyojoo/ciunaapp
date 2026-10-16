@@ -2,6 +2,7 @@
 import * as React from "react"
 import { Copy, Trash2 } from "lucide-react"
 import { Banner, Button, Card, CardBody, CardHeader, ConfirmDialog, EmptyState, Field, Input, PageHeader, Select, Skeleton, useToast } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -21,7 +22,7 @@ export default function TeamPage() {
   const [error, setError] = React.useState<string | null>(null)
   const [removing, setRemoving] = React.useState<string | null>(null)
   if (!merchant) return null
-  if (!can("team")) return <EmptyState title={t("errors.FORBIDDEN")} />
+  if (!can("team")) return <SellerNoAccess />
 
   async function invite(e: React.FormEvent) {
     e.preventDefault()

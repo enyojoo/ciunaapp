@@ -39,7 +39,7 @@ const DrawerContent = React.forwardRef<
         onOpenAutoFocus?.(event)
         if (event.defaultPrevented) return
         event.preventDefault()
-        event.currentTarget.focus()
+        ;(event.currentTarget as HTMLElement | null)?.focus()
       }}
     >
       <DrawerVaul.Handle className="mx-auto mt-3 mb-2 h-1.5 w-12 shrink-0 rounded-full bg-muted-foreground/30" />

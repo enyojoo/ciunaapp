@@ -3,8 +3,9 @@ import * as React from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { format } from "date-fns"
-import { ArrowLeft, Lock, SearchX } from "lucide-react"
+import { ArrowLeft, SearchX } from "lucide-react"
 import { Banner, Button, EmptyState, PageHeader, Skeleton, StatusBadge, cn } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -16,7 +17,7 @@ import { dateLocale, STATUS_LABEL_KEY } from "@/components/orders/format"
 export default function ThreadPage() {
   const { t } = useT()
   const { can } = useSeller()
-  if (!can("messages")) return <EmptyState icon={<Lock />} title={t("messages.noAccess.title")} description={t("messages.noAccess.body")} />
+  if (!can("messages")) return <SellerNoAccess titleKey="messages.noAccess.title" bodyKey="messages.noAccess.body" />
   return <Thread />
 }
 

@@ -3,6 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { CalendarCheck } from "lucide-react"
 import { Amount, Banner, Button, Card, EmptyState, PageHeader, Skeleton, StatusBadge, Tabs, useToast } from "@ciuna/ui-web"
+import { RequirePermission } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
 import { useT } from "@/lib/i18n"
@@ -14,6 +15,10 @@ type Scope = "requests" | "upcoming" | "past"
 const POLL_MS = 30_000
 
 export default function BookingsPage() {
+  return <RequirePermission permission="orders"><BookingsPageContent /></RequirePermission>
+}
+
+function BookingsPageContent() {
   return <ExpertOnly><Bookings /></ExpertOnly>
 }
 

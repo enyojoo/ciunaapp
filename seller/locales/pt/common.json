@@ -68,5 +68,8 @@
   "action.upload": "Enviar arquivo",
   "action.submit": "Enviar",
   "action.done": "Concluído",
-  "state.default": "padrão"
+  "state.default": "padrão",
+  "noAccess.title": "Você não tem acesso a esta página",
+  "noAccess.body": "Peça ao proprietário do negócio para lhe dar acesso.",
+  "noAccess.back": "Voltar ao início"
 }

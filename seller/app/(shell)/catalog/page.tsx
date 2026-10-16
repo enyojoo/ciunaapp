@@ -3,6 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { Clock, Package, Plus, Search, Truck, Upload, XCircle } from "lucide-react"
 import { Amount, Banner, Button, Card, EmptyState, Input, PageHeader, Skeleton, StatusBadge, Switch, Tabs, useToast } from "@ciuna/ui-web"
+import { RequirePermission } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -13,6 +14,10 @@ type Filter = "all" | "live" | "draft" | "archived"
 type Resp = { products: Product[]; total: number }
 
 export default function CatalogPage() {
+  return <RequirePermission permission="catalog"><CatalogPageContent /></RequirePermission>
+}
+
+function CatalogPageContent() {
   const { t } = useT()
   const errText = useErrorText()
   const toast = useToast()

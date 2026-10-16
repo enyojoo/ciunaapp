@@ -1,13 +1,64 @@
--- Ciuna Seller portal: all 7 new migrations in order. Paste into Supabase SQL Editor and run once.
--- Take a backup first (Dashboard > Database > Backups). Each part is its own transaction and safe to re-run.
+-- Ciuna Seller portal: all 7 new migrations in order. Paste into the Supabase SQL Editor and run.
+-- BEFORE: take a backup (Dashboard > Database > Backups) and read the pre-check results below.
+-- Safe to re-run: every part is its own transaction, every object is created only if missing, backfills only touch
+-- rows that are still unlinked, and each part gives up after 5 seconds if it cannot get a table lock (nothing changed,
+-- just run it again). If a part fails, earlier parts stay applied; fix the cause and run the whole file again.
+-- Needs Postgres 15 or newer (nulls-not-distinct unique constraint, security_invoker view): the first pre-check shows this.
+-- Verified by scripts/verify-baseline.mjs (see docs/build-plan/v1-sql-verification.md).
 
 
--- ===== pre-check: these must all return true before you run the rest =====
+-- ===== pre-check 1: every value must be true before you run the rest =====
 select
   to_regclass('public.hub_vendors') is not null as hub_vendors,
   to_regclass('public.hub_products') is not null as hub_products,
+  to_regclass('public.expert_profiles') is not null as expert_profiles,
+  to_regclass('public.expert_services') is not null as expert_services,
   to_regclass('public.marketplace_orders') is not null as marketplace_orders,
-  to_regclass('public.users') is not null as users;
+  to_regclass('public.marketplace_quotes') is not null as marketplace_quotes,
+  to_regclass('public.users') is not null as users,
+  current_setting('server_version_num')::int >= 150000 as postgres_15_or_newer;
+
+-- ===== pre-check 2: columns the migrations read on existing tables. Must return ZERO rows =====
+select req.tbl as table_name, req.col as missing_column
+from (values
+  ('users','id'),
+  ('hub_vendors','id'), ('hub_vendors','service_line_slug'), ('hub_vendors','slug'), ('hub_vendors','name'), ('hub_vendors','is_published'), ('hub_vendors','photo_url'),
+  ('hub_products','id'), ('hub_products','vendor_id'), ('hub_products','title'),
+  ('expert_profiles','id'), ('expert_profiles','slug'), ('expert_profiles','display_name'), ('expert_profiles','is_published'), ('expert_profiles','image_url'),
+  ('expert_services','id'),
+  ('marketplace_quotes','id'), ('marketplace_quotes','payload'),
+  ('marketplace_orders','id'), ('marketplace_orders','quote_id'), ('marketplace_orders','user_id'), ('marketplace_orders','line'), ('marketplace_orders','snapshot'),
+  ('marketplace_orders','public_id'), ('marketplace_orders','payment_state'), ('marketplace_orders','fulfillment_state'), ('marketplace_orders','updated_at')
+) as req(tbl, col)
+left join information_schema.columns c on c.table_schema = 'public' and c.table_name = req.tbl and c.column_name = req.col
+where c.column_name is null;
+
+-- ===== pre-check 3: names this file creates that ALREADY exist. First run: expect ZERO rows. =====
+-- (On a re-run after a successful run, every row is expected.) A table listed here that this file did not create means a
+-- name clash with something older: stop and send the output back before running anything.
+select 'table' as kind, c.relname as name
+from pg_class c
+where c.relnamespace = 'public'::regnamespace and c.relkind in ('r', 'v', 'p') and c.relname in (
+  'merchants','merchant_members','merchant_invites','merchant_applications','kyb_profiles','merchant_documents','merchant_payout_methods','audit_log',
+  'fee_plans','fee_rules','marketplace_settings','ledger_accounts','ledger_txns','ledger_entries','ledger_balances','order_fees','merchant_earnings','payouts',
+  'merchant_notification_prefs','telegram_links','telegram_link_tokens','seller_outbox','reviews','order_messages','favorites','rate_limit_hits')
+union all
+select 'column', c.table_name || '.' || c.column_name
+from information_schema.columns c
+where c.table_schema = 'public' and (c.table_name, c.column_name) in (
+  ('hub_vendors','merchant_id'),('hub_products','merchant_id'),('expert_profiles','merchant_id'),('marketplace_orders','merchant_id'),
+  ('hub_products','review_status'),('hub_products','review_note'),('hub_products','translations'),('hub_products','gallery'),
+  ('expert_services','review_status'),('expert_services','review_note'),('expert_services','translations'),
+  ('hub_vendors','translations'),('expert_profiles','translations'),('merchants','fee_plan_id'),
+  ('hub_vendors','rating_avg'),('hub_vendors','rating_count'),('expert_profiles','rating_avg'),('expert_profiles','rating_count'))
+order by 1, 2;
+
+-- ===== pre-check 4: table sizes (informational; the backfills touch these rows once) =====
+select
+  (select count(*) from hub_vendors) as vendors,
+  (select count(*) from hub_products) as products,
+  (select count(*) from expert_profiles) as experts,
+  (select count(*) from marketplace_orders) as orders;
 
 
 -- ===== 20261016100000_merchants_foundation.sql =====
@@ -15,6 +66,9 @@ select
 -- Additive. Same access model as the marketplace lifecycle: RLS on with no policies; every read/write goes
 -- through the service-role API, which enforces membership (see api/lib/merchant/auth.ts).
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 -- ---------------------------------------------------------------------------------------------
 -- merchants
@@ -184,27 +238,28 @@ create index if not exists hub_products_merchant_idx on hub_products (merchant_i
 create index if not exists expert_profiles_merchant_idx on expert_profiles (merchant_id);
 
 -- Backfill: every existing vendor / expert gets an Office-managed merchant so nothing breaks.
-insert into merchants (type, slug, display_name, status, office_managed, logo_url)
-select 'store', 'v-' || v.service_line_slug || '-' || v.slug, v.name,
-       case when v.is_published then 'live' else 'draft' end, true, v.photo_url
-from hub_vendors v
-where v.merchant_id is null
-on conflict (slug) do nothing;
-
-update hub_vendors v set merchant_id = m.id
-from merchants m
-where v.merchant_id is null and m.slug = 'v-' || v.service_line_slug || '-' || v.slug;
-
-insert into merchants (type, slug, display_name, status, office_managed, logo_url)
-select 'expert', 'e-' || coalesce(p.slug, p.id::text), p.display_name,
-       case when p.is_published then 'live' else 'draft' end, true, p.image_url
-from expert_profiles p
-where p.merchant_id is null
-on conflict (slug) do nothing;
-
-update expert_profiles p set merchant_id = m.id
-from merchants m
-where p.merchant_id is null and m.slug = 'e-' || coalesce(p.slug, p.id::text);
+-- Idempotent (only rows with merchant_id null) and collision-safe: each vendor/expert gets its OWN merchant even when
+-- two rows share a slug or a slug is empty; the merchant slug falls back to '<base>-<first 8 of id>'.
+do $$
+declare r record; mid uuid; base text; s text;
+begin
+  for r in select id, service_line_slug, slug, name, is_published, photo_url from hub_vendors where merchant_id is null order by created_at, id loop
+    base := 'v-' || coalesce(nullif(r.service_line_slug, ''), 'x') || '-' || coalesce(nullif(r.slug, ''), r.id::text);
+    s := case when exists (select 1 from merchants where slug = base) then base || '-' || substr(r.id::text, 1, 8) else base end;
+    insert into merchants (type, slug, display_name, status, office_managed, logo_url)
+      values ('store', s, coalesce(nullif(r.name, ''), s), case when coalesce(r.is_published, false) then 'live' else 'draft' end, true, r.photo_url)
+      returning id into mid;
+    update hub_vendors set merchant_id = mid where id = r.id;
+  end loop;
+  for r in select id, slug, display_name, is_published, image_url from expert_profiles where merchant_id is null order by created_at, id loop
+    base := 'e-' || coalesce(nullif(r.slug, ''), r.id::text);
+    s := case when exists (select 1 from merchants where slug = base) then base || '-' || substr(r.id::text, 1, 8) else base end;
+    insert into merchants (type, slug, display_name, status, office_managed, logo_url)
+      values ('expert', s, coalesce(nullif(r.display_name, ''), s), case when coalesce(r.is_published, false) then 'live' else 'draft' end, true, r.image_url)
+      returning id into mid;
+    update expert_profiles set merchant_id = mid where id = r.id;
+  end loop;
+end $$;
 
 update hub_products p set merchant_id = v.merchant_id
 from hub_vendors v
@@ -232,10 +287,16 @@ drop trigger if exists marketplace_orders_set_merchant on marketplace_orders;
 create trigger marketplace_orders_set_merchant before insert on marketplace_orders
   for each row execute function marketplace_order_set_merchant();
 
-update marketplace_orders o set merchant_id = coalesce(
-  (select v.merchant_id from marketplace_quotes q join hub_vendors v on v.id = nullif(q.payload->>'vendorId','')::uuid where q.id = o.quote_id),
-  (select p.merchant_id from marketplace_quotes q join expert_profiles p on p.id = nullif(q.payload->>'profileId','')::uuid where q.id = o.quote_id)
-) where o.merchant_id is null;
+update marketplace_orders o set merchant_id = m.merchant_id
+from (
+  select o2.id, coalesce(v.merchant_id, p.merchant_id) as merchant_id
+  from marketplace_orders o2
+  join marketplace_quotes q on q.id = o2.quote_id
+  left join hub_vendors v on v.id = nullif(q.payload->>'vendorId', '')::uuid
+  left join expert_profiles p on p.id = nullif(q.payload->>'profileId', '')::uuid
+  where o2.merchant_id is null
+) m
+where o.id = m.id and m.merchant_id is not null;
 
 -- ---------------------------------------------------------------------------------------------
 -- seed KYB profiles (data, editable in Office)
@@ -269,6 +330,9 @@ commit;
 -- Same access model as the other marketplace tables: RLS on, no policies, service-role only; every mutation
 -- goes through the security-definer functions below so balances can never drift from entries.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 -- ---------------------------------------------------------------------------------------------
 -- fee engine configuration (edited in Office)
@@ -614,6 +678,9 @@ commit;
 -- Seller alerts: preferences, Telegram link, and an outbox the notification worker drains (email + Telegram).
 -- Rows are created by database triggers so an alert is never lost if the API is busy; the worker sends them.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 create table if not exists merchant_notification_prefs (
   user_id uuid not null references users(id) on delete cascade,
@@ -761,6 +828,9 @@ commit;
 -- Same conventions as the merchant migrations: RLS on with no policies (service role only), additive,
 -- security-definer functions with execute revoked from public roles.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 create table if not exists reviews (
   id uuid primary key default gen_random_uuid(),
@@ -908,6 +978,9 @@ commit;
 -- Order-scoped chat between a customer and the seller of a paid order.
 -- Service role only (RLS on, no policies). Messages are append-only; the only change allowed is read_by_other_at.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 create table if not exists order_messages (
   id bigint generated always as identity primary key,
@@ -1114,6 +1187,9 @@ commit;
 -- Customer discovery: favourites and search indexes. Search itself is a plain ILIKE over trigram indexes for now;
 -- the API hides the implementation so a dedicated engine can replace it later.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 do $$ begin
   create extension if not exists pg_trgm;
@@ -1139,10 +1215,20 @@ do $$ begin
     create index if not exists hub_vendors_name_trgm on hub_vendors using gin (lower(name) gin_trgm_ops);
     create index if not exists expert_profiles_name_trgm on expert_profiles using gin (lower(display_name) gin_trgm_ops);
   end if;
+exception when others then
+  -- e.g. the operator class is in a schema that is not on the search_path; search still works, just without the index
+  raise notice 'trigram indexes skipped: %', sqlerrm;
 end $$;
 
 commit;
 
--- ===== verify (run after; results should be 0 / true) =====
+-- ===== verify (run after; every row must say 0) =====
 select count(*) as vendors_without_merchant from hub_vendors where merchant_id is null;
-select count(*) as products_without_merchant from hub_products where merchant_id is null;
+select count(*) as products_without_merchant from hub_products where merchant_id is null and vendor_id is not null;
+select count(*) as experts_without_merchant from expert_profiles where merchant_id is null;
+select count(*) as merchants_shared_by_several_vendors from (select merchant_id from hub_vendors group by merchant_id having count(*) > 1) s;
+select count(*) as merchants_shared_by_several_experts from (select merchant_id from expert_profiles group by merchant_id having count(*) > 1) s;
+select count(*) as orders_with_vendor_but_no_merchant from marketplace_orders o join marketplace_quotes q on q.id = o.quote_id
+  where o.merchant_id is null and (nullif(q.payload->>'vendorId', '') is not null or nullif(q.payload->>'profileId', '') is not null);
+-- informational (not required to be 0): products that never had a vendor stay without a merchant
+select count(*) as info_products_without_vendor from hub_products where vendor_id is null;

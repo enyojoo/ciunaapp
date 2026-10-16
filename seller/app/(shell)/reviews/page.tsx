@@ -1,7 +1,8 @@
 "use client"
 import * as React from "react"
-import { Lock, Star } from "lucide-react"
+import { Star } from "lucide-react"
 import { Banner, Button, EmptyState, PageHeader, Skeleton, Tabs } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -16,10 +17,7 @@ export default function ReviewsPage() {
   const { can } = useSeller()
   if (!can("orders")) {
     return (
-      <>
-        <PageHeader title={t("reviews.title")} />
-        <EmptyState icon={<Lock />} title={t("reviews.noAccess.title")} description={t("reviews.noAccess.body")} />
-      </>
+      <SellerNoAccess pageTitle={t("reviews.title")} titleKey="reviews.noAccess.title" bodyKey="reviews.noAccess.body" />
     )
   }
   return <ReviewsList />

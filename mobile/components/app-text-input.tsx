@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import { Platform, TextInput, type TextInputProps } from "react-native"
+import { Platform, TextInput, type TextInputProps, type TextStyle } from "react-native"
 import { colors } from "@/lib/theme"
 
 const webInputReset =
@@ -8,7 +8,7 @@ const webInputReset =
         outlineStyle: "none",
         outlineWidth: 0,
         boxShadow: "none",
-      } as const)
+      } as unknown as TextStyle)
     : null
 
 /** TextInput with browser default focus chrome removed on web (use container focus ring instead). */

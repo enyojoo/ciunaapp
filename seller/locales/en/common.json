@@ -68,5 +68,8 @@
   "action.upload": "Upload",
   "action.submit": "Submit",
   "action.done": "Done",
-  "state.default": "default"
+  "state.default": "default",
+  "noAccess.title": "You don't have access to this page",
+  "noAccess.body": "Ask the business owner to give you access.",
+  "noAccess.back": "Back to Home"
 }

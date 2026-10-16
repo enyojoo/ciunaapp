@@ -9,18 +9,18 @@ function norm(code: string): string {
   return code.trim().toUpperCase()
 }
 
-export function currenciesForSendPicker(
-  currencies: SendCurrencyOption[],
+export function currenciesForSendPicker<T extends SendCurrencyOption>(
+  currencies: T[],
   receiveCurrency: string,
-): SendCurrencyOption[] {
+): T[] {
   const recv = norm(receiveCurrency)
   return currencies.filter((c) => c.can_send !== false && norm(c.code) !== recv)
 }
 
-export function currenciesForReceivePicker(
-  currencies: SendCurrencyOption[],
+export function currenciesForReceivePicker<T extends SendCurrencyOption>(
+  currencies: T[],
   sendCurrency: string,
-): SendCurrencyOption[] {
+): T[] {
   const send = norm(sendCurrency)
   return currencies.filter((c) => c.can_receive !== false && norm(c.code) !== send)
 }

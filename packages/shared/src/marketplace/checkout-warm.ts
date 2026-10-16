@@ -108,7 +108,8 @@ export function prefetchCheckoutQuote(opts: {
     return (w.promise || Promise.resolve(w)).then((e) => e.quote)
   }
   w.phase = "preview"
-  const run = (async () => {
+  let run!: Promise<CheckoutWarmEntry>
+  run = (async () => {
     try {
       const d = await api(opts.fetcher, "/api/hub/checkout/preview", {
         source: { kind: "cart", cartId: opts.cartId },
@@ -168,7 +169,8 @@ export function warmCartCheckout(opts: {
 
   w.phase = "submit"
   w.error = null
-  const run = (async () => {
+  let run!: Promise<CheckoutWarmEntry>
+  run = (async () => {
     try {
       let quote = w.quote
       if (!quote || w.fingerprint !== opts.fingerprint) {

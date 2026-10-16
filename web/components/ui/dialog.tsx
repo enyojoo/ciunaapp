@@ -48,7 +48,7 @@ const DialogContent = React.forwardRef<
         onOpenAutoFocus?.(event)
         if (event.defaultPrevented) return
         event.preventDefault()
-        event.currentTarget.focus()
+        ;(event.currentTarget as HTMLElement | null)?.focus()
       }}
     >
       {children}

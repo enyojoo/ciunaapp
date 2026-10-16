@@ -2,6 +2,9 @@
 -- Same access model as the other marketplace tables: RLS on, no policies, service-role only; every mutation
 -- goes through the security-definer functions below so balances can never drift from entries.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 -- ---------------------------------------------------------------------------------------------
 -- fee engine configuration (edited in Office)

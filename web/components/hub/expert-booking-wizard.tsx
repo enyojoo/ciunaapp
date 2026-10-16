@@ -534,7 +534,7 @@ export function ExpertBookingWizard() {
         {wizardStep === 2 ? (
           <div className="space-y-6">
             {(selectedService?.short_description || "").trim() ? (
-              <p className="text-sm leading-relaxed text-muted-foreground">{selectedService.short_description}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{selectedService?.short_description}</p>
             ) : null}
             <h2 className="text-base font-semibold text-foreground">{t("experts.bookingWizard.chooseTime")}</h2>
             <div className="flex flex-col gap-6 lg:flex-row">

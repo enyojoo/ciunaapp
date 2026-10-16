@@ -68,5 +68,8 @@
   "action.upload": "Subir",
   "action.submit": "Enviar",
   "action.done": "Listo",
-  "state.default": "predeterminado"
+  "state.default": "predeterminado",
+  "noAccess.title": "No tienes acceso a esta página",
+  "noAccess.body": "Pide al propietario del negocio que te dé acceso.",
+  "noAccess.back": "Volver al inicio"
 }

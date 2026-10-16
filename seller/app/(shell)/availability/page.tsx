@@ -3,6 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { Clock } from "lucide-react"
 import { Banner, Button, Card, EmptyState, Field, PageHeader, Select, Skeleton } from "@ciuna/ui-web"
+import { RequirePermission } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
 import { useT } from "@/lib/i18n"
@@ -12,6 +13,10 @@ import { TimeOffPanel } from "@/components/expert/time-off-panel"
 import { UpcomingSlots } from "@/components/expert/upcoming-slots"
 
 export default function AvailabilityPage() {
+  return <RequirePermission permission="availability"><AvailabilityPageContent /></RequirePermission>
+}
+
+function AvailabilityPageContent() {
   return <ExpertOnly><Availability /></ExpertOnly>
 }
 

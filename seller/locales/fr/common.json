@@ -68,5 +68,8 @@
   "action.upload": "Téléverser",
   "action.submit": "Envoyer",
   "action.done": "Terminé",
-  "state.default": "par défaut"
+  "state.default": "par défaut",
+  "noAccess.title": "Vous n'avez pas accès à cette page",
+  "noAccess.body": "Demandez au propriétaire de l'entreprise de vous donner l'accès.",
+  "noAccess.back": "Retour à l'accueil"
 }

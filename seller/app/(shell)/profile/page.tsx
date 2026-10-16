@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
 import { Button, Card, CardBody, CardHeader, Field, Input, LanguageTabs, PageHeader, Select, Textarea, useToast, Banner } from "@ciuna/ui-web"
+import { RequirePermission } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { useSeller } from "@/lib/session"
 import { useErrorText, useT } from "@/lib/i18n"
@@ -10,6 +11,10 @@ import { countryOptions } from "@/lib/countries"
 const CURRENCIES = ["RUB", "USD", "EUR", "CNY", "NGN", "GHS", "KES", "BRL"]
 
 export default function ProfilePage() {
+  return <RequirePermission permission="profile"><ProfilePageContent /></RequirePermission>
+}
+
+function ProfilePageContent() {
   const { merchant, refresh, can } = useSeller()
   const { t, locale } = useT()
   const errText = useErrorText()

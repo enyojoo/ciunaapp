@@ -68,5 +68,8 @@
   "action.upload": "上传",
   "action.submit": "提交",
   "action.done": "完成",
-  "state.default": "默认"
+  "state.default": "默认",
+  "noAccess.title": "您无权访问此页面",
+  "noAccess.body": "请联系企业所有者为您开通权限。",
+  "noAccess.back": "返回首页"
 }

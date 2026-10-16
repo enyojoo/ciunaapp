@@ -127,7 +127,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const adminProfile = {
           id: authUser.id,
           email: authUser.email,
-          first_name: authUser.user_metadata?.first_name || authUser.name || '',
+          first_name: authUser.user_metadata?.first_name || (authUser as any).name || '',
           last_name: authUser.user_metadata?.last_name || '',
           phone: authUser.phone || '',
           base_currency: authUser.user_metadata?.base_currency || 'NGN',
@@ -138,7 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           role: 'super_admin'
         }
         
-        setUserProfile(adminProfile)
+        setUserProfile(adminProfile as any)
         setIsAdmin(true)
         setUser(authUser)
         return adminProfile

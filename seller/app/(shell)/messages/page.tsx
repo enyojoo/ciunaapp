@@ -1,7 +1,8 @@
 "use client"
 import * as React from "react"
-import { Lock, MessageSquare } from "lucide-react"
+import { MessageSquare } from "lucide-react"
 import { Banner, Button, EmptyState, PageHeader, Skeleton } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -16,10 +17,7 @@ export default function MessagesPage() {
   const { can } = useSeller()
   if (!can("messages")) {
     return (
-      <>
-        <PageHeader title={t("messages.title")} />
-        <EmptyState icon={<Lock />} title={t("messages.noAccess.title")} description={t("messages.noAccess.body")} />
-      </>
+      <SellerNoAccess pageTitle={t("messages.title")} titleKey="messages.noAccess.title" bodyKey="messages.noAccess.body" />
     )
   }
   return <Threads />

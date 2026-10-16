@@ -213,8 +213,8 @@ export function SendPaymentMethodDefaultDisplay({
             <div className="mb-3 space-y-1">
               <span className="text-xs text-gray-600">{t("send.walletAddress")}</span>
               <div className="flex items-start gap-2">
-                <span className="flex-1 break-all font-mono text-xs font-medium">{m.wallet_address.trim()}</span>
-                <Button variant="ghost" size="sm" onClick={() => onCopy(m.wallet_address.trim(), "walletAddress")} className="h-5 w-5 shrink-0 p-0">
+                <span className="flex-1 break-all font-mono text-xs font-medium">{m.wallet_address?.trim()}</span>
+                <Button variant="ghost" size="sm" onClick={() => onCopy(m.wallet_address?.trim() ?? "", "walletAddress")} className="h-5 w-5 shrink-0 p-0">
                   {copiedStates.walletAddress ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
                 </Button>
               </div>

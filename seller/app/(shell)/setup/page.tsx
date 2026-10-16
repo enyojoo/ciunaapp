@@ -3,6 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { CheckCircle2, Circle, FileText, Trash2, Upload } from "lucide-react"
 import { Banner, Button, Card, CardBody, CardHeader, Field, Input, PageHeader, Skeleton, StatusBadge, cn, useToast } from "@ciuna/ui-web"
+import { RequirePermission } from "@/components/no-access"
 import { api, ApiError, uploadFile } from "@/lib/api"
 import { useQuery, invalidate } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -14,6 +15,10 @@ interface AppState { status: string; answers: { tier?: number; fields?: Record<s
 interface Doc { id: string; kind: string; file_name: string | null; status: string; reason: string | null; expires_at: string | null }
 
 export default function SetupPage() {
+  return <RequirePermission permission="documents"><SetupPageContent /></RequirePermission>
+}
+
+function SetupPageContent() {
   const { merchant, refresh } = useSeller()
   const { t } = useT()
   const errText = useErrorText()

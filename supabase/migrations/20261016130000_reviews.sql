@@ -2,6 +2,9 @@
 -- Same conventions as the merchant migrations: RLS on with no policies (service role only), additive,
 -- security-definer functions with execute revoked from public roles.
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 create table if not exists reviews (
   id uuid primary key default gen_random_uuid(),

@@ -33,14 +33,15 @@ export default function AppTabs() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        sceneContainerStyle: hideTabBar
+        // sceneContainerStyle is read at runtime by the tabs navigator; its typing was dropped in newer versions.
+        ...({ sceneContainerStyle: hideTabBar
           ? { flex: 1, minHeight: 0, backgroundColor: colors.paper }
           : {
               flex: 1,
               minHeight: 0,
               backgroundColor: colors.paper,
               paddingBottom: barHeight,
-            },
+            } } as object),
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
         tabBarShowLabel: true,

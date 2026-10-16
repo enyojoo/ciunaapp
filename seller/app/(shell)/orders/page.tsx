@@ -1,7 +1,8 @@
 "use client"
 import * as React from "react"
-import { Inbox, Lock } from "lucide-react"
+import { Inbox } from "lucide-react"
 import { Button, EmptyState, PageHeader, Skeleton, Tabs, Banner, useToast } from "@ciuna/ui-web"
+import { SellerNoAccess } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -16,10 +17,7 @@ export default function OrdersPage() {
   const { can } = useSeller()
   if (!can("orders")) {
     return (
-      <>
-        <PageHeader title={t("orders.title")} />
-        <EmptyState icon={<Lock />} title={t("orders.noAccess.title")} description={t("orders.noAccess.body")} />
-      </>
+      <SellerNoAccess pageTitle={t("orders.title")} titleKey="orders.noAccess.title" bodyKey="orders.noAccess.body" />
     )
   }
   return <OrdersList />

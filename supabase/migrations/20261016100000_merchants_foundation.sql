@@ -2,6 +2,9 @@
 -- Additive. Same access model as the marketplace lifecycle: RLS on with no policies; every read/write goes
 -- through the service-role API, which enforces membership (see api/lib/merchant/auth.ts).
 begin;
+-- Fail fast instead of queueing behind a long-running transaction (a queued ALTER blocks every later query on that table).
+-- If this errors with a lock timeout, nothing was changed: run it again a minute later.
+set local lock_timeout = '5s';
 
 -- ---------------------------------------------------------------------------------------------
 -- merchants
@@ -171,27 +174,28 @@ create index if not exists hub_products_merchant_idx on hub_products (merchant_i
 create index if not exists expert_profiles_merchant_idx on expert_profiles (merchant_id);
 
 -- Backfill: every existing vendor / expert gets an Office-managed merchant so nothing breaks.
-insert into merchants (type, slug, display_name, status, office_managed, logo_url)
-select 'store', 'v-' || v.service_line_slug || '-' || v.slug, v.name,
-       case when v.is_published then 'live' else 'draft' end, true, v.photo_url
-from hub_vendors v
-where v.merchant_id is null
-on conflict (slug) do nothing;
-
-update hub_vendors v set merchant_id = m.id
-from merchants m
-where v.merchant_id is null and m.slug = 'v-' || v.service_line_slug || '-' || v.slug;
-
-insert into merchants (type, slug, display_name, status, office_managed, logo_url)
-select 'expert', 'e-' || coalesce(p.slug, p.id::text), p.display_name,
-       case when p.is_published then 'live' else 'draft' end, true, p.image_url
-from expert_profiles p
-where p.merchant_id is null
-on conflict (slug) do nothing;
-
-update expert_profiles p set merchant_id = m.id
-from merchants m
-where p.merchant_id is null and m.slug = 'e-' || coalesce(p.slug, p.id::text);
+-- Idempotent (only rows with merchant_id null) and collision-safe: each vendor/expert gets its OWN merchant even when
+-- two rows share a slug or a slug is empty; the merchant slug falls back to '<base>-<first 8 of id>'.
+do $$
+declare r record; mid uuid; base text; s text;
+begin
+  for r in select id, service_line_slug, slug, name, is_published, photo_url from hub_vendors where merchant_id is null order by created_at, id loop
+    base := 'v-' || coalesce(nullif(r.service_line_slug, ''), 'x') || '-' || coalesce(nullif(r.slug, ''), r.id::text);
+    s := case when exists (select 1 from merchants where slug = base) then base || '-' || substr(r.id::text, 1, 8) else base end;
+    insert into merchants (type, slug, display_name, status, office_managed, logo_url)
+      values ('store', s, coalesce(nullif(r.name, ''), s), case when coalesce(r.is_published, false) then 'live' else 'draft' end, true, r.photo_url)
+      returning id into mid;
+    update hub_vendors set merchant_id = mid where id = r.id;
+  end loop;
+  for r in select id, slug, display_name, is_published, image_url from expert_profiles where merchant_id is null order by created_at, id loop
+    base := 'e-' || coalesce(nullif(r.slug, ''), r.id::text);
+    s := case when exists (select 1 from merchants where slug = base) then base || '-' || substr(r.id::text, 1, 8) else base end;
+    insert into merchants (type, slug, display_name, status, office_managed, logo_url)
+      values ('expert', s, coalesce(nullif(r.display_name, ''), s), case when coalesce(r.is_published, false) then 'live' else 'draft' end, true, r.image_url)
+      returning id into mid;
+    update expert_profiles set merchant_id = mid where id = r.id;
+  end loop;
+end $$;
 
 update hub_products p set merchant_id = v.merchant_id
 from hub_vendors v
@@ -219,10 +223,16 @@ drop trigger if exists marketplace_orders_set_merchant on marketplace_orders;
 create trigger marketplace_orders_set_merchant before insert on marketplace_orders
   for each row execute function marketplace_order_set_merchant();
 
-update marketplace_orders o set merchant_id = coalesce(
-  (select v.merchant_id from marketplace_quotes q join hub_vendors v on v.id = nullif(q.payload->>'vendorId','')::uuid where q.id = o.quote_id),
-  (select p.merchant_id from marketplace_quotes q join expert_profiles p on p.id = nullif(q.payload->>'profileId','')::uuid where q.id = o.quote_id)
-) where o.merchant_id is null;
+update marketplace_orders o set merchant_id = m.merchant_id
+from (
+  select o2.id, coalesce(v.merchant_id, p.merchant_id) as merchant_id
+  from marketplace_orders o2
+  join marketplace_quotes q on q.id = o2.quote_id
+  left join hub_vendors v on v.id = nullif(q.payload->>'vendorId', '')::uuid
+  left join expert_profiles p on p.id = nullif(q.payload->>'profileId', '')::uuid
+  where o2.merchant_id is null
+) m
+where o.id = m.id and m.merchant_id is not null;
 
 -- ---------------------------------------------------------------------------------------------
 -- seed KYB profiles (data, editable in Office)
