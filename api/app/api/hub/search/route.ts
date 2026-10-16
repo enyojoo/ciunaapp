@@ -3,12 +3,16 @@ import { createServerClient } from "@/lib/supabase"
 import { createErrorResponse, withErrorHandling } from "@/lib/auth-utils"
 import { cleanQuery, likePattern } from "@/lib/discovery"
 import { filterToPublishedVendors } from "@/lib/hub-product-vendors"
+import { rateLimit, clientIp, LIMITS } from "@/lib/rate-limit"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 /** Public search. ?q=...&line=food|mart|experts|all&limit=20 -> { products, vendors, experts }. Published, sellable results only. */
 export const GET = withErrorHandling(async (request: NextRequest) => {
+  if (!(await rateLimit(`search:${clientIp(request)}`, LIMITS.search.limit, LIMITS.search.windowSeconds))) {
+    return NextResponse.json({ error: "Too many searches. Try again in a minute." }, { status: 429, headers: { "Retry-After": "60" } })
+  }
   const sp = new URL(request.url).searchParams
   const q = cleanQuery(sp.get("q"))
   if (!q) return createErrorResponse("Type at least 2 characters.", 400)

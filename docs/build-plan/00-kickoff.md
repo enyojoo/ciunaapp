@@ -19,11 +19,13 @@ Done and committed:
 - A3 (done): `zh` and `pt` are in `mobile/lib/i18n.ts`, `web/lib/i18n/config.ts`, `web/lib/auth-context.tsx`, `web/lib/database.ts` (type), both language pickers (`mobile/components/language-picker.tsx`, `web/components/i18n/language-picker.tsx`) and the `languages.*` names in all six `common.json`. `users.preferred_language` is a plain text column, no migration needed.
 - V3 (done): `npm run locales:check` prints `locales ok`; the 27 missing es/fr/ru keys were filled.
 - A5 (half done): Seller phone nav is now 4 items plus More for stores and experts (`seller/components/shell/nav.ts`), and More reaches Earnings, Reviews and Availability. Still to do for A5: the Playwright harness and the 375px test.
+- A7 (done for Seller alerts): `renderAlert` adds the Ciuna logo and shows booking times in the business's operating-country zone with a label (e.g. `20 Oct 12:00 MSK`), via `zoneForCountry` in `api/lib/merchant/notify-messages.ts`; tests updated and passing. No schema change: a per-user `users.time_zone` is the later upgrade. Customer emails still need the same treatment.
+- A6 (started): migration `supabase/migrations/20261017100000_rate_limits.sql` (copy for the SQL editor: `supabase/deploy/rate-limits.sql`, tested twice on a local Postgres: allows N then blocks, idempotent), helper `api/lib/rate-limit.ts` (`rateLimit`, `clientIp`, `LIMITS`; fails open if the function is missing), applied to `GET /api/hub/search` (429 with `Retry-After`). Chat already limits at 30 per hour (`lib/merchant/messages.ts`). Still to apply: auth, checkout, uploads, reviews, favourites. Owner action: run `supabase/deploy/rate-limits.sql` in the SQL editor.
 Follow-ups found while doing it:
 - Customer emails (`api/lib/email-notification-service.ts`, `normalizeLocale`) only support en, ru, fr, es; zh and pt fall back to English. Add zh and pt templates (part of A7 and send S5).
 - `verification.kycBridge.*` copy (all languages) names Bitbanker, IIDX and Sumsub on a customer screen. Reword to "our verification partner" per the no-provider rule (customer-app WP11/WP12).
 - Pre-existing TypeScript errors in `mobile` (`sceneContainerStyle`, `app-text-input.tsx`) and `web` (`auth-context.tsx`, `i18n/config.ts`) were present before this work; clear them in A4.
-Remaining in Stage A: A1, A2, A4, A5 harness, A6, A7, V1, V2, V4.
+Remaining in Stage A: A1, A2, A4, A5 harness, A6 (apply to the other routes), A7 (customer emails), V1, V2, V4.
 
 ## Stage A task list (start here; items are independent unless noted)
 | # | Task | Plan section | Exit test |
