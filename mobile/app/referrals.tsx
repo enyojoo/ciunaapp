@@ -99,6 +99,14 @@ export default function ReferralsScreen() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const [codeCopied, setCodeCopied] = useState(false)
+  const copyCode = async () => {
+    if (!data?.slug) return
+    await Clipboard.setStringAsync(data.slug)
+    setCodeCopied(true)
+    setTimeout(() => setCodeCopied(false), 2000)
+  }
+
   const shareLink = async () => {
     if (!data?.shareUrl) return
     await Share.share({ message: `${t("referrals.shareMessagePrefix")} ${data.shareUrl}` })
@@ -181,6 +189,18 @@ export default function ReferralsScreen() {
         {data?.shareUrl ? (
           <View style={styles.qrWrap}>
             <QRCode value={data.shareUrl} size={140} color={colors.text} backgroundColor="#ffffff" />
+          </View>
+        ) : null}
+
+        {data?.slug ? (
+          <View style={[styles.linkRow, styles.codeRow]}>
+            <Text style={styles.codeLabel}>{t("referrals.yourCode", { defaultValue: "Your code" })}</Text>
+            <Text style={styles.codeValue} selectable numberOfLines={1}>
+              {data.slug}
+            </Text>
+            <Pressable onPress={() => void copyCode()} hitSlop={8} style={styles.copyBtn} accessibilityRole="button" accessibilityLabel={t("referrals.yourCode", { defaultValue: "Your code" })}>
+              {codeCopied ? <Check size={16} color={colors.success} strokeWidth={2.4} /> : <Copy size={16} color={colors.text} strokeWidth={2} />}
+            </Pressable>
           </View>
         ) : null}
 
@@ -342,6 +362,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   linkText: { flex: 1, fontSize: 13, color: colors.text },
+  codeRow: { marginBottom: 8 },
+  codeLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
+  codeValue: { flex: 1, fontSize: 15, fontWeight: "700", letterSpacing: 0.5, color: colors.text },
   copyBtn: { width: 32, height: 32, alignItems: "center", justifyContent: "center" },
   tierBlock: { marginTop: 18 },
   tierHeading: { fontSize: 15, fontWeight: "600", color: colors.text },

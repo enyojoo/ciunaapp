@@ -749,7 +749,8 @@
     "programThreshold": "Ganhe {{reward}} quando cada indicado enviar, somadas, {{threshold}} ou mais em transações concluídas na Ciuna.",
     "shareTitle": "Envie dinheiro com a Ciuna",
     "shareMessagePrefix": "Use meu link para se cadastrar e enviar dinheiro entre mais de 10 países africanos e a Rússia, sem taxas, na Ciuna:",
-    "unnamedReferee": "Usuário"
+    "unnamedReferee": "Usuário",
+    "yourCode": "Seu código"
   },
   "profile": {
     "title": "Seu perfil",

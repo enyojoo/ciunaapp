@@ -749,7 +749,8 @@
     "programThreshold": "Earn {{reward}} when each referral sends a combined {{threshold}} or more in completed transactions on Ciuna.",
     "shareTitle": "Send Money with Ciuna",
     "shareMessagePrefix": "Use my link to sign up and send money between 10+ African countries and Russia for free on Ciuna:",
-    "unnamedReferee": "User"
+    "unnamedReferee": "User",
+    "yourCode": "Your code"
   },
   "profile": {
     "title": "Your profile",

@@ -659,7 +659,8 @@
     "programThreshold": "Gagnez {{reward}} lorsque chaque filleul envoie au total {{threshold}} ou plus en transactions complétées sur Ciuna.",
     "shareTitle": "Envoyer de l’argent avec Ciuna",
     "shareMessagePrefix": "Utilise mon lien pour t’inscrire et envoyer de l’argent vers plus de 10 pays d’Afrique et vers la Russie gratuitement sur Ciuna :",
-    "unnamedReferee": "Utilisateur"
+    "unnamedReferee": "Utilisateur",
+    "yourCode": "Votre code"
   },
   "profile": {
     "title": "Votre profil",
