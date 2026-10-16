@@ -101,9 +101,12 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
           )}
         </View>
         <View style={styles.dirCaption}>
-          <Text style={styles.dirName} numberOfLines={1} ellipsizeMode="tail">
-            {expert.display_name}
-          </Text>
+          <View style={styles.dirNameRow}>
+            <Text style={styles.dirName} numberOfLines={1} ellipsizeMode="tail">
+              {expert.display_name}
+            </Text>
+            {expert.is_verified ? <VerifiedBadge size={13} kind="expert" tier={expert.verification_tier} /> : null}
+          </View>
           <Text style={styles.rating} numberOfLines={1}>
             {Number(expert.rating_count) > 0 && Number(expert.rating_avg) > 0
               ? `★ ${Number(expert.rating_avg).toFixed(1)} (${expert.rating_count})`
@@ -278,7 +281,8 @@ const styles = StyleSheet.create({
   stripName: { fontSize: 12, fontWeight: "600", color: colors.text },
   gridHit: { width: "48.5%", marginBottom: 12 },
   dirCaption: { paddingHorizontal: 10, paddingVertical: 10, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  dirName: { fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
+  dirNameRow: { flexDirection: "row", alignItems: "center", gap: 4 },
+  dirName: { flexShrink: 1, fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
   rating: { marginTop: 2, fontSize: 12, fontWeight: "600", color: colors.muted },
   hint: { marginTop: 4, fontSize: 11, fontWeight: "500", color: colors.primary },
   svcHit: { width: "48.5%" },

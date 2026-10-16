@@ -7,8 +7,8 @@ Replaces the gap tables in `customer-app.md` (stale). Source: card READMEs and t
 |---|---|---|
 | CustomerHome | B | Sticky header, slider, tiles, no search |
 | FoodHome, MartHome | P | Pill search built; categories still sit below Stores; no offline banner |
-| StoreCard | P | No closed state (blocked: hours) |
-| StorePage | P | Skeleton built; no share or paused-store state (blocked: status field) |
+| StoreCard | B | Closed state, cover image, verified tier built (needs storefront-details.sql) |
+| StorePage | P | Open/closed line, cover, minimum order, skeleton built; no share or paused-store state |
 | ProductCard | B | Low-stock note built; sale price shows struck through |
 | ProductPage | P | Gallery with dots, stock line, heart, skeleton built; no sticky bar, no reviews teaser |
 | PriceTag, FilterChips | B | Shared components built |
@@ -22,25 +22,25 @@ Replaces the gap tables in `customer-app.md` (stale). Source: card READMEs and t
 ## Cart, checkout, orders, reviews
 | Card | Status | Notes |
 |---|---|---|
-| Cart, CartLine | P | Unavailable rows, vendor-lock dialog, skeleton built; minimum-order banner blocked |
-| MarketCheckout | P | Zone-not-served banner built; Review is still one screen with Details |
+| Cart, CartLine | P | Unavailable rows, vendor-lock dialog, skeleton, minimum-order note built |
+| MarketCheckout | P | Zone-not-served and minimum-order banners, area delivery time built; Review is still one screen with Details |
 | OrderSummary | P | Pickup line, expert-booking variant |
 | OrderTracking | P | Status header, delivery/pickup card, timeline built; seller avatar and rating, reason text left |
 | OrderTimeline | P | Built from real states; no per-stage times (blocked) |
 | OrderChat, ChatBubble | B | Desktop side panel not built |
 | ReviewFlow | B | Web dialog missing |
 | ReviewCard, ReviewSummary | P | ReviewCard exported with Read more; RatingStars input still inline in the review sheet |
-| VerifiedBadge | B | One component replaces five inline marks (tier and tooltip blocked) |
+| VerifiedBadge | B | One component, two tiers (tooltip with check date still blocked) |
 | FulfilmentChip, FulfilmentPicker | M / P | Chip is seller-only; picker lacks fee and ETA |
 
 ## Experts
 | Card | Status | Notes |
 |---|---|---|
-| ExpertsDirectory | P | Search, category chips, count, empty and error states built; language chips blocked |
-| ExpertCard | P | Rating or New built; from-price and verified flag blocked |
-| ExpertProfile | P | Retry built; no sticky Book bar (several services), credentials blocked |
+| ExpertsDirectory | P | Search, category and language chips, count, empty and error states built |
+| ExpertCard | P | Rating or New and verified mark built; from-price left |
+| ExpertProfile | P | Retry, languages, credentials, years, verified tier built; no sticky Book bar (several services) |
 | ServiceCard | P | No duration chip |
-| SlotPicker | B (2026-10-17) | Date strip, 3-column grid, zone line; expert zone blocked |
+| SlotPicker | B | Date strip, 3-column grid, two-zone line (needs storefront-details.sql for the expert zone) |
 | ExpertBooking | P | No step bar, notes |
 
 ## Account and send
@@ -57,12 +57,14 @@ Replaces the gap tables in `customer-app.md` (stale). Source: card READMEs and t
 | CustomerKyc, CustomerLimits, CustomerSupport | P / M / P | Mostly blocked |
 | ReceiptCustomer, PushAndInApp | M | Blocked |
 
-## Blocked on API, schema or backend (not built)
-- Structured store hours and open/closed; delivery fee, minimum order, ETA (delivery zones schema).
-- Store cover image field in the vendor payload.
-- Expert spoken languages, credentials, verified flag, time zone; next availability.
+## Built in the storefront-details work (needs supabase/deploy/storefront-details.sql run)
+Opening hours with time zone, open/closed state, minimum order (enforced at order time), delivery time per area, store cover, verification tier, expert languages, time zone, credentials, years of practice and verified flag. Seller portal has the editors on Delivery and pickup.
+
+## Still blocked on backend (not built)
+- Store paused or unavailable status in the public payload; delivery fee and minimum per area (minimum is per store).
+- Expert next availability and from-price on cards; expert credentials editor in the seller portal (read-only in the customer app today).
 - Per-stage order timestamps; seller rating on the order; chat response-time line.
-- Verified tier and check date.
+- Verification check date and checklist for the tooltip.
 - Account deletion; KYC levels and limits; support requests and chat; push registration; PDF receipts.
 - Popular near you; translation hint.
 

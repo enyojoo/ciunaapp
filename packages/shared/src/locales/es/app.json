@@ -1041,7 +1041,8 @@
       "noMatch": "Ningún experto coincide",
       "noMatchBody": "Prueba con otro nombre o categoría.",
       "all": "Todos",
-      "isNew": "Nuevo"
+      "isNew": "Nuevo",
+      "allLanguages": "Todos los idiomas"
     }
   },
   "referralLanding": {

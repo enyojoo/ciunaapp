@@ -4,16 +4,18 @@ import type { ExpertSlot } from "./types"
 
 const TTL_MS = 60_000
 
-type ServiceSlots = { slots: ExpertSlot[]; service: { title: string; short_description?: string | null } | null }
+type ServiceSlots = { slots: ExpertSlot[]; service: { title: string; short_description?: string | null } | null; expertTimeZone: string | null }
 
 async function fetchExpertSlots(serviceId: string): Promise<ServiceSlots> {
   const res = await fetchWithAuth(`/api/expert/services/${encodeURIComponent(serviceId)}/slots`)
   if (!res.ok) throw new Error("Failed to load slots")
   const body = (await res.json()) as {
     slots?: ExpertSlot[]
+    expert_time_zone?: string
     service?: { title?: string; short_description?: string | null }
   }
   return {
+    expertTimeZone: body.expert_time_zone || null,
     slots: body.slots || [],
     service: body.service ? { title: body.service.title || "", short_description: body.service.short_description } : null,
   }

@@ -138,7 +138,7 @@ export default function VendorScreen() {
                 {vendor?.name}
               </Text>
               {vendor?.is_verified ? (
-                <VerifiedBadge size={18} />
+                <VerifiedBadge size={18} tier={vendor?.verification_tier} />
               ) : null}
             </View>
             {location ? (
@@ -266,7 +266,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: { width: "100%", height: "100%" },
-  identityBody: { flex: 1, minWidth: 0, justifyContent: "center", gap: 4 },
+  // Starts below the cover: only the logo overlaps it.
+  identityBody: { flex: 1, minWidth: 0, justifyContent: "flex-start", gap: 4, marginTop: 44 },
   nameRow: { flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" },
   name: { flexShrink: 1, fontSize: 20, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
   locRow: { flexDirection: "row", alignItems: "center", gap: 5 },

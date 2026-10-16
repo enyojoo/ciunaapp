@@ -10,9 +10,9 @@ type Day = { key: string; date: Date; slots: ExpertSlot[] }
 const dayKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
 
 /** Short zone name for the device ("MSK", "GMT+3"), shown beside the times. */
-function zoneName(locale: string, at: Date): string {
+function zoneName(locale: string, at: Date, timeZone?: string): string {
   try {
-    const part = new Intl.DateTimeFormat(locale, { timeZoneName: "short" })
+    const part = new Intl.DateTimeFormat(locale, { timeZoneName: "short", ...(timeZone ? { timeZone } : {}) })
       .formatToParts(at)
       .find((p) => p.type === "timeZoneName")
     return part?.value || Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -29,10 +29,13 @@ export function SlotPicker({
   slots,
   loading,
   onConfirm,
+  expertZone,
 }: {
   slots: ExpertSlot[]
   loading?: boolean
   onConfirm: (slotId: string) => void
+  /** IANA zone of the expert. When it differs from the device zone it is named beside the customer's. */
+  expertZone?: string | null
 }) {
   const { t, i18n } = useTranslation("app")
   const locale = i18n.resolvedLanguage || i18n.language || "en"
@@ -122,6 +125,14 @@ export function SlotPicker({
 
       <Text style={styles.zone}>
         {t("experts.slots.timezone", { zone: zoneName(locale, new Date(activeDay.date)), defaultValue: "Times shown in your time zone ({{zone}})" })}
+        {expertZone && expertZone !== Intl.DateTimeFormat().resolvedOptions().timeZone
+          ? " · " +
+            t("experts.slots.expertZone", {
+              place: expertZone.split("/").pop()?.replace(/_/g, " ") || expertZone,
+              zone: zoneName(locale, new Date(activeDay.date), expertZone),
+              defaultValue: "Expert in {{place}} ({{zone}})",
+            })
+          : ""}
       </Text>
 
       <PrimaryButton

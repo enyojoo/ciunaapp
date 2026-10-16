@@ -14,7 +14,7 @@ const REF = "seeqjiebmrnolcyydewj"
 fs.mkdirSync(out, { recursive: true })
 
 const now = new Date().toISOString()
-const vendor = { id: "v1", name: "Mama T's Kitchen", slug: "mama-ts-kitchen", photo_url: null, service_line_slug: "food", is_verified: true, location: "Moscow, Tverskaya", pickup_location: "Tverskaya 12, counter by the entrance", pickup_hours: "Mon–Sat 10:00–20:00", fulfillment_notes: "Call ahead for orders over 5 kg." }
+const vendor = { id: "v1", name: "Mama T's Kitchen", slug: "mama-ts-kitchen", photo_url: null, service_line_slug: "food", is_verified: true, location: "Moscow, Tverskaya", pickup_location: "Tverskaya 12, counter by the entrance", pickup_hours: "Mon–Sat 10:00–20:00", hours_configured: true, is_open: true, closes_at: "21:00", opens_at: null, min_order_amount: 1500, min_order_currency: "RUB", verification_tier: 2, fulfillment_notes: "Call ahead for orders over 5 kg." }
 const base = (id, title, sub, price, sale, cat, extra = {}) => ({
   id, title, short_description: sub, image_url: null, list_price: price, sale_price: sale, fixed_amount: sale ?? price,
   fixed_currency: "RUB", default_input_currency: "RUB", service_line_slug: "food", category: cat, vendor_id: "v1", vendor,
@@ -94,6 +94,8 @@ async function mock(page) {
       const attempts = [{ id: "a1", rail: "yookassa", state: "succeeded", confirmation_mode: "embedded", instructions: {} }]
       return json(route, { order: { id: "o1", transaction_id: "t1", public_id: "CU-1042", line: "food", payment_state: "paid", fulfillment_state: "in_progress", fulfillment_mode: "delivery", payment_deadline: new Date(Date.now() + 900000).toISOString(), snapshot, owner_team: "marketplace", created_at: new Date(Date.now() - 7200000).toISOString(), attempts, events: [], canCancel: false, nextAction: "track", seller: { name: "Mama T's Kitchen" } } })
     }
+    if (p === "/api/expert/profiles/ada-obi") return json(route, { profile: { id: "e1", slug: "ada-obi", display_name: "Ada Obi", headline: "Nutritionist for expats", bio: "I help people abroad eat well on a budget.", category: "Health", image_url: null, service_area: "Moscow and online", rating_avg: 4.8, rating_count: 12, languages: ["en", "ru", "fr"], time_zone: "Africa/Lagos", credentials: [{ title: "MSc Nutrition", issuer: "UCL", year: 2019 }], years_experience: 7, is_verified: true, verification_tier: 2 }, services: [] })
+    if (p === "/api/expert/profiles/ada-obi/reviews" || p.startsWith("/api/expert/profiles/ada-obi/reviews")) return json(route, { summary: { avg: 4.8, count: 12, distribution: { "1": 0, "2": 0, "3": 1, "4": 2, "5": 9 } }, reviews: [], hasMore: false })
     if (p === "/api/hub/favorites") return json(route, { keys: [], vendors: [], experts: [], products: [] })
     if (p.startsWith("/api/referrals")) return json(route, { slug: "amara", balance: 0 })
     return route.continue()
@@ -108,6 +110,7 @@ const SHOTS = [
   { name: "cart-empty", path: "/hub/food/cart", wait: 2000, full: true },
   { name: "cart-filled", path: "/hub/food/cart", wait: 2500, full: true, filled: true },
   { name: "checkout-page", path: "/hub/food/checkout", wait: 3000, full: true, filled: true },
+  { name: "expert-profile", path: "/experts/ada-obi", wait: 2500, full: true },
   { name: "order-chat", path: "/orders/o1/chat", wait: 2500, full: true },
   { name: "order-detail", path: "/orders/o1", wait: 2500, full: true },
   { name: "more", path: "/more", wait: 2000, full: true },

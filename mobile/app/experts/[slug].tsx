@@ -18,6 +18,8 @@ import { ScreenScroll } from "@/components/screen"
 import { EXPERT_NOT_FOUND, useExpertProfile } from "@/lib/use-expert-profile"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
+import { VerifiedBadge } from "@/components/verified-badge"
+import { languageName } from "@/lib/language-name"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /**
@@ -29,7 +31,7 @@ export default function ExpertProfileScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
   const navigation = useNavigation()
   const router = useRouter()
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const { data, loading, error, revalidate } = useExpertProfile(slug)
   const profile = data?.profile ?? null
   const services = data?.services ?? []
@@ -56,6 +58,8 @@ export default function ExpertProfileScreen() {
   const showBioFrame = Boolean(bio || meeting)
   const category = (profile?.category || "").trim()
   const location = (profile?.service_area || "").trim()
+  const languages = profile?.languages ?? []
+  const credentials = profile?.credentials ?? []
 
   if (loading && !profile) {
     return (
@@ -100,9 +104,12 @@ export default function ExpertProfileScreen() {
           ) : null}
         </View>
         <View style={styles.identityBody}>
-          <Text style={styles.name} numberOfLines={2}>
-            {profile.display_name}
-          </Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name} numberOfLines={2}>
+              {profile.display_name}
+            </Text>
+            {profile.is_verified ? <VerifiedBadge size={18} kind="expert" tier={profile.verification_tier} /> : null}
+          </View>
           {profile.headline ? (
             <Text style={styles.headline} numberOfLines={2}>
               {profile.headline}
@@ -120,6 +127,32 @@ export default function ExpertProfileScreen() {
           ) : null}
         </View>
       </View>
+
+      {languages.length > 0 || credentials.length > 0 || profile.years_experience ? (
+        <View style={styles.detailsFrame}>
+          {languages.length > 0 ? (
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>{t("experts.profile.languages", { defaultValue: "Speaks" })}</Text>
+              <Text style={styles.detailValue}>{languages.map((l) => languageName(l, i18n.language)).join(", ")}</Text>
+            </View>
+          ) : null}
+          {profile.years_experience ? (
+            <View style={styles.detailRow}>
+              <Text style={styles.detailValue}>{t("experts.profile.yearsExp", { n: profile.years_experience, defaultValue: "{{n}} years of experience" })}</Text>
+            </View>
+          ) : null}
+          {credentials.length > 0 ? (
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>{t("experts.profile.credentials", { defaultValue: "Credentials" })}</Text>
+              {credentials.map((c, i) => (
+                <Text key={i} style={styles.detailValue}>
+                  {[c.title, c.issuer, c.year].filter(Boolean).join(" · ")}
+                </Text>
+              ))}
+            </View>
+          ) : null}
+        </View>
+      ) : null}
 
       {showBioFrame ? (
         <View style={styles.bioFrame}>
@@ -170,7 +203,12 @@ const styles = StyleSheet.create({
   },
   avatar: { width: "100%", height: "100%" },
   identityBody: { flex: 1, minWidth: 0, justifyContent: "center", gap: 3 },
-  name: { fontSize: 20, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
+  nameRow: { flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" },
+  detailsFrame: { marginBottom: 16, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, padding: 16, gap: 12 },
+  detailRow: { gap: 2 },
+  detailLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
+  detailValue: { fontSize: typeSize.body, lineHeight: 22, color: colors.text },
+  name: { flexShrink: 1, fontSize: 20, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
   headline: { fontSize: typeSize.body, color: colors.text },
   category: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary },
   locRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 2 },

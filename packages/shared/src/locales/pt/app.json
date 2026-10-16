@@ -353,7 +353,8 @@
       "noMatch": "Nenhum especialista encontrado",
       "noMatchBody": "Tente outro nome ou categoria.",
       "all": "Todos",
-      "isNew": "Novo"
+      "isNew": "Novo",
+      "allLanguages": "Todos os idiomas"
     }
   },
   "transactions": {

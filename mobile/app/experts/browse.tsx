@@ -9,16 +9,18 @@ import { ExpertDirectoryCard } from "@/components/expert-catalog"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { LoadError } from "@/components/load-error"
 import { useExpertProfiles } from "@/lib/use-expert-profiles"
+import { languageName } from "@/lib/language-name"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export default function ExpertsBrowseScreen() {
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const { data, loading, error, revalidate } = useExpertProfiles()
   const profiles = data || []
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState<string | null>(null)
+  const [language, setLanguage] = useState("")
 
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
@@ -28,10 +30,13 @@ export default function ExpertsBrowseScreen() {
     [profiles],
   )
 
+  const languages = useMemo(() => [...new Set(profiles.flatMap((p) => p.languages ?? []))].sort(), [profiles])
+
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase()
     return [...profiles]
       .filter((p) => !category || (p.category || "").trim() === category)
+      .filter((p) => !language || (p.languages ?? []).includes(language))
       .filter(
         (p) =>
           !needle ||
@@ -42,12 +47,13 @@ export default function ExpertsBrowseScreen() {
         const tb = b.created_at ? new Date(b.created_at).getTime() : 0
         return tb - ta
       })
-  }, [profiles, query, category])
+  }, [profiles, query, category, language])
 
-  const filtering = Boolean(query.trim() || category)
+  const filtering = Boolean(query.trim() || category || language)
   const clear = () => {
     setQuery("")
     setCategory(null)
+    setLanguage("")
   }
 
   return (
@@ -81,6 +87,16 @@ export default function ExpertsBrowseScreen() {
             options={[{ id: "", label: t("experts.directory.all", { defaultValue: "All" }) }, ...categories.map((c) => ({ id: c, label: c }))]}
             value={category ?? ""}
             onChange={(id) => setCategory(id || null)}
+          />
+        </View>
+      ) : null}
+
+      {languages.length > 1 ? (
+        <View style={styles.chips}>
+          <FilterChips
+            options={[{ id: "", label: t("experts.directory.allLanguages", { defaultValue: "All languages" }) }, ...languages.map((l) => ({ id: l, label: languageName(l, i18n.language) }))]}
+            value={language}
+            onChange={setLanguage}
           />
         </View>
       ) : null}

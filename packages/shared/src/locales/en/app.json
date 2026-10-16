@@ -353,7 +353,8 @@
       "noMatch": "No experts match",
       "noMatchBody": "Try another name or category.",
       "all": "All",
-      "isNew": "New"
+      "isNew": "New",
+      "allLanguages": "All languages"
     }
   },
   "transactions": {

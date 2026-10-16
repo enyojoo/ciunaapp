@@ -18,7 +18,7 @@ export default function ExpertBookScreen() {
     <ScreenScroll>
       <Text style={styles.title}>{data?.service?.title}</Text>
       {data?.service?.short_description ? <Text style={styles.sub}>{data.service.short_description}</Text> : null}
-      <SlotPicker slots={data?.slots || []} loading={loading && !data} onConfirm={setSlotId} />
+      <SlotPicker slots={data?.slots || []} loading={loading && !data} onConfirm={setSlotId} expertZone={data?.expertTimeZone} />
     </ScreenScroll>
   )
 }

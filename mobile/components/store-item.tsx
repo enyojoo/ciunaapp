@@ -101,7 +101,7 @@ function StoreFace({
           <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
             {vendor.name}
           </Text>
-          {vendor.is_verified ? <VerifiedBadge size={14} label={verifiedLabel} /> : null}
+          {vendor.is_verified ? <VerifiedBadge size={14} label={vendor.verification_tier === 2 ? undefined : verifiedLabel} tier={vendor.verification_tier} /> : null}
         </View>
         <Text style={styles.rating} numberOfLines={1}>
           {rated
