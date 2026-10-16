@@ -1,9 +1,8 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { tileArtFor } from "@/components/tile"
-import { useEffect } from "react"
 import { Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { Clock, Info, MapPin, ShoppingBag } from "lucide-react-native"
 import { VerifiedBadge } from "@/components/verified-badge"
@@ -15,7 +14,8 @@ import { EmptyState } from "@/components/empty-state"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { ScreenScroll } from "@/components/screen"
-import { hubProductDetailPath, isHubMarketplaceSlug } from "@/lib/hub"
+import { hubLineHomePath, hubProductDetailPath, isHubMarketplaceSlug } from "@/lib/hub"
+import { HubTopBar } from "@/components/hub-top-bar"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useHubVendorStorefront } from "@/lib/use-hub-vendor"
 import { StoreHeader } from "@/components/store-header"
@@ -34,7 +34,6 @@ export default function VendorScreen() {
   const { slug, vendor: vendorParam } = useLocalSearchParams<{ slug: string; vendor: string }>()
   const line = String(slug || "").toLowerCase()
   const vendorSlug = String(vendorParam || "")
-  const navigation = useNavigation()
   const router = useRouter()
   const { t, i18n } = useTranslation("app")
   const { data, loading, error, revalidate } = useHubVendorStorefront(line, vendorSlug)
@@ -50,42 +49,45 @@ export default function VendorScreen() {
 
   const reviews = useReviews(vendor && isHubMarketplaceSlug(line) ? { kind: "vendor", line, slug: vendorSlug } : null)
 
-  useEffect(() => {
-    // No title — the vendor name is already the big heading in the body; a repeated header title is redundant.
-    navigation.setOptions({
-      title: "",
-      headerRight:
-        cartMode || vendorId
-          ? () => (
-              <View style={styles.headerRight}>
-                {vendorId ? <FavouriteHeart type="vendor" id={vendorId} style={styles.headerHeart} /> : null}
-                {cartMode ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
-              </View>
-            )
-          : undefined,
-    })
-  }, [navigation, cartMode, line, vendorId])
+  // Same top bar as Food and Mart: back chip on the left, favourite and cart on the right.
+  const topBar = (
+    <HubTopBar
+      backHref={hubLineHomePath(line)}
+      trailing={
+        <>
+          {vendorId ? <FavouriteHeart type="vendor" id={vendorId} style={styles.barHeart} /> : null}
+          {cartMode ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
+        </>
+      }
+    />
+  )
 
   if (loading && !vendor) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
-        <StoreHeader vendor={null} line={line} summary={null} productCount={0} skeleton />
-      </ScreenScroll>
+        {topBar}
+        <ScreenScroll edges={["left", "right"]}>
+          <StoreHeader vendor={null} line={line} summary={null} productCount={0} skeleton />
+        </ScreenScroll>
+      </View>
     )
   }
 
   if (notFound && !vendor) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
-        <EmptyState
-          title={t("hub.vendorStoreNotFound", { defaultValue: "Store not found" })}
-          body={t("hub.vendorStoreNotFoundBody", {
-            defaultValue: "This store is unavailable or the link may be incorrect.",
-          })}
-        />
-      </ScreenScroll>
+        {topBar}
+        <ScreenScroll edges={["left", "right"]}>
+          <EmptyState
+            title={t("hub.vendorStoreNotFound", { defaultValue: "Store not found" })}
+            body={t("hub.vendorStoreNotFoundBody", {
+              defaultValue: "This store is unavailable or the link may be incorrect.",
+            })}
+          />
+        </ScreenScroll>
+      </View>
     )
   }
 
@@ -102,6 +104,7 @@ export default function VendorScreen() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
+      {topBar}
       <ScreenScroll edges={["left", "right"]} contentStyle={cartMode ? styles.contentWithCartBar : undefined}>
         <StoreHeader vendor={vendor} line={line} summary={reviews.summary} productCount={products.length} />
 
@@ -184,8 +187,8 @@ const styles = StyleSheet.create({
   infoLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
   infoValue: { fontSize: 15, lineHeight: 21, color: colors.text },
   cover: { height: 128, borderRadius: 20, overflow: "hidden", backgroundColor: colors.paper },
-  headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
-  headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
+  // A plain 40px icon button in the top bar, the same size as the back chip and the cart button.
+  barHeart: { position: "relative", top: 0, right: 0, width: 40, height: 40, borderRadius: 20, backgroundColor: "transparent", shadowOpacity: 0, elevation: 0 },
   skelFill: { backgroundColor: colors.paper, borderColor: colors.paper },
   skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.paper },
   contentWithCartBar: { paddingBottom: 56 },

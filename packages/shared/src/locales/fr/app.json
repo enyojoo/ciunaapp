@@ -302,7 +302,8 @@
     "badgeMart": "Mart",
     "badgeReferral": "Parrainage",
     "groupToday": "Aujourd’hui",
-    "groupYesterday": "Hier"
+    "groupYesterday": "Hier",
+    "chipBookings": "Réservations"
   },
   "txDetail": {
     "errorNotFound": "Transaction introuvable ou accès refusé",
@@ -1197,7 +1198,8 @@
     "minOrderBanner": "La livraison exige {{min}} minimum. Ajoutez {{more}} ou choisissez le retrait.",
     "etaMinutes": "{{n}} min",
     "storeClosedTitle": "Cette boutique est fermée pour le moment",
-    "storeOpensAt": "Ouverture {{day}} à {{time}}."
+    "storeOpensAt": "Ouverture {{day}} à {{time}}.",
+    "free": "Gratuit"
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

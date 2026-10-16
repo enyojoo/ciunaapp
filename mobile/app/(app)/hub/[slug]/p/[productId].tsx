@@ -1,7 +1,6 @@
-import { useEffect } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { Minus, Plus } from "lucide-react-native"
 import { EmptyState } from "@/components/empty-state"
@@ -14,10 +13,12 @@ import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
 import { updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useGuardedAdd } from "@/lib/use-guarded-add"
+import { HubTopBar } from "@/components/hub-top-bar"
 import { ProductGallery, productImages } from "@/components/product-gallery"
 import { PriceTag } from "@/components/price-tag"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import {
+  hubLineHomePath,
   hubMarketplaceCheckoutPath,
   hubMarketplaceVendorPath,
   hubProductDetailPath,
@@ -44,7 +45,6 @@ export default function HubProductDetailScreen() {
   const { slug, productId } = useLocalSearchParams<{ slug: string; productId: string }>()
   const line = String(slug || "").toLowerCase()
   const marketplace = isHubMarketplaceSlug(line)
-  const navigation = useNavigation()
   const router = useRouter()
   const { t } = useTranslation("app")
   const { showError } = useToast()
@@ -54,18 +54,18 @@ export default function HubProductDetailScreen() {
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
 
-  useEffect(() => {
-    // No title — the product name is already the big heading in the body; a repeated header title is redundant.
-    navigation.setOptions({
-      title: "",
-      headerRight: () => (
-        <View style={styles.headerRight}>
-          {productId ? <FavouriteHeart type="product" id={String(productId)} style={styles.headerHeart} /> : null}
+  // Same top bar as Food and Mart: back chip on the left, favourite and cart on the right.
+  const topBar = (
+    <HubTopBar
+      backHref={hubLineHomePath(line)}
+      trailing={
+        <>
+          {productId ? <FavouriteHeart type="product" id={String(productId)} style={styles.barHeart} /> : null}
           {marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
-        </View>
-      ),
-    })
-  }, [navigation, marketplace, line, productId])
+        </>
+      }
+    />
+  )
 
   const cartMode = Boolean(product) && product!.pricing_type === "fixed" && Boolean(product!.vendor_id)
   const { cart } = useHubCart(cartMode ? product!.vendor_id : null)
@@ -109,29 +109,36 @@ export default function HubProductDetailScreen() {
 
   if (loading) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
-        <View style={styles.skelImage} />
-        <View style={[styles.skelBar, { width: "70%", height: 20, marginTop: 4 }]} />
-        <View style={[styles.skelBar, { width: "40%", marginTop: 12 }]} />
-        <View style={[styles.skelBar, { width: "100%", marginTop: 16 }]} />
-        <View style={[styles.skelBar, { width: "85%" }]} />
-      </ScreenScroll>
+        {topBar}
+        <ScreenScroll edges={["left", "right"]}>
+          <View style={styles.skelImage} />
+          <View style={[styles.skelBar, { width: "70%", height: 20, marginTop: 4 }]} />
+          <View style={[styles.skelBar, { width: "40%", marginTop: 12 }]} />
+          <View style={[styles.skelBar, { width: "100%", marginTop: 16 }]} />
+          <View style={[styles.skelBar, { width: "85%" }]} />
+        </ScreenScroll>
+      </View>
     )
   }
 
   if (notFound || !product) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
-        <EmptyState title={t("hub.productNotFound", { defaultValue: "Product not found." })} />
-      </ScreenScroll>
+        {topBar}
+        <ScreenScroll edges={["left", "right"]}>
+          <EmptyState title={t("hub.productNotFound", { defaultValue: "Product not found." })} />
+        </ScreenScroll>
+      </View>
     )
   }
 
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
+      {topBar}
       {guard.dialog}
       <ScreenScroll
         edges={["left", "right"]}
@@ -268,8 +275,8 @@ export default function HubProductDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
-  headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
+  // A plain 40px icon button in the top bar, the same size as the back chip and the cart button.
+  barHeart: { position: "relative", top: 0, right: 0, width: 40, height: 40, borderRadius: 20, backgroundColor: "transparent", shadowOpacity: 0, elevation: 0 },
   skelImage: { width: "100%", aspectRatio: 4 / 3, borderRadius: radius.card, backgroundColor: colors.paper, marginBottom: 12 },
   skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.paper, marginBottom: 8 },
   stock: { marginTop: 4, fontSize: typeSize.meta, fontWeight: "600", color: colors.muted },

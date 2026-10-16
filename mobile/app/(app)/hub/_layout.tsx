@@ -31,11 +31,11 @@ export default function HubStack() {
       <Stack.Screen name="[slug]/stores" />
       <Stack.Screen
         name="[slug]/v/[vendor]"
-        options={{ headerShown: true, title: "", headerBackVisible: false, headerLeft: () => <StackBackButton label={back} /> }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="[slug]/p/[productId]"
-        options={{ headerShown: true, title: "", headerBackVisible: false, headerLeft: () => <StackBackButton label={back} /> }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="[slug]/cart"

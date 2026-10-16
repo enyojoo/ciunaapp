@@ -302,7 +302,8 @@
     "badgeMart": "Mart",
     "badgeReferral": "Реферал",
     "groupToday": "Сегодня",
-    "groupYesterday": "Вчера"
+    "groupYesterday": "Вчера",
+    "chipBookings": "Записи"
   },
   "txDetail": {
     "errorNotFound": "Операция не найдена или доступ запрещён",
@@ -1197,7 +1198,8 @@
     "minOrderBanner": "Для доставки нужен заказ от {{min}}. Добавьте ещё {{more}} или выберите самовывоз.",
     "etaMinutes": "{{n}} мин",
     "storeClosedTitle": "Магазин сейчас закрыт",
-    "storeOpensAt": "Откроется {{day}} в {{time}}."
+    "storeOpensAt": "Откроется {{day}} в {{time}}.",
+    "free": "Бесплатно"
   },
   "social": {
     "loadFailed": "Не удалось загрузить, попробуйте ещё раз",

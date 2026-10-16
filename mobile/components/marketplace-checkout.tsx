@@ -62,6 +62,17 @@ type ReceiptAsset = {
   size?: number | null
 }
 
+function formatSlot(slot: { start: string; end?: string; timezone?: string }, locale: string): string {
+  try {
+    const tz = slot.timezone ? { timeZone: slot.timezone } : {}
+    const start = new Date(slot.start).toLocaleString(locale, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", ...tz })
+    const end = slot.end ? new Date(slot.end).toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit", ...tz }) : ""
+    return [end ? start + " – " + end : start, slot.timezone ? "(" + slot.timezone + ")" : ""].filter(Boolean).join(" ")
+  } catch {
+    return ""
+  }
+}
+
 function SummaryCard({
   title,
   publicId,
@@ -70,9 +81,12 @@ function SummaryCard({
   fulfillmentMode,
   paymentState,
   label,
+  slot,
 }: {
   title: string
   publicId?: string
+  /** Expert booking: when the session is, shown in its own time zone. */
+  slot?: { start: string; end?: string; timezone?: string }
   lines: { id: string; quantity: number; title: string; unitPrice: number }[]
   totals: {
     productCurrency: string
@@ -86,10 +100,13 @@ function SummaryCard({
   paymentState?: string
   label: (key: string, fallback: string) => string
 }) {
+  const { i18n } = useTranslation("app")
+  const slotText = slot ? formatSlot(slot, i18n.language) : ""
   return (
     <View style={styles.summary}>
       <Text style={styles.summaryTitle}>{title}</Text>
       {!!publicId && <Text style={styles.summaryId}>{publicId}</Text>}
+      {slotText ? <Text style={styles.summarySlot}>{slotText}</Text> : null}
       <View style={styles.summaryLines}>
         {lines.map((l) => (
           <View key={l.id} style={styles.summaryLine}>
@@ -109,6 +126,12 @@ function SummaryCard({
             {formatMoney(totals.marketplaceFee, totals.productCurrency)}
           </Text>
         </View>
+        {fulfillmentMode === "pickup" ? (
+          <View style={styles.feeRow}>
+            <Text style={styles.feeLabel}>{label("pickup", "Pickup")}</Text>
+            <Text style={styles.feeValue}>{label("free", "Free")}</Text>
+          </View>
+        ) : null}
         {fulfillmentMode === "delivery" ? (
           <View style={styles.feeRow}>
             <Text style={styles.feeLabel}>{label("deliveryFee", "Delivery fee")}</Text>
@@ -460,6 +483,7 @@ export function MarketplaceCheckout({
             fulfillmentMode={fulfillmentMode}
             paymentState={paying && c.order ? c.order.payment_state : undefined}
             label={label}
+            slot={q?.slotStart ? { start: q.slotStart, end: q.slotEnd, timezone: q.timezone } : undefined}
           />
 
           {!paying && (q || seed) && (
@@ -478,14 +502,6 @@ export function MarketplaceCheckout({
                       />
                     ))}
                   </View>
-                )}
-
-                {q && !!q.slotStart && (
-                  <Text style={styles.meta}>
-                    {new Date(q.slotStart).toLocaleString(undefined, { timeZone: q.timezone })} —{" "}
-                    {new Date(q.slotEnd!).toLocaleTimeString(undefined, { timeZone: q.timezone })} (
-                    {q.timezone})
-                  </Text>
                 )}
 
                 {q?.fulfillmentMode === "pickup" && (
@@ -859,7 +875,14 @@ export function MarketplaceOrderView({
   return (
     <ScreenScroll keyboard edges={["left", "right", "bottom"]} contentStyle={styles.scroll}>
       <View style={styles.stack}>
-        <OrderStatusHeader order={order} />
+        <OrderStatusHeader
+          order={order}
+          reason={
+            order.fulfillment_state === "cancelled"
+              ? order.exception_reason || [...order.events].reverse().find((e) => /cancel/i.test(e.kind))?.message || undefined
+              : undefined
+          }
+        />
         <SummaryCard
           title={order.snapshot.title}
           publicId={order.public_id}
@@ -868,6 +891,7 @@ export function MarketplaceOrderView({
           fulfillmentMode={order.fulfillment_mode}
           paymentState={order.payment_state}
           label={label}
+          slot={order.snapshot.slotStart ? { start: order.snapshot.slotStart, end: order.snapshot.slotEnd, timezone: order.snapshot.timezone } : undefined}
         />
         <OrderPlaceCard order={order} />
         <View style={styles.timelineCard}>
@@ -875,7 +899,11 @@ export function MarketplaceOrderView({
           <OrderTimeline order={order} />
         </View>
         <OrderReviewCard orderId={order.id} fulfilled={order.fulfillment_state === "fulfilled"} line={order.line} />
-        <SellerChatCard orderId={order.id} sellerName={(order as { seller?: { name?: string } }).seller?.name} />
+        <SellerChatCard
+          orderId={order.id}
+          sellerName={(order as { seller?: { name?: string } }).seller?.name}
+          photoUrl={(order as { seller?: { photoUrl?: string | null } }).seller?.photoUrl}
+        />
         {!!error && (
           <View style={styles.errorBox}>
             <Text style={styles.errorText}>
@@ -1025,6 +1053,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
   summaryId: { fontSize: typeSize.meta, color: colors.muted },
+  summarySlot: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   summaryLines: { gap: 8 },
   summaryLine: { flexDirection: "row", justifyContent: "space-between", gap: 12 },
   summaryLineText: { flex: 1, fontSize: typeSize.body, color: colors.text, lineHeight: 22 },

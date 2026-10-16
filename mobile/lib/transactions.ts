@@ -10,12 +10,18 @@ export function isHubTransaction(tx: Pick<CombinedTransaction, "transaction_sour
   return tx.transaction_source === "hub" || tx.type === "hub"
 }
 
-export type FilterChip = "all" | "send" | "hub" | "referral"
+export type FilterChip = "all" | "send" | "hub" | "bookings" | "referral"
+
+/** An expert booking: a marketplace order on the experts line. */
+export function isBookingTransaction(tx: CombinedTransaction): boolean {
+  return tx.marketplace_order?.line === "experts"
+}
 
 export function matchesFilterChip(tx: CombinedTransaction, chip: FilterChip): boolean {
   if (chip === "all") return true
   if (chip === "referral") return isReferralPayout(tx)
   if (isReferralPayout(tx)) return false
+  if (chip === "bookings") return isBookingTransaction(tx)
   return chip === "hub" ? isHubTransaction(tx) : !isHubTransaction(tx)
 }
 

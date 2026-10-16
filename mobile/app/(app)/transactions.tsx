@@ -100,6 +100,7 @@ const CHIPS: { id: FilterChip; label: string }[] = [
   { id: "all", label: "orders.chipAll" },
   { id: "send", label: "orders.chipSend" },
   { id: "hub", label: "orders.chipHub" },
+  { id: "bookings", label: "orders.chipBookings" },
   { id: "referral", label: "orders.chipPayout" },
 ]
 

@@ -397,7 +397,8 @@
     "badgeMart": "超市",
     "badgeReferral": "推荐",
     "groupToday": "今天",
-    "groupYesterday": "昨天"
+    "groupYesterday": "昨天",
+    "chipBookings": "预约"
   },
   "txDetail": {
     "errorNotFound": "未找到交易或无权访问",
@@ -1197,7 +1198,8 @@
     "minOrderBanner": "配送需满 {{min}}。再加 {{more}}，或选择自取。",
     "etaMinutes": "{{n}} 分钟",
     "storeClosedTitle": "该店铺目前已打烊",
-    "storeOpensAt": "将于{{day}} {{time}}开门。"
+    "storeOpensAt": "将于{{day}} {{time}}开门。",
+    "free": "免费"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

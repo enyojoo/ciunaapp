@@ -19,12 +19,12 @@ import { SearchHeroButton } from "@/components/search-entry"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
 
-function goBack(router: ReturnType<typeof useRouter>, backHref: string) {
+export function goBack(router: ReturnType<typeof useRouter>, backHref: string) {
   if (router.canGoBack()) router.back()
   else router.replace(backHref as never)
 }
 
-function HeroBack({ label, onPress }: { label: string; onPress: () => void }) {
+export function HeroBack({ label, onPress }: { label: string; onPress: () => void }) {
   const ios = Platform.OS === "ios"
   const Icon = ios ? ChevronLeft : ArrowLeft
   return (
@@ -425,3 +425,6 @@ const styles = StyleSheet.create({
   scroll: { paddingBottom: 56 },
   body: { paddingHorizontal: space.page, paddingTop: 20 },
 })
+
+/** The Food and Mart header bar's own styles, shared so other hub screens use the identical bar. */
+export const heroBarStyle = { hero: styles.hero, bar: styles.bar, trailing: styles.trailing }

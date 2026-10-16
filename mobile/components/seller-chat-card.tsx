@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { ChevronRight, MessageCircle } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
@@ -6,7 +7,7 @@ import { useChatUnread } from "@/lib/order-chat"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /** "Message seller" row on the order screen. A dot shows when the seller has written and it has not been read. */
-export function SellerChatCard({ orderId, sellerName }: { orderId: string; sellerName?: string | null }) {
+export function SellerChatCard({ orderId, sellerName, photoUrl }: { orderId: string; sellerName?: string | null; photoUrl?: string | null }) {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { unread, unavailable } = useChatUnread(orderId)
@@ -20,7 +21,11 @@ export function SellerChatCard({ orderId, sellerName }: { orderId: string; selle
       style={styles.card}
     >
       <View style={styles.icon}>
-        <MessageCircle size={20} color={colors.primaryText} strokeWidth={2.2} />
+        {photoUrl ? (
+          <Image source={{ uri: photoUrl }} style={styles.photo} contentFit="cover" />
+        ) : (
+          <MessageCircle size={20} color={colors.primaryText} strokeWidth={2.2} />
+        )}
         {unread > 0 ? <View style={styles.dot} /> : null}
       </View>
       <View style={styles.body}>
@@ -49,6 +54,7 @@ const styles = StyleSheet.create({
     padding: 14,
   },
   icon: { width: 40, height: 40, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor: colors.primaryTint },
+  photo: { width: 40, height: 40, borderRadius: 20 },
   dot: {
     position: "absolute",
     top: 2,
