@@ -1139,7 +1139,8 @@
     "backToShopping": "返回购物",
     "orderCancelled": "订单已取消",
     "progressDetails": "详情",
-    "progressReview": "确认"
+    "progressReview": "确认",
+    "placed": "订单已下达"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

@@ -1139,7 +1139,8 @@
     "backToShopping": "Volver a comprar",
     "orderCancelled": "Pedido cancelado",
     "progressDetails": "Detalles",
-    "progressReview": "Revisión"
+    "progressReview": "Revisión",
+    "placed": "Pedido realizado"
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",

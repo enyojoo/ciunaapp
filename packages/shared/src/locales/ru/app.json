@@ -1139,7 +1139,8 @@
     "backToShopping": "Вернуться к покупкам",
     "orderCancelled": "Заказ отменён",
     "progressDetails": "Детали",
-    "progressReview": "Проверка"
+    "progressReview": "Проверка",
+    "placed": "Заказ оформлен"
   },
   "social": {
     "loadFailed": "Не удалось загрузить, попробуйте ещё раз",

@@ -1139,7 +1139,8 @@
     "backToShopping": "Retour aux achats",
     "orderCancelled": "Commande annulée",
     "progressDetails": "Détails",
-    "progressReview": "Vérification"
+    "progressReview": "Vérification",
+    "placed": "Commande passée"
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

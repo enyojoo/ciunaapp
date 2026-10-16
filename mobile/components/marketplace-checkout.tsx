@@ -18,6 +18,7 @@ import { ScreenScroll } from "@/components/screen"
 import { MarketplacePayStep, type MarketplacePayTab } from "@/components/marketplace-pay-step"
 import { useToast } from "@/components/toast-provider"
 import { OrderReviewCard } from "@/components/review-sheet"
+import { OrderTimeline } from "@/components/order-timeline"
 import { SellerChatCard } from "@/components/seller-chat-card"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { startYooKassaPayment, resumeYooKassaPayment, isYooKassaNativeAvailable } from "@/lib/yookassa-native"
@@ -821,9 +822,10 @@ export function MarketplaceOrderView({
           paymentState={order.payment_state}
           label={label}
         />
-        <Text style={styles.meta}>
-          {label("fulfillment", "Fulfillment")}: {label(order.fulfillment_state, order.fulfillment_state)}
-        </Text>
+        <View style={styles.timelineCard}>
+          <Text style={styles.sectionTitle}>{label("fulfillment", "Fulfillment")}</Text>
+          <OrderTimeline order={order} />
+        </View>
         <OrderReviewCard orderId={order.id} fulfilled={order.fulfillment_state === "fulfilled"} line={order.line} />
         <SellerChatCard orderId={order.id} sellerName={(order as { seller?: { name?: string } }).seller?.name} />
         {!!error && (
@@ -956,6 +958,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   errorText: { fontSize: typeSize.meta, color: colors.danger, fontWeight: "600" },
+  timelineCard: { backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },
   progress: { flexDirection: "row", gap: 8, marginBottom: 16 },
   progressStep: { flex: 1, gap: 6 },
   progressBar: { height: 4, borderRadius: 2, backgroundColor: colors.border },

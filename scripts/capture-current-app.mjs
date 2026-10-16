@@ -87,7 +87,13 @@ async function mock(page) {
       ]
       return json(route, { messages, closed: false, available: true })
     }
-    if (p === "/api/hub/orders/o1") return json(route, { order: { id: "o1", public_id: "CU-1042", created_at: new Date(Date.now() - 7200000).toISOString(), updated_at: new Date().toISOString(), payment_state: "paid", fulfillment_state: "preparing", events: [], seller: { name: "Mama T's Kitchen" }, snapshot: { title: "Mama T's Kitchen", line: "food", lines: [{ id: "ci1", quantity: 2, title: "Jollof rice with chicken", unitPrice: 450 }, { id: "ci2", quantity: 1, title: "Chin chin (200 g)", unitPrice: 250 }], totals: { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, convertedSubtotal: 1150, corridorFee: 0, total: 1150 } } } })
+    if (p === "/api/hub/orders/o1") {
+      const totals = { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, exchangeRate: 1, convertedSubtotal: 1150, corridorFee: 0, total: 1150 }
+      const lines = [{ id: "ci1", productId: "p1", quantity: 2, title: "Jollof rice with chicken", unitPrice: 450, feePercent: 0, fields: [] }, { id: "ci2", productId: "p3", quantity: 1, title: "Chin chin (200 g)", unitPrice: 250, feePercent: 0, fields: [] }]
+      const snapshot = { id: "q1", expiresAt: new Date(Date.now() + 900000).toISOString(), source: { kind: "cart", cartId: "c1" }, line: "food", title: "Mama T's Kitchen", lines, totals, modes: ["delivery"], fulfillmentMode: "delivery", zones: [], requirePhone: false, methods: [], payCurrencies: ["RUB"], instructions: "", checkoutReady: true, snapshot: null, contactName: "Amara N.", contactPhone: "+7 900 000 00 00", contactEmail: "amara@example.com", deliveryAddressLine: "Tverskaya 1, apt 12", note: "" }
+      const attempts = [{ id: "a1", rail: "yookassa", state: "succeeded", confirmation_mode: "embedded", instructions: {} }]
+      return json(route, { order: { id: "o1", transaction_id: "t1", public_id: "CU-1042", line: "food", payment_state: "paid", fulfillment_state: "in_progress", fulfillment_mode: "delivery", payment_deadline: new Date(Date.now() + 900000).toISOString(), snapshot, owner_team: "marketplace", created_at: new Date(Date.now() - 7200000).toISOString(), attempts, events: [], canCancel: false, nextAction: "track", seller: { name: "Mama T's Kitchen" } } })
+    }
     if (p === "/api/hub/favorites") return json(route, { keys: [], vendors: [], experts: [], products: [] })
     if (p.startsWith("/api/referrals")) return json(route, { slug: "amara", balance: 0 })
     return route.continue()
@@ -103,6 +109,7 @@ const SHOTS = [
   { name: "cart-filled", path: "/hub/food/cart", wait: 2500, full: true, filled: true },
   { name: "checkout-page", path: "/hub/food/checkout", wait: 3000, full: true, filled: true },
   { name: "order-chat", path: "/orders/o1/chat", wait: 2500, full: true },
+  { name: "order-detail", path: "/orders/o1", wait: 2500, full: true },
   { name: "more", path: "/more", wait: 2000, full: true },
   { name: "home", path: "/hub", wait: 2500, full: true },
 ]

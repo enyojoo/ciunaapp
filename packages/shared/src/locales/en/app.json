@@ -1139,7 +1139,8 @@
     "backToShopping": "Back to shopping",
     "orderCancelled": "Order cancelled",
     "progressDetails": "Details",
-    "progressReview": "Review"
+    "progressReview": "Review",
+    "placed": "Order placed"
   },
   "social": {
     "loadFailed": "Couldn't load, try again",
