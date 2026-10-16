@@ -45,9 +45,15 @@ export default function HubCartScreen() {
 
   const items = cart?.items || []
   const availableItems = items.filter((i) => !i.unavailable && i.product)
+  const minAmount = cart?.vendor?.min_order_amount ?? null
+  const minCurrency = cart?.vendor?.min_order_currency ?? null
   const unavailableItems = items.filter((i) => i.unavailable || !i.product)
   const currency = availableItems[0]?.product?.fixed_currency || ""
   const subtotal = availableItems.reduce((sum, i) => sum + hubProductEffectivePrice(i.product!) * i.quantity, 0)
+
+  // Informational only: pickup has no minimum, so checkout stays available; delivery is checked at checkout.
+  const belowMin = minAmount != null && minCurrency === currency && subtotal < minAmount
+  const shortBy = belowMin && minAmount != null ? minAmount - subtotal : 0
 
   useEffect(() => {
     prefetchYooKassaWidgetScript()
@@ -230,6 +236,15 @@ export default function HubCartScreen() {
         </Text>
       </View>
 
+      {belowMin ? (
+        <Text style={styles.minNote}>
+          {t("hub.cart.minOrderMore", {
+            more: formatMoney(shortBy, currency),
+            min: formatMoney(minAmount as number, currency),
+            defaultValue: "Add {{more}} more for delivery. Minimum order is {{min}}.",
+          })}
+        </Text>
+      ) : null}
       {unavailableItems.length > 0 ? (
         <Text style={styles.blockedNote}>{t("hub.cart.unavailableNote", { defaultValue: "Remove unavailable items to check out." })}</Text>
       ) : null}
@@ -257,6 +272,7 @@ const styles = StyleSheet.create({
   skeletonRow: { height: 84, backgroundColor: colors.paper, borderColor: colors.paper },
   rowOff: { opacity: 0.7 },
   rowTitleOff: { fontSize: 15, fontWeight: "600", color: colors.muted, textDecorationLine: "line-through" },
+  minNote: { marginTop: 12, fontSize: 13, color: colors.primaryDeep, textAlign: "center" },
   blockedNote: { marginTop: 12, fontSize: 13, color: colors.warningText, textAlign: "center" },
   lineTotal: { fontSize: 15, fontWeight: "700", color: colors.text, marginBottom: 6 },
   summary: { marginTop: 16, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },

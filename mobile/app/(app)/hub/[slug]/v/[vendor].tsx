@@ -5,7 +5,7 @@ import { Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { Clock, Info, MapPin } from "lucide-react-native"
+import { Clock, Info, MapPin, ShoppingBag } from "lucide-react-native"
 import { VerifiedBadge } from "@/components/verified-badge"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import { RatingLine, ReviewsSection } from "@/components/reviews-section"
@@ -18,6 +18,8 @@ import { ScreenScroll } from "@/components/screen"
 import { hubProductDetailPath, isHubMarketplaceSlug } from "@/lib/hub"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useHubVendorStorefront } from "@/lib/use-hub-vendor"
+import { storeOpenLine } from "@/lib/store-hours"
+import { formatCardPrice } from "@/lib/money"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import type { HubVendor } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -34,7 +36,7 @@ export default function VendorScreen() {
   const vendorSlug = String(vendorParam || "")
   const navigation = useNavigation()
   const router = useRouter()
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const { data, loading, error, revalidate } = useHubVendorStorefront(line, vendorSlug)
   const products = data?.products || []
   const vendor = data?.vendor || null
@@ -99,6 +101,11 @@ export default function VendorScreen() {
   const notes = (vendor?.fulfillment_notes || "").trim()
   const pickupLocation = (vendor?.pickup_location || "").trim()
   const pickupHours = (vendor?.pickup_hours || "").trim()
+  const openLine = vendor ? storeOpenLine(vendor, t, i18n.language) : null
+  const minOrder =
+    vendor?.min_order_amount != null && vendor.min_order_currency
+      ? t("hub.store.minOrder", { min: formatCardPrice(vendor.min_order_amount, vendor.min_order_currency), defaultValue: "Minimum order for delivery: {{min}}" })
+      : ""
 
   return (
     <View style={{ flex: 1 }}>
@@ -106,12 +113,16 @@ export default function VendorScreen() {
       <ScreenScroll edges={["left", "right"]} contentStyle={cartMode ? styles.contentWithCartBar : undefined}>
         {/* Cover: the line's art until stores upload covers. The logo overlaps its bottom edge. */}
         <View style={styles.cover}>
-          <LinearGradient
-            colors={[tileArtFor(line).from, tileArtFor(line).to]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={StyleSheet.absoluteFill}
-          />
+          {vendor?.cover_url ? (
+            <Image source={{ uri: vendor.cover_url }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+          ) : (
+            <LinearGradient
+              colors={[tileArtFor(line).from, tileArtFor(line).to]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFill}
+            />
+          )}
         </View>
         <View style={[styles.identityRow, styles.identityOverCover]}>
           <View style={styles.logoWrap}>
@@ -138,6 +149,11 @@ export default function VendorScreen() {
                 </Text>
               </View>
             ) : null}
+            {openLine ? (
+              <View style={[styles.openChip, openLine.open ? styles.openChipOn : styles.openChipOff]}>
+                <Text style={[styles.openChipText, openLine.open ? styles.openTextOn : styles.openTextOff]}>{openLine.text}</Text>
+              </View>
+            ) : null}
             <RatingLine summary={reviews.summary} />
             <Text style={styles.productCount}>
               {t("hub.vendorProductCount", { defaultValue: "{{count}} products", count: products.length })}
@@ -151,8 +167,18 @@ export default function VendorScreen() {
           </View>
         ) : null}
 
-        {notes || pickupLocation || pickupHours ? (
+        {notes || pickupLocation || pickupHours || minOrder ? (
           <View style={styles.infoPlate}>
+            {minOrder ? (
+              <View style={styles.infoRow}>
+                <View style={styles.infoIcon}>
+                  <ShoppingBag size={16} color={colors.primaryText} strokeWidth={2.2} />
+                </View>
+                <View style={styles.infoBody}>
+                  <Text style={styles.infoValue}>{minOrder}</Text>
+                </View>
+              </View>
+            ) : null}
             {pickupLocation ? (
               <View style={styles.infoRow}>
                 <View style={styles.infoIcon}>
@@ -207,6 +233,12 @@ export default function VendorScreen() {
 }
 
 const styles = StyleSheet.create({
+  openChip: { alignSelf: "flex-start", borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
+  openChipOn: { backgroundColor: "#ECFDF5" },
+  openChipOff: { backgroundColor: "#F3F4F6" },
+  openChipText: { fontSize: 12, fontWeight: "600" },
+  openTextOn: { color: "#047857" },
+  openTextOff: { color: "#4B5563" },
   infoPlate: { marginTop: 16, marginBottom: 20, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 14 },
   infoRow: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
   infoIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: "center", justifyContent: "center" },

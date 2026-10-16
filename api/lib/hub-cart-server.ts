@@ -67,6 +67,8 @@ async function hydrateCart(server: HubServer, cart: Record<string, unknown>): Pr
       service_line_slug: String(vendorRow.service_line_slug || ""),
       photo_url: vendorRow.photo_url != null ? String(vendorRow.photo_url) : null,
       is_verified: Boolean(vendorRow.is_verified),
+      min_order_amount: vendorRow.min_order_amount != null ? Number(vendorRow.min_order_amount) : null,
+      min_order_currency: vendorRow.min_order_currency ? String(vendorRow.min_order_currency) : null,
     }
   }
 

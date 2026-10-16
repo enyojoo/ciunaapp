@@ -185,7 +185,11 @@
     "toRange": "à",
     "sellPrice": "Prix de vente",
     "store": {
-      "newStore": "Nouvelle boutique"
+      "newStore": "Nouvelle boutique",
+      "openUntil": "Ouvert jusqu’à {{time}}",
+      "closed": "Fermé",
+      "closedOpens": "Fermé · ouvre {{day}} {{time}}",
+      "minOrder": "Commande minimale pour la livraison : {{min}}"
     },
     "cart": {
       "emptyBody": "Ajoutez un article d'une boutique pour commencer votre commande.",
@@ -199,12 +203,15 @@
       "lockTitle": "Commencer un nouveau panier ?",
       "lockBody": "Votre panier contient des articles de {{vendor}}. Un panier ne contient qu’une boutique : il sera vidé.",
       "lockConfirm": "Nouveau panier",
-      "lockCancel": "Garder le panier actuel"
+      "lockCancel": "Garder le panier actuel",
+      "minOrderMore": "Ajoutez encore {{more}} pour la livraison. Commande minimale : {{min}}."
     },
     "stock": {
       "onlyLeft": "Plus que {{n}}",
       "left": "{{n}} restants"
-    }
+    },
+    "verifiedBusiness": "Entreprise vérifiée",
+    "verifiedIndividual": "Vérifié"
   },
   "assistant": {
     "title": "Assistant",
@@ -955,7 +962,10 @@
       "fulfillmentInPerson": "En personne",
       "fulfillmentBoth": "En ligne ou en personne",
       "fulfillmentHero": "Modalité : {{value}}",
-      "priceFrom": "Dès"
+      "priceFrom": "Dès",
+      "languages": "Langues parlées",
+      "credentials": "Qualifications",
+      "yearsExp": "{{n}} ans d’expérience"
     },
     "booking": {
       "title": "Réserver un expert",
@@ -1021,7 +1031,8 @@
     "slots": {
       "timezone": "Heures affichées dans votre fuseau horaire ({{zone}})",
       "book": "Réserver {{time}}",
-      "pickTime": "Choisissez une heure"
+      "pickTime": "Choisissez une heure",
+      "expertZone": "Expert à {{place}} ({{zone}})"
     },
     "directory": {
       "search": "Rechercher des experts",
@@ -1179,7 +1190,9 @@
       "cancelled": "Cette commande a été annulée."
     },
     "zoneNotServedTitle": "Nous ne livrons pas encore ici",
-    "pickupInstead": "Retrait sur place"
+    "pickupInstead": "Retrait sur place",
+    "minOrderBanner": "La livraison exige {{min}} minimum. Ajoutez {{more}} ou choisissez le retrait.",
+    "etaMinutes": "{{n}} min"
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

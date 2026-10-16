@@ -41,6 +41,9 @@ export interface HubProductVendorSummary {
   photo_url: string | null
   /** When true, show verified badge (requires `is_verified` on `hub_vendors`). */
   is_verified: boolean
+  /** Store minimum for delivery orders (storefront-details migration); absent until it is applied. */
+  min_order_amount?: number | null
+  min_order_currency?: string | null
 }
 
 export interface HubProductRow {

@@ -185,7 +185,11 @@
     "toRange": "до",
     "sellPrice": "Цена продажи",
     "store": {
-      "newStore": "Новый магазин"
+      "newStore": "Новый магазин",
+      "openUntil": "Открыто до {{time}}",
+      "closed": "Закрыто",
+      "closedOpens": "Закрыто · откроется {{day}} {{time}}",
+      "minOrder": "Минимальный заказ для доставки: {{min}}"
     },
     "cart": {
       "emptyBody": "Добавьте что-нибудь из магазина, чтобы начать заказ.",
@@ -199,12 +203,15 @@
       "lockTitle": "Начать новую корзину?",
       "lockBody": "В корзине товары из «{{vendor}}». Корзина — для одного магазина, поэтому она будет очищена.",
       "lockConfirm": "Новая корзина",
-      "lockCancel": "Оставить текущую"
+      "lockCancel": "Оставить текущую",
+      "minOrderMore": "Добавьте ещё {{more}} для доставки. Минимальный заказ — {{min}}."
     },
     "stock": {
       "onlyLeft": "Осталось всего {{n}}",
       "left": "Осталось: {{n}}"
-    }
+    },
+    "verifiedBusiness": "Проверенный бизнес",
+    "verifiedIndividual": "Проверено"
   },
   "assistant": {
     "title": "Ассистент",
@@ -955,7 +962,10 @@
       "fulfillmentInPerson": "Очно",
       "fulfillmentBoth": "Онлайн или очно",
       "fulfillmentHero": "Формат: {{value}}",
-      "priceFrom": "От"
+      "priceFrom": "От",
+      "languages": "Говорит на",
+      "credentials": "Квалификация",
+      "yearsExp": "Опыт: {{n}} лет"
     },
     "booking": {
       "title": "Запись к эксперту",
@@ -1021,7 +1031,8 @@
     "slots": {
       "timezone": "Время указано в вашем часовом поясе ({{zone}})",
       "book": "Записаться на {{time}}",
-      "pickTime": "Выберите время"
+      "pickTime": "Выберите время",
+      "expertZone": "Эксперт: {{place}} ({{zone}})"
     },
     "directory": {
       "search": "Поиск экспертов",
@@ -1179,7 +1190,9 @@
       "cancelled": "Этот заказ отменён."
     },
     "zoneNotServedTitle": "Сюда пока нельзя доставить",
-    "pickupInstead": "Заберу сам"
+    "pickupInstead": "Заберу сам",
+    "minOrderBanner": "Для доставки нужен заказ от {{min}}. Добавьте ещё {{more}} или выберите самовывоз.",
+    "etaMinutes": "{{n}} мин"
   },
   "social": {
     "loadFailed": "Не удалось загрузить, попробуйте ещё раз",

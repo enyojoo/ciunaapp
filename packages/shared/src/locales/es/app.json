@@ -185,7 +185,11 @@
     "toRange": "a",
     "sellPrice": "Precio de venta",
     "store": {
-      "newStore": "Tienda nueva"
+      "newStore": "Tienda nueva",
+      "openUntil": "Abierto hasta las {{time}}",
+      "closed": "Cerrado",
+      "closedOpens": "Cerrado · abre {{day}} {{time}}",
+      "minOrder": "Pedido mínimo para entrega: {{min}}"
     },
     "cart": {
       "emptyBody": "Añade algo de una tienda para empezar tu pedido.",
@@ -199,12 +203,15 @@
       "lockTitle": "¿Empezar un carrito nuevo?",
       "lockBody": "Tu carrito tiene artículos de {{vendor}}. Un carrito admite una sola tienda, así que se vaciará.",
       "lockConfirm": "Carrito nuevo",
-      "lockCancel": "Mantener el carrito actual"
+      "lockCancel": "Mantener el carrito actual",
+      "minOrderMore": "Añade {{more}} más para la entrega. El pedido mínimo es {{min}}."
     },
     "stock": {
       "onlyLeft": "Solo quedan {{n}}",
       "left": "Quedan {{n}}"
-    }
+    },
+    "verifiedBusiness": "Empresa verificada",
+    "verifiedIndividual": "Verificado"
   },
   "assistant": {
     "title": "Asistente",
@@ -955,7 +962,10 @@
       "fulfillmentInPerson": "Presencial",
       "fulfillmentBoth": "En línea o presencial",
       "fulfillmentHero": "Modalidad: {{value}}",
-      "priceFrom": "Desde"
+      "priceFrom": "Desde",
+      "languages": "Idiomas",
+      "credentials": "Credenciales",
+      "yearsExp": "{{n}} años de experiencia"
     },
     "booking": {
       "title": "Reservar un experto",
@@ -1021,7 +1031,8 @@
     "slots": {
       "timezone": "Horas mostradas en tu zona horaria ({{zone}})",
       "book": "Reservar {{time}}",
-      "pickTime": "Elige una hora"
+      "pickTime": "Elige una hora",
+      "expertZone": "Experto en {{place}} ({{zone}})"
     },
     "directory": {
       "search": "Buscar expertos",
@@ -1179,7 +1190,9 @@
       "cancelled": "Este pedido fue cancelado."
     },
     "zoneNotServedTitle": "Aún no entregamos aquí",
-    "pickupInstead": "Recoger en tienda"
+    "pickupInstead": "Recoger en tienda",
+    "minOrderBanner": "La entrega requiere un mínimo de {{min}}. Añade {{more}} más o elige recoger.",
+    "etaMinutes": "{{n}} min"
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",

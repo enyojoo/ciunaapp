@@ -501,6 +501,24 @@ export function MarketplaceCheckout({
 
                 {q?.fulfillmentMode === "delivery" && (
                   <View style={styles.blockGap}>
+                    {q.minOrder && !q.minOrder.met ? (
+                      <View style={styles.zoneBanner} accessibilityRole="alert">
+                        <Text style={styles.zoneBody}>
+                          {t("marketplace.minOrderBanner", {
+                            min: formatMoney(q.minOrder.amount, q.minOrder.currency),
+                            more: formatMoney(q.minOrder.amount - q.totals.subtotal, q.minOrder.currency),
+                            defaultValue: "Delivery needs a {{min}} minimum. Add {{more}} more, or pick up instead.",
+                          })}
+                        </Text>
+                        {modes.includes("pickup") ? (
+                          <PrimaryButton
+                            label={label("pickupInstead", "Pick up instead")}
+                            variant="secondary"
+                            onPress={() => c.setFulfillmentMode("pickup")}
+                          />
+                        ) : null}
+                      </View>
+                    ) : null}
                     <Text style={styles.fieldLabel}>{label("zone", "Delivery area")}</Text>
                     {q.zones.length === 0 ? (
                       <View style={styles.zoneBanner} accessibilityRole="alert">
@@ -518,7 +536,7 @@ export function MarketplaceCheckout({
                       q.zones.map((z) => (
                         <Choice
                           key={z.id}
-                          label={`${z.city} · ${z.district} · ${formatMoney(z.fee, z.currency)}`}
+                          label={`${z.city} · ${z.district} · ${formatMoney(z.fee, z.currency)}${z.etaMinutes ? ` · ${t("marketplace.etaMinutes", { n: z.etaMinutes, defaultValue: "{{n}} min" })}` : ""}`}
                           selected={c.deliveryZoneId === z.id}
                           onPress={() => c.setDeliveryZoneId(z.id)}
                         />

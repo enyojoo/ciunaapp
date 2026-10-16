@@ -185,7 +185,11 @@
     "toRange": "to",
     "sellPrice": "Sell price",
     "store": {
-      "newStore": "New store"
+      "newStore": "New store",
+      "openUntil": "Open until {{time}}",
+      "closed": "Closed",
+      "closedOpens": "Closed · opens {{day}} {{time}}",
+      "minOrder": "Minimum order for delivery: {{min}}"
     },
     "cart": {
       "emptyBody": "Add something from a store to start your order.",
@@ -199,12 +203,15 @@
       "lockTitle": "Start a new cart?",
       "lockBody": "Your cart has items from {{vendor}}. A cart holds one store, so adding this will clear it.",
       "lockConfirm": "Start new cart",
-      "lockCancel": "Keep current cart"
+      "lockCancel": "Keep current cart",
+      "minOrderMore": "Add {{more}} more for delivery. Minimum order is {{min}}."
     },
     "stock": {
       "onlyLeft": "Only {{n}} left",
       "left": "{{n}} left"
-    }
+    },
+    "verifiedBusiness": "Verified business",
+    "verifiedIndividual": "Verified"
   },
   "assistant": {
     "title": "Assistant",
@@ -267,7 +274,10 @@
       "fulfillmentInPerson": "In person",
       "fulfillmentBoth": "Online or in person",
       "fulfillmentHero": "Fulfillment: {{value}}",
-      "priceFrom": "From"
+      "priceFrom": "From",
+      "languages": "Speaks",
+      "credentials": "Credentials",
+      "yearsExp": "{{n}} years of experience"
     },
     "booking": {
       "title": "Book an expert",
@@ -333,7 +343,8 @@
     "slots": {
       "timezone": "Times shown in your time zone ({{zone}})",
       "book": "Book {{time}}",
-      "pickTime": "Choose a time"
+      "pickTime": "Choose a time",
+      "expertZone": "Expert in {{place}} ({{zone}})"
     },
     "directory": {
       "search": "Search experts",
@@ -1179,7 +1190,9 @@
       "cancelled": "This order was cancelled."
     },
     "zoneNotServedTitle": "We can’t deliver here yet",
-    "pickupInstead": "Pick up instead"
+    "pickupInstead": "Pick up instead",
+    "minOrderBanner": "Delivery needs a {{min}} minimum. Add {{more}} more, or pick up instead.",
+    "etaMinutes": "{{n}} min"
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

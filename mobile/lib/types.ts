@@ -34,6 +34,8 @@ export type HubProduct = {
     service_line_slug?: string
     photo_url?: string | null
     is_verified?: boolean
+    min_order_amount?: number | null
+    min_order_currency?: string | null
   } | null
 }
 
@@ -81,6 +83,16 @@ export type HubVendor = {
   service_line_slug?: string
   rating_avg?: number | string | null
   rating_count?: number | null
+  /** Hours state computed by the API in the store's own time zone. Not shown when hours_configured is false. */
+  hours_configured?: boolean
+  is_open?: boolean
+  opens_at?: { day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"; time: string } | null
+  closes_at?: string | null
+  min_order_amount?: number | null
+  min_order_currency?: string | null
+  cover_url?: string | null
+  /** 0 none, 1 individual, 2 registered business. */
+  verification_tier?: number
 }
 
 export type CombinedTransaction = {
@@ -169,6 +181,12 @@ export type ExpertProfile = {
   meeting_hint?: string | null
   rating_avg?: number | string | null
   rating_count?: number | null
+  languages?: string[]
+  time_zone?: string
+  credentials?: { title: string; issuer?: string; year?: number }[]
+  years_experience?: number | null
+  is_verified?: boolean
+  verification_tier?: number
   created_at?: string
 }
 

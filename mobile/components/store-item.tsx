@@ -70,11 +70,23 @@ function StoreFace({
   const count = Number(vendor.rating_count ?? 0)
   const avg = Number(vendor.rating_avg ?? 0)
   const rated = count > 0 && Number.isFinite(avg)
+  const closed = Boolean(vendor.hours_configured) && vendor.is_open === false
   return (
     <View style={[styles.card, compact ? styles.cardRail : styles.cardGrid]}>
       {/* Cover: the line's art, the design's stand-in until stores upload covers. */}
       <View style={[styles.cover, compact ? styles.coverRail : styles.coverGrid]}>
-        <LinearGradient colors={[art.from, art.to]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+        {vendor.cover_url ? (
+          <Image source={{ uri: vendor.cover_url }} style={StyleSheet.absoluteFill} contentFit="cover" />
+        ) : (
+          <LinearGradient colors={[art.from, art.to]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+        )}
+        {closed ? (
+          <View style={styles.closedShade}>
+            <View style={styles.closedChip}>
+              <Text style={styles.closedText}>{t("hub.store.closed", { defaultValue: "Closed" })}</Text>
+            </View>
+          </View>
+        ) : null}
       </View>
       {/* Logo: round, white ring, overlapping the cover. */}
       <View style={styles.logoWrap}>
@@ -110,6 +122,9 @@ function StoreFace({
 }
 
 const styles = StyleSheet.create({
+  closedShade: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(17,24,39,0.35)", justifyContent: "flex-end", alignItems: "flex-end", padding: 8 },
+  closedChip: { borderRadius: radius.pill, backgroundColor: colors.surface, paddingHorizontal: 10, paddingVertical: 3 },
+  closedText: { fontSize: 12, fontWeight: "700", color: colors.text },
   stripHit: { width: 200 },
   stripSkeleton: { height: 180, borderRadius: radius.card, backgroundColor: colors.paper },
   gridHit: { width: "48.5%", marginBottom: 12 },
