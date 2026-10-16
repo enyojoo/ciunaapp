@@ -39,30 +39,15 @@ export default function HubStack() {
       />
       <Stack.Screen
         name="[slug]/cart"
-        options={{
-          headerShown: true,
-          title: t("marketplace.cart", { defaultValue: "Cart" }),
-          headerBackVisible: false,
-          headerLeft: () => <StackBackButton label={back} />,
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="[slug]/checkout/index"
-        options={{
-          headerShown: true,
-          title: t("marketplace.checkout", { defaultValue: "Checkout" }),
-          headerBackVisible: false,
-          headerLeft: () => <StackBackButton label={back} />,
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="[slug]/checkout/[productId]"
-        options={{
-          headerShown: true,
-          title: t("marketplace.checkout", { defaultValue: "Checkout" }),
-          headerBackVisible: false,
-          headerLeft: () => <StackBackButton label={back} />,
-        }}
+        options={{ headerShown: false }}
       />
     </Stack>
   )

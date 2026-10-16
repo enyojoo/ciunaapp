@@ -9,6 +9,8 @@ import { MarketplaceCheckout } from "@/components/marketplace-checkout"
 import { hubProductEffectivePrice } from "@/lib/money"
 import type { HubCart } from "@/lib/types"
 import { colors, type as typeSize } from "@/lib/theme"
+import { HubTopBar } from "@/components/hub-top-bar"
+import { hubLineHomePath } from "@/lib/hub"
 
 type CheckoutSeed = {
   title: string
@@ -38,7 +40,7 @@ function cartSeed(cart: HubCart): CheckoutSeed {
   }
 }
 
-export default function HubCartCheckout() {
+function HubCartCheckout() {
   const { profile } = useAuth()
   const { slug } = useLocalSearchParams<{ slug: string }>(),
     { cart, loading } = useHubCartByLine(slug as "food" | "mart"),
@@ -91,6 +93,18 @@ export default function HubCartCheckout() {
   return (
     <View style={styles.boot}>
       <Text style={styles.empty}>{t("marketplace.emptyCart")}</Text>
+    </View>
+  )
+}
+
+/** Same top bar as Food, store and product: back chip and the screen title. */
+export default function HubCartCheckoutScreen() {
+  const { slug } = useLocalSearchParams<{ slug: string }>()
+  const { t } = useTranslation("app")
+  return (
+    <View style={{ flex: 1 }}>
+      <HubTopBar title={t("marketplace.checkout", { defaultValue: "Checkout" })} backHref={hubLineHomePath(String(slug || "food").toLowerCase())} />
+      <HubCartCheckout />
     </View>
   )
 }

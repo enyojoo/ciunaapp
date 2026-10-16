@@ -3,7 +3,7 @@ import { shortDay } from "@/lib/store-hours"
 import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import * as Crypto from "expo-crypto"
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react-native"
 import {
@@ -20,21 +20,17 @@ import { useAuth } from "@/lib/auth-context"
 import { hubCartCheckoutPath, hubLineHomePath } from "@/lib/hub"
 import { removeHubCartItem, updateHubCartItemQuantity, useHubCartByLine } from "@/lib/hub-cart"
 import { hubProductEffectivePrice, formatMoney } from "@/lib/money"
+import { HubTopBar } from "@/components/hub-top-bar"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
-export default function HubCartScreen() {
+function HubCartScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
   const line = String(slug || "").toLowerCase() as "food" | "mart"
-  const navigation = useNavigation()
   const router = useRouter()
   const { t, i18n } = useTranslation("app")
   const { showError } = useToast()
   const { profile } = useAuth()
   const { cart, loading } = useHubCartByLine(line)
-
-  useEffect(() => {
-    navigation.setOptions({ title: t("hub.cart.title", { defaultValue: "Cart" }) })
-  }, [navigation, t])
 
   const fingerprint = useMemo(() => {
     if (!cart) return ""
@@ -105,7 +101,7 @@ export default function HubCartScreen() {
 
   if (loading && !cart) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
       <StatusBar style="dark" />
         <View style={styles.list}>
           {[0, 1, 2].map((i) => (
@@ -118,7 +114,7 @@ export default function HubCartScreen() {
 
   if (!cart || items.length === 0) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
       <StatusBar style="dark" />
         <EmptyState
           icon={<ShoppingCart size={26} color={colors.primaryText} strokeWidth={2} />}
@@ -132,7 +128,7 @@ export default function HubCartScreen() {
   }
 
   return (
-    <ScreenScroll edges={["left", "right"]}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
       <StatusBar style="dark" />
       {/* Store plate: who the cart is from, and a way back to add more. */}
       <View style={styles.storePlate}>
@@ -270,6 +266,21 @@ export default function HubCartScreen() {
     </ScreenScroll>
   )
 }
+
+/** Same top bar as Food, store and product: back chip and the screen title. */
+export default function HubCartScreenScreen() {
+  const { slug } = useLocalSearchParams<{ slug: string }>()
+  const { t } = useTranslation("app")
+  return (
+    <View style={{ flex: 1 }}>
+      <HubTopBar title={t("hub.cart.title", { defaultValue: "Cart" })} backHref={hubLineHomePath(String(slug || "food").toLowerCase())} />
+      <HubCartScreen />
+    </View>
+  )
+}
+
+/** Space between the top bar and the first content block. */
+const AFTER_BAR = { paddingTop: 16 }
 
 const styles = StyleSheet.create({
   storePlate: { flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 12, marginBottom: 12 },

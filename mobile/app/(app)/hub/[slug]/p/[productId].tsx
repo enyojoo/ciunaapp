@@ -112,7 +112,7 @@ export default function HubProductDetailScreen() {
       <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
         {topBar}
-        <ScreenScroll edges={["left", "right"]}>
+        <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
           <View style={styles.skelImage} />
           <View style={[styles.skelBar, { width: "70%", height: 20, marginTop: 4 }]} />
           <View style={[styles.skelBar, { width: "40%", marginTop: 12 }]} />
@@ -128,7 +128,7 @@ export default function HubProductDetailScreen() {
       <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
         {topBar}
-        <ScreenScroll edges={["left", "right"]}>
+        <ScreenScroll edges={["left", "right"]} contentStyle={AFTER_BAR}>
           <EmptyState title={t("hub.productNotFound", { defaultValue: "Product not found." })} />
         </ScreenScroll>
       </View>
@@ -142,7 +142,7 @@ export default function HubProductDetailScreen() {
       {guard.dialog}
       <ScreenScroll
         edges={["left", "right"]}
-        contentStyle={marketplace ? styles.contentWithCartBar : undefined}
+        contentStyle={marketplace ? { ...AFTER_BAR, ...styles.contentWithCartBar } : AFTER_BAR}
       >
         <ProductGallery images={productImages(product)} />
         <Text style={styles.title}>{product.title}</Text>
@@ -273,6 +273,9 @@ export default function HubProductDetailScreen() {
     </View>
   )
 }
+
+/** Space between the top bar and the first content block. */
+const AFTER_BAR = { paddingTop: 16 }
 
 const styles = StyleSheet.create({
   // A plain 40px icon button in the top bar, the same size as the back chip and the cart button.
