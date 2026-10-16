@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import {
@@ -14,11 +14,11 @@ import {
   ShieldCheck,
 } from "lucide-react-native"
 import { ScreenScroll } from "@/components/screen"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Avatar } from "@/components/avatar"
 import { GroupCard, Row } from "@/components/row"
 import { LanguagePicker } from "@/components/language-picker"
 import { useAuth } from "@/lib/auth-context"
-import { useExternalLink } from "@/lib/external-link"
 import { hasPin } from "@/lib/pin"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
@@ -28,9 +28,10 @@ export default function MoreScreen() {
   const { t } = useTranslation("common")
   const { t: tApp } = useTranslation("app")
   const { signOut, profile, user } = useAuth()
-  const { openLink } = useExternalLink()
   const router = useRouter()
   const [pinSet, setPinSet] = useState(false)
+  const [confirmOut, setConfirmOut] = useState(false)
+  const [signingOut, setSigningOut] = useState(false)
   const { data: eligibility, revalidate } = useBitbankerEligibility(user?.id)
 
   useFocusRevalidate(() => void revalidate())
@@ -52,15 +53,14 @@ export default function MoreScreen() {
 
   const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Account"
 
-  const confirmSignOut = () => {
-    Alert.alert(t("more.signOutTitle"), t("more.signOutDescription"), [
-      { text: t("more.cancel"), style: "cancel" },
-      {
-        text: t("more.signOut"),
-        style: "destructive",
-        onPress: () => void signOut(),
-      },
-    ])
+  const confirmSignOut = async () => {
+    setSigningOut(true)
+    try {
+      await signOut()
+    } finally {
+      setSigningOut(false)
+      setConfirmOut(false)
+    }
   }
 
   return (
@@ -74,7 +74,7 @@ export default function MoreScreen() {
             <Text style={[ui.title, styles.name]} numberOfLines={1}>
               {name}
             </Text>
-            {verified ? <BadgeCheck size={18} color={colors.primary} strokeWidth={2.4} /> : null}
+            {verified ? <BadgeCheck size={18} color={colors.success} strokeWidth={2.4} /> : null}
           </View>
           {profile?.email ? (
             <Text style={[ui.subtitle, styles.email]} numberOfLines={1}>
@@ -83,7 +83,7 @@ export default function MoreScreen() {
           ) : null}
         </View>
         <View style={styles.openChip}>
-          <Text style={styles.openChipText}>{t("more.open", { defaultValue: "Open" })}</Text>
+          <Text style={styles.openChipText}>{t("more.profile", { defaultValue: "Profile" })}</Text>
         </View>
       </Pressable>
 
@@ -99,7 +99,7 @@ export default function MoreScreen() {
           }
         />
         <Row
-          icon={<Gift size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<Gift size={16} color={colors.refer} strokeWidth={2.2} />}
           label={t("more.affiliatesReferrals")}
           onPress={() => router.push("/referrals")}
         />
@@ -130,22 +130,28 @@ export default function MoreScreen() {
         />
         <Row
           icon={<FileText size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
-          label={t("more.privacyPolicy")}
-          onPress={() => void openLink("https://www.ciuna.com/privacy", t("more.privacyPolicy"))}
-        />
-        <Row
-          icon={<FileText size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
-          label={t("more.termsOfService")}
-          onPress={() => void openLink("https://www.ciuna.com/terms", t("more.termsOfService"))}
+          label={t("more.legal", { defaultValue: "Legal" })}
+          onPress={() => router.push("/legal" as never)}
           last
         />
       </GroupCard>
 
-      <Pressable onPress={confirmSignOut} style={styles.logout}>
+      <Pressable onPress={() => setConfirmOut(true)} style={styles.logout}>
         <LogOut size={16} color={colors.danger} strokeWidth={2.2} />
         <Text style={styles.logoutText}>{t("more.logout")}</Text>
       </Pressable>
       <Text style={styles.version}>{t("more.version", { version: "1.0.0" })}</Text>
+      <ConfirmDialog
+        open={confirmOut}
+        title={t("more.signOutTitle")}
+        description={t("more.signOutDescription")}
+        confirmLabel={t("more.signOut")}
+        cancelLabel={t("more.cancel")}
+        destructive
+        busy={signingOut}
+        onConfirm={() => void confirmSignOut()}
+        onCancel={() => setConfirmOut(false)}
+      />
     </ScreenScroll>
   )
 }

@@ -8,7 +8,9 @@
     "transactions": "Активность",
     "more": "Ещё",
     "logout": "Выйти",
-    "login": "Войти"
+    "login": "Войти",
+    "orders": "Заказы",
+    "account": "Аккаунт"
   },
   "more": {
     "title": "Ещё",
@@ -29,7 +31,9 @@
     "signOutDescription": "Выйти из аккаунта? Потребуется снова войти.",
     "cancel": "Отмена",
     "signOut": "Выйти",
-    "signingOut": "Выход…"
+    "signingOut": "Выход…",
+    "profile": "Профиль",
+    "legal": "Правовая информация"
   },
   "kyc": {
     "verified": "Подтверждён",

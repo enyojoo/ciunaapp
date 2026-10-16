@@ -118,3 +118,6 @@ The customer app (Expo `mobile/` and `web/`) is to match `design-system/` and is
 - Checkout and payment contracts stay frozen; only presentation changes.
 - Exception (owner, 2026-10-16): ProductCard and StoreCard in the customer app stay as they are today. Every other customer surface matches the design system.
 - Home has no orange hero billboard, and Home tiles always use the drawn service-line icons. Office image uploads (`icon_url`) are not shown on Home.
+
+- Home header (owner, 2026-10-16): Support is removed from Home. The profile avatar sits where it was, right of Refer; it opens the profile. Applies to the Expo app, web, and the CustomerHome card.
+- Avatars are round and carry a 1px hairline border (owner, 2026-10-16). The app avatar and the design `.avatar` both follow this.

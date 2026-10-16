@@ -90,14 +90,14 @@ export default function AppTabs() {
       <Tabs.Screen
         name="transactions"
         options={{
-          title: t("nav.transactions", { defaultValue: "Activities" }),
+          title: t("nav.orders", { defaultValue: "Orders" }),
           tabBarIcon: ({ color }) => <History size={TAB_BAR_ICON_SIZE} color={color} strokeWidth={2} />,
         }}
       />
       <Tabs.Screen
         name="more"
         options={{
-          title: t("nav.more", { defaultValue: "More" }),
+          title: t("nav.account", { defaultValue: "Account" }),
           tabBarIcon: ({ color }) => (
             <LayoutDashboard size={TAB_BAR_ICON_SIZE} color={color} strokeWidth={2} />
           ),

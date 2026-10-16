@@ -8,7 +8,9 @@
     "transactions": "动态",
     "more": "更多",
     "logout": "退出登录",
-    "login": "登录"
+    "login": "登录",
+    "orders": "订单",
+    "account": "账户"
   },
   "more": {
     "title": "更多",
@@ -29,7 +31,9 @@
     "signOutDescription": "您确定要退出登录吗？退出后需要重新登录才能访问您的账户。",
     "cancel": "取消",
     "signOut": "退出登录",
-    "signingOut": "正在退出…"
+    "signingOut": "正在退出…",
+    "profile": "资料",
+    "legal": "法律信息"
   },
   "kyc": {
     "verified": "已验证",

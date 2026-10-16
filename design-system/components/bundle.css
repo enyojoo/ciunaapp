@@ -118,7 +118,7 @@ a{color:var(--primary-text)}
 .banner-destructive{background:var(--destructive-surface);color:var(--destructive-text)}
 .banner-success{background:var(--success-surface);color:var(--success-text)}
 .divider{height:1px;background:var(--hairline);border:0;margin:0}
-.avatar{width:40px;height:40px;border-radius:50%;background:var(--primary-tint);color:var(--primary-text);display:inline-grid;place-items:center;font:700 15px/1 var(--font-web);flex-shrink:0;overflow:hidden}
+.avatar{width:40px;height:40px;border-radius:50%;border:1px solid var(--hairline);background:var(--primary-tint);color:var(--primary-text);display:inline-grid;place-items:center;font:700 15px/1 var(--font-web);flex-shrink:0;overflow:hidden;box-sizing:border-box}
 .avatar.sm{width:32px;height:32px;font-size:13px}
 .avatar.lg{width:56px;height:56px;font-size:20px}
 .avatar.xl{width:72px;height:72px;font-size:26px}

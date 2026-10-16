@@ -8,7 +8,9 @@
     "transactions": "Activités",
     "more": "Plus",
     "logout": "Déconnexion",
-    "login": "Connexion"
+    "login": "Connexion",
+    "orders": "Commandes",
+    "account": "Compte"
   },
   "more": {
     "title": "Plus",
@@ -29,7 +31,9 @@
     "signOutDescription": "Voulez-vous vraiment vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
     "cancel": "Annuler",
     "signOut": "Se déconnecter",
-    "signingOut": "Déconnexion…"
+    "signingOut": "Déconnexion…",
+    "profile": "Profil",
+    "legal": "Mentions légales"
   },
   "kyc": {
     "verified": "Vérifié",

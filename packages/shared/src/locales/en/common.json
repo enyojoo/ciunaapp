@@ -8,7 +8,9 @@
     "transactions": "Activities",
     "more": "More",
     "logout": "Logout",
-    "login": "Log in"
+    "login": "Log in",
+    "orders": "Orders",
+    "account": "Account"
   },
   "more": {
     "title": "More",
@@ -29,7 +31,9 @@
     "signOutDescription": "Are you sure you want to sign out? You'll need to sign in again to access your account.",
     "cancel": "Cancel",
     "signOut": "Sign Out",
-    "signingOut": "Signing out..."
+    "signingOut": "Signing out...",
+    "profile": "Profile",
+    "legal": "Legal"
   },
   "kyc": {
     "verified": "Verified",

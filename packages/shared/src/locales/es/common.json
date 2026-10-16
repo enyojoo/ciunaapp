@@ -8,7 +8,9 @@
     "transactions": "Actividades",
     "more": "Más",
     "logout": "Cerrar sesión",
-    "login": "Iniciar sesión"
+    "login": "Iniciar sesión",
+    "orders": "Pedidos",
+    "account": "Cuenta"
   },
   "more": {
     "title": "Más",
@@ -29,7 +31,9 @@
     "signOutDescription": "¿Seguro que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tu cuenta.",
     "cancel": "Cancelar",
     "signOut": "Cerrar sesión",
-    "signingOut": "Cerrando sesión…"
+    "signingOut": "Cerrando sesión…",
+    "profile": "Perfil",
+    "legal": "Legal"
   },
   "kyc": {
     "verified": "Verificado",
