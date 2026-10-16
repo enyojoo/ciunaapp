@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react"
+import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useFocusEffect, useRouter } from "expo-router"
 import { Heart } from "lucide-react-native"
@@ -41,7 +42,7 @@ export default function FavouritesScreen() {
 
   if (!signedIn) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
         <EmptyState
           title={t("favourites.signedOutTitle", { defaultValue: "Sign in to see your favourites" })}
           body={t("favourites.signedOutBody", { defaultValue: "Your favourites follow your account across devices." })}
@@ -152,7 +153,7 @@ export default function FavouritesScreen() {
   })()
 
   return (
-    <ScreenScroll edges={["left", "right"]}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
       <View style={styles.tabs} accessibilityRole="tablist">
         {tabs.map((x) => (
           <Pressable

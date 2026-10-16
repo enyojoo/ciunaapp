@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { StyleSheet, Text, View } from "react-native"
 import { useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -17,7 +18,7 @@ function ExpertBookBody() {
     { t } = useTranslation("app")
   if (slotId) return <MarketplaceCheckout source={{ kind: "expert", expertServiceSlotId: slotId }} />
   return (
-    <ScreenScroll>
+    <ScreenScroll contentStyle={NARROW_COLUMN}>
       <StepBar steps={[t("marketplace.progressTime", { defaultValue: "Time" }), t("marketplace.progressDetails", { defaultValue: "Details" }), t("marketplace.progressReview", { defaultValue: "Review" })]} active={0} />
       <Text style={styles.title}>{data?.service?.title}</Text>
       {data?.service?.short_description ? <Text style={styles.sub}>{data.service.short_description}</Text> : null}

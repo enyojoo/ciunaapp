@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react"
+import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { HubTopBar } from "@/components/hub-top-bar"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
@@ -40,7 +41,7 @@ function ExpertServiceDetailBody() {
 
   if (loading) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
         <StatusBar style="dark" />
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -51,7 +52,7 @@ function ExpertServiceDetailBody() {
 
   if (notFound || !service) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
         <StatusBar style="dark" />
         <EmptyState
           title={t("hub.serviceUnavailable", { defaultValue: "This service is currently unavailable." })}
@@ -68,7 +69,7 @@ function ExpertServiceDetailBody() {
   const bookLabel = t("experts.profile.bookSession", { defaultValue: "Book a session" })
 
   return (
-    <ScreenScroll edges={["left", "right"]}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
       <StatusBar style="dark" />
       <Text style={styles.title}>{service.title}</Text>
       <Pressable

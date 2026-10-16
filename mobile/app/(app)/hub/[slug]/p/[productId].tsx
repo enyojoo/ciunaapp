@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
+import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -112,7 +113,7 @@ export default function HubProductDetailScreen() {
       <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
         {topBar}
-        <ScreenScroll edges={["left", "right"]}>
+        <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
           <View style={styles.skelImage} />
           <View style={[styles.skelBar, { width: "70%", height: 20, marginTop: 4 }]} />
           <View style={[styles.skelBar, { width: "40%", marginTop: 12 }]} />
@@ -128,7 +129,7 @@ export default function HubProductDetailScreen() {
       <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
         {topBar}
-        <ScreenScroll edges={["left", "right"]}>
+        <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
           <EmptyState title={t("hub.productNotFound", { defaultValue: "Product not found." })} />
         </ScreenScroll>
       </View>
@@ -142,7 +143,7 @@ export default function HubProductDetailScreen() {
       {guard.dialog}
       <ScreenScroll
         edges={["left", "right"]}
-        contentStyle={marketplace ? styles.contentWithCartBar : undefined}
+        contentStyle={marketplace ? { ...NARROW_COLUMN, ...styles.contentWithCartBar } : NARROW_COLUMN}
       >
         <ProductGallery images={productImages(product)} />
         <Text style={styles.title}>{product.title}</Text>

@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useRouter } from "expo-router"
@@ -55,7 +56,7 @@ function ExpertProfileBody() {
 
   if (loading && !profile) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
         <StatusBar style="dark" />
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -66,7 +67,7 @@ function ExpertProfileBody() {
 
   if (error && !profile && !(error instanceof Error && error.message === EXPERT_NOT_FOUND)) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
         <StatusBar style="dark" />
         <LoadError onRetry={() => void revalidate()} />
       </ScreenScroll>
@@ -75,7 +76,7 @@ function ExpertProfileBody() {
 
   if (notFound || !profile) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
         <StatusBar style="dark" />
         <EmptyState
           title={t("hub.expertNotFound", { defaultValue: "Expert not found" })}
@@ -87,7 +88,7 @@ function ExpertProfileBody() {
   }
 
   return (
-    <ScreenScroll edges={["left", "right"]}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
       <StatusBar style="dark" />
       <View style={styles.identityRow}>
         <View style={styles.avatarWrap}>

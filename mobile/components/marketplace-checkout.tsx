@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { shortDay } from "@/lib/store-hours"
 import { ActivityIndicator, AppState, Linking, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -1076,7 +1077,7 @@ export function MarketplaceOrderView({
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingTop: 0, paddingHorizontal: 16 },
+  scroll: { paddingTop: 0, paddingHorizontal: 16, ...NARROW_COLUMN },
   stack: { gap: 20, paddingBottom: 16 },
   footerPad: { padding: 20 },
   loading: { fontSize: typeSize.body, color: colors.muted },

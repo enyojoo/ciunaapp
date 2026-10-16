@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react"
+import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { shortDay } from "@/lib/store-hours"
 import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
@@ -101,7 +102,7 @@ function HubCartScreen() {
 
   if (loading && !cart) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
       <StatusBar style="dark" />
         <View style={styles.list}>
           {[0, 1, 2].map((i) => (
@@ -114,7 +115,7 @@ function HubCartScreen() {
 
   if (!cart || items.length === 0) {
     return (
-      <ScreenScroll edges={["left", "right"]}>
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
       <StatusBar style="dark" />
         <EmptyState
           icon={<ShoppingCart size={26} color={colors.primaryText} strokeWidth={2} />}
@@ -128,7 +129,7 @@ function HubCartScreen() {
   }
 
   return (
-    <ScreenScroll edges={["left", "right"]}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
       <StatusBar style="dark" />
       {/* Store plate: who the cart is from, and a way back to add more. */}
       <View style={styles.storePlate}>

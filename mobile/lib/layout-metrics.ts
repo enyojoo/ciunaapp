@@ -20,3 +20,9 @@ export function getLayoutMode(width: number): LayoutMode {
   if (width >= REGULAR_WIDTH_BREAKPOINT) return "tablet"
   return "mobile"
 }
+
+/**
+ * Forms and detail pages (cart, checkout, orders, product, expert, favourites) stay this wide and centre on wide
+ * web screens, instead of stretching across the whole window. On phones the screen is narrower, so nothing changes.
+ */
+export const NARROW_COLUMN = { maxWidth: 720, width: "100%", alignSelf: "center" } as const
