@@ -35,6 +35,7 @@ import { useAuth } from "@/lib/auth-context"
 import { officeDataStore } from "@/lib/office-data-store"
 import { hubProductsPath, hubVendorsPath } from "@/lib/hub-office-paths"
 import { cn } from "@/lib/utils"
+import { usePermissions } from "@/lib/permissions"
 
 interface OfficeDashboardLayoutProps {
   children: React.ReactNode
@@ -180,12 +181,13 @@ function OperationsSectionSubnav({
 }
 
 function MerchantsSectionSubnav({ pathname, onNavigate }: { pathname: string | null; onNavigate: () => void }) {
+  const { ready, can } = usePermissions()
   const items = [
-    { name: "Merchants", href: "/merchants", icon: Store },
-    { name: "KYB requirements", href: "/kyb", icon: ListChecks },
-    { name: "Audit log", href: "/audit", icon: ScrollText },
-    { name: "Reviews", href: "/reviews", icon: Star },
-  ]
+    { name: "Merchants", href: "/merchants", icon: Store, permission: "merchants.read" },
+    { name: "KYB requirements", href: "/kyb", icon: ListChecks, permission: "kyb.manage" },
+    { name: "Audit log", href: "/audit", icon: ScrollText, permission: "audit.read" },
+    { name: "Reviews", href: "/reviews", icon: Star, permission: "merchants.read" },
+  ].filter((item) => !ready || can(item.permission))
   return (
     <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
       {items.map((item) => (
@@ -276,6 +278,8 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
   const [merchantsNavOpen, setMerchantsNavOpen] = useState(false)
   const [financeNavOpen, setFinanceNavOpen] = useState(false)
   const { signOut, isSuperAdmin } = useAuth()
+  const perms = usePermissions()
+  const showFinance = !perms.ready || perms.can("finance.manage")
 
   const navigation = isSuperAdmin
     ? baseNavigation
@@ -410,7 +414,8 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
               ) : null}
             </div>
 
-            <div className="pt-1">
+            {showFinance ? (
+<div className="pt-1">
               <div className="flex items-center gap-0.5 rounded-md">
                 <Button
                   type="button"
@@ -441,6 +446,7 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
                 <FinanceSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
               ) : null}
             </div>
+) : null}
 
             <div className="pt-1">
               <div className="flex items-center gap-0.5 rounded-md">
