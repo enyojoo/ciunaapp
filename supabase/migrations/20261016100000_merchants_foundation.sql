@@ -162,6 +162,7 @@ alter table expert_services add column if not exists review_status text not null
   check (review_status in ('approved','pending','rejected'));
 alter table expert_services add column if not exists review_note text;
 alter table hub_products add column if not exists translations jsonb not null default '{}';
+alter table hub_products add column if not exists gallery jsonb not null default '[]';
 alter table hub_vendors add column if not exists translations jsonb not null default '{}';
 alter table expert_profiles add column if not exists translations jsonb not null default '{}';
 alter table expert_services add column if not exists translations jsonb not null default '{}';
