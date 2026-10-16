@@ -127,3 +127,7 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# design card audit screenshots
+design-system/.audit/
+test-results/
+playwright-report/

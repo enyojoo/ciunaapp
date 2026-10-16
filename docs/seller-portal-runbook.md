@@ -49,6 +49,9 @@ npm run dev -w seller               # port 3003 (needs seller/.env)
 ## Tests
 
 ```bash
+npx playwright install chromium     # once per machine (set PW_CHROMIUM_PATH to use an existing Chromium)
+npm run test:seller                  # Playwright smoke at 375/768/1280 against Seller in mock mode (starts it on :3003)
+npm run design:audit                 # renders every design card, screenshots in design-system/.audit/
 npm run design:check && npm run design:cards
 npm run test -w @ciuna/shared                       # money formatting
 npm run test:merchant -w api                        # rules, fees, products, expert helpers, and SQL ledger/payout integration
