@@ -137,7 +137,7 @@ export default function HubLineCatalog() {
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
         searchLine={marketplace ? (line as "food" | "mart") : undefined}
-        trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="hero" /> : undefined}
+        trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : undefined}
       >
         {catalog}
       </HubLinePageShell>

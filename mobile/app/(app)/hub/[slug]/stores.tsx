@@ -33,7 +33,7 @@ export default function StoresScreen() {
         subtitle={t("hub.storesDirectorySubtitle", { defaultValue: "Choose a store to see its products." })}
         backAriaLabel={t("hub.backToLine", { defaultValue: "Back to line" })}
         backHref={hubLineHomePath(line)}
-        trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="hero" /> : undefined}
+        trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : undefined}
       >
         {loading && vendors.length === 0 ? (
           <View style={styles.grid}>

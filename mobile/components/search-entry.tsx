@@ -38,7 +38,7 @@ export function SearchHeroButton({ line }: { line: "food" | "mart" | "experts" }
       style={styles.heroHit}
     >
       <View style={styles.heroChip}>
-        <Search size={20} color="#FFFFFF" strokeWidth={2.2} />
+        <Search size={20} color={colors.text} strokeWidth={2.2} />
       </View>
     </Pressable>
   )
@@ -63,7 +63,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.22)",
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },

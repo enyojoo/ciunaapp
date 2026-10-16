@@ -10,7 +10,6 @@ import {
   type RefreshControlProps,
 } from "react-native"
 import { Image } from "expo-image"
-import { LinearGradient } from "expo-linear-gradient"
 import { StatusBar } from "expo-status-bar"
 import { useRouter } from "expo-router"
 import { ArrowLeft, BadgeCheck, ChevronLeft, MapPin } from "lucide-react-native"
@@ -18,7 +17,6 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { SearchHeroButton } from "@/components/search-entry"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
-const HERO_COLORS = [colors.heroOrange, colors.heroOrangeMid, colors.heroAmber] as const
 
 function goBack(router: ReturnType<typeof useRouter>, backHref: string) {
   if (router.canGoBack()) router.back()
@@ -31,7 +29,7 @@ function HeroBack({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} hitSlop={8} style={styles.backHit}>
       <View style={styles.backChip}>
-        <Icon size={ios ? 26 : 22} color="#FFFFFF" strokeWidth={ios ? 2.6 : 2.25} />
+        <Icon size={ios ? 26 : 22} color={colors.text} strokeWidth={ios ? 2.6 : 2.25} />
       </View>
     </Pressable>
   )
@@ -86,12 +84,12 @@ function LineHero({
             {title}
           </Text>
           {verified ? (
-            <BadgeCheck size={18} color="#FFEDD5" strokeWidth={2} accessibilityLabel={verifiedAriaLabel} />
+            <BadgeCheck size={18} color={colors.success} strokeWidth={2} accessibilityLabel={verifiedAriaLabel} />
           ) : null}
         </View>
         {loc ? (
           <View style={styles.locRow}>
-            <MapPin size={14} color={colors.heroBody} strokeWidth={2} />
+            <MapPin size={14} color={colors.muted} strokeWidth={2} />
             <Text style={styles.loc} numberOfLines={1}>
               {loc}
             </Text>
@@ -163,12 +161,12 @@ function StorefrontHero({
                 {title}
               </Text>
               {verified ? (
-                <BadgeCheck size={16} color="#FFEDD5" strokeWidth={2.2} accessibilityLabel={verifiedAriaLabel} />
+                <BadgeCheck size={16} color={colors.success} strokeWidth={2.2} accessibilityLabel={verifiedAriaLabel} />
               ) : null}
             </View>
             {loc ? (
               <View style={styles.locCluster}>
-                <MapPin size={13} color={colors.heroBody} strokeWidth={2} />
+                <MapPin size={13} color={colors.muted} strokeWidth={2} />
                 <Text style={styles.storeLoc} numberOfLines={1}>
                   {loc}
                 </Text>
@@ -240,7 +238,7 @@ export function HubLinePageShell({
   const storefront = variant === "storefront"
 
   const hero = (
-    <LinearGradient colors={[...HERO_COLORS]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.hero}>
+    <View style={styles.hero}>
       <SafeAreaView edges={["top"]}>
         {storefront ? (
           <StorefrontHero
@@ -270,7 +268,7 @@ export function HubLinePageShell({
           />
         )}
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   )
 
   const body = (
@@ -287,7 +285,7 @@ export function HubLinePageShell({
 
   return (
     <View style={styles.screen}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       {hero}
       {keyboard ? (
         <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
@@ -304,8 +302,9 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },
   flex: { flex: 1 },
   hero: {
-    borderBottomLeftRadius: radius.card,
-    borderBottomRightRadius: radius.card,
+    backgroundColor: colors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
     overflow: "hidden",
   },
   bar: {
@@ -328,7 +327,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.22)",
+    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -341,24 +340,24 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: -0.35,
     lineHeight: 28,
-    color: "#FFFFFF",
+    color: colors.text,
   },
-  subtitle: { marginTop: 4, fontSize: typeSize.meta, lineHeight: 18, color: colors.heroBody },
+  subtitle: { marginTop: 4, fontSize: typeSize.meta, lineHeight: 18, color: colors.muted },
   locRow: { marginTop: 4, flexDirection: "row", alignItems: "center", gap: 6 },
-  loc: { flex: 1, fontSize: typeSize.meta, lineHeight: 18, color: colors.heroBody },
+  loc: { flex: 1, fontSize: typeSize.meta, lineHeight: 18, color: colors.muted },
   photoWrap: {
     width: 44,
     height: 44,
     borderRadius: 12,
     overflow: "hidden",
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: colors.border,
   },
   photo: { width: "100%", height: "100%" },
-  photoSkeleton: { width: 44, height: 44, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.2)" },
-  titleSkeleton: { height: 22, width: "70%", borderRadius: 6, backgroundColor: "rgba(255,255,255,0.25)" },
-  subSkeleton: { marginTop: 8, height: 12, width: "90%", borderRadius: 6, backgroundColor: "rgba(255,255,255,0.15)" },
+  photoSkeleton: { width: 44, height: 44, borderRadius: 12, backgroundColor: colors.neutralSurface },
+  titleSkeleton: { height: 22, width: "70%", borderRadius: 6, backgroundColor: colors.neutralSurface },
+  subSkeleton: { marginTop: 8, height: 12, width: "90%", borderRadius: 6, backgroundColor: colors.surface },
   storefront: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -379,12 +378,12 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 12,
     overflow: "hidden",
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: colors.border,
     flexShrink: 0,
   },
-  logoSkeleton: { width: 48, height: 48, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.2)" },
+  logoSkeleton: { width: 48, height: 48, borderRadius: 12, backgroundColor: colors.neutralSurface },
   nameBlock: { flex: 1, minWidth: 0, justifyContent: "center" },
   nameCluster: {
     flexDirection: "row",
@@ -398,7 +397,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: -0.3,
     lineHeight: 22,
-    color: "#FFFFFF",
+    color: colors.text,
   },
   locCluster: {
     marginTop: 2,
@@ -411,13 +410,13 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontSize: 12,
     lineHeight: 16,
-    color: colors.heroBody,
+    color: colors.muted,
   },
   storeBio: {
     marginTop: 10,
     fontSize: typeSize.meta,
     lineHeight: 19,
-    color: colors.heroBody,
+    color: colors.muted,
   },
   // A little extra clearance vs. a plain screen's 40 — Food/Mart screens under this shell can also
   // show the floating cart bar, and last-row content ending up pressed against it looks cramped.
