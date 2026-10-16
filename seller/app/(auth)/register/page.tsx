@@ -24,7 +24,7 @@ export default function RegisterPage() {
     const { data, error } = await supabase.auth.signUp({
       email: f.email.trim(),
       password: f.password,
-      options: { data: { first_name: f.firstName.trim(), last_name: f.lastName.trim() }, emailRedirectTo: typeof window !== "undefined" ? window.location.origin : undefined },
+      options: { data: { name: `${f.firstName.trim()} ${f.lastName.trim()}`.trim(), full_name: `${f.firstName.trim()} ${f.lastName.trim()}`.trim(), first_name: f.firstName.trim(), last_name: f.lastName.trim() }, emailRedirectTo: typeof window !== "undefined" ? window.location.origin : undefined },
     })
     setBusy(false)
     if (error) return setError(/registered|exists/i.test(error.message) ? t("auth.exists") : t("errors.generic"))

@@ -7,6 +7,8 @@ import en_orders from "./en/orders.json"
 import en_expert from "./en/expert.json"
 import en_earnings from "./en/earnings.json"
 import en_settings from "./en/settings.json"
+import en_reviews from "./en/reviews.json"
+import en_messages from "./en/messages.json"
 import ru_common from "./ru/common.json"
 import ru_auth from "./ru/auth.json"
 import ru_setup from "./ru/setup.json"
@@ -16,6 +18,8 @@ import ru_orders from "./ru/orders.json"
 import ru_expert from "./ru/expert.json"
 import ru_earnings from "./ru/earnings.json"
 import ru_settings from "./ru/settings.json"
+import ru_reviews from "./ru/reviews.json"
+import ru_messages from "./ru/messages.json"
 import fr_common from "./fr/common.json"
 import fr_auth from "./fr/auth.json"
 import fr_setup from "./fr/setup.json"
@@ -25,6 +29,8 @@ import fr_orders from "./fr/orders.json"
 import fr_expert from "./fr/expert.json"
 import fr_earnings from "./fr/earnings.json"
 import fr_settings from "./fr/settings.json"
+import fr_reviews from "./fr/reviews.json"
+import fr_messages from "./fr/messages.json"
 import es_common from "./es/common.json"
 import es_auth from "./es/auth.json"
 import es_setup from "./es/setup.json"
@@ -34,6 +40,8 @@ import es_orders from "./es/orders.json"
 import es_expert from "./es/expert.json"
 import es_earnings from "./es/earnings.json"
 import es_settings from "./es/settings.json"
+import es_reviews from "./es/reviews.json"
+import es_messages from "./es/messages.json"
 import zh_common from "./zh/common.json"
 import zh_auth from "./zh/auth.json"
 import zh_setup from "./zh/setup.json"
@@ -43,6 +51,8 @@ import zh_orders from "./zh/orders.json"
 import zh_expert from "./zh/expert.json"
 import zh_earnings from "./zh/earnings.json"
 import zh_settings from "./zh/settings.json"
+import zh_reviews from "./zh/reviews.json"
+import zh_messages from "./zh/messages.json"
 import pt_common from "./pt/common.json"
 import pt_auth from "./pt/auth.json"
 import pt_setup from "./pt/setup.json"
@@ -52,14 +62,16 @@ import pt_orders from "./pt/orders.json"
 import pt_expert from "./pt/expert.json"
 import pt_earnings from "./pt/earnings.json"
 import pt_settings from "./pt/settings.json"
+import pt_reviews from "./pt/reviews.json"
+import pt_messages from "./pt/messages.json"
 
 export const LOCALES = {
-  en: { ...en_common, ...en_auth, ...en_setup, ...en_home, ...en_catalog, ...en_orders, ...en_expert, ...en_earnings, ...en_settings },
-  ru: { ...ru_common, ...ru_auth, ...ru_setup, ...ru_home, ...ru_catalog, ...ru_orders, ...ru_expert, ...ru_earnings, ...ru_settings },
-  fr: { ...fr_common, ...fr_auth, ...fr_setup, ...fr_home, ...fr_catalog, ...fr_orders, ...fr_expert, ...fr_earnings, ...fr_settings },
-  es: { ...es_common, ...es_auth, ...es_setup, ...es_home, ...es_catalog, ...es_orders, ...es_expert, ...es_earnings, ...es_settings },
-  zh: { ...zh_common, ...zh_auth, ...zh_setup, ...zh_home, ...zh_catalog, ...zh_orders, ...zh_expert, ...zh_earnings, ...zh_settings },
-  pt: { ...pt_common, ...pt_auth, ...pt_setup, ...pt_home, ...pt_catalog, ...pt_orders, ...pt_expert, ...pt_earnings, ...pt_settings },
+  en: { ...en_common, ...en_auth, ...en_setup, ...en_home, ...en_catalog, ...en_orders, ...en_expert, ...en_earnings, ...en_settings, ...en_messages, ...en_reviews },
+  ru: { ...ru_common, ...ru_auth, ...ru_setup, ...ru_home, ...ru_catalog, ...ru_orders, ...ru_expert, ...ru_earnings, ...ru_settings, ...ru_messages, ...ru_reviews },
+  fr: { ...fr_common, ...fr_auth, ...fr_setup, ...fr_home, ...fr_catalog, ...fr_orders, ...fr_expert, ...fr_earnings, ...fr_settings, ...fr_messages, ...fr_reviews },
+  es: { ...es_common, ...es_auth, ...es_setup, ...es_home, ...es_catalog, ...es_orders, ...es_expert, ...es_earnings, ...es_settings, ...es_messages, ...es_reviews },
+  zh: { ...zh_common, ...zh_auth, ...zh_setup, ...zh_home, ...zh_catalog, ...zh_orders, ...zh_expert, ...zh_earnings, ...zh_settings, ...zh_messages, ...zh_reviews },
+  pt: { ...pt_common, ...pt_auth, ...pt_setup, ...pt_home, ...pt_catalog, ...pt_orders, ...pt_expert, ...pt_earnings, ...pt_settings, ...pt_messages, ...pt_reviews },
 } as const
 
 export type Locale = keyof typeof LOCALES
