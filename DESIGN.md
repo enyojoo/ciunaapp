@@ -1,5 +1,7 @@
 # Ciuna design
 
+> **Superseded in part.** Colour, money format, status vocabulary, voice and component specs now live in [`design-system/`](design-system/README.md). `design-system/tokens.json` is the source of truth for every hex value; the colour table in section 1 below is historical. Key change: **filled orange controls carry ink (`#111827`) labels, never white** (white on `#F97316` is 2.8:1), and orange text uses `#C2410C`. Product scope for the seller side is in [docs/seller-portal-and-design-system-plan.md](docs/seller-portal-and-design-system-plan.md).
+
 Ciuna is a **super-app for people living abroad** (Africa–Russia corridors in product copy). One account, four jobs, one activity list: **send money home**, **order food**, **buy from mart**, **hire experts**. Trust, KYC, Support, and `en` / `ru` / `fr` / `es` matter more than a marketing hero.
 
 This file is the source of truth for **product, brand, naming, and native UI**. Web (`app.ciuna.com` on a phone) is the product reference. Expo must match that product, not the desktop sidebar.
