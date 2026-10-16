@@ -128,10 +128,7 @@ const styles = StyleSheet.create({
   chipText: { fontSize: 14, fontWeight: "600", color: colors.text },
   chipTextOn: { color: "#FFFFFF" },
   toolbar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 8,
+    gap: 12,
     marginBottom: 16,
   },
   selectHit: { maxWidth: 176, minWidth: 132 },
