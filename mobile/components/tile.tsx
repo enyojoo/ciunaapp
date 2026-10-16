@@ -47,7 +47,7 @@ export function Tile({
   const art = tileArtFor(slug ?? "")
   const Icon = art.icon
   const { height: winH } = useWindowDimensions()
-  /** Short phones: smaller artwork and no caption line, so the grid still fits above the tab bar. */
+  /** Short screens: smaller artwork. The description is never dropped or cut to one line: the page scrolls. */
   const compact = winH < 700
   const artHeight = Math.round(Math.min(120, Math.max(84, winH * 0.15)))
   const inner = (
@@ -64,7 +64,7 @@ export function Tile({
         <Text style={styles.title} numberOfLines={2}>
           {title}
         </Text>
-        {description && !compact ? (
+        {description ? (
           <Text style={styles.desc} numberOfLines={2}>
             {description}
           </Text>

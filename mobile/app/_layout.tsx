@@ -1,4 +1,5 @@
 import "@/lib/nativewind-flags"
+import { AppStackHeader } from "@/components/app-stack-header"
 import "../global.css"
 import "@/lib/web-crypto"
 import { Stack } from "expo-router"
@@ -65,6 +66,8 @@ export default function RootLayout() {
                         headerTintColor: colors.text,
                         headerBackButtonDisplayMode: "minimal",
                         animationDuration: 180,
+                        // Every screen that shows a header gets the shared top bar.
+                        header: (props: unknown) => <AppStackHeader {...(props as Parameters<typeof AppStackHeader>[0])} />,
                       }}
                     >
                       <Stack.Screen name="index" />
