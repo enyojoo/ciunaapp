@@ -1,6 +1,6 @@
 # Send money build plan
 
-Cards: `CustomerSend`, `CustomerSendWeb`, `CustomerTransferDetail`, `CustomerRecipients`, `CustomerKyc`, `CustomerLimits`, `SendAmountField`, `RateLine`, `ReceiptTransfer`, `EmailTransfer`, `PushTransfer`, `OfficeTransferDetail`, `OfficeRatesApproval`, `OfficeLimits`, `OfficeSendOps`, `OfficeRecipientsAndBlocks`, `OfficeTransactions`, `OfficeRates`, `OfficeKyc`. Decisions: `design-system/guides/80-decisions.md` (Send money section). All rates, fees, limits, deadlines and provider ids on cards are samples.
+Cards: `CustomerSend`, `CustomerSendWeb`, `CustomerTransferDetail`, `CustomerRecipients`, `CustomerKyc`, `CustomerLimits`, `SendAmountField`, `RateLine`, `ReceiptTransfer`, `EmailTransfer`, `PushTransfer`, `OfficeTransferDetail`, `OfficeRatesApproval` (simplified: no approval step), `OfficeLimits`, `OfficeSendOps`, `OfficeRecipientsAndBlocks`, `OfficeTransactions`, `OfficeRates`, `OfficeKyc`. Decisions: `design-system/guides/80-decisions.md` (Send money section). All rates, fees, limits, deadlines and provider ids on cards are samples.
 
 Principles: Send is money movement. Ship in small steps behind flags, keep the checkout and payment contracts frozen for installed apps, no provider names on customer screens, every money mutation idempotent and audited.
 
@@ -10,15 +10,15 @@ Principles: Send is money movement. Ship in small steps behind flags, keep the c
 | Transfer timeline | 3 stages in `mobile/app/pay/[transactionId].tsx` | 4 stages, awaiting-payment deadline with rate lock, refunded and cancelled states |
 | Transfer detail | none as a screen | detail screen, share receipt, repeat transfer, report a problem |
 | Limits | none | per-level monthly limits, usage, reset date, limit errors in Send |
-| Rates | list and markup in Office | four-eyes approval, history, stale-rate block, customer paused state |
+| Rates | list and markup in Office | direct finance edit with audit note and bounds, history, stale-rate block, customer paused state |
 | Notifications | emails en/es/fr/ru, exclamation-mark copy | zh and pt, split events (received, sent, delivered, failed, rate expiry), customer push |
 | Receipt | uploaded proof files only | generated receipt (screen, PDF, image) |
 | Office | transactions list | transfer detail page, retry/refund/mark delivered with reasons, attempts, provider health, blocklist, limits editor, Send ops queues |
 | Web | partial | `CustomerSendWeb` desktop flow with top nav and side panels |
 
 ## Work packages
-S0. Data: tables for `transfer_events`, `transfer_attempts`, `rate_proposals`, `rate_history`, `kyc_limits`, `kyc_limit_exceptions`, `kyc_usage`, `send_blocks`; migrations after API WP0. Exit: chain applies twice on real Postgres; RLS tests.
-S1. Rates: proposal and approval API (proposer cannot approve), history append-only, stale-rate guard in quote and create-transfer (503-style paused response), Office Rates and RatesApproval. Exit: four-eyes test, stale corridor refuses new transfers, existing in-flight transfers unaffected.
+S0. Data: tables for `transfer_events`, `transfer_attempts`, `rate_history`, `kyc_limits`, `kyc_limit_exceptions`, `kyc_usage`, `send_blocks`; migrations after API WP0. Exit: chain applies twice on real Postgres; RLS tests.
+S1. Rates: edit API with bounds validation and audit note, history append-only, stale-rate guard in quote and create-transfer (503-style paused response), Office Rates and RatesApproval. Exit: bounds test, audit row per change, stale corridor refuses new transfers, existing in-flight transfers unaffected.
 S2. Limits: `kyc_limits` read by quote and create, `kyc_usage` monthly, exception with expiry, Office Limits (compliance and super_admin write), `CustomerLimits`. Exit: boundary tests (exactly at, one minor unit over, across month reset).
 S3. Transfer lifecycle: event timeline, 10-minute payment window and rate lock read from settings, refund state, attempts and retry, mark delivered, notes; Office TransferDetail and SendOps; customer TransferDetail on native and web. Exit: retry idempotency (double click creates one attempt), refund by role, timeline matches provider webhooks in replay tests.
 S4. Customer Send UI: `SendAmountField`, `CorridorPicker`, `RateLine`, review, waiting screen, failure states; native first, then `CustomerSendWeb`. Exit: simulator and browser walk of every state on the card with the fake provider.

@@ -15,7 +15,7 @@ Let finance see and change the exchange rate and markup for each send corridor, 
 
 - Live, Stale (older than 1 hour, warning), Manual (neutral).
 - Validation: markup outside 0% to 5% blocks Save and says so.
-- Every markup or manual-rate change needs a second finance approver.
+- Finance edits directly; every change is audited with who, old, new and a note.
 - Support role: View only banner, no Edit or History.
 
 ## Rules

@@ -1304,8 +1304,8 @@
   {
    "name": "OfficeRatesApproval",
    "group": "Office · Screens",
-   "subtitle": "Rates workflow: corridor table with live, stale and manual rows, proposed markup change with diff and impact, four-eyes approve or reject, stale-rate Send block, history and validation",
-   "height": 6360,
+   "subtitle": "Rates change card: corridor table with live, stale and manual rows, direct finance edits with note and bounds, audited history, customer paused state, ops read-only",
+   "height": 4496,
    "width": 1240,
    "page": true,
    "readme": true

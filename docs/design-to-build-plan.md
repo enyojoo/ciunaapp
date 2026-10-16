@@ -42,7 +42,7 @@ Exit: a customer can search, favourite, order, chat and review against staging; 
 1. Seller money screens and catalog desktop (P6, P7, P8).
 2. Office finance polish, listing review and catalog queue (needs API WP2 reason templates and catalog reviews), orders and exception queue with refund by role (needs API WP5), bookings (O6, O7, O8).
 3. Customer store and product pages, cart and checkout, experts, activity (WP6, WP7, WP9, WP10).
-4. Payout hardening (API WP13): card-number rejection, four-eyes approval, attempts table.
+4. Payout hardening (API WP13): card-number rejection, attempts table.
 
 ### Stage C2: Send money
 See `build-plan/send.md` (S0 to S7). Depends on the permission model (Stage A item 2) and the data baseline.

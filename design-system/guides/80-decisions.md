@@ -67,14 +67,14 @@ Defaults chosen for Ciuna's interest: protect money and customers first, launch 
 
 ### Money and platform
 - Seed settings: hold 3 days after completion for goods and 2 days after the session for experts; minimum payout ₽1,000; payout fee 0% at launch (built, off); commissions 8% food, 6% mart, 12% experts until the pilot data says otherwise. The "1% withdraw fee" on cards is an example only and should be shown as 0 until finance sets one.
-- Payout approval is four-eyes: one finance user approves, another marks paid, for amounts above a configurable threshold.
+- Payouts keep the existing steps (approve, then mark paid with a reference). No extra second-person rule at launch.
 - Chat translation: provider interface with Google Cloud Translation as the default; original text is shown if the provider fails. Push: Expo push for native, web push after launch.
 - Maintenance mode is enforced in the API for all clients; money routes return 503 and apps show a banner.
 - PIN stays a local device lock for launch; a server PIN needs its own security review.
 - Rate limits at launch: auth 10/min per IP, chat 30/min per user, search 60/min per user, checkout 10/min per user, uploads 20/min per user.
 
 ### Send money (added)
-- Every rate markup or manual-rate change needs a second finance approver (four-eyes), not only large ones. A stale corridor rate blocks new transfers on that corridor and shows a plain "paused" state to customers.
+- Finance changes rates and markups directly. No second approver. Every change is audited with who, old value, new value and a short note, and values outside the allowed bounds (markup 0% to 5%, no negative spread) are refused. A stale corridor rate blocks new transfers on that corridor and shows a plain "paused" state to customers.
 - Limits are edited by compliance and super_admin only; finance sees them read-only.
 - Compliance has read-only access to Send operations.
 - All rates, markups, fees, limits and provider ids on Send cards are sample data.
