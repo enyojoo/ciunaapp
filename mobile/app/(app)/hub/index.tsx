@@ -12,6 +12,7 @@ import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useHubServiceLines } from "@/lib/use-hub-service-line"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { lineHref } from "@/lib/hub"
+import { useCatalogGridColumns } from "@/lib/responsive-layout"
 import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { colors, space } from "@/lib/theme"
 
@@ -22,6 +23,10 @@ export default function HomeScreen() {
   const { openLink } = useExternalLink()
   const { data, loading, refreshing, refresh, revalidate } = useHubServiceLines()
   const lines = data || []
+  // Phones show two tiles per row and fill the screen. Wide web screens show them all in one row,
+  // with a height cap so the tiles stay a sensible size instead of stretching across a big window.
+  const wide = useCatalogGridColumns() > 2
+  const perRow = wide ? Math.max(2, lines.length || 4) : 2
 
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
@@ -71,9 +76,9 @@ export default function HomeScreen() {
           />
         ) : (
           <View style={styles.grid}>
-            {Array.from({ length: Math.ceil(lines.length / 2) }).map((_, r) => (
-              <View key={r} style={styles.row}>
-                {lines.slice(r * 2, r * 2 + 2).map((line) => {
+            {Array.from({ length: Math.ceil(lines.length / perRow) }).map((_, r) => (
+              <View key={r} style={[styles.row, wide && styles.rowWide]}>
+                {lines.slice(r * perRow, r * perRow + perRow).map((line) => {
                   const { title, shortDescription } = hubServiceLineTileCopy(line, t)
                   return (
                     <View key={line.id} style={styles.cell}>
@@ -96,5 +101,6 @@ const styles = StyleSheet.create({
   // Fills the rest of the screen; each row takes an equal share and each tile stretches to its row.
   grid: { flex: 1, paddingHorizontal: space.page, gap: 10, paddingBottom: 10 },
   row: { flex: 1, flexDirection: "row", gap: 10 },
+  rowWide: { flexGrow: 0, flexShrink: 0, flexBasis: 320, height: 320 },
   cell: { flex: 1 },
 })
