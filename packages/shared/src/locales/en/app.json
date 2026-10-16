@@ -1201,7 +1201,9 @@
     "etaMinutes": "{{n}} min",
     "storeClosedTitle": "This store is closed right now",
     "storeOpensAt": "It opens {{day}} {{time}}.",
-    "free": "Free"
+    "free": "Free",
+    "continueToReview": "Continue to review",
+    "edit": "Edit"
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

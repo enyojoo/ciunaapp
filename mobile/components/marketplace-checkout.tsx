@@ -186,7 +186,8 @@ export function MarketplaceCheckout({
     [amount, setAmount] = useState(""),
     [payTab, setPayTab] = useState<MarketplacePayTab>("yookassa"),
     [receiptFile, setReceiptFile] = useState<ReceiptAsset | null>(null),
-    [leaving, setLeaving] = useState(false)
+    [leaving, setLeaving] = useState(false),
+    [step, setStep] = useState<"details" | "review">("details")
   const autoOnline = useRef(false)
   const actual =
     source.kind === "product" && customAmount ? { ...source, fundedAmount: Number(amount) } : source
@@ -205,6 +206,8 @@ export function MarketplaceCheckout({
   })
   const label = (key: string, fallback: string) => t(`marketplace.${key}`, { defaultValue: fallback })
   const paying = !!(c.order && isOpenPay(c.order)) || leaving
+  /** Review is its own step: after Continue, or whenever a payment is already open. */
+  const inReview = step === "review" || paying
   const doneOrder = !leaving && !!(c.order && !isOpenPay(c.order))
   const q = c.quote
   const snap = c.order?.snapshot
@@ -297,7 +300,7 @@ export function MarketplaceCheckout({
   }, [q?.id])
 
   useEffect(() => {
-    if (doneOrder || paying || !q || activePayTab !== "yookassa") return
+    if (step !== "review" || doneOrder || paying || !q || activePayTab !== "yookassa") return
     if (!q.methods.some((m) => m.rail === "yookassa")) return
     if (!canAct || c.busy || !c.contactName.trim()) return
     if (onlinePayment?.confirmationToken) return
@@ -307,7 +310,7 @@ export function MarketplaceCheckout({
       const token = order?.attempts?.[0]?.confirmation_token
       if (!order || (Platform.OS === "web" && !token)) autoOnline.current = false
     })
-  }, [q?.id, canAct, activePayTab, paying, doneOrder, c.busy, c.contactName, onlinePayment?.confirmationToken])
+  }, [step, q?.id, canAct, activePayTab, paying, doneOrder, c.busy, c.contactName, onlinePayment?.confirmationToken])
 
   if (doneOrder)
     return (
@@ -446,8 +449,8 @@ export function MarketplaceCheckout({
           </Text>
         </View>
         <View style={styles.progressStep}>
-          <View style={[styles.progressBar, (paying || doneOrder) && styles.progressBarOn]} />
-          <Text style={[styles.progressText, (paying || doneOrder) && styles.progressTextOn]}>
+          <View style={[styles.progressBar, (inReview || doneOrder) && styles.progressBarOn]} />
+          <Text style={[styles.progressText, (inReview || doneOrder) && styles.progressTextOn]}>
             {label("progressReview", "Review")}
           </Text>
         </View>
@@ -486,7 +489,7 @@ export function MarketplaceCheckout({
             slot={q?.slotStart ? { start: q.slotStart, end: q.slotEnd, timezone: q.timezone } : undefined}
           />
 
-          {!paying && (q || seed) && (
+          {!inReview && (q || seed) && (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>{destHeading}</Text>
               <View style={styles.sectionCard}>
@@ -657,10 +660,34 @@ export function MarketplaceCheckout({
                   </Text>
                 )}
               </View>
+              <PrimaryButton
+                label={label("continueToReview", "Continue to review")}
+                disabled={!canAct || c.busy}
+                onPress={() => setStep("review")}
+              />
             </View>
           )}
 
-          {payMethods.length > 0 && (
+          {!paying && inReview && (q || seed) && (
+            <View style={styles.section}>
+              <View style={styles.recapHead}>
+                <Text style={styles.sectionTitle}>{destHeading}</Text>
+                <Pressable onPress={() => setStep("details")} hitSlop={8} accessibilityRole="button">
+                  <Text style={styles.link}>{label("edit", "Edit")}</Text>
+                </Pressable>
+              </View>
+              <View style={styles.sectionCard}>
+                <Text style={styles.infoValue}>
+                  {[c.contactName.trim(), c.contactPhone.trim()].filter(Boolean).join(" · ")}
+                </Text>
+                {fulfillmentMode === "delivery" && c.address.trim() ? <Text style={styles.infoValue}>{c.address.trim()}</Text> : null}
+                {fulfillmentMode === "pickup" && q?.pickupLocation ? <Text style={styles.infoValue}>{q.pickupLocation}</Text> : null}
+                {c.note.trim() ? <Text style={styles.meta}>{c.note.trim()}</Text> : null}
+              </View>
+            </View>
+          )}
+
+          {inReview && payMethods.length > 0 && (
             <MarketplacePayStep
               methods={payMethods}
               payTab={activePayTab}
@@ -1030,7 +1057,7 @@ export function MarketplaceOrderView({
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingTop: 8, paddingHorizontal: 16 },
+  scroll: { paddingTop: 16, paddingHorizontal: 16 },
   stack: { gap: 20, paddingBottom: 16 },
   footerPad: { padding: 20 },
   loading: { fontSize: typeSize.body, color: colors.muted },
@@ -1044,6 +1071,7 @@ const styles = StyleSheet.create({
   errorText: { fontSize: typeSize.meta, color: colors.danger, fontWeight: "600" },
   timelineCard: { backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },
   progress: { flexDirection: "row", gap: 8, marginBottom: 16 },
+  recapHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   progressStep: { flex: 1, gap: 6 },
   progressBar: { height: 4, borderRadius: 2, backgroundColor: colors.border },
   progressBarOn: { backgroundColor: colors.primary },

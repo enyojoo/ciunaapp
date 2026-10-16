@@ -1201,7 +1201,9 @@
     "etaMinutes": "{{n}} мин",
     "storeClosedTitle": "Магазин сейчас закрыт",
     "storeOpensAt": "Откроется {{day}} в {{time}}.",
-    "free": "Бесплатно"
+    "free": "Бесплатно",
+    "continueToReview": "Перейти к проверке",
+    "edit": "Изменить"
   },
   "social": {
     "loadFailed": "Не удалось загрузить, попробуйте ещё раз",

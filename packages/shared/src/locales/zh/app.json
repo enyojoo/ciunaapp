@@ -1201,7 +1201,9 @@
     "etaMinutes": "{{n}} 分钟",
     "storeClosedTitle": "该店铺目前已打烊",
     "storeOpensAt": "将于{{day}} {{time}}开门。",
-    "free": "免费"
+    "free": "免费",
+    "continueToReview": "继续确认",
+    "edit": "编辑"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

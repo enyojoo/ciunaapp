@@ -1201,7 +1201,9 @@
     "etaMinutes": "{{n}} min",
     "storeClosedTitle": "Esta tienda está cerrada ahora",
     "storeOpensAt": "Abre el {{day}} a las {{time}}.",
-    "free": "Gratis"
+    "free": "Gratis",
+    "continueToReview": "Continuar a la revisión",
+    "edit": "Editar"
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",
