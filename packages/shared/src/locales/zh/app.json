@@ -1240,23 +1240,26 @@
   },
   "home": {
     "slide": {
-      "send": {
-        "title": "把钱寄回家",
-        "body": "5 分钟内转给家人，手续费先显示。",
-        "cta": "立即汇款"
-      },
-      "mart": {
-        "title": "食品和香料",
-        "body": "Lagos Pantry：今天在莫斯科送达。",
-        "cta": "去超市"
-      },
-      "experts": {
-        "title": "预约本地专家",
-        "body": "能说您的语言的律师、老师和翻译。",
-        "cta": "查找专家"
-      },
       "adLabel": "广告",
-      "position": "第 {{n}} 张，共 {{total}} 张"
+      "position": "第 {{n}} 张，共 {{total}} 张",
+      "belong": {
+        "kicker": "Ciuna",
+        "title": "家在您身边",
+        "body": "金钱与家乡的人，一处搞定。",
+        "cta": "去看看"
+      },
+      "language": {
+        "kicker": "为海外的您",
+        "title": "无论在哪都能被理解",
+        "body": "说您语言的店铺和专家。",
+        "cta": "找同乡"
+      },
+      "family": {
+        "kicker": "常伴家人",
+        "title": "家人近在指尖",
+        "body": "几分钟把钱寄回家。",
+        "cta": "寄钱回家"
+      }
     }
   }
 }

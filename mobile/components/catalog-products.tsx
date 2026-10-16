@@ -1,10 +1,8 @@
 import { useMemo, useState } from "react"
-import { Pressable, StyleSheet, Text, View } from "react-native"
-import { ChevronDown } from "lucide-react-native"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { EmptyState } from "@/components/empty-state"
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card"
-import { SheetPicker } from "@/components/sheet-picker"
 import { catalogCategories, filterCatalogByCategory, sortHubCatalogProducts } from "@/lib/hub-catalog"
 import type { HubProduct } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -34,7 +32,6 @@ export function CatalogProducts({
 }) {
   const { t } = useTranslation("app")
   const [category, setCategory] = useState("")
-  const [pickerOpen, setPickerOpen] = useState(false)
   const ordered = useMemo(() => sortHubCatalogProducts(products), [products])
   const options = useMemo(() => catalogCategories(ordered, category), [ordered, category])
   const visible = useMemo(() => filterCatalogByCategory(ordered, category), [ordered, category])
@@ -43,31 +40,33 @@ export function CatalogProducts({
   const allLabel = t("hub.allCategories", { defaultValue: "All categories" })
   const heading = headingProp || t("hub.marketplaceProductsHeading", { defaultValue: "Products" })
   const filterAria = t("hub.categoryFilterAria", { defaultValue: "Filter by category" })
-  const pickerItems = useMemo(
-    () => [{ id: ALL_VALUE, label: allLabel }, ...options.map((c) => ({ id: c, label: c }))],
-    [allLabel, options],
-  )
-  const selectedLabel = category || allLabel
 
+  /** Design: heading, then a row of category chips ("All" plus each category); the selected chip is filled. */
+  const chips = [{ id: ALL_VALUE, label: allLabel }, ...options.map((c) => ({ id: c, label: c }))]
   const toolbar = (
     <View style={styles.toolbar}>
       <Text style={styles.heading} numberOfLines={1}>
         {heading}
       </Text>
       {options.length > 0 ? (
-        <Pressable
-          onPress={() => setPickerOpen(true)}
-          accessibilityRole="button"
-          accessibilityLabel={filterAria}
-          style={styles.selectHit}
-        >
-          <View style={styles.select}>
-            <Text style={styles.selectValue} numberOfLines={1}>
-              {selectedLabel}
-            </Text>
-            <ChevronDown size={16} color={colors.muted} strokeWidth={2.2} />
-          </View>
-        </Pressable>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips} accessibilityLabel={filterAria}>
+          {chips.map((c) => {
+            const on = (category || ALL_VALUE) === c.id
+            return (
+              <Pressable
+                key={c.id}
+                onPress={() => setCategory(c.id === ALL_VALUE ? "" : c.id)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: on }}
+                style={[styles.chip, on && styles.chipOn]}
+              >
+                <Text style={[styles.chipText, on && styles.chipTextOn]} numberOfLines={1}>
+                  {c.label}
+                </Text>
+              </Pressable>
+            )
+          })}
+        </ScrollView>
       ) : loading ? (
         <View style={styles.selectSkeleton} />
       ) : null}
@@ -95,16 +94,6 @@ export function CatalogProducts({
   return (
     <View>
       {toolbar}
-      <SheetPicker
-        open={pickerOpen}
-        title={filterAria}
-        items={pickerItems}
-        keyExtractor={(item) => item.id}
-        labelExtractor={(item) => item.label}
-        selectedId={category || ALL_VALUE}
-        onSelect={(item) => setCategory(item.id === ALL_VALUE ? "" : item.id)}
-        onClose={() => setPickerOpen(false)}
-      />
       {visible.length === 0 ? (
         <EmptyState
           title={t("hub.noProductsInCategory", { defaultValue: "No products in this category." })}
@@ -132,7 +121,12 @@ export function CatalogProducts({
 }
 
 const styles = StyleSheet.create({
-  heading: { flex: 1, minWidth: 0, fontSize: 18, fontWeight: "600", color: colors.text, marginRight: 8 },
+  heading: { fontSize: 20, fontWeight: "700", color: colors.text, letterSpacing: -0.2 },
+  chips: { gap: 8, paddingBottom: 4 },
+  chip: { height: 36, paddingHorizontal: 14, borderRadius: 18, borderWidth: 1, borderColor: colors.inputEdge, backgroundColor: colors.surface, justifyContent: "center" },
+  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipText: { fontSize: 14, fontWeight: "600", color: colors.text },
+  chipTextOn: { color: "#FFFFFF" },
   toolbar: {
     flexDirection: "row",
     alignItems: "center",

@@ -144,7 +144,7 @@
    "name": "LanguageTabs",
    "group": "Forms",
    "subtitle": "Language tabs en ru fr es zh pt with default marker, filled dot and missing-translation state, shown on a product form",
-   "height": 1381,
+   "height": 1398,
    "width": null,
    "page": false,
    "readme": true
@@ -171,7 +171,7 @@
    "name": "Alert",
    "group": "Feedback",
    "subtitle": "Inline banners: neutral, warning, destructive and success with title, body and action, plus the seller store status banners",
-   "height": 1308,
+   "height": 2039,
    "width": null,
    "page": false,
    "readme": true
@@ -333,7 +333,7 @@
    "name": "DocumentUpload",
    "group": "Marketplace",
    "subtitle": "One verification document row: required or optional, upload, in review, approved, rejected with the Office reason, expiry and a locked approved file",
-   "height": 1184,
+   "height": 1251,
    "width": 900,
    "page": false,
    "readme": true
@@ -405,7 +405,7 @@
    "name": "ListingEditor",
    "group": "Marketplace",
    "subtitle": "Product editor as a desktop screen: basics with language tabs, photos, price, stock, fulfilment, visibility, validation errors, review-pending hint and sticky save bar",
-   "height": 2337,
+   "height": 2432,
    "width": 1240,
    "page": true,
    "readme": true
@@ -414,7 +414,7 @@
    "name": "OnboardingChecklist",
    "group": "Marketplace",
    "subtitle": "Set up and verify checklist: seven steps in done, to do, blocked, in review and rejected states, on desktop and phone",
-   "height": 1070,
+   "height": 1123,
    "width": null,
    "page": false,
    "readme": true
@@ -836,8 +836,8 @@
   {
    "name": "HomeSlider",
    "group": "Customer app · Screens",
-   "subtitle": "Home hero as a slider: swipe, dots, auto-advance, pause on touch; slides are data so Office can add ads later",
-   "height": 1000,
+   "subtitle": "Home banner that says what Ciuna is for (a home for people abroad), not what the services do: three purpose banners, gradient from the old hero deepened for contrast. Height follows the screen.",
+   "height": 1334,
    "width": null,
    "page": false,
    "readme": true
@@ -963,7 +963,7 @@
    "name": "SellerEarnings",
    "group": "Seller · Screens",
    "subtitle": "Earnings overview: four balances with the hold note, Withdraw, the statement as a table or stacked cards with statuses, CSV download with a date error, the empty state and every Withdraw sheet state",
-   "height": 5452,
+   "height": 5533,
    "width": 1240,
    "page": true,
    "readme": true
@@ -972,7 +972,7 @@
    "name": "SellerFulfilment",
    "group": "Seller · Screens",
    "subtitle": "Delivery and pickup: pickup address, hours and notes, delivery zone rows with fee, currency and active switch, duplicate error, and what each part unlocks",
-   "height": 4203,
+   "height": 4369,
    "width": 1240,
    "page": true,
    "readme": true
@@ -981,7 +981,7 @@
    "name": "SellerHome",
    "group": "Seller · Screens",
    "subtitle": "Seller Home: live (new orders, in progress, to-do, today's earnings), setup checklist, five status banners, loading skeleton, phone and desktop",
-   "height": 4002,
+   "height": 4125,
    "width": 1240,
    "page": true,
    "readme": true
@@ -990,7 +990,7 @@
    "name": "SellerImport",
    "group": "Seller · Screens",
    "subtitle": "Import products from CSV: template download, upload, preview with per-row errors, progress and a created or failed summary",
-   "height": 5408,
+   "height": 5468,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1017,7 +1017,7 @@
    "name": "SellerOnboarding",
    "group": "Seller · Screens",
    "subtitle": "Create a business: choose type, name, section, country and languages, with an invite banner and validation states on phone and desktop",
-   "height": 4485,
+   "height": 4543,
    "width": 1200,
    "page": true,
    "readme": true
@@ -1044,7 +1044,7 @@
    "name": "SellerPayoutMethods",
    "group": "Seller · Screens",
    "subtitle": "Payout methods: Verified and Waiting for verification, default marker, add sheet for SBP and bank accounts with a card-number error, Ciuna Send as Coming soon, remove confirm and empty state",
-   "height": 3528,
+   "height": 3586,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1062,7 +1062,7 @@
    "name": "SellerProductEditor",
    "group": "Seller · Screens",
    "subtitle": "Product editor: basics with English, Русский and 中文 tabs, photos, price, stock, fulfilment, visibility, validation errors, sticky save bar and archive confirm",
-   "height": 5983,
+   "height": 6099,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1089,7 +1089,7 @@
    "name": "SellerServiceEditor",
    "group": "Seller · Screens",
    "subtitle": "Service editor: pricing, duration, booking rules in hours or minutes, meeting instructions required to publish, sticky bar, and the unpublish confirm",
-   "height": 2740,
+   "height": 2820,
    "width": 1200,
    "page": true,
    "readme": true
@@ -1107,7 +1107,7 @@
    "name": "SellerSetup",
    "group": "Seller · Screens",
    "subtitle": "Set up and verify: profile, logo, verification type and country requirements, details, per-document status, first listing and submit, in draft, rejected, in review and approved",
-   "height": 10836,
+   "height": 11031,
    "width": 1200,
    "page": true,
    "readme": true
@@ -1143,7 +1143,7 @@
    "name": "OfficeAssistant",
    "group": "Office · Screens",
    "subtitle": "Office Assistant: the ops AI assistant (conversation, tool result table, suggested and confirmed actions, errors, unavailable, role-limited) and the built queue of customer requests",
-   "height": 4548,
+   "height": 4645,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1242,7 +1242,7 @@
    "name": "OfficeLimits",
    "group": "Office · Screens",
    "subtitle": "KYC levels and monthly Send limits per level and corridor, usage by level, per-user exceptions with reason and expiry, audit note; values labelled as seed examples",
-   "height": 6396,
+   "height": 6610,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1314,7 +1314,7 @@
    "name": "OfficeRatesApproval",
    "group": "Office · Screens",
    "subtitle": "Rates change card: corridor table with live, stale and manual rows, direct finance edits with note and bounds, audited history, customer paused state, ops read-only",
-   "height": 4520,
+   "height": 4732,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1323,7 +1323,7 @@
    "name": "OfficeRecipientsAndBlocks",
    "group": "Office · Screens",
    "subtitle": "Recipient lookup by masked account number, related transfers, blocked recipients and senders with reason and evidence, block and unblock dialogs, empty and no-match states",
-   "height": 5604,
+   "height": 5718,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1350,7 +1350,7 @@
    "name": "OfficeSendOps",
    "group": "Office · Screens",
    "subtitle": "Send operations dashboard: volume and success tiles, queues for payments waiting, failed and stuck payouts and pending refunds, provider status with maintenance toggle, role variants",
-   "height": 5533,
+   "height": 5784,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1386,7 +1386,7 @@
    "name": "OfficeTransferDetail",
    "group": "Office · Screens",
    "subtitle": "Full-page transfer detail: status and owner, sender and recipient, amounts and rate snapshot, provider timeline with raw ids and attempts, notes, audit trail, role-based actions and reason dialogs",
-   "height": 8097,
+   "height": 8436,
    "width": 1240,
    "page": true,
    "readme": true

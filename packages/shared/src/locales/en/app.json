@@ -1240,23 +1240,26 @@
   },
   "home": {
     "slide": {
-      "send": {
-        "title": "Send money home",
-        "body": "Transfers to family in 5 minutes, with the fee shown first.",
-        "cta": "Send now"
-      },
-      "mart": {
-        "title": "Groceries and spices",
-        "body": "Lagos Pantry: delivered in Moscow today.",
-        "cta": "Shop Mart"
-      },
-      "experts": {
-        "title": "Book a local expert",
-        "body": "Lawyers, tutors and translators who speak your language.",
-        "cta": "Find experts"
-      },
       "adLabel": "Ad",
-      "position": "Slide {{n}} of {{total}}"
+      "position": "Slide {{n}} of {{total}}",
+      "belong": {
+        "kicker": "Ciuna",
+        "title": "Home is wherever you are",
+        "body": "Money, groceries, people from home.",
+        "cta": "Explore"
+      },
+      "language": {
+        "kicker": "For people abroad",
+        "title": "Be understood anywhere",
+        "body": "Stores and experts in your language.",
+        "cta": "Find your people"
+      },
+      "family": {
+        "kicker": "Stay close",
+        "title": "Family, a few taps away",
+        "body": "Send money home in minutes.",
+        "cta": "Send home"
+      }
     }
   }
 }

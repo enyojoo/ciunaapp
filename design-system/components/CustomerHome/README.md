@@ -4,7 +4,7 @@
 The first screen of the customer app: a quiet launcher for the services Office has switched on.
 
 ## Anatomy
-Compact header: Ciuna logo left, Refer pill (teal) and the profile avatar right (opens Account). Support is not on Home. One muted line. A two-column grid of service tiles (4:3 artwork, title, one short line) from Office Hub Services. Three-tab bar on phones. On desktop web: top nav (Home, Orders, Favourites), greeting, four-column tiles and a referral plate.
+Header (sticky): Ciuna logo left, Refer pill (teal) and the profile avatar right (opens Account). Support and search are not on Home. Below the header: the hero banner (what Ciuna is for: a home for people abroad; height follows the screen, 128 to 176 px), then the service tiles. Home fits on one screen without scrolling. One muted line. A two-column grid of service tiles (4:3 artwork, title, one short line) from Office Hub Services. Three-tab bar on phones. On desktop web: top nav (Home, Orders, Favourites), greeting, four-column tiles and a referral plate.
 
 ## States
 Loaded; first-load skeleton (six tiles) with no cache; a tile hidden by Office (grid reflows); Russian and Chinese copy (wrap, no truncation of titles); desktop. Empty (all tiles off) shows the standard EmptyState "Unavailable" with retry; offline shows cached tiles with no banner on Home.

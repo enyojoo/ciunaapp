@@ -1,18 +1,19 @@
 /**
- * Home slider content. Slides are data: Office will supply this list later (and ads with `ad: true`).
- * Until then these static slides point at the four service lines. Copy comes from the `home.slide.*` keys.
+ * Home banner content: what Ciuna is for, not what the services do (the tiles already show those).
+ * Ciuna is a home for people living abroad: money, groceries and people from home, in one place.
+ * Banners are data; Office will supply paid ads later (`ad: true`). Copy: `home.slide.<id>.*`.
  */
-export type HomeSlideArt = "food" | "mart" | "send" | "experts"
+export type HomeSlideTone = "warm" | "teal" | "blue"
 
 export interface HomeSlide {
   id: string
-  art: HomeSlideArt
+  tone: HomeSlideTone
   href: string
   ad?: boolean
 }
 
 export const HOME_SLIDES: HomeSlide[] = [
-  { id: "send", art: "send", href: "/send" },
-  { id: "mart", art: "mart", href: "/hub/mart" },
-  { id: "experts", art: "experts", href: "/experts" },
+  { id: "belong", tone: "warm", href: "/hub" },
+  { id: "language", tone: "teal", href: "/experts" },
+  { id: "family", tone: "blue", href: "/send" },
 ]

@@ -83,7 +83,8 @@ const SHOTS = [
 ]
 const only = process.argv.slice(2)
 const browser = await chromium.launch()
-const ctx = await browser.newContext({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: "en-US" })
+const [VW, VH] = (process.env.CAPTURE_VIEWPORT || "375x812").split("x").map(Number)
+const ctx = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: "en-US" })
 const page = await ctx.newPage()
 await mock(page)
 // seed the session before the app boots
@@ -95,7 +96,8 @@ for (const shot of SHOTS) {
   await page.waitForTimeout(shot.wait)
   const where = new URL(page.url()).pathname
   if (where.startsWith("/auth")) { failed.push(`${shot.name}: redirected to ${where} (no session)`); continue }
-  await page.screenshot({ path: path.join(out, `${shot.name}.png`), fullPage: shot.full })
+  const tag = process.env.CAPTURE_VIEWPORT ? `-${VW}x${VH}` : ""
+  await page.screenshot({ path: path.join(out, `${shot.name}${tag}.png`), fullPage: shot.full })
   console.log(`captured ${shot.name} (${where})`)
 }
 await browser.close()

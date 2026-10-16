@@ -1240,23 +1240,26 @@
   },
   "home": {
     "slide": {
-      "send": {
-        "title": "Envoyez de l'argent à la maison",
-        "body": "Virements à la famille en 5 minutes, frais affichés d'abord.",
-        "cta": "Envoyer"
-      },
-      "mart": {
-        "title": "Épicerie et épices",
-        "body": "Lagos Pantry : livraison à Moscou aujourd'hui.",
-        "cta": "Ouvrir Mart"
-      },
-      "experts": {
-        "title": "Réservez un expert local",
-        "body": "Avocats, tuteurs et traducteurs qui parlent votre langue.",
-        "cta": "Trouver des experts"
-      },
       "adLabel": "Publicité",
-      "position": "Diapositive {{n}} sur {{total}}"
+      "position": "Diapositive {{n}} sur {{total}}",
+      "belong": {
+        "kicker": "Ciuna",
+        "title": "Chez soi, où que vous soyez",
+        "body": "Argent et proches de chez vous.",
+        "cta": "Découvrir"
+      },
+      "language": {
+        "kicker": "Pour l'étranger",
+        "title": "Compris partout",
+        "body": "Boutiques et experts dans votre langue.",
+        "cta": "Trouver les vôtres"
+      },
+      "family": {
+        "kicker": "Restez proches",
+        "title": "Famille à quelques touches",
+        "body": "Envoyez de l'argent en minutes.",
+        "cta": "Envoyer"
+      }
     }
   }
 }

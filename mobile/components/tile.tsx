@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
+import { useWindowDimensions } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
-import { Briefcase, GraduationCap, Send, ShoppingBasket, Utensils, type LucideIcon } from "lucide-react-native"
+import { Briefcase, Gift, GraduationCap, Send, ShoppingBasket, Sparkles, Utensils, type LucideIcon } from "lucide-react-native"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /**
@@ -15,6 +16,10 @@ export const TILE_ART: Record<string, TileArt> = {
   mart: { from: "#9FCB8A", to: "#3F8A55", icon: ShoppingBasket },
   send: { from: "#8FB8D9", to: "#3F6F9C", icon: Send },
   experts: { from: "#D9A3C7", to: "#9C4F83", icon: GraduationCap },
+  /** Hero slides (not tiles). */
+  refer: { from: "#5EC4B6", to: "#0F766E", icon: Gift },
+  pick: { from: "#F3B47A", to: "#D9622B", icon: Sparkles },
+  offer: { from: "#9FCB8A", to: "#3F8A55", icon: ShoppingBasket },
 }
 
 /** Art for a service-line slug. Unknown slugs get the neutral brown fallback. */
@@ -41,21 +46,25 @@ export function Tile({
 }) {
   const art = tileArtFor(slug ?? "")
   const Icon = art.icon
+  const { height: winH } = useWindowDimensions()
+  /** Short phones: smaller artwork and no caption line, so the grid still fits above the tab bar. */
+  const compact = winH < 700
+  const artHeight = Math.round(Math.min(120, Math.max(84, winH * 0.15)))
   const inner = (
     <View style={styles.card}>
-      <View style={styles.art}>
+      <View style={[styles.art, { height: artHeight }]}>
         <LinearGradient colors={[art.from, art.to]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
         {iconUrl ? (
           <Image source={{ uri: iconUrl }} style={styles.artImage} contentFit="contain" />
         ) : (
-          <Icon size={56} color="#FFFFFF" strokeWidth={2} style={{ opacity: 0.9 }} />
+          <Icon size={44} color="#FFFFFF" strokeWidth={2} style={{ opacity: 0.9 }} />
         )}
       </View>
       <View style={styles.caption}>
         <Text style={styles.title} numberOfLines={2}>
           {title}
         </Text>
-        {description ? (
+        {description && !compact ? (
           <Text style={styles.desc} numberOfLines={2}>
             {description}
           </Text>
@@ -86,8 +95,8 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  art: { aspectRatio: 4 / 3, alignItems: "center", justifyContent: "center" },
-  artImage: { width: 56, height: 56 },
+  art: { alignItems: "center", justifyContent: "center" },
+  artImage: { width: 48, height: 48 },
   caption: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 12, gap: 2 },
   skeleton: { minHeight: 180, backgroundColor: colors.surface },
   title: {

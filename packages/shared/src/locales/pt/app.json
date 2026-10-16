@@ -1240,23 +1240,26 @@
   },
   "home": {
     "slide": {
-      "send": {
-        "title": "Envie dinheiro para casa",
-        "body": "Transferências para a família em 5 minutos, com a taxa mostrada antes.",
-        "cta": "Enviar agora"
-      },
-      "mart": {
-        "title": "Mercado e temperos",
-        "body": "Lagos Pantry: entrega em Moscou hoje.",
-        "cta": "Ir ao Mercado"
-      },
-      "experts": {
-        "title": "Agende um especialista local",
-        "body": "Advogados, professores e tradutores que falam o seu idioma.",
-        "cta": "Encontrar especialistas"
-      },
       "adLabel": "Anúncio",
-      "position": "Slide {{n}} de {{total}}"
+      "position": "Slide {{n}} de {{total}}",
+      "belong": {
+        "kicker": "Ciuna",
+        "title": "Casa é onde você estiver",
+        "body": "Dinheiro e gente de casa.",
+        "cta": "Explorar"
+      },
+      "language": {
+        "kicker": "Para quem vive fora",
+        "title": "Entendido em qualquer lugar",
+        "body": "Lojas e especialistas no seu idioma.",
+        "cta": "Encontre os seus"
+      },
+      "family": {
+        "kicker": "Fique perto",
+        "title": "Família a um toque",
+        "body": "Envie dinheiro para casa em minutos.",
+        "cta": "Enviar"
+      }
     }
   }
 }

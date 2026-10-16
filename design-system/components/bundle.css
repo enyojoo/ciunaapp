@@ -285,3 +285,23 @@ a{color:var(--primary-text)}
 .dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
 .dots i{width:6px;height:6px;border-radius:3px;background:var(--hairline);display:block;transition:width .2s}
 .dots i.on{width:18px;background:var(--primary)}
+
+.ph-refer{--ph-bg:linear-gradient(135deg,#5EC4B6,#0F766E)}
+
+/* ---------- home banner (hero): gradient banner, eyebrow, title, one line, CTA; height follows the screen ---------- */
+.banner{position:relative;overflow:hidden;border-radius:20px;color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;min-height:128px}
+.banner .bg{position:absolute;inset:0}
+.banner .orb{position:absolute;border-radius:999px;background:rgba(255,255,255,.12)}
+.banner .orb.a{width:160px;height:160px;right:-48px;top:-56px}
+.banner .orb.b{width:90px;height:90px;right:70px;bottom:-40px;background:rgba(255,255,255,.08)}
+.banner .copy{position:relative;display:grid;gap:2px;padding-right:64px}
+.banner .kicker{font:700 11px/15px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.banner .ttl{font:700 19px/24px var(--font-native);letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.banner .line{font:400 13px/18px var(--font-native);color:rgba(255,255,255,.92);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.banner .cta{position:relative;display:inline-flex;align-items:center;gap:6px;margin-top:6px;font:700 14px/18px var(--font-native)}
+.banner .cta .ic{--s:15px}
+.banner .well{position:absolute;right:16px;top:16px;width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.2);display:grid;place-items:center}
+.banner .well .ic{--s:26px;color:#fff}
+.banner.warm{background:linear-gradient(135deg,#9A3412,#C2410C 55%,#D97706)}
+.banner.teal{background:linear-gradient(135deg,#134E4A,#0F766E 55%,#115E59)}
+.banner.blue{background:linear-gradient(135deg,#1E3A8A,#1D4ED8 55%,#1E40AF)}

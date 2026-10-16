@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next"
 import { hubServiceLineTileCopy, type HubServiceLineRow } from "@ciuna/shared"
 import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
-import { SearchEntryField } from "@/components/search-entry"
 import { HomeSlider } from "@/components/home-slider"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
@@ -49,7 +48,6 @@ export default function HomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
       >
-        <SearchEntryField />
         <HomeSlider />
         {loading ? (
           <View style={styles.grid}>
