@@ -1003,6 +1003,11 @@
       "priceFixed": "{{amount}} {{currency}}",
       "priceFixedWithLabel": "{{amount}} {{currency}} — {{label}}",
       "priceDash": "—"
+    },
+    "slots": {
+      "timezone": "Время указано в вашем часовом поясе ({{zone}})",
+      "book": "Записаться на {{time}}",
+      "pickTime": "Выберите время"
     }
   },
   "referralLanding": {

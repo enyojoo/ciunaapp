@@ -319,6 +319,11 @@
       "priceFixed": "{{amount}} {{currency}}",
       "priceFixedWithLabel": "{{amount}} {{currency}} — {{label}}",
       "priceDash": "—"
+    },
+    "slots": {
+      "timezone": "Horários exibidos no seu fuso horário ({{zone}})",
+      "book": "Reservar {{time}}",
+      "pickTime": "Escolha um horário"
     }
   },
   "transactions": {
