@@ -1,5 +1,7 @@
 # Customer app build plan (native `mobile/` + web `web/`)
 
+> The gap tables below are out of date. Current done and left lists are in `customer-app-status.md`.
+
 Scope: the 25 cards in `Customer app · Screens` plus customer-facing `Marketplace` components. Source of truth for what differs: each card's README `Upgrade` section. Analysis date 2026-10-16, read-only; nothing here is built yet.
 
 Legend. Native/Web: B = built, P = partly built (needs rework), N = not built. Size: S under a day of focused work, M a few days, L a week or more. API: ok = exists and is enough, ext = exists, needs fields, new = no endpoint.
