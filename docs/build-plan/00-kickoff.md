@@ -25,6 +25,14 @@ Use this to start a new session. Paste the prompt at the bottom.
 | A6 | Rate limits (auth, chat, search, checkout, uploads) | api-and-data WP6 | burst test returns 429 with `Retry-After` |
 | A7 | Seller alert emails: logo and recipient time zone | seller P2 | notify tests updated and green |
 
+### Verification tasks (what used to be listed as risks; each has an owner task and a gate)
+| # | Task | How | Gate |
+| --- | --- | --- | --- |
+| V1 | Prove the 7 Seller migrations against the real schema before the owner runs them | After A1 produces the baseline dump, restore it into a local Postgres (Docker `postgres:15`, or PGlite loaded with the dump) and run `supabase/deploy/seller-portal-all.sql` on it; fix any column or constraint mismatch in the migration files and regenerate the file | Combined file runs clean twice on the restored real schema; backfill counts match (`merchant_id is null` = 0 for vendors and products); report to the owner that the file is verified |
+| V2 | Rendering check for every design card | Add `design-system/scripts/audit-cards.mjs` (Playwright, installed with Seller P0): open each card at its header width, fail on horizontal overflow, page taller than its header `height`, console errors, and missing images; save a screenshot per card to a gitignored folder | `npm run design:audit` green on all cards; wire into CI |
+| V3 | Locale completeness | `npm run locales:check` (`scripts/check-locales.mjs`, already in the repo) compares every language with English for missing keys, empty values and placeholder mismatches. It currently reports 27 missing keys in es, fr, ru, zh and pt (`send.mobile.swapCurrencies`, `verification.kycBridge.*`). Fill them (translate with the Azure provider through a one-off script, review diff), then add every new string from the plan to all six languages in the same change | `npm run locales:check` prints `locales ok`; runtime falls back to English for a missing key and logs it in development |
+| V4 | Strings written by agents (ru, zh, pt) | Treat the locale files as the single source: they improve by editing JSON, no code change. Collect the agent-written strings in `docs/build-plan/strings-to-review.md` with the file and key, and re-run V3 after edits | List exists; no blocker for release |
+
 Then Stage B (see master plan).
 
 ## Owner actions that only the Supabase owner can do
@@ -46,5 +54,5 @@ Numbers are Office-editable seeds, translation is Azure AI Translator, Telegram 
 
 ## Prompt to paste into the new session
 ```
-Work in /Users/a1/Projects/ciunaapp. Read docs/build-plan/00-kickoff.md, then docs/design-to-build-plan.md and design-system/guides/80-decisions.md. Execute Stage A of the plan: tasks A1 to A7, using the surface plans in docs/build-plan/ for detail. Decisions are already made; do not ask about them. Follow the working rules in the kickoff file. Start with A1 and A2 (API and data), run A3 to A7 as parallel work where files do not overlap, verify each with its exit test, commit per task, and report what is done, what failed, and anything that needs an outside input (only provider keys: Azure Translator, Expo push; Telegram is deferred).
+Work in /Users/a1/Projects/ciunaapp. Read docs/build-plan/00-kickoff.md, then docs/design-to-build-plan.md and design-system/guides/80-decisions.md. Execute Stage A of the plan: tasks A1 to A7 and verification tasks V1 to V4 (V1 right after A1), using the surface plans in docs/build-plan/ for detail. Decisions are already made; do not ask about them. Follow the working rules in the kickoff file. Start with A1 and A2 (API and data), run A3 to A7 as parallel work where files do not overlap, verify each with its exit test, commit per task, and report what is done, what failed, and anything that needs an outside input (only provider keys: Azure Translator, Expo push; Telegram is deferred).
 ```

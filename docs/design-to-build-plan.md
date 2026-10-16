@@ -28,6 +28,8 @@ Run in parallel; they touch different files.
 5. **Seller test harness and nav fix (P0, P1).** Playwright against `NEXT_PUBLIC_SELLER_MOCK=1`; fix the phone nav (it shows 6 slots; Earnings and Reviews unreachable on a phone).
 6. **Rate limits (API WP6)** and **email logo and time zone (Seller P2)**: independent, small.
 
+Verification tasks V1 to V4 in `build-plan/00-kickoff.md` run inside stage A (migrations proven on the real schema, card rendering audit, locale completeness, strings review list).
+
 Exit for stage A: migration chain reproducible, matrix test green, six languages selectable on native and web, Seller smoke tests green at 375, 768, 1280.
 
 ### Stage B: first user-visible slice (APIs that exist but no client calls)
