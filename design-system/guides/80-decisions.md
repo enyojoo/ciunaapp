@@ -121,3 +121,6 @@ The customer app (Expo `mobile/` and `web/`) is to match `design-system/` and is
 
 - Home header (owner, 2026-10-16): Support is removed from Home. The profile avatar sits where it was, right of Refer; it opens the profile. Applies to the Expo app, web, and the CustomerHome card.
 - Avatars are round and carry a 1px hairline border (owner, 2026-10-16). The app avatar and the design `.avatar` both follow this.
+- Home hero returns as a slider (owner, 2026-10-16). It sits under the search field and above the tiles. Slides are restrained cards built from the service-line art (not an orange billboard), auto-advance every 5 seconds, pause while the user touches it, swipe to change, and dots show position. The slide list is a data source so Office can add ads later: each slide has a title, one line, an optional link, and a label such as "Ad" when paid placement is shown.
+- Customer Home scrolls as one page (owner, 2026-10-16): header, search, slider and tiles all scroll. The hero slider is not sticky; only the tab bar stays fixed.
+- Product cards use the design's Improved frame (owner, 2026-10-16), which overrides the earlier exception that kept the current product card. Store cards are not changed by this.

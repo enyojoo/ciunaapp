@@ -1237,5 +1237,26 @@
     "anonymous": "顾客",
     "count_one": "{{count}} 条评价",
     "count_other": "{{count}} 条评价"
+  },
+  "home": {
+    "slide": {
+      "send": {
+        "title": "把钱寄回家",
+        "body": "5 分钟内转给家人，手续费先显示。",
+        "cta": "立即汇款"
+      },
+      "mart": {
+        "title": "食品和香料",
+        "body": "Lagos Pantry：今天在莫斯科送达。",
+        "cta": "去超市"
+      },
+      "experts": {
+        "title": "预约本地专家",
+        "body": "能说您的语言的律师、老师和翻译。",
+        "cta": "查找专家"
+      },
+      "adLabel": "广告",
+      "position": "第 {{n}} 张，共 {{total}} 张"
+    }
   }
 }

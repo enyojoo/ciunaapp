@@ -5,6 +5,7 @@ import { hubServiceLineTileCopy, type HubServiceLineRow } from "@ciuna/shared"
 import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
 import { SearchEntryField } from "@/components/search-entry"
+import { HomeSlider } from "@/components/home-slider"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
 import { useExternalLink } from "@/lib/external-link"
@@ -39,8 +40,7 @@ export default function HomeScreen() {
 
   return (
     <Screen edges={["top", "left", "right"]}>
-      <AppHeader />
-      <SearchEntryField />
+      {/* The whole Home scrolls: header, search, slider and tiles. Only the tab bar stays fixed. */}
       <ScrollView
         style={styles.flex}
         contentContainerStyle={[styles.scroll, { paddingBottom: tabContentPadding }]}
@@ -48,6 +48,9 @@ export default function HomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
       >
+        <AppHeader />
+        <SearchEntryField />
+        <HomeSlider />
         {loading ? (
           <View style={styles.grid}>
             {Array.from({ length: 6 }).map((_, i) => (

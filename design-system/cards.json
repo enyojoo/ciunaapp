@@ -834,6 +834,15 @@
    "readme": true
   },
   {
+   "name": "HomeSlider",
+   "group": "Customer app · Screens",
+   "subtitle": "Home hero as a slider: swipe, dots, auto-advance, pause on touch; slides are data so Office can add ads later",
+   "height": 1000,
+   "width": null,
+   "page": false,
+   "readme": true
+  },
+  {
    "name": "MarketCheckout",
    "group": "Customer app · Screens",
    "subtitle": "Marketplace checkout: details, review with one Pay button, then the provider payment frame, waiting, paid, failed and closed states; address and zone errors",

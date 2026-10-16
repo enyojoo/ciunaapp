@@ -1237,5 +1237,26 @@
     "anonymous": "Customer",
     "count_one": "{{count}} review",
     "count_other": "{{count}} reviews"
+  },
+  "home": {
+    "slide": {
+      "send": {
+        "title": "Send money home",
+        "body": "Transfers to family in 5 minutes, with the fee shown first.",
+        "cta": "Send now"
+      },
+      "mart": {
+        "title": "Groceries and spices",
+        "body": "Lagos Pantry: delivered in Moscow today.",
+        "cta": "Shop Mart"
+      },
+      "experts": {
+        "title": "Book a local expert",
+        "body": "Lawyers, tutors and translators who speak your language.",
+        "cta": "Find experts"
+      },
+      "adLabel": "Ad",
+      "position": "Slide {{n}} of {{total}}"
+    }
   }
 }

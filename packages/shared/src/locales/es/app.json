@@ -1237,5 +1237,26 @@
     "anonymous": "Cliente",
     "count_one": "{{count}} reseña",
     "count_other": "{{count}} reseñas"
+  },
+  "home": {
+    "slide": {
+      "send": {
+        "title": "Envía dinero a casa",
+        "body": "Transferencias a la familia en 5 minutos, con la comisión a la vista.",
+        "cta": "Enviar ahora"
+      },
+      "mart": {
+        "title": "Comestibles y especias",
+        "body": "Lagos Pantry: entrega hoy en Moscú.",
+        "cta": "Ir a Mart"
+      },
+      "experts": {
+        "title": "Reserva a un experto local",
+        "body": "Abogados, tutores y traductores que hablan tu idioma.",
+        "cta": "Buscar expertos"
+      },
+      "adLabel": "Anuncio",
+      "position": "Diapositiva {{n}} de {{total}}"
+    }
   }
 }

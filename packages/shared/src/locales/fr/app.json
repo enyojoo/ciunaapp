@@ -1237,5 +1237,26 @@
     "anonymous": "Client",
     "count_one": "{{count}} avis",
     "count_other": "{{count}} avis"
+  },
+  "home": {
+    "slide": {
+      "send": {
+        "title": "Envoyez de l'argent à la maison",
+        "body": "Virements à la famille en 5 minutes, frais affichés d'abord.",
+        "cta": "Envoyer"
+      },
+      "mart": {
+        "title": "Épicerie et épices",
+        "body": "Lagos Pantry : livraison à Moscou aujourd'hui.",
+        "cta": "Ouvrir Mart"
+      },
+      "experts": {
+        "title": "Réservez un expert local",
+        "body": "Avocats, tuteurs et traducteurs qui parlent votre langue.",
+        "cta": "Trouver des experts"
+      },
+      "adLabel": "Publicité",
+      "position": "Diapositive {{n}} sur {{total}}"
+    }
   }
 }

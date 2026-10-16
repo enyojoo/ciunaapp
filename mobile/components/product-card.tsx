@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from "react-native"
 import { Image } from "expo-image"
-import { BadgeCheck, Minus, Plus, ShoppingCart } from "lucide-react-native"
+import { BadgeCheck, Minus, Plus, Store } from "lucide-react-native"
+import { LinearGradient } from "expo-linear-gradient"
 import { useTranslation } from "react-i18next"
 import {
   formatCardPrice,
@@ -14,6 +15,7 @@ import { colors, radius, shadow, shadowNone } from "@/lib/theme"
 import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useToast } from "@/components/toast-provider"
 import { FavouriteHeart } from "@/components/favourite-heart"
+import { tileArtFor } from "@/components/tile"
 
 export function ProductCard({
   product,
@@ -88,15 +90,25 @@ export function ProductCard({
     })
   }
 
+  const art = tileArtFor(product.service_line_slug || cartLineSlug || "food")
+  const ArtIcon = art.icon
+
+  /** Design: 4:3 media, heart top right, low-stock line, price with struck list price, round add button. */
   const media = (
     <View style={styles.imageWrap}>
       {product.image_url ? (
-        <Image source={{ uri: product.image_url }} style={styles.image} contentFit="contain" />
+        <Image source={{ uri: product.image_url }} style={styles.image} contentFit="cover" />
       ) : (
-        <View style={styles.imageFallback}>
-          <Text style={styles.noImage}>{t("hub.noImage", { defaultValue: "No image" })}</Text>
-        </View>
+        <>
+          <LinearGradient colors={[art.from, art.to]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+          <ArtIcon size={34} color="rgba(255,255,255,0.9)" strokeWidth={2} />
+        </>
       )}
+      {soldOut ? (
+        <View style={styles.soldPill}>
+          <Text style={styles.soldText}>{t("hub.soldOut", { defaultValue: "Sold out" })}</Text>
+        </View>
+      ) : null}
       {showCategory ? (
         <View style={styles.catBadge}>
           <Text style={styles.catBadgeText} numberOfLines={1}>
@@ -107,38 +119,18 @@ export function ProductCard({
     </View>
   )
 
-  const titleBlock = (
-    <>
-      <Text style={styles.title} numberOfLines={1}>
-        {product.title}
-      </Text>
-      {product.fulfillment_mode === "delivery" || product.fulfillment_mode === "pickup" ? (
-        <Text style={styles.fulfillmentCue} numberOfLines={1}>
-          {t(`marketplace.${product.fulfillment_mode}`, {
-            defaultValue: String(product.fulfillment_mode).replace(/_/g, " "),
-          })}
-        </Text>
-      ) : null}
-    </>
-  )
+  const lowStock =
+    !soldOut && product.stock_quantity != null && Number(product.stock_quantity) > 0 && Number(product.stock_quantity) <= 5
 
-  const vendorBlock =
+  const vendorLine =
     showVendor && vendor?.name ? (
-      onVendorPress ? (
-        <Pressable
-          onPress={onVendorPress}
-          hitSlop={4}
-          accessibilityRole="button"
-          accessibilityLabel={vendor.name}
-          style={styles.vendorHit}
-        >
-          <VendorChip vendor={vendor} />
-        </Pressable>
-      ) : (
-        <View style={styles.vendorHit}>
-          <VendorChip vendor={vendor} />
-        </View>
-      )
+      <View style={styles.vendorRow}>
+        <Store size={12} color={colors.muted} strokeWidth={2.2} />
+        <Text style={styles.vendorName} numberOfLines={1}>
+          {vendor.name}
+        </Text>
+        {vendor.is_verified ? <BadgeCheck size={12} color={colors.success} strokeWidth={2.4} /> : null}
+      </View>
     ) : null
 
   const priceRow = userInput ? (
@@ -152,61 +144,51 @@ export function ProductCard({
     </View>
   ) : (
     <View style={styles.priceRow}>
-      <Text style={styles.pricePrefix}>{t("hub.sellPrice", { defaultValue: "Sell price" })}</Text>
-      {strike && list != null ? <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text> : null}
       <Text style={styles.price}>{formatCardPrice(price, currency)}</Text>
+      {strike && list != null ? <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text> : null}
     </View>
   )
 
-  const cartOrCta = cartMode ? (
-    cartQuantity > 0 ? (
-      <View style={styles.stepper}>
-        <Pressable
-          onPress={() => handleQuantityChange(cartQuantity - 1)}
-          hitSlop={6}
-          accessibilityRole="button"
-          accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
-          style={styles.stepperBtn}
-        >
-          <Minus size={14} color={colors.primary} strokeWidth={2.4} />
-        </Pressable>
-        <Text style={styles.stepperValue}>{cartQuantity}</Text>
-        <Pressable
-          onPress={() => handleQuantityChange(cartQuantity + 1)}
-          hitSlop={6}
-          accessibilityRole="button"
-          accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
-          style={styles.stepperBtn}
-        >
-          <Plus size={14} color={colors.primary} strokeWidth={2.4} />
-        </Pressable>
-      </View>
-    ) : (
+  const cartOrCta = cartMode && cartQuantity > 0 ? (
+    <View style={styles.stepper}>
       <Pressable
-        onPress={() => handleAddToCart()}
-        disabled={soldOut}
+        onPress={() => handleQuantityChange(cartQuantity - 1)}
+        hitSlop={6}
         accessibilityRole="button"
-        accessibilityLabel={t("hub.cart.addToCart", { defaultValue: "Add to cart" })}
-        style={[styles.cta, soldOut && styles.ctaDisabled]}
+        accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
+        style={styles.stepperBtn}
       >
-        {soldOut ? (
-          <Text style={styles.ctaText}>{t("hub.soldOut", { defaultValue: "Sold out" })}</Text>
-        ) : (
-          <View style={styles.ctaWithIcon}>
-            <ShoppingCart size={13} color={colors.onPrimary} strokeWidth={2.4} />
-            <Text style={styles.ctaText}>{t("hub.cart.addToCart", { defaultValue: "Add to cart" })}</Text>
-          </View>
-        )}
+        <Minus size={16} color={colors.text} strokeWidth={2.4} />
       </Pressable>
-    )
+      <Text style={styles.stepperValue}>{cartQuantity}</Text>
+      <Pressable
+        onPress={() => handleQuantityChange(cartQuantity + 1)}
+        hitSlop={6}
+        accessibilityRole="button"
+        accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
+        style={styles.stepperBtn}
+      >
+        <Plus size={16} color={colors.text} strokeWidth={2.4} />
+      </Pressable>
+    </View>
+  ) : cartMode ? (
+    <Pressable
+      onPress={() => handleAddToCart()}
+      disabled={soldOut}
+      accessibilityRole="button"
+      accessibilityLabel={t("hub.cart.addToCart", { defaultValue: "Add to cart" })}
+      style={({ pressed }) => [styles.add, soldOut && styles.addDisabled, pressed && styles.addPressed]}
+    >
+      <Plus size={20} color={soldOut ? colors.subtle : "#FFFFFF"} strokeWidth={2.4} />
+    </Pressable>
   ) : (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={cta}
-      style={styles.cta}
+      style={({ pressed }) => [styles.add, pressed && styles.addPressed]}
     >
-      <Text style={styles.ctaText}>{cta}</Text>
+      <Plus size={20} color="#FFFFFF" strokeWidth={2.4} />
     </Pressable>
   )
 
@@ -216,18 +198,25 @@ export function ProductCard({
       <View style={styles.card}>
         <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={product.title}>
           {media}
-          <View style={styles.bodyTop}>{titleBlock}</View>
+          <View style={styles.bodyTop}>
+            <Text style={styles.title} numberOfLines={2}>
+              {product.title}
+            </Text>
+            {vendorLine}
+            {lowStock ? (
+              <Text style={styles.low}>{t("hub.onlyLeft", { defaultValue: "Only {{count}} left", count: Number(product.stock_quantity) })}</Text>
+            ) : null}
+          </View>
         </Pressable>
         <View style={styles.body}>
-          {vendorBlock}
-          <View style={styles.priceBlock}>
-            <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={product.title}>
+          <View style={styles.row}>
+            <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={product.title} style={styles.priceHit}>
               {priceRow}
             </Pressable>
             {cartOrCta}
           </View>
         </View>
-        <FavouriteHeart type="product" id={product.id} style={showCategory ? styles.heartLeft : undefined} />
+        <FavouriteHeart type="product" id={product.id} style={styles.heart} />
       </View>
     </View>
   )
@@ -236,15 +225,15 @@ export function ProductCard({
 /** Exported so the product detail screen can show the same vendor treatment (photo, name, verified check) as the catalog card, instead of a plain name. */
 export function VendorChip({ vendor }: { vendor: NonNullable<HubProduct["vendor"]> }) {
   return (
-    <View style={styles.vendorRow}>
+    <View style={vendorStyles.vendorRow}>
       {vendor.photo_url ? (
-        <Image source={{ uri: vendor.photo_url }} style={styles.vendorPhoto} contentFit="cover" />
+        <Image source={{ uri: vendor.photo_url }} style={vendorStyles.vendorPhoto} contentFit="cover" />
       ) : (
-        <View style={styles.vendorFallback}>
-          <Text style={styles.vendorInitial}>{(vendor.name.trim().charAt(0) || "?").toUpperCase()}</Text>
+        <View style={vendorStyles.vendorFallback}>
+          <Text style={vendorStyles.vendorInitial}>{(vendor.name.trim().charAt(0) || "?").toUpperCase()}</Text>
         </View>
       )}
-      <Text style={styles.vendorName} numberOfLines={1}>
+      <Text style={vendorStyles.vendorName} numberOfLines={1}>
         {vendor.name}
       </Text>
       {vendor.is_verified ? <BadgeCheck size={12} color={colors.primary} strokeWidth={2.2} /> : null}
@@ -257,7 +246,7 @@ export function ProductCardSkeleton() {
   return (
     <View style={[styles.hit, { width: catalogCardWidth(columns) }]}>
       <View style={[styles.card, styles.skeleton]}>
-        <View style={styles.imageFallback} />
+        <View style={styles.imageWrap} />
         <View style={styles.body}>
           <View style={styles.skelTitle} />
           <View style={styles.skelMeta} />
@@ -269,88 +258,90 @@ export function ProductCardSkeleton() {
 
 const styles = StyleSheet.create({
   hit: { width: "48.5%" },
-  heartLeft: { left: 6, right: undefined },
   card: {
     overflow: "hidden",
     borderRadius: radius.card,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: colors.border,
     backgroundColor: colors.surface,
-    ...shadow({ opacity: 0.08, radius: 10, offsetY: 4, elevation: 2 }),
   },
-  skeleton: { borderColor: colors.border, ...shadowNone },
-  imageWrap: { width: "100%", aspectRatio: 4 / 3, backgroundColor: "#F3F4F6" },
-  image: { width: "100%", height: "100%" },
-  imageFallback: {
+  imageWrap: {
     width: "100%",
     aspectRatio: 4 / 3,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: colors.paper,
+    overflow: "hidden",
   },
-  noImage: { fontSize: 11, color: colors.muted, textAlign: "center", paddingHorizontal: 8 },
+  image: { width: "100%", height: "100%" },
+  soldPill: {
+    position: "absolute",
+    left: 8,
+    bottom: 8,
+    borderRadius: radius.pill,
+    backgroundColor: "rgba(255,255,255,0.95)",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  soldText: { fontSize: 12, fontWeight: "600", color: colors.text },
   catBadge: {
     position: "absolute",
-    top: 6,
-    right: 6,
-    maxWidth: "72%",
+    top: 8,
+    left: 8,
+    maxWidth: "60%",
     borderRadius: radius.pill,
     backgroundColor: "rgba(255,255,255,0.92)",
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
-  catBadgeText: { fontSize: 9, fontWeight: "600", color: "#374151" },
-  body: { paddingHorizontal: 10, paddingTop: 0, paddingBottom: 10 },
-  bodyTop: { paddingHorizontal: 10, paddingTop: 8 },
-  title: { fontSize: 13, fontWeight: "600", lineHeight: 17, color: colors.text },
-  fulfillmentCue: {
-    marginTop: 2,
-    fontSize: 11,
-    fontWeight: "600",
-    color: colors.primary,
-    textTransform: "capitalize",
-  },
-  vendorHit: { marginTop: 6, alignSelf: "flex-start", maxWidth: "100%" },
-  vendorRow: { flexDirection: "row", alignItems: "center", gap: 6, maxWidth: "100%" },
-  vendorPhoto: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.paper },
-  vendorFallback: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: colors.paper,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  vendorInitial: { fontSize: 9, fontWeight: "700", color: colors.muted },
-  vendorName: { flexShrink: 1, fontSize: 11, fontWeight: "500", color: colors.text },
-  priceBlock: { marginTop: 10, gap: 8 },
-  priceRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 4 },
-  pricePrefix: { fontSize: 11, fontWeight: "500", color: colors.muted },
+  catBadgeText: { fontSize: 11, fontWeight: "600", color: colors.neutralText },
+  heart: { top: 8, right: 8 },
+  bodyTop: { paddingHorizontal: 12, paddingTop: 10, gap: 4 },
+  body: { paddingHorizontal: 12, paddingTop: 6, paddingBottom: 12 },
+  title: { fontSize: 14, fontWeight: "600", lineHeight: 19, color: colors.text },
+  vendorRow: { flexDirection: "row", alignItems: "center", gap: 4, maxWidth: "100%" },
+  vendorName: { flexShrink: 1, fontSize: 12, lineHeight: 16, fontWeight: "500", color: colors.muted },
+  low: { fontSize: 12, lineHeight: 16, fontWeight: "600", color: colors.warningText },
+  row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8, minHeight: 40 },
+  priceHit: { flexShrink: 1 },
+  priceRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 6 },
+  pricePrefix: { fontSize: 12, fontWeight: "500", color: colors.muted },
   price: { fontSize: 15, fontWeight: "700", color: colors.text },
-  strike: { fontSize: 11, color: colors.muted, textDecorationLine: "line-through" },
-  cta: {
-    minHeight: 32,
+  strike: { fontSize: 12, color: colors.muted, textDecorationLine: "line-through" },
+  add: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 12,
     backgroundColor: colors.primary,
+    flexShrink: 0,
   },
-  ctaDisabled: { opacity: 0.5 },
-  ctaText: { fontSize: 12, fontWeight: "600", color: colors.onPrimary },
-  ctaWithIcon: { flexDirection: "row", alignItems: "center", gap: 5 },
+  addDisabled: { backgroundColor: colors.neutralSurface },
+  addPressed: { backgroundColor: colors.primaryHover },
   stepper: {
-    minHeight: 32,
+    height: 40,
+    minWidth: 104,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderRadius: 12,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: colors.primary,
-    backgroundColor: "#FFF7ED",
-    paddingHorizontal: 6,
+    borderColor: colors.inputEdge,
+    backgroundColor: colors.surface,
+    paddingHorizontal: 4,
   },
-  stepperBtn: { width: 24, height: 24, alignItems: "center", justifyContent: "center" },
-  stepperValue: { flex: 1, textAlign: "center", fontSize: 13, fontWeight: "700", color: colors.primary },
+  stepperBtn: { width: 32, height: 36, alignItems: "center", justifyContent: "center" },
+  stepperValue: { minWidth: 24, textAlign: "center", fontSize: 15, fontWeight: "700", color: colors.text },
+  skeleton: { borderColor: colors.border, ...shadowNone },
   skelTitle: { height: 14, width: "80%", borderRadius: 4, backgroundColor: colors.paper },
   skelMeta: { marginTop: 8, height: 10, width: "50%", borderRadius: 4, backgroundColor: colors.paper },
+})
+
+const vendorStyles = StyleSheet.create({
+  vendorRow: { flexDirection: "row", alignItems: "center", gap: 6, maxWidth: "100%" },
+  vendorPhoto: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.paper },
+  vendorFallback: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.paper, alignItems: "center", justifyContent: "center" },
+  vendorInitial: { fontSize: 9, fontWeight: "700", color: colors.muted },
+  vendorName: { flexShrink: 1, fontSize: 11, fontWeight: "500", color: colors.text },
 })

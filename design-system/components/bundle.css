@@ -268,3 +268,20 @@ a{color:var(--primary-text)}
 .doc{width:560px;background:#fff;border:1px solid var(--hairline);border-radius:12px;padding:36px 40px;box-shadow:var(--shadow-sm)}
 .email{width:600px;background:var(--paper);padding:28px 16px}
 .email .inner{background:#fff;border-radius:16px;padding:28px;border:1px solid var(--hairline)}
+
+/* ---------- home slider (hero as a slider; slides are data, ads get an "Ad" label) ---------- */
+.slides{display:flex;gap:12px;overflow:hidden;scroll-snap-type:x mandatory}
+.slide{flex:0 0 100%;scroll-snap-align:start;border-radius:20px;overflow:hidden;position:relative;color:#fff;min-height:168px;display:flex;flex-direction:column;justify-content:flex-end;padding:18px}
+.slide .art{position:absolute;inset:0}
+.slide .art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,24,39,0) 30%,rgba(17,24,39,.55) 100%)}
+.slide .ico{position:absolute;right:16px;top:16px;width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.22);display:grid;place-items:center;z-index:1}
+.slide .ico .ic{--s:34px;color:#fff}
+.slide .txt{position:relative;z-index:1;display:grid;gap:4px}
+.slide .ttl{font:700 22px/27px var(--font-native);letter-spacing:-.2px;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.slide .sub{font:400 14px/19px var(--font-native);opacity:.95}
+.slide .lnk{font:600 13px/16px var(--font-native);margin-top:6px;display:inline-flex;align-items:center;gap:6px}
+.slide .lnk .ic{--s:14px}
+.slide .ad{position:absolute;left:14px;top:14px;z-index:1;font:600 11px/14px var(--font-native);letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.9);color:var(--ink);border-radius:999px;padding:3px 9px}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.dots i{width:6px;height:6px;border-radius:3px;background:var(--hairline);display:block;transition:width .2s}
+.dots i.on{width:18px;background:var(--primary)}
