@@ -109,8 +109,8 @@ export function ProductCard({
 
   const titleBlock = (
     <>
-      {/* Fixed slots: every card reserves two title lines and one cue line, so rows stay even. */}
-      <Text style={styles.title} numberOfLines={2}>
+      {/* Fixed slots: the name is one line with an ellipsis, then the cue line, so every card has the same height. */}
+      <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
         {product.title}
       </Text>
       <Text style={styles.fulfillmentCue} numberOfLines={1}>
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   catBadgeText: { fontSize: 9, fontWeight: "600", color: "#374151" },
   body: { paddingHorizontal: 10, paddingTop: 0, paddingBottom: 10 },
   bodyTop: { paddingHorizontal: 10, paddingTop: 8 },
-  title: { fontSize: 13, fontWeight: "600", lineHeight: 17, minHeight: 34, color: colors.text },
+  title: { fontSize: 13, fontWeight: "600", lineHeight: 17, minHeight: 17, color: colors.text },
   vendorSlot: { minHeight: 22, justifyContent: "center" },
   fulfillmentCue: {
     marginTop: 2,
