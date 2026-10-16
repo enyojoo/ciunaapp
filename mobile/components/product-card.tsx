@@ -109,16 +109,17 @@ export function ProductCard({
 
   const titleBlock = (
     <>
-      <Text style={styles.title} numberOfLines={1}>
+      {/* Fixed slots: every card reserves two title lines and one cue line, so rows stay even. */}
+      <Text style={styles.title} numberOfLines={2}>
         {product.title}
       </Text>
-      {product.fulfillment_mode === "delivery" || product.fulfillment_mode === "pickup" ? (
-        <Text style={styles.fulfillmentCue} numberOfLines={1}>
-          {t(`marketplace.${product.fulfillment_mode}`, {
-            defaultValue: String(product.fulfillment_mode).replace(/_/g, " "),
-          })}
-        </Text>
-      ) : null}
+      <Text style={styles.fulfillmentCue} numberOfLines={1}>
+        {product.fulfillment_mode === "delivery" || product.fulfillment_mode === "pickup"
+          ? t(`marketplace.${product.fulfillment_mode}`, {
+              defaultValue: String(product.fulfillment_mode).replace(/_/g, " "),
+            })
+          : " "}
+      </Text>
     </>
   )
 
@@ -219,7 +220,7 @@ export function ProductCard({
           <View style={styles.bodyTop}>{titleBlock}</View>
         </Pressable>
         <View style={styles.body}>
-          {vendorBlock}
+          <View style={styles.vendorSlot}>{vendorBlock}</View>
           <View style={styles.priceBlock}>
             <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={product.title}>
               {priceRow}
@@ -302,9 +303,11 @@ const styles = StyleSheet.create({
   catBadgeText: { fontSize: 9, fontWeight: "600", color: "#374151" },
   body: { paddingHorizontal: 10, paddingTop: 0, paddingBottom: 10 },
   bodyTop: { paddingHorizontal: 10, paddingTop: 8 },
-  title: { fontSize: 13, fontWeight: "600", lineHeight: 17, color: colors.text },
+  title: { fontSize: 13, fontWeight: "600", lineHeight: 17, minHeight: 34, color: colors.text },
+  vendorSlot: { minHeight: 22, justifyContent: "center" },
   fulfillmentCue: {
     marginTop: 2,
+    minHeight: 14,
     fontSize: 11,
     fontWeight: "600",
     color: colors.primary,
@@ -323,7 +326,7 @@ const styles = StyleSheet.create({
   },
   vendorInitial: { fontSize: 9, fontWeight: "700", color: colors.muted },
   vendorName: { flexShrink: 1, fontSize: 11, fontWeight: "500", color: colors.text },
-  priceBlock: { marginTop: 10, gap: 8 },
+  priceBlock: { marginTop: 4, gap: 8, minHeight: 40, justifyContent: "flex-end" },
   priceRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 4 },
   pricePrefix: { fontSize: 11, fontWeight: "500", color: colors.muted },
   price: { fontSize: 15, fontWeight: "700", color: colors.text },
