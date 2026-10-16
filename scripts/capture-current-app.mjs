@@ -140,6 +140,8 @@ for (const shot of SHOTS) {
   await page.waitForTimeout(shot.wait)
   const where = new URL(page.url()).pathname
   if (where.startsWith("/auth")) { failed.push(`${shot.name}: redirected to ${where} (no session)`); continue }
+  // CAPTURE_OFFLINE=1: tell the page the browser went offline, to see the offline pill.
+  if (process.env.CAPTURE_OFFLINE) { await page.evaluate(() => window.dispatchEvent(new Event("offline"))); await page.waitForTimeout(400) }
   const tag = process.env.CAPTURE_VIEWPORT ? `-${VW}x${VH}` : ""
   await page.screenshot({ path: path.join(out, `${shot.name}${tag}.png`), fullPage: shot.full })
   console.log(`captured ${shot.name} (${where})`)

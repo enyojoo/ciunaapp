@@ -1354,5 +1354,8 @@
         "cta": "Enviar"
       }
     }
+  },
+  "offline": {
+    "banner": "Sin conexión. Mostrando datos guardados."
   }
 }

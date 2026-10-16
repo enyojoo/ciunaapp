@@ -1,4 +1,5 @@
 import Constants from "expo-constants"
+import { tracked } from "@/lib/network-status"
 import { Platform } from "react-native"
 import { joinApiPath, resolveApiUrl } from "@ciuna/shared/urls"
 import { supabase } from "./supabase"
@@ -28,7 +29,7 @@ export function apiUrl(path: string): string {
 }
 
 export async function apiFetch(path: string, init?: RequestInit): Promise<Response> {
-  return fetch(apiUrl(path), { ...init, credentials: "omit" })
+  return tracked(fetch(apiUrl(path), { ...init, credentials: "omit" }))
 }
 
 export async function fetchWithAuth(path: string, init?: RequestInit): Promise<Response> {
@@ -37,12 +38,12 @@ export async function fetchWithAuth(path: string, init?: RequestInit): Promise<R
   if (data.session?.access_token) {
     headers.set("Authorization", `Bearer ${data.session.access_token}`)
   }
-  let res = await fetch(apiUrl(path), { ...init, headers, credentials: "omit" })
+  let res = await tracked(fetch(apiUrl(path), { ...init, headers, credentials: "omit" }))
   if (res.status === 401) {
     const refreshed = await supabase.auth.refreshSession()
     if (refreshed.data.session?.access_token) {
       headers.set("Authorization", `Bearer ${refreshed.data.session.access_token}`)
-      res = await fetch(apiUrl(path), { ...init, headers, credentials: "omit" })
+      res = await tracked(fetch(apiUrl(path), { ...init, headers, credentials: "omit" }))
     }
   }
   return res

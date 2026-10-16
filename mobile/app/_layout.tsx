@@ -1,4 +1,5 @@
 import "@/lib/nativewind-flags"
+import { OfflineBanner } from "@/components/offline-banner"
 import { AppStackHeader } from "@/components/app-stack-header"
 import "../global.css"
 import "@/lib/web-crypto"
@@ -118,6 +119,7 @@ function RootChrome({ children }: { children: ReactNode }) {
       <WebViewportFrame>
         <ResponsiveAppShell>{children}</ResponsiveAppShell>
       </WebViewportFrame>
+      <OfflineBanner />
     </View>
   )
 }

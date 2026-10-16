@@ -1354,5 +1354,8 @@
         "cta": "Send home"
       }
     }
+  },
+  "offline": {
+    "banner": "You are offline. Showing saved data."
   }
 }

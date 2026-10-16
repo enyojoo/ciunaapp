@@ -1354,5 +1354,8 @@
         "cta": "Enviar"
       }
     }
+  },
+  "offline": {
+    "banner": "Você está offline. Mostrando dados salvos."
   }
 }
