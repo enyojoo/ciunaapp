@@ -1,40 +1,26 @@
 # Next session: continue the customer app backend and the blocked cards
 
-Written 2026-10-18 at the end of a long session. Read this first, then `customer-app-status.md` (done and left lists) and `design-system/guides/80-decisions.md` (owner decisions). Everything below is committed on `main`; nothing is pushed.
+Written 2026-10-18 at the end of a long session, updated after the support API landed. Read this first, then `customer-app-status.md` (done and left lists) and `design-system/guides/80-decisions.md` (owner decisions). Everything below is committed on `main`; nothing is pushed.
 
 ## State right now
 
 - **Customer Expo app (`mobile/`, native and web):** everything that needs no backend is built and committed. Home fits every screen with no scrolling; one shared top bar; checkout has Details and Review steps; desktop web layouts checked at 1280x800. tsc, locales:check, design:check, design:cards all pass.
 - **Store hours, minimum order, delivery time, expert fields:** built end to end (migration, API, seller portal, app). The owner has run `storefront-details.sql` and the files before it.
-- **Support requests, started:** the migration `supabase/migrations/20261018100000_support_requests.sql` is written and tested (6 database tests pass in `api/tests/merchant/database-support.test.mjs`), with the deploy copy `supabase/deploy/support-requests.sql` and a row in `RUN-ORDER.md`. **The owner has NOT run it, and no API or UI exists yet.** Do not tell the owner to run it until the API is in.
+- **Support requests, backend done, no UI yet:** migration `supabase/migrations/20261018100000_support_requests.sql` (6 database tests), deploy copy `supabase/deploy/support-requests.sql` with a `RUN-ORDER.md` row, library `api/lib/support.ts`, customer routes under `api/app/api/support/` (`requests` GET and POST, `requests/[id]` GET, `requests/[id]/messages` POST, `requests/[id]/read` POST, `unread` GET), Office routes under `api/app/api/admin/support/` (queue, thread and PATCH assign or resolve, reply), the `support.manage` permission (super_admin, ops, support), and the `support` rate limit (20 a minute). 4 more tests in `api/tests/merchant/support.test.ts`; the merchant suite is 115 passing. **The owner has NOT run `support-requests.sql`.** Run it only once the customer screens exist.
 - Not started: receipts, limits, push registration.
 
 ## Order of work
 
-### 1. Support requests (finish)
-Schema is done: tables `support_requests` (status open, awaiting_customer, resolved; unread counters for both sides) and `support_messages`; functions `support_create`, `support_send`, `support_resolve`, `support_mark_read`. Errors come back as exception messages: `SUPPORT_TOO_MANY_OPEN`, `SUPPORT_ORDER_NOT_FOUND`, `SUPPORT_NOT_FOUND`, `SUPPORT_CLOSED`, `SUPPORT_BAD_SENDER`. Map them like `api/lib/merchant/messages.ts` maps chat errors.
+### 1. Support requests (finish: screens, Office page, deploy check)
+The API above is the contract. Error codes the screens must handle (in `errors.<CODE>` strings): `SUPPORT_TOO_MANY_OPEN` (409), `SUPPORT_ORDER_NOT_FOUND` (404), `SUPPORT_NOT_FOUND` (404), `SUPPORT_CLOSED` (409, resolved more than 14 days ago), `SUPPORT_TOPIC_INVALID`, `SUPPORT_SUBJECT_INVALID`, `MESSAGE_EMPTY`, `MESSAGE_TOO_LONG`, `RATE_LIMITED` (429). Request shape: `{ id, public_id, topic, subject, status, order_id, customer_unread, last_message_at, last_message_preview, created_at }`; messages: `{ id, sender_kind: customer|agent|system, body, created_at }`; a system message with body `resolved` is rendered as a localized "Marked resolved" line.
 
-**API (new, in `api/`):**
-- Customer, with `authedRoute` from `api/lib/merchant/http.ts` and `limitOrResponse` (add `support: { limit: 20, windowSeconds: 60 }` to `LIMITS` in `api/lib/rate-limit.ts`):
-  - `GET /api/support/requests` (list for the user, newest message first, with `customer_unread`)
-  - `POST /api/support/requests` `{ topic, subject, orderId?, body }` -> `support_create`
-  - `GET /api/support/requests/[id]` (request plus messages, owner only)
-  - `POST /api/support/requests/[id]/messages` `{ body }` -> `support_send(..., 'customer', ...)`
-  - `POST /api/support/requests/[id]/read` -> `support_mark_read(..., 'customer')`
-  - `GET /api/support/unread` (sum of `customer_unread`)
-- Office, with `adminRoute` (`api/lib/merchant/http.ts`): add a `support.manage` permission to `api/lib/admin-roles.ts` (give it to `super_admin`, `ops`, `support`; keep `support.read` for reads), then:
-  - `GET /api/admin/support` (queue: filter status, assigned, text; show customer name, topic, status, unread, age)
-  - `GET /api/admin/support/[id]`, `POST /api/admin/support/[id]/messages` (agent reply), `PATCH /api/admin/support/[id]` (assign, resolve via `support_resolve`), each audited with `api/lib/merchant/audit.ts`.
-  - Check `api/tests/merchant/admin-legacy-permissions.test.ts` and `rules.test.ts` after adding the permission.
-- Tests: add `api/tests/merchant/support.test.ts` for validation and error mapping; keep the database tests green. Run `cd api && npm run test:merchant`.
+**Customer screens (`mobile/`), still to build:** keep `support.tsx` (contact rows, FAQ, hours) and add a "My requests" row with an unread dot (from `GET /api/support/unread`). New routes `mobile/app/support/requests.tsx` (list with filter chips All, Open, Resolved; status words per the card: Awaiting you and In review are warning, Resolved is success), `support/new.tsx` (topic chips, related order picker from the user's orders, subject, message with counter, Send request; no screenshot upload in v1), `support/[id].tsx` (thread: customer bubbles primary with white text, agent bubbles neutral, system line, composer with counter, call `/read` on open, poll like `mobile/app/orders/[id]/chat.tsx`). Register the three in `mobile/app/_layout.tsx` as Stack.Screen entries with titles (the shared stack header draws the bar). Reuse `AppTextInput`, `LoadError`, `EmptyState`, `FilterChips`, `useCachedQuery`. Strings in all six languages in `packages/shared/src/locales/*/app.json`, then `npm run locales:check`.
 
-**Customer screens (`mobile/`):** keep `support.tsx` (contact rows, FAQ, hours) and add a "My requests" row. New routes `mobile/app/support/requests.tsx` (list with filter chips All, Open, Resolved; status words per the card: Awaiting you and In review are warning, Resolved is success), `support/new.tsx` (topic chips, related order picker, subject, message with counter, Send request; no screenshot upload in v1), `support/[id].tsx` (thread: customer bubbles primary with white text, agent bubbles neutral, system line for "resolved", composer with counter, mark read on open). Register the three in `mobile/app/_layout.tsx` Stack.Screen entries with titles (the shared stack header draws the bar). Reuse `chat.tsx` patterns (polling, retry, rate-limit notice) and `AppTextInput`, `LoadError`, `EmptyState`. Strings in all six languages in `packages/shared/src/locales/*/app.json` (run `npm run locales:check`). Show an unread dot on the Support row in More and on the list rows.
-
-**Office page:** `office/app/support/page.tsx` modelled on `office/app/reviews/page.tsx`: queue on the left, thread and reply box on the right, assign to me, Resolve. Add it to the Office nav.
+**Office page, still to build:** `office/app/support/page.tsx` modelled on `office/app/reviews/page.tsx`: queue (filters status, assigned, search) on the left, thread and reply box on the right, Assign to me, Resolve; add it to the Office nav.
 
 **Do not build the AI assistant** (`mobile/app/assistant.tsx` stays as is): it needs an LLM and the card says it must never invent amounts. Ask the owner first.
 
-**Then:** add support tables and functions to `supabase/deploy/verify-all.sql` (the test `api/tests/merchant/database-verify.test.mjs` applies every migration and expects no false rows, so it will catch drift), update `design-system/components/CustomerSupport/README.md` Upgrade section, `customer-app-status.md`, and tell the owner to run `support-requests.sql`.
+**Then:** add the support tables and functions to `supabase/deploy/verify-all.sql` (the test `api/tests/merchant/database-verify.test.mjs` applies every migration and expects no false rows, so it catches drift), update `design-system/components/CustomerSupport/README.md` (Upgrade section) and `customer-app-status.md`, and tell the owner to run `support-requests.sql`.
 
 ### 2. Receipts (card `ReceiptCustomer`)
 Customers get a receipt for a completed Send transfer, marketplace order or booking. Plan: one API route `GET /api/receipts/[kind]/[id]` that returns a structured JSON receipt (number, date, parties, items, fees, total, payment method name only, never a provider name), and a PDF via a server-side generator (check what `api/app/api/admin/receipts` and `api/lib` already do for transfers before adding a library). Customer UI: a Receipt screen opened from the transfer detail and order view, with Share (the transfer screen already has a text Share receipt). Ask the owner before adding a PDF dependency.
