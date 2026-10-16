@@ -44,6 +44,8 @@ export default function HomeScreen() {
       <ScrollView
         style={styles.flex}
         contentContainerStyle={[styles.scroll, { paddingBottom: tabContentPadding }]}
+        // The tiles share whatever height is left under the banner, so Home fits without scrolling.
+        // Scrolling stays only as a fallback on a screen too small for the minimum tile sizes.
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
@@ -51,9 +53,14 @@ export default function HomeScreen() {
         <HomeSlider />
         {loading ? (
           <View style={styles.grid}>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <View key={i} style={styles.cell}>
-                <TileSkeleton />
+            {[0, 1].map((r) => (
+              <View key={r} style={styles.row}>
+                <View style={styles.cell}>
+                  <TileSkeleton />
+                </View>
+                <View style={styles.cell}>
+                  <TileSkeleton />
+                </View>
               </View>
             ))}
           </View>
@@ -64,14 +71,18 @@ export default function HomeScreen() {
           />
         ) : (
           <View style={styles.grid}>
-            {lines.map((line) => {
-              const { title, shortDescription } = hubServiceLineTileCopy(line, t)
-              return (
-                <View key={line.id} style={styles.cell}>
-                  <Tile title={title} description={shortDescription} slug={line.slug} onPress={() => open(line)} />
-                </View>
-              )
-            })}
+            {Array.from({ length: Math.ceil(lines.length / 2) }).map((_, r) => (
+              <View key={r} style={styles.row}>
+                {lines.slice(r * 2, r * 2 + 2).map((line) => {
+                  const { title, shortDescription } = hubServiceLineTileCopy(line, t)
+                  return (
+                    <View key={line.id} style={styles.cell}>
+                      <Tile title={title} description={shortDescription} slug={line.slug} onPress={() => open(line)} />
+                    </View>
+                  )
+                })}
+              </View>
+            ))}
           </View>
         )}
       </ScrollView>
@@ -81,7 +92,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  scroll: { paddingTop: 16, paddingBottom: 40 },
-  grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", paddingHorizontal: space.page },
-  cell: { width: "48.5%", marginBottom: 10, alignSelf: "stretch" },
+  scroll: { flexGrow: 1, paddingTop: 16, paddingBottom: 40 },
+  // Fills the rest of the screen; each row takes an equal share and each tile stretches to its row.
+  grid: { flex: 1, paddingHorizontal: space.page, gap: 10, paddingBottom: 10 },
+  row: { flex: 1, flexDirection: "row", gap: 10 },
+  cell: { flex: 1 },
 })

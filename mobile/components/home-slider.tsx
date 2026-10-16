@@ -31,8 +31,11 @@ const RESUME_MS = 8000
 const GAP = 12
 /** Banner height follows the screen, clamped so small phones keep room for the tiles and large phones do not stretch. */
 export function bannerHeight(windowHeight: number): number {
-  return Math.min(176, Math.max(128, Math.round(windowHeight * 0.19)))
+  return Math.min(176, Math.max(104, Math.round(windowHeight * 0.19)))
 }
+
+/** Below this the banner drops its small "CIUNA" label and tightens its padding so the text still fits. */
+const COMPACT_BANNER = 124
 
 export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
   const { t } = useTranslation("app")
@@ -99,7 +102,7 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
               accessibilityLabel={t(`home.slide.${item.id}.title`, { defaultValue: item.id })}
               style={({ pressed }) => [{ width: itemWidth, height: h }, pressed && styles.pressed]}
             >
-              <View style={styles.banner}>
+              <View style={[styles.banner, h < COMPACT_BANNER && styles.bannerCompact]}>
                 <LinearGradient colors={b.stops} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
                 {/* Decorative: large soft circles tie the banner to the brand's dot mark. */}
                 <View style={[styles.orb, styles.orbA]} />
@@ -110,7 +113,7 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
                   </View>
                 ) : null}
                 <View style={styles.copy}>
-                  {kicker ? <Text style={styles.kicker}>{kicker}</Text> : null}
+                  {kicker && h >= COMPACT_BANNER ? <Text style={styles.kicker}>{kicker}</Text> : null}
                   <Text style={styles.title} numberOfLines={1}>
                     {t(`home.slide.${item.id}.title`, { defaultValue: item.id })}
                   </Text>
@@ -155,6 +158,7 @@ const styles = StyleSheet.create({
   wrap: { paddingHorizontal: space.page, marginBottom: 12 },
   pressed: { opacity: 0.92 },
   banner: { flex: 1, borderRadius: 20, overflow: "hidden", padding: 18, justifyContent: "flex-end" },
+  bannerCompact: { padding: 12 },
   orb: { position: "absolute", borderRadius: 999, backgroundColor: "rgba(255,255,255,0.12)" },
   orbA: { width: 160, height: 160, right: -48, top: -56 },
   orbB: { width: 90, height: 90, right: 70, bottom: -40, backgroundColor: "rgba(255,255,255,0.08)" },

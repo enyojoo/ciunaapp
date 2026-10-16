@@ -4,11 +4,12 @@ import { useFocusEffect, useRouter } from "expo-router"
 import { Heart } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { EmptyState } from "@/components/empty-state"
-import { ExpertDirectoryCard } from "@/components/expert-catalog"
+import { expertProfilePath } from "@/components/expert-catalog"
+import { ExpertRow, RowSkeleton, StoreRow } from "@/components/list-rows"
 import { LoadError } from "@/components/load-error"
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card"
 import { ScreenScroll } from "@/components/screen"
-import { StoreGridCard, StoreGridSkeleton } from "@/components/store-item"
+import { StoreGridSkeleton } from "@/components/store-item"
 import { hubMarketplaceVendorPath, hubProductDetailPath } from "@/lib/hub"
 import { useFavourites } from "@/lib/favourites"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -70,6 +71,15 @@ export default function FavouritesScreen() {
   }[tab]
 
   const list = (() => {
+    if (loading && tab !== "products") {
+      return (
+        <View>
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+        </View>
+      )
+    }
     if (loading) {
       return (
         <View style={styles.grid}>
@@ -102,9 +112,9 @@ export default function FavouritesScreen() {
     }
     if (tab === "stores") {
       return (
-        <View style={styles.grid}>
+        <View>
           {stores.map((v) => (
-            <StoreGridCard
+            <StoreRow
               key={v.id}
               vendor={v}
               onPress={() => router.push(hubMarketplaceVendorPath(String(v.service_line_slug || "food"), v.slug) as never)}
@@ -133,9 +143,9 @@ export default function FavouritesScreen() {
       )
     }
     return (
-      <View style={styles.grid}>
+      <View>
         {experts.map((e) => (
-          <ExpertDirectoryCard key={e.id} expert={e} />
+          <ExpertRow key={e.id} expert={e} onPress={() => router.push(expertProfilePath(e) as never)} />
         ))}
       </View>
     )

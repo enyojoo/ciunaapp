@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
-import { useWindowDimensions } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import { Briefcase, Gift, GraduationCap, Send, ShoppingBasket, Sparkles, Utensils, type LucideIcon } from "lucide-react-native"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -46,13 +45,9 @@ export function Tile({
 }) {
   const art = tileArtFor(slug ?? "")
   const Icon = art.icon
-  const { height: winH } = useWindowDimensions()
-  /** Short screens: smaller artwork. The description is never dropped or cut to one line: the page scrolls. */
-  const compact = winH < 700
-  const artHeight = Math.round(Math.min(120, Math.max(84, winH * 0.15)))
   const inner = (
     <View style={styles.card}>
-      <View style={[styles.art, { height: artHeight }]}>
+      <View style={styles.art}>
         <LinearGradient colors={[art.from, art.to]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
         {iconUrl ? (
           <Image source={{ uri: iconUrl }} style={styles.artImage} contentFit="contain" />
@@ -95,19 +90,22 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  art: { alignItems: "center", justifyContent: "center" },
+  // The artwork takes whatever height the caption leaves, down to a minimum, so tiles fit any screen.
+  art: { flex: 1, minHeight: 56, alignItems: "center", justifyContent: "center" },
   artImage: { width: 48, height: 48 },
   caption: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 12, gap: 2 },
-  skeleton: { minHeight: 180, backgroundColor: colors.surface },
+  skeleton: { minHeight: 120, backgroundColor: colors.surface },
   title: {
     fontSize: 16,
     fontWeight: "600",
     lineHeight: 20,
     color: colors.text,
   },
+  // Two lines are always reserved, so tiles in a row keep the same artwork height whatever the copy length.
   desc: {
     fontSize: 13,
     lineHeight: 18,
+    minHeight: 36,
     color: colors.muted,
   },
 })

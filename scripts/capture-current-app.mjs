@@ -100,7 +100,7 @@ async function mock(page) {
     }
     if (p === "/api/expert/profiles/ada-obi") return json(route, { profile: { id: "e1", slug: "ada-obi", display_name: "Ada Obi", headline: "Nutritionist for expats", bio: "I help people abroad eat well on a budget.", category: "Health", image_url: null, service_area: "Moscow and online", rating_avg: 4.8, rating_count: 12, languages: ["en", "ru", "fr"], time_zone: "Africa/Lagos", credentials: [{ title: "MSc Nutrition", issuer: "UCL", year: 2019 }], years_experience: 7, is_verified: true, verification_tier: 2 }, services: [] })
     if (p === "/api/expert/profiles/ada-obi/reviews" || p.startsWith("/api/expert/profiles/ada-obi/reviews")) return json(route, { summary: { avg: 4.8, count: 12, distribution: { "1": 0, "2": 0, "3": 1, "4": 2, "5": 9 } }, reviews: [], hasMore: false })
-    if (p === "/api/hub/favorites") return json(route, { keys: [], vendors: [], experts: [], products: [] })
+    if (p === "/api/hub/favorites") return process.env.CAPTURE_FAVS ? json(route, { keys: ["vendor:v1", "expert:e1"], vendors: [vendor], experts: [{ id: "e1", slug: "ada-obi", display_name: "Ada Obi", headline: "Nutritionist for expats", category: "Health", image_url: null, rating_avg: 4.8, rating_count: 12, languages: ["en", "ru"], is_verified: true, verification_tier: 2 }], products: [] }) : json(route, { keys: [], vendors: [], experts: [], products: [] })
     if (p.startsWith("/api/referrals")) return json(route, { slug: "amara", balance: 0 })
     return route.continue()
   })
@@ -115,6 +115,7 @@ const SHOTS = [
   { name: "cart-filled", path: "/hub/food/cart", wait: 2500, full: true, filled: true },
   { name: "checkout-page", path: "/hub/food/checkout", wait: 3000, full: true, filled: true },
   { name: "expert-profile", path: "/experts/ada-obi", wait: 2500, full: true },
+  { name: "favourites", path: "/favourites", wait: 2500, full: true },
   { name: "order-chat", path: "/orders/o1/chat", wait: 2500, full: true },
   { name: "order-detail", path: "/orders/o1", wait: 2500, full: true },
   { name: "more", path: "/more", wait: 2000, full: true },

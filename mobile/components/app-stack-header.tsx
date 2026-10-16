@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { View } from "react-native"
 import { HubTopBar } from "@/components/hub-top-bar"
 
 type HeaderProps = {
@@ -17,5 +18,10 @@ type HeaderProps = {
 export function AppStackHeader({ options, back }: HeaderProps) {
   const title = typeof options.title === "string" ? options.title : ""
   const right = options.headerRight ? options.headerRight({ canGoBack: Boolean(back) }) : null
-  return <HubTopBar title={title || undefined} trailing={right} />
+  // The 16px under the bar matches the space the hub screens add themselves.
+  return (
+    <View style={{ marginBottom: 16 }}>
+      <HubTopBar title={title || undefined} trailing={right} />
+    </View>
+  )
 }
