@@ -27,6 +27,7 @@ import {
   Wallet,
   Percent,
   Settings2,
+  Star,
 } from "lucide-react"
 import { BrandLogo } from "@ciuna/shared"
 import { Button } from "@/components/ui/button"
@@ -183,6 +184,7 @@ function MerchantsSectionSubnav({ pathname, onNavigate }: { pathname: string | n
     { name: "Merchants", href: "/merchants", icon: Store },
     { name: "KYB requirements", href: "/kyb", icon: ListChecks },
     { name: "Audit log", href: "/audit", icon: ScrollText },
+    { name: "Reviews", href: "/reviews", icon: Star },
   ]
   return (
     <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
@@ -239,7 +241,7 @@ function isFinanceSectionPath(pathname: string | null): boolean {
 }
 
 function isMerchantsSectionPath(pathname: string | null): boolean {
-  return hubPathActive(pathname, "/merchants") || hubPathActive(pathname, "/kyb") || hubPathActive(pathname, "/audit")
+  return hubPathActive(pathname, "/merchants") || hubPathActive(pathname, "/kyb") || hubPathActive(pathname, "/audit") || hubPathActive(pathname, "/reviews")
 }
 
 function isHubSectionPath(pathname: string | null): boolean {
