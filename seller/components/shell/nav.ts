@@ -9,14 +9,14 @@ export function navFor(type: "store" | "expert"): NavItem[] {
     { href: "/orders", labelKey: "nav.orders", icon: ClipboardList, permission: "orders", primary: true, ready: true },
     { href: "/messages", labelKey: "nav.messages", icon: MessageSquare, permission: "messages", primary: true, ready: true },
     { href: "/catalog", labelKey: "nav.catalog", icon: Package, permission: "catalog", primary: true, ready: true },
-    { href: "/earnings", labelKey: "nav.earnings", icon: Wallet, permission: "earnings", primary: true, ready: true },
+    { href: "/earnings", labelKey: "nav.earnings", icon: Wallet, permission: "earnings", primary: false, ready: true },
     { href: "/reviews", labelKey: "reviews.nav", icon: Star, permission: "orders", primary: false, ready: true },
   ]
   const expert: NavItem[] = [
     { href: "/bookings", labelKey: "nav.bookings", icon: CalendarCheck, permission: "orders", primary: true, ready: true },
     { href: "/messages", labelKey: "nav.messages", icon: MessageSquare, permission: "messages", primary: true, ready: true },
     { href: "/services", labelKey: "nav.services", icon: Briefcase, permission: "catalog", primary: true, ready: true },
-    { href: "/availability", labelKey: "nav.availability", icon: Clock, permission: "availability", primary: true, ready: true },
+    { href: "/availability", labelKey: "nav.availability", icon: Clock, permission: "availability", primary: false, ready: true },
     { href: "/earnings", labelKey: "nav.earnings", icon: Wallet, permission: "earnings", primary: false, ready: true },
     { href: "/reviews", labelKey: "reviews.nav", icon: Star, permission: "orders", primary: false, ready: true },
   ]
