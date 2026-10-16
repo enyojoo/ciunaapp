@@ -145,5 +145,22 @@
   "errors.ZONE_INVALID": "Enter a city and a district for every zone.",
   "errors.ZONE_FEE_INVALID": "Enter a delivery fee of 0 or more.",
   "errors.ZONE_CURRENCY_INVALID": "Choose a supported currency for the zone.",
-  "errors.ZONE_DUPLICATE": "Each city and district can be listed only once."
+  "errors.ZONE_DUPLICATE": "Each city and district can be listed only once.",
+  "catalog.fulfilment.schedule": "Weekly opening hours",
+  "catalog.fulfilment.scheduleHint": "Customers see whether you are open. Leave every day closed to show no opening hours.",
+  "catalog.fulfilment.timeZone": "Time zone",
+  "catalog.fulfilment.openDay": "Open",
+  "catalog.fulfilment.addRange": "Add hours",
+  "catalog.fulfilment.openFrom": "Opens",
+  "catalog.fulfilment.openTo": "Closes",
+  "catalog.fulfilment.minOrder": "Minimum order for delivery",
+  "catalog.fulfilment.minOrderHint": "Delivery orders below this amount cannot be placed. Leave empty for no minimum.",
+  "catalog.fulfilment.minOrderAmount": "Amount",
+  "catalog.fulfilment.eta": "Delivery time (min)",
+  "errors.HOURS_INVALID": "Check the opening hours: each range must end after it starts.",
+  "errors.HOURS_OVERLAP": "Opening hours on the same day must not overlap.",
+  "errors.MIN_ORDER_INVALID": "Enter a valid minimum order amount.",
+  "errors.MIN_ORDER_CURRENCY_INVALID": "Choose a currency for the minimum order.",
+  "errors.ZONE_ETA_INVALID": "Delivery time must be a whole number of minutes between 1 and 1440.",
+  "errors.TIME_ZONE_INVALID": "Choose a valid time zone."
 }

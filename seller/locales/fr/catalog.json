@@ -145,5 +145,22 @@
   "errors.ZONE_INVALID": "Saisissez une ville et un quartier pour chaque zone.",
   "errors.ZONE_FEE_INVALID": "Saisissez des frais de livraison supérieurs ou égaux à 0.",
   "errors.ZONE_CURRENCY_INVALID": "Choisissez une devise prise en charge pour la zone.",
-  "errors.ZONE_DUPLICATE": "Chaque ville et quartier ne peut figurer qu'une seule fois."
+  "errors.ZONE_DUPLICATE": "Chaque ville et quartier ne peut figurer qu'une seule fois.",
+  "catalog.fulfilment.schedule": "Horaires d’ouverture hebdomadaires",
+  "catalog.fulfilment.scheduleHint": "Les clients voient si vous êtes ouvert. Laissez tous les jours fermés pour ne pas afficher d’horaires.",
+  "catalog.fulfilment.timeZone": "Fuseau horaire",
+  "catalog.fulfilment.openDay": "Ouvert",
+  "catalog.fulfilment.addRange": "Ajouter des horaires",
+  "catalog.fulfilment.openFrom": "Ouverture",
+  "catalog.fulfilment.openTo": "Fermeture",
+  "catalog.fulfilment.minOrder": "Commande minimale pour la livraison",
+  "catalog.fulfilment.minOrderHint": "Les commandes de livraison inférieures à ce montant ne peuvent pas être passées. Laissez vide pour aucun minimum.",
+  "catalog.fulfilment.minOrderAmount": "Montant",
+  "catalog.fulfilment.eta": "Délai de livraison (min)",
+  "errors.HOURS_INVALID": "Vérifiez les horaires : chaque plage doit se terminer après son début.",
+  "errors.HOURS_OVERLAP": "Les horaires d’une même journée ne doivent pas se chevaucher.",
+  "errors.MIN_ORDER_INVALID": "Saisissez un montant de commande minimale valide.",
+  "errors.MIN_ORDER_CURRENCY_INVALID": "Choisissez une devise pour la commande minimale.",
+  "errors.ZONE_ETA_INVALID": "Le délai doit être un nombre entier de minutes entre 1 et 1440.",
+  "errors.TIME_ZONE_INVALID": "Choisissez un fuseau horaire valide."
 }

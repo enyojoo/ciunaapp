@@ -145,5 +145,22 @@
   "errors.ZONE_INVALID": "请为每个区域填写城市和区域。",
   "errors.ZONE_FEE_INVALID": "请输入 0 或更大的配送费。",
   "errors.ZONE_CURRENCY_INVALID": "请为该区域选择支持的币种。",
-  "errors.ZONE_DUPLICATE": "每个城市和区域只能列出一次。"
+  "errors.ZONE_DUPLICATE": "每个城市和区域只能列出一次。",
+  "catalog.fulfilment.schedule": "每周营业时间",
+  "catalog.fulfilment.scheduleHint": "顾客可以看到您是否营业。所有日期都不营业则不显示营业时间。",
+  "catalog.fulfilment.timeZone": "时区",
+  "catalog.fulfilment.openDay": "营业",
+  "catalog.fulfilment.addRange": "添加时段",
+  "catalog.fulfilment.openFrom": "开门",
+  "catalog.fulfilment.openTo": "关门",
+  "catalog.fulfilment.minOrder": "配送起送金额",
+  "catalog.fulfilment.minOrderHint": "低于该金额的配送订单无法下单。留空表示无起送金额。",
+  "catalog.fulfilment.minOrderAmount": "金额",
+  "catalog.fulfilment.eta": "配送时间（分钟）",
+  "errors.HOURS_INVALID": "请检查营业时间：每个时段的结束时间必须晚于开始时间。",
+  "errors.HOURS_OVERLAP": "同一天的营业时段不能重叠。",
+  "errors.MIN_ORDER_INVALID": "请输入有效的起送金额。",
+  "errors.MIN_ORDER_CURRENCY_INVALID": "请选择起送金额的币种。",
+  "errors.ZONE_ETA_INVALID": "配送时间必须是 1 到 1440 之间的整数分钟。",
+  "errors.TIME_ZONE_INVALID": "请选择有效的时区。"
 }

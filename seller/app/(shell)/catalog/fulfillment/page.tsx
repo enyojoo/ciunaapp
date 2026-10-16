@@ -10,11 +10,20 @@ import { useErrorText, useT } from "@/lib/i18n"
 import { CURRENCIES } from "@/components/catalog/csv"
 import { num, type FulfillmentData } from "@/components/catalog/shared"
 
-interface Zone { city: string; district: string; fee: string; currency: string; active: boolean }
+interface Zone { city: string; district: string; fee: string; currency: string; active: boolean; eta: string }
+const DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const
+type DayKey = (typeof DAY_KEYS)[number]
+type Range = { open: string; close: string }
+type Sched = Record<DayKey, Range[]>
+const emptySched = (): Sched => ({ mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] })
+const zoneList = (): string[] => {
+  const all = (Intl as unknown as { supportedValuesOf?: (k: string) => string[] }).supportedValuesOf?.("timeZone")
+  return all && all.length ? all : ["UTC", "Europe/Moscow", "Africa/Lagos", "Asia/Shanghai", "America/Sao_Paulo"]
+}
 const ctl = "h-12 md:h-11"
 
 export default function FulfillmentPage() {
-  const { t } = useT()
+  const { t, locale } = useT()
   const errText = useErrorText()
   const toast = useToast()
   const { merchant } = useSeller()
@@ -26,6 +35,12 @@ export default function FulfillmentPage() {
   const [hours, setHours] = React.useState("")
   const [notes, setNotes] = React.useState("")
   const [zones, setZones] = React.useState<Zone[]>([])
+  const [sched, setSched] = React.useState<Sched>(emptySched)
+  const [timeZone, setTimeZone] = React.useState("UTC")
+  const [minAmount, setMinAmount] = React.useState("")
+  const [minCurrency, setMinCurrency] = React.useState("")
+  const zoneNames = React.useMemo(() => { const l = zoneList(); return l.includes(timeZone) ? l : [timeZone, ...l] }, [timeZone])
+  const dayName = (i: number) => new Date(2026, 9, 19 + i).toLocaleDateString(locale, { weekday: "long" })
   const [dirty, setDirty] = React.useState(false)
   const [busy, setBusy] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
@@ -37,9 +52,13 @@ export default function FulfillmentPage() {
     setLocation(q.data.pickup.location ?? "")
     setHours(q.data.pickup.hours ?? "")
     setNotes(q.data.notes ?? "")
-    setZones(q.data.zones.filter((z) => z.active).map((z) => ({ city: z.city, district: z.district, fee: String(Number(z.fee)), currency: z.currency, active: true })).concat(q.data.zones.filter((z) => !z.active).map((z) => ({ city: z.city, district: z.district, fee: String(Number(z.fee)), currency: z.currency, active: false }))))
+    setSched({ ...emptySched(), ...Object.fromEntries(Object.entries(q.data.hours ?? {}).map(([d, r]) => [d, (r ?? []).map((x) => ({ open: x.open, close: x.close }))])) })
+    setTimeZone(q.data.timeZone || "UTC")
+    setMinAmount(q.data.minOrder ? String(q.data.minOrder.amount) : "")
+    setMinCurrency(q.data.minOrder?.currency || currency)
+    setZones(q.data.zones.filter((z) => z.active).map((z) => ({ city: z.city, district: z.district, fee: String(Number(z.fee)), currency: z.currency, active: true, eta: z.eta_minutes != null ? String(z.eta_minutes) : "" })).concat(q.data.zones.filter((z) => !z.active).map((z) => ({ city: z.city, district: z.district, fee: String(Number(z.fee)), currency: z.currency, active: false, eta: z.eta_minutes != null ? String(z.eta_minutes) : "" }))))
     setLoaded(true)
-  }, [q.data, loaded])
+  }, [q.data, loaded, currency])
 
   React.useEffect(() => {
     if (!dirty) return
@@ -62,6 +81,7 @@ export default function FulfillmentPage() {
     zones.forEach((z, i) => {
       if (!z.city.trim() || !z.district.trim()) errs[i] = t("errors.ZONE_INVALID")
       else if (!(num(z.fee) >= 0)) errs[i] = t("errors.ZONE_FEE_INVALID")
+      else if (z.eta.trim() && !(Number.isInteger(num(z.eta)) && num(z.eta) >= 1 && num(z.eta) <= 1440)) errs[i] = t("errors.ZONE_ETA_INVALID")
       else if (seen.has(key(z))) errs[i] = t("errors.ZONE_DUPLICATE")
       seen.add(key(z))
     })
@@ -69,9 +89,16 @@ export default function FulfillmentPage() {
     if (Object.keys(errs).length) return
     setBusy(true)
     try {
+      if (timeZone !== (q.data?.timeZone || "UTC")) await api("/api/merchant/profile", { method: "PATCH", json: { time_zone: timeZone } })
       await api("/api/merchant/fulfillment", {
         method: "PUT",
-        json: { pickup: { location: location.trim(), hours: hours.trim() }, notes: notes.trim(), zones: zones.map((z) => ({ city: z.city.trim(), district: z.district.trim(), fee: num(z.fee), currency: z.currency, active: z.active })) },
+        json: {
+          pickup: { location: location.trim(), hours: hours.trim() },
+          notes: notes.trim(),
+          hours: Object.fromEntries(DAY_KEYS.filter((d) => sched[d].length).map((d) => [d, sched[d]])),
+          minOrder: minAmount.trim() ? { amount: num(minAmount), currency: minCurrency || currency } : null,
+          zones: zones.map((z) => ({ city: z.city.trim(), district: z.district.trim(), fee: num(z.fee), currency: z.currency, active: z.active, etaMinutes: z.eta.trim() ? num(z.eta) : null })),
+        },
       })
       invalidate("fulfillment")
       setDirty(false)
@@ -117,6 +144,52 @@ export default function FulfillmentPage() {
           </Card>
 
           <Card>
+            <CardHeader title={t("catalog.fulfilment.schedule")} description={t("catalog.fulfilment.scheduleHint")} />
+            <CardBody className="space-y-4">
+              <Field label={t("catalog.fulfilment.timeZone")}>
+                <Select className={ctl} value={timeZone} onChange={(e) => { setTimeZone(e.target.value); touch() }}>
+                  {zoneNames.map((z) => <option key={z} value={z}>{z}</option>)}
+                </Select>
+              </Field>
+              {DAY_KEYS.map((d, i) => (
+                <div key={d} className="space-y-2 rounded-2xl border border-hairline p-3">
+                  <div className="flex min-h-12 items-center justify-between gap-3">
+                    <span className="text-[15px] font-semibold capitalize text-ink">{dayName(i)}</span>
+                    <span className="flex items-center gap-3 text-sm font-medium text-ink">
+                      <Switch checked={sched[d].length > 0} onCheckedChange={(v) => { setSched((all) => ({ ...all, [d]: v ? [{ open: "09:00", close: "18:00" }] : [] })); touch() }} label={t("catalog.fulfilment.openDay")} />
+                      {t("catalog.fulfilment.openDay")}
+                    </span>
+                  </div>
+                  {sched[d].map((r, j) => (
+                    <div key={j} className="grid grid-cols-[1fr_1fr_auto] items-end gap-3">
+                      <Field label={t("catalog.fulfilment.openFrom")}><Input className={ctl} type="time" value={r.open} onChange={(e) => { setSched((all) => ({ ...all, [d]: all[d].map((x, k) => (k === j ? { ...x, open: e.target.value } : x)) })); touch() }} /></Field>
+                      <Field label={t("catalog.fulfilment.openTo")}><Input className={ctl} type="time" value={r.close} onChange={(e) => { setSched((all) => ({ ...all, [d]: all[d].map((x, k) => (k === j ? { ...x, close: e.target.value } : x)) })); touch() }} /></Field>
+                      <Button type="button" variant="ghost" className="h-12 text-destructive-text md:h-11" aria-label={t("action.remove")} onClick={() => { setSched((all) => ({ ...all, [d]: all[d].filter((_, k) => k !== j) })); touch() }}><Trash2 /></Button>
+                    </div>
+                  ))}
+                  {sched[d].length > 0 && sched[d].length < 3 ? (
+                    <Button type="button" variant="secondary" className="h-12 md:h-11" onClick={() => { setSched((all) => ({ ...all, [d]: [...all[d], { open: "18:00", close: "21:00" }] })); touch() }}><Plus />{t("catalog.fulfilment.addRange")}</Button>
+                  ) : null}
+                </div>
+              ))}
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader title={t("catalog.fulfilment.minOrder")} description={t("catalog.fulfilment.minOrderHint")} />
+            <CardBody>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field label={t("catalog.fulfilment.minOrderAmount")}><Input className={ctl} inputMode="decimal" value={minAmount} onChange={(e) => { setMinAmount(e.target.value); touch() }} /></Field>
+                <Field label={t("catalog.field.currency")}>
+                  <Select className={ctl} value={minCurrency || currency} onChange={(e) => { setMinCurrency(e.target.value); touch() }}>
+                    {(CURRENCIES.includes(minCurrency || currency) ? CURRENCIES : [minCurrency || currency, ...CURRENCIES]).map((c) => <option key={c} value={c}>{c}</option>)}
+                  </Select>
+                </Field>
+              </div>
+            </CardBody>
+          </Card>
+
+          <Card>
             <CardHeader title={t("catalog.fulfilment.zones")} description={t("catalog.fulfilment.zonesHint")} />
             <CardBody className="space-y-4">
               {zones.length === 0 ? <p className="text-sm text-muted">{t("catalog.fulfilment.noZones")}</p> : null}
@@ -132,6 +205,9 @@ export default function FulfillmentPage() {
                       </Select>
                     </Field>
                   </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Field label={t("catalog.fulfilment.eta")}><Input className={ctl} inputMode="numeric" value={z.eta} onChange={(e) => upd(i, { eta: e.target.value })} /></Field>
+                  </div>
                   {fieldErrors[i] ? <p role="alert" className="text-sm text-destructive-text">{fieldErrors[i]}</p> : null}
                   <div className="flex min-h-12 items-center justify-between gap-3">
                     <span className="flex items-center gap-3 text-sm font-medium text-ink">
@@ -145,7 +221,7 @@ export default function FulfillmentPage() {
                   </div>
                 </div>
               ))}
-              <Button type="button" variant="secondary" className="h-12 md:h-11" onClick={() => { setZones((all) => [...all, { city: "", district: "", fee: "0", currency, active: true }]); touch() }}>
+              <Button type="button" variant="secondary" className="h-12 md:h-11" onClick={() => { setZones((all) => [...all, { city: "", district: "", fee: "0", currency, active: true, eta: "" }]); touch() }}>
                 <Plus />
                 {t("catalog.fulfilment.addZone")}
               </Button>

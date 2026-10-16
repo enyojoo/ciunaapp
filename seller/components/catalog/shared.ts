@@ -23,7 +23,11 @@ export interface Product {
 export interface FulfillmentData {
   pickup: { location: string | null; hours: string | null }
   notes: string | null
-  zones: Array<{ id?: string; city: string; district: string; fee: number | string; currency: string; active: boolean }>
+  /** Weekly schedule: a missing day is closed; an empty object means no hours are shown. */
+  hours?: Partial<Record<"mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun", Array<{ open: string; close: string }>>>
+  timeZone?: string
+  minOrder?: { amount: number; currency: string | null } | null
+  zones: Array<{ id?: string; city: string; district: string; fee: number | string; currency: string; active: boolean; eta_minutes?: number | null }>
 }
 
 /** Category list for the merchant's section (service_line comes from the session). Null when the section is unknown. */

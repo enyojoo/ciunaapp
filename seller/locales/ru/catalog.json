@@ -145,5 +145,22 @@
   "errors.ZONE_INVALID": "Укажите город и район для каждой зоны.",
   "errors.ZONE_FEE_INVALID": "Укажите стоимость доставки от 0.",
   "errors.ZONE_CURRENCY_INVALID": "Выберите поддерживаемую валюту для зоны.",
-  "errors.ZONE_DUPLICATE": "Каждый город и район можно указать только один раз."
+  "errors.ZONE_DUPLICATE": "Каждый город и район можно указать только один раз.",
+  "catalog.fulfilment.schedule": "Часы работы по дням",
+  "catalog.fulfilment.scheduleHint": "Покупатели видят, открыт ли магазин. Если все дни закрыты, часы работы не показываются.",
+  "catalog.fulfilment.timeZone": "Часовой пояс",
+  "catalog.fulfilment.openDay": "Открыто",
+  "catalog.fulfilment.addRange": "Добавить часы",
+  "catalog.fulfilment.openFrom": "Открывается",
+  "catalog.fulfilment.openTo": "Закрывается",
+  "catalog.fulfilment.minOrder": "Минимальный заказ для доставки",
+  "catalog.fulfilment.minOrderHint": "Заказы на доставку на меньшую сумму оформить нельзя. Оставьте пустым, если минимума нет.",
+  "catalog.fulfilment.minOrderAmount": "Сумма",
+  "catalog.fulfilment.eta": "Время доставки (мин)",
+  "errors.HOURS_INVALID": "Проверьте часы работы: время закрытия должно быть позже времени открытия.",
+  "errors.HOURS_OVERLAP": "Часы работы в один день не должны пересекаться.",
+  "errors.MIN_ORDER_INVALID": "Введите корректную сумму минимального заказа.",
+  "errors.MIN_ORDER_CURRENCY_INVALID": "Выберите валюту минимального заказа.",
+  "errors.ZONE_ETA_INVALID": "Время доставки — целое число минут от 1 до 1440.",
+  "errors.TIME_ZONE_INVALID": "Выберите корректный часовой пояс."
 }

@@ -145,5 +145,22 @@
   "errors.ZONE_INVALID": "Informe uma cidade e um bairro para cada zona.",
   "errors.ZONE_FEE_INVALID": "Informe uma taxa de entrega igual ou maior que 0.",
   "errors.ZONE_CURRENCY_INVALID": "Escolha uma moeda compatível para a zona.",
-  "errors.ZONE_DUPLICATE": "Cada cidade e bairro só pode aparecer uma vez."
+  "errors.ZONE_DUPLICATE": "Cada cidade e bairro só pode aparecer uma vez.",
+  "catalog.fulfilment.schedule": "Horário semanal de funcionamento",
+  "catalog.fulfilment.scheduleHint": "Os clientes veem se você está aberto. Deixe todos os dias fechados para não mostrar horário.",
+  "catalog.fulfilment.timeZone": "Fuso horário",
+  "catalog.fulfilment.openDay": "Aberto",
+  "catalog.fulfilment.addRange": "Adicionar horário",
+  "catalog.fulfilment.openFrom": "Abre",
+  "catalog.fulfilment.openTo": "Fecha",
+  "catalog.fulfilment.minOrder": "Pedido mínimo para entrega",
+  "catalog.fulfilment.minOrderHint": "Pedidos de entrega abaixo desse valor não podem ser feitos. Deixe vazio para não ter mínimo.",
+  "catalog.fulfilment.minOrderAmount": "Valor",
+  "catalog.fulfilment.eta": "Tempo de entrega (min)",
+  "errors.HOURS_INVALID": "Confira o horário: cada faixa deve terminar depois de começar.",
+  "errors.HOURS_OVERLAP": "Os horários de um mesmo dia não podem se sobrepor.",
+  "errors.MIN_ORDER_INVALID": "Informe um valor mínimo de pedido válido.",
+  "errors.MIN_ORDER_CURRENCY_INVALID": "Escolha uma moeda para o pedido mínimo.",
+  "errors.ZONE_ETA_INVALID": "O tempo de entrega deve ser um número inteiro de minutos entre 1 e 1440.",
+  "errors.TIME_ZONE_INVALID": "Escolha um fuso horário válido."
 }
