@@ -5,7 +5,7 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { BadgeCheck, MapPin } from "lucide-react-native"
+import { BadgeCheck, Clock, Info, MapPin } from "lucide-react-native"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import { RatingLine, ReviewsSection } from "@/components/reviews-section"
 import { useReviews } from "@/lib/use-reviews"
@@ -151,24 +151,39 @@ export default function VendorScreen() {
         ) : null}
 
         {notes || pickupLocation || pickupHours ? (
-          <View style={styles.notesFrame}>
-            {notes ? (
-              <>
-                <Text style={styles.notesLabel}>
-                  {t("marketplace.fulfillmentNotes", { defaultValue: "Fulfillment notes" })}
-                </Text>
-                <Text style={styles.notesBody}>{notes}</Text>
-              </>
-            ) : null}
+          <View style={styles.infoPlate}>
             {pickupLocation ? (
-              <Text style={styles.notesBody}>
-                {t("marketplace.pickupLocation", { defaultValue: "Pickup location" })}: {pickupLocation}
-              </Text>
+              <View style={styles.infoRow}>
+                <View style={styles.infoIcon}>
+                  <MapPin size={16} color={colors.primaryText} strokeWidth={2.2} />
+                </View>
+                <View style={styles.infoBody}>
+                  <Text style={styles.infoLabel}>{t("marketplace.pickupLocation", { defaultValue: "Pickup location" })}</Text>
+                  <Text style={styles.infoValue}>{pickupLocation}</Text>
+                </View>
+              </View>
             ) : null}
             {pickupHours ? (
-              <Text style={styles.notesBody}>
-                {t("marketplace.pickupHours", { defaultValue: "Pickup hours" })}: {pickupHours}
-              </Text>
+              <View style={styles.infoRow}>
+                <View style={styles.infoIcon}>
+                  <Clock size={16} color={colors.primaryText} strokeWidth={2.2} />
+                </View>
+                <View style={styles.infoBody}>
+                  <Text style={styles.infoLabel}>{t("marketplace.pickupHours", { defaultValue: "Pickup hours" })}</Text>
+                  <Text style={styles.infoValue}>{pickupHours}</Text>
+                </View>
+              </View>
+            ) : null}
+            {notes ? (
+              <View style={styles.infoRow}>
+                <View style={styles.infoIcon}>
+                  <Info size={16} color={colors.primaryText} strokeWidth={2.2} />
+                </View>
+                <View style={styles.infoBody}>
+                  <Text style={styles.infoLabel}>{t("marketplace.fulfillmentNotes", { defaultValue: "Fulfillment notes" })}</Text>
+                  <Text style={styles.infoValue}>{notes}</Text>
+                </View>
+              </View>
             ) : null}
           </View>
         ) : null}
@@ -191,6 +206,12 @@ export default function VendorScreen() {
 }
 
 const styles = StyleSheet.create({
+  infoPlate: { marginTop: 16, marginBottom: 20, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 14 },
+  infoRow: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
+  infoIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: "center", justifyContent: "center" },
+  infoBody: { flex: 1, minWidth: 0, gap: 2 },
+  infoLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
+  infoValue: { fontSize: 15, lineHeight: 21, color: colors.text },
   cover: { height: 128, borderRadius: 20, overflow: "hidden" },
   identityOverCover: { marginTop: -40, paddingHorizontal: 4 },
   logoInitial: { fontSize: 22, fontWeight: "700", color: colors.primaryText, textAlign: "center" },

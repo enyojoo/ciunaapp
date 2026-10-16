@@ -14,7 +14,7 @@ const REF = "seeqjiebmrnolcyydewj"
 fs.mkdirSync(out, { recursive: true })
 
 const now = new Date().toISOString()
-const vendor = { id: "v1", name: "Mama T's Kitchen", slug: "mama-ts-kitchen", photo_url: null, service_line_slug: "food", is_verified: true, location: "Moscow, Tverskaya" }
+const vendor = { id: "v1", name: "Mama T's Kitchen", slug: "mama-ts-kitchen", photo_url: null, service_line_slug: "food", is_verified: true, location: "Moscow, Tverskaya", pickup_location: "Tverskaya 12, counter by the entrance", pickup_hours: "Mon–Sat 10:00–20:00", fulfillment_notes: "Call ahead for orders over 5 kg." }
 const base = (id, title, sub, price, sale, cat, extra = {}) => ({
   id, title, short_description: sub, image_url: null, list_price: price, sale_price: sale, fixed_amount: sale ?? price,
   fixed_currency: "RUB", default_input_currency: "RUB", service_line_slug: "food", category: cat, vendor_id: "v1", vendor,
