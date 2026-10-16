@@ -136,6 +136,7 @@ export type CombinedTransaction = {
   contact_phone?: string | null
   receipt_url?: string | null
   receipt_filename?: string | null
+  recipient_id?: string | null
   recipient?: {
     full_name?: string
     account_number?: string

@@ -396,7 +396,10 @@
     "statusTxnCancelled": "Операция отменена",
     "statusTxnCancelledDesc": "Операция отменена. При оплате средства будут возвращены.",
     "statusProcessing": "Операция обрабатывается",
-    "statusProcessingDesc": "Ваша операция в обработке"
+    "statusProcessingDesc": "Ваша операция в обработке",
+    "shareReceipt": "Поделиться квитанцией",
+    "shareText": "Перевод Ciuna {{id}}: {{send}} отправлено получателю {{name}}, {{date}}.",
+    "repeatTransfer": "Повторить перевод"
   },
   "txTimeline": {
     "payoutSubmitted": "Запрос отправлен",

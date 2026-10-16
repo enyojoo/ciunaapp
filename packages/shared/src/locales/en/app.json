@@ -491,7 +491,10 @@
     "statusTxnCancelled": "Transaction Cancelled",
     "statusTxnCancelledDesc": "This transaction has been cancelled. You will receive a refund if payment was made.",
     "statusProcessing": "Transaction Processing",
-    "statusProcessingDesc": "Your transaction is being processed"
+    "statusProcessingDesc": "Your transaction is being processed",
+    "shareReceipt": "Share receipt",
+    "shareText": "Ciuna transfer {{id}}: {{send}} sent to {{name}} on {{date}}.",
+    "repeatTransfer": "Repeat transfer"
   },
   "txTimeline": {
     "payoutSubmitted": "Request submitted",

@@ -491,7 +491,10 @@
     "statusTxnCancelled": "Transação cancelada",
     "statusTxnCancelledDesc": "Esta transação foi cancelada. Se o pagamento foi feito, você receberá o reembolso.",
     "statusProcessing": "Transação em processamento",
-    "statusProcessingDesc": "Sua transação está sendo processada"
+    "statusProcessingDesc": "Sua transação está sendo processada",
+    "shareReceipt": "Compartilhar recibo",
+    "shareText": "Transferência Ciuna {{id}}: {{send}} enviados para {{name}} em {{date}}.",
+    "repeatTransfer": "Repetir transferência"
   },
   "txTimeline": {
     "payoutSubmitted": "Solicitação enviada",

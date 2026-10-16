@@ -491,7 +491,10 @@
     "statusTxnCancelled": "交易已取消",
     "statusTxnCancelledDesc": "此交易已取消。如已付款，将为您退款。",
     "statusProcessing": "交易处理中",
-    "statusProcessingDesc": "您的交易正在处理中"
+    "statusProcessingDesc": "您的交易正在处理中",
+    "shareReceipt": "分享收据",
+    "shareText": "Ciuna 转账 {{id}}：已于 {{date}} 向 {{name}} 汇出 {{send}}。",
+    "repeatTransfer": "重复转账"
   },
   "txTimeline": {
     "payoutSubmitted": "申请已提交",

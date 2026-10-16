@@ -2,7 +2,7 @@ import type { MarketplaceOrder } from "@ciuna/shared"
 import { MarketplaceOrderView } from "@/components/marketplace-checkout"
 import { useEffect, useRef, useState } from "react"
 import * as Clipboard from "expo-clipboard"
-import { ActivityIndicator, Image, Linking, Pressable, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Image, Linking, Pressable, Share, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -306,9 +306,42 @@ function LegacyOrderScreen() {
         {!referral && !isHub ? (
           <View style={styles.actionHalf}>
             <PrimaryButton
-              label={t("txDetail.sendAgain")}
+              label={tx.send_currency && tx.receive_currency ? t("txDetail.repeatTransfer", { defaultValue: "Repeat transfer" }) : t("txDetail.sendAgain")}
               variant="secondary"
-              onPress={() => router.push("/send" as never)}
+              onPress={() =>
+                router.push(
+                  (tx.send_currency && tx.receive_currency
+                    ? {
+                        pathname: "/send",
+                        params: {
+                          from: tx.send_currency,
+                          to: tx.receive_currency,
+                          amount: String(tx.send_amount ?? ""),
+                          ...(tx.recipient_id ? { recipient: tx.recipient_id } : {}),
+                        },
+                      }
+                    : "/send") as never,
+                )
+              }
+            />
+          </View>
+        ) : null}
+        {!referral && !isHub && tone === "completed" ? (
+          <View style={styles.actionHalf}>
+            <PrimaryButton
+              label={t("txDetail.shareReceipt", { defaultValue: "Share receipt" })}
+              variant="secondary"
+              onPress={() =>
+                void Share.share({
+                  message: t("txDetail.shareText", {
+                    id: tx.transaction_id,
+                    send: formatMoney(tx.send_amount, tx.send_currency),
+                    name: tx.recipient?.full_name || "",
+                    date: tx.created_at ? new Date(tx.created_at).toLocaleDateString(locale, { dateStyle: "medium" }) : "",
+                    defaultValue: "Ciuna transfer {{id}}: {{send}} sent to {{name}} on {{date}}.",
+                  }),
+                })
+              }
             />
           </View>
         ) : null}

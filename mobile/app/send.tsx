@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
-import { useRouter } from "expo-router"
+import { useRouter, useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
 import {
   applyReceiveCurrencyChange,
@@ -56,6 +56,7 @@ export default function SendScreen() {
   useFocusRevalidate(reloadFx)
   const { user, profile } = useAuth()
   const { data: eligibility } = useBitbankerEligibility(user?.id)
+  const params = useLocalSearchParams<{ from?: string; to?: string; amount?: string; recipient?: string }>()
   const [step, setStep] = useState<SendFlowStep>("amount")
   const [sendAmount, setSendAmount] = useState(SEND_DEFAULT_AMOUNT)
   const [sendCurrency, setSendCurrency] = useState("")
@@ -72,6 +73,15 @@ export default function SendScreen() {
   useEffect(() => {
     if (currencies.length === 0) return
     if (!sendCurrency && !receiveCurrency) {
+      // Repeat transfer: the detail screen passes the earlier currency pair, amount and recipient.
+      if (params.from && params.to && currencies.some((c) => c.code === params.from)) {
+        prevSendCurrencyRef.current = String(params.from)
+        setSendCurrency(String(params.from))
+        setReceiveCurrency(String(params.to))
+        if (Number(params.amount) > 0) setSendAmount(String(params.amount))
+        if (params.recipient) setRecipientId(String(params.recipient))
+        return
+      }
       const pair = initialSendReceivePair(currencies, profile?.base_currency)
       if (pair) {
         prevSendCurrencyRef.current = pair.sendCurrency
