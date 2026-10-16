@@ -49,6 +49,6 @@ export function renderAlert(kind: AlertKind, payload: Record<string, any>, opts:
   const url = `${opts.portalUrl.replace(/\/+$/, "")}${path}`
   const footer = fill(t("footer"), { name: opts.merchantName })
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-  const html = `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#111827"><h1 style="font-size:20px;margin:0 0 8px">${esc(title)}</h1><p style="font-size:16px;line-height:1.5;color:#52596B;margin:0 0 20px">${esc(body)}</p><a href="${esc(url)}" style="display:inline-block;background:#F97316;color:#111827;font-weight:600;padding:12px 20px;border-radius:12px;text-decoration:none">${esc(t("open"))}</a><p style="font-size:13px;color:#52596B;margin:24px 0 0">${esc(footer)}</p></div>`
+  const html = `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#111827"><h1 style="font-size:20px;margin:0 0 8px">${esc(title)}</h1><p style="font-size:16px;line-height:1.5;color:#52596B;margin:0 0 20px">${esc(body)}</p><a href="${esc(url)}" style="display:inline-block;background:#CD4B0E;color:#FFFFFF;font-weight:600;padding:12px 20px;border-radius:12px;text-decoration:none">${esc(t("open"))}</a><p style="font-size:13px;color:#52596B;margin:24px 0 0">${esc(footer)}</p></div>`
   return { title, body, url, openLabel: t("open"), footer, html, text: `${title}\n${body}\n${url}\n\n${footer}` }
 }

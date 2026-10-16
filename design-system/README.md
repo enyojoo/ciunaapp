@@ -13,8 +13,8 @@ Ciuna is a super app for **foreigners living in Russia** — African, Chinese, L
 
 ## Principles
 
-1. **Neutrals carry the surface. Orange signals intent.** Paper canvas, white plates, ink text. Orange (`brand-primary`) marks the one thing to do: buttons, active tabs, selected state, the logo. Never fill a page or a large card with orange. No giant orange billboards.
-2. **Ink on orange, never white.** White on `#F97316` is 2.8:1 and fails AA. Every orange fill carries `primary-foreground` (ink, 6.3:1). Orange as *text* or a link uses `primary-text` `#C2410C` (5.2:1). Hover and press use `primary-hover`.
+1. **Neutrals carry the surface. Orange signals intent.** Paper canvas, white plates, ink text. Orange marks the one thing to do: buttons, active tabs, selected state. Never fill a page or a large card with orange. No giant orange billboards.
+2. **White on orange, on the right orange.** Buttons use white labels, as people expect. White on the logo orange `#F97316` is only 2.8:1, so controls use `primary` `#CD4B0E` (white label 4.56:1) and hover to `primary-hover` `#B8420B` (5.7:1). The logo orange `brand-primary` is for the logo, illustrations and large decorative shapes. Orange as *text* or a link uses `primary-text` `#C2410C` (5.2:1).
 3. **One status vocabulary, one colour pair each.** Completed, Paid, Live, Verified → green. Pending, Preparing, In review, Awaiting → amber. Failed, Rejected, Overdue → red. Draft, Paused, Cancelled, Refunded → neutral. Orange is never a status. A status always carries a word or icon, never colour alone.
 4. **Money has one format.** Through `formatMoney` / `Amount` only. Symbol first, comma thousands, dot decimals, tabular figures, true minus: `₽12,500`, `$24.50`, `€9`, `−₽450`. No `.00` on whole amounts in lists; breakdowns that add up always show cents. Currencies with no minor unit never show decimals. Rates use symbols on both sides. Pickers name a currency by flag and code.
 5. **Instant by default.** Open with cached data on screen; skeleton only on a true first load with no cache, never over cached content.
@@ -39,7 +39,7 @@ Ciuna is a super app for **foreigners living in Russia** — African, Chinese, L
 See `tokens.json` for every value and its usage note.
 
 - **Canvas:** `paper` behind `surface` plates. Text is `ink`; secondary text is `muted`; `subtle` is for icons and placeholders only.
-- **Primary:** `brand-primary` fill + `primary-foreground` label; `primary-hover` for hover/press; `primary-text` for links and small orange text; `primary-tint` + `primary-border` for selected rows and callouts.
+- **Primary:** `primary` fill + white `primary-foreground` label; `primary-hover` for hover/press; `primary-text` for links and small orange text; `primary-tint` + `primary-border` for selected rows and callouts. `brand-primary` is the logo orange (logo, illustrations, large decorative areas only).
 - **Status:** each status has a solid fill (white label), a `-surface` ground and a `-text` colour. Badges use surface + text. Solid fills only for emphasis (a destructive confirm button).
 - **Refer:** `refer` teal pill; never a status.
 - **Controls:** edges use `input-edge` (3:1); decorative dividers use `hairline`.
@@ -66,4 +66,4 @@ Do not mix languages: no dense Office tables on the customer app; no giant tiles
 
 ## Implementation
 
-Tokens flow `tokens.json` → `packages/shared/src/design/tokens.generated.{ts,json}` → generated blocks in `web|office|seller/app/globals.css` and the Expo theme and Tailwind config. Shared web components live in `packages/ui-web`. Never hardcode hex in a component; use a token. Components that need orange text use `text-primary-text`; orange fills use `bg-primary text-primary-foreground`.
+Tokens flow `tokens.json` → `packages/shared/src/design/tokens.generated.{ts,json}` → generated blocks in `web|office|seller/app/globals.css` and the Expo theme and Tailwind config. Shared web components live in `packages/ui-web`. Never hardcode hex in a component; use a token. Components that need orange text use `text-primary-text`; orange fills use `bg-primary text-primary-foreground` (white).

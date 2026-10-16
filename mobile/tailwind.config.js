@@ -10,7 +10,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: tokens["brand-primary"],
+        primary: tokens.primary,
+        brand: tokens["brand-primary"],
         "on-primary": tokens["primary-foreground"],
         "primary-hover": tokens["primary-hover"],
         "primary-text": tokens["primary-text"],

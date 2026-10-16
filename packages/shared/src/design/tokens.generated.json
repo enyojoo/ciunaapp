@@ -1,8 +1,9 @@
 {
   "color": {
     "brand-primary": "#F97316",
-    "primary-foreground": "#111827",
-    "primary-hover": "#EA580C",
+    "primary": "#CD4B0E",
+    "primary-foreground": "#FFFFFF",
+    "primary-hover": "#B8420B",
     "primary-text": "#C2410C",
     "primary-tint": "#FFF3E8",
     "primary-border": "#FDBA74",

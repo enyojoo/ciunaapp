@@ -64,7 +64,7 @@ design-system/tokens.json
 **Shared web UI package.** Extract the shadcn primitives into `packages/ui-web` so `web`, `seller` and `office` use one Button, Input, Table and StatusBadge. Office currently has its own copy.
 
 **Component backlog (specs first, then code)**
-- Foundations: Button (ink-on-orange), Input, Select, Sheet, Dialog, Tabs, Toast, Skeleton, StatusBadge, Amount, DataTable, EmptyState, FileDrop, ImageUploader, LanguageTabs, Stepper, Timeline.
+- Foundations: Button (white label on primary), Input, Select, Sheet, Dialog, Tabs, Toast, Skeleton, StatusBadge, Amount, DataTable, EmptyState, FileDrop, ImageUploader, LanguageTabs, Stepper, Timeline.
 - Customer: ProductCard, StoreCard, ExpertCard, RatingStars, ReviewList, OrderTimeline, BookingCard.
 - Seller: AppShell (sidebar on desktop, bottom nav on phone), OrderCard and OrderBoard, ListingEditor, VariantGrid, AvailabilityEditor, EarningsTile, PayoutRow, OnboardingChecklist.
 - Office: AppShell, ApplicationReviewCard, FeeRuleEditor, LedgerTable, ExceptionQueue.

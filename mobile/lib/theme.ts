@@ -40,8 +40,10 @@ export const shadowNone: ViewStyle =
 
 /** Native canvas tokens. Web stays Geist + oklch(0.99); Expo uses paper + system type. */
 export const colors = {
-  primary: designColors.brandPrimary,
-  /** Label colour on any orange fill. Never white on orange (2.8:1). */
+  /** Fill for controls (burnt orange, white label 4.56:1). The logo orange is `brand`. */
+  primary: designColors.primary,
+  brand: designColors.brandPrimary,
+  /** Label colour on any primary fill: white. */
   onPrimary: designColors.primaryForeground,
   primaryHover: designColors.primaryHover,
   /** Orange as text/link on paper or white (5.2:1). */

@@ -54,17 +54,18 @@ export const designType = ${JSON.stringify(tokens.type)} as const
 )
 
 const cssVars = [
-  ["primary", "brand-primary"],
+  ["primary", "primary"],
   ["primary-foreground", "primary-foreground"],
+  ["brand-primary", "brand-primary"],
   ["primary-hover", "primary-hover"],
   ["primary-text", "primary-text"],
   ["primary-tint", "primary-tint"],
   ["primary-border", "primary-border"],
-  ["ring", "brand-primary"],
+  ["ring", "primary"],
   ["chart-1", "brand-primary"],
-  ["sidebar-primary", "brand-primary"],
+  ["sidebar-primary", "primary"],
   ["sidebar-primary-foreground", "primary-foreground"],
-  ["sidebar-ring", "brand-primary"],
+  ["sidebar-ring", "primary"],
   ["destructive", "destructive"],
   ["destructive-foreground", "#ffffff"],
   ["success", "success"],
@@ -84,7 +85,7 @@ const cssVars = [
   ["hairline", "hairline"],
   ["input-edge", "input-edge"],
 ]
-const themeOnly = ["primary-hover", "primary-text", "primary-tint", "primary-border", "success", "success-surface", "success-text", "warning", "warning-surface", "warning-text", "destructive-surface", "destructive-text", "neutral-surface", "neutral-text", "refer", "refer-surface", "paper", "ink", "hairline", "input-edge"]
+const themeOnly = ["brand-primary", "primary-hover", "primary-text", "primary-tint", "primary-border", "success", "success-surface", "success-text", "warning", "warning-surface", "warning-text", "destructive-surface", "destructive-text", "neutral-surface", "neutral-text", "refer", "refer-surface", "paper", "ink", "hairline", "input-edge"]
 const START = "/* ciuna-tokens:start (generated from design-system/tokens.json; run `npm run design:sync`) */"
 const END = "/* ciuna-tokens:end */"
 const cssBlock =
