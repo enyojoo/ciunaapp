@@ -18,7 +18,7 @@ import { ScreenScroll } from "@/components/screen"
 import { hubProductDetailPath, isHubMarketplaceSlug } from "@/lib/hub"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useHubVendorStorefront } from "@/lib/use-hub-vendor"
-import { storeOpenLine } from "@/lib/store-hours"
+import { StoreHeader } from "@/components/store-header"
 import { formatCardPrice } from "@/lib/money"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import type { HubVendor } from "@/lib/types"
@@ -70,14 +70,7 @@ export default function VendorScreen() {
     return (
       <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
-        <View style={styles.cover} />
-        <View style={[styles.identityRow, styles.identityOverCover]}>
-          <View style={[styles.logoWrap, styles.skelFill]} />
-          <View style={styles.identityBody}>
-            <View style={[styles.skelBar, { width: "60%", height: 20 }]} />
-            <View style={[styles.skelBar, { width: "40%" }]} />
-          </View>
-        </View>
+        <StoreHeader vendor={null} line={line} summary={null} productCount={0} skeleton />
       </ScreenScroll>
     )
   }
@@ -101,7 +94,6 @@ export default function VendorScreen() {
   const notes = (vendor?.fulfillment_notes || "").trim()
   const pickupLocation = (vendor?.pickup_location || "").trim()
   const pickupHours = (vendor?.pickup_hours || "").trim()
-  const openLine = vendor ? storeOpenLine(vendor, t, i18n.language) : null
   const minOrder =
     vendor?.min_order_amount != null && vendor.min_order_currency
       ? t("hub.store.minOrder", { min: formatCardPrice(vendor.min_order_amount, vendor.min_order_currency), defaultValue: "Minimum order for delivery: {{min}}" })
@@ -111,55 +103,7 @@ export default function VendorScreen() {
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
       <ScreenScroll edges={["left", "right"]} contentStyle={cartMode ? styles.contentWithCartBar : undefined}>
-        {/* Cover: the line's art until stores upload covers. The logo overlaps its bottom edge. */}
-        <View style={styles.cover}>
-          {vendor?.cover_url ? (
-            <Image source={{ uri: vendor.cover_url }} style={StyleSheet.absoluteFill} resizeMode="cover" />
-          ) : (
-            <LinearGradient
-              colors={[tileArtFor(line).from, tileArtFor(line).to]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={StyleSheet.absoluteFill}
-            />
-          )}
-        </View>
-        <View style={[styles.identityRow, styles.identityOverCover]}>
-          <View style={styles.logoWrap}>
-            {vendor?.photo_url ? (
-              <Image source={{ uri: vendor.photo_url }} style={styles.logo} resizeMode="cover" />
-            ) : (
-              <Text style={styles.logoInitial}>{(vendor?.name || "?").trim().charAt(0).toUpperCase()}</Text>
-            )}
-          </View>
-          <View style={styles.identityBody}>
-            <View style={styles.nameRow}>
-              <Text style={styles.name} numberOfLines={2}>
-                {vendor?.name}
-              </Text>
-              {vendor?.is_verified ? (
-                <VerifiedBadge size={18} tier={vendor?.verification_tier} />
-              ) : null}
-            </View>
-            {location ? (
-              <View style={styles.locRow}>
-                <MapPin size={14} color={colors.muted} strokeWidth={2} />
-                <Text style={styles.loc} numberOfLines={1}>
-                  {location}
-                </Text>
-              </View>
-            ) : null}
-            {openLine ? (
-              <View style={[styles.openChip, openLine.open ? styles.openChipOn : styles.openChipOff]}>
-                <Text style={[styles.openChipText, openLine.open ? styles.openTextOn : styles.openTextOff]}>{openLine.text}</Text>
-              </View>
-            ) : null}
-            <RatingLine summary={reviews.summary} />
-            <Text style={styles.productCount}>
-              {t("hub.vendorProductCount", { defaultValue: "{{count}} products", count: products.length })}
-            </Text>
-          </View>
-        </View>
+        <StoreHeader vendor={vendor} line={line} summary={reviews.summary} productCount={products.length} />
 
         {bio ? (
           <View style={styles.bioFrame}>
@@ -233,12 +177,6 @@ export default function VendorScreen() {
 }
 
 const styles = StyleSheet.create({
-  openChip: { alignSelf: "flex-start", borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
-  openChipOn: { backgroundColor: "#ECFDF5" },
-  openChipOff: { backgroundColor: "#F3F4F6" },
-  openChipText: { fontSize: 12, fontWeight: "600" },
-  openTextOn: { color: "#047857" },
-  openTextOff: { color: "#4B5563" },
   infoPlate: { marginTop: 16, marginBottom: 20, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 14 },
   infoRow: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
   infoIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: "center", justifyContent: "center" },
@@ -246,33 +184,11 @@ const styles = StyleSheet.create({
   infoLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
   infoValue: { fontSize: 15, lineHeight: 21, color: colors.text },
   cover: { height: 128, borderRadius: 20, overflow: "hidden", backgroundColor: colors.paper },
-  identityOverCover: { marginTop: -40, paddingHorizontal: 4 },
-  logoInitial: { fontSize: 22, fontWeight: "700", color: colors.primaryText, textAlign: "center" },
   headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
   headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
   skelFill: { backgroundColor: colors.paper, borderColor: colors.paper },
   skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.paper },
   contentWithCartBar: { paddingBottom: 56 },
-  identityRow: { flexDirection: "row", gap: 14, marginBottom: 16 },
-  logoWrap: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    overflow: "hidden",
-    backgroundColor: colors.surface,
-    borderWidth: 3,
-    borderColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logo: { width: "100%", height: "100%" },
-  // Starts below the cover: only the logo overlaps it.
-  identityBody: { flex: 1, minWidth: 0, justifyContent: "flex-start", gap: 4, marginTop: 44 },
-  nameRow: { flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" },
-  name: { flexShrink: 1, fontSize: 20, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
-  locRow: { flexDirection: "row", alignItems: "center", gap: 5 },
-  loc: { flexShrink: 1, fontSize: typeSize.meta, color: colors.muted },
-  productCount: { fontSize: typeSize.meta, color: colors.muted },
   bioFrame: {
     marginBottom: 24,
     borderRadius: radius.card,
