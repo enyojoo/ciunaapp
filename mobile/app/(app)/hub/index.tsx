@@ -40,7 +40,8 @@ export default function HomeScreen() {
 
   return (
     <Screen edges={["top", "left", "right"]}>
-      {/* The whole Home scrolls: header, search, slider and tiles. Only the tab bar stays fixed. */}
+      {/* Header stays fixed; search, slider and tiles scroll under it. */}
+      <AppHeader />
       <ScrollView
         style={styles.flex}
         contentContainerStyle={[styles.scroll, { paddingBottom: tabContentPadding }]}
@@ -48,7 +49,6 @@ export default function HomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
       >
-        <AppHeader />
         <SearchEntryField />
         <HomeSlider />
         {loading ? (
