@@ -122,7 +122,22 @@ export default function HubCartScreen() {
   return (
     <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
-      <Text style={styles.vendorName}>{cart.vendor?.name || ""}</Text>
+      {/* Store plate: who the cart is from, and a way back to add more. */}
+      <View style={styles.storePlate}>
+        <View style={styles.storeLogo}>
+          {cart.vendor?.photo_url ? (
+            <Image source={{ uri: cart.vendor.photo_url }} style={styles.storeLogoImg} resizeMode="cover" />
+          ) : (
+            <Text style={styles.storeLogoInitial}>{(cart.vendor?.name || "?").trim().charAt(0).toUpperCase()}</Text>
+          )}
+        </View>
+        <Text style={styles.storeName} numberOfLines={1}>
+          {cart.vendor?.name || ""}
+        </Text>
+        <Pressable onPress={() => router.back()} accessibilityRole="button" hitSlop={8}>
+          <Text style={styles.addMore}>{t("hub.cart.addMore", { defaultValue: "Add more" })}</Text>
+        </Pressable>
+      </View>
       <View style={styles.list}>
         {availableItems.map((item) => {
           const product = item.product!
@@ -141,6 +156,7 @@ export default function HubCartScreen() {
                 <Text style={styles.rowPrice}>{formatMoney(unitPrice, product.fixed_currency)}</Text>
               </View>
               <View style={styles.rowActions}>
+                <Text style={styles.lineTotal}>{formatMoney(unitPrice * item.quantity, product.fixed_currency)}</Text>
                 <View style={styles.stepper}>
                   <Pressable
                     onPress={() => onQuantityChange(item.id, item.quantity - 1)}
@@ -177,14 +193,27 @@ export default function HubCartScreen() {
         })}
       </View>
 
-      <View style={styles.subtotalRow}>
-        <Text style={styles.subtotalLabel}>{t("hub.cart.subtotal", { defaultValue: "Subtotal" })}</Text>
-        <Text style={styles.subtotalValue}>{formatMoney(subtotal, currency)}</Text>
+      {/* Summary plate: subtotal and total. Delivery is added at checkout, once the address is known. */}
+      <View style={styles.summary}>
+        <View style={styles.subtotalRow}>
+          <Text style={styles.subtotalLabel}>{t("hub.cart.subtotal", { defaultValue: "Subtotal" })}</Text>
+          <Text style={styles.subtotalValue}>{formatMoney(subtotal, currency)}</Text>
+        </View>
+        <View style={styles.totalRow}>
+          <Text style={styles.totalLabel}>{t("hub.cart.total", { defaultValue: "Total" })}</Text>
+          <Text style={styles.totalValue}>{formatMoney(subtotal, currency)}</Text>
+        </View>
+        <Text style={styles.deliveryNote}>
+          {t("hub.cart.deliveryAtCheckout", { defaultValue: "Delivery is added at checkout." })}
+        </Text>
       </View>
 
       <View style={styles.checkoutBtn}>
         <PrimaryButton
-          label={t("hub.cart.checkout", { defaultValue: "Checkout" })}
+          label={t("hub.cart.checkoutWithTotal", {
+            defaultValue: "Checkout · {{total}}",
+            total: formatMoney(subtotal, currency),
+          })}
           onPress={goCheckout}
           disabled={availableItems.length === 0}
         />
@@ -194,6 +223,18 @@ export default function HubCartScreen() {
 }
 
 const styles = StyleSheet.create({
+  storePlate: { flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 12, marginBottom: 12 },
+  storeLogo: { width: 40, height: 40, borderRadius: 20, overflow: "hidden", backgroundColor: colors.paper, alignItems: "center", justifyContent: "center" },
+  storeLogoImg: { width: "100%", height: "100%" },
+  storeLogoInitial: { fontSize: 16, fontWeight: "700", color: colors.primaryText },
+  storeName: { flex: 1, minWidth: 0, fontSize: 15, fontWeight: "700", color: colors.text },
+  addMore: { fontSize: 14, fontWeight: "600", color: colors.primaryText },
+  lineTotal: { fontSize: 15, fontWeight: "700", color: colors.text, marginBottom: 6 },
+  summary: { marginTop: 16, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },
+  totalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 },
+  totalLabel: { fontSize: 16, fontWeight: "700", color: colors.text },
+  totalValue: { fontSize: 18, fontWeight: "700", color: colors.text },
+  deliveryNote: { fontSize: 12, color: colors.muted },
   center: { paddingVertical: 60, alignItems: "center" },
   vendorName: { fontSize: 13, fontWeight: "600", color: colors.muted, marginBottom: 8 },
   list: { gap: 10 },

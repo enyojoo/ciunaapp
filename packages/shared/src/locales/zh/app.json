@@ -189,7 +189,11 @@
     },
     "cart": {
       "emptyBody": "从店铺添加商品，开始下单。",
-      "browse": "去逛美食"
+      "browse": "去逛美食",
+      "addMore": "继续添加",
+      "total": "合计",
+      "deliveryAtCheckout": "配送费在结算时添加。",
+      "checkoutWithTotal": "结算 · {{total}}"
     }
   },
   "assistant": {

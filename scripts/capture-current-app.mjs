@@ -42,6 +42,7 @@ const serviceLines = () => {
   ]
 }
 const json = (route, body, status = 200) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) })
+let filledCart = false
 async function mock(page) {
   await page.route(/supabase\.co/, async (route) => {
     const req = route.request()
@@ -65,7 +66,18 @@ async function mock(page) {
     if (p === `/api/hub/vendors/${vendor.slug}/products`) return json(route, { products })
     const m = p.match(/^\/api\/hub\/products\/(.+)$/)
     if (m) { const pr = products.find((x) => x.id === m[1]); return pr ? json(route, { product: pr }) : json(route, { error: "Not found" }, 404) }
-    if (p === "/api/hub/cart") return json(route, { cart: null, items: [] })
+    if (p === "/api/hub/checkout/preview") {
+      const future = new Date(Date.now() + 15 * 60000).toISOString()
+      return json(route, { quote: { id: "q1", expiresAt: future, source: { kind: "cart", cartId: "c1" }, line: "food", title: "Mama T's Kitchen", lines: [], totals: { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, exchangeRate: 1, convertedSubtotal: 1150, corridorFee: 0, total: 1150 }, modes: ["delivery"], fulfillmentMode: "delivery", zones: [], requirePhone: false, methods: [], payCurrencies: ["RUB"], instructions: "", checkoutReady: true, snapshot: null } })
+    }
+    if (p === "/api/hub/cart") {
+      if (!filledCart) return json(route, { cart: null, items: [] })
+      const items = [
+        { id: "ci1", cart_id: "c1", hub_product_id: "p1", quantity: 2, product: products[0] },
+        { id: "ci2", cart_id: "c1", hub_product_id: "p3", quantity: 1, product: products[2] },
+      ]
+      return json(route, { cart: { id: "c1", user_id: profile.id, service_line_slug: "food", vendor_id: "v1", vendor, status: "active", items } })
+    }
     if (p === "/api/hub/favorites") return json(route, { keys: [], vendors: [], experts: [], products: [] })
     if (p.startsWith("/api/referrals")) return json(route, { slug: "amara", balance: 0 })
     return route.continue()
@@ -78,6 +90,7 @@ const SHOTS = [
   { name: "product-page", path: "/hub/food/p/p1", wait: 2500, full: true },
   { name: "store-page", path: "/hub/food/v/mama-ts-kitchen", wait: 2500, full: true },
   { name: "cart-empty", path: "/hub/food/cart", wait: 2000, full: true },
+  { name: "cart-filled", path: "/hub/food/cart", wait: 2500, full: true, filled: true },
   { name: "more", path: "/more", wait: 2000, full: true },
   { name: "home", path: "/hub", wait: 2500, full: true },
 ]
@@ -86,12 +99,16 @@ const browser = await chromium.launch()
 const [VW, VH] = (process.env.CAPTURE_VIEWPORT || "375x812").split("x").map(Number)
 const ctx = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: "en-US" })
 const page = await ctx.newPage()
+if (process.env.CAPTURE_DEBUG) page.on("console", (m) => { if (m.type() === "error") console.error("console:", m.text().slice(0, 300)) })
+if (process.env.CAPTURE_DEBUG) page.on("response", (r) => { if (r.status() >= 400) console.error("http", r.status(), r.url().slice(0, 140)) })
+if (process.env.CAPTURE_DEBUG) page.on("pageerror", (e) => console.error("pageerror:", String(e).slice(0, 300)))
 await mock(page)
 // seed the session before the app boots
 await page.addInitScript((s) => { try { localStorage.setItem(`sb-${s.ref}-auth-token`, JSON.stringify(s.session)) } catch {} }, { ref: REF, session })
 const failed = []
 for (const shot of SHOTS) {
   if (only.length && !only.includes(shot.name)) continue
+  filledCart = Boolean(shot.filled)
   await page.goto(BASE + shot.path, { waitUntil: "load", timeout: 60000 }).catch((e) => failed.push(`${shot.name}: ${e.message}`))
   await page.waitForTimeout(shot.wait)
   const where = new URL(page.url()).pathname

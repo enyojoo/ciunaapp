@@ -189,7 +189,11 @@
     },
     "cart": {
       "emptyBody": "Add something from a store to start your order.",
-      "browse": "Browse Food"
+      "browse": "Browse Food",
+      "addMore": "Add more",
+      "total": "Total",
+      "deliveryAtCheckout": "Delivery is added at checkout.",
+      "checkoutWithTotal": "Checkout · {{total}}"
     }
   },
   "assistant": {

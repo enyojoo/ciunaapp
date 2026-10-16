@@ -189,7 +189,11 @@
     },
     "cart": {
       "emptyBody": "Ajoutez un article d'une boutique pour commencer votre commande.",
-      "browse": "Parcourir Food"
+      "browse": "Parcourir Food",
+      "addMore": "Ajouter",
+      "total": "Total",
+      "deliveryAtCheckout": "La livraison est ajoutée à la commande.",
+      "checkoutWithTotal": "Commander · {{total}}"
     }
   },
   "assistant": {

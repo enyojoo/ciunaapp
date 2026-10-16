@@ -189,7 +189,11 @@
     },
     "cart": {
       "emptyBody": "Añade algo de una tienda para empezar tu pedido.",
-      "browse": "Explorar Comida"
+      "browse": "Explorar Comida",
+      "addMore": "Añadir más",
+      "total": "Total",
+      "deliveryAtCheckout": "El envío se añade al pagar.",
+      "checkoutWithTotal": "Pagar · {{total}}"
     }
   },
   "assistant": {
