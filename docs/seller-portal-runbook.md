@@ -12,7 +12,7 @@ What exists, how to run it, and what must be set before it can take real money. 
 | Merchant API | `api/app/api/merchant/**` | Membership-checked on the server (`api/lib/merchant/auth.ts`). |
 | Office APIs | `api/app/api/admin/{merchants,kyb-profiles,audit,fee-rules,fee-plans,payouts,payout-methods,marketplace-settings}` | Roles in `api/lib/admin-roles.ts`. |
 | Office pages | `office/app/{merchants,kyb,audit,finance,fees}` | |
-| Migrations | `supabase/migrations/20261016100000_merchants_foundation.sql`, `20261016110000_ledger_fees_payouts.sql`, `20261016120000_seller_notifications.sql` | Additive. Apply in order, after the marketplace migrations. |
+| Migrations | `supabase/migrations/20261016100000_merchants_foundation.sql`, `20261016110000_ledger_fees_payouts.sql`, `20261016120000_seller_notifications.sql`, `20261016130000_reviews.sql`, `20261016140000_order_messages.sql`, `20261016150000_marketplace_analytics.sql`, `20261016160000_discovery.sql` | Additive. Apply in order, after the marketplace migrations. |
 
 ## Before first deploy
 
@@ -57,7 +57,8 @@ npx tsc --noEmit -p seller && npx tsc --noEmit -p api && npx tsc --noEmit -p pac
 
 ## Known gaps
 
-- Messages (order chat), reviews, customer-side discovery and the customer app's rendering of galleries/translations are not built yet.
+- Customer-app UI for reviews, order chat, search and favourites (the APIs and Seller/Office sides exist; see status in the plan doc).
+- Order chat has no machine translation (no provider configured); messages store their language.
 - Customer time zone is not stored on bookings; the seller sees the service zone and their device zone.
 - Variants and multi-image display on the customer side need checkout and catalog changes.
 - No automated payout rails yet; payouts are manual in Office.
