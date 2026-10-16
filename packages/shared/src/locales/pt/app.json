@@ -324,6 +324,15 @@
       "timezone": "Horários exibidos no seu fuso horário ({{zone}})",
       "book": "Reservar {{time}}",
       "pickTime": "Escolha um horário"
+    },
+    "directory": {
+      "search": "Buscar especialistas",
+      "count": "Especialistas: {{count}}",
+      "clear": "Limpar filtros",
+      "noMatch": "Nenhum especialista encontrado",
+      "noMatchBody": "Tente outro nome ou categoria.",
+      "all": "Todos",
+      "isNew": "Novo"
     }
   },
   "transactions": {

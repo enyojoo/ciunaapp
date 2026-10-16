@@ -324,6 +324,15 @@
       "timezone": "Times shown in your time zone ({{zone}})",
       "book": "Book {{time}}",
       "pickTime": "Choose a time"
+    },
+    "directory": {
+      "search": "Search experts",
+      "count": "Experts: {{count}}",
+      "clear": "Clear filters",
+      "noMatch": "No experts match",
+      "noMatchBody": "Try another name or category.",
+      "all": "All",
+      "isNew": "New"
     }
   },
   "transactions": {

@@ -8,13 +8,14 @@ import { FavouriteHeart } from "@/components/favourite-heart"
 import { RatingLine, ReviewsSection } from "@/components/reviews-section"
 import { useReviews } from "@/lib/use-reviews"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import {
   ExpertServiceCard,
   ExpertServiceSkeleton,
   expertServiceToCatalog,
 } from "@/components/expert-catalog"
 import { ScreenScroll } from "@/components/screen"
-import { useExpertProfile } from "@/lib/use-expert-profile"
+import { EXPERT_NOT_FOUND, useExpertProfile } from "@/lib/use-expert-profile"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -63,6 +64,15 @@ export default function ExpertProfileScreen() {
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
         </View>
+      </ScreenScroll>
+    )
+  }
+
+  if (error && !profile && !(error instanceof Error && error.message === EXPERT_NOT_FOUND)) {
+    return (
+      <ScreenScroll edges={["left", "right"]}>
+        <StatusBar style="dark" />
+        <LoadError onRetry={() => void revalidate()} />
       </ScreenScroll>
     )
   }

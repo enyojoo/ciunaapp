@@ -165,6 +165,8 @@ export type ExpertProfile = {
   pricing_hint?: string | null
   service_area?: string | null
   meeting_hint?: string | null
+  rating_avg?: number | string | null
+  rating_count?: number | null
   created_at?: string
 }
 

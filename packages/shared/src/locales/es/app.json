@@ -1008,6 +1008,15 @@
       "timezone": "Horas mostradas en tu zona horaria ({{zone}})",
       "book": "Reservar {{time}}",
       "pickTime": "Elige una hora"
+    },
+    "directory": {
+      "search": "Buscar expertos",
+      "count": "Expertos: {{count}}",
+      "clear": "Borrar filtros",
+      "noMatch": "Ningún experto coincide",
+      "noMatchBody": "Prueba con otro nombre o categoría.",
+      "all": "Todos",
+      "isNew": "Nuevo"
     }
   },
   "referralLanding": {

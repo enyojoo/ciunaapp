@@ -82,6 +82,7 @@ export function ExpertFeaturedSkeleton() {
 
 export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: ExpertProfile; onBeforeNavigate?: () => void }) {
   const router = useRouter()
+  const { t } = useTranslation("app")
   return (
     <View style={styles.gridHit}>
     <Pressable
@@ -102,6 +103,11 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
         <View style={styles.dirCaption}>
           <Text style={styles.dirName} numberOfLines={1} ellipsizeMode="tail">
             {expert.display_name}
+          </Text>
+          <Text style={styles.rating} numberOfLines={1}>
+            {Number(expert.rating_count) > 0 && Number(expert.rating_avg) > 0
+              ? `★ ${Number(expert.rating_avg).toFixed(1)} (${expert.rating_count})`
+              : t("experts.directory.isNew", { defaultValue: "New" })}
           </Text>
           {expert.pricing_hint ? (
             <Text style={styles.hint} numberOfLines={1}>
@@ -278,6 +284,7 @@ const styles = StyleSheet.create({
   gridHit: { width: "48.5%", marginBottom: 12 },
   dirCaption: { paddingHorizontal: 10, paddingVertical: 10, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   dirName: { fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
+  rating: { marginTop: 2, fontSize: 12, fontWeight: "600", color: colors.muted },
   hint: { marginTop: 4, fontSize: 11, fontWeight: "500", color: colors.primary },
   svcHit: { width: "48.5%" },
   svcSkeleton: { minHeight: 176, borderRadius: radius.card, backgroundColor: "#F3F4F6" },

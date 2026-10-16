@@ -1,31 +1,53 @@
-import { useMemo } from "react"
-import { StyleSheet, View } from "react-native"
+import { useMemo, useState } from "react"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
+import { Search, X } from "lucide-react-native"
+import { AppTextInput } from "@/components/app-text-input"
 import { EmptyState } from "@/components/empty-state"
 import { ExpertDirectoryCard } from "@/components/expert-catalog"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
+import { LoadError } from "@/components/load-error"
 import { useExpertProfiles } from "@/lib/use-expert-profiles"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
-import { colors } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export default function ExpertsBrowseScreen() {
   const { t } = useTranslation("app")
-  const { data, loading, revalidate } = useExpertProfiles()
+  const { data, loading, error, revalidate } = useExpertProfiles()
   const profiles = data || []
+  const [query, setQuery] = useState("")
+  const [category, setCategory] = useState<string | null>(null)
 
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
 
-  const sorted = useMemo(
-    () =>
-      [...profiles].sort((a, b) => {
+  const categories = useMemo(
+    () => [...new Set(profiles.map((p) => (p.category || "").trim()).filter(Boolean))].sort(),
+    [profiles],
+  )
+
+  const filtered = useMemo(() => {
+    const needle = query.trim().toLowerCase()
+    return [...profiles]
+      .filter((p) => !category || (p.category || "").trim() === category)
+      .filter(
+        (p) =>
+          !needle ||
+          [p.display_name, p.headline, p.category].some((v) => (v || "").toLowerCase().includes(needle)),
+      )
+      .sort((a, b) => {
         const ta = a.created_at ? new Date(a.created_at).getTime() : 0
         const tb = b.created_at ? new Date(b.created_at).getTime() : 0
         return tb - ta
-      }),
-    [profiles],
-  )
+      })
+  }, [profiles, query, category])
+
+  const filtering = Boolean(query.trim() || category)
+  const clear = () => {
+    setQuery("")
+    setCategory(null)
+  }
 
   return (
     <HubLinePageShell
@@ -34,18 +56,76 @@ export default function ExpertsBrowseScreen() {
       backAriaLabel={t("hub.backToExperts", { defaultValue: "Back to experts" })}
       backHref="/experts"
     >
+      <View style={styles.searchBox}>
+        <Search size={18} color={colors.muted} strokeWidth={2} />
+        <AppTextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder={t("experts.directory.search", { defaultValue: "Search experts" })}
+          placeholderTextColor="#9CA3AF"
+          accessibilityLabel={t("experts.directory.search", { defaultValue: "Search experts" })}
+          style={styles.searchInput}
+          returnKeyType="search"
+        />
+        {query ? (
+          <Pressable onPress={() => setQuery("")} hitSlop={8} accessibilityRole="button" accessibilityLabel={t("common.clear", { defaultValue: "Clear" })}>
+            <X size={18} color={colors.muted} strokeWidth={2} />
+          </Pressable>
+        ) : null}
+      </View>
+
+      {categories.length > 0 ? (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
+          {[null, ...categories].map((c) => {
+            const on = c === category
+            return (
+              <Pressable
+                key={c ?? "all"}
+                onPress={() => setCategory(c)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: on }}
+                style={[styles.chip, on && styles.chipOn]}
+              >
+                <Text style={[styles.chipText, on && styles.chipTextOn]}>
+                  {c ?? t("experts.directory.all", { defaultValue: "All" })}
+                </Text>
+              </Pressable>
+            )
+          })}
+        </ScrollView>
+      ) : null}
+
+      {!loading && profiles.length > 0 ? (
+        <View style={styles.countRow}>
+          <Text style={styles.count}>{t("experts.directory.count", { count: filtered.length, defaultValue: "Experts: {{count}}" })}</Text>
+          {filtering ? (
+            <Pressable onPress={clear} hitSlop={8} accessibilityRole="button">
+              <Text style={styles.clear}>{t("experts.directory.clear", { defaultValue: "Clear filters" })}</Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
+
       {loading && profiles.length === 0 ? (
         <View style={styles.grid}>
           {Array.from({ length: 6 }).map((_, i) => (
             <View key={i} style={styles.skel} />
           ))}
         </View>
-      ) : null}
-      {!loading && sorted.length === 0 ? (
+      ) : error && profiles.length === 0 ? (
+        <LoadError onRetry={() => void revalidate()} />
+      ) : profiles.length === 0 ? (
         <EmptyState title={t("hub.expertsEmpty", { defaultValue: "No experts listed yet." })} />
+      ) : filtered.length === 0 ? (
+        <EmptyState
+          title={t("experts.directory.noMatch", { defaultValue: "No experts match" })}
+          body={t("experts.directory.noMatchBody", { defaultValue: "Try another name or category." })}
+          actionLabel={t("experts.directory.clear", { defaultValue: "Clear filters" })}
+          onAction={clear}
+        />
       ) : (
         <View style={styles.grid}>
-          {sorted.map((ex) => (
+          {filtered.map((ex) => (
             <ExpertDirectoryCard key={ex.id} expert={ex} />
           ))}
         </View>
@@ -55,6 +135,36 @@ export default function ExpertsBrowseScreen() {
 }
 
 const styles = StyleSheet.create({
+  searchBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    minHeight: 48,
+    paddingHorizontal: 14,
+    marginBottom: 12,
+    borderRadius: radius.row,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  searchInput: { flex: 1, fontSize: typeSize.body, color: colors.text, paddingVertical: 8 },
+  chips: { gap: 8, paddingBottom: 12 },
+  chip: {
+    height: 36,
+    paddingHorizontal: 14,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipText: { fontSize: 13, fontWeight: "600", color: colors.text },
+  chipTextOn: { color: colors.onPrimary },
+  countRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
+  count: { fontSize: typeSize.meta, color: colors.muted },
+  clear: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText },
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
   skel: { width: "48.5%", aspectRatio: 0.85, marginBottom: 12, borderRadius: 16, backgroundColor: colors.paper },
 })

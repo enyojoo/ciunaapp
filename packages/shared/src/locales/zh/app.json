@@ -324,6 +324,15 @@
       "timezone": "时间按您的时区显示（{{zone}}）",
       "book": "预订 {{time}}",
       "pickTime": "选择时间"
+    },
+    "directory": {
+      "search": "搜索专家",
+      "count": "专家：{{count}}",
+      "clear": "清除筛选",
+      "noMatch": "没有匹配的专家",
+      "noMatchBody": "试试其他名称或类别。",
+      "all": "全部",
+      "isNew": "新"
     }
   },
   "transactions": {

@@ -1008,6 +1008,15 @@
       "timezone": "Heures affichées dans votre fuseau horaire ({{zone}})",
       "book": "Réserver {{time}}",
       "pickTime": "Choisissez une heure"
+    },
+    "directory": {
+      "search": "Rechercher des experts",
+      "count": "Experts : {{count}}",
+      "clear": "Effacer les filtres",
+      "noMatch": "Aucun expert ne correspond",
+      "noMatchBody": "Essayez un autre nom ou une autre catégorie.",
+      "all": "Tous",
+      "isNew": "Nouveau"
     }
   },
   "referralLanding": {
