@@ -1,4 +1,4 @@
-<!-- @dsCard group="Marketplace" height=670 width=1300 subtitle="Cart item row with quantity stepper, remove and price, sold out and price changed lines, and the other-store notice" -->
+<!-- @dsCard group="Marketplace" height=1944 width=1300 subtitle="Cart item row with quantity stepper, remove and price, sold out and price changed lines, and the other-store notice" -->
 <!doctype html>
 <html><head><meta charset="utf-8"><title>CartLine</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
 <style>
@@ -28,7 +28,8 @@
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .two ul{margin:0;padding-left:18px;font:14px/22px var(--font-native)}
 </style></head>
-<body><div class="cz-page native"><div class="cz-stack" style="gap:24px">
+<body>
+<div class="cz-page"><section class="cz-section" style="max-width:820px;margin:0 auto 24px"><p class="cz-h">Current · captured from the running app · Cart, empty state (demo data)</p><img src="../../reference/current-app/shots/cart-empty.png" alt="Current app: Cart, empty state (demo data)" style="width:375px;max-width:100%;display:block;margin:0 auto;border:1px solid var(--hairline);border-radius:24px"></section><p class="cz-h" style="text-align:center;margin:0 0 12px">Improved · proposed</p><div class="cz-page native"><div class="cz-stack" style="gap:24px">
 <div class="cz-grid">
 <div class="cz-col"><div class="cz-cap">Default and quantity 1 (remove)</div>
 <div class="cl"><div class="line"><div class="ph ph-1"><i data-i="utensils"></i></div><div class="grow"><span class="n">Jollof rice with chicken</span><span class="m">Medium spice</span><div class="bt"><span class="step"><span><i data-i="minus" style="--s:18px"></i></span><b>2</b><span><i data-i="plus" style="--s:18px"></i></span></span><span class="p">₽1,300</span></div></div></div>
@@ -45,4 +46,4 @@
 </div>
 <div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Turn the minus into a bin at quantity 1; removing is then one clear tap.</li><li>Say why a line has a problem (sold out, price changed, only N left) with an icon and words.</li><li>Ask before clearing the cart for another store, with two named actions.</li></ul></div>
 <div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't remove a line silently when it sells out; show it muted with Remove.</li><li>Don't let the stepper go past stock; disable plus.</li><li>Don't use red for a price change; it is a warning.</li></ul></div></div>
-</div></div></body></html>
+</div></div></div></body></html>

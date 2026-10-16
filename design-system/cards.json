@@ -315,7 +315,7 @@
    "name": "CartLine",
    "group": "Marketplace",
    "subtitle": "Cart item row with quantity stepper, remove and price, sold out and price changed lines, and the other-store notice",
-   "height": 670,
+   "height": 1944,
    "width": 1300,
    "page": false,
    "readme": true
@@ -477,7 +477,7 @@
    "name": "ProductCard",
    "group": "Marketplace",
    "subtitle": "Grid tile and list row: default, sale, sold out, low stock, in cart with stepper, long Russian and Chinese titles, skeleton",
-   "height": 1611,
+   "height": 2599,
    "width": null,
    "page": false,
    "readme": true
@@ -675,7 +675,7 @@
    "name": "CustomerHome",
    "group": "Customer app · Screens",
    "subtitle": "Home with Office-driven two-column service tiles, loading, a tile hidden in Office, Russian and Chinese, and the desktop web layout",
-   "height": 2596,
+   "height": 3528,
    "width": 1300,
    "page": true,
    "readme": true
@@ -702,7 +702,7 @@
    "name": "CustomerMore",
    "group": "Customer app · Screens",
    "subtitle": "Account tab: identity first, grouped Account and App rows, verification chip, language picker with six languages, sign-out confirmation",
-   "height": 1986,
+   "height": 2918,
    "width": 900,
    "page": true,
    "readme": true
@@ -828,7 +828,7 @@
    "name": "FoodHome",
    "group": "Customer app · Screens",
    "subtitle": "The Food line page: search, category chips, Stores rail and featured products with cart bar; loaded, loading, empty, offline and desktop",
-   "height": 2756,
+   "height": 3688,
    "width": 1300,
    "page": true,
    "readme": true
@@ -873,7 +873,7 @@
    "name": "ProductPage",
    "group": "Customer app · Screens",
    "subtitle": "Product detail: gallery, price and sale, vendor, delivery or pickup, stock, translation hint, reviews teaser and the sticky add-to-cart bar",
-   "height": 986,
+   "height": 1936,
    "width": 1300,
    "page": true,
    "readme": true
@@ -900,7 +900,7 @@
    "name": "StorePage",
    "group": "Customer app · Screens",
    "subtitle": "A store: cover, logo, verified badge, rating, hours, delivery info, menu by category, reviews preview; open, closed and unavailable, phone and desktop",
-   "height": 2756,
+   "height": 3688,
    "width": 1300,
    "page": true,
    "readme": true

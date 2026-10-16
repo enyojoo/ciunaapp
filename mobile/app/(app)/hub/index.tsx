@@ -69,7 +69,7 @@ export default function HomeScreen() {
               const { title, shortDescription } = hubServiceLineTileCopy(line, t)
               return (
                 <View key={line.id} style={styles.cell}>
-                  <Tile title={title} description={shortDescription} iconUrl={line.icon_url} onPress={() => open(line)} />
+                  <Tile title={title} description={shortDescription} iconUrl={line.icon_url} slug={line.slug} onPress={() => open(line)} />
                 </View>
               )
             })}
@@ -84,5 +84,5 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   scroll: { paddingTop: 16, paddingBottom: 40 },
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", paddingHorizontal: space.page },
-  cell: { width: "48.5%", marginBottom: 10 },
+  cell: { width: "48.5%", marginBottom: 10, alignSelf: "stretch" },
 })
