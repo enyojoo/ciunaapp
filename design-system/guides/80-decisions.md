@@ -109,3 +109,11 @@ Applies to every surface (customer Expo and web, Seller, Office). The cards are 
 
 ## Rule: a screen is not done until its API and data exist
 Every screen or component built from a card ships with the endpoints, migrations (additive, in `supabase/migrations/`, plus the same SQL appended to a `supabase/deploy/*.sql` file the owner can paste), tests and types it needs. Nothing is left "blocked on the API". Code must also degrade gracefully when a new table or column is not yet applied on the live database (feature-detect and show an empty or unavailable state), so the work is never gated on running SQL. New endpoints follow the permission matrix (`adminRoute` / `merchantRoute`), write audit rows for mutations, and keep changes additive for installed native apps.
+
+## Decision (2026-10-16): the customer app matches the design system
+The customer app (Expo `mobile/` and `web/`) is to match `design-system/` and is no longer a reference for its look. This reverses the earlier "current product wins over a weaker card" rule for the customer app only; Seller and Office keep the rule as written.
+
+- Build screens to the Improved frame of each card, using the design tokens and `components/bundle.css` shapes.
+- Native stores cannot be force-updated: changes ship additively, and screens that change behaviour sit behind flags until the store build has them.
+- Checkout and payment contracts stay frozen; only presentation changes.
+- Open question for the owner: the orange "Send, Shop & Book." hero on Home. DESIGN.md and the CustomerHome card say no hero billboard; the current app shows one. Remove it, or keep a restrained version?
