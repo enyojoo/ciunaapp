@@ -1,4 +1,6 @@
-# Customer app: done and left (updated 2026-10-17)
+# Customer app: done and left (updated 2026-10-18)
+
+> Continuing in a new session? Start with `next-session.md`: the ordered plan for support requests, receipts, limits and push.
 
 This replaces the gap tables in `customer-app.md`, which are stale. It covers the native app in `mobile/` only. The web app in `web/` has not been audited (see "Web app" below).
 
