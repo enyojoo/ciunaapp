@@ -1,3 +1,4 @@
+import { FilterChips } from "@/components/filter-chips"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router"
@@ -234,19 +235,9 @@ export default function SearchScreen() {
         ) : phase === "ready" ? (
           <View>
             {chips.length > 2 ? (
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
-                {chips.map((c) => (
-                  <Pressable
-                    key={c.id}
-                    onPress={() => setGroup(c.id)}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: group === c.id }}
-                    style={[styles.chip, group === c.id && styles.chipOn]}
-                  >
-                    <Text style={[styles.chipText, group === c.id && styles.chipTextOn]}>{c.label}</Text>
-                  </Pressable>
-                ))}
-              </ScrollView>
+              <View style={styles.chips}>
+                <FilterChips options={chips} value={group} onChange={setGroup} />
+              </View>
             ) : null}
             {showProducts ? (
               <View style={styles.group}>
@@ -345,7 +336,7 @@ const styles = StyleSheet.create({
   recentText: { flex: 1, fontSize: typeSize.body, color: colors.text },
   group: { marginBottom: 24 },
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", rowGap: 12 },
-  chips: { gap: 8, paddingBottom: 16 },
+  chips: { paddingBottom: 12 },
   chip: {
     minHeight: 36,
     justifyContent: "center",

@@ -1,5 +1,6 @@
+import { FilterChips } from "@/components/filter-chips"
 import { useMemo, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { Search, X } from "lucide-react-native"
 import { AppTextInput } from "@/components/app-text-input"
@@ -75,24 +76,13 @@ export default function ExpertsBrowseScreen() {
       </View>
 
       {categories.length > 0 ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
-          {[null, ...categories].map((c) => {
-            const on = c === category
-            return (
-              <Pressable
-                key={c ?? "all"}
-                onPress={() => setCategory(c)}
-                accessibilityRole="button"
-                accessibilityState={{ selected: on }}
-                style={[styles.chip, on && styles.chipOn]}
-              >
-                <Text style={[styles.chipText, on && styles.chipTextOn]}>
-                  {c ?? t("experts.directory.all", { defaultValue: "All" })}
-                </Text>
-              </Pressable>
-            )
-          })}
-        </ScrollView>
+        <View style={styles.chips}>
+          <FilterChips
+            options={[{ id: "", label: t("experts.directory.all", { defaultValue: "All" }) }, ...categories.map((c) => ({ id: c, label: c }))]}
+            value={category ?? ""}
+            onChange={(id) => setCategory(id || null)}
+          />
+        </View>
       ) : null}
 
       {!loading && profiles.length > 0 ? (
@@ -148,20 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   searchInput: { flex: 1, fontSize: typeSize.body, color: colors.text, paddingVertical: 8 },
-  chips: { gap: 8, paddingBottom: 12 },
-  chip: {
-    height: 36,
-    paddingHorizontal: 14,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: "600", color: colors.text },
-  chipTextOn: { color: colors.onPrimary },
+  chips: { paddingBottom: 12 },
   countRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
   count: { fontSize: typeSize.meta, color: colors.muted },
   clear: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText },

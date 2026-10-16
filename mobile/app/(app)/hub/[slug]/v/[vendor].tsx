@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { tileArtFor } from "@/components/tile"
 import { useEffect } from "react"
-import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -68,8 +68,13 @@ export default function VendorScreen() {
     return (
       <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
+        <View style={styles.cover} />
+        <View style={[styles.identityRow, styles.identityOverCover]}>
+          <View style={[styles.logoWrap, styles.skelFill]} />
+          <View style={styles.identityBody}>
+            <View style={[styles.skelBar, { width: "60%", height: 20 }]} />
+            <View style={[styles.skelBar, { width: "40%" }]} />
+          </View>
         </View>
       </ScreenScroll>
     )
@@ -208,12 +213,13 @@ const styles = StyleSheet.create({
   infoBody: { flex: 1, minWidth: 0, gap: 2 },
   infoLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
   infoValue: { fontSize: 15, lineHeight: 21, color: colors.text },
-  cover: { height: 128, borderRadius: 20, overflow: "hidden" },
+  cover: { height: 128, borderRadius: 20, overflow: "hidden", backgroundColor: colors.paper },
   identityOverCover: { marginTop: -40, paddingHorizontal: 4 },
   logoInitial: { fontSize: 22, fontWeight: "700", color: colors.primaryText, textAlign: "center" },
   headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
   headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
-  center: { paddingVertical: 60, alignItems: "center" },
+  skelFill: { backgroundColor: colors.paper, borderColor: colors.paper },
+  skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.paper },
   contentWithCartBar: { paddingBottom: 56 },
   identityRow: { flexDirection: "row", gap: 14, marginBottom: 16 },
   logoWrap: {

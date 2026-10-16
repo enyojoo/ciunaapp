@@ -1,3 +1,4 @@
+import { FilterChips } from "@/components/filter-chips"
 import { useMemo, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
@@ -49,24 +50,12 @@ export function CatalogProducts({
         {heading}
       </Text>
       {options.length > 0 ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips} accessibilityLabel={filterAria}>
-          {chips.map((c) => {
-            const on = (category || ALL_VALUE) === c.id
-            return (
-              <Pressable
-                key={c.id}
-                onPress={() => setCategory(c.id === ALL_VALUE ? "" : c.id)}
-                accessibilityRole="button"
-                accessibilityState={{ selected: on }}
-                style={[styles.chip, on && styles.chipOn]}
-              >
-                <Text style={[styles.chipText, on && styles.chipTextOn]} numberOfLines={1}>
-                  {c.label}
-                </Text>
-              </Pressable>
-            )
-          })}
-        </ScrollView>
+        <FilterChips
+          options={chips}
+          value={category || ALL_VALUE}
+          onChange={(id) => setCategory(id === ALL_VALUE ? "" : id)}
+          ariaLabel={filterAria}
+        />
       ) : loading ? (
         <View style={styles.selectSkeleton} />
       ) : null}
@@ -122,11 +111,6 @@ export function CatalogProducts({
 
 const styles = StyleSheet.create({
   heading: { fontSize: 20, fontWeight: "700", color: colors.text, letterSpacing: -0.2 },
-  chips: { gap: 8, paddingBottom: 4 },
-  chip: { height: 36, paddingHorizontal: 14, borderRadius: 18, borderWidth: 1, borderColor: colors.inputEdge, backgroundColor: colors.surface, justifyContent: "center" },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 14, fontWeight: "600", color: colors.text },
-  chipTextOn: { color: "#FFFFFF" },
   toolbar: {
     gap: 12,
     marginBottom: 16,
