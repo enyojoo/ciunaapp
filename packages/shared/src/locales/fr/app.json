@@ -200,6 +200,10 @@
       "lockBody": "Votre panier contient des articles de {{vendor}}. Un panier ne contient qu’une boutique : il sera vidé.",
       "lockConfirm": "Nouveau panier",
       "lockCancel": "Garder le panier actuel"
+    },
+    "stock": {
+      "onlyLeft": "Plus que {{n}}",
+      "left": "{{n}} restants"
     }
   },
   "assistant": {

@@ -9,6 +9,8 @@ export type HubProduct = {
   category?: string | null
   service_line_slug?: "food" | "mart" | null
   image_url?: string | null
+  /** Extra photos from the merchant gallery: urls or { url } objects. */
+  gallery?: unknown
   list_price?: number | null
   sale_price?: number | null
   fixed_amount?: number | null

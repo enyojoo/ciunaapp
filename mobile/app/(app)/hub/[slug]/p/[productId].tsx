@@ -1,6 +1,5 @@
 import { useEffect } from "react"
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
-import { Image } from "expo-image"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -15,6 +14,8 @@ import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
 import { updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useGuardedAdd } from "@/lib/use-guarded-add"
+import { ProductGallery, productImages } from "@/components/product-gallery"
+import { FavouriteHeart } from "@/components/favourite-heart"
 import {
   hubMarketplaceCheckoutPath,
   hubMarketplaceVendorPath,
@@ -57,11 +58,14 @@ export default function HubProductDetailScreen() {
     // No title — the product name is already the big heading in the body; a repeated header title is redundant.
     navigation.setOptions({
       title: "",
-      headerRight: marketplace
-        ? () => <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" />
-        : undefined,
+      headerRight: () => (
+        <View style={styles.headerRight}>
+          {productId ? <FavouriteHeart type="product" id={String(productId)} style={styles.headerHeart} /> : null}
+          {marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
+        </View>
+      ),
     })
-  }, [navigation, marketplace, line])
+  }, [navigation, marketplace, line, productId])
 
   const cartMode = Boolean(product) && product!.pricing_type === "fixed" && Boolean(product!.vendor_id)
   const { cart } = useHubCart(cartMode ? product!.vendor_id : null)
@@ -79,6 +83,14 @@ export default function HubProductDetailScreen() {
   const currency = product?.fixed_currency || product?.default_input_currency || ""
   const soldOut =
     Boolean(product?.sold_out) || (product?.stock_quantity != null && Number(product.stock_quantity) <= 0)
+
+  const stockQty = product?.stock_quantity != null ? Number(product.stock_quantity) : null
+  const stockLine =
+    stockQty == null || stockQty <= 0
+      ? ""
+      : stockQty <= 5
+        ? t("hub.stock.onlyLeft", { n: stockQty, defaultValue: "Only {{n}} left" })
+        : t("hub.stock.left", { n: stockQty, defaultValue: "{{n}} left" })
 
   const guard = useGuardedAdd()
   const handleAddToCart = () => {
@@ -99,9 +111,11 @@ export default function HubProductDetailScreen() {
     return (
       <ScreenScroll edges={["left", "right"]}>
         <StatusBar style="dark" />
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
-        </View>
+        <View style={styles.skelImage} />
+        <View style={[styles.skelBar, { width: "70%", height: 20, marginTop: 4 }]} />
+        <View style={[styles.skelBar, { width: "40%", marginTop: 12 }]} />
+        <View style={[styles.skelBar, { width: "100%", marginTop: 16 }]} />
+        <View style={[styles.skelBar, { width: "85%" }]} />
       </ScreenScroll>
     )
   }
@@ -123,14 +137,9 @@ export default function HubProductDetailScreen() {
         edges={["left", "right"]}
         contentStyle={marketplace ? styles.contentWithCartBar : undefined}
       >
-        {product.image_url ? (
-          <Image source={{ uri: product.image_url }} style={styles.image} contentFit="cover" />
-        ) : (
-          <View style={styles.imageFallback}>
-            <Text style={styles.noImage}>{t("hub.noImage", { defaultValue: "No image" })}</Text>
-          </View>
-        )}
+        <ProductGallery images={productImages(product)} />
         <Text style={styles.title}>{product.title}</Text>
+        {stockLine ? <Text style={[styles.stock, product.stock_quantity != null && Number(product.stock_quantity) <= 5 && styles.stockLow]}>{stockLine}</Text> : null}
         {(product.fulfillment_mode === "delivery" ||
           product.fulfillment_mode === "pickup" ||
           product.sla_text) ? (
@@ -263,29 +272,15 @@ export default function HubProductDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  center: { paddingVertical: 60, alignItems: "center" },
+  headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
+  headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
+  skelImage: { width: "100%", aspectRatio: 4 / 3, borderRadius: radius.card, backgroundColor: colors.paper, marginBottom: 12 },
+  skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.paper, marginBottom: 8 },
+  stock: { marginTop: 4, fontSize: typeSize.meta, fontWeight: "600", color: colors.muted },
+  stockLow: { color: colors.warningText },
   // A small gap so the last content (the recommendations rail) doesn't end up pressed right up
   // against the floating cart bar — not a big empty void at the end of the scroll.
   contentWithCartBar: { paddingBottom: 56 },
-  image: {
-    width: "100%",
-    aspectRatio: 4 / 3,
-    borderRadius: radius.card,
-    marginBottom: 12,
-    backgroundColor: colors.paper,
-  },
-  imageFallback: {
-    width: "100%",
-    aspectRatio: 4 / 3,
-    borderRadius: radius.card,
-    marginBottom: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  noImage: { fontSize: typeSize.meta, color: colors.muted },
   title: { fontSize: 20, fontWeight: "600", color: colors.text },
   cueRow: { marginTop: 8, flexDirection: "row", flexWrap: "wrap", gap: 6 },
   cueChip: {

@@ -200,6 +200,10 @@
       "lockBody": "Your cart has items from {{vendor}}. A cart holds one store, so adding this will clear it.",
       "lockConfirm": "Start new cart",
       "lockCancel": "Keep current cart"
+    },
+    "stock": {
+      "onlyLeft": "Only {{n}} left",
+      "left": "{{n}} left"
     }
   },
   "assistant": {
