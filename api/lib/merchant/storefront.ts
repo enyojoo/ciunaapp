@@ -42,3 +42,14 @@ export function expertFields(row: Record<string, any>) {
     verification_tier: Number(row.verification_tier) || (row.is_verified ? 1 : 0),
   }
 }
+
+/**
+ * Set when a store has opening hours and is closed right now (orders are blocked until it opens).
+ * A store with no hours is never closed. `opensAt` is in the store's own time zone.
+ */
+export function storeClosedState(row: Record<string, any> | null | undefined, now: Date = new Date()): { opensAt?: { day: string; time: string } } | undefined {
+  if (!row) return undefined
+  const f = storefrontFields(row, now)
+  if (!f.hours_configured || f.is_open) return undefined
+  return f.opens_at ? { opensAt: f.opens_at } : {}
+}

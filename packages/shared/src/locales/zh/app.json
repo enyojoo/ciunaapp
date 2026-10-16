@@ -204,7 +204,8 @@
       "lockBody": "购物车中有来自 {{vendor}} 的商品。一个购物车只能放一家店的商品，添加后将清空原购物车。",
       "lockConfirm": "新建购物车",
       "lockCancel": "保留当前购物车",
-      "minOrderMore": "再加 {{more}} 即可配送。起送金额为 {{min}}。"
+      "minOrderMore": "再加 {{more}} 即可配送。起送金额为 {{min}}。",
+      "storeClosedNote": "该店铺已打烊，营业前无法结账。"
     },
     "stock": {
       "onlyLeft": "仅剩 {{n}} 件",
@@ -1157,7 +1158,8 @@
       "AMOUNT_REQUIRED": "请输入在商品限额范围内的金额。",
       "CONTACT_SUPPORT": "如需修改已接单的订单，请联系客服。",
       "CHECKOUT_UNAVAILABLE": "暂时无法结算。",
-      "BELOW_MINIMUM_ORDER": "该店铺配送需要更高的订单金额。"
+      "BELOW_MINIMUM_ORDER": "该店铺配送需要更高的订单金额。",
+      "STORE_CLOSED": "该店铺已打烊，请在营业时再试。"
     },
     "events": {
       "created": "待付款",
@@ -1193,7 +1195,9 @@
     "zoneNotServedTitle": "暂不支持配送到此处",
     "pickupInstead": "改为自取",
     "minOrderBanner": "配送需满 {{min}}。再加 {{more}}，或选择自取。",
-    "etaMinutes": "{{n}} 分钟"
+    "etaMinutes": "{{n}} 分钟",
+    "storeClosedTitle": "该店铺目前已打烊",
+    "storeOpensAt": "将于{{day}} {{time}}开门。"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

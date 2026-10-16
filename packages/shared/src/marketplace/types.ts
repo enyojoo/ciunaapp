@@ -84,6 +84,8 @@ export interface MarketplaceQuote {
   fulfillmentMinutes?: number
   /** Store minimum for delivery orders, when set in the product currency. `met` is false while the subtotal is below it. */
   minOrder?: { amount: number; currency: string; met: boolean }
+  /** Present while the store has hours and is closed: checkout is blocked until it opens. */
+  storeClosed?: { opensAt?: { day: string; time: string } }
 }
 export interface MarketplaceSubmit {
   quoteId: string

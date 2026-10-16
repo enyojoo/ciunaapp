@@ -204,7 +204,8 @@
       "lockBody": "Your cart has items from {{vendor}}. A cart holds one store, so adding this will clear it.",
       "lockConfirm": "Start new cart",
       "lockCancel": "Keep current cart",
-      "minOrderMore": "Add {{more}} more for delivery. Minimum order is {{min}}."
+      "minOrderMore": "Add {{more}} more for delivery. Minimum order is {{min}}.",
+      "storeClosedNote": "This store is closed, so checkout is unavailable until it opens."
     },
     "stock": {
       "onlyLeft": "Only {{n}} left",
@@ -1157,7 +1158,8 @@
       "AMOUNT_REQUIRED": "Enter an amount within the product’s limits.",
       "CONTACT_SUPPORT": "Contact support to change an accepted order.",
       "CHECKOUT_UNAVAILABLE": "Checkout is not available yet.",
-      "BELOW_MINIMUM_ORDER": "This store needs a higher order total for delivery."
+      "BELOW_MINIMUM_ORDER": "This store needs a higher order total for delivery.",
+      "STORE_CLOSED": "This store is closed. Try again when it opens."
     },
     "events": {
       "created": "Awaiting payment",
@@ -1193,7 +1195,9 @@
     "zoneNotServedTitle": "We can’t deliver here yet",
     "pickupInstead": "Pick up instead",
     "minOrderBanner": "Delivery needs a {{min}} minimum. Add {{more}} more, or pick up instead.",
-    "etaMinutes": "{{n}} min"
+    "etaMinutes": "{{n}} min",
+    "storeClosedTitle": "This store is closed right now",
+    "storeOpensAt": "It opens {{day}} {{time}}."
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

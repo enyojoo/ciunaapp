@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { shortDay } from "@/lib/store-hours"
 import { ActivityIndicator, AppState, Linking, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import * as Crypto from "expo-crypto"
@@ -156,7 +157,7 @@ export function MarketplaceCheckout({
   }
 }) {
   const { profile } = useAuth(),
-    { t } = useTranslation("app"),
+    { t, i18n } = useTranslation("app"),
     router = useRouter(),
     { showInfo } = useToast(),
     [amount, setAmount] = useState(""),
@@ -437,6 +438,20 @@ export function MarketplaceCheckout({
 
       {(q || snap || seed) && totals && (
         <View style={styles.stack}>
+          {q?.storeClosed ? (
+            <View style={styles.zoneBanner} accessibilityRole="alert">
+              <Text style={styles.zoneTitle}>{label("storeClosedTitle", "This store is closed right now")}</Text>
+              {q.storeClosed.opensAt ? (
+                <Text style={styles.zoneBody}>
+                  {t("marketplace.storeOpensAt", {
+                    day: shortDay(q.storeClosed.opensAt.day as "mon", i18n.language),
+                    time: q.storeClosed.opensAt.time,
+                    defaultValue: "It opens {{day}} {{time}}.",
+                  })}
+                </Text>
+              ) : null}
+            </View>
+          ) : null}
           <SummaryCard
             title={title}
             publicId={c.order?.public_id}

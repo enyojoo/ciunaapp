@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase"
+import { storefrontFields } from "@/lib/merchant/storefront"
 import { enrichHubProductsWithVendors } from "@/lib/hub-product-vendors"
 import type { HubCartItemRow, HubCartRow, HubProductRow } from "@/lib/hub-types"
 
@@ -53,6 +54,10 @@ async function hydrateCart(server: HubServer, cart: Record<string, unknown>): Pr
     }
   })
 
+  const hoursFields = (row: Record<string, any>) => {
+    const f = storefrontFields(row)
+    return { hours_configured: f.hours_configured, is_open: f.is_open, opens_at: f.opens_at, closes_at: f.closes_at }
+  }
   let vendor: HubCartRow["vendor"]
   const { data: vendorRow } = await server
     .from("hub_vendors")
@@ -69,6 +74,7 @@ async function hydrateCart(server: HubServer, cart: Record<string, unknown>): Pr
       is_verified: Boolean(vendorRow.is_verified),
       min_order_amount: vendorRow.min_order_amount != null ? Number(vendorRow.min_order_amount) : null,
       min_order_currency: vendorRow.min_order_currency ? String(vendorRow.min_order_currency) : null,
+      ...hoursFields(vendorRow),
     }
   }
 

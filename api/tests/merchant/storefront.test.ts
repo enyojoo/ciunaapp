@@ -45,3 +45,13 @@ test("expert fields are cleaned and capped", () => {
   assert.deepEqual(expertFields({}).languages, [])
   assert.equal(expertFields({}).time_zone, "UTC")
 })
+
+import { storeClosedState } from "../../lib/merchant/storefront"
+
+test("closed state blocks only stores that set hours and are closed now", () => {
+  const row = { opening_hours: { mon: [{ open: "09:00", close: "21:00" }] }, time_zone: "Europe/Moscow" }
+  assert.equal(storeClosedState(row, new Date("2026-10-19T07:30:00Z")), undefined) // Monday 10:30, open
+  assert.deepEqual(storeClosedState(row, new Date("2026-10-19T19:00:00Z")), { opensAt: { day: "mon", time: "09:00" } }) // Monday 22:00
+  assert.equal(storeClosedState({ opening_hours: {} }), undefined) // no hours set: never closed
+  assert.equal(storeClosedState(null), undefined)
+})

@@ -204,7 +204,8 @@
       "lockBody": "Tu carrito tiene artículos de {{vendor}}. Un carrito admite una sola tienda, así que se vaciará.",
       "lockConfirm": "Carrito nuevo",
       "lockCancel": "Mantener el carrito actual",
-      "minOrderMore": "Añade {{more}} más para la entrega. El pedido mínimo es {{min}}."
+      "minOrderMore": "Añade {{more}} más para la entrega. El pedido mínimo es {{min}}.",
+      "storeClosedNote": "Esta tienda está cerrada, así que no puedes pagar hasta que abra."
     },
     "stock": {
       "onlyLeft": "Solo quedan {{n}}",
@@ -1157,7 +1158,8 @@
       "AMOUNT_REQUIRED": "Introduce un importe dentro de los límites del producto.",
       "CONTACT_SUPPORT": "Contacta con soporte para cambiar un pedido aceptado.",
       "CHECKOUT_UNAVAILABLE": "El pago aún no está disponible.",
-      "BELOW_MINIMUM_ORDER": "Esta tienda requiere un pedido mayor para la entrega."
+      "BELOW_MINIMUM_ORDER": "Esta tienda requiere un pedido mayor para la entrega.",
+      "STORE_CLOSED": "Esta tienda está cerrada. Inténtalo cuando abra."
     },
     "events": {
       "created": "Pendiente de pago",
@@ -1193,7 +1195,9 @@
     "zoneNotServedTitle": "Aún no entregamos aquí",
     "pickupInstead": "Recoger en tienda",
     "minOrderBanner": "La entrega requiere un mínimo de {{min}}. Añade {{more}} más o elige recoger.",
-    "etaMinutes": "{{n}} min"
+    "etaMinutes": "{{n}} min",
+    "storeClosedTitle": "Esta tienda está cerrada ahora",
+    "storeOpensAt": "Abre el {{day}} a las {{time}}."
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",

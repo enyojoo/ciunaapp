@@ -36,6 +36,10 @@ export type HubProduct = {
     is_verified?: boolean
     min_order_amount?: number | null
     min_order_currency?: string | null
+    hours_configured?: boolean
+    is_open?: boolean
+    opens_at?: { day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"; time: string } | null
+    closes_at?: string | null
   } | null
 }
 

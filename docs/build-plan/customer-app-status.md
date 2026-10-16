@@ -22,7 +22,7 @@ Replaces the gap tables in `customer-app.md` (stale). Source: card READMEs and t
 ## Cart, checkout, orders, reviews
 | Card | Status | Notes |
 |---|---|---|
-| Cart, CartLine | P | Unavailable rows, vendor-lock dialog, skeleton, minimum-order note built |
+| Cart, CartLine | P | Unavailable rows, vendor-lock dialog, skeleton, minimum-order note, closed-store block built |
 | MarketCheckout | P | Zone-not-served and minimum-order banners, area delivery time built; Review is still one screen with Details |
 | OrderSummary | P | Pickup line, expert-booking variant |
 | OrderTracking | P | Status header, delivery/pickup card, timeline built; seller avatar and rating, reason text left |

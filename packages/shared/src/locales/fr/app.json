@@ -204,7 +204,8 @@
       "lockBody": "Votre panier contient des articles de {{vendor}}. Un panier ne contient qu’une boutique : il sera vidé.",
       "lockConfirm": "Nouveau panier",
       "lockCancel": "Garder le panier actuel",
-      "minOrderMore": "Ajoutez encore {{more}} pour la livraison. Commande minimale : {{min}}."
+      "minOrderMore": "Ajoutez encore {{more}} pour la livraison. Commande minimale : {{min}}.",
+      "storeClosedNote": "Cette boutique est fermée : la commande n’est pas disponible avant l’ouverture."
     },
     "stock": {
       "onlyLeft": "Plus que {{n}}",
@@ -1157,7 +1158,8 @@
       "AMOUNT_REQUIRED": "Saisissez un montant respectant les limites du produit.",
       "CONTACT_SUPPORT": "Contactez l’assistance pour modifier une commande acceptée.",
       "CHECKOUT_UNAVAILABLE": "Le paiement est indisponible pour le moment.",
-      "BELOW_MINIMUM_ORDER": "Cette boutique exige un montant de commande plus élevé pour la livraison."
+      "BELOW_MINIMUM_ORDER": "Cette boutique exige un montant de commande plus élevé pour la livraison.",
+      "STORE_CLOSED": "Cette boutique est fermée. Réessayez à l’ouverture."
     },
     "events": {
       "created": "En attente de paiement",
@@ -1193,7 +1195,9 @@
     "zoneNotServedTitle": "Nous ne livrons pas encore ici",
     "pickupInstead": "Retrait sur place",
     "minOrderBanner": "La livraison exige {{min}} minimum. Ajoutez {{more}} ou choisissez le retrait.",
-    "etaMinutes": "{{n}} min"
+    "etaMinutes": "{{n}} min",
+    "storeClosedTitle": "Cette boutique est fermée pour le moment",
+    "storeOpensAt": "Ouverture {{day}} à {{time}}."
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

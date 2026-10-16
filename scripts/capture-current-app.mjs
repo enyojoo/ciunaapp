@@ -14,7 +14,7 @@ const REF = "seeqjiebmrnolcyydewj"
 fs.mkdirSync(out, { recursive: true })
 
 const now = new Date().toISOString()
-const vendor = { id: "v1", name: "Mama T's Kitchen", slug: "mama-ts-kitchen", photo_url: null, service_line_slug: "food", is_verified: true, location: "Moscow, Tverskaya", pickup_location: "Tverskaya 12, counter by the entrance", pickup_hours: "Mon–Sat 10:00–20:00", hours_configured: true, is_open: true, closes_at: "21:00", opens_at: null, min_order_amount: 1500, min_order_currency: "RUB", verification_tier: 2, fulfillment_notes: "Call ahead for orders over 5 kg." }
+const vendor = { id: "v1", name: "Mama T's Kitchen", slug: "mama-ts-kitchen", photo_url: null, service_line_slug: "food", is_verified: true, location: "Moscow, Tverskaya", pickup_location: "Tverskaya 12, counter by the entrance", pickup_hours: "Mon–Sat 10:00–20:00", hours_configured: true, is_open: !process.env.CAPTURE_CLOSED, closes_at: process.env.CAPTURE_CLOSED ? null : "21:00", opens_at: process.env.CAPTURE_CLOSED ? { day: "mon", time: "09:00" } : null, min_order_amount: 1500, min_order_currency: "RUB", verification_tier: 2, fulfillment_notes: "Call ahead for orders over 5 kg." }
 const base = (id, title, sub, price, sale, cat, extra = {}) => ({
   id, title, short_description: sub, image_url: null, list_price: price, sale_price: sale, fixed_amount: sale ?? price,
   fixed_currency: "RUB", default_input_currency: "RUB", service_line_slug: "food", category: cat, vendor_id: "v1", vendor,
@@ -68,7 +68,7 @@ async function mock(page) {
     if (m) { const pr = products.find((x) => x.id === m[1]); return pr ? json(route, { product: pr }) : json(route, { error: "Not found" }, 404) }
     if (p === "/api/hub/checkout/preview") {
       const future = new Date(Date.now() + 15 * 60000).toISOString()
-      return json(route, { quote: { id: "q1", expiresAt: future, source: { kind: "cart", cartId: "c1" }, line: "food", title: "Mama T's Kitchen", lines: [{ id: "ci1", productId: "p1", quantity: 2, title: "Jollof rice with chicken", unitPrice: 450, feePercent: 0, fields: [] }, { id: "ci2", productId: "p3", quantity: 1, title: "Chin chin (200 g)", unitPrice: 250, feePercent: 0, fields: [] }], totals: { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, exchangeRate: 1, convertedSubtotal: 1150, corridorFee: 0, total: 1150 }, modes: ["delivery"], fulfillmentMode: "delivery", zones: [], requirePhone: false, methods: [], payCurrencies: ["RUB"], instructions: "", checkoutReady: true, snapshot: null } })
+      return json(route, { quote: { id: "q1", expiresAt: future, source: { kind: "cart", cartId: "c1" }, line: "food", title: "Mama T's Kitchen", lines: [{ id: "ci1", productId: "p1", quantity: 2, title: "Jollof rice with chicken", unitPrice: 450, feePercent: 0, fields: [] }, { id: "ci2", productId: "p3", quantity: 1, title: "Chin chin (200 g)", unitPrice: 250, feePercent: 0, fields: [] }], totals: { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, exchangeRate: 1, convertedSubtotal: 1150, corridorFee: 0, total: 1150 }, modes: ["delivery"], fulfillmentMode: "delivery", zones: [], requirePhone: false, methods: [], payCurrencies: ["RUB"], instructions: "", checkoutReady: !process.env.CAPTURE_CLOSED, ...(process.env.CAPTURE_CLOSED ? { storeClosed: { opensAt: { day: "mon", time: "09:00" } } } : {}), snapshot: null } })
     }
     if (p === "/api/hub/cart") {
       if (!filledCart) return json(route, { cart: null, items: [] })

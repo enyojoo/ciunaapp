@@ -44,6 +44,11 @@ export interface HubProductVendorSummary {
   /** Store minimum for delivery orders (storefront-details migration); absent until it is applied. */
   min_order_amount?: number | null
   min_order_currency?: string | null
+  /** Hours state in the store's own zone; hours_configured false means no hours are shown. */
+  hours_configured?: boolean
+  is_open?: boolean
+  opens_at?: { day: string; time: string } | null
+  closes_at?: string | null
 }
 
 export interface HubProductRow {

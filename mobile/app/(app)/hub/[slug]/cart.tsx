@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react"
+import { shortDay } from "@/lib/store-hours"
 import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import * as Crypto from "expo-crypto"
@@ -26,7 +27,7 @@ export default function HubCartScreen() {
   const line = String(slug || "").toLowerCase() as "food" | "mart"
   const navigation = useNavigation()
   const router = useRouter()
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const { showError } = useToast()
   const { profile } = useAuth()
   const { cart, loading } = useHubCartByLine(line)
@@ -45,6 +46,8 @@ export default function HubCartScreen() {
 
   const items = cart?.items || []
   const availableItems = items.filter((i) => !i.unavailable && i.product)
+  const storeClosed = Boolean(cart?.vendor?.hours_configured) && cart?.vendor?.is_open === false
+  const opensAt = cart?.vendor?.opens_at ?? null
   const minAmount = cart?.vendor?.min_order_amount ?? null
   const minCurrency = cart?.vendor?.min_order_currency ?? null
   const unavailableItems = items.filter((i) => i.unavailable || !i.product)
@@ -83,7 +86,7 @@ export default function HubCartScreen() {
   }
 
   const goCheckout = () => {
-    if (!cart?.id || availableItems.length === 0 || unavailableItems.length > 0) return
+    if (!cart?.id || availableItems.length === 0 || unavailableItems.length > 0 || storeClosed) return
     const contactName =
       [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
       profile?.email?.split("@")[0] ||
@@ -245,6 +248,12 @@ export default function HubCartScreen() {
           })}
         </Text>
       ) : null}
+      {storeClosed ? (
+        <Text style={styles.blockedNote}>
+          {t("hub.cart.storeClosedNote", { defaultValue: "This store is closed, so checkout is unavailable until it opens." })}
+          {opensAt ? " " + t("marketplace.storeOpensAt", { day: shortDay(opensAt.day, i18n.language), time: opensAt.time, defaultValue: "It opens {{day}} {{time}}." }) : ""}
+        </Text>
+      ) : null}
       {unavailableItems.length > 0 ? (
         <Text style={styles.blockedNote}>{t("hub.cart.unavailableNote", { defaultValue: "Remove unavailable items to check out." })}</Text>
       ) : null}
@@ -255,7 +264,7 @@ export default function HubCartScreen() {
             total: formatMoney(subtotal, currency),
           })}
           onPress={goCheckout}
-          disabled={availableItems.length === 0 || unavailableItems.length > 0}
+          disabled={availableItems.length === 0 || unavailableItems.length > 0 || storeClosed}
         />
       </View>
     </ScreenScroll>

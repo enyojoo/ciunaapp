@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto"
+import { storeClosedState } from "@/lib/merchant/storefront"
 import {
   marketplaceTotals,
   type MarketplaceQuote,
@@ -362,6 +363,7 @@ export async function buildQuote(userId: string, input: MarketplacePreviewInput)
     minAmount != null && fulfillmentMode === "delivery" && vendor?.min_order_currency === currency
       ? { amount: minAmount, currency, met: totals.subtotal >= minAmount }
       : undefined
+  const storeClosed = vendor ? storeClosedState(vendor) : undefined
   const snapshot: Omit<MarketplaceQuote, "id" | "expiresAt"> = {
     source: input.source,
     line,
@@ -395,11 +397,13 @@ export async function buildQuote(userId: string, input: MarketplacePreviewInput)
       }),
     ),
     ...(minOrder ? { minOrder } : {}),
+    ...(storeClosed ? { storeClosed } : {}),
     checkoutReady:
       (await lineCheckoutEnabled(line)) &&
       available.options.length > 0 &&
       (fulfillmentMode !== "delivery" || !!zone) &&
-      (minOrder?.met ?? true),
+      (minOrder?.met ?? true) &&
+      !storeClosed,
   }
   return {
     snapshot,
@@ -462,6 +466,8 @@ export async function submit(user: { id: string; email: string }, body: Marketpl
   const snapshot = q.payload.snapshot as MarketplaceQuote
   await requireEnabled(snapshot.line)
   const fresh = await buildQuote(user.id, q.payload.input)
+  // Checked on the fresh quote: the store may have closed since the customer opened checkout.
+  assert(!fresh.snapshot.storeClosed, "STORE_CLOSED")
   assert(hash(fresh) === hash(q.payload), "PRICE_CHANGED")
   assert(snapshot.minOrder?.met ?? true, "BELOW_MINIMUM_ORDER")
   assert(snapshot.checkoutReady, "CHECKOUT_UNAVAILABLE")
