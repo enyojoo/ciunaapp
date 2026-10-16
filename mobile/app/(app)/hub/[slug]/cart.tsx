@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar"
 import * as Crypto from "expo-crypto"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { Minus, Plus, Trash2 } from "lucide-react-native"
+import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react-native"
 import {
   prefetchCheckoutQuote,
   warmCartCheckout,
@@ -109,8 +109,10 @@ export default function HubCartScreen() {
       <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
         <EmptyState
+          icon={<ShoppingCart size={26} color={colors.primaryText} strokeWidth={2} />}
           title={t("hub.cart.empty", { defaultValue: "Your cart is empty." })}
-          actionLabel={t("hub.cart.browse", { defaultValue: "Start browsing" })}
+          body={t("hub.cart.emptyBody", { defaultValue: "Add something from a store to start your order." })}
+          actionLabel={t("hub.cart.browse", { defaultValue: "Browse Food" })}
           onAction={() => router.replace(hubLineHomePath(line) as never)}
         />
       </ScreenScroll>

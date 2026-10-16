@@ -186,6 +186,10 @@
     "sellPrice": "Prix de vente",
     "store": {
       "newStore": "Nouvelle boutique"
+    },
+    "cart": {
+      "emptyBody": "Ajoutez un article d'une boutique pour commencer votre commande.",
+      "browse": "Parcourir Food"
     }
   },
   "assistant": {

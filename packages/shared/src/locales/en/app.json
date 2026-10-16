@@ -186,6 +186,10 @@
     "sellPrice": "Sell price",
     "store": {
       "newStore": "New store"
+    },
+    "cart": {
+      "emptyBody": "Add something from a store to start your order.",
+      "browse": "Browse Food"
     }
   },
   "assistant": {

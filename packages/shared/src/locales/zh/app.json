@@ -186,6 +186,10 @@
     "sellPrice": "售价",
     "store": {
       "newStore": "新店铺"
+    },
+    "cart": {
+      "emptyBody": "从店铺添加商品，开始下单。",
+      "browse": "去逛美食"
     }
   },
   "assistant": {

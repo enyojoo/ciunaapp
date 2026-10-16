@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { PrimaryButton } from "./primary-button"
 import { colors, type as typeSize } from "@/lib/theme"
@@ -7,14 +8,18 @@ export function EmptyState({
   body,
   actionLabel,
   onAction,
+  icon,
 }: {
   title: string
   body?: string
   actionLabel?: string
   onAction?: () => void
+  /** Design: a tinted icon well above the title (one Lucide icon, 26px). */
+  icon?: ReactNode
 }) {
   return (
     <View style={styles.wrap}>
+      {icon ? <View style={styles.iconWell}>{icon}</View> : null}
       <Text style={styles.title}>{title}</Text>
       {body ? <Text style={styles.body}>{body}</Text> : null}
       {actionLabel && onAction ? (
@@ -32,6 +37,7 @@ export function ComingSoon({ title }: { title: string }) {
 
 const styles = StyleSheet.create({
   wrap: { alignItems: "center", paddingHorizontal: 24, paddingVertical: 64 },
+  iconWell: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.primaryTint, alignItems: "center", justifyContent: "center", marginBottom: 16 },
   title: { textAlign: "center", fontSize: 18, fontWeight: "600", color: colors.text },
   body: { marginTop: 8, textAlign: "center", fontSize: typeSize.body, color: colors.muted },
   action: { marginTop: 24, width: "100%", maxWidth: 280 },
