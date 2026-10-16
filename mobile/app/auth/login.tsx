@@ -2,7 +2,7 @@ import { Link, useRouter } from "expo-router"
 import { useEffect, useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth } from "@/components/auth-chrome"
+import { AuthFooter, AuthNotice, AuthTitle, AuthTopBar, PasswordEye, SocialAuth } from "@/components/auth-chrome"
 import { Field } from "@/components/field"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
@@ -10,7 +10,7 @@ import { useToast } from "@/components/toast-provider"
 import { apiFetch } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { supabase } from "@/lib/supabase"
-import { colors, radius, ui } from "@/lib/theme"
+import { ui } from "@/lib/theme"
 
 export default function LoginScreen() {
   const { t } = useTranslation("app")
@@ -106,11 +106,7 @@ export default function LoginScreen() {
           onGoogle={() => void onSocial(signInWithGoogle)}
           disabled={busy}
         />
-        {notice ? (
-          <View style={[styles.notice, notice.tone === "warn" ? styles.noticeWarn : styles.noticeError]} accessibilityRole="alert">
-            <Text style={[styles.noticeText, notice.tone === "warn" ? styles.noticeTextWarn : styles.noticeTextError]}>{notice.text}</Text>
-          </View>
-        ) : null}
+        {notice ? <AuthNotice tone={notice.tone} text={notice.text} /> : null}
         <Field
           label={t("auth.email", { defaultValue: "Email" })}
           autoCapitalize="none"
@@ -179,10 +175,4 @@ const styles = StyleSheet.create({
   content: { flexGrow: 1, paddingTop: 8 },
   form: { width: "100%", maxWidth: 448, alignSelf: "center" },
   forgot: { alignSelf: "flex-start", marginBottom: 16 },
-  notice: { borderRadius: radius.row, padding: 12, marginBottom: 12 },
-  noticeError: { backgroundColor: "#FEF2F2" },
-  noticeWarn: { backgroundColor: "#FFFBEB" },
-  noticeText: { fontSize: 14, lineHeight: 20, fontWeight: "600" },
-  noticeTextError: { color: colors.danger },
-  noticeTextWarn: { color: colors.warningText },
 })

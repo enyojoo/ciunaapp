@@ -50,6 +50,15 @@ export function AuthTopBar({ onBack }: { onBack?: () => void }) {
   )
 }
 
+/** Inline message above an auth form: red for a failed attempt, amber for a locked account. */
+export function AuthNotice({ tone, text }: { tone: "error" | "warn"; text: string }) {
+  return (
+    <View style={[styles.notice, tone === "warn" ? styles.noticeWarn : styles.noticeError]} accessibilityRole="alert">
+      <Text style={[styles.noticeText, tone === "warn" ? styles.noticeTextWarn : styles.noticeTextError]}>{text}</Text>
+    </View>
+  )
+}
+
 export function AuthTitle({ children, compact }: { children: ReactNode; compact?: boolean }) {
   return <Text style={compact ? styles.titleCompact : styles.title}>{children}</Text>
 }
@@ -197,6 +206,12 @@ function AppleMark() {
 }
 
 const styles = StyleSheet.create({
+  notice: { borderRadius: radius.row, padding: 12, marginBottom: 12 },
+  noticeError: { backgroundColor: "#FEF2F2" },
+  noticeWarn: { backgroundColor: "#FFFBEB" },
+  noticeText: { fontSize: 14, lineHeight: 20, fontWeight: "600" },
+  noticeTextError: { color: colors.danger },
+  noticeTextWarn: { color: colors.warningText },
   topBar: {
     flexDirection: "row",
     alignItems: "center",

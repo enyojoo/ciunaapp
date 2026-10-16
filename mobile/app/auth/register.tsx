@@ -2,7 +2,7 @@ import { useRouter } from "expo-router"
 import { useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth, useAuthBack } from "@/components/auth-chrome"
+import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth, useAuthBack, AuthNotice } from "@/components/auth-chrome"
 import { Field } from "@/components/field"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
@@ -26,25 +26,27 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("")
   const [show, setShow] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [notice, setNotice] = useState<string | null>(null)
 
   const onSubmit = async () => {
     const trimmedEmail = email.trim()
     if (!fullName.trim() || !trimmedEmail || !password) {
-      showError(t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }))
+      setNotice(t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }))
       return
     }
     if (password.length < 6) {
-      showError(t("auth.passwordMinLength", { defaultValue: "Password must be at least 6 characters long" }))
+      setNotice(t("auth.passwordMinLength", { defaultValue: "Password must be at least 6 characters long" }))
       return
     }
     if (!EMAIL_RE.test(trimmedEmail)) {
-      showError(t("auth.enterEmailAddress", { defaultValue: "Please enter a valid email address" }))
+      setNotice(t("auth.enterEmailAddress", { defaultValue: "Please enter a valid email address" }))
       return
     }
+    setNotice(null)
     setBusy(true)
     const { error: err } = await signUp(trimmedEmail, password, fullName)
     setBusy(false)
-    if (err) showError(err)
+    if (err) setNotice(err)
     else router.replace("/auth/login")
   }
 
@@ -83,10 +85,14 @@ export default function RegisterScreen() {
           onGoogle={() => void onSocial(signInWithGoogle)}
           disabled={busy}
         />
+        {notice ? <AuthNotice tone="error" text={notice} /> : null}
         <Field
           label={t("auth.fullName", { defaultValue: "Full name" })}
           value={fullName}
-          onChangeText={setFullName}
+          onChangeText={(v) => {
+            setFullName(v)
+            setNotice(null)
+          }}
           autoComplete="name"
           textContentType="name"
           autoCapitalize="words"
@@ -102,7 +108,10 @@ export default function RegisterScreen() {
           textContentType="emailAddress"
           placeholder={t("auth.emailPlaceholder", { defaultValue: "you@example.com" })}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(v) => {
+            setEmail(v)
+            setNotice(null)
+          }}
           returnKeyType="next"
         />
         <Field
@@ -114,7 +123,10 @@ export default function RegisterScreen() {
           textContentType="newPassword"
           placeholder={t("auth.createPasswordPlaceholder", { defaultValue: "Create a password" })}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={(v) => {
+            setPassword(v)
+            setNotice(null)
+          }}
           returnKeyType="go"
           onSubmitEditing={() => void onSubmit()}
           trailing={<PasswordEye show={show} onToggle={() => setShow((s) => !s)} />}
