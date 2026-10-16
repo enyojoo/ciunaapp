@@ -1,3 +1,4 @@
+import { Highlighted } from "@/components/highlight"
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from "react-native"
 import { Image } from "expo-image"
 import { Minus, Plus, ShoppingCart } from "lucide-react-native"
@@ -100,9 +101,7 @@ export function ProductCard({
   const titleBlock = (
     <>
       {/* Fixed slots: the name is one line with an ellipsis, then the cue line, so every card has the same height. */}
-      <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-        {product.title}
-      </Text>
+      <Highlighted style={styles.title} numberOfLines={1} ellipsizeMode="tail" text={product.title} />
       <Text style={[styles.fulfillmentCue, lowStock && styles.lowStock]} numberOfLines={1}>
         {lowStock
           ? t("hub.stock.onlyLeft", { n: Number(product.stock_quantity), defaultValue: "Only {{n}} left" })

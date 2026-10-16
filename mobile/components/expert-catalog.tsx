@@ -1,3 +1,4 @@
+import { Highlighted } from "@/components/highlight"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
@@ -102,9 +103,7 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
         </View>
         <View style={styles.dirCaption}>
           <View style={styles.dirNameRow}>
-            <Text style={styles.dirName} numberOfLines={1} ellipsizeMode="tail">
-              {expert.display_name}
-            </Text>
+            <Highlighted style={styles.dirName} numberOfLines={1} ellipsizeMode="tail" text={expert.display_name} />
             {expert.is_verified ? <VerifiedBadge size={13} kind="expert" tier={expert.verification_tier} /> : null}
           </View>
           <Text style={styles.rating} numberOfLines={1}>

@@ -1,3 +1,4 @@
+import { HighlightProvider } from "@/components/highlight"
 import { FilterChips } from "@/components/filter-chips"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
@@ -134,6 +135,7 @@ export default function SearchScreen() {
   const grid = (children: React.ReactNode) => <View style={styles.grid}>{children}</View>
 
   return (
+    <HighlightProvider query={text}>
     <Screen edges={["top", "left", "right"]}>
       <View style={styles.header}>
         <Pressable
@@ -312,6 +314,7 @@ export default function SearchScreen() {
         ) : null}
       </ScrollView>
     </Screen>
+    </HighlightProvider>
   )
 }
 

@@ -1,3 +1,4 @@
+import { Highlighted } from "@/components/highlight"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
 import { MapPin } from "lucide-react-native"
@@ -98,9 +99,7 @@ function StoreFace({
       </View>
       <View style={styles.caption}>
         <View style={styles.nameRow}>
-          <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
-            {vendor.name}
-          </Text>
+          <Highlighted style={styles.name} numberOfLines={1} ellipsizeMode="tail" text={vendor.name} />
           {vendor.is_verified ? <VerifiedBadge size={14} label={vendor.verification_tier === 2 ? undefined : verifiedLabel} tier={vendor.verification_tier} /> : null}
         </View>
         <Text style={styles.rating} numberOfLines={1}>
