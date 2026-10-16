@@ -5,6 +5,7 @@ import { ToastProvider } from "@ciuna/ui-web"
 import { UiStringsBridge } from "@/components/ui-strings-bridge"
 import { I18nProvider } from "@/lib/i18n"
 import { SessionProvider } from "@/lib/session"
+import Script from "next/script"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -18,10 +19,15 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#FAFAF8" }
 
+// Design-review demo mode: NEXT_PUBLIC_SELLER_MOCK=1 loads /dev-mock.js (fake session + canned API). Off everywhere else.
+const mock = process.env.NEXT_PUBLIC_SELLER_MOCK === "1"
+const mockRef = mock ? (process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/^https?:\/\//, "").split(".")[0] : undefined
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-supabase-ref={mockRef}>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+        {mock ? <Script src="/dev-mock.js" strategy="beforeInteractive" /> : null}
         <I18nProvider>
           <UiStringsBridge>
           <ToastProvider>

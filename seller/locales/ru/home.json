@@ -1,1 +1,15 @@
-{}
+{
+  "home.welcome": "Добро пожаловать, {name}",
+  "home.setup.body": "Выполните эти шаги, и Ciuna проверит ваш бизнес.",
+  "home.live.body": "Что требует вашего внимания сегодня.",
+  "home.setup.title": "Подготовьтесь к продажам",
+  "home.newOrders": "Новые заказы",
+  "home.newBookings": "Новые запросы на бронирование",
+  "home.needsAction": "Ждут вашего подтверждения",
+  "home.inProgress": "В работе",
+  "more.storeProfile": "Профиль магазина",
+  "more.expertProfile": "Профиль эксперта",
+  "more.verification": "Проверка и документы",
+  "more.fulfillment": "Самовывоз и доставка",
+  "more.team": "Команда"
+}

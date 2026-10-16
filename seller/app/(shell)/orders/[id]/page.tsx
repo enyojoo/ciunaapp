@@ -90,7 +90,7 @@ function OrderDetail() {
       {error ? <div className="mb-4"><Banner tone="warning" title={errText(error.code)} action={<Button size="sm" variant="secondary" onClick={() => void reload()}>{t("action.retry")}</Button>} /></div> : null}
       {order.exception ? <div className="mb-4"><Banner tone="warning" title={t("orders.exception.title")}>{t("errors.CONTACT_SUPPORT")}</Banner></div> : null}
 
-      <div className="grid gap-4 md:grid-cols-[1fr_340px] md:items-start">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-start">
         <div className="space-y-4">
           <Card>
             <CardHeader title={t("orders.items")} />

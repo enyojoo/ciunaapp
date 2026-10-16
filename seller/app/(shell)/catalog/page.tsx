@@ -128,9 +128,9 @@ function ProductRow({ product: p, busy, canPublish, onSoldOut, onStatus }: { pro
   const archived = p.status === "archived"
   return (
     <Card className="p-3 sm:p-4">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:gap-4">
         <Link href={`/catalog/${p.id}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
-          <div className="size-16 shrink-0 overflow-hidden rounded-xl bg-neutral-surface md:size-14">
+          <div className="size-16 shrink-0 overflow-hidden rounded-xl bg-neutral-surface xl:size-14">
             {p.image_url ? <img src={p.image_url} alt="" className="aspect-square size-full object-cover" /> : <div className="flex size-full items-center justify-center text-muted"><Package className="size-5" aria-hidden /></div>}
           </div>
           <div className="min-w-0">
@@ -146,17 +146,17 @@ function ProductRow({ product: p, busy, canPublish, onSoldOut, onStatus }: { pro
             ) : null}
           </div>
         </Link>
-        <div className="flex flex-wrap items-center gap-2 md:w-48 md:flex-col md:items-start md:gap-1.5">
+        <div className="flex flex-wrap items-center gap-2 xl:w-48 xl:flex-col xl:items-start xl:gap-1.5">
           <StatusBadge status={p.status} label={t(`catalog.status.${p.status}`)} />
           <span className={p.sold_out ? "rounded-full bg-destructive-surface px-2.5 py-1 text-xs font-semibold text-destructive-text" : "rounded-full bg-neutral-surface px-2.5 py-1 text-xs font-semibold text-neutral-text"}>{stock}</span>
         </div>
         {!archived ? (
-          <div className="flex items-center justify-between gap-3 border-t border-hairline pt-3 md:w-72 md:justify-end md:border-0 md:pt-0">
+          <div className="flex items-center justify-between gap-3 border-t border-hairline pt-3 xl:w-72 xl:justify-end xl:border-0 xl:pt-0">
             <label className="flex min-h-12 items-center gap-2.5 text-sm font-medium text-ink">
               <Switch checked={p.sold_out} onCheckedChange={onSoldOut} disabled={busy} label={t("catalog.stock.soldOutToggle", { title: p.title })} />
               {t("catalog.stock.soldOut")}
             </label>
-            <Button type="button" variant="secondary" className="h-12 md:h-11" disabled={busy || (p.status !== "live" && !canPublish)} onClick={onStatus} title={p.status !== "live" && !canPublish ? t("catalog.form.publishLater") : undefined}>
+            <Button type="button" variant="secondary" className="h-12 xl:h-11" disabled={busy || (p.status !== "live" && !canPublish)} onClick={onStatus} title={p.status !== "live" && !canPublish ? t("catalog.form.publishLater") : undefined}>
               {p.status === "live" ? t("catalog.action.pause") : t("catalog.action.publish")}
             </Button>
           </div>

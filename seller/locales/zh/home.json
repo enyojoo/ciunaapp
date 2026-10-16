@@ -1,1 +1,15 @@
-{}
+{
+  "home.welcome": "欢迎，{name}",
+  "home.setup.body": "完成这些步骤后，Ciuna 将审核您的业务。",
+  "home.live.body": "今天需要您处理的事项。",
+  "home.setup.title": "准备开始销售",
+  "home.newOrders": "新订单",
+  "home.newBookings": "新的预约请求",
+  "home.needsAction": "等待您接受",
+  "home.inProgress": "进行中",
+  "more.storeProfile": "店铺资料",
+  "more.expertProfile": "专家资料",
+  "more.verification": "验证与文件",
+  "more.fulfillment": "自提与配送",
+  "more.team": "团队"
+}
