@@ -1,8 +1,8 @@
 "use client"
 import * as React from "react"
 import Link from "next/link"
-import { ArrowLeft, Plus, Trash2 } from "lucide-react"
-import { Banner, Button, Card, CardBody, CardHeader, Field, Input, PageHeader, Select, Skeleton, Switch, Textarea, useToast } from "@ciuna/ui-web"
+import { ArrowLeft, Check, Circle, Plus, Trash2 } from "lucide-react"
+import { Banner, Button, Card, CardBody, CardHeader, Chip, Field, Input, PageHeader, Select, Skeleton, Switch, Textarea, useToast } from "@ciuna/ui-web"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -48,6 +48,8 @@ export default function FulfillmentPage() {
     return () => window.removeEventListener("beforeunload", h)
   }, [dirty])
 
+  const hasPickup = location.trim().length > 0
+  const hasZone = zones.some((z) => z.active && z.city.trim() && z.district.trim())
   const touch = () => setDirty(true)
   const upd = (i: number, patch: Partial<Zone>) => { setZones((z) => z.map((x, j) => (j === i ? { ...x, ...patch } : x))); touch() }
   const key = (z: Zone) => `${z.city.trim().toLowerCase()}|${z.district.trim().toLowerCase()}`
@@ -82,7 +84,7 @@ export default function FulfillmentPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="mx-auto w-full max-w-3xl lg:max-w-5xl">
       <PageHeader
         back={<Link href="/catalog" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-muted hover:text-ink"><ArrowLeft className="size-4" />{t("catalog.back")}</Link>}
         title={t("catalog.fulfilment.title")}
@@ -95,6 +97,10 @@ export default function FulfillmentPage() {
       ) : (
         <form onSubmit={save} className="space-y-4" noValidate>
           {error ? <Banner tone="destructive" title={error} /> : null}
+          {!hasPickup ? <Banner tone="warning" title={t("catalog.fulfilment.pickupMissing")} /> : null}
+          {!hasZone ? <Banner tone="warning" title={t("catalog.fulfilment.zonesMissing")} /> : null}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
+          <div className="space-y-4">
           <Card>
             <CardHeader title={t("catalog.fulfilment.pickup")} description={t("catalog.fulfilment.pickupHint")} />
             <CardBody className="space-y-4">
@@ -116,7 +122,7 @@ export default function FulfillmentPage() {
               {zones.length === 0 ? <p className="text-sm text-muted">{t("catalog.fulfilment.noZones")}</p> : null}
               {zones.map((z, i) => (
                 <div key={i} className="space-y-3 rounded-2xl border border-hairline p-3">
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1.2fr_1.2fr_0.8fr_0.7fr]">
                     <Field label={t("catalog.fulfilment.city")}><Input className={ctl} value={z.city} maxLength={80} onChange={(e) => upd(i, { city: e.target.value })} /></Field>
                     <Field label={t("catalog.fulfilment.district")}><Input className={ctl} value={z.district} maxLength={80} onChange={(e) => upd(i, { district: e.target.value })} /></Field>
                     <Field label={t("catalog.fulfilment.fee")}><Input className={ctl} inputMode="decimal" value={z.fee} onChange={(e) => upd(i, { fee: e.target.value })} /></Field>
@@ -145,6 +151,27 @@ export default function FulfillmentPage() {
               </Button>
             </CardBody>
           </Card>
+
+          </div>
+          <Card className="lg:sticky lg:top-20">
+            <CardHeader title={t("catalog.fulfilment.unlocks")} />
+            <CardBody>
+              <ul className="space-y-3">
+                {[
+                  { ok: hasPickup, label: t("catalog.fulfilment.unlock.pickup"), help: t("catalog.fulfilment.unlock.pickupHelp") },
+                  { ok: hasZone, label: t("catalog.fulfilment.unlock.delivery"), help: t("catalog.fulfilment.unlock.deliveryHelp") },
+                  { ok: true, label: t("catalog.fulfilment.unlock.digital"), help: t("catalog.fulfilment.unlock.digitalHelp") },
+                ].map((u) => (
+                  <li key={u.label} className="flex items-start gap-3">
+                    {u.ok ? <Check className="mt-0.5 size-5 shrink-0 rounded-full bg-success-surface p-0.5 text-success-text" aria-hidden /> : <Circle className="mt-0.5 size-5 shrink-0 text-subtle" aria-hidden />}
+                    <div className="min-w-0 flex-1"><p className="text-[15px] font-semibold text-ink">{u.label}</p><p className="text-sm text-muted">{u.help}</p></div>
+                    <Chip tone={u.ok ? "success" : "neutral"}>{t(u.ok ? "setup.done" : "setup.todo")}</Chip>
+                  </li>
+                ))}
+              </ul>
+            </CardBody>
+          </Card>
+          </div>
 
           <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 -mx-4 flex items-center justify-end gap-3 border-t border-hairline bg-white/95 px-4 py-3 backdrop-blur md:bottom-0 md:mx-0 md:rounded-2xl md:border">
             {dirty ? <span className="mr-auto text-sm font-medium text-warning-text">{t("catalog.form.unsaved")}</span> : null}

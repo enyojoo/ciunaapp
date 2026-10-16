@@ -3,7 +3,7 @@
 begin;
 set local lock_timeout = '5s';
 insert into marketplace_settings (key, value) values
-  ('low_stock_threshold', '3'),
+  ('low_stock_threshold', '5'),
   ('document_expiry_warning_days', '30')
 on conflict (key) do nothing;
 commit;

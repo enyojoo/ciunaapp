@@ -7,16 +7,16 @@ import { useT } from "@/lib/i18n"
 import { dateLocale, STATUS_LABEL_KEY } from "@/components/orders/format"
 import type { Thread } from "./format"
 
-export function ThreadRow({ thread }: { thread: Thread }) {
+export function ThreadRow({ thread, selected }: { thread: Thread; selected?: boolean }) {
   const { t, locale } = useT()
   const ago = formatDistanceToNowStrict(new Date(thread.lastAt), { addSuffix: true, locale: dateLocale(locale) })
   const name = thread.customerName ?? t("messages.customer")
   const mine = thread.lastFrom === "merchant"
   return (
-    <Card className={cn("relative flex flex-col gap-2 p-4", thread.unread ? "border-primary" : undefined)}>
+    <Card selected={selected} className={cn("relative flex flex-col gap-2 p-4", thread.unread && !selected ? "border-primary" : undefined)}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Link href={`/messages/${encodeURIComponent(thread.orderId)}`} className="rounded-md text-base font-semibold text-ink outline-none after:absolute after:inset-0 focus-visible:ring-[3px] focus-visible:ring-ring/50">
+          <Link href={`/messages/${encodeURIComponent(thread.orderId)}`} aria-current={selected ? "page" : undefined} className="rounded-md text-base font-semibold text-ink outline-none after:absolute after:inset-0 focus-visible:ring-[3px] focus-visible:ring-ring/50">
             {name}
           </Link>
           <p className="text-sm text-muted">{t("orders.number", { id: thread.publicId })} · <time dateTime={thread.lastAt}>{ago}</time></p>

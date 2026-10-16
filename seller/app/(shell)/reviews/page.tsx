@@ -40,7 +40,9 @@ function ReviewsList() {
   return (
     <>
       <PageHeader title={t("reviews.title")} description={t("reviews.subtitle")} />
-      {data ? <SummaryCard summary={data.summary} /> : null}
+      <div className="lg:grid lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start lg:gap-6">
+      <div className="lg:sticky lg:top-20">{data ? <SummaryCard summary={data.summary} /> : null}</div>
+      <div className="min-w-0">
       <Tabs value={tab} onChange={(v) => { setTab(v); setLimit(PAGE) }} items={tabs} className="mb-4" />
       <div role="tabpanel" aria-busy={loading}>
         {loading && !data ? (
@@ -64,6 +66,8 @@ function ReviewsList() {
             ) : null}
           </>
         )}
+      </div>
+      </div>
       </div>
       <ReplySheet review={replying} onClose={() => setReplying(null)} onDone={() => void reload()} />
     </>

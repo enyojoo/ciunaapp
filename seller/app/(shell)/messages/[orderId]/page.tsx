@@ -5,19 +5,15 @@ import { useParams } from "next/navigation"
 import { format } from "date-fns"
 import { ArrowLeft, SearchX } from "lucide-react"
 import { Banner, Button, EmptyState, PageHeader, Skeleton, StatusBadge, cn } from "@ciuna/ui-web"
-import { SellerNoAccess } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
-import { useSeller } from "@/lib/session"
 import { useErrorText, useT } from "@/lib/i18n"
 import { Composer } from "@/components/messages/composer"
 import { unreadCustomerId, type ChatMessage, type ThreadResponse } from "@/components/messages/format"
 import { dateLocale, STATUS_LABEL_KEY } from "@/components/orders/format"
 
 export default function ThreadPage() {
-  const { t } = useT()
-  const { can } = useSeller()
-  if (!can("messages")) return <SellerNoAccess titleKey="messages.noAccess.title" bodyKey="messages.noAccess.body" />
+  // The permission lock screen is rendered by the messages layout.
   return <Thread />
 }
 
@@ -64,7 +60,7 @@ function Thread() {
   }
 
   const back = (
-    <Link href="/messages" className="inline-flex min-h-12 items-center gap-1.5 rounded-lg text-sm font-semibold text-primary-text outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
+    <Link href="/messages" className="inline-flex min-h-12 items-center lg:hidden gap-1.5 rounded-lg text-sm font-semibold text-primary-text outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
       <ArrowLeft className="size-4" aria-hidden />
       {t("messages.back")}
     </Link>
@@ -83,7 +79,7 @@ function Thread() {
   const { order, messages, closed, available } = data
   let lastDay = ""
   return (
-    <div className="pb-[18rem] md:pb-0">
+    <div className="pb-[18rem] md:pb-0" key={orderId}>
       <PageHeader
         back={back}
         title={order.customerName ?? t("messages.customer")}

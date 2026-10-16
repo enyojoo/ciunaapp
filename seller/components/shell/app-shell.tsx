@@ -10,6 +10,7 @@ import { useT } from "@/lib/i18n"
 import { api } from "@/lib/api"
 import { navFor, MORE_ITEM } from "./nav"
 import { MerchantSwitcher } from "./merchant-switcher"
+import { TopBar } from "./top-bar"
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`)
@@ -65,13 +66,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="min-w-0">
+        <TopBar />
         {/* top bar on phones */}
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-hairline bg-white/90 px-4 pt-safe backdrop-blur md:hidden">
           <MerchantSwitcher compact />
           <Link href="/more" aria-label={t("nav.more")} className="flex size-10 items-center justify-center rounded-full hover:bg-neutral-surface"><Menu className="size-5" /></Link>
         </header>
 
-        <main className="mx-auto w-full max-w-[1100px] px-4 pb-nav pt-5 sm:px-6 md:pb-12 md:pt-8">
+        <main className="mx-auto w-full max-w-[1100px] px-4 pb-nav pt-5 sm:px-6 md:pb-12 md:pt-6">
           <StatusBanner status={merchant.status} reason={merchant.rejection_reason} onResume={resume} />
           {children}
         </main>

@@ -142,9 +142,9 @@ export function AvailabilityEditor({ service, data, onSaved }: { service: Expert
             const ranges = week[d] ?? []
             return (
               <div key={d} className="px-4 py-3.5 sm:px-5">
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3 className="text-[15px] font-semibold">{dayName(d, locale)}</h3>
-                  <div className="flex gap-1">
+                  <div className="flex flex-wrap gap-1">
                     {ranges.length > 0 ? <Button size="sm" variant="ghost" onClick={() => { setCopyFrom(d); setCopyTo([]) }}><Copy />{t("expert.avail.copy")}</Button> : null}
                     <Button size="sm" variant="secondary" onClick={() => addRange(d)}><Plus />{t("expert.avail.add")}</Button>
                   </div>

@@ -10,6 +10,8 @@ export interface SellerReview {
   reply: string | null
   reply_at: string | null
   reply_editable: boolean
+  /** When the reply locks; absent on older API responses (the card then omits the countdown). */
+  reply_editable_until?: string | null
 }
 export interface ReviewsResponse { summary: ReviewSummary; reviews: SellerReview[]; total: number; needs_reply: number }
 export type ReviewTab = "all" | "needs_reply"

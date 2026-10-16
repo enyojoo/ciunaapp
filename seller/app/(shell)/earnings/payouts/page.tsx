@@ -9,7 +9,7 @@ import { invalidate, useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
 import { useErrorText, useT } from "@/lib/i18n"
 import { EarningsSubnav } from "@/components/earnings/subnav"
-import { PAYOUT_STATUS_KEY, PAYOUT_STATUS_TONE_WORD, useDate } from "@/components/earnings/format"
+import { PAYOUT_STATUS_KEY, PAYOUT_STATUS_TONE_WORD, useDate, useDateTime } from "@/components/earnings/format"
 
 interface Payout {
   id: string; currency: string; amount: number; fee: number; net: number
@@ -25,6 +25,7 @@ export default function PayoutsPage() {
   const errText = useErrorText()
   const toast = useToast()
   const date = useDate()
+  const dateTime = useDateTime()
   const list = useQuery<{ payouts: Payout[] }>(can("payouts") ? "payouts" : null, () => api("/api/merchant/payouts"), { refreshMs: 60_000 })
   const [cancelling, setCancelling] = React.useState<string | null>(null)
   const [busy, setBusy] = React.useState(false)
@@ -49,11 +50,11 @@ export default function PayoutsPage() {
     <>
       <PageHeader title={t("earnings.payouts.title")} description={t("earnings.payouts.subtitle")} />
       <EarningsSubnav />
-      <div className="space-y-3">
-        {list.error && !list.data ? <Banner tone="destructive" title={errText(list.error.code)} action={<Button variant="secondary" onClick={() => list.reload()}>{t("action.retry")}</Button>} /> : null}
+      <div className="grid items-start gap-3 md:grid-cols-2">
+        {list.error && !list.data ? <div className="md:col-span-2"><Banner tone="destructive" title={errText(list.error.code)} action={<Button variant="secondary" onClick={() => list.reload()}>{t("action.retry")}</Button>} /></div> : null}
         {list.loading && !list.data ? <><Skeleton className="h-32" /><Skeleton className="h-32" /></> : null}
         {list.data && !payouts.length ? (
-          <Card><EmptyState icon={<Banknote />} title={t("earnings.payouts.empty.title")} description={t("earnings.payouts.empty.body")} action={<Link href="/earnings" className="inline-flex h-11 items-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground hover:bg-primary-hover">{t("earnings.payouts.empty.cta")}</Link>} /></Card>
+          <Card className="md:col-span-2"><EmptyState icon={<Banknote />} title={t("earnings.payouts.empty.title")} description={t("earnings.payouts.empty.body")} action={<Link href="/earnings" className="inline-flex h-11 items-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground hover:bg-primary-hover">{t("earnings.payouts.empty.cta")}</Link>} /></Card>
         ) : null}
         {payouts.map((p) => {
           const m = p.method_snapshot
@@ -70,7 +71,7 @@ export default function PayoutsPage() {
                 <Row label={t("earnings.payout.fee")}><Amount value={p.fee} currency={p.currency} /></Row>
                 <Row label={t("earnings.payout.received")}><Amount value={p.net} currency={p.currency} /></Row>
                 <Row label={t("earnings.payout.method")}><span>{m?.label || t(`earnings.kind.${m?.kind ?? "bank"}`)}{m?.last4 ? ` ••${m.last4}` : ""}</span></Row>
-                {p.status === "paid" && p.paid_at ? <Row label={t("earnings.payout.paidOn")}><span>{date(p.paid_at)}</span></Row> : null}
+                {p.status === "paid" && p.paid_at ? <Row label={t("earnings.payout.paidOn")}><span>{dateTime(p.paid_at)}</span></Row> : null}
                 {p.status === "paid" && p.reference ? <Row label={t("earnings.payout.reference")}><span className="break-all">{p.reference}</span></Row> : null}
               </dl>
               <p className="mt-3 text-sm text-muted">{t(`earnings.payout.note.${p.status}`)}</p>

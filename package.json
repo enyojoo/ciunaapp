@@ -34,9 +34,12 @@
     "dev:mobile:web": "npm run web -w mobile",
     "export:mobile:web": "npm run export:web -w mobile",
     "sync:rates:debug": "npm run sync:debug -w @ciuna/rate-sync --",
-    "design:cards-build": "node design-system/scripts/build-cards.mjs"
+    "design:cards-build": "node design-system/scripts/build-cards.mjs",
+    "design:audit": "node design-system/scripts/audit-cards.mjs",
+    "test:seller": "playwright test --project=seller-375 --project=seller-768 --project=seller-1280"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "turbo": "^2.8.12"
   },
   "dependencies": {

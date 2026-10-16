@@ -3,7 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Archive, Bike, Store, Download } from "lucide-react"
-import { Banner, Button, Card, CardBody, CardHeader, ConfirmDialog, Field, Input, LanguageTabs, Select, Switch, Textarea, cn, useToast } from "@ciuna/ui-web"
+import { Banner, Button, Card, StatusBadge, CardBody, CardHeader, ConfirmDialog, Field, Input, LanguageTabs, Select, Switch, Textarea, cn, useToast } from "@ciuna/ui-web"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -26,6 +26,8 @@ interface FormState {
   unlimited: boolean
   stock: string
   soldOut: boolean
+  /** Visibility card: on means the listing is live in the store. */
+  visible: boolean
   mode: "delivery" | "pickup" | "digital"
   tr: Record<string, Tr>
 }
@@ -34,7 +36,7 @@ type Errs = Partial<Record<"title" | "list" | "sale" | "stock", string>>
 const ctl = "h-12 md:h-11"
 const priceText = (v: number | string | null | undefined) => (v === null || v === undefined || v === "" ? "" : String(Number(v)))
 
-function initial(p: Product | null, currency: string, category: string): FormState {
+function initial(p: Product | null, currency: string, category: string, canPublish: boolean): FormState {
   const tr: Record<string, Tr> = {}
   for (const [l, v] of Object.entries(p?.translations ?? {})) tr[l] = { title: v?.title ?? "", short: v?.short_description ?? "", long: v?.long_description ?? "" }
   return {
@@ -50,6 +52,7 @@ function initial(p: Product | null, currency: string, category: string): FormSta
     unlimited: p ? p.stock_quantity === null : true,
     stock: p?.stock_quantity != null ? String(p.stock_quantity) : "",
     soldOut: p?.sold_out ?? false,
+    visible: p ? p.status === "live" : canPublish,
     mode: p?.fulfillment_mode ?? "delivery",
     tr,
   }
@@ -69,7 +72,7 @@ export function ProductForm({ product }: { product: Product | null }) {
   const categories = categoriesFor(merchant?.service_line)
   const currency = merchant?.default_currency ?? "USD"
 
-  const [form, setForm] = React.useState<FormState>(() => initial(product, currency, categories[0] ?? ""))
+  const [form, setForm] = React.useState<FormState>(() => initial(product, currency, categories[0] ?? "", merchant?.status === "live"))
   const [saved, setSaved] = React.useState(() => JSON.stringify(form))
   const [current, setCurrent] = React.useState<Product | null>(product)
   const [lang, setLang] = React.useState(defaultLang)
@@ -206,11 +209,13 @@ export function ProductForm({ product }: { product: Product | null }) {
   const status = current?.status ?? "draft"
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); void save(status === "live" ? "live" : canPublish ? "live" : "draft") }} className="space-y-4" noValidate>
+    <form onSubmit={(e) => { e.preventDefault(); void save(canPublish && form.visible ? "live" : "draft") }} className="space-y-4" noValidate>
       {serverError ? <Banner tone="destructive" title={serverError} /> : null}
       {current?.review_status === "rejected" ? <Banner tone="destructive" title={t("catalog.review.rejected", { note: current.review_note ?? "" })} /> : current?.review_status === "pending" ? <Banner tone="warning" title={t("catalog.review.pending")} /> : null}
       <p className="text-sm text-muted">{t("catalog.form.moderationHint")}</p>
 
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+      <div className="space-y-4">
       <Card>
         <CardHeader title={t("catalog.section.basics")} />
         <CardBody className="space-y-4">
@@ -277,6 +282,8 @@ export function ProductForm({ product }: { product: Product | null }) {
         </CardBody>
       </Card>
 
+      </div>
+      <div className="space-y-4 lg:sticky lg:top-20">
       <Card>
         <CardHeader title={t("catalog.section.stock")} />
         <CardBody className="space-y-4">
@@ -318,6 +325,19 @@ export function ProductForm({ product }: { product: Product | null }) {
         </CardBody>
       </Card>
 
+      <Card>
+        <CardHeader title={t("catalog.section.visibility")} action={<StatusBadge status={status} label={t(`catalog.status.${status}`)} />} />
+        <CardBody className="space-y-2">
+          <div className="flex min-h-12 items-center justify-between gap-3">
+            <div>
+              <p className="text-[15px] font-medium text-ink">{t("catalog.field.visible")}</p>
+              <p className="text-sm text-muted">{t(!canPublish ? "catalog.form.publishLater" : form.visible ? "catalog.field.visibleOn" : "catalog.field.visibleOff")}</p>
+            </div>
+            <Switch checked={form.visible && canPublish} onCheckedChange={(v) => set("visible", v)} disabled={!canPublish} label={t("catalog.field.visible")} />
+          </div>
+        </CardBody>
+      </Card>
+
       {current && status !== "archived" ? (
         <div>
           <Button type="button" variant="ghost" className="h-12 text-destructive-text" onClick={() => setArchiveOpen(true)}>
@@ -326,6 +346,8 @@ export function ProductForm({ product }: { product: Product | null }) {
           </Button>
         </div>
       ) : null}
+      </div>
+      </div>
 
       <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 -mx-4 border-t border-hairline bg-white/95 px-4 py-3 backdrop-blur md:bottom-0 md:mx-0 md:rounded-2xl md:border">
         {!canPublish ? <p className="mb-2 text-sm text-muted">{t("catalog.form.publishLater")}</p> : null}
@@ -335,8 +357,8 @@ export function ProductForm({ product }: { product: Product | null }) {
             {status === "live" ? t("catalog.action.moveToDraft") : t("catalog.action.saveDraft")}
           </Button>
           {canPublish ? (
-            <Button type="button" size="lg" busy={busy === "live"} disabled={busy !== null} onClick={() => void save("live")}>
-              {status === "live" ? t("catalog.action.saveChanges") : t("catalog.action.publish")}
+            <Button type="button" size="lg" busy={busy === (form.visible ? "live" : "draft")} disabled={busy !== null} onClick={() => void save(form.visible ? "live" : "draft")}>
+              {form.visible ? (status === "live" ? t("catalog.action.saveChanges") : t("catalog.action.publish")) : t("catalog.action.saveChanges")}
             </Button>
           ) : null}
         </div>

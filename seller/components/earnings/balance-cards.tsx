@@ -6,15 +6,16 @@ import type { Balance } from "./logic"
 /** One card per currency. Each figure says what it waits for; money-in is never red or green. */
 export function BalanceCards({ balances, holdDays }: { balances: Balance[]; holdDays: number }) {
   const { t } = useT()
+  const many = balances.length > 1
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {balances.map((b) => (
-        <Card key={b.currency}>
+        <Card key={b.currency} selected={b.available > 0}>
           <CardBody>
-            <p className="text-sm font-semibold text-muted">{t("earnings.available")} · {b.currency}</p>
-            <p className="mt-1"><Amount value={b.available} currency={b.currency} size="display" /></p>
+            <p className="text-sm font-semibold text-muted">{t("earnings.available")}{many ? ` · ${b.currency}` : ""}</p>
+            <p className="mt-1"><Amount value={b.available} currency={b.currency} size="display" className="text-[44px] leading-none sm:text-3xl" /></p>
             <p className="mt-1 text-sm text-muted">{t("earnings.available.help")}</p>
-            <dl className="mt-4 grid grid-cols-1 gap-3 border-t border-hairline pt-4 sm:grid-cols-3">
+            <dl className="mt-4 grid grid-cols-1 gap-3 border-t border-hairline pt-4 sm:grid-cols-3 [&>div:not(:last-child)]:border-b [&>div]:border-hairline [&>div]:pb-3 sm:[&>div:not(:last-child)]:border-b-0 sm:[&>div]:pb-0">
               <Tile label={t("earnings.pending")} value={b.pending} currency={b.currency} help={t("earnings.pending.help", { days: holdDays })} />
               <Tile label={t("earnings.inPayout")} value={b.inPayout} currency={b.currency} help={t("earnings.inPayout.help")} />
               <Tile label={t("earnings.paidOut")} value={b.paidOut} currency={b.currency} help={t("earnings.paidOut.help")} />

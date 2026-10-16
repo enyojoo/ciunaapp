@@ -86,12 +86,12 @@ function OrderDetail() {
       />
       <div className="mb-5 flex flex-wrap items-center gap-2">
         <FulfilmentChip mode={mode} />
-        {live ? <DueChip dueAt={order.dueAt} /> : null}
+        {live ? <DueChip size="md" dueAt={order.dueAt} /> : null}
       </div>
       {error ? <div className="mb-4"><Banner tone="warning" title={errText(error.code)} action={<Button size="sm" variant="secondary" onClick={() => void reload()}>{t("action.retry")}</Button>} /></div> : null}
       {order.exception ? <div className="mb-4"><Banner tone="warning" title={t("orders.exception.title")}>{t("errors.CONTACT_SUPPORT")}</Banner></div> : null}
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-start">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
         <div className="space-y-4">
           <Card>
             <CardHeader title={t("orders.items")} />

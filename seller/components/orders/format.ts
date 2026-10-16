@@ -22,6 +22,8 @@ export interface SellerOrder {
   digitalContent: string | null
   actions: Array<"accept" | "start" | "fulfill" | "reject">
   exception: string | null
+  /** Shown on a rejected card when the list payload carries it; the card degrades to no line when absent. */
+  rejectReason?: string | null
 }
 export interface SellerOrderEvent { id: string; kind: string; created_at: string; message: string | null }
 export type OrderTab = "new" | "active" | "done" | "cancelled"

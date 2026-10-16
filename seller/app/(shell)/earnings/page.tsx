@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
 import { Wallet } from "lucide-react"
-import { Banner, Button, Card, EmptyState, PageHeader, Skeleton } from "@ciuna/ui-web"
+import { Banner, Button, Card, EmptyState, Skeleton } from "@ciuna/ui-web"
 import { SellerNoAccess } from "@/components/no-access"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
@@ -33,11 +33,14 @@ export default function EarningsPage() {
 
   return (
     <>
-      <PageHeader
-        title={t("earnings.title")}
-        description={t("earnings.subtitle")}
-        action={can("payouts") ? <Button onClick={() => setWithdrawing(true)} disabled={!canWithdraw}>{t("earnings.withdraw")}</Button> : null}
-      />
+      {/* Withdraw sits beside the title on phones too, so the balance stays above the fold. */}
+      <header className="mb-5 sm:mb-6">
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-2xl font-bold tracking-tight text-ink">{t("earnings.title")}</h1>
+          {can("payouts") ? <Button onClick={() => setWithdrawing(true)} disabled={!canWithdraw}>{t("earnings.withdraw")}</Button> : null}
+        </div>
+        <p className="mt-1 max-w-2xl text-[15px] text-muted">{t("earnings.subtitle")}</p>
+      </header>
       <EarningsSubnav />
       <div className="space-y-6">
         {earnings.error && !earnings.data ? <Banner tone="destructive" title={errText(earnings.error.code)} action={<Button variant="secondary" onClick={() => earnings.reload()}>{t("action.retry")}</Button>} /> : null}

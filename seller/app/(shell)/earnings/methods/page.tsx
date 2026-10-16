@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
-import { Landmark, Plus, Trash2 } from "lucide-react"
-import { Banner, Button, Card, ConfirmDialog, EmptyState, PageHeader, Skeleton, StatusBadge, useToast } from "@ciuna/ui-web"
+import { Landmark, Plus, Trash2, Send } from "lucide-react"
+import { Banner, Button, Card, Chip, ConfirmDialog, EmptyState, PageHeader, Skeleton, StatusBadge, useToast } from "@ciuna/ui-web"
 import { SellerNoAccess } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
@@ -49,7 +49,7 @@ export default function MethodsPage() {
         {methods.map((m) => (
           <Card key={m.id} className="flex flex-wrap items-center gap-3 p-4">
             <div className="min-w-0 flex-1">
-              <p className="truncate font-semibold">{m.label}{m.is_default ? <span className="ml-2 text-sm font-medium text-muted">· {t("earnings.methods.default")}</span> : null}</p>
+              <p className="flex flex-wrap items-center gap-2 font-semibold"><span className="min-w-0 truncate">{m.label}</span>{m.is_default ? <Chip tone="primary">{t("earnings.methods.defaultBadge")}</Chip> : null}</p>
               <p className="text-sm text-muted">{t(`earnings.kind.${m.kind}`)} · {m.currency}{m.last4 ? ` · ••${m.last4}` : ""}</p>
             </div>
             <StatusBadge status={m.verified ? "verified" : "pending"} label={m.verified ? t("earnings.methods.verified") : t("earnings.methods.waiting")} />
@@ -59,6 +59,16 @@ export default function MethodsPage() {
             </div>
           </Card>
         ))}
+        {list.data ? (
+          <Card aria-disabled="true" className="flex flex-wrap items-center gap-3 border-dashed bg-neutral-surface/60 p-4">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-muted"><Send className="size-5" aria-hidden /></span>
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-muted">{t("earnings.methods.sendRow")}</p>
+              <p className="text-sm text-muted">{t("earnings.methods.sendRow.help")}</p>
+            </div>
+            <Chip tone="neutral">{t("earnings.comingSoon")}</Chip>
+          </Card>
+        ) : null}
       </div>
       <AddMethodSheet open={adding} onOpenChange={setAdding} defaultCurrency={merchant.default_currency} onAdded={() => { invalidate("payout-methods"); void list.reload() }} />
       <ConfirmDialog open={Boolean(removing)} onOpenChange={(o) => !o && setRemoving(null)} title={t("earnings.methods.remove.q")} description={t("earnings.methods.remove.body")} confirmLabel={t("action.remove")} cancelLabel={t("action.cancel")} destructive busy={busy} onConfirm={remove} />

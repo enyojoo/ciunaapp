@@ -1,5 +1,6 @@
 "use client"
 import { format } from "date-fns"
+import { Clock, Lock } from "lucide-react"
 import { Button, Card } from "@ciuna/ui-web"
 import { useT } from "@/lib/i18n"
 import { dateLocale } from "@/components/orders/format"
@@ -22,6 +23,7 @@ export function ReviewCard({ review, canReply, onReply }: { review: SellerReview
         <div className="rounded-2xl bg-neutral-surface p-3.5">
           <p className="text-sm font-semibold text-ink">{t("reviews.yourReply")}</p>
           <p className="mt-1 whitespace-pre-line break-words text-[15px] text-ink">{review.reply}</p>
+          <EditWindow review={review} />
         </div>
       ) : null}
       {canReply && (!review.reply || review.reply_editable) ? (
@@ -31,4 +33,15 @@ export function ReviewCard({ review, canReply, onReply }: { review: SellerReview
       ) : null}
     </Card>
   )
+}
+
+/** Names the edit window under a posted reply: hours left while editable, a locked note after. */
+function EditWindow({ review }: { review: SellerReview }) {
+  const { t } = useT()
+  if (review.reply_editable) {
+    const until = review.reply_editable_until ? new Date(review.reply_editable_until).getTime() : null
+    const hours = until ? Math.max(1, Math.ceil((until - Date.now()) / 3_600_000)) : null
+    return <p className="mt-2 flex items-center gap-1.5 text-sm text-muted"><Clock className="size-4 shrink-0" aria-hidden />{hours ? t("reviews.editLeft", { hours }) : t("reviews.reply.editWindow")}</p>
+  }
+  return <p className="mt-2 flex items-center gap-1.5 text-sm text-muted"><Lock className="size-4 shrink-0" aria-hidden />{t("reviews.locked")}</p>
 }

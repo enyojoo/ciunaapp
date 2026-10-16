@@ -2,8 +2,9 @@
 import * as React from "react"
 import { Button, Field, Sheet, Textarea, cn } from "@ciuna/ui-web"
 import { useT } from "@/lib/i18n"
+import { formatMoneyDisplay } from "@ciuna/shared"
 import { useOrderAction } from "./use-order-action"
-import type { SellerOrder } from "./format"
+import { orderTotal, type SellerOrder } from "./format"
 
 /** Detail action bar. Shows only the actions the API lists. Sticky above the bottom nav on phones. */
 export function OrderActions({ order, onDone }: { order: SellerOrder; onDone: (o: SellerOrder) => void }) {
@@ -43,11 +44,11 @@ export function OrderActions({ order, onDone }: { order: SellerOrder; onDone: (o
   return (
     <>
       <div className={cn(sticky)}>
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-2 sm:flex-row sm:flex-wrap md:justify-end">
+        <div className="mx-auto flex max-w-[1100px] gap-2 md:flex-wrap md:justify-end [&>button]:flex-1 md:[&>button]:flex-none">
           {has("accept") ? <Button size="lg" className="min-h-12" busy={busy === `${order.id}:accept`} onClick={() => instant("accept")}>{t("orders.action.accept")}</Button> : null}
           {has("start") ? <Button size="lg" className="min-h-12" busy={busy === `${order.id}:start`} onClick={() => instant("start")}>{t("orders.action.start")}</Button> : null}
           {has("fulfill") ? <Button size="lg" className="min-h-12" variant={has("start") ? "secondary" : "default"} onClick={() => setSheet("fulfill")}>{t("orders.action.fulfill")}</Button> : null}
-          {has("reject") ? <Button size="lg" className="min-h-12" variant="secondary" onClick={() => setSheet("reject")}>{t("orders.action.reject")}</Button> : null}
+          {has("reject") ? <Button size="lg" className="order-first min-h-12 md:order-none" variant="secondary" onClick={() => setSheet("reject")}>{t("orders.action.reject")}</Button> : null}
         </div>
       </div>
 
@@ -55,7 +56,7 @@ export function OrderActions({ order, onDone }: { order: SellerOrder; onDone: (o
         open={sheet === "reject"}
         onOpenChange={(o) => !o && close()}
         title={t("orders.reject.title")}
-        description={t("orders.reject.body")}
+        description={order.totals ? t("orders.reject.bodyRefund", { amount: formatMoneyDisplay(orderTotal(order), order.totals.currency) }) : t("orders.reject.body")}
         footer={
           <>
             <Button variant="secondary" size="lg" onClick={close} disabled={busy !== null}>{t("action.cancel")}</Button>

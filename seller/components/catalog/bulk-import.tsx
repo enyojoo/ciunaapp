@@ -2,7 +2,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { Download, FileUp } from "lucide-react"
-import { Banner, Button, Card, CardBody, CardHeader, useToast } from "@ciuna/ui-web"
+import { Banner, Button, Card, CardBody, CardHeader, ProgressBar, useToast } from "@ciuna/ui-web"
 import { api, ApiError } from "@/lib/api"
 import { invalidate } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -106,9 +106,10 @@ export function BulkImport() {
     <div className="space-y-4">
       <Card>
         <CardHeader title={t("catalog.import.step1")} description={t("catalog.import.step1Hint", { max: MAX_IMPORT_ROWS })} />
-        <CardBody className="flex flex-col gap-2 sm:flex-row">
+        <CardBody className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <Button type="button" variant="secondary" size="lg" onClick={downloadTemplate}><Download />{t("catalog.import.template")}</Button>
           <Button type="button" size="lg" disabled={running} onClick={() => fileRef.current?.click()}><FileUp />{t("catalog.import.choose")}</Button>
+          <p className="text-sm text-muted sm:ml-1">{t("catalog.import.fileHint")}</p>
           <input ref={fileRef} type="file" accept=".csv,text/csv" className="sr-only" tabIndex={-1} aria-label={t("catalog.import.choose")} onChange={(e) => void onFile(e.target.files?.[0])} />
         </CardBody>
       </Card>
@@ -121,7 +122,24 @@ export function BulkImport() {
           <CardBody className="space-y-4">
             {parsed.tooMany ? <Banner tone="warning" title={t("catalog.import.tooMany", { max: MAX_IMPORT_ROWS, total: parsed.total })} /> : null}
             {categories === null ? <Banner tone="neutral" title={t("catalog.import.lineUnknown")} /> : null}
-            <div className="overflow-x-auto rounded-xl border border-hairline">
+            <ul className="space-y-2 md:hidden">
+              {parsed.rows.map((r) => {
+                const p = r.payload
+                const get = (i: number) => r.raw[i] ?? ""
+                const ok = r.errors.length === 0
+                return (
+                  <li key={r.line} className="rounded-xl border border-hairline p-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0"><p className="text-xs text-muted">{t("catalog.import.col.row")} {r.line}</p><p className="font-semibold text-ink">{p?.title ?? get(0)}</p></div>
+                      <span className={ok ? "shrink-0 text-sm font-semibold text-success-text" : "shrink-0 text-sm font-semibold text-destructive-text"}>{ok ? t("catalog.import.ready") : t("catalog.import.problem")}</span>
+                    </div>
+                    <p className="mt-1 text-sm text-muted">{[p?.category ?? get(2), p ? `${p.list_price} ${p.fixed_currency}` : get(3), p ? t(`catalog.mode.${p.fulfillment_mode}`) : get(7)].filter(Boolean).join(" · ")}</p>
+                    {!ok ? <ul className="mt-1.5 space-y-0.5 text-sm text-destructive-text">{r.errors.map((c) => <li key={c} role="alert">{t(`errors.${c}`)}</li>)}</ul> : null}
+                  </li>
+                )
+              })}
+            </ul>
+            <div className="hidden overflow-x-auto rounded-xl border border-hairline md:block">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead className="bg-neutral-surface text-xs font-semibold uppercase text-muted">
                   <tr>{headers.map((h) => <th key={h} scope="col" className="px-3 py-2.5">{h}</th>)}</tr>
@@ -155,12 +173,7 @@ export function BulkImport() {
             </div>
 
             {running || finished ? (
-              <div>
-                <div className="mb-1.5 flex justify-between text-sm text-muted"><span>{t("catalog.import.progress", { done, total: valid.length })}</span><span>{pct}%</span></div>
-                <div role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-label={t("catalog.import.step3")} className="h-2.5 overflow-hidden rounded-full bg-neutral-surface">
-                  <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${pct}%` }} />
-                </div>
-              </div>
+              <ProgressBar value={done} max={valid.length || 1} label={t("catalog.import.step3")} valueText={`${t("catalog.import.progress", { done, total: valid.length })} · ${pct}%`} />
             ) : null}
 
             {finished ? (

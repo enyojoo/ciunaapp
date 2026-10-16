@@ -51,7 +51,7 @@ function Availability() {
               : sched.loading ? <Skeleton className="h-64" />
               : (
                 <>
-                  <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-start">
+                  <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-start">
                     <AvailabilityEditor key={service.id} service={service} data={current} onSaved={(d) => { setSaved(d); setToken((n) => n + 1); void reload() }} />
                     <div className="space-y-4">
                       <TimeOffPanel services={services} zone={zone} defaultServiceId={service.id} onDone={() => setToken((n) => n + 1)} />

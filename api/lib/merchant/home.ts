@@ -1,6 +1,6 @@
 /** Pure helpers behind GET /api/merchant/home and the seller screens' derived fields. No database access, so they are unit-tested. */
 
-export const DEFAULT_LOW_STOCK_THRESHOLD = 3
+export const DEFAULT_LOW_STOCK_THRESHOLD = 5
 export const DEFAULT_DOCUMENT_WARNING_DAYS = 30
 
 /** Offset in minutes of `zone` from UTC at `at` (positive east). */

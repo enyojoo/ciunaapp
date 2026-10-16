@@ -7,7 +7,7 @@ import { barPercent, type ReviewSummary } from "./logic"
 export function SummaryCard({ summary }: { summary: ReviewSummary }) {
   const { t } = useT()
   return (
-    <Card className="mb-4 grid gap-5 p-4 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-5">
+    <Card className="mb-4 grid gap-5 p-4 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-5 lg:grid-cols-1 lg:gap-5">
       <div>
         <p className="text-4xl font-semibold tabular-nums text-ink">{summary.avg === null ? "-" : summary.avg.toFixed(1)}</p>
         {summary.avg !== null ? <Stars value={summary.avg} size="size-5" className="mt-1" /> : null}
