@@ -29,7 +29,7 @@ Follow-ups found while doing it:
 Remaining in Stage A: A1, A2, A4, A5 harness, A6 (apply to the other routes), A7 (customer emails), V1, V2, V4.
 
 ## Correction to apply with D0: marketplace payment is the YooKassa frame
-Marketplace checkout does not show a Ciuna-drawn list of payment methods. The customer pays inside YooKassa's frame (web embedded widget, native SDK) where the methods appear. Our last step is summary plus "Pay ₽X", then frame states (opening, waiting, paid, failed, cancelled). See "Marketplace payment (corrected)" in `design-system/guides/80-decisions.md`. Rebuild `MarketCheckout`, `OrderSummary`, `ExpertBooking` (pay step), and remove method lists elsewhere in customer marketplace cards. Send keeps its own Ciuna-drawn methods.
+Marketplace checkout does not show a Ciuna-drawn list of payment methods. The customer pays inside YooKassa's frame (web embedded widget, native SDK) where the methods appear. Our last step is summary plus "Pay ₽X", then the frame as a full screen (not a bottom sheet) and the states (opening, waiting, paid, failed, cancelled). See "Marketplace payment (corrected)" in `design-system/guides/80-decisions.md`. Rebuild `MarketCheckout`, `OrderSummary`, `ExpertBooking` (pay step), and remove method lists elsewhere in customer marketplace cards. Send keeps its own Ciuna-drawn methods.
 
 ## Priority design task: start customer cards from the current Expo UI (do this before Stage B customer work)
 Decision: the current customer app in `mobile/` (Expo) looks better than the customer cards in the design system. The cards are not the contract for the customer app's visual style until they are reconciled. Rule: **current product first, then improve.**

@@ -100,3 +100,5 @@ Defaults chosen for Ciuna's interest: protect money and customers first, launch 
 - Customer copy still avoids naming the provider in our own text ("Pay securely", "Payment"); the frame carries its own branding, which is expected. Office may name YooKassa.
 - Send is different: its payment methods (SBP QR, bank transfer) are drawn by Ciuna and stay as designed.
 - Design cards to change: `MarketCheckout`, `OrderSummary`, `ExpertBooking` (pay step), `Cart` (no methods), `ProductPage` and `CustomerTransactions` only if they show a method list.
+
+- The payment frame is a full screen (its own page with a minimal Ciuna header: a close button and the title "Payment"), not a bottom sheet or drop-up laid over the order summary. On web it fills the content area of the checkout page. Closing it returns to the Review step; confirmation states then show on our own screen.
