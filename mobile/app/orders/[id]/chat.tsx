@@ -30,6 +30,19 @@ type Pending = { tempId: number; body: string; status: "sending" | "failed" }
 type Row = { key: string; kind: "message"; message: ChatMessage } | { key: string; kind: "pending"; pending: Pending }
 
 const chars = (s: string) => [...s].length
+const CLOSE_AFTER_DAYS = 14
+
+/** When the chat closed: the server's date, else completion (or last event) date + 14 days. */
+function closedAtFor(order: { chat?: { closesAt?: string | null }; events?: { kind: string; created_at: string }[]; updated_at?: string; created_at?: string } | null): Date | null {
+  if (!order) return null
+  if (order.chat?.closesAt) return new Date(order.chat.closesAt)
+  const events = order.events || []
+  const done = [...events].reverse().find((e) => /fulfilled|completed|cancel/i.test(e.kind))
+  const base = done?.created_at || order.updated_at || events[events.length - 1]?.created_at || order.created_at
+  if (!base) return null
+  const d = new Date(new Date(base).getTime() + CLOSE_AFTER_DAYS * 86_400_000)
+  return Number.isNaN(d.getTime()) ? null : d
+}
 
 function dayKey(iso: string) {
   const d = new Date(iso)
@@ -48,7 +61,7 @@ export default function OrderChatScreen() {
   const [thread, setThread] = useState<ChatThread | null>(null)
   const [failed, setFailed] = useState(false)
   const [order, setOrder] = useState<
-    (Pick<MarketplaceOrder, "id" | "public_id" | "snapshot"> & { seller?: { name?: string }; chat?: { closesAt?: string | null } }) | null
+    (Pick<MarketplaceOrder, "id" | "public_id" | "snapshot"> & { created_at?: string; events?: { kind: string; created_at: string }[]; payment_state?: string; fulfillment_state?: string; updated_at?: string; seller?: { name?: string }; chat?: { closesAt?: string | null } }) | null
   >(null)
   const [pending, setPending] = useState<Pending[]>([])
   const [draft, setDraft] = useState("")
@@ -182,6 +195,7 @@ export default function OrderChatScreen() {
   const over = count > CHAT_MAX
   const canSend = Boolean(draft.trim()) && !over && !rateLimited
   const open = Boolean(thread && thread.available && !thread.closed)
+  const closedAt = closedAtFor(order)
   const showCardHint = CARD_PATTERN.test(draft)
 
   const submit = () => {
@@ -236,6 +250,15 @@ export default function OrderChatScreen() {
           <Text style={styles.centerBody}>
             {t("chat.notAvailableBody", { defaultValue: "You can message the seller as soon as your payment is confirmed." })}
           </Text>
+          {order ? (
+            <Pressable
+              onPress={() => router.push(`/orders/${order.id}` as never)}
+              accessibilityRole="button"
+              style={styles.payBtn}
+            >
+              <Text style={styles.payBtnText}>{t("hub.checkout.paidOnline", { defaultValue: "Complete payment" })}</Text>
+            </Pressable>
+          ) : null}
         </View>
       )
     }
@@ -333,9 +356,9 @@ export default function OrderChatScreen() {
       {thread?.available && thread.closed ? (
         <View style={styles.banner} accessibilityRole="alert">
           <Text style={styles.bannerText}>
-            {order?.chat?.closesAt
+            {closedAt
               ? t("chat.closedOn", {
-                  date: new Date(order.chat.closesAt).toLocaleDateString(locale, { dateStyle: "medium" }),
+                  date: closedAt.toLocaleDateString(locale, { dateStyle: "medium" }),
                   defaultValue: "Chat closed on {{date}}. You can still read the conversation.",
                 })
               : t("chat.closed", { defaultValue: "This chat is closed. You can still read the conversation." })}
@@ -415,6 +438,8 @@ const styles = StyleSheet.create({
   skelOut: { alignSelf: "flex-end", width: "48%" },
   center: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 64, paddingHorizontal: 24 },
   centerTitle: { textAlign: "center", fontSize: 17, fontWeight: "600", color: colors.text },
+  payBtn: { marginTop: 20, minHeight: 48, paddingHorizontal: 24, borderRadius: radius.row, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" },
+  payBtnText: { fontSize: typeSize.body, fontWeight: "700", color: colors.onPrimary },
   centerBody: { marginTop: 8, textAlign: "center", fontSize: typeSize.body, color: colors.muted },
   sep: { alignItems: "center", marginVertical: 10 },
   sepText: { fontSize: 12, fontWeight: "600", color: colors.muted },

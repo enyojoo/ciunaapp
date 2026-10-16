@@ -45,7 +45,7 @@ function useOrderReview(orderId: string, enabled: boolean) {
 }
 
 /** "Rate your order" prompt, or the customer's own review, on a completed order. Hidden when no review is possible. */
-export function OrderReviewCard({ orderId, fulfilled }: { orderId: string; fulfilled: boolean }) {
+export function OrderReviewCard({ orderId, fulfilled, line }: { orderId: string; fulfilled: boolean; line?: string }) {
   const { t } = useTranslation("app")
   const { state, error, reload, setState } = useOrderReview(orderId, fulfilled)
   const [open, setOpen] = useState(false)
@@ -80,7 +80,7 @@ export function OrderReviewCard({ orderId, fulfilled }: { orderId: string; fulfi
           </View>
         ) : (
           <View style={styles.cardBody}>
-            <Text style={styles.cardTitle}>{t("reviews.promptTitle", { defaultValue: "Rate your order" })}</Text>
+            <Text style={styles.cardTitle}>{(line === "experts" ? t("reviews.promptTitleSession", { defaultValue: "Rate your session" }) : t("reviews.promptTitle", { defaultValue: "Rate your order" }))}</Text>
             <Text style={styles.cardHint}>
               {t("reviews.promptHint", { defaultValue: "How was it? Your rating helps other customers." })}
             </Text>
@@ -103,6 +103,7 @@ export function OrderReviewCard({ orderId, fulfilled }: { orderId: string; fulfi
       <ReviewSheet
         open={open}
         orderId={orderId}
+        line={line}
         review={review}
         canEdit={state.canEdit}
         onClose={() => setOpen(false)}
@@ -119,6 +120,7 @@ export function OrderReviewCard({ orderId, fulfilled }: { orderId: string; fulfi
 function ReviewSheet({
   open,
   orderId,
+  line,
   review,
   canEdit,
   onClose,
@@ -127,6 +129,7 @@ function ReviewSheet({
 }: {
   open: boolean
   orderId: string
+  line?: string
   review: OwnReview | null
   canEdit: boolean
   onClose: () => void
@@ -163,7 +166,7 @@ function ReviewSheet({
     ? t("reviews.lockedTitle", { defaultValue: "Your review" })
     : review
       ? t("reviews.editTitle", { defaultValue: "Edit your review" })
-      : t("reviews.sheetTitle", { defaultValue: "Rate your order" })
+      : (line === "experts" ? t("reviews.sheetTitleSession", { defaultValue: "Rate your session" }) : t("reviews.sheetTitle", { defaultValue: "Rate your order" }))
 
   let editUntil = ""
   if (review && canEdit) {

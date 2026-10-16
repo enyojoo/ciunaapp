@@ -3,6 +3,7 @@ import { marketplaceRoute } from "@/lib/marketplace/http"
 import { MarketplaceError } from "@/lib/marketplace/service"
 import { MerchantError } from "@/lib/merchant/errors"
 import { tableExists } from "@/lib/merchant/messages"
+import { safeSelect } from "@/lib/safe-select"
 import { createServerClient } from "@/lib/supabase"
 import { MAX_BODY, cleanText, eligibility, failFromDb, reviewEditable, toPublicReview, validateRating } from "@/lib/merchant/reviews"
 
@@ -13,7 +14,7 @@ const OWN_COLS = "id,rating,body,language,status,created_at,updated_at,reply,rep
 async function loadOwn(orderId: string, userId: string) {
   const db = createServerClient()
   const [order, review] = await Promise.all([
-    db.from("marketplace_orders").select("id,user_id,merchant_id,fulfillment_state,updated_at").eq("id", orderId).eq("user_id", userId).maybeSingle(),
+    safeSelect("marketplace_orders", "id,user_id,merchant_id,fulfillment_state,updated_at", (cols) => db.from("marketplace_orders").select(cols).eq("id", orderId).eq("user_id", userId).maybeSingle()),
     db.from("reviews").select(OWN_COLS).eq("order_id", orderId).eq("user_id", userId).maybeSingle(),
   ])
   failFromDb(order.error || review.error)

@@ -808,7 +808,7 @@ export function MarketplaceOrderView({
         <Text style={styles.meta}>
           {label("fulfillment", "Fulfillment")}: {label(order.fulfillment_state, order.fulfillment_state)}
         </Text>
-        <OrderReviewCard orderId={order.id} fulfilled={order.fulfillment_state === "fulfilled"} />
+        <OrderReviewCard orderId={order.id} fulfilled={order.fulfillment_state === "fulfilled"} line={order.line} />
         <SellerChatCard orderId={order.id} sellerName={(order as { seller?: { name?: string } }).seller?.name} />
         {!!error && (
           <View style={styles.errorBox}>

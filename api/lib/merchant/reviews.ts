@@ -40,6 +40,13 @@ export function replyEditable(replyAt: string | Date | null | undefined, now = D
   return Number.isFinite(t) && now - t <= REPLY_EDIT_HOURS * HOUR
 }
 
+/** When a posted reply stops being editable, or null when there is no reply. */
+export function replyEditableUntil(replyAt: string | Date | null | undefined): string | null {
+  if (!replyAt) return null
+  const t = new Date(replyAt).getTime()
+  return Number.isFinite(t) ? new Date(t + REPLY_EDIT_HOURS * HOUR).toISOString() : null
+}
+
 /** First name only. Never a last name, never an email. */
 export function firstName(first?: string | null, fallback: string | null = null): string | null {
   const raw = String(first ?? "").trim()

@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { isUuidLike, normalizePublicSlug } from "@ciuna/shared"
 import { createServerClient } from "@/lib/supabase"
+import { safeSelect } from "@/lib/safe-select"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { EXPERT_CATALOG_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 
@@ -32,14 +33,11 @@ export const GET = withErrorHandling(async (_request: NextRequest, context?: { p
 
   const server = createServerClient()
 
-  let profileQuery = server.from("expert_profiles").select(PROFILE_FIELDS).eq("is_published", true)
-  if (isUuidLike(raw)) {
-    profileQuery = profileQuery.eq("id", raw)
-  } else {
-    profileQuery = profileQuery.eq("slug", normalizePublicSlug(raw))
-  }
-
-  const { data: profile, error } = await profileQuery.maybeSingle()
+  const { data: profileRaw, error } = await safeSelect("expert_profiles", PROFILE_FIELDS, (cols) => {
+    const q = server.from("expert_profiles").select(cols).eq("is_published", true)
+    return (isUuidLike(raw) ? q.eq("id", raw) : q.eq("slug", normalizePublicSlug(raw))).maybeSingle()
+  })
+  const profile = profileRaw ? ({ rating_avg: null, rating_count: 0, ...(profileRaw as any) } as any) : null
 
   if (error) {
     console.error("expert profile GET", error)

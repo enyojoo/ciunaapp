@@ -2,6 +2,8 @@ import { type NextRequest, NextResponse } from "next/server"
 import { isUuidLike, normalizePublicSlug } from "@ciuna/shared"
 import { createServerClient } from "@/lib/supabase"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
+import { safeSelect } from "@/lib/safe-select"
+import { tableExists } from "@/lib/merchant/messages"
 import { buildSummary, listPublicReviews, parsePaging } from "@/lib/merchant/reviews"
 
 export const dynamic = "force-dynamic"
@@ -14,9 +16,13 @@ export const GET = withErrorHandling(async (request: NextRequest, context?: { pa
   const raw = decodeURIComponent(String(segment || "").trim())
   if (!raw) return createErrorResponse("Missing slug", 400)
 
-  let q = createServerClient().from("expert_profiles").select("id, merchant_id").eq("is_published", true)
-  q = isUuidLike(raw) ? q.eq("id", raw) : q.eq("slug", normalizePublicSlug(raw))
-  const { data: profile, error } = await q.maybeSingle()
+  const find = (cols: string) => {
+    const q = createServerClient().from("expert_profiles").select(cols).eq("is_published", true)
+    return (isUuidLike(raw) ? q.eq("id", raw) : q.eq("slug", normalizePublicSlug(raw))).maybeSingle()
+  }
+  // merchant_id arrives with the merchants migration; without it there are simply no reviews yet.
+  const found = await safeSelect("expert_profiles", "id, merchant_id", (cols) => find(cols))
+  const { data: profile, error } = found as { data: any; error: any }
   if (error) {
     console.error("expert reviews", error)
     return createErrorResponse("Failed to load reviews", 500)
@@ -25,7 +31,7 @@ export const GET = withErrorHandling(async (request: NextRequest, context?: { pa
 
   const { limit, offset } = parsePaging(new URL(request.url).searchParams)
   const merchantId = (profile as any).merchant_id as string | null
-  const data = merchantId ? await listPublicReviews(merchantId, "expert", limit, offset) : { summary: buildSummary(null), reviews: [] }
+  const data = merchantId && (await tableExists("reviews")) ? await listPublicReviews(merchantId, "expert", limit, offset) : { summary: buildSummary(null), reviews: [] }
   const res = NextResponse.json(data)
   res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate")
   return res

@@ -1,7 +1,7 @@
 import { merchantRoute } from "@/lib/merchant/http"
 import { createServerClient } from "@/lib/supabase"
 import { check } from "@/lib/merchant/errors"
-import { buildSummary, parsePaging, replyEditable, toPublicReview } from "@/lib/merchant/reviews"
+import { buildSummary, parsePaging, replyEditable, replyEditableUntil, toPublicReview } from "@/lib/merchant/reviews"
 
 export const dynamic = "force-dynamic"
 
@@ -22,7 +22,7 @@ export const GET = merchantRoute("orders", async (req, { merchant }) => {
   check(dist.error)
   return {
     summary: buildSummary(dist.data as Record<string, unknown>),
-    reviews: (list.data || []).map((r: any) => ({ ...toPublicReview(r), reply_editable: Boolean(r.reply) && replyEditable(r.reply_at) })),
+    reviews: (list.data || []).map((r: any) => ({ ...toPublicReview(r), reply_editable: Boolean(r.reply) && replyEditable(r.reply_at), reply_editable_until: replyEditableUntil(r.reply_at) })),
     total: list.count ?? 0,
     needs_reply: needs.count ?? 0,
   }

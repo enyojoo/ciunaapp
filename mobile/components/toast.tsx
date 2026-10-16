@@ -51,7 +51,7 @@ export function Toast({
     <Animated.View
       style={[
         styles.wrap,
-        { top: insets.top + 16, transform: [{ translateY: slide }], opacity },
+        { top: insets.top + TOAST_TOP_OFFSET, transform: [{ translateY: slide }], opacity },
       ]}
     >
       <View style={[styles.toast, { borderLeftColor: accent }]}>
@@ -81,6 +81,9 @@ export function Toast({
     </Animated.View>
   )
 }
+
+/** Clears the 56pt navigation header so toasts never cover the back button. */
+const TOAST_TOP_OFFSET = 56 + 8
 
 const styles = StyleSheet.create({
   wrap: {

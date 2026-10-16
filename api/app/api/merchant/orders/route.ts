@@ -2,6 +2,7 @@ import { merchantRoute } from "@/lib/merchant/http"
 import { createServerClient } from "@/lib/supabase"
 import { check } from "@/lib/merchant/errors"
 import { toSellerOrder } from "@/lib/merchant/orders"
+import { rejectReasonOf } from "@/lib/merchant/home"
 
 const STATE_FILTER: Record<string, string[]> = {
   new: ["awaiting_acceptance"],
@@ -31,5 +32,16 @@ export const GET = merchantRoute("orders", async (req, { merchant }) => {
     return r.count ?? 0
   }
   const [cNew, cActive] = await Promise.all([countFor(STATE_FILTER.new), countFor(STATE_FILTER.active)])
-  return { orders: (data || []).map(toSellerOrder), total: count ?? 0, counts: { new: cNew, active: cActive } }
+  const orders: any[] = (data || []).map(toSellerOrder)
+
+  // A cancelled card names why. The reason lives in the audit row written when the seller rejected; omitted if unavailable.
+  const cancelled = orders.filter((o) => o.status === "cancelled")
+  if (cancelled.length) {
+    try {
+      const a = await createServerClient().from("audit_log").select("entity_id,details").eq("action", "order.reject").eq("merchant_id", merchant.id).in("entity_id", cancelled.map((o) => o.id))
+      const byOrder = new Map<string, string | null>((a.data || []).map((r: any) => [String(r.entity_id), rejectReasonOf(r.details)]))
+      for (const o of cancelled) o.rejectReason = byOrder.get(o.id) ?? null
+    } catch (e) { console.error("orders list: reject reasons unavailable", e instanceof Error ? e.message : e) }
+  }
+  return { orders, total: count ?? 0, counts: { new: cNew, active: cActive } }
 })

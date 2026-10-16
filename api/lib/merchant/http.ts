@@ -68,6 +68,20 @@ export function adminRoute<T>(permission: AdminPermission, fn: (req: NextRequest
   }
 }
 
+/** Like `adminRoute`, but the handler returns its own Response (CSV downloads). Same auth, permission and error mapping. */
+export function adminRawRoute(permission: AdminPermission, fn: (req: NextRequest, admin: AdminUser, params: Params) => Promise<Response>) {
+  return async (request: NextRequest, context: Ctx = {}) => {
+    try {
+      const admin = await requireAdmin(request)
+      if (!adminCan(admin.role, permission)) throw new MerchantError("FORBIDDEN", 403, { permission })
+      const params = (await context.params) || {}
+      return await fn(request, admin, params)
+    } catch (e) {
+      return handle(e)
+    }
+  }
+}
+
 export async function readJson(request: NextRequest): Promise<Record<string, any>> {
   const body = await request.json()
   if (!body || typeof body !== "object" || Array.isArray(body)) throw new MerchantError("INVALID_REQUEST", 400)

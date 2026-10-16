@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase"
+import { safeSelect } from "@/lib/safe-select"
 import { MerchantError, check } from "./errors"
 
 /** Order chat. Rules live in SQL (message_send); these helpers validate early and shape responses. Never log bodies. */
@@ -94,12 +95,13 @@ export function parseAfter(raw: string | null): number {
 
 /** Customer-side order lookup: only the owner's orders; id may be a uuid or public id. */
 export async function loadCustomerOrder(userId: string, id: string) {
-  let q = createServerClient().from("marketplace_orders").select("id,merchant_id,payment_state,fulfillment_state,updated_at").eq("user_id", userId)
-  q = UUID.test(id) ? q.eq("id", id) : q.eq("public_id", id.toUpperCase())
-  const { data, error } = await q.maybeSingle()
+  const { data, error } = await safeSelect("marketplace_orders", "id,merchant_id,payment_state,fulfillment_state,updated_at", (cols) => {
+    const q = createServerClient().from("marketplace_orders").select(cols).eq("user_id", userId)
+    return (UUID.test(id) ? q.eq("id", id) : q.eq("public_id", id.toUpperCase())).maybeSingle()
+  })
   check(error)
   if (!data) throw new MerchantError("ORDER_NOT_FOUND", 404)
-  return data as { id: string; merchant_id: string | null; payment_state: string; fulfillment_state: string; updated_at: string }
+  return { merchant_id: null, ...(data as any) } as { id: string; merchant_id: string | null; payment_state: string; fulfillment_state: string; updated_at: string }
 }
 
 export async function threadFor(order: { id: string; merchant_id: string | null; payment_state: string; fulfillment_state: string; updated_at: string }, after: number) {

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
+import { safeSelect } from "@/lib/safe-select"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { EXPERT_CATALOG_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 import { formatCurrencySymbolOnly } from "@/utils/currency"
@@ -12,18 +13,18 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   const category = (searchParams.get("category") || "").trim()
 
   const server = createServerClient()
-  let q = server.from("expert_profiles").select(LIST_SELECT).eq("is_published", true).order("display_name", { ascending: true })
-  if (category) {
-    q = q.eq("category", category)
-  }
-  const { data, error } = await q
+  const { data, error } = await safeSelect("expert_profiles", LIST_SELECT, (cols) => {
+    let q = server.from("expert_profiles").select(cols).eq("is_published", true).order("display_name", { ascending: true })
+    if (category) q = q.eq("category", category)
+    return q
+  })
 
   if (error) {
     console.error("expert profiles list", error)
     return createErrorResponse("Failed to load experts", 500)
   }
 
-  const profiles = data || []
+  const profiles = ((data || []) as any[]).map((p) => ({ rating_avg: null, rating_count: 0, ...p }))
   const profileIds = profiles.map((p) => p.id).filter(Boolean)
   const pricingHints = new Map<string, string>()
 
