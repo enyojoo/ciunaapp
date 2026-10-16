@@ -68,7 +68,7 @@ Defaults chosen for Ciuna's interest: protect money and customers first, launch 
 ### Money and platform
 - Seed settings: hold 3 days after completion for goods and 2 days after the session for experts; minimum payout ₽1,000; payout fee 0% at launch (built, off); commissions 8% food, 6% mart, 12% experts until the pilot data says otherwise. The "1% withdraw fee" on cards is an example only and should be shown as 0 until finance sets one.
 - Payouts keep the existing steps (approve, then mark paid with a reference). No extra second-person rule at launch.
-- Chat translation: provider interface with Google Cloud Translation as the default; original text is shown if the provider fails. Push: Expo push for native, web push after launch.
+- Chat translation: Azure AI Translator (supports en, ru, fr, es, zh-Hans, pt) behind a provider interface; the original text is shown if the provider fails. Needs `AZURE_TRANSLATOR_KEY`, `AZURE_TRANSLATOR_REGION` and endpoint in the API env. Push: Expo push for native, web push after launch.
 - Maintenance mode is enforced in the API for all clients; money routes return 503 and apps show a banner.
 - PIN stays a local device lock for launch; a server PIN needs its own security review.
 - Rate limits at launch: auth 10/min per IP, chat 30/min per user, search 60/min per user, checkout 10/min per user, uploads 20/min per user.
@@ -78,3 +78,18 @@ Defaults chosen for Ciuna's interest: protect money and customers first, launch 
 - Limits are edited by compliance and super_admin only; finance sees them read-only.
 - Compliance has read-only access to Send operations.
 - All rates, markups, fees, limits and provider ids on Send cards are sample data.
+
+### Final seeds and deferrals (no outside sign-off needed to build)
+- All numbers are Office-editable settings; the values below are the launch defaults and ship as seeds in a migration. Nobody has to approve them before the build; Office changes them later without a deploy.
+  - Send limits per month by KYC level: level 1 ₽50,000, level 2 ₽600,000, level 3 ₽2,000,000. Per transfer minimum ₽500.
+  - Commissions: food 8%, mart 6%, experts 12%. Payout fee 0%. Minimum payout ₽1,000. Hold 3 days (goods) and 2 days (experts).
+  - Referral: rewards 0.5%, 0.75%, 1% by tier on the transfer fee, minimum referral payout ₽1,000.
+  - SLA, rate limits, expiries as listed above.
+- Telegram alerts are built but stay off until `TELEGRAM_BOT_TOKEN` is set; at launch Seller alerts are email only. Create the bot later with @BotFather.
+- Provider accounts are obtained in parallel to the build; code reads keys from env and every provider call sits behind an interface with a fake for tests: Azure AI Translator, Expo push, SES (existing), YooKassa and Bitbanker (existing).
+- Account deletion text (final, English; translate to the other five languages with the standard strings process):
+  - Title: "Delete your account?"
+  - Body: "We will erase your profile, saved recipients, addresses and favourites. We must keep records of your payments and transfers for 5 years because the law requires it. They stay on file without your profile details and are used only for legal and security needs. You cannot undo this."
+  - Blocked: "You can't delete your account yet. Finish or cancel open orders and transfers and withdraw or use your referral balance, then try again."
+  - Buttons: "Delete account" (destructive), "Keep my account".
+  - Retention is a setting (`retention_years`, default 5) so it can follow legal advice without a code change.

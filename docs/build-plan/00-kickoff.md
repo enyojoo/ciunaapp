@@ -27,6 +27,9 @@ Use this to start a new session. Paste the prompt at the bottom.
 
 Then Stage B (see master plan).
 
+## Settled (do not ask)
+Numbers are Office-editable seeds, translation is Azure AI Translator, Telegram is built but off until a bot token exists, account-deletion wording is final. See the end of `design-system/guides/80-decisions.md`. There is one Supabase project (production): apply SQL with a backup first (`supabase/deploy/seller-portal-all.sql`), never assume a staging copy.
+
 ## Working rules
 - The card is the contract. If the card is wrong, fix the card first, then the code.
 - Numbers on cards are samples; read them from Office or the database.
@@ -38,5 +41,5 @@ Then Stage B (see master plan).
 
 ## Prompt to paste into the new session
 ```
-Work in /Users/a1/Projects/ciunaapp. Read docs/build-plan/00-kickoff.md, then docs/design-to-build-plan.md and design-system/guides/80-decisions.md. Execute Stage A of the plan: tasks A1 to A7, using the surface plans in docs/build-plan/ for detail. Decisions are already made; do not ask about them. Follow the working rules in the kickoff file. Start with A1 and A2 (API and data), run A3 to A7 as parallel work where files do not overlap, verify each with its exit test, commit per task, and report what is done, what failed, and anything that needs an outside input (staging project confirmation, provider accounts, legal text).
+Work in /Users/a1/Projects/ciunaapp. Read docs/build-plan/00-kickoff.md, then docs/design-to-build-plan.md and design-system/guides/80-decisions.md. Execute Stage A of the plan: tasks A1 to A7, using the surface plans in docs/build-plan/ for detail. Decisions are already made; do not ask about them. Follow the working rules in the kickoff file. Start with A1 and A2 (API and data), run A3 to A7 as parallel work where files do not overlap, verify each with its exit test, commit per task, and report what is done, what failed, and anything that needs an outside input (only provider keys: Azure Translator, Expo push; Telegram is deferred).
 ```

@@ -57,11 +57,7 @@ Follow `launch-readiness.md`: staging migration order, env vars (`MERCHANT_PAYOU
 Unconfirmed "New" items: in-app support chat and the conversational assistant, expert "Notify me" and intro-video slot, "Withdraw via Ciuna Send" (disabled row only), compliance case workflow, booking disputes, listing health card, global search. Every number on a card is a placeholder.
 
 ## Decisions
-All product decisions are resolved in `design-system/guides/80-decisions.md` (section "Resolved product decisions"). The surface plans' "decisions needed" lists are answered there. Only inputs from outside the codebase remain:
-1. Real KYC limits and referral numbers, signed off by compliance and finance before launch (seeds are conservative).
-2. Legal text for account deletion and data retention.
-3. Provider accounts: Google Cloud Translation key, Expo push credentials, Telegram bot, SES, YooKassa.
-4. Confirmation of which Supabase project is staging.
+All product decisions are final in `design-system/guides/80-decisions.md`, including the numbers (Office-editable seeds), Azure AI Translator, Telegram deferred, and the account-deletion wording. Nothing needs sign-off before building. Only credentials are needed, and the code reads them from env behind interfaces with fakes for tests: Azure Translator key and region, Expo push, and the existing SES, YooKassa and Bitbanker. There is one Supabase project (production); apply SQL with a backup first.
 
 ## How to run it
 - One owner per surface and per stage item; packages inside a stage touch different files and can run as parallel sessions in separate worktrees.
