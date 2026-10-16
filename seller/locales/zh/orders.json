@@ -86,5 +86,6 @@
   "errors.SESSION_NOT_ENDED": "预约结束后才能标记为已完成。",
   "errors.ORDER_NOT_FOUND": "找不到此订单。",
   "errors.INVALID_ACTION": "此操作不可用。",
-  "errors.UNAVAILABLE": "无法连接 Ciuna，请检查网络后重试。"
+  "errors.UNAVAILABLE": "无法连接 Ciuna，请检查网络后重试。",
+  "orders.messageCustomer": "联系客户"
 }

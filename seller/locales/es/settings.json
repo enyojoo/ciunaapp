@@ -46,5 +46,6 @@
   "notif.kind.payout_update": "Estado de los pagos",
   "notif.kind.merchant_status": "Cambios en tu solicitud",
   "more.alerts": "Alertas",
-  "more.payoutMethods": "Métodos de pago"
+  "more.payoutMethods": "Métodos de pago",
+  "notif.kind.message_new": "Mensajes nuevos de clientes"
 }

@@ -86,5 +86,6 @@
   "errors.SESSION_NOT_ENDED": "Puedes marcar una reserva como completada cuando termine la sesión.",
   "errors.ORDER_NOT_FOUND": "No encontramos este pedido.",
   "errors.INVALID_ACTION": "Esa acción no está disponible.",
-  "errors.UNAVAILABLE": "No pudimos conectar con Ciuna. Revisa tu conexión e inténtalo de nuevo."
+  "errors.UNAVAILABLE": "No pudimos conectar con Ciuna. Revisa tu conexión e inténtalo de nuevo.",
+  "orders.messageCustomer": "Escribir al cliente"
 }

@@ -46,5 +46,6 @@
   "notif.kind.payout_update": "提现进度",
   "notif.kind.merchant_status": "申请进度变更",
   "more.alerts": "提醒",
-  "more.payoutMethods": "收款方式"
+  "more.payoutMethods": "收款方式",
+  "notif.kind.message_new": "客户的新消息"
 }

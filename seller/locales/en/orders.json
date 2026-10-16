@@ -86,5 +86,6 @@
   "errors.SESSION_NOT_ENDED": "You can mark a booking fulfilled after the session has ended.",
   "errors.ORDER_NOT_FOUND": "We couldn't find this order.",
   "errors.INVALID_ACTION": "That action isn't available.",
-  "errors.UNAVAILABLE": "We couldn't reach Ciuna. Check your connection and try again."
+  "errors.UNAVAILABLE": "We couldn't reach Ciuna. Check your connection and try again.",
+  "orders.messageCustomer": "Message the customer"
 }

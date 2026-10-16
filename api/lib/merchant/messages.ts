@@ -71,16 +71,14 @@ export async function sendMessage(orderId: string, kind: SenderKind, senderId: s
   return toChatMessage(Array.isArray(data) ? data[0] : data)
 }
 
+/** With `after` it returns what is newer (oldest first); without it, the latest 200 (oldest first). */
 export async function listMessages(orderId: string, after: number): Promise<ChatMessage[]> {
-  const { data, error } = await createServerClient()
-    .from("order_messages")
-    .select("id,sender_kind,body,language,created_at,read_by_other_at")
-    .eq("order_id", orderId)
-    .gt("id", after)
-    .order("id", { ascending: true })
-    .limit(200)
+  let q = createServerClient().from("order_messages").select("id,sender_kind,body,language,created_at,read_by_other_at").eq("order_id", orderId)
+  q = after > 0 ? q.gt("id", after).order("id", { ascending: true }) : q.order("id", { ascending: false })
+  const { data, error } = await q.limit(200)
   check(error)
-  return (data || []).map(toChatMessage)
+  const rows = (data || []).map(toChatMessage)
+  return after > 0 ? rows : rows.reverse()
 }
 
 export async function markRead(orderId: string, reader: SenderKind): Promise<number> {

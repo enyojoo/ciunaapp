@@ -46,5 +46,6 @@
   "notif.kind.payout_update": "Atualizações de repasse",
   "notif.kind.merchant_status": "Mudanças na sua solicitação",
   "more.alerts": "Alertas",
-  "more.payoutMethods": "Métodos de repasse"
+  "more.payoutMethods": "Métodos de repasse",
+  "notif.kind.message_new": "Novas mensagens de clientes"
 }

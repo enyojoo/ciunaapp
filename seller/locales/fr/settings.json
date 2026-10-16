@@ -46,5 +46,6 @@
   "notif.kind.payout_update": "Suivi des versements",
   "notif.kind.merchant_status": "Changements de votre dossier",
   "more.alerts": "Alertes",
-  "more.payoutMethods": "Moyens de versement"
+  "more.payoutMethods": "Moyens de versement",
+  "notif.kind.message_new": "Nouveaux messages des clients"
 }

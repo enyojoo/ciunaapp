@@ -86,5 +86,6 @@
   "errors.SESSION_NOT_ENDED": "Vous pouvez marquer une réservation comme traitée une fois la séance terminée.",
   "errors.ORDER_NOT_FOUND": "Nous n'avons pas trouvé cette commande.",
   "errors.INVALID_ACTION": "Cette action n'est pas disponible.",
-  "errors.UNAVAILABLE": "Impossible de joindre Ciuna. Vérifiez votre connexion et réessayez."
+  "errors.UNAVAILABLE": "Impossible de joindre Ciuna. Vérifiez votre connexion et réessayez.",
+  "orders.messageCustomer": "Écrire au client"
 }

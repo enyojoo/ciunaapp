@@ -2,7 +2,7 @@ import { merchantRoute, readJson } from "@/lib/merchant/http"
 import { createServerClient } from "@/lib/supabase"
 import { assert, check } from "@/lib/merchant/errors"
 
-const KINDS = ["order_new", "booking_new", "payout_update", "merchant_status"]
+const KINDS = ["order_new", "booking_new", "message_new", "payout_update", "merchant_status"]
 
 async function snapshot(userId: string, merchantId: string) {
   const db = createServerClient()

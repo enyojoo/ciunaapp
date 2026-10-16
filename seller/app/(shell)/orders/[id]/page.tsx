@@ -3,7 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { format, formatDistanceToNow } from "date-fns"
-import { ArrowLeft, Lock, Mail, MapPin, Phone, SearchX } from "lucide-react"
+import { ArrowLeft, Lock, Mail, MapPin, MessageSquare, Phone, SearchX } from "lucide-react"
 import { Amount, Banner, Button, Card, CardBody, CardHeader, EmptyState, PageHeader, Skeleton, StatusBadge } from "@ciuna/ui-web"
 import { api } from "@/lib/api"
 import { useQuery } from "@/lib/query"
@@ -162,6 +162,7 @@ function OrderDetail() {
               {order.customer.email ? (
                 <a href={`mailto:${order.customer.email}`} className="flex min-h-12 items-center gap-2 break-all rounded-lg text-primary-text underline-offset-4 outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50"><Mail className="size-4 shrink-0" aria-hidden />{order.customer.email}</a>
               ) : null}
+              <Link href={`/messages/${order.id}`} className="flex min-h-12 items-center gap-2 rounded-lg font-semibold text-primary-text outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50"><MessageSquare className="size-4" aria-hidden />{t("orders.messageCustomer")}</Link>
             </CardBody>
           </Card>
 
