@@ -18,7 +18,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "node --import tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

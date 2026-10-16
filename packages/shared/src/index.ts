@@ -10,6 +10,7 @@ export {
   joinApiPath,
 } from "./constants/urls"
 export { roundMoney } from "./money/round"
+export { formatMoneyDisplay, currencySymbol, type FormatMoneyOptions } from "./money/format-money"
 export { formatExchangeRateDisplay } from "./money/format-exchange-rate"
 export {
   clampSendAmountForCurrency,
