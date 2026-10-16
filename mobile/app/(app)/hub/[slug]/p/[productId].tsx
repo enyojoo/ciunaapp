@@ -15,6 +15,7 @@ import { useToast } from "@/components/toast-provider"
 import { updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useGuardedAdd } from "@/lib/use-guarded-add"
 import { ProductGallery, productImages } from "@/components/product-gallery"
+import { PriceTag } from "@/components/price-tag"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import {
   hubMarketplaceCheckoutPath,
@@ -27,7 +28,6 @@ import { useHubProduct } from "@/lib/use-hub-product"
 import { useHubVendorProducts } from "@/lib/use-hub-vendor"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import {
-  formatCardPrice,
   hubProductEffectivePrice,
   hubProductListPrice,
   hubProductShowListStrike,
@@ -187,23 +187,19 @@ export default function HubProductDetailScreen() {
         ) : null}
 
         <View style={styles.priceRow}>
-          {product.pricing_type === "user_input" ? (
-            <Text style={styles.pricePrefix}>
-              {product.funded_min
-                ? t("hub.payFrom", { defaultValue: "Pay from" })
-                : t("hub.setAmount", { defaultValue: "Set amount" })}
-            </Text>
-          ) : (
-            <Text style={styles.pricePrefix}>{t("hub.sellPrice", { defaultValue: "Sell price" })}</Text>
-          )}
-          {strike && list != null ? (
-            <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text>
-          ) : null}
-          <Text style={styles.price}>
-            {product.pricing_type === "user_input" && product.funded_min
-              ? formatCardPrice(product.funded_min, currency)
-              : formatCardPrice(price, currency)}
-          </Text>
+          <PriceTag
+            size="lg"
+            prefix={
+              product.pricing_type === "user_input"
+                ? product.funded_min
+                  ? t("hub.payFrom", { defaultValue: "Pay from" })
+                  : t("hub.setAmount", { defaultValue: "Set amount" })
+                : t("hub.sellPrice", { defaultValue: "Sell price" })
+            }
+            strike={product.pricing_type !== "user_input" && strike && list != null ? list : null}
+            amount={product.pricing_type === "user_input" ? (product.funded_min ? product.funded_min : null) : price}
+            currency={currency}
+          />
         </View>
 
         <View style={styles.ctaBlock}>
@@ -294,10 +290,7 @@ const styles = StyleSheet.create({
   cueText: { fontSize: 11, fontWeight: "600", color: colors.text, textTransform: "capitalize" },
   vendorHit: { marginTop: 6, alignSelf: "flex-start", maxWidth: "100%" },
   desc: { marginTop: 10, fontSize: typeSize.body, lineHeight: 22, color: colors.text },
-  priceRow: { marginTop: 20, flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 6 },
-  pricePrefix: { fontSize: typeSize.meta, fontWeight: "500", color: colors.muted },
-  price: { fontSize: 22, fontWeight: "700", color: colors.text },
-  strike: { fontSize: typeSize.meta, color: colors.muted, textDecorationLine: "line-through" },
+  priceRow: { marginTop: 20 },
   ctaBlock: { marginTop: 20 },
   stepper: {
     flexDirection: "row",

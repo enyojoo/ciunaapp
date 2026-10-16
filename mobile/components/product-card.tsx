@@ -2,9 +2,9 @@ import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } fro
 import { Image } from "expo-image"
 import { Minus, Plus, ShoppingCart } from "lucide-react-native"
 import { VerifiedBadge } from "@/components/verified-badge"
+import { PriceTag } from "@/components/price-tag"
 import { useTranslation } from "react-i18next"
 import {
-  formatCardPrice,
   hubProductEffectivePrice,
   hubProductListPrice,
   hubProductShowListStrike,
@@ -135,20 +135,20 @@ export function ProductCard({
     ) : null
 
   const priceRow = userInput ? (
-    <View style={styles.priceRow}>
-      <Text style={styles.pricePrefix}>
-        {hasMin
-          ? t("hub.payFrom", { defaultValue: "Pay from" })
-          : t("hub.setAmount", { defaultValue: "Set amount" })}
-      </Text>
-      {hasMin ? <Text style={styles.price}>{formatCardPrice(min, currency)}</Text> : null}
-    </View>
+    <PriceTag
+      size="sm"
+      prefix={hasMin ? t("hub.payFrom", { defaultValue: "Pay from" }) : t("hub.setAmount", { defaultValue: "Set amount" })}
+      amount={hasMin ? min : null}
+      currency={currency}
+    />
   ) : (
-    <View style={styles.priceRow}>
-      <Text style={styles.pricePrefix}>{t("hub.sellPrice", { defaultValue: "Sell price" })}</Text>
-      {strike && list != null ? <Text style={styles.strike}>{formatCardPrice(list, currency)}</Text> : null}
-      <Text style={styles.price}>{formatCardPrice(price, currency)}</Text>
-    </View>
+    <PriceTag
+      size="sm"
+      prefix={t("hub.sellPrice", { defaultValue: "Sell price" })}
+      strike={strike && list != null ? list : null}
+      amount={price}
+      currency={currency}
+    />
   )
 
   const cartOrCta = cartMode ? (
@@ -321,10 +321,6 @@ const styles = StyleSheet.create({
   vendorInitial: { fontSize: 9, fontWeight: "700", color: colors.muted },
   vendorName: { flexShrink: 1, fontSize: 11, fontWeight: "500", color: colors.text },
   priceBlock: { marginTop: 4, gap: 8, minHeight: 40, justifyContent: "flex-end" },
-  priceRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 4 },
-  pricePrefix: { fontSize: 11, fontWeight: "500", color: colors.muted },
-  price: { fontSize: 15, fontWeight: "700", color: colors.text },
-  strike: { fontSize: 11, color: colors.muted, textDecorationLine: "line-through" },
   cta: {
     minHeight: 32,
     alignItems: "center",
