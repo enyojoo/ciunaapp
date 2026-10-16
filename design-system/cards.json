@@ -792,7 +792,7 @@
    "name": "ExpertBooking",
    "group": "Customer app · Screens",
    "subtitle": "Booking flow in five steps: choose service, date and slot with both time zones, details, pay (summary, payment frame, checking, failed, closed), awaiting confirmation then confirmed with meeting link, plus slot taken and declined states",
-   "height": 3771,
+   "height": 4709,
    "width": 1300,
    "page": true,
    "readme": true
@@ -837,7 +837,7 @@
    "name": "MarketCheckout",
    "group": "Customer app · Screens",
    "subtitle": "Marketplace checkout: details, review with one Pay button, then the provider payment frame, waiting, paid, failed and closed states; address and zone errors",
-   "height": 3864,
+   "height": 3883,
    "width": 1300,
    "page": true,
    "readme": true

@@ -12,13 +12,14 @@ Takes a customer from "I want an hour with Carlos" to a paid, confirmed meeting 
 - 5 Confirmation: first "Awaiting confirmation from the expert" (amber), then "Confirmed" (green) with the meeting link, copy, Add to calendar and **Join meeting**.
 
 ## States
-Awaiting confirmation, Confirmed (link opens 10 minutes before start), Declined or expired (neutral, refund line with timeframe), Slot just taken (red banner, struck-through slot, details kept, nothing charged), Payment frame open, Checking payment, Payment failed (banner on step 4 with Try again), Frame closed (slot kept, nothing charged), Loading slots (chip skeletons), No slots (links to the profile hint).
+Awaiting confirmation, Confirmed (link opens 10 minutes before start), Declined or expired (neutral, refund line with timeframe), Slot just taken (red banner, struck-through slot, details kept, nothing charged), Opening payment (spinner screen), Payment frame open (full screen), Checking payment, Payment failed (banner on step 4 with Try again), Frame closed (slot kept, nothing charged), Loading slots (chip skeletons), No slots (links to the profile hint).
 
 ## Rules
 - Always show both time zones: the viewer's first, then the expert's with their city.
 - A slot is reserved when payment starts and released after 10 minutes without payment.
 - The money is held until the expert confirms; a decline or no reply in 24 hours refunds in full.
 - Customer and expert screens never name a payment provider and never draw payment methods; they are chosen in the provider's frame and shown afterwards only as the name returned.
+- The payment frame is a full screen, not a sheet.
 - The meeting link is shown only after confirmation.
 
 ## Upgrade
