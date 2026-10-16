@@ -15,6 +15,7 @@ import { StatusBar } from "expo-status-bar"
 import { useRouter } from "expo-router"
 import { ArrowLeft, BadgeCheck, ChevronLeft, MapPin } from "lucide-react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { SearchHeroButton } from "@/components/search-entry"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
 const HERO_COLORS = [colors.heroOrange, colors.heroOrangeMid, colors.heroAmber] as const
@@ -204,7 +205,8 @@ export function HubLinePageShell({
   refreshControl,
   keyboard,
   variant = "line",
-  trailingAction,
+  trailingAction: trailingProp,
+  searchLine,
 }: {
   title: string
   subtitle?: string | null
@@ -221,8 +223,17 @@ export function HubLinePageShell({
   variant?: "line" | "storefront"
   /** Optional extra control in the hero row (e.g. a cart icon on Food/Mart). */
   trailingAction?: ReactNode
+  /** Adds a search button to the hero that opens Search scoped to this line. */
+  searchLine?: "food" | "mart" | "experts"
 }) {
   const router = useRouter()
+  const trailingAction =
+    searchLine || trailingProp ? (
+      <View style={styles.trailing}>
+        {searchLine ? <SearchHeroButton line={searchLine} /> : null}
+        {trailingProp}
+      </View>
+    ) : undefined
   const photo = photoUrl?.trim() || ""
   const loc = location?.trim() || ""
   const onBack = () => goBack(router, backHref)
@@ -321,6 +332,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  trailing: { flexDirection: "row", alignItems: "center", gap: 4 },
   copy: { flex: 1, minWidth: 0 },
   titleRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   title: {

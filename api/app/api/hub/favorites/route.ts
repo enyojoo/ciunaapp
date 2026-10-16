@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
+import { tableExists } from "@/lib/merchant/messages"
 import { requireAuth, createErrorResponse, withErrorHandling } from "@/lib/auth-utils"
 
 export const dynamic = "force-dynamic"
@@ -18,6 +19,11 @@ async function who(request: NextRequest) {
 export const GET = withErrorHandling(async (request: NextRequest) => {
   const user = await who(request)
   if (!user) return createErrorResponse("Unauthorized", 401)
+  if (!(await tableExists("favorites"))) {
+    const res = NextResponse.json({ keys: [], vendors: [], experts: [], products: [], unavailable: true })
+    res.headers.set("Cache-Control", "no-store")
+    return res
+  }
   const db = createServerClient()
   const { data, error } = await db.from("favorites").select("target_type,target_id,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(200)
   if (error) return createErrorResponse("Failed to load favourites", 500)
@@ -48,6 +54,7 @@ export const PUT = withErrorHandling(async (request: NextRequest) => {
   if (!user) return createErrorResponse("Unauthorized", 401)
   const t = await parse(request)
   if (!t) return createErrorResponse("Invalid favourite", 400)
+  if (!(await tableExists("favorites"))) return createErrorResponse("Favourites are not available yet", 503)
   const db = createServerClient()
   const { count } = await db.from("favorites").select("target_id", { count: "exact", head: true }).eq("user_id", user.id)
   if ((count ?? 0) >= 500) return createErrorResponse("Too many favourites", 409)
@@ -61,6 +68,7 @@ export const DELETE = withErrorHandling(async (request: NextRequest) => {
   if (!user) return createErrorResponse("Unauthorized", 401)
   const t = await parse(request)
   if (!t) return createErrorResponse("Invalid favourite", 400)
+  if (!(await tableExists("favorites"))) return createErrorResponse("Favourites are not available yet", 503)
   const { error } = await createServerClient().from("favorites").delete().eq("user_id", user.id).eq("target_type", t.type).eq("target_id", t.id)
   if (error) return createErrorResponse("Failed to remove", 500)
   return NextResponse.json({ ok: true })

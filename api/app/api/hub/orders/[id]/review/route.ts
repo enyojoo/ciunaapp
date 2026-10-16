@@ -2,6 +2,7 @@ import { NextRequest } from "next/server"
 import { marketplaceRoute } from "@/lib/marketplace/http"
 import { MarketplaceError } from "@/lib/marketplace/service"
 import { MerchantError } from "@/lib/merchant/errors"
+import { tableExists } from "@/lib/merchant/messages"
 import { createServerClient } from "@/lib/supabase"
 import { MAX_BODY, cleanText, eligibility, failFromDb, reviewEditable, toPublicReview, validateRating } from "@/lib/merchant/reviews"
 
@@ -36,6 +37,7 @@ async function asMarketplace<T>(fn: () => Promise<T>): Promise<T> {
 /** The caller's review of this order (or null) and whether they can write or edit one now. */
 export const GET = marketplaceRoute(async (_req: NextRequest, { params }, user) =>
   asMarketplace(async () => {
+    if (!(await tableExists("reviews"))) return { review: null, canReview: false, canEdit: false, reason: "REVIEWS_UNAVAILABLE", unavailable: true }
     const { order, review } = await loadOwn(String(params.id), user.id)
     if (!order) return { review: null, canReview: false, canEdit: false, reason: "REVIEW_NOT_ALLOWED" }
     const e = eligibility(order as any, user.id, review as any)
@@ -46,6 +48,7 @@ export const GET = marketplaceRoute(async (_req: NextRequest, { params }, user) 
 /** Create the review, or edit it within 48 hours. Body: { rating, body?, language? } */
 export const POST = marketplaceRoute(async (req: NextRequest, { params }, user) =>
   asMarketplace(async () => {
+    if (!(await tableExists("reviews"))) throw new MarketplaceError("REVIEWS_UNAVAILABLE", 503)
     const body = await req.json()
     if (!body || typeof body !== "object" || Array.isArray(body)) throw new MarketplaceError("INVALID_REQUEST", 400)
     const rating = validateRating(body.rating)

@@ -79,6 +79,7 @@ export default function ExpertsDirectory() {
       title={labels.title}
       subtitle={labels.subtitle ?? t("hub.expertsSubtitle", { defaultValue: "Trusted professionals for all your home and beauty needs." })}
       backAriaLabel={t("hub.backToHub", { defaultValue: "Back to Hub" })}
+      searchLine="experts"
     >
       <View style={styles.featuredBlock}>
         <View style={styles.head}>

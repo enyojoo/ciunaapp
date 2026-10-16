@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { chatAvailable, chatClosed, cleanBody, cleanLanguage, firstName, parseAfter, preview, sendError } from "../../lib/merchant/messages"
+import { chatState, chatAvailable, chatClosed, cleanBody, cleanLanguage, firstName, parseAfter, preview, sendError } from "../../lib/merchant/messages"
 
 test("body is trimmed and validated", () => {
   assert.equal(cleanBody("  hello  \n"), "hello")
@@ -59,4 +59,16 @@ test("database errors map to API codes and unknown ones are hidden", () => {
   assert.equal(parseAfter("12"), 12)
   assert.equal(parseAfter("-3"), 0)
   assert.equal(parseAfter("abc"), 0)
+})
+
+test("chatState reports availability, closed and the closing date", () => {
+  const now = Date.parse("2026-10-30T00:00:00Z")
+  const paid = { merchant_id: "m", payment_state: "paid", fulfillment_state: "accepted", updated_at: "2026-10-01T00:00:00Z" }
+  assert.deepEqual(chatState(paid, now), { available: true, closed: false, closesAt: null })
+  assert.equal(chatState({ ...paid, payment_state: "awaiting_payment" }, now).available, false)
+  assert.equal(chatState({ ...paid, merchant_id: null }, now).closed, true)
+  const done = chatState({ ...paid, fulfillment_state: "fulfilled" }, now)
+  assert.equal(done.closesAt, "2026-10-15T00:00:00.000Z")
+  assert.equal(done.closed, true)
+  assert.equal(chatState({ ...paid, fulfillment_state: "fulfilled", updated_at: "2026-10-25T00:00:00Z" }, now).closed, false)
 })

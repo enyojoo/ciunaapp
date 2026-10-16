@@ -17,6 +17,8 @@ import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { MarketplacePayStep, type MarketplacePayTab } from "@/components/marketplace-pay-step"
 import { useToast } from "@/components/toast-provider"
+import { OrderReviewCard } from "@/components/review-sheet"
+import { SellerChatCard } from "@/components/seller-chat-card"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { startYooKassaPayment, resumeYooKassaPayment, isYooKassaNativeAvailable } from "@/lib/yookassa-native"
 import { hubCartPath } from "@/lib/hub"
@@ -806,6 +808,8 @@ export function MarketplaceOrderView({
         <Text style={styles.meta}>
           {label("fulfillment", "Fulfillment")}: {label(order.fulfillment_state, order.fulfillment_state)}
         </Text>
+        <OrderReviewCard orderId={order.id} fulfilled={order.fulfillment_state === "fulfilled"} />
+        <SellerChatCard orderId={order.id} sellerName={(order as { seller?: { name?: string } }).seller?.name} />
         {!!error && (
           <View style={styles.errorBox}>
             <Text style={styles.errorText}>

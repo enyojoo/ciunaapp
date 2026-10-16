@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import {
-  buildSummary, eligibility, firstName, nameWithInitial, replyEditable, reviewEditable, reviewErrorStatus, reviewWindowOpen,
+  buildSummary, eligibility, firstName, nameWithInitial, replyEditable, replyEditableUntil, reviewEditable, reviewErrorStatus, reviewWindowOpen,
   summaryFromRatings, toPublicReview, validateRating, parsePaging,
 } from "../../lib/merchant/reviews"
 
@@ -79,4 +79,10 @@ test("error codes map to stable statuses; paging is clamped", () => {
   assert.equal(reviewErrorStatus("SOMETHING_ELSE"), 400)
   assert.deepEqual(parsePaging(new URLSearchParams("limit=999&offset=-4")), { limit: 50, offset: 0 })
   assert.deepEqual(parsePaging(new URLSearchParams("")), { limit: 20, offset: 0 })
+})
+
+test("reply edit deadline is 24 hours after the reply", () => {
+  assert.equal(replyEditableUntil(null), null)
+  assert.equal(replyEditableUntil("2026-10-16T10:00:00Z"), "2026-10-17T10:00:00.000Z")
+  assert.equal(replyEditableUntil("not a date"), null)
 })

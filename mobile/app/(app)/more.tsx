@@ -6,6 +6,7 @@ import {
   BadgeCheck,
   FileText,
   Gift,
+  Heart,
   Landmark,
   MessageCircleQuestion,
   Lock,
@@ -25,6 +26,7 @@ import { colors, radius, type as typeSize, ui } from "@/lib/theme"
 
 export default function MoreScreen() {
   const { t } = useTranslation("common")
+  const { t: tApp } = useTranslation("app")
   const { signOut, profile, user } = useAuth()
   const { openLink } = useExternalLink()
   const router = useRouter()
@@ -111,6 +113,11 @@ export default function MoreScreen() {
 
       <GroupCard title={t("more.app")}>
         <LanguagePicker />
+        <Row
+          icon={<Heart size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          label={tApp("favourites.title", { defaultValue: "Favourites" })}
+          onPress={() => router.push("/favourites" as never)}
+        />
         <Row
           icon={<Landmark size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
           label={t("more.recipients")}

@@ -5,6 +5,7 @@ import { hubServiceLineTileCopy, type HubServiceLineRow } from "@ciuna/shared"
 import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
 import { HubHero } from "@/components/hub-hero"
+import { SearchEntryField } from "@/components/search-entry"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
 import { useExternalLink } from "@/lib/external-link"
@@ -40,6 +41,7 @@ export default function HomeScreen() {
   return (
     <Screen edges={["top", "left", "right"]}>
       <AppHeader />
+      <SearchEntryField />
       <ScrollView
         style={styles.flex}
         contentContainerStyle={[styles.scroll, { paddingBottom: tabContentPadding }]}

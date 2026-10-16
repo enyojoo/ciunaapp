@@ -4,6 +4,9 @@ import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { MapPin } from "lucide-react-native"
+import { FavouriteHeart } from "@/components/favourite-heart"
+import { RatingLine, ReviewsSection } from "@/components/reviews-section"
+import { useReviews } from "@/lib/use-reviews"
 import { EmptyState } from "@/components/empty-state"
 import {
   ExpertServiceCard,
@@ -34,10 +37,18 @@ export default function ExpertProfileScreen() {
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
 
+  const reviews = useReviews(profile ? { kind: "expert", slug: String(slug) } : null)
+  const profileId = profile?.id ?? null
+
   // No title — the expert's name is already the big heading in the body; a repeated header title is redundant.
   useEffect(() => {
-    navigation.setOptions({ title: "" })
-  }, [navigation])
+    navigation.setOptions({
+      title: "",
+      headerRight: profileId
+        ? () => <FavouriteHeart type="expert" id={profileId} style={styles.headerHeart} />
+        : undefined,
+    })
+  }, [navigation, profileId])
 
   const bio = (profile?.bio || "").trim()
   const meeting = (profile?.meeting_hint || "").trim()
@@ -88,6 +99,7 @@ export default function ExpertProfileScreen() {
             </Text>
           ) : null}
           {category ? <Text style={styles.category}>{category}</Text> : null}
+          <RatingLine summary={reviews.summary} />
           {location ? (
             <View style={styles.locRow}>
               <MapPin size={13} color={colors.muted} strokeWidth={2} />
@@ -128,11 +140,13 @@ export default function ExpertProfileScreen() {
           ))}
         </View>
       )}
+      <ReviewsSection state={reviews} />
     </ScreenScroll>
   )
 }
 
 const styles = StyleSheet.create({
+  headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
   center: { paddingVertical: 60, alignItems: "center" },
   identityRow: { flexDirection: "row", gap: 14, marginBottom: 20 },
   avatarWrap: {

@@ -4,6 +4,7 @@ import { useRouter } from "expo-router"
 import { BadgeCheck } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { formatCardPrice } from "@/lib/money"
+import { FavouriteHeart } from "@/components/favourite-heart"
 import type { ExpertCatalogService, ExpertProfile, ExpertService } from "@/lib/types"
 import { seedExpertCatalogService } from "@/lib/use-expert-catalog-services"
 import { catalogCardWidth, useCatalogGridColumns } from "@/lib/responsive-layout"
@@ -47,11 +48,11 @@ export function expertServiceToCatalog(s: ExpertService, expert: ExpertProfile):
 export function ExpertFeaturedChip({ expert }: { expert: ExpertProfile }) {
   const router = useRouter()
   return (
+    <View style={styles.stripHit}>
     <Pressable
       onPress={() => router.push(expertProfilePath(expert) as never)}
       accessibilityRole="button"
       accessibilityLabel={expert.display_name}
-      style={styles.stripHit}
     >
       <View style={styles.stripCard}>
         <View style={styles.stripPhoto}>
@@ -70,6 +71,8 @@ export function ExpertFeaturedChip({ expert }: { expert: ExpertProfile }) {
         </View>
       </View>
     </Pressable>
+    <FavouriteHeart type="expert" id={expert.id} />
+    </View>
   )
 }
 
@@ -77,14 +80,14 @@ export function ExpertFeaturedSkeleton() {
   return <View style={[styles.stripHit, styles.stripSkeleton]} />
 }
 
-export function ExpertDirectoryCard({ expert }: { expert: ExpertProfile }) {
+export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: ExpertProfile; onBeforeNavigate?: () => void }) {
   const router = useRouter()
   return (
+    <View style={styles.gridHit}>
     <Pressable
-      onPress={() => router.push(expertProfilePath(expert) as never)}
+      onPress={() => { onBeforeNavigate?.(); router.push(expertProfilePath(expert) as never) }}
       accessibilityRole="button"
       accessibilityLabel={expert.display_name}
-      style={styles.gridHit}
     >
       <View style={styles.stripCard}>
         <View style={styles.stripPhoto}>
@@ -108,6 +111,8 @@ export function ExpertDirectoryCard({ expert }: { expert: ExpertProfile }) {
         </View>
       </View>
     </Pressable>
+    <FavouriteHeart type="expert" id={expert.id} />
+    </View>
   )
 }
 

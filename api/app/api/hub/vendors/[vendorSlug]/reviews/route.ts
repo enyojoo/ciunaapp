@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { getPublishedHubVendorForLine } from "@/lib/hub-vendor-resolve"
+import { tableExists } from "@/lib/merchant/messages"
 import { buildSummary, listPublicReviews, parsePaging } from "@/lib/merchant/reviews"
 
 const ALLOWED_LINES = new Set(["food", "mart"])
@@ -27,7 +28,7 @@ export const GET = withErrorHandling(async (request: NextRequest, context?: { pa
 
   const { limit, offset } = parsePaging(sp)
   const merchantId = (vendor as any).merchant_id as string | null
-  const data = merchantId ? await listPublicReviews(merchantId, "vendor", limit, offset) : { summary: buildSummary(null), reviews: [] }
+  const data = merchantId && (await tableExists("reviews")) ? await listPublicReviews(merchantId, "vendor", limit, offset) : { summary: buildSummary(null), reviews: [] }
   const res = NextResponse.json(data)
   res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate")
   return res

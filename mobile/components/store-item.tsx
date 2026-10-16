@@ -3,6 +3,7 @@ import { Image } from "expo-image"
 import { BadgeCheck, MapPin } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
+import { FavouriteHeart } from "@/components/favourite-heart"
 import type { HubVendor } from "@/lib/types"
 
 export function StoreChip({
@@ -14,9 +15,12 @@ export function StoreChip({
 }) {
   const { t } = useTranslation("app")
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={vendor.name} style={styles.stripHit}>
-      <StoreFace vendor={vendor} verifiedLabel={t("hub.verifiedVendor", { defaultValue: "Verified vendor" })} compact />
-    </Pressable>
+    <View style={styles.stripHit}>
+      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={vendor.name}>
+        <StoreFace vendor={vendor} verifiedLabel={t("hub.verifiedVendor", { defaultValue: "Verified vendor" })} compact />
+      </Pressable>
+      <FavouriteHeart type="vendor" id={vendor.id} />
+    </View>
   )
 }
 
@@ -29,9 +33,12 @@ export function StoreGridCard({
 }) {
   const { t } = useTranslation("app")
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={vendor.name} style={styles.gridHit}>
-      <StoreFace vendor={vendor} verifiedLabel={t("hub.verifiedVendor", { defaultValue: "Verified vendor" })} showLocation />
-    </Pressable>
+    <View style={styles.gridHit}>
+      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={vendor.name}>
+        <StoreFace vendor={vendor} verifiedLabel={t("hub.verifiedVendor", { defaultValue: "Verified vendor" })} showLocation />
+      </Pressable>
+      <FavouriteHeart type="vendor" id={vendor.id} />
+    </View>
   )
 }
 

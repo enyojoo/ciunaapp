@@ -13,6 +13,7 @@ import { catalogCardWidth, useCatalogGridColumns } from "@/lib/responsive-layout
 import { colors, radius, shadow, shadowNone } from "@/lib/theme"
 import { addToHubCart, updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useToast } from "@/components/toast-provider"
+import { FavouriteHeart } from "@/components/favourite-heart"
 
 export function ProductCard({
   product,
@@ -226,6 +227,7 @@ export function ProductCard({
             {cartOrCta}
           </View>
         </View>
+        <FavouriteHeart type="product" id={product.id} style={showCategory ? styles.heartLeft : undefined} />
       </View>
     </View>
   )
@@ -267,6 +269,7 @@ export function ProductCardSkeleton() {
 
 const styles = StyleSheet.create({
   hit: { width: "48.5%" },
+  heartLeft: { left: 6, right: undefined },
   card: {
     overflow: "hidden",
     borderRadius: radius.card,

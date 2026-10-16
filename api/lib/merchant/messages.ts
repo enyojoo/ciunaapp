@@ -107,3 +107,48 @@ export async function threadFor(order: { id: string; merchant_id: string | null;
   const messages = available ? await listMessages(order.id, after) : []
   return { messages, closed: !available || chatClosed(order), available }
 }
+
+/** Chat window for the customer order payload: whether it is open, closed, and when it closes or closed. */
+export function chatState(
+  order: { merchant_id: string | null; payment_state: string; fulfillment_state: string; updated_at: string },
+  now = Date.now(),
+) {
+  const available = chatAvailable(order)
+  const ends = order.fulfillment_state === "fulfilled" || order.fulfillment_state === "cancelled"
+  const closesAt = ends ? new Date(new Date(order.updated_at).getTime() + CLOSE_AFTER_DAYS * 86_400_000).toISOString() : null
+  return { available, closed: !available || chatClosed(order, now), closesAt }
+}
+
+const TABLE_PROBE_MS = 30_000
+const probes = new Map<string, { at: number; ok: boolean }>()
+
+/**
+ * True when a table exists on this database. Lets customer routes show an empty/unavailable state instead of a 500
+ * while a migration has not been applied yet. Cached briefly; any error other than "missing" counts as present.
+ */
+export async function tableExists(table: string, now = Date.now()): Promise<boolean> {
+  const hit = probes.get(table)
+  if (hit && now - hit.at < TABLE_PROBE_MS) return hit.ok
+  const { error } = await createServerClient().from(table).select("*").limit(0)
+  const missing = Boolean(error) && (error!.code === "PGRST205" || error!.code === "42P01" || /does not exist|schema cache/i.test(error!.message))
+  probes.set(table, { at: now, ok: !missing })
+  return !missing
+}
+
+/** Public seller identity for an order (store name or expert name). Null when it cannot be resolved; never throws. */
+export async function sellerFor(order: { merchant_id: string | null }, line: string) {
+  if (!order.merchant_id) return null
+  try {
+    const db = createServerClient()
+    if (line === "experts") {
+      const { data, error } = await db.from("expert_profiles").select("display_name,slug,image_url").eq("merchant_id", order.merchant_id).limit(1).maybeSingle()
+      if (error || !data) return null
+      return { name: data.display_name as string, slug: (data.slug as string) ?? null, line, photoUrl: (data.image_url as string) ?? null }
+    }
+    const { data, error } = await db.from("hub_vendors").select("name,slug,photo_url").eq("merchant_id", order.merchant_id).eq("service_line_slug", line).limit(1).maybeSingle()
+    if (error || !data) return null
+    return { name: data.name as string, slug: (data.slug as string) ?? null, line, photoUrl: (data.photo_url as string) ?? null }
+  } catch {
+    return null
+  }
+}

@@ -4,6 +4,9 @@ import { StatusBar } from "expo-status-bar"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { BadgeCheck, MapPin } from "lucide-react-native"
+import { FavouriteHeart } from "@/components/favourite-heart"
+import { RatingLine, ReviewsSection } from "@/components/reviews-section"
+import { useReviews } from "@/lib/use-reviews"
 import { CatalogProducts } from "@/components/catalog-products"
 import { EmptyState } from "@/components/empty-state"
 import { HubCartBar } from "@/components/hub-cart-bar"
@@ -40,13 +43,23 @@ export default function VendorScreen() {
   const cartMode = isHubMarketplaceSlug(line)
   const vendorId = (vendor as (HubVendor & { id?: string }) | null)?.id ?? null
 
+  const reviews = useReviews(vendor && isHubMarketplaceSlug(line) ? { kind: "vendor", line, slug: vendorSlug } : null)
+
   useEffect(() => {
     // No title — the vendor name is already the big heading in the body; a repeated header title is redundant.
     navigation.setOptions({
       title: "",
-      headerRight: cartMode ? () => <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : undefined,
+      headerRight:
+        cartMode || vendorId
+          ? () => (
+              <View style={styles.headerRight}>
+                {vendorId ? <FavouriteHeart type="vendor" id={vendorId} style={styles.headerHeart} /> : null}
+                {cartMode ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
+              </View>
+            )
+          : undefined,
     })
-  }, [navigation, cartMode, line])
+  }, [navigation, cartMode, line, vendorId])
 
   if (loading && !vendor) {
     return (
@@ -111,6 +124,7 @@ export default function VendorScreen() {
                 </Text>
               </View>
             ) : null}
+            <RatingLine summary={reviews.summary} />
             <Text style={styles.productCount}>
               {t("hub.vendorProductCount", { defaultValue: "{{count}} products", count: products.length })}
             </Text>
@@ -156,6 +170,7 @@ export default function VendorScreen() {
             cartLineSlug={cartMode ? (line as "food" | "mart") : undefined}
           />
         )}
+        {vendor ? <ReviewsSection state={reviews} /> : null}
       </ScreenScroll>
       {cartMode ? <HubCartBar lineSlug={line as "food" | "mart"} vendorId={vendorId} /> : null}
     </View>
@@ -163,6 +178,8 @@ export default function VendorScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
+  headerHeart: { position: "relative", top: 0, right: 0, backgroundColor: "transparent" },
   center: { paddingVertical: 60, alignItems: "center" },
   contentWithCartBar: { paddingBottom: 56 },
   identityRow: { flexDirection: "row", gap: 14, marginBottom: 16 },

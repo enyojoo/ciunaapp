@@ -27,10 +27,16 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
 
   const [products, vendors, experts] = await Promise.all([
     wantsProducts
-      ? (() => {
-          let pq = db.from("hub_products").select("id,title,short_description,image_url,list_price,sale_price,fixed_amount,fixed_currency,service_line_slug,category,vendor_id,sold_out,stock_quantity,translations").eq("status", "live").or(`title.ilike.${pattern},short_description.ilike.${pattern}`).limit(limit)
-          if (line !== "all") pq = pq.eq("service_line_slug", line)
-          return pq
+      ? (async () => {
+          // `translations` arrives with the merchants migration; fall back to the base columns when it is not applied yet.
+          const run = (cols: string) => {
+            let pq = db.from("hub_products").select(cols).eq("status", "live").or(`title.ilike.${pattern},short_description.ilike.${pattern}`).limit(limit)
+            if (line !== "all") pq = pq.eq("service_line_slug", line)
+            return pq
+          }
+          const base = "id,title,short_description,image_url,list_price,sale_price,fixed_amount,fixed_currency,service_line_slug,category,vendor_id,sold_out,stock_quantity"
+          const full = await run(`${base},translations`)
+          return full.error ? run(base) : full
         })()
       : Promise.resolve({ data: [], error: null }),
     wantsProducts
