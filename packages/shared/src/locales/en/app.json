@@ -1203,7 +1203,8 @@
     "rateLimited": "Too many searches. Try again in a minute.",
     "recent": "Recent searches",
     "searchAll": "Search everywhere",
-    "stores": "Stores"
+    "stores": "Stores",
+    "placeholderLine": "Search products and stores"
   },
   "favourites": {
     "title": "Favourites",

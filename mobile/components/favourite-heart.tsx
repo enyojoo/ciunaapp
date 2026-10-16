@@ -27,14 +27,14 @@ export function FavouriteHeart({
   return (
     <Pressable
       onPress={() => void toggle(type, id)}
-      hitSlop={8}
+      hitSlop={7}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityState={{ selected: on }}
       style={[styles.chip, style]}
     >
       <Heart
-        size={16}
+        size={18}
         strokeWidth={2.2}
         color={on ? colors.primaryText : colors.muted}
         fill={on ? colors.primaryText : "transparent"}
@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 6,
     right: 6,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgba(255,255,255,0.94)",

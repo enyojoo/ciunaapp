@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/empty-state"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
+import { SearchEntryField } from "@/components/search-entry"
 import { StoreChip, StoreChipSkeleton } from "@/components/store-item"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { attachVendorsToProducts } from "@/lib/hub-catalog"
@@ -59,6 +60,7 @@ export default function HubLineCatalog() {
 
   const catalog = (
     <>
+      {marketplace ? <SearchEntryField line={line as "food" | "mart"} embedded /> : null}
       {marketplace ? (
         <View style={styles.storesBlock}>
           <View style={styles.storesHead}>
@@ -136,7 +138,6 @@ export default function HubLineCatalog() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
-        searchLine={marketplace ? (line as "food" | "mart") : undefined}
         trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : undefined}
       >
         {catalog}

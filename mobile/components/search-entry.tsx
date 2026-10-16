@@ -8,14 +8,16 @@ export function searchHref(line?: "food" | "mart" | "experts") {
   return (line ? `/search?line=${line}` : "/search") as never
 }
 
-/** Tappable search field (opens the Search screen). Lives under the header on Home. */
-export function SearchEntryField() {
+/** Tappable search field (opens the Search screen). Pass a line to scope it; `embedded` drops the header padding. */
+export function SearchEntryField({ line, embedded }: { line?: "food" | "mart" | "experts"; embedded?: boolean } = {}) {
   const { t } = useTranslation("app")
   const router = useRouter()
-  const label = t("search.placeholder", { defaultValue: "Search products, stores, experts" })
+  const label = line && line !== "experts"
+    ? t("search.placeholderLine", { defaultValue: "Search products and stores" })
+    : t("search.placeholder", { defaultValue: "Search products, stores, experts" })
   return (
-    <View style={styles.wrap}>
-      <Pressable onPress={() => router.push(searchHref())} accessibilityRole="search" accessibilityLabel={label} style={styles.field}>
+    <View style={embedded ? styles.embedded : styles.wrap}>
+      <Pressable onPress={() => router.push(searchHref(line))} accessibilityRole="search" accessibilityLabel={label} style={styles.field}>
         <Search size={18} color={colors.muted} strokeWidth={2.2} />
         <Text style={styles.text} numberOfLines={1}>
           {label}
@@ -46,6 +48,7 @@ export function SearchHeroButton({ line }: { line: "food" | "mart" | "experts" }
 
 const styles = StyleSheet.create({
   wrap: { paddingHorizontal: space.page, paddingBottom: 12, backgroundColor: colors.surface },
+  embedded: { marginBottom: 16 },
   field: {
     minHeight: 46,
     flexDirection: "row",

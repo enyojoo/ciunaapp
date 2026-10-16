@@ -1203,7 +1203,8 @@
     "rateLimited": "Trop de recherches. Réessayez dans une minute.",
     "recent": "Recherches récentes",
     "searchAll": "Rechercher partout",
-    "stores": "Boutiques"
+    "stores": "Boutiques",
+    "placeholderLine": "Rechercher produits et boutiques"
   },
   "favourites": {
     "title": "Favoris",

@@ -1203,7 +1203,8 @@
     "rateLimited": "搜索过于频繁，请一分钟后再试。",
     "recent": "最近搜索",
     "searchAll": "搜索全部",
-    "stores": "店铺"
+    "stores": "店铺",
+    "placeholderLine": "搜索商品和店铺"
   },
   "favourites": {
     "title": "收藏",
