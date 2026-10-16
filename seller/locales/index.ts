@@ -1,0 +1,66 @@
+import en_common from "./en/common.json"
+import en_auth from "./en/auth.json"
+import en_setup from "./en/setup.json"
+import en_home from "./en/home.json"
+import en_catalog from "./en/catalog.json"
+import en_orders from "./en/orders.json"
+import en_expert from "./en/expert.json"
+import en_earnings from "./en/earnings.json"
+import en_settings from "./en/settings.json"
+import ru_common from "./ru/common.json"
+import ru_auth from "./ru/auth.json"
+import ru_setup from "./ru/setup.json"
+import ru_home from "./ru/home.json"
+import ru_catalog from "./ru/catalog.json"
+import ru_orders from "./ru/orders.json"
+import ru_expert from "./ru/expert.json"
+import ru_earnings from "./ru/earnings.json"
+import ru_settings from "./ru/settings.json"
+import fr_common from "./fr/common.json"
+import fr_auth from "./fr/auth.json"
+import fr_setup from "./fr/setup.json"
+import fr_home from "./fr/home.json"
+import fr_catalog from "./fr/catalog.json"
+import fr_orders from "./fr/orders.json"
+import fr_expert from "./fr/expert.json"
+import fr_earnings from "./fr/earnings.json"
+import fr_settings from "./fr/settings.json"
+import es_common from "./es/common.json"
+import es_auth from "./es/auth.json"
+import es_setup from "./es/setup.json"
+import es_home from "./es/home.json"
+import es_catalog from "./es/catalog.json"
+import es_orders from "./es/orders.json"
+import es_expert from "./es/expert.json"
+import es_earnings from "./es/earnings.json"
+import es_settings from "./es/settings.json"
+import zh_common from "./zh/common.json"
+import zh_auth from "./zh/auth.json"
+import zh_setup from "./zh/setup.json"
+import zh_home from "./zh/home.json"
+import zh_catalog from "./zh/catalog.json"
+import zh_orders from "./zh/orders.json"
+import zh_expert from "./zh/expert.json"
+import zh_earnings from "./zh/earnings.json"
+import zh_settings from "./zh/settings.json"
+import pt_common from "./pt/common.json"
+import pt_auth from "./pt/auth.json"
+import pt_setup from "./pt/setup.json"
+import pt_home from "./pt/home.json"
+import pt_catalog from "./pt/catalog.json"
+import pt_orders from "./pt/orders.json"
+import pt_expert from "./pt/expert.json"
+import pt_earnings from "./pt/earnings.json"
+import pt_settings from "./pt/settings.json"
+
+export const LOCALES = {
+  en: { ...en_common, ...en_auth, ...en_setup, ...en_home, ...en_catalog, ...en_orders, ...en_expert, ...en_earnings, ...en_settings },
+  ru: { ...ru_common, ...ru_auth, ...ru_setup, ...ru_home, ...ru_catalog, ...ru_orders, ...ru_expert, ...ru_earnings, ...ru_settings },
+  fr: { ...fr_common, ...fr_auth, ...fr_setup, ...fr_home, ...fr_catalog, ...fr_orders, ...fr_expert, ...fr_earnings, ...fr_settings },
+  es: { ...es_common, ...es_auth, ...es_setup, ...es_home, ...es_catalog, ...es_orders, ...es_expert, ...es_earnings, ...es_settings },
+  zh: { ...zh_common, ...zh_auth, ...zh_setup, ...zh_home, ...zh_catalog, ...zh_orders, ...zh_expert, ...zh_earnings, ...zh_settings },
+  pt: { ...pt_common, ...pt_auth, ...pt_setup, ...pt_home, ...pt_catalog, ...pt_orders, ...pt_expert, ...pt_earnings, ...pt_settings },
+} as const
+
+export type Locale = keyof typeof LOCALES
+export const LOCALE_LIST: Locale[] = ["en", "ru", "fr", "es", "zh", "pt"]

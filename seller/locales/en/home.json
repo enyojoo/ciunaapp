@@ -1,0 +1,15 @@
+{
+  "home.welcome": "Welcome, {name}",
+  "home.setup.body": "Finish these steps and Ciuna will review your business.",
+  "home.live.body": "What needs your attention today.",
+  "home.setup.title": "Get ready to sell",
+  "home.newOrders": "New orders",
+  "home.newBookings": "New booking requests",
+  "home.needsAction": "Waiting for you to accept",
+  "home.inProgress": "In progress",
+  "more.storeProfile": "Store profile",
+  "more.expertProfile": "Expert profile",
+  "more.verification": "Verification and documents",
+  "more.fulfillment": "Pickup and delivery",
+  "more.team": "Team"
+}
