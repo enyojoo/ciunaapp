@@ -52,16 +52,12 @@ Follow `launch-readiness.md`: staging migration order, env vars (`MERCHANT_PAYOU
 ## Do not build yet
 Unconfirmed "New" items: in-app support chat and the conversational assistant, expert "Notify me" and intro-video slot, "Withdraw via Ciuna Send" (disabled row only), compliance case workflow, booking disputes, listing health card, global search. Every number on a card is a placeholder.
 
-## Decisions needed from you before the stages that use them
-1. Office permission table per role (blocks Stage A item 2 wording, not the work).
-2. KYC levels and limits, and the compliance provider (Stage D).
-3. SLA targets per queue (O5).
-4. Listing-review scope and rejection templates (Stage C).
-5. Seller More as a sheet or a page; low-stock threshold; email time zone (Seller).
-6. Expert credentials, spoken languages, intro video (P11).
-7. Real commission, hold-day, payout-minimum and referral numbers, entered in Office before the first merchant is approved.
-8. Chat translation provider and push provider (Stage D).
-9. The 14 open customer questions in `build-plan/customer-app.md` section 6 (Support and Assistant are blocked on them).
+## Decisions
+All product decisions are resolved in `design-system/guides/80-decisions.md` (section "Resolved product decisions"). The surface plans' "decisions needed" lists are answered there. Only inputs from outside the codebase remain:
+1. Real KYC limits and referral numbers, signed off by compliance and finance before launch (seeds are conservative).
+2. Legal text for account deletion and data retention.
+3. Provider accounts: Google Cloud Translation key, Expo push credentials, Telegram bot, SES, YooKassa.
+4. Confirmation of which Supabase project is staging.
 
 ## How to run it
 - One owner per surface and per stage item; packages inside a stage touch different files and can run as parallel sessions in separate worktrees.
