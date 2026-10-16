@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from "react-native"
+import { useState } from "react"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { LoadError } from "@/components/load-error"
 import { PrimaryButton } from "@/components/primary-button"
@@ -40,8 +41,12 @@ function Distribution({ summary }: { summary: ReviewSummary }) {
   )
 }
 
-function ReviewCard({ review, locale }: { review: PublicReview; locale: string }) {
+const CLAMP_CHARS = 200
+
+export function ReviewCard({ review, locale }: { review: PublicReview; locale: string }) {
   const { t } = useTranslation("app")
+  const [open, setOpen] = useState(false)
+  const long = (review.body || "").length > CLAMP_CHARS
   let date = ""
   try {
     date = new Date(review.created_at).toLocaleDateString(locale, { year: "numeric", month: "short", day: "numeric" })
@@ -57,7 +62,18 @@ function ReviewCard({ review, locale }: { review: PublicReview; locale: string }
         <Text style={styles.date}>{date}</Text>
       </View>
       <RatingStars value={review.rating} size={13} />
-      {review.body ? <Text style={styles.body}>{review.body}</Text> : null}
+      {review.body ? (
+        <Text style={styles.body} numberOfLines={long && !open ? 4 : undefined}>
+          {review.body}
+        </Text>
+      ) : null}
+      {long ? (
+        <Pressable onPress={() => setOpen((o) => !o)} hitSlop={8} accessibilityRole="button" style={styles.more}>
+          <Text style={styles.moreText}>
+            {open ? t("reviews.readLess", { defaultValue: "Show less" }) : t("reviews.readMore", { defaultValue: "Read more" })}
+          </Text>
+        </Pressable>
+      ) : null}
       {review.reply ? (
         <View style={styles.reply}>
           <Text style={styles.replyLabel}>{t("reviews.sellerReply", { defaultValue: "Reply from the seller" })}</Text>
@@ -116,6 +132,8 @@ export function ReviewsSection({ state }: { state: ReviewsState }) {
 }
 
 const styles = StyleSheet.create({
+  more: { alignSelf: "flex-start", minHeight: 32, justifyContent: "center" },
+  moreText: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText },
   wrap: { marginTop: 28 },
   heading: { marginBottom: 12, fontSize: 18, fontWeight: "600", color: colors.text },
   line: { flexDirection: "row", alignItems: "center", gap: 6 },

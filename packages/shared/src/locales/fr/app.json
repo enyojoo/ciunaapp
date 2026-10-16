@@ -1294,7 +1294,9 @@
     "sellerReply": "Réponse du vendeur",
     "anonymous": "Client",
     "count_one": "{{count}} avis",
-    "count_other": "{{count}} avis"
+    "count_other": "{{count}} avis",
+    "readMore": "Lire la suite",
+    "readLess": "Réduire"
   },
   "home": {
     "slide": {

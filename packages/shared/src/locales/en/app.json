@@ -1294,7 +1294,9 @@
     "sellerReply": "Reply from the seller",
     "anonymous": "Customer",
     "count_one": "{{count}} review",
-    "count_other": "{{count}} reviews"
+    "count_other": "{{count}} reviews",
+    "readMore": "Read more",
+    "readLess": "Show less"
   },
   "home": {
     "slide": {

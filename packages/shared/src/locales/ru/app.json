@@ -1296,7 +1296,9 @@
     "count_one": "{{count}} отзыв",
     "count_other": "{{count}} отзыва",
     "count_few": "{{count}} отзыва",
-    "count_many": "{{count}} отзывов"
+    "count_many": "{{count}} отзывов",
+    "readMore": "Читать полностью",
+    "readLess": "Свернуть"
   },
   "home": {
     "slide": {

@@ -1294,7 +1294,9 @@
     "sellerReply": "卖家回复",
     "anonymous": "顾客",
     "count_one": "{{count}} 条评价",
-    "count_other": "{{count}} 条评价"
+    "count_other": "{{count}} 条评价",
+    "readMore": "展开",
+    "readLess": "收起"
   },
   "home": {
     "slide": {
