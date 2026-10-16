@@ -945,7 +945,7 @@
    "name": "SellerCatalog",
    "group": "Seller · Screens",
    "subtitle": "Catalog list: search, status tabs, product rows with sale price, stock chip and review state, inline Sold out and Pause or Publish, empty and loading states",
-   "height": 3516,
+   "height": 5784,
    "width": 1240,
    "page": true,
    "readme": true
@@ -998,8 +998,8 @@
   {
    "name": "SellerMore",
    "group": "Seller · Screens",
-   "subtitle": "Seller More: grouped list for store, expert and staff roles on phone and tablet, as a page and as a sheet, with language, sign out and a Russian variant",
-   "height": 4479,
+   "subtitle": "Seller More: grouped page with hints, hints-missing state, staff and finance roles, phone and tablet, Russian variant",
+   "height": 5532,
    "width": 1300,
    "page": true,
    "readme": true
@@ -1115,8 +1115,8 @@
   {
    "name": "SellerTeam",
    "group": "Seller · Screens",
-   "subtitle": "Team: members with roles, owner locked, invite form with role help and a permissions table, pending invites with copy link, an invite error and the remove confirm",
-   "height": 3110,
+   "subtitle": "Team as built: invite form with role help, members with role select and remove, owner and your own row fixed, pending invites, invite error and the remove confirm; permissions table, invite expiry with Copy link and a named confirm are marked not built yet",
+   "height": 5001,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1134,7 +1134,7 @@
    "name": "OfficeAssistant",
    "group": "Office · Screens",
    "subtitle": "Office Assistant: the ops AI assistant (conversation, tool result table, suggested and confirmed actions, errors, unavailable, role-limited) and the built queue of customer requests",
-   "height": 4516,
+   "height": 4548,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1233,7 +1233,7 @@
    "name": "OfficeLimits",
    "group": "Office · Screens",
    "subtitle": "KYC levels and monthly Send limits per level and corridor, usage by level, per-user exceptions with reason and expiry, audit note; values labelled as seed examples",
-   "height": 6340,
+   "height": 6396,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1268,8 +1268,8 @@
   {
    "name": "OfficeMerchantsQueue",
    "group": "Office · Screens",
-   "subtitle": "Merchant applications queue: In review default, tabs, type filter, age and SLA, country base to operating, empty queue",
-   "height": 1684,
+   "subtitle": "Merchant applications queue as built: tabs, type filter, Mine and Over SLA, saved Views, age and SLA chips, Owner with Claim and Release, paging, empty and error states",
+   "height": 3744,
    "width": 1200,
    "page": true,
    "readme": true
@@ -1305,7 +1305,7 @@
    "name": "OfficeRatesApproval",
    "group": "Office · Screens",
    "subtitle": "Rates change card: corridor table with live, stale and manual rows, direct finance edits with note and bounds, audited history, customer paused state, ops read-only",
-   "height": 4496,
+   "height": 4520,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1314,7 +1314,7 @@
    "name": "OfficeRecipientsAndBlocks",
    "group": "Office · Screens",
    "subtitle": "Recipient lookup by masked account number, related transfers, blocked recipients and senders with reason and evidence, block and unblock dialogs, empty and no-match states",
-   "height": 5572,
+   "height": 5604,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1341,7 +1341,7 @@
    "name": "OfficeSendOps",
    "group": "Office · Screens",
    "subtitle": "Send operations dashboard: volume and success tiles, queues for payments waiting, failed and stuck payouts and pending refunds, provider status with maintenance toggle, role variants",
-   "height": 5501,
+   "height": 5533,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1359,7 +1359,7 @@
    "name": "OfficeShell",
    "group": "Office · Screens",
    "subtitle": "Office shell: grouped sidebar, role chip, Cmd-K search open, and what ops, finance and support see",
-   "height": 2980,
+   "height": 3211,
    "width": 1200,
    "page": true,
    "readme": true
@@ -1377,7 +1377,7 @@
    "name": "OfficeTransferDetail",
    "group": "Office · Screens",
    "subtitle": "Full-page transfer detail: status and owner, sender and recipient, amounts and rate snapshot, provider timeline with raw ids and attempts, notes, audit trail, role-based actions and reason dialogs",
-   "height": 8041,
+   "height": 8097,
    "width": 1240,
    "page": true,
    "readme": true

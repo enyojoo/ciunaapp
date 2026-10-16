@@ -9,7 +9,10 @@ const dir = path.join(root, "components")
 const only = process.argv.slice(2)
 const css = fs.readFileSync(path.join(dir, "bundle.css"), "utf8")
 const icons = Function("window", fs.readFileSync(path.join(dir, "icons.js"), "utf8") + "; return window.CZ_ICONS")({})
-const defined = new Set([...css.matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m) => m[1]))
+const extraCss = fs.existsSync(path.join(dir, "current-app.css")) ? fs.readFileSync(path.join(dir, "current-app.css"), "utf8") : ""
+const classesOf = (s) => [...s.matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m) => m[1])
+const defined = new Set(classesOf(css))
+const definedExtra = new Set(classesOf(extraCss)) // only for cards that link ../current-app.css
 const tokenNames = new Set([...fs.readFileSync(path.join(dir, "tokens.css"), "utf8").matchAll(/--([\w-]+):/g)].map((m) => m[1]))
 const emoji = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u
 const ALLOWED_HEX = new Set(["#fff", "#ffffff", "#000", "#000000"])
@@ -27,8 +30,9 @@ for (const name of fs.readdirSync(dir).sort()) {
   for (const m of html.matchAll(/data-i="([^"']+)"/g)) if (!icons[m[1]]) fail(name, `unknown icon "${m[1]}"`)
   const localCss = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join("\n")
   const localDefined = new Set([...localCss.matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m) => m[1]))
+  const usesExtra = html.includes('href="../current-app.css"')
   const unknown = new Set()
-  for (const m of html.matchAll(/class="([^"]*)"/g)) for (const c of m[1].split(/\s+/)) if (c && !c.includes("'") && !defined.has(c) && !localDefined.has(c) && !/^(is-|ph-|on$|off$)/.test(c)) unknown.add(c)
+  for (const m of html.matchAll(/class="([^"]*)"/g)) for (const c of m[1].split(/\s+/)) if (c && !c.includes("'") && !defined.has(c) && !localDefined.has(c) && !(usesExtra && definedExtra.has(c)) && !/^(is-|ph-|on$|off$)/.test(c)) unknown.add(c)
   if (unknown.size) fail(name, `classes not defined in bundle.css or the card's <style>: ${[...unknown].slice(0, 12).join(", ")}`)
   for (const m of html.matchAll(/var\(--([\w-]+)/g)) if (!tokenNames.has(m[1]) && !/^(s|ph-bg)$/.test(m[1]) && !localCss.includes(`--${m[1]}:`) && !html.includes(`--${m[1]}:`)) fail(name, `unknown token var(--${m[1]})`)
   const hexes = [...html.matchAll(/#[0-9a-fA-F]{3,8}\b/g)].map((m) => m[0].toLowerCase()).filter((h) => !ALLOWED_HEX.has(h))

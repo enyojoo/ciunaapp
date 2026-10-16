@@ -5,13 +5,13 @@ The More destination in Ciuna Seller: everything a seller needs that does not fi
 
 ## Anatomy
 - Page (phone, built route `/more`): page header "More" with the signed-in email, then two groups of rows in cards: Business (Store profile or Expert profile, Reviews, Verification and documents, Pickup and delivery or Availability, Earnings, Payout methods) and Settings (Alerts, Team). Below them a card with Language (a select showing the current language) and Sign out.
-- Row: 20px icon, label, a right-hand hint (rating, balance, payout method, people count) or a status badge, chevron. Minimum height 50px; the whole row is the tap target.
-- Sheet (phone): the same rows in a bottom sheet opened from the More item in the bottom nav, with the email in the header. It never shows a second set of rows.
-- Language sheet: six languages in their own script, the current one checked.
+- Row: 20px icon, label, a right-hand hint (rating, available balance, default payout method, people count; only when the data exists) or a status badge, chevron. Minimum height 50px; the whole row is the tap target.
+- Sheet (phone, not built yet): the same rows in a bottom sheet opened from the More item in the bottom nav, with the email in the header. It never shows a second set of rows.
+- Language sheet (not built yet; the page uses a select): six languages in their own script, the current one checked.
 - Tablet (820): sidebar already lists Earnings and Reviews, so those rows leave More. The list stays at 520px and is not stretched.
 
 ## States
-Store owner; expert owner as a sheet; staff with orders and messages only (Reviews, Alerts, Language, Sign out); finance staff (Earnings, Payout methods, Alerts); language sheet; Russian with wrapping labels and truncated hints; tablet owner; tablet staff. Verification shows Verified, In review, Rejected or Action needed as a badge, never colour alone.
+Store owner; hints missing; expert owner as a sheet (not built); staff (Reviews, Pickup and delivery, Alerts); finance (Reviews, Earnings, Payout methods, Alerts); language sheet (not built); Russian with wrapping labels and truncated hints; tablet owner; tablet staff. Verification shows Verified, In review, Rejected or Action needed as a badge, never colour alone.
 
 ## Rules
 - A row the role cannot use is not drawn. Alerts, Language and Sign out are always present.
@@ -22,12 +22,20 @@ Store owner; expert owner as a sheet; staff with orders and messages only (Revie
 - Seller never shows provider names: "SBP · Sberbank" names a bank, not a payment provider.
 
 ## Upgrade
-Built in `seller/app/(shell)/more/page.tsx` as one flat card of rows. Differences:
-- Earnings and Reviews are not in the built list, and on phones the bottom nav does not reach them either (see SellerShellStates). They are New here, with Business and Settings group labels.
-- Right-hand hints and status badges are New; today rows have only icon, label and chevron.
-- Built has no Settings row; Alerts and Team are routes under `/settings`. The groups simply label them.
-- The sheet version is New (today More is always a full page).
-- The tablet rule that More drops rows already in the sidebar is New.
+**Built** (`seller/app/(shell)/more/page.tsx`):
+- A full page at `/more` with Business and Settings groups, Earnings and Reviews rows (phone only; from 768px the sidebar carries them), right-hand hints, the Verification badge and a Language select above Sign out.
+- Hints are drawn only when their data exists: rating (`4.8 ★`), the largest available balance, default payout method with last digits, team size. Never a placeholder.
+- Rows follow permissions; Alerts, Language and Sign out are always present.
+
+**Differs** (product wins; the card now shows the product):
+- Hints: rating is `4.8 ★` (no review count), balance has no "available" word, Alerts, Pickup and delivery and expert rows carry no hint. An extra frame shows the page with hints missing (loading or no data).
+- Language is a native select, not a sheet; More is always a page, not a sheet over the screen.
+- Staff keep Pickup and delivery (catalog permission); finance sees Reviews (orders permission), Earnings and Payout methods and a Home, Orders, More bottom nav.
+- Group labels are sentence-case headings, not uppercase eyebrows.
+
+**Not built yet** (marked in the frame captions):
+- More as a bottom sheet from the nav (expert frame).
+- Language as a sheet of six languages in their own script.
 
 ## Code
 `seller/app/(shell)/more/page.tsx`, `seller/components/shell/nav.ts`, `seller/components/shell/app-shell.tsx`

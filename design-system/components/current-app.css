@@ -1,0 +1,161 @@
+/* Current customer app (Expo) as CSS, used by the "Current" frames of the customer cards.
+   Every value is read from mobile/components/*.tsx and mobile/lib/theme.ts; colours come from tokens (no hex here).
+   Link it after bundle.css: <link rel="stylesheet" href="../current-app.css">. Native font, light only.
+   Prefix ca- = "current app". Improved frames may reuse these building blocks and override what they improve in the card's own <style>. */
+
+.ca{font-family:var(--font-native)}
+.ca *{font-family:inherit}
+.ca-grad{background:linear-gradient(to bottom right,var(--hero-orange),var(--hero-orange-mid),var(--hero-amber))}
+
+/* ---- home header (AppHeader), search entry, hero banner (HubHero), tiles (Tile) ---- */
+.ca-head{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px;background:var(--surface);flex-shrink:0}
+.ca-head .logo{height:28px;width:90px;display:block}
+.ca-head .acts{display:flex;align-items:center;gap:6px;margin-left:12px}
+.ca-refer{height:32px;max-width:180px;display:inline-flex;align-items:center;gap:4px;padding:0 10px;border-radius:999px;border:1px solid var(--refer-border);background:linear-gradient(to right,var(--refer-surface),var(--success-surface));font:600 12px/1 var(--font-native);color:var(--refer-text);white-space:nowrap}
+.ca-refer .ic{--s:14px;color:var(--refer-icon)}
+.ca-avatar{width:40px;height:40px;border-radius:50%;background:var(--hero-body);border:1px solid var(--hairline);color:var(--primary-text);display:inline-grid;place-items:center;font:700 15px/1 var(--font-native);flex-shrink:0;overflow:hidden}
+.ca-searchwrap{padding:0 20px 12px;background:var(--surface);flex-shrink:0}
+.ca-search{min-height:46px;display:flex;align-items:center;gap:10px;border-radius:999px;border:1px solid var(--hairline);background:var(--paper);padding:0 16px;font:400 16px/22px var(--font-native);color:var(--muted)}
+.ca-search .ic{--s:18px;color:var(--muted)}
+.ca-hero{margin:0 20px 20px;border-radius:16px;padding:20px;text-align:center}
+.ca-hero h2{margin:0;font:700 24px/30px var(--font-native);letter-spacing:-.4px;color:#fff}
+.ca-hero p{margin:8px auto 0;max-width:280px;font:400 13px/20px var(--font-native);color:var(--hero-body)}
+.ca-grid2{display:flex;flex-wrap:wrap;justify-content:space-between;padding:0 20px}
+.ca-grid2>*{width:48.5%;margin-bottom:10px}
+.ca-tile{min-height:148px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:16px;border:1px solid var(--hairline);background:var(--surface);padding:16px 12px;text-align:center}
+.ca-tile .badge-ico{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(to bottom,var(--hero-orange-mid),var(--hero-orange))}
+.ca-tile .badge-ico .ic{--s:28px}
+.ca-tile .t{margin-top:8px;width:100%;font:600 13px/18px var(--font-native);color:var(--ink)}
+.ca-tile .d{margin-top:4px;width:100%;font:400 12px/16px var(--font-native);color:var(--muted)}
+.ca-tile.sk{background:var(--surface)}
+
+/* ---- tab bar (Tabs in app/(app)/_layout.tsx): 52 content + 8 top, bottom = home indicator area ---- */
+.ca-tabbar{display:grid;grid-template-columns:repeat(3,1fr);padding-top:8px;border-top:1px solid var(--hairline);background:var(--surface);flex-shrink:0}
+.ca-tab{height:52px;display:grid;justify-items:center;align-content:center;gap:2px;font:600 12px/16px var(--font-native);color:var(--muted)}
+.ca-tab .ic{--s:22px}
+.ca-tab.on{color:var(--primary)}
+.ca-tabbar+.homebar{height:34px;background:var(--surface);align-items:flex-start;padding-top:8px}
+
+/* ---- service-line header bar (HubLinePageShell): orange gradient is the navigation ---- */
+.ca-bar{border-radius:0 0 16px 16px;overflow:hidden;flex-shrink:0}
+.ca-bar .statusbar{color:#fff}
+.ca-bar .row{display:flex;align-items:center;gap:8px;padding:4px 20px 16px 8px;min-height:48px}
+.ca-bar .row.sf{align-items:flex-start}
+.ca-back{width:48px;height:48px;display:grid;place-items:center;flex-shrink:0}
+.ca-chip{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;color:#fff;position:relative;flex-shrink:0}
+.ca-chip .ic{--s:20px}
+.ca-back .ca-chip .ic{--s:26px}
+.ca-bar .copy{flex:1;min-width:0}
+.ca-bar .title{font:700 22px/28px var(--font-native);letter-spacing:-.35px;color:#fff}
+.ca-bar .sub{margin-top:4px;font:400 13px/18px var(--font-native);color:var(--hero-body)}
+.ca-bar .trail{display:flex;align-items:center;gap:4px}
+.ca-bar .logo{width:48px;height:48px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);flex-shrink:0}
+.ca-bar .logo .ph{border-radius:0;width:100%;height:100%}
+.ca-bar .sname{font:700 18px/22px var(--font-native);letter-spacing:-.3px;color:#fff;display:flex;align-items:center;gap:5px}
+.ca-bar .sname .ic{--s:16px;color:var(--primary-tint)}
+.ca-bar .sloc{margin-top:2px;display:flex;align-items:center;gap:4px;font:400 12px/16px var(--font-native);color:var(--hero-body)}
+.ca-bar .sloc .ic{--s:13px}
+.ca-bar .bio{margin-top:10px;font:400 13px/19px var(--font-native);color:var(--hero-body)}
+.ca-cbadge{position:absolute;top:-2px;right:-2px;min-width:16px;height:16px;padding:0 3px;border-radius:8px;background:#fff;color:var(--primary-text);font:700 9px/16px var(--font-native);text-align:center}
+.ca-body{flex:1;min-height:0;overflow:hidden;padding:20px 20px 0}
+.ca-h2{font:600 18px/24px var(--font-native);color:var(--ink);margin:0}
+.ca-seeall{display:inline-flex;align-items:center;gap:2px;font:600 14px/20px var(--font-native);color:var(--primary)}
+.ca-seeall .ic{--s:16px}
+
+/* ---- floating cart bar (HubCartBar) ---- */
+.ca-cartbar{position:absolute;left:12px;right:12px;bottom:6px;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;border-radius:999px;background:var(--ink);padding:12px 16px;box-shadow:var(--shadow-native-cart-bar);color:#fff;font:600 13px/18px var(--font-native)}
+.ca-cartbar .l{display:flex;align-items:center;gap:8px}
+.ca-cartbar .l .ic{--s:16px}
+.ca-cartbar b{font-weight:700}
+
+/* ---- product card (ProductCard), vendor chip ---- */
+.ca-pc{border-radius:16px;border:1px solid var(--card-edge);background:var(--surface);overflow:hidden;box-shadow:var(--shadow-native-card);position:relative;text-align:left}
+.ca-pc .img{position:relative;width:100%;aspect-ratio:4/3;background:var(--neutral-surface);display:flex;justify-content:center;overflow:hidden}
+.ca-pc .img .ph{width:75%;height:100%;border-radius:0}
+.ca-pc .img .ph.wide{width:100%}
+.ca-pc .img .noimg{align-self:center;font:400 11px/16px var(--font-native);color:var(--muted);padding:0 8px;text-align:center}
+.ca-pc .cat{position:absolute;top:6px;right:6px;max-width:72%;border-radius:999px;background:rgba(255,255,255,.92);padding:2px 6px;font:600 9px/12px var(--font-native);color:var(--neutral-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca-pc .top{padding:8px 10px 0}
+.ca-pc .ti{font:600 13px/17px var(--font-native);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca-pc .cue{margin-top:2px;font:600 11px/14px var(--font-native);color:var(--primary);text-transform:capitalize}
+.ca-pc .bd{padding:0 10px 10px}
+.ca-vchip{margin-top:6px;display:inline-flex;align-items:center;gap:6px;max-width:100%}
+.ca-vchip .vp{width:18px;height:18px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font:700 9px/1 var(--font-native);color:var(--muted);flex-shrink:0}
+.ca-vchip .vn{font:500 11px/14px var(--font-native);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca-vchip .ic{--s:12px;color:var(--primary)}
+.ca-pc .pb{margin-top:10px;display:grid;gap:8px}
+.ca-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px}
+.ca-price .pre{font:500 11px/14px var(--font-native);color:var(--muted)}
+.ca-price s{font:400 11px/14px var(--font-native);color:var(--muted)}
+.ca-price b{font:700 15px/20px var(--font-native);color:var(--ink)}
+.ca-cta{min-height:32px;display:flex;align-items:center;justify-content:center;gap:5px;border-radius:12px;background:var(--primary);color:#fff;font:600 12px/16px var(--font-native)}
+.ca-cta .ic{--s:13px}
+.ca-cta.off{opacity:.5}
+.ca-step{min-height:32px;display:flex;align-items:center;justify-content:space-between;border-radius:12px;border:1px solid var(--primary);background:var(--hero-body);padding:0 6px;color:var(--primary)}
+.ca-step i,.ca-step svg.ic{--s:14px}
+.ca-step .b{width:24px;height:24px;display:grid;place-items:center}
+.ca-step .n{flex:1;text-align:center;font:700 13px/16px var(--font-native)}
+.ca-heart{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;box-shadow:var(--shadow-native-heart);color:var(--muted)}
+.ca-heart .ic{--s:16px}
+.ca-heart.on{color:var(--primary-text)}
+.ca-heart.on .ic{fill:currentColor}
+.ca-heart.left{left:6px;right:auto}
+.ca-pc.sk{box-shadow:none;border-color:var(--hairline)}
+.ca-pc.sk .img{background:var(--neutral-surface)}
+.ca-pc.sk .a{height:14px;width:80%;border-radius:4px;background:var(--paper)}
+.ca-pc.sk .c{margin-top:8px;height:10px;width:50%;border-radius:4px;background:var(--paper)}
+
+/* ---- store face (StoreFace): strip 120 wide, grid 48.5% ---- */
+.ca-sf{border-radius:16px;border:1px solid var(--hairline);background:var(--surface);overflow:hidden;box-shadow:var(--shadow-native-face);position:relative;text-align:left}
+.ca-sf .ph1{width:100%;aspect-ratio:1;background:var(--paper);position:relative;display:grid;place-items:center;overflow:hidden}
+.ca-sf .ph1 .ph{position:absolute;inset:0;border-radius:0;aspect-ratio:auto}
+.ca-sf .ph1 .nm{padding:8px;font:600 11px/14px var(--font-native);color:var(--muted);text-align:center}
+.ca-sf .cap{border-top:1px solid var(--hairline);padding:12px}
+.ca-sf.strip{width:120px}
+.ca-sf.strip .cap{padding:8px}
+.ca-sf .nr{display:flex;align-items:center;gap:4px;min-width:0}
+.ca-sf.strip .nr{justify-content:center}
+.ca-sf .nr .n{flex:0 1 auto;min-width:0;font:600 13px/18px var(--font-native);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca-sf.strip .nr .n{font-size:12px;line-height:16px}
+.ca-sf .nr .ic{--s:12px;color:var(--primary);flex-shrink:0}
+.ca-sf .loc{margin-top:4px;display:flex;align-items:center;gap:4px;min-width:0;font:400 11px/15px var(--font-native);color:var(--muted)}
+.ca-sf .loc .ic{--s:12px;color:var(--muted)}
+.ca-sf .loc span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca-sf.sk{box-shadow:none;aspect-ratio:.85;background:var(--paper);border:0}
+.ca-sf.strip.sk{aspect-ratio:.82}
+
+/* ---- primitives: PrimaryButton, Row/GroupCard, StatusChip, EmptyState ---- */
+.ca-btn{min-height:48px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:14px 16px;background:var(--primary);color:#fff;font:600 16px/20px var(--font-native)}
+.ca-btn.secondary{background:var(--surface);border:1px solid var(--hairline);color:var(--ink)}
+.ca-btn.ghost{background:transparent;color:var(--ink)}
+.ca-btn.danger{background:transparent;color:var(--destructive)}
+.ca-btn.off{opacity:.45}
+.ca-group{margin-bottom:16px;overflow:hidden;border-radius:16px;border:1px solid var(--hairline);background:var(--surface);padding:0 16px}
+.ca-group .hd{padding-top:16px;font:600 17px/22px var(--font-native);color:var(--ink)}
+.ca-row{min-height:48px;display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--hairline)}
+.ca-row:last-child{border-bottom:0}
+.ca-row .ico{width:30px;height:30px;margin-right:12px;border-radius:9px;display:grid;place-items:center;background:var(--hero-body);color:var(--primary)}
+.ca-row .ico .ic{--s:18px}
+.ca-row .lb{flex:1;font:400 16px/22px var(--font-native);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca-row .lb.danger{color:var(--destructive)}
+.ca-row .tr{margin-left:8px;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.ca-row .tr .ic{--s:18px}
+.ca-status{display:inline-flex;border-radius:999px;padding:3px 10px;font:600 12px/16px var(--font-native)}
+.ca-status.pending{background:var(--warning-surface);color:var(--warning-text)}
+.ca-status.completed{background:var(--success-surface);color:var(--success)}
+.ca-status.failed{background:var(--destructive-surface);color:var(--destructive)}
+.ca-status.cancelled{background:var(--neutral-surface);color:var(--neutral-text)}
+.ca-empty{display:grid;justify-items:center;padding:64px 24px;text-align:center}
+.ca-empty .t{font:600 18px/24px var(--font-native);color:var(--ink)}
+.ca-empty .b{margin-top:8px;font:400 16px/22px var(--font-native);color:var(--muted)}
+.ca-stars{display:inline-flex;gap:2px;align-items:center;color:var(--primary-text)}
+.ca-stars .ic{--s:14px;fill:currentColor}
+.ca-stars .off{color:var(--star-empty);fill:none}
+
+/* ---- Current / Improved framing shared by the customer cards ---- */
+.ca-pair{display:flex;flex-wrap:wrap;gap:36px;justify-content:center;align-items:flex-start}
+.ca-label{display:inline-flex;align-items:center;gap:8px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.ca-label.cur{background:var(--neutral-surface);color:var(--neutral-text)}
+.ca-label.imp{background:var(--success-surface);color:var(--success-text)}
+.ca-notes{max-width:360px;margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.ca-notes li+li{margin-top:4px}

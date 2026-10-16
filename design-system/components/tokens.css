@@ -32,6 +32,15 @@
   --refer: #0F766E;
   --refer-surface: #F0FDFA;
   --scrim: #111827;
+  --hero-orange: #EA580C;
+  --hero-orange-mid: #F97316;
+  --hero-amber: #FBBF24;
+  --hero-body: #FFF7ED;
+  --card-edge: #E5E7EB;
+  --star-empty: #D1D5DB;
+  --refer-border: #99F6E4;
+  --refer-text: #134E4A;
+  --refer-icon: #115E59;
   --radius-control: 12px;
   --radius-card: 16px;
   --radius-sheet: 24px;
@@ -41,6 +50,10 @@
   --shadow-md: 0 8px 24px rgba(17,24,39,.10);
   --shadow-lg: 0 18px 48px rgba(17,24,39,.16);
   --shadow-card-face: 0 4px 12px rgba(17,24,39,.20);
+  --shadow-native-card: 0 4px 10px rgba(15,23,42,.08);
+  --shadow-native-face: 0 2px 8px rgba(15,23,42,.06);
+  --shadow-native-heart: 0 1px 4px rgba(15,23,42,.12);
+  --shadow-native-cart-bar: 0 6px 16px rgba(15,23,42,.30);
   --font-web: Geist, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-native: -apple-system, 'SF Pro Text', Roboto, system-ui, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;

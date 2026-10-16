@@ -27,7 +27,16 @@
     "neutral-text": "#374151",
     "refer": "#0F766E",
     "refer-surface": "#F0FDFA",
-    "scrim": "#111827"
+    "scrim": "#111827",
+    "hero-orange": "#EA580C",
+    "hero-orange-mid": "#F97316",
+    "hero-amber": "#FBBF24",
+    "hero-body": "#FFF7ED",
+    "card-edge": "#E5E7EB",
+    "star-empty": "#D1D5DB",
+    "refer-border": "#99F6E4",
+    "refer-text": "#134E4A",
+    "refer-icon": "#115E59"
   },
   "radius": {
     "control": 12,

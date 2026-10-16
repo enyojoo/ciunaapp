@@ -100,6 +100,8 @@ S8. Navigation/shell. Keep tab label "More"; add Favourites and Search entry poi
 
 Each package ships native and web together unless noted. "Device" = iOS simulator and an Android device or emulator; "browser" = `web/` at phone width and desktop width, plus Expo web build when the package touches shared RN code.
 
+**Design baseline (task D0).** WP2 to WP10 (primitives, discovery, store and product pages, cart, orders) start from the reconciled customer cards. Each card now has a "Current" frame (the Expo app as built, extracted from `mobile/components/*.tsx`, `mobile/lib/theme.ts`, `mobile/app/**`) and an "Improved" frame beside it; the card README `Upgrade` section lists Current, Improved (what and why) and Build notes. Build the Improved frame by changing the existing components, not by restyling the app to the old cards. Shared Current-app CSS lives in `design-system/components/current-app.css`; native values missing from the old tokens were added to `tokens.json` (hero gradient stops, `card-edge`, native shadows).
+
 WP1. Language wiring (S1). Depends on nothing.
 Exit: switch to Chinese and Portuguese on device and browser from the picker and from the Home/Account rows; relaunch keeps choice; no raw keys on Home, Food, Cart, Send, More; zh and pt parity check script passes; auth, emails still render in en/ru/fr/es.
 

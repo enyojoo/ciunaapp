@@ -19,7 +19,17 @@ List; filtered; store in review (Publish disabled); empty ("No products yet" wit
 - Money through Amount: `₽390`, struck `₽450`.
 
 ## Upgrade
-Built in `seller/app/(shell)/catalog/page.tsx`. Matches today's behaviour. The desktop row layout here is the built `xl` layout (1280px and up); between 768 and 1279px the built row stacks into a card like the phone.
+**Built**
+- List, search, status tabs, sale price, stock chip, review line, inline Sold out and Pause or Publish, empty, no-match, skeleton, error and busy states (`seller/app/(shell)/catalog/page.tsx`).
+- Phone: Add product hugs its width; Delivery zones and Import links sit under it; the "can publish once approved" banner is below the links, above the search.
+- Desktop and tablet: sidebar with a top bar (bell and account only, no search). Empty state has one action, Add product.
+
+**Differs**
+- The product still switches to the row layout at `xl` (1280px). Between 768 and 1279px the row stacks into a card; the 768 frame shows that as built.
+- The card now draws the 1024px row layout the reconciliation asks for, with narrower columns (128px status, 256px actions) so the name keeps room.
+
+**Not built yet**
+- Row layout from `lg` (1024px) instead of `xl`; the 1024 frame is captioned "Not built yet".
 
 ## Code
 `seller/app/(shell)/catalog/page.tsx`

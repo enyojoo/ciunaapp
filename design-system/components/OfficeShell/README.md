@@ -2,33 +2,38 @@
 
 ## Purpose
 
-The frame every Office screen sits in: grouped sidebar, header with global search and the signed-in role, and a content area on the paper canvas.
+The frame every Office screen sits in: grouped sidebar, header with search and the signed-in role, and a content area. Drawn as built, with the role rules and the no-access screen.
 
 ## Anatomy
 
-- Sidebar (232px): Operations, Marketplace, Merchants, Finance, Settings groups; counts on queues that need work (Merchants in review, Payouts open).
-- Header: global search with the Cmd-K hint, notifications, role chip, user avatar.
-- Command palette (Cmd-K): grouped results (merchants, go-to pages, orders), keyboard hints in the footer.
-- Content: page head, toolbar, then tables or review panels inside `.o-card`.
+- Sidebar (224px): Ciuna mark and "Office", a Dashboard link, then five collapsible groups: Operations, Marketplace, Merchants, Finance, Settings. Each group row has a chevron (toggle) and the group link; the group holding the current page opens automatically, the others stay collapsed. Links sit indented under a hairline. Logout is pinned at the bottom.
+- Count badges on work queues (Users and KYC, Transactions, Assistant, Catalog review, Applications, Payouts): the open count from `GET /api/admin/queues`. The badge turns warning and its label says "N over target" when something is past its SLA. Nothing shows until the first answer, for a queue the role cannot work, or at zero.
+- Header (64px): search button with the Cmd or Ctrl-K hint, then the user's name and the role chip (Ops, Support, Finance, Compliance, Super admin) at the right.
+- Search dialog (Cmd or Ctrl-K, also the Search button): input, results grouped Merchants, Orders, Payouts with icon, title and a one-line subtitle; arrows move, Enter opens. Results are limited to what the role may read.
+- No-access screen: shown in the content area when the signed-in role lacks the permission for the route (longest-prefix rule): lock, "You do not have access to this page", the role named, "Ask a super admin if you need it", Back to dashboard.
 
 ## States
 
-- Ops: Merchants, KYB, Audit, Reviews, Marketplace; Finance group shows Analytics only.
-- Finance: Payouts, Fees, Money settings; no review decisions.
-- Support: read only; decision and money controls are removed, a Read only badge says so.
-- Palette open: scrim over the page, first result highlighted.
+- Ops: no Finance group. Support: only what it may read; no counts for queues it cannot work. Finance: Finance group, no review decisions. Compliance: KYB and Audit log.
+- Palette: too short (type at least 2 characters), searching, nothing found, search failed (calm message, no raw error).
+- While permissions load every link shows; once loaded the links a role cannot use disappear and a group with no link disappears.
+- `/fees` and `/fees/settings` never both light up (longest matching link wins).
 
 ## Rules
 
-- A control the role may not use is hidden, never disabled without a reason.
-- A whole sidebar group disappears when the role has nothing in it.
+- A control or link the role may not use is hidden, never disabled; the API still answers 403.
 - The role chip is always visible so screenshots and screen shares show who is acting.
+- Count badges and the dashboard Needs action card read the same endpoint, so they always agree.
 - Office is the only surface allowed to name payment providers.
 
 ## Upgrade
 
-Differs from built Office: today the sidebar has collapsible Operations, Merchants, Finance and Hub sections with ad-hoc links. The card proposes five fixed groups, count badges on work queues, a role chip in the header and a Cmd-K palette with grouped results (the palette is new). Role hiding for support is already in the built layout; the finance and ops variants formalise it.
+Built / differs / Not built yet.
+
+- Built (and drawn): five groups with chevrons, active group opens automatically, role chip in the header at the right, count badges with over-target wording, Cmd or Ctrl-K search over merchants, orders and payouts, no-access screen, longest-prefix active link.
+- Differs from the earlier card: sidebar is 224px with neutral active fill (not orange tint), header search is a button (the old card's bell and avatar are not built), the palette has no "Go to" group or footer hints, and the merchant header has no Claim button (claiming happens in the Applications queue).
+- Not built yet: "Go to" page shortcuts (G then P) inside the palette, a footer of keyboard hints, notifications bell, avatar menu, Read only badge in page headers (support sees an explanatory note on the merchant page instead).
 
 ## Code
 
-office/components/layout/office-dashboard-layout.tsx
+office/components/layout/office-dashboard-layout.tsx, office/components/office/command-palette.tsx, office/lib/office-nav.ts

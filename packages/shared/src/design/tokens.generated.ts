@@ -28,6 +28,15 @@ export const designColors = {
   "refer": "#0F766E",
   "referSurface": "#F0FDFA",
   "scrim": "#111827",
+  "heroOrange": "#EA580C",
+  "heroOrangeMid": "#F97316",
+  "heroAmber": "#FBBF24",
+  "heroBody": "#FFF7ED",
+  "cardEdge": "#E5E7EB",
+  "starEmpty": "#D1D5DB",
+  "referBorder": "#99F6E4",
+  "referText": "#134E4A",
+  "referIcon": "#115E59",
 } as const
 
 export const designRadius = {"control":12,"card":16,"sheet":24,"pill":999} as const

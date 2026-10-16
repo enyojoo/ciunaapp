@@ -131,3 +131,4 @@ next-env.d.ts
 design-system/.audit/
 test-results/
 playwright-report/
+.audit/
