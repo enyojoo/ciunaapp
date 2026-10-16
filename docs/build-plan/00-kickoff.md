@@ -68,6 +68,9 @@ Exit: for each rebuilt card, the "Current" frame is visually indistinguishable f
 
 Then Stage B (see master plan).
 
+## Deploy order warning (found by running the app locally against the live database)
+The API code in the repo already reads columns that only the Seller migrations create. With the live database as it is today, `GET /api/hub/vendors?service_line=food` fails with `column hub_vendors.rating_avg does not exist` (500), so the customer app shows "No stores yet". Therefore: run `supabase/deploy/seller-portal-all.sql` on the live database BEFORE deploying this API to production, and never deploy the API ahead of the SQL. D0 customer screenshots with real stores and products need the SQL applied first.
+
 ## Owner actions that only the Supabase owner can do
 1. Back up, then run `supabase/deploy/seller-portal-all.sql` in the SQL Editor and send back the verify results (the build assumes these 7 migrations are applied; until then Seller and Office merchant features fail against the database).
 2. Run `supabase/deploy/marketplace-cron.sql` if not done.
