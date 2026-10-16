@@ -1,6 +1,6 @@
 // Email notification types and interfaces
 
-export type EmailLocale = "en" | "ru" | "fr" | "es"
+export type EmailLocale = "en" | "ru" | "fr" | "es" | "zh" | "pt"
 
 export interface EmailTemplate {
   subject: string | ((data: any) => string)

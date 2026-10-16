@@ -1,0 +1,192 @@
+{
+  "common": {
+    "logoAlt": "Ciuna",
+    "needHelp": "Precisa de ajuda? Estamos aqui para você.",
+    "contactSupport": "Falar com o suporte",
+    "contactSupportMailto": "mailto:support@ciuna.com",
+    "footerCopyright": "© {{year}} Ciuna. Todos os direitos reservados.",
+    "footerAccountNote": "Você recebeu este e-mail porque tem uma conta na Ciuna.",
+    "refundNote": "Se você foi cobrado, devolveremos o valor ao seu meio de pagamento original em até 24 horas."
+  },
+  "status": {
+    "pending": "Pendente",
+    "processing": "Em processamento",
+    "completed": "Concluído",
+    "failed": "Falhou",
+    "cancelled": "Cancelado"
+  },
+  "summary": {
+    "heading": "Detalhes da transação",
+    "transactionId": "ID da transação:",
+    "recipient": "Destinatário:",
+    "amount": "Valor:",
+    "receiving": "Valor recebido:",
+    "rateUsed": "Taxa usada:",
+    "exchangeFee": "Taxa de câmbio:",
+    "logisticsFee": "Taxa de logística:",
+    "corridorFee": "Taxa do corredor:",
+    "hubFee": "Taxa da plataforma:",
+    "totalPaid": "Total pago:",
+    "status": "Status:",
+    "date": "Data:",
+    "order": "Pedido:",
+    "type": "Tipo:",
+    "typeFixed": "Preço fixo",
+    "typeUserInput": "Valor informado pelo cliente",
+    "fundedAmount": "Valor carregado:",
+    "exchangeRate": "Taxa de câmbio:",
+    "fulfillment": "Entrega:",
+    "fulfillmentOnlineValue": "Entrega online para {{contactName}}",
+    "fulfillmentInPersonValue": "Entrega presencial para {{contactName}}",
+    "deliveryAddress": "Endereço de entrega:",
+    "contact": "Contato:",
+    "product": "Produto:"
+  },
+  "welcome": {
+    "subject": "Bem-vindo à Ciuna! Vamos começar",
+    "title": "Bem-vindo à Ciuna!",
+    "greeting": "Olá, {{firstName}}! Bem-vindo à Ciuna.",
+    "intro": "Obrigado por entrar na Ciuna! Sua conta já está ativa e pronta para enviar dinheiro para o exterior em menos de 5 minutos.",
+    "featuresLead": "Com a Ciuna, você pode:",
+    "featureSpeed": "Enviar dinheiro para o mundo todo em menos de 5 minutos — transferências internacionais rápidas",
+    "featureTracking": "Acompanhar suas transferências em tempo real",
+    "featureRecipients": "Salvar seus destinatários favoritos para transferências rápidas",
+    "featureRates": "Aproveitar taxas de câmbio competitivas, sem taxas ocultas",
+    "gettingStartedHeading": "Primeiros passos",
+    "gettingStartedBody": "Para fazer sua primeira transferência, clique em “Enviar dinheiro” no seu painel e siga os passos. O dinheiro chega ao destino em menos de 5 minutos!",
+    "cta": "Ir para o painel"
+  },
+  "send": {
+    "pending": {
+      "subject": "Transferência criada - #{{transactionId}}",
+      "title": "Transação criada",
+      "body": "Sua transferência para {{recipientName}} foi criada e está sendo processada. Enviaremos atualizações enquanto o dinheiro segue até o destino.",
+      "nextHeading": "Próximos passos",
+      "nextBody": "Estamos trabalhando na sua transferência e avisaremos assim que ela for concluída. Você pode acompanhar o andamento no seu painel.",
+      "cta": "Acompanhar transação"
+    },
+    "processing": {
+      "subject": "Transferência em processamento - #{{transactionId}}",
+      "title": "Transferência em processamento",
+      "body": "Boa notícia! Recebemos seu pagamento e sua transferência para {{recipientName}} está em processamento. O dinheiro chegará em menos de 5 minutos!",
+      "nextHeading": "O que está acontecendo",
+      "nextBody": "Estamos trabalhando com nossos parceiros bancários para concluir sua transferência. Graças à nossa tecnologia, isso normalmente leva menos de 5 minutos.",
+      "cta": "Acompanhar transferência"
+    },
+    "completed": {
+      "subject": "Transferência concluída com sucesso! #{{transactionId}}",
+      "title": "Transferência concluída",
+      "body": "Sua transferência para {{recipientName}} foi concluída com sucesso. O dinheiro foi enviado e deve chegar em minutos.",
+      "nextHeading": "Próximos passos",
+      "nextBody": "Graças ao nosso processamento rápido, o destinatário deve receber o dinheiro em minutos. Você pode acompanhar todas as suas transferências no painel.",
+      "cta": "Ver transação"
+    },
+    "failed": {
+      "subject": "Transferência falhou - #{{transactionId}}",
+      "title": "Transferência falhou",
+      "bodyWithReason": "Infelizmente, sua transferência para {{recipientName}} não pôde ser concluída. Motivo: {{reason}}",
+      "bodyNoReason": "Infelizmente, sua transferência para {{recipientName}} não pôde ser concluída. Fale com o suporte para mais informações.",
+      "nextHeading": "O que acontece agora",
+      "cta": "Falar com o suporte"
+    },
+    "cancelled": {
+      "subject": "Transferência cancelada - #{{transactionId}}",
+      "title": "Transferência cancelada",
+      "bodyWithReason": "Sua transferência para {{recipientName}} foi cancelada. Motivo: {{reason}}",
+      "bodyNoReason": "Sua transferência para {{recipientName}} foi cancelada. Pode ter sido cancelada por você ou pela nossa equipe de suporte.",
+      "refundHeading": "Informações de reembolso",
+      "cta": "Fazer nova transferência"
+    }
+  },
+  "hubOrder": {
+    "pending": {
+      "subject": "Pedido recebido - {{productTitle}} (#{{transactionId}})",
+      "title": "Pedido recebido",
+      "hero": {
+        "fixed": "Obrigado pela compra de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
+        "userInput": "Recebemos seu carregamento para {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}."
+      },
+      "fulfillment": {
+        "online": "Vamos entregar para {{contactName}} no telefone {{contactPhone}}.",
+        "inPerson": "Vamos entregar para {{contactName}} em {{deliveryAddressLine}}. Nosso entregador ligará para {{contactPhone}} ao chegar."
+      },
+      "nextHeading": "Próximos passos",
+      "nextBody": "Estamos preparando seu pedido e avisaremos assim que ele for processado. Você pode acompanhar o andamento a qualquer momento em Transações.",
+      "cta": "Ver pedido"
+    },
+    "processing": {
+      "subject": "Processando seu pedido - {{productTitle}} (#{{transactionId}})",
+      "title": "Pedido em processamento",
+      "hero": {
+        "fixed": "Recebemos seu pagamento de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) e estamos processando agora.",
+        "userInput": "Recebemos seu pagamento de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) e estamos processando seu carregamento agora."
+      },
+      "fulfillment": {
+        "online": "A entrega para {{contactName}} no telefone {{contactPhone}} já está a caminho.",
+        "inPerson": "Nosso entregador está preparando a entrega para {{contactName}} em {{deliveryAddressLine}} e ligará para {{contactPhone}} ao chegar."
+      },
+      "nextHeading": "O que está acontecendo",
+      "nextBody": "Enviaremos uma confirmação final assim que o seu pedido estiver pronto.",
+      "cta": "Ver pedido"
+    },
+    "completed": {
+      "subjectOnline": "Pedido entregue - {{productTitle}} (#{{transactionId}})",
+      "subjectInPerson": "Pedido a caminho - {{productTitle}} (#{{transactionId}})",
+      "title": "Pedido concluído",
+      "hero": {
+        "fixed": "Seu pedido de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) foi concluído.",
+        "userInput": "Seu carregamento para {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) foi concluído."
+      },
+      "fulfillment": {
+        "online": "Seu pedido foi entregue para {{contactName}}. Veja os detalhes na página do pedido.",
+        "inPerson": "Nosso entregador está a caminho de {{contactName}} em {{deliveryAddressLine}} e ligará para {{contactPhone}} ao chegar."
+      },
+      "nextHeading": "Próximos passos",
+      "nextBody": "Você pode ver o recibo completo na página do pedido a qualquer momento.",
+      "cta": "Ver pedido"
+    },
+    "failed": {
+      "subject": "Pedido falhou - {{productTitle}} (#{{transactionId}})",
+      "title": "Pedido falhou",
+      "bodyWithReason": "Infelizmente, seu pedido de {{productTitle}} não pôde ser concluído. Motivo: {{reason}}",
+      "bodyNoReason": "Infelizmente, seu pedido de {{productTitle}} não pôde ser concluído. Fale com o suporte para mais informações.",
+      "nextHeading": "O que acontece agora",
+      "cta": "Falar com o suporte"
+    },
+    "cancelled": {
+      "subject": "Pedido cancelado - {{productTitle}} (#{{transactionId}})",
+      "title": "Pedido cancelado",
+      "bodyWithReason": "Seu pedido de {{productTitle}} foi cancelado. Motivo: {{reason}}",
+      "bodyNoReason": "Seu pedido de {{productTitle}} foi cancelado. Pode ter sido cancelado por você ou pela nossa equipe de suporte.",
+      "refundHeading": "Informações de reembolso",
+      "cta": "Ver a loja"
+    }
+  },
+  "referralPayout": {
+    "pending": {
+      "subjectWithTx": "Solicitação de repasse de indicação — #{{payoutTransactionId}}",
+      "subjectWithRequest": "Solicitação de repasse de indicação recebida — {{requestIdShort}}…",
+      "subjectFallback": "Solicitação de repasse de indicação recebida",
+      "title": "Solicitação de repasse de indicação recebida",
+      "body": "Olá, {{firstName}}! Recebemos seu pedido de saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}}. Nossa equipe vai analisar e processar — assim como ao iniciar um envio, você receberá outro e-mail quando o repasse for concluído ou cancelado.",
+      "referenceTx": "ID da transação: {{payoutTransactionId}}",
+      "referenceRequest": "ID da solicitação: {{payoutRequestId}}",
+      "nextHeading": "Próximos passos",
+      "nextBody": "Avisaremos por e-mail quando o repasse for enviado ou se o pedido for cancelado. Você também pode ver o status em Afiliados e indicações no app.",
+      "cta": "Ver indicações"
+    },
+    "completed": {
+      "subject": "Repasse de indicação enviado — {{amount}} {{currency}}",
+      "title": "Repasse de indicação concluído",
+      "body": "Olá, {{firstName}}! Seu saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}} foi concluído. Este envio aparece nas suas atividades como uma transferência comum e conta para o total de envios do ano.",
+      "referenceTx": "ID da transação: {{linkedTransactionId}}",
+      "cta": "Ver atividade"
+    },
+    "cancelled": {
+      "subject": "Solicitação de repasse de indicação cancelada",
+      "title": "Repasse de indicação cancelado",
+      "body": "Olá, {{firstName}}! Sua solicitação de repasse de {{amount}} {{currency}} para {{recipientName}} foi cancelada. Esses valores continuam no seu saldo de indicações disponível. Se você não esperava isso, fale com o suporte.",
+      "cta": "Abrir indicações"
+    }
+  }
+}

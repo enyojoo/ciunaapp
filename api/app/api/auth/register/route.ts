@@ -1,8 +1,11 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { type NextRequest, NextResponse } from "next/server"
 import { userService } from "@/lib/database"
 import jwt from "jsonwebtoken"
 
 export async function POST(request: NextRequest) {
+  const limited = await limitOrResponse(request, "auth", LIMITS.auth)
+  if (limited) return limited
   try {
     const { email, password, firstName, lastName, phone, baseCurrency } = await request.json()
 

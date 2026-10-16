@@ -23,7 +23,7 @@ type HubSnapshot = {
 
 function normalizeLocale(value: unknown): EmailLocale {
   const v = typeof value === 'string' ? value.toLowerCase() : ''
-  return (['en', 'ru', 'fr', 'es'] as const).includes(v as EmailLocale) ? (v as EmailLocale) : 'en'
+  return (['en', 'ru', 'fr', 'es', 'zh', 'pt'] as const).includes(v as EmailLocale) ? (v as EmailLocale) : 'en'
 }
 
 function isHubTransaction(tx: { transaction_source?: string | null; type?: string | null }): boolean {

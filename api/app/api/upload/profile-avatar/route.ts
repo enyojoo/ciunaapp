@@ -1,3 +1,4 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { NextRequest, NextResponse } from "next/server"
 import { requireUser, createErrorResponse, withErrorHandling } from "@/lib/auth-utils"
 import { createServerClient } from "@/lib/supabase"
@@ -59,6 +60,8 @@ async function ensureAvatarsBucket(admin: ReturnType<typeof createServerClient>)
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
   const user = await requireUser(request)
+  const limited = await limitOrResponse(request, "upload", LIMITS.upload, user.id)
+  if (limited) return limited
   const parsed = await readUpload(request)
   if ("error" in parsed) return createErrorResponse(parsed.error, parsed.status)
   if (parsed.bytes.length > MAX_BYTES) return createErrorResponse("Photo must be 2MB or smaller.", 400)

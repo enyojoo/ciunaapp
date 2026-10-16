@@ -1,3 +1,4 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { type NextRequest, NextResponse } from "next/server"
 import { requireAuth, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { addCartItem } from "@/lib/hub-cart-server"
@@ -8,6 +9,8 @@ function normalizeServiceLine(v: unknown): "food" | "mart" | null {
 }
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
+  const limited = await limitOrResponse(request, "cart", LIMITS.cart)
+  if (limited) return limited
   let user: { id: string }
   try {
     user = await requireAuth(request)

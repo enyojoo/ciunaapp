@@ -1,8 +1,11 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { LoginAttemptService } from "@/lib/login-attempts"
 
 export async function POST(request: NextRequest) {
+  const limited = await limitOrResponse(request, "auth", LIMITS.auth)
+  if (limited) return limited
   try {
     const { email, password } = await request.json()
 

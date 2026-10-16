@@ -1,0 +1,192 @@
+{
+  "common": {
+    "logoAlt": "Ciuna",
+    "needHelp": "需要帮助？我们随时为您服务。",
+    "contactSupport": "联系客服",
+    "contactSupportMailto": "mailto:support@ciuna.com",
+    "footerCopyright": "© {{year}} Ciuna。版权所有。",
+    "footerAccountNote": "您收到此邮件是因为您拥有 Ciuna 账户。",
+    "refundNote": "如果您已被扣款，我们将在 24 小时内退款至您的原支付方式。"
+  },
+  "status": {
+    "pending": "待处理",
+    "processing": "处理中",
+    "completed": "已完成",
+    "failed": "失败",
+    "cancelled": "已取消"
+  },
+  "summary": {
+    "heading": "交易详情",
+    "transactionId": "交易编号：",
+    "recipient": "收款人：",
+    "amount": "金额：",
+    "receiving": "到账金额：",
+    "rateUsed": "使用汇率：",
+    "exchangeFee": "兑换手续费：",
+    "logisticsFee": "物流费：",
+    "corridorFee": "通道费：",
+    "hubFee": "平台费：",
+    "totalPaid": "实付总额：",
+    "status": "状态：",
+    "date": "日期：",
+    "order": "订单：",
+    "type": "类型：",
+    "typeFixed": "固定价格",
+    "typeUserInput": "自定义金额",
+    "fundedAmount": "充值金额：",
+    "exchangeRate": "汇率：",
+    "fulfillment": "配送方式：",
+    "fulfillmentOnlineValue": "线上交付给 {{contactName}}",
+    "fulfillmentInPersonValue": "上门配送给 {{contactName}}",
+    "deliveryAddress": "配送地址：",
+    "contact": "联系人：",
+    "product": "商品："
+  },
+  "welcome": {
+    "subject": "欢迎使用 Ciuna，让我们开始吧",
+    "title": "欢迎使用 Ciuna",
+    "greeting": "您好，{{firstName}}！欢迎使用 Ciuna。",
+    "intro": "感谢您加入 Ciuna！您的账户已激活，可以在 5 分钟内完成跨境汇款。",
+    "featuresLead": "使用 Ciuna，您可以：",
+    "featureSpeed": "5 分钟内完成全球汇款，跨境转账快速到账",
+    "featureTracking": "实时查看转账进度",
+    "featureRecipients": "保存常用收款人，快速转账",
+    "featureRates": "享受有竞争力的汇率，没有隐藏费用",
+    "gettingStartedHeading": "开始使用",
+    "gettingStartedBody": "要发起第一笔转账，只需点击控制台中的“汇款”按钮，按照简单的步骤操作即可。资金将在 5 分钟内到达收款方！",
+    "cta": "前往控制台"
+  },
+  "send": {
+    "pending": {
+      "subject": "转账已创建 - #{{transactionId}}",
+      "title": "交易已创建",
+      "body": "您向 {{recipientName}} 的转账已创建，目前正在处理中。资金送达前，我们会向您发送进度更新。",
+      "nextHeading": "接下来",
+      "nextBody": "我们正在处理您的转账，完成后会通知您。您可以在控制台查看进度。",
+      "cta": "查看交易进度"
+    },
+    "processing": {
+      "subject": "转账处理中 - #{{transactionId}}",
+      "title": "转账处理中",
+      "body": "好消息！我们已收到您的付款，向 {{recipientName}} 的转账正在处理中。资金将在 5 分钟内到账。",
+      "nextHeading": "当前进展",
+      "nextBody": "我们正与银行合作伙伴完成转账。得益于我们的先进技术，这通常只需 5 分钟之内。",
+      "cta": "查看转账"
+    },
+    "completed": {
+      "subject": "转账已成功完成 #{{transactionId}}",
+      "title": "转账已完成",
+      "body": "您向 {{recipientName}} 的转账已成功完成。资金已发出，几分钟内即可到账。",
+      "nextHeading": "接下来",
+      "nextBody": "得益于快速处理，收款方应在几分钟内收到资金。您可以在控制台查看所有转账记录。",
+      "cta": "查看交易"
+    },
+    "failed": {
+      "subject": "转账失败 - #{{transactionId}}",
+      "title": "转账失败",
+      "bodyWithReason": "很抱歉，您向 {{recipientName}} 的转账未能完成。原因：{{reason}}",
+      "bodyNoReason": "很抱歉，您向 {{recipientName}} 的转账未能完成。如需更多信息，请联系客服。",
+      "nextHeading": "接下来会发生什么",
+      "cta": "联系客服"
+    },
+    "cancelled": {
+      "subject": "转账已取消 - #{{transactionId}}",
+      "title": "转账已取消",
+      "bodyWithReason": "您向 {{recipientName}} 的转账已取消。原因：{{reason}}",
+      "bodyNoReason": "您向 {{recipientName}} 的转账已取消。可能是您或我们的客服取消的。",
+      "refundHeading": "退款信息",
+      "cta": "发起新转账"
+    }
+  },
+  "hubOrder": {
+    "pending": {
+      "subject": "订单已收到 - {{productTitle}}（#{{transactionId}}）",
+      "title": "订单已收到",
+      "hero": {
+        "fixed": "感谢您购买 {{productTitle}}（{{fundedAmount}} {{fundedCurrency}}）。",
+        "userInput": "我们已收到您为 {{productTitle}} 的充值 {{fundedAmount}} {{fundedCurrency}}。"
+      },
+      "fulfillment": {
+        "online": "我们会将商品交付给 {{contactName}}，联系电话 {{contactPhone}}。",
+        "inPerson": "我们会将商品配送到 {{contactName}}，地址 {{deliveryAddressLine}}。配送员到达时会致电 {{contactPhone}}。"
+      },
+      "nextHeading": "接下来",
+      "nextBody": "我们正在准备您的订单，处理完成后会通知您。您可以随时在“交易”中查看进度。",
+      "cta": "查看订单"
+    },
+    "processing": {
+      "subject": "订单处理中 - {{productTitle}}（#{{transactionId}}）",
+      "title": "订单处理中",
+      "hero": {
+        "fixed": "我们已收到您为 {{productTitle}}（{{fundedAmount}} {{fundedCurrency}}）的付款，正在处理中。",
+        "userInput": "我们已收到您为 {{productTitle}}（{{fundedAmount}} {{fundedCurrency}}）的付款，正在处理您的充值。"
+      },
+      "fulfillment": {
+        "online": "发往 {{contactName}}（{{contactPhone}}）的商品正在配送途中。",
+        "inPerson": "配送员正在准备发往 {{contactName}}（{{deliveryAddressLine}}）的商品，到达时会致电 {{contactPhone}}。"
+      },
+      "nextHeading": "当前进展",
+      "nextBody": "订单备妥后，我们会发送最终确认。",
+      "cta": "查看订单"
+    },
+    "completed": {
+      "subjectOnline": "订单已送达 - {{productTitle}}（#{{transactionId}}）",
+      "subjectInPerson": "订单配送中 - {{productTitle}}（#{{transactionId}}）",
+      "title": "订单已完成",
+      "hero": {
+        "fixed": "您购买的 {{productTitle}}（{{fundedAmount}} {{fundedCurrency}}）已完成。",
+        "userInput": "您为 {{productTitle}}（{{fundedAmount}} {{fundedCurrency}}）的充值已完成。"
+      },
+      "fulfillment": {
+        "online": "您的订单已送达 {{contactName}}。详情请查看订单页面。",
+        "inPerson": "配送员正前往 {{contactName}}（{{deliveryAddressLine}}），到达时会致电 {{contactPhone}}。"
+      },
+      "nextHeading": "接下来",
+      "nextBody": "您可以随时在订单页面查看完整收据。",
+      "cta": "查看订单"
+    },
+    "failed": {
+      "subject": "订单失败 - {{productTitle}}（#{{transactionId}}）",
+      "title": "订单失败",
+      "bodyWithReason": "很抱歉，您购买的 {{productTitle}} 未能完成。原因：{{reason}}",
+      "bodyNoReason": "很抱歉，您购买的 {{productTitle}} 未能完成。如需更多信息，请联系客服。",
+      "nextHeading": "接下来会发生什么",
+      "cta": "联系客服"
+    },
+    "cancelled": {
+      "subject": "订单已取消 - {{productTitle}}（#{{transactionId}}）",
+      "title": "订单已取消",
+      "bodyWithReason": "您购买的 {{productTitle}} 已取消。原因：{{reason}}",
+      "bodyNoReason": "您购买的 {{productTitle}} 已取消。可能是您或我们的客服取消的。",
+      "refundHeading": "退款信息",
+      "cta": "浏览商城"
+    }
+  },
+  "referralPayout": {
+    "pending": {
+      "subjectWithTx": "推荐奖励提现申请 — #{{payoutTransactionId}}",
+      "subjectWithRequest": "已收到推荐奖励提现申请 — {{requestIdShort}}…",
+      "subjectFallback": "已收到推荐奖励提现申请",
+      "title": "已收到推荐奖励提现申请",
+      "body": "您好，{{firstName}}，我们已收到您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请。我们的团队会审核并处理，与发起汇款时类似，提现完成或取消时您都会收到邮件。",
+      "referenceTx": "交易编号：{{payoutTransactionId}}",
+      "referenceRequest": "申请编号：{{payoutRequestId}}",
+      "nextHeading": "接下来",
+      "nextBody": "提现发出或申请取消时，我们会通过邮件通知您。您也可以在应用的“联盟与推荐”中查看状态。",
+      "cta": "查看推荐"
+    },
+    "completed": {
+      "subject": "推荐奖励已发出 — {{amount}} {{currency}}",
+      "title": "推荐奖励提现已完成",
+      "body": "您好，{{firstName}}，您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请已完成。这笔转账会像普通转账一样显示在您的记录中，并计入您全年的汇款总额。",
+      "referenceTx": "交易编号：{{linkedTransactionId}}",
+      "cta": "查看记录"
+    },
+    "cancelled": {
+      "subject": "推荐奖励提现申请已取消",
+      "title": "推荐奖励提现已取消",
+      "body": "您好，{{firstName}}，您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请已取消。这些资金仍保留在您可用的推荐余额中。如果您并未预期此结果，请联系客服。",
+      "cta": "打开推荐"
+    }
+  }
+}

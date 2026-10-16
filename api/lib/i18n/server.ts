@@ -4,10 +4,12 @@ import enEmails from "@/locales/en/emails.json"
 import ruEmails from "@/locales/ru/emails.json"
 import frEmails from "@/locales/fr/emails.json"
 import esEmails from "@/locales/es/emails.json"
+import zhEmails from "@/locales/zh/emails.json"
+import ptEmails from "@/locales/pt/emails.json"
 
-export type EmailLocale = "en" | "ru" | "fr" | "es"
+export type EmailLocale = "en" | "ru" | "fr" | "es" | "zh" | "pt"
 
-const SUPPORTED_LOCALES: EmailLocale[] = ["en", "ru", "fr", "es"]
+const SUPPORTED_LOCALES: EmailLocale[] = ["en", "ru", "fr", "es", "zh", "pt"]
 
 let instance: I18nInstance | null = null
 
@@ -21,6 +23,8 @@ function getInstance(): I18nInstance {
       ru: { emails: ruEmails },
       fr: { emails: frEmails },
       es: { emails: esEmails },
+      zh: { emails: zhEmails },
+      pt: { emails: ptEmails },
     },
     lng: "en",
     fallbackLng: "en",

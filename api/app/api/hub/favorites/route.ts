@@ -1,3 +1,4 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { tableExists } from "@/lib/merchant/messages"
@@ -50,6 +51,8 @@ async function parse(request: NextRequest) {
 }
 
 export const PUT = withErrorHandling(async (request: NextRequest) => {
+  const limited = await limitOrResponse(request, "favourite", LIMITS.favourite)
+  if (limited) return limited
   const user = await who(request)
   if (!user) return createErrorResponse("Unauthorized", 401)
   const t = await parse(request)
@@ -64,6 +67,8 @@ export const PUT = withErrorHandling(async (request: NextRequest) => {
 })
 
 export const DELETE = withErrorHandling(async (request: NextRequest) => {
+  const limited = await limitOrResponse(request, "favourite", LIMITS.favourite)
+  if (limited) return limited
   const user = await who(request)
   if (!user) return createErrorResponse("Unauthorized", 401)
   const t = await parse(request)
