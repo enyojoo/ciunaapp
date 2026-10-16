@@ -1176,7 +1176,9 @@
       "in_progress": "Your order is being prepared.",
       "fulfilled": "Your order is complete.",
       "cancelled": "This order was cancelled."
-    }
+    },
+    "zoneNotServedTitle": "We can’t deliver here yet",
+    "pickupInstead": "Pick up instead"
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

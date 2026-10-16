@@ -95,14 +95,18 @@ export function ProductCard({
     </View>
   )
 
+  const lowStock = !soldOut && product.stock_quantity != null && Number(product.stock_quantity) > 0 && Number(product.stock_quantity) <= 5
+
   const titleBlock = (
     <>
       {/* Fixed slots: the name is one line with an ellipsis, then the cue line, so every card has the same height. */}
       <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
         {product.title}
       </Text>
-      <Text style={styles.fulfillmentCue} numberOfLines={1}>
-        {product.fulfillment_mode === "delivery" || product.fulfillment_mode === "pickup"
+      <Text style={[styles.fulfillmentCue, lowStock && styles.lowStock]} numberOfLines={1}>
+        {lowStock
+          ? t("hub.stock.onlyLeft", { n: Number(product.stock_quantity), defaultValue: "Only {{n}} left" })
+          : product.fulfillment_mode === "delivery" || product.fulfillment_mode === "pickup"
           ? t(`marketplace.${product.fulfillment_mode}`, {
               defaultValue: String(product.fulfillment_mode).replace(/_/g, " "),
             })
@@ -294,6 +298,7 @@ const styles = StyleSheet.create({
   bodyTop: { paddingHorizontal: 10, paddingTop: 8 },
   title: { fontSize: 13, fontWeight: "600", lineHeight: 17, minHeight: 17, color: colors.text },
   vendorSlot: { minHeight: 22, justifyContent: "center" },
+  lowStock: { color: colors.warningText, fontWeight: "600" },
   fulfillmentCue: {
     marginTop: 2,
     minHeight: 14,

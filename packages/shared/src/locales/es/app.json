@@ -1176,7 +1176,9 @@
       "in_progress": "Tu pedido se está preparando.",
       "fulfilled": "Tu pedido está completo.",
       "cancelled": "Este pedido fue cancelado."
-    }
+    },
+    "zoneNotServedTitle": "Aún no entregamos aquí",
+    "pickupInstead": "Recoger en tienda"
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",

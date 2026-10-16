@@ -1176,7 +1176,9 @@
       "in_progress": "您的订单正在准备中。",
       "fulfilled": "您的订单已完成。",
       "cancelled": "此订单已取消。"
-    }
+    },
+    "zoneNotServedTitle": "暂不支持配送到此处",
+    "pickupInstead": "改为自取"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

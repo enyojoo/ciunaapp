@@ -503,7 +503,17 @@ export function MarketplaceCheckout({
                   <View style={styles.blockGap}>
                     <Text style={styles.fieldLabel}>{label("zone", "Delivery area")}</Text>
                     {q.zones.length === 0 ? (
-                      <Text style={styles.warn}>{label("noZones", "Delivery is not available for this store yet.")}</Text>
+                      <View style={styles.zoneBanner} accessibilityRole="alert">
+                        <Text style={styles.zoneTitle}>{label("zoneNotServedTitle", "We can't deliver here yet")}</Text>
+                        <Text style={styles.zoneBody}>{label("noZones", "Delivery is not available for this store yet.")}</Text>
+                        {modes.includes("pickup") ? (
+                          <PrimaryButton
+                            label={label("pickupInstead", "Pick up instead")}
+                            variant="secondary"
+                            onPress={() => c.setFulfillmentMode("pickup")}
+                          />
+                        ) : null}
+                      </View>
                     ) : (
                       q.zones.map((z) => (
                         <Choice
@@ -517,12 +527,14 @@ export function MarketplaceCheckout({
                     {!c.deliveryZoneId && q.zones.length > 0 && (
                       <Text style={styles.meta}>{label("chooseZone", "Choose a delivery area")}</Text>
                     )}
-                    <Field
-                      label={label("address", "Delivery address")}
-                      accessibilityLabel={label("address", "Delivery address")}
-                      value={c.address}
-                      onChangeText={c.setAddress}
-                    />
+                    {q.zones.length > 0 ? (
+                      <Field
+                        label={label("address", "Delivery address")}
+                        accessibilityLabel={label("address", "Delivery address")}
+                        value={c.address}
+                        onChangeText={c.setAddress}
+                      />
+                    ) : null}
                   </View>
                 )}
 
@@ -1042,6 +1054,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   warn: { fontSize: typeSize.meta, color: colors.primaryDeep, lineHeight: 18 },
+  zoneBanner: { gap: 8, padding: 14, borderRadius: radius.row, backgroundColor: "#FEF2F2" },
+  zoneTitle: { fontSize: typeSize.body, fontWeight: "700", color: colors.danger },
+  zoneBody: { fontSize: typeSize.meta, lineHeight: 18, color: colors.text },
   link: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary, marginVertical: 8 },
   currencyBlock: { marginTop: 4 },
   infoBlock: {

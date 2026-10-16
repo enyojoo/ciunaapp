@@ -1176,7 +1176,9 @@
       "in_progress": "Votre commande est en préparation.",
       "fulfilled": "Votre commande est terminée.",
       "cancelled": "Cette commande a été annulée."
-    }
+    },
+    "zoneNotServedTitle": "Nous ne livrons pas encore ici",
+    "pickupInstead": "Retrait sur place"
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",
