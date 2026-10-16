@@ -183,7 +183,10 @@
     "payFrom": "Оплатить от",
     "payUpTo": "Оплатить до",
     "toRange": "до",
-    "sellPrice": "Цена продажи"
+    "sellPrice": "Цена продажи",
+    "store": {
+      "newStore": "Новый магазин"
+    }
   },
   "assistant": {
     "title": "Ассистент",

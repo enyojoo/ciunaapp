@@ -77,6 +77,8 @@ export type HubVendor = {
   fulfillment_notes?: string | null
   is_verified?: boolean
   service_line_slug?: string
+  rating_avg?: number | string | null
+  rating_count?: number | null
 }
 
 export type CombinedTransaction = {

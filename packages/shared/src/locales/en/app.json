@@ -183,7 +183,10 @@
     "payFrom": "Pay from",
     "payUpTo": "Pay up to",
     "toRange": "to",
-    "sellPrice": "Sell price"
+    "sellPrice": "Sell price",
+    "store": {
+      "newStore": "New store"
+    }
   },
   "assistant": {
     "title": "Assistant",

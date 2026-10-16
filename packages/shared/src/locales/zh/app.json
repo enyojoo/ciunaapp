@@ -183,7 +183,10 @@
     "payFrom": "起付金额",
     "payUpTo": "最高付款",
     "toRange": "至",
-    "sellPrice": "售价"
+    "sellPrice": "售价",
+    "store": {
+      "newStore": "新店铺"
+    }
   },
   "assistant": {
     "title": "助手",

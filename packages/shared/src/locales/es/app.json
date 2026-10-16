@@ -183,7 +183,10 @@
     "payFrom": "Paga desde",
     "payUpTo": "Paga hasta",
     "toRange": "a",
-    "sellPrice": "Precio de venta"
+    "sellPrice": "Precio de venta",
+    "store": {
+      "newStore": "Tienda nueva"
+    }
   },
   "assistant": {
     "title": "Asistente",

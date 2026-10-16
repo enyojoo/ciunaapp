@@ -1,6 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
 import { BadgeCheck, MapPin } from "lucide-react-native"
+import { LinearGradient } from "expo-linear-gradient"
+import { tileArtFor } from "@/components/tile"
 import { useTranslation } from "react-i18next"
 import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
 import { FavouriteHeart } from "@/components/favourite-heart"
@@ -61,31 +63,38 @@ function StoreFace({
   compact?: boolean
   showLocation?: boolean
 }) {
+  const { t } = useTranslation("app")
+  const art = tileArtFor(vendor.service_line_slug || "food")
   const loc = (vendor.location || "").trim()
+  const count = Number(vendor.rating_count ?? 0)
+  const avg = Number(vendor.rating_avg ?? 0)
+  const rated = count > 0 && Number.isFinite(avg)
   return (
-    <View style={styles.card}>
-      <View style={styles.photo}>
+    <View style={[styles.card, compact ? styles.cardRail : styles.cardGrid]}>
+      {/* Cover: the line's art, the design's stand-in until stores upload covers. */}
+      <View style={[styles.cover, compact ? styles.coverRail : styles.coverGrid]}>
+        <LinearGradient colors={[art.from, art.to]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+      </View>
+      {/* Logo: round, white ring, overlapping the cover. */}
+      <View style={styles.logoWrap}>
         {vendor.photo_url ? (
-          <Image source={{ uri: vendor.photo_url }} style={styles.photoImg} contentFit="cover" />
+          <Image source={{ uri: vendor.photo_url }} style={styles.logo} contentFit="cover" />
         ) : (
-          <View style={styles.photoFallback}>
-            <Text style={styles.photoFallbackText} numberOfLines={2}>
-              {vendor.name}
-            </Text>
-          </View>
+          <Text style={styles.logoInitial}>{(vendor.name.trim().charAt(0) || "?").toUpperCase()}</Text>
         )}
       </View>
-      <View style={[styles.caption, compact ? styles.captionCompact : styles.captionGrid]}>
-        <View style={[styles.nameRow, compact ? styles.nameCenter : styles.nameStart]}>
-          <Text style={[styles.name, compact ? styles.nameCompact : styles.nameGrid]} numberOfLines={1} ellipsizeMode="tail">
+      <View style={styles.caption}>
+        <View style={styles.nameRow}>
+          <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
             {vendor.name}
           </Text>
-          {vendor.is_verified ? (
-            <View style={styles.check}>
-              <BadgeCheck size={12} color={colors.primary} strokeWidth={2.2} accessibilityLabel={verifiedLabel} />
-            </View>
-          ) : null}
+          {vendor.is_verified ? <BadgeCheck size={14} color={colors.success} strokeWidth={2.4} accessibilityLabel={verifiedLabel} /> : null}
         </View>
+        <Text style={styles.rating} numberOfLines={1}>
+          {rated
+            ? `★ ${avg.toFixed(1)} (${count})`
+            : t("hub.store.newStore", { defaultValue: "New store" })}
+        </Text>
         {showLocation && loc ? (
           <View style={styles.locRow}>
             <MapPin size={12} color={colors.muted} strokeWidth={2} />
@@ -100,36 +109,42 @@ function StoreFace({
 }
 
 const styles = StyleSheet.create({
-  stripHit: { width: 120 },
-  stripSkeleton: {
-    aspectRatio: 0.82,
-    borderRadius: radius.card,
-    backgroundColor: colors.paper,
-  },
+  stripHit: { width: 200 },
+  stripSkeleton: { height: 180, borderRadius: radius.card, backgroundColor: colors.paper },
   gridHit: { width: "48.5%", marginBottom: 12 },
   gridSkeleton: { aspectRatio: 0.85, borderRadius: radius.card, backgroundColor: colors.paper },
   card: {
-    overflow: "hidden",
     borderRadius: radius.card,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    ...shadow({ opacity: 0.06, radius: 8, offsetY: 2, elevation: 2 }),
+    overflow: "hidden",
+    paddingBottom: 12,
   },
-  photo: { width: "100%", aspectRatio: 1, backgroundColor: colors.paper },
-  photoImg: { width: "100%", height: "100%" },
-  photoFallback: { flex: 1, alignItems: "center", justifyContent: "center", padding: 8 },
-  photoFallbackText: { fontSize: 11, fontWeight: "600", color: colors.muted, textAlign: "center" },
-  caption: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  captionCompact: { paddingHorizontal: 8, paddingVertical: 8 },
-  captionGrid: { paddingHorizontal: 12, paddingVertical: 12 },
+  cardRail: { width: 200 },
+  cardGrid: { width: "100%" },
+  cover: { width: "100%" },
+  coverRail: { height: 96 },
+  coverGrid: { height: 84 },
+  logoWrap: {
+    marginTop: -24,
+    marginLeft: 12,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 3,
+    borderColor: colors.surface,
+    backgroundColor: colors.paper,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  logo: { width: "100%", height: "100%" },
+  logoInitial: { fontSize: 18, fontWeight: "700", color: colors.primaryText },
+  caption: { paddingHorizontal: 12, paddingTop: 6, gap: 2 },
   nameRow: { flexDirection: "row", alignItems: "center", gap: 4, minWidth: 0 },
-  nameCenter: { justifyContent: "center" },
-  nameStart: { justifyContent: "flex-start" },
-  name: { flexShrink: 1, minWidth: 0, fontWeight: "600", color: colors.text },
-  nameCompact: { fontSize: 12, lineHeight: 16 },
-  nameGrid: { fontSize: typeSize.meta, lineHeight: 18 },
-  check: { flexShrink: 0 },
-  locRow: { marginTop: 4, flexDirection: "row", alignItems: "center", gap: 4, minWidth: 0 },
-  loc: { flexShrink: 1, minWidth: 0, fontSize: 11, lineHeight: 15, color: colors.muted },
+  name: { flexShrink: 1, minWidth: 0, fontSize: 15, fontWeight: "700", color: colors.text },
+  rating: { fontSize: 12, lineHeight: 16, fontWeight: "600", color: colors.text },
+  locRow: { marginTop: 2, flexDirection: "row", alignItems: "center", gap: 4, minWidth: 0 },
+  loc: { flexShrink: 1, minWidth: 0, fontSize: 12, lineHeight: 16, color: colors.muted },
 })
