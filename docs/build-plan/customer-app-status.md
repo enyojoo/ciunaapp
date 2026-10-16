@@ -6,38 +6,39 @@ Replaces the gap tables in `customer-app.md` (stale). Source: card READMEs and t
 | Card | Status | Notes |
 |---|---|---|
 | CustomerHome | B | Sticky header, slider, tiles, no search |
-| FoodHome, MartHome | P | Search is a header icon, not the pill field; categories sit below Stores; no offline banner |
+| FoodHome, MartHome | P | Pill search built; categories still sit below Stores; no offline banner |
 | StoreCard | P | No closed state (blocked: hours) |
-| StorePage | P | No share, jump chips, paused-store state, skeleton |
-| ProductCard | B | Low-stock line and sale badge missing |
-| ProductPage | P | No sticky bar, stock line, heart, gallery dots, reviews teaser, skeleton |
-| PriceTag, FilterChips, SearchField | P | Inline only; no shared components |
+| StorePage | P | Skeleton built; no share or paused-store state (blocked: status field) |
+| ProductCard | B | Low-stock note built; sale price shows struck through |
+| ProductPage | P | Gallery with dots, stock line, heart, skeleton built; no sticky bar, no reviews teaser |
+| PriceTag, FilterChips | B | Shared components built |
+| SearchField | P | Still inline in search.tsx |
 | SearchResults | P | No highlighting, per-group See all |
 | Favourites | B | |
-| FavouriteHeart | P | Size, in-flight state, sign-in prompt |
+| FavouriteHeart | B | 34px with 48px target; sign-in prompt not needed (app is signed-in only) |
 | EmptyState | B | |
-| Skeleton | P | Detail screens use a spinner |
+| Skeleton | B | Product, store, cart, activity and expert browse use skeletons |
 
 ## Cart, checkout, orders, reviews
 | Card | Status | Notes |
 |---|---|---|
-| Cart, CartLine | P | Unavailable items hidden silently; no vendor-lock sheet; spinner not skeleton |
-| MarketCheckout | P | Review is not a separate step; zone-not-served banner missing |
+| Cart, CartLine | P | Unavailable rows, vendor-lock dialog, skeleton built; minimum-order banner blocked |
+| MarketCheckout | P | Zone-not-served banner built; Review is still one screen with Details |
 | OrderSummary | P | Pickup line, expert-booking variant |
-| OrderTracking | P | Status header, delivery/pickup card, payment card, seller avatar, awaiting-payment banner, reason text |
+| OrderTracking | P | Status header, delivery/pickup card, timeline built; seller avatar and rating, reason text left |
 | OrderTimeline | P | Built from real states; no per-stage times (blocked) |
 | OrderChat, ChatBubble | B | Desktop side panel not built |
 | ReviewFlow | B | Web dialog missing |
-| ReviewCard, ReviewSummary, RatingStars | P | Inline, not shared components |
-| VerifiedBadge | P | Inline only |
+| ReviewCard, ReviewSummary | P | ReviewCard exported with Read more; RatingStars input still inline in the review sheet |
+| VerifiedBadge | B | One component replaces five inline marks (tier and tooltip blocked) |
 | FulfilmentChip, FulfilmentPicker | M / P | Chip is seller-only; picker lacks fee and ETA |
 
 ## Experts
 | Card | Status | Notes |
 |---|---|---|
-| ExpertsDirectory | P | No filters or search on browse |
-| ExpertCard | P | No rating, from-price |
-| ExpertProfile | P | No sticky Book bar, retry, skeleton |
+| ExpertsDirectory | P | Search, category chips, count, empty and error states built; language chips blocked |
+| ExpertCard | P | Rating or New built; from-price and verified flag blocked |
+| ExpertProfile | P | Retry built; no sticky Book bar (several services), credentials blocked |
 | ServiceCard | P | No duration chip |
 | SlotPicker | B (2026-10-17) | Date strip, 3-column grid, zone line; expert zone blocked |
 | ExpertBooking | P | No step bar, notes |
@@ -45,12 +46,12 @@ Replaces the gap tables in `customer-app.md` (stale). Source: card READMEs and t
 ## Account and send
 | Card | Status | Notes |
 |---|---|---|
-| CustomerAuth | P | Errors are toasts, no language chip |
-| CustomerPin | P | Errors are toasts, no attempts or locked state |
-| CustomerProfile | P | No language row, system alerts |
-| CustomerRecipients | P | System alert for delete |
-| CustomerReferrals | P | No code line, progress strip |
-| CustomerTransactions | P | Spinner, no error or offline state |
+| CustomerAuth | P | Inline errors on login and register built; no language chip |
+| CustomerPin | P | Inline error and red dots built; attempts and lock rules not decided |
+| CustomerProfile | P | Language row, email hint, in-app dialogs built; delete is blocked on backend |
+| CustomerRecipients | P | In-app delete dialog naming the recipient built |
+| CustomerReferrals | P | Code row built; progress strip left |
+| CustomerTransactions | P | Skeleton, retry and saved-data note built; Bookings chip left |
 | CustomerSend, CustomerTransferDetail | P | Verify flow, repeat transfer, share receipt |
 | CustomerMore, Languages | B | |
 | CustomerKyc, CustomerLimits, CustomerSupport | P / M / P | Mostly blocked |
