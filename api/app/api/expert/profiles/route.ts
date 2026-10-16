@@ -5,7 +5,7 @@ import { EXPERT_CATALOG_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 import { formatCurrencySymbolOnly } from "@/utils/currency"
 
 const LIST_SELECT =
-  "id, slug, display_name, headline, bio, is_published, category, image_url, service_area, created_at"
+  "id, slug, display_name, headline, bio, is_published, category, image_url, service_area, rating_avg, rating_count, created_at"
 
 export const GET = withErrorHandling(async (request: NextRequest) => {
   const { searchParams } = new URL(request.url)

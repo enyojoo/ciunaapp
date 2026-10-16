@@ -44,3 +44,19 @@ export async function enrichHubProductsWithVendors(server: HubServer, products: 
     return vendor ? { ...p, vendor } : { ...p, vendor: undefined }
   })
 }
+
+/**
+ * Public catalogs must not list products whose store is not published (in review, paused, suspended).
+ * Products without a vendor (Ciuna-owned digital goods) are unaffected.
+ */
+export async function filterToPublishedVendors<T extends { vendor_id?: string | null }>(server: HubServer, products: T[]): Promise<T[]> {
+  const ids = [...new Set(products.map((p) => p.vendor_id).filter(Boolean))] as string[]
+  if (!ids.length) return products
+  const { data, error } = await server.from("hub_vendors").select("id").in("id", ids).eq("is_published", true)
+  if (error) {
+    console.error("filterToPublishedVendors", error)
+    return products // fail open: checkout re-validates the vendor anyway
+  }
+  const ok = new Set((data || []).map((v: any) => String(v.id)))
+  return products.filter((p) => !p.vendor_id || ok.has(String(p.vendor_id)))
+}

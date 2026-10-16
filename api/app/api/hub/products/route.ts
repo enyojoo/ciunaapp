@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAuth, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { sortHubProductRows } from "@/lib/hub-products-sort"
-import { enrichHubProductsWithVendors } from "@/lib/hub-product-vendors"
+import { enrichHubProductsWithVendors, filterToPublishedVendors } from "@/lib/hub-product-vendors"
 import { hubProductBelongsToServiceLine } from "@/lib/hub-slug"
 import type { HubProductRow } from "@/lib/hub-types"
 
@@ -45,6 +45,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
     rows = rows.filter((p) => hubProductBelongsToServiceLine(p, serviceLine))
   }
 
+  rows = await filterToPublishedVendors(server, rows)
   const enriched = await enrichHubProductsWithVendors(server, rows)
 
   const res = NextResponse.json({ products: sortHubProductRows(enriched) })

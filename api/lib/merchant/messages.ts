@@ -1,0 +1,111 @@
+import { createServerClient } from "@/lib/supabase"
+import { MerchantError, check } from "./errors"
+
+/** Order chat. Rules live in SQL (message_send); these helpers validate early and shape responses. Never log bodies. */
+export const MAX_BODY = 2000
+export const PREVIEW_LENGTH = 120
+export const CLOSE_AFTER_DAYS = 14
+export const RATE_LIMIT_PER_HOUR = 30
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+export type SenderKind = "customer" | "merchant"
+export interface ChatMessage { id: number; senderKind: SenderKind; body: string; language: string; createdAt: string; readAt: string | null }
+
+/** Trims and validates a message body; throws MESSAGE_EMPTY / MESSAGE_TOO_LONG. */
+export function cleanBody(raw: unknown): string {
+  if (typeof raw !== "string") throw new MerchantError("MESSAGE_EMPTY", 400)
+  const body = raw.trim()
+  if (!body) throw new MerchantError("MESSAGE_EMPTY", 400)
+  if ([...body].length > MAX_BODY) throw new MerchantError("MESSAGE_TOO_LONG", 400)
+  return body
+}
+
+export function cleanLanguage(raw: unknown): string {
+  const s = typeof raw === "string" ? raw.trim().toLowerCase() : ""
+  return /^[a-z]{2,3}(-[a-z0-9]{2,8})?$/.test(s) ? s : "en"
+}
+
+/** First 120 characters on one line, with an ellipsis when cut. */
+export function preview(body: string, max = PREVIEW_LENGTH): string {
+  const flat = body.replace(/\s+/g, " ").trim()
+  const chars = [...flat]
+  return chars.length > max ? chars.slice(0, max - 1).join("").trimEnd() + "…" : flat
+}
+
+/** Sellers see only the customer's first name. */
+export function firstName(full: string | null | undefined): string | null {
+  const first = (full || "").trim().split(/\s+/)[0]
+  return first || null
+}
+
+/** Chat closes CLOSE_AFTER_DAYS after the order is fulfilled or cancelled (mirrors message_chat_state in SQL). */
+export function chatClosed(order: { fulfillment_state: string; updated_at: string }, now = Date.now()): boolean {
+  if (order.fulfillment_state !== "fulfilled" && order.fulfillment_state !== "cancelled") return false
+  return new Date(order.updated_at).getTime() < now - CLOSE_AFTER_DAYS * 86_400_000
+}
+
+export function chatAvailable(order: { merchant_id: string | null; payment_state: string }): boolean {
+  return Boolean(order.merchant_id) && ["paid", "refund_pending", "refunded"].includes(order.payment_state)
+}
+
+export function toChatMessage(r: any): ChatMessage {
+  return { id: Number(r.id), senderKind: r.sender_kind, body: r.body, language: r.language, createdAt: r.created_at, readAt: r.read_by_other_at ?? null }
+}
+
+const KNOWN = ["CHAT_CLOSED", "RATE_LIMITED", "MESSAGE_EMPTY", "MESSAGE_TOO_LONG", "CHAT_UNAVAILABLE", "ORDER_NOT_FOUND", "FORBIDDEN"]
+const STATUS: Record<string, number> = { CHAT_CLOSED: 409, CHAT_UNAVAILABLE: 409, RATE_LIMITED: 429, MESSAGE_EMPTY: 400, MESSAGE_TOO_LONG: 400, ORDER_NOT_FOUND: 404, FORBIDDEN: 403 }
+
+/** Maps a database exception from message_send to an API error. */
+export function sendError(error: { message: string; code?: string }): MerchantError {
+  const code = KNOWN.find((c) => error.message.includes(c))
+  if (code) return new MerchantError(code, STATUS[code])
+  console.error("message send failed", error.code)
+  return new MerchantError("DATABASE_ERROR", 500)
+}
+
+export async function sendMessage(orderId: string, kind: SenderKind, senderId: string, body: unknown, language?: unknown): Promise<ChatMessage> {
+  const clean = cleanBody(body)
+  const { data, error } = await createServerClient().rpc("message_send", { p_order: orderId, p_sender_kind: kind, p_sender: senderId, p_body: clean, p_lang: cleanLanguage(language) })
+  if (error) throw sendError(error)
+  return toChatMessage(Array.isArray(data) ? data[0] : data)
+}
+
+export async function listMessages(orderId: string, after: number): Promise<ChatMessage[]> {
+  const { data, error } = await createServerClient()
+    .from("order_messages")
+    .select("id,sender_kind,body,language,created_at,read_by_other_at")
+    .eq("order_id", orderId)
+    .gt("id", after)
+    .order("id", { ascending: true })
+    .limit(200)
+  check(error)
+  return (data || []).map(toChatMessage)
+}
+
+export async function markRead(orderId: string, reader: SenderKind): Promise<number> {
+  const { data, error } = await createServerClient().rpc("messages_mark_read", { p_order: orderId, p_reader_kind: reader })
+  check(error)
+  return Number(data) || 0
+}
+
+export function parseAfter(raw: string | null): number {
+  const n = Number(raw)
+  return Number.isInteger(n) && n > 0 ? n : 0
+}
+
+/** Customer-side order lookup: only the owner's orders; id may be a uuid or public id. */
+export async function loadCustomerOrder(userId: string, id: string) {
+  let q = createServerClient().from("marketplace_orders").select("id,merchant_id,payment_state,fulfillment_state,updated_at").eq("user_id", userId)
+  q = UUID.test(id) ? q.eq("id", id) : q.eq("public_id", id.toUpperCase())
+  const { data, error } = await q.maybeSingle()
+  check(error)
+  if (!data) throw new MerchantError("ORDER_NOT_FOUND", 404)
+  return data as { id: string; merchant_id: string | null; payment_state: string; fulfillment_state: string; updated_at: string }
+}
+
+export async function threadFor(order: { id: string; merchant_id: string | null; payment_state: string; fulfillment_state: string; updated_at: string }, after: number) {
+  const available = chatAvailable(order)
+  const messages = available ? await listMessages(order.id, after) : []
+  return { messages, closed: !available || chatClosed(order), available }
+}

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAuth, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
-import { enrichHubProductsWithVendors } from "@/lib/hub-product-vendors"
+import { enrichHubProductsWithVendors, filterToPublishedVendors } from "@/lib/hub-product-vendors"
 
 export const GET = withErrorHandling(async (request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
@@ -18,6 +18,9 @@ export const GET = withErrorHandling(async (request: NextRequest, { params }: { 
     return createErrorResponse("Product not found", 404)
   }
 
+  if (!(await filterToPublishedVendors(server, [data])).length) {
+    return createErrorResponse("Product not found", 404)
+  }
   const [enriched] = await enrichHubProductsWithVendors(server, [data])
 
   return NextResponse.json({ product: enriched })

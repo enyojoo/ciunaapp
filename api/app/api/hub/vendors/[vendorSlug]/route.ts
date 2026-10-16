@@ -47,6 +47,8 @@ export const GET = withErrorHandling(async (request: NextRequest, context?: { pa
       fulfillment_notes: vendor.fulfillment_notes != null ? String(vendor.fulfillment_notes) : null,
       is_published: Boolean(vendor.is_published),
       is_verified: Boolean(vendor.is_verified),
+      rating_avg: vendor.rating_avg != null ? Number(vendor.rating_avg) : null,
+      rating_count: Number(vendor.rating_count) || 0,
       created_at: String(vendor.created_at || ""),
       updated_at: String(vendor.updated_at || ""),
     },

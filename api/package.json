@@ -8,7 +8,7 @@
     "build": "next build",
     "lint": "next lint",
     "start": "next start --port 3002",
-    "test:merchant": "node --import tsx --test tests/merchant/*.test.ts && node --test tests/merchant/database.test.mjs",
+    "test:merchant": "node --import tsx --test tests/merchant/*.test.ts && node --test tests/merchant/database*.test.mjs",
     "test:marketplace": "node --test tests/marketplace/database.test.mjs && node --import tsx --test tests/marketplace/*.test.ts"
   },
   "dependencies": {

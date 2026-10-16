@@ -12,6 +12,8 @@ const MIGRATIONS = [
   "20261016100000_merchants_foundation.sql",
   "20261016110000_ledger_fees_payouts.sql",
   "20261016120000_seller_notifications.sql",
+  "20261016150000_marketplace_analytics.sql",
+  "20261016160000_discovery.sql",
 ]
 const uid = "11111111-1111-4111-8111-111111111111"
 const pid = "22222222-2222-4222-8222-222222222222"
@@ -254,4 +256,35 @@ test("merchant approval and rejection alert the owner; pause and resume do not",
   await db.query("update merchants set status='paused' where id=$1", [m])
   await db.query("update merchants set status='live' where id=$1", [m])
   assert.equal((await outbox(db)).length, 0)
+})
+
+test("analytics: GMV, take rate, outcomes, active merchants and activation", async () => {
+  const db = await setup()
+  const m = await merchant(db)
+  await db.query("update merchants set approved_at = now() - interval '2 days' where id=$1", [m])
+  const a = await fulfilledOrder(db, m, 1000, 100)
+  await db.query("select earning_record($1, 80, '{}', 0)", [a])
+  const b = await fulfilledOrder(db, m, 500, 0)
+  await db.query("select earning_record($1, 40, '{}', 0)", [b])
+  const r = (await db.query("select marketplace_analytics(now() - interval '3 days', now() + interval '1 day') as v")).rows[0].v
+  assert.equal(r.money[0].currency, "RUB")
+  assert.equal(Number(r.money[0].gmv), 1600)
+  assert.equal(Number(r.money[0].commission), 120)
+  assert.equal(Number(r.money[0].takeRate), 8) // 120 / 1500 items
+  assert.equal(r.orders[0].fulfilled, 2)
+  assert.equal(Number(r.orders[0].fulfilmentRate), 100)
+  assert.equal(r.merchants.activeInRange, 1)
+  assert.ok(r.timeToFirstOrderMedianHours >= 47)
+  assert.equal(r.topMerchants[0].orders, 2)
+  await assert.rejects(db.query("select marketplace_analytics(now(), now() - interval '1 day')"), /RANGE_INVALID/)
+})
+
+test("favourites are unique per user and target and cascade with the user", async () => {
+  const db = await setup()
+  const target = "77777777-7777-4777-8777-777777777777"
+  await db.query("insert into favorites(user_id,target_type,target_id) values($1,'vendor',$2)", [uid, target])
+  await assert.rejects(db.query("insert into favorites(user_id,target_type,target_id) values($1,'vendor',$2)", [uid, target]), /duplicate key/)
+  await assert.rejects(db.query("insert into favorites(user_id,target_type,target_id) values($1,'banana',$2)", [uid, target]), /violates check/)
+  await db.query("delete from users where id=$1", [uid])
+  assert.equal((await db.query("select count(*)::int n from favorites")).rows[0].n, 0)
 })

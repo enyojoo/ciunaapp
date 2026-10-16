@@ -32,3 +32,13 @@ test("booking, payout and status alerts render without leftovers and escape HTML
 test("unknown language falls back to English", () => {
   assert.equal(renderAlert("order_new", { orderId: "x", publicId: "CIU-9", amount: 10, currency: "USD" }, opts("de")).title, "New order CIU-9")
 })
+
+test("message alert shows the order and a preview, links to the thread, in every language", () => {
+  for (const l of ALERT_LANGS) {
+    const m = renderAlert("message_new", { orderId: "ord1", publicId: "CIU-7", preview: "Where is my order?" }, opts(l))
+    assert.ok(m.title.includes("CIU-7"), l)
+    assert.ok(m.body.includes("Where is my order?"), l)
+    assert.equal(m.url, "https://seller.ciuna.com/messages/ord1")
+    assert.ok(!/\{\w+\}/.test(m.text), `${l} has unfilled placeholder`)
+  }
+})

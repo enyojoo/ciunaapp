@@ -17,7 +17,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   const server = createServerClient()
   const { data, error } = await server
     .from("hub_vendors")
-    .select("id, service_line_slug, name, slug, photo_url, short_bio, location, is_published, is_verified, created_at, updated_at")
+    .select("id, service_line_slug, name, slug, photo_url, short_bio, location, is_published, is_verified, rating_avg, rating_count, created_at, updated_at")
     .eq("service_line_slug", serviceLine)
     .eq("is_published", true)
     .order("name", { ascending: true })
