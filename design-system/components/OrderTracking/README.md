@@ -28,7 +28,7 @@ Preparing (live, sticky Message seller), Completed (rate prompt, pickup variant)
 ## Upgrade
 Built: the order view (`mobile/components/marketplace-checkout.tsx`, `MarketplaceOrderView`) shows items and breakdown, a stage timeline (`mobile/components/order-timeline.tsx`: Order placed, Paid, Accepted, In progress, Fulfilled; cancelled stops the timeline; refund pending and refunded add a final step), Message seller with the seller card, and the rate prompt. Stage times show only for the order placed time: the API has no per-stage timestamps yet, so Preparing and Ready both show as In progress.
 
-Still to do: the status header (icon, badge, next time), a delivery or pickup card, the seller rating, a Report a problem link (the screen says Contact support today; wording is a product call), and the cancelled and refunded reason text.
+Still to do: the status header (icon, badge, next time), a delivery or pickup card, the seller rating, the support link keeps the text Contact support (owner decision, 2026-10-17), not Report a problem, and the cancelled and refunded reason text.
 
 ## Code
 `mobile/app/orders/[id].tsx`, `web/components/hub/marketplace-order.tsx`
