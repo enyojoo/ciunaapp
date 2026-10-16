@@ -3,6 +3,8 @@ import { assert, check, MerchantError } from "./errors"
 import { slugify, withSuffix } from "./slug"
 import { MERCHANT_EDITABLE_FIELDS, SUPPORTED_CURRENCIES, SUPPORTED_LANGUAGES } from "./status"
 import type { MerchantRow } from "./auth"
+import { isValidTimeZone } from "./hours"
+import { isMissingSchemaError } from "@/lib/safe-select"
 
 const db = () => createServerClient()
 
@@ -89,6 +91,8 @@ export function pickEditable(body: Record<string, any>, merchant: MerchantRow) {
       v = Array.from(new Set(v))
     } else if (key === "default_language") {
       assert((SUPPORTED_LANGUAGES as readonly string[]).includes(v), "LANGUAGE_INVALID")
+    } else if (key === "time_zone") {
+      assert(isValidTimeZone(v), "TIME_ZONE_INVALID")
     } else if (key === "default_currency") {
       assert((SUPPORTED_CURRENCIES as readonly string[]).includes(String(v).toUpperCase()), "CURRENCY_INVALID")
       v = String(v).toUpperCase()
@@ -116,6 +120,15 @@ export function pickEditable(body: Record<string, any>, merchant: MerchantRow) {
   return patch
 }
 
+/**
+ * Mirrors newer columns onto the storefront row. A database that has not had the storefront-details SQL yet
+ * simply skips them, so seller actions never fail because of a missing optional column.
+ */
+async function mirrorOptional(table: "hub_vendors" | "expert_profiles", merchantId: string, patch: Record<string, unknown>) {
+  const { error } = await db().from(table).update(patch).eq("merchant_id", merchantId)
+  if (error && !isMissingSchemaError(error)) check(error)
+}
+
 /** Keep the customer-facing storefront in step with the merchant's status. */
 export async function syncPublication(merchant: Pick<MerchantRow, "id" | "type" | "status" | "kyb_tier" | "display_name" | "logo_url">) {
   const published = merchant.status === "live"
@@ -129,6 +142,10 @@ export async function syncPublication(merchant: Pick<MerchantRow, "id" | "type" 
     const { error } = await db().from("expert_profiles").update({ is_published: published, updated_at: new Date().toISOString() }).eq("merchant_id", merchant.id)
     check(error)
   }
+  await mirrorOptional(merchant.type === "store" ? "hub_vendors" : "expert_profiles", merchant.id, {
+    verification_tier: published ? merchant.kyb_tier : 0,
+    ...(merchant.type === "expert" ? { is_verified: published && merchant.kyb_tier >= 1 } : {}),
+  })
 }
 
 /** Mirror seller-edited profile fields onto the customer-facing row. */
@@ -140,12 +157,14 @@ export async function syncStorefrontFields(merchant: MerchantRow) {
       .update({ name: merchant.display_name, photo_url: merchant.logo_url, short_bio: desc, translations: { description: merchant.description || {} }, updated_at: new Date().toISOString() })
       .eq("merchant_id", merchant.id)
     check(error)
+    await mirrorOptional("hub_vendors", merchant.id, { cover_url: merchant.cover_url, time_zone: merchant.time_zone })
   } else {
     const { error } = await db()
       .from("expert_profiles")
       .update({ display_name: merchant.display_name, image_url: merchant.logo_url, bio: desc, translations: { description: merchant.description || {} }, updated_at: new Date().toISOString() })
       .eq("merchant_id", merchant.id)
     check(error)
+    await mirrorOptional("expert_profiles", merchant.id, { languages: merchant.languages, time_zone: merchant.time_zone })
   }
 }
 

@@ -1144,7 +1144,8 @@
       "CONTACT_PHONE_REQUIRED": "请输入用于履约的电话号码。",
       "AMOUNT_REQUIRED": "请输入在商品限额范围内的金额。",
       "CONTACT_SUPPORT": "如需修改已接单的订单，请联系客服。",
-      "CHECKOUT_UNAVAILABLE": "暂时无法结算。"
+      "CHECKOUT_UNAVAILABLE": "暂时无法结算。",
+      "BELOW_MINIMUM_ORDER": "该店铺配送需要更高的订单金额。"
     },
     "events": {
       "created": "待付款",

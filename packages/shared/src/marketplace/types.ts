@@ -29,6 +29,8 @@ export interface MarketplaceZone {
   district: string
   fee: number
   currency: string
+  /** Typical delivery time for this area, when the seller has set one. */
+  etaMinutes?: number
 }
 export interface MarketplaceLineItem {
   id: string
@@ -80,6 +82,8 @@ export interface MarketplaceQuote {
   timezone?: string
   checkoutReady: boolean
   fulfillmentMinutes?: number
+  /** Store minimum for delivery orders, when set in the product currency. `met` is false while the subtotal is below it. */
+  minOrder?: { amount: number; currency: string; met: boolean }
 }
 export interface MarketplaceSubmit {
   quoteId: string

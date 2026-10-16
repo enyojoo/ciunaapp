@@ -19,6 +19,8 @@ export interface MerchantRow {
   kyb_tier: number
   logo_url: string | null
   cover_url: string | null
+  /** IANA zone (migration 20261017140000); absent until that SQL is applied. */
+  time_zone?: string
   description: Record<string, string>
   contact_email: string | null
   contact_phone: string | null

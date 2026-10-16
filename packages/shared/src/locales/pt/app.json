@@ -1144,7 +1144,8 @@
       "CONTACT_PHONE_REQUIRED": "Digite um telefone para o atendimento.",
       "AMOUNT_REQUIRED": "Digite um valor dentro dos limites do produto.",
       "CONTACT_SUPPORT": "Entre em contato com o suporte para alterar um pedido aceito.",
-      "CHECKOUT_UNAVAILABLE": "A finalização da compra ainda não está disponível."
+      "CHECKOUT_UNAVAILABLE": "A finalização da compra ainda não está disponível.",
+      "BELOW_MINIMUM_ORDER": "Esta loja exige um valor de pedido maior para entrega."
     },
     "events": {
       "created": "Aguardando pagamento",

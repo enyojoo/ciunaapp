@@ -1144,7 +1144,8 @@
       "CONTACT_PHONE_REQUIRED": "Saisissez un numéro de téléphone.",
       "AMOUNT_REQUIRED": "Saisissez un montant respectant les limites du produit.",
       "CONTACT_SUPPORT": "Contactez l’assistance pour modifier une commande acceptée.",
-      "CHECKOUT_UNAVAILABLE": "Le paiement est indisponible pour le moment."
+      "CHECKOUT_UNAVAILABLE": "Le paiement est indisponible pour le moment.",
+      "BELOW_MINIMUM_ORDER": "Cette boutique exige un montant de commande plus élevé pour la livraison."
     },
     "events": {
       "created": "En attente de paiement",

@@ -1,12 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { safeSelect } from "@/lib/safe-select"
+import { expertFields } from "@/lib/merchant/storefront"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { EXPERT_CATALOG_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 import { formatCurrencySymbolOnly } from "@/utils/currency"
 
 const LIST_SELECT =
-  "id, slug, display_name, headline, bio, is_published, category, image_url, service_area, rating_avg, rating_count, created_at"
+  "id, slug, display_name, headline, bio, is_published, category, image_url, service_area, rating_avg, rating_count, created_at, languages, time_zone, credentials, years_experience, is_verified, verification_tier"
 
 export const GET = withErrorHandling(async (request: NextRequest) => {
   const { searchParams } = new URL(request.url)
@@ -17,7 +18,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
     let q = server.from("expert_profiles").select(cols).eq("is_published", true).order("display_name", { ascending: true })
     if (category) q = q.eq("category", category)
     return q
-  })
+  }, Date.now(), ["is_verified"])
 
   if (error) {
     console.error("expert profiles list", error)
@@ -66,6 +67,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
 
   const enriched = profiles.map((p) => ({
     ...p,
+    ...expertFields(p),
     pricing_hint: pricingHints.get(p.id) ?? null,
   }))
 

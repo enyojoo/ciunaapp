@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
+import { safeSelect } from "@/lib/safe-select"
 import { requireAuth, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { EXPERT_SLOTS_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 
@@ -25,12 +26,10 @@ export const GET = withErrorHandling(
     if (se || !svc) return createErrorResponse("Not found", 404)
     if (!svc.is_published) return createErrorResponse("Not found", 404)
 
-    const { data: prof, error: pe } = await server
-      .from("expert_profiles")
-      .select("is_published")
-      .eq("id", svc.expert_profile_id)
-      .maybeSingle()
-    if (pe || !prof?.is_published) return createErrorResponse("Not found", 404)
+    const { data: prof, error: pe } = await safeSelect("expert_profiles", "is_published, time_zone", (cols) =>
+      server.from("expert_profiles").select(cols).eq("id", svc.expert_profile_id).maybeSingle(),
+    )
+    if (pe || !(prof as { is_published?: boolean } | null)?.is_published) return createErrorResponse("Not found", 404)
 
     const { data, error } = await server
       .from("expert_service_slots")
@@ -57,6 +56,7 @@ export const GET = withErrorHandling(
     const held = new Set((holds || []).map((h) => h.slot_id))
     const res = NextResponse.json({
       slots: (data || []).filter((s) => !held.has(s.id)),
+      expert_time_zone: String((prof as { time_zone?: string } | null)?.time_zone || "UTC"),
       service: {
         id: String(svc.id),
         title: String(svc.title ?? ""),

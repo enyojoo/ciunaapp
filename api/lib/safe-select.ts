@@ -21,6 +21,17 @@ export const NEW_COLUMNS = [
   "reviewed_at",
   "review_reason_key",
   "claimed_at",
+  // 20261017140000_storefront_details.sql
+  "opening_hours",
+  "time_zone",
+  "min_order_amount",
+  "min_order_currency",
+  "cover_url",
+  "verification_tier",
+  "eta_minutes",
+  "languages",
+  "credentials",
+  "years_experience",
 ] as const
 
 const MISSING_CODES = new Set(["42703", "42P01", "PGRST204", "PGRST205"])
@@ -61,8 +72,10 @@ export async function safeSelect<R extends { data: any; error: any }>(
   cols: string,
   build: (cols: string) => PromiseLike<R>,
   now = Date.now(),
+  /** Columns that are new on this table only (not droppable everywhere), e.g. expert_profiles.is_verified. */
+  extraNew: readonly string[] = [],
 ): Promise<R> {
-  const base = stripNewColumns(cols)
+  const base = stripNewColumns(cols, extraNew)
   const until = degraded.get(key)
   if (until && until > now && base !== cols) return build(base)
   const first = await build(cols)

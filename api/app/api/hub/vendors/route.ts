@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { safeSelect } from "@/lib/safe-select"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
+import { storefrontFields } from "@/lib/merchant/storefront"
 
 const ALLOWED_LINES = new Set(["food", "mart"])
 
@@ -16,7 +17,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   }
 
   const server = createServerClient()
-  const { data, error } = await safeSelect("hub_vendors", "id, service_line_slug, name, slug, photo_url, short_bio, location, is_published, is_verified, rating_avg, rating_count, created_at, updated_at", (cols) =>
+  const { data, error } = await safeSelect("hub_vendors", "id, service_line_slug, name, slug, photo_url, short_bio, location, is_published, is_verified, rating_avg, rating_count, created_at, updated_at, opening_hours, time_zone, min_order_amount, min_order_currency, cover_url, verification_tier", (cols) =>
     server
       .from("hub_vendors")
       .select(cols)
@@ -30,7 +31,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
     return createErrorResponse("Failed to load vendors", 500)
   }
 
-  const res = NextResponse.json({ vendors: (data || []).map((v: any) => ({ rating_avg: null, rating_count: 0, ...v })) })
+  const res = NextResponse.json({ vendors: (data || []).map((v: any) => ({ rating_avg: null, rating_count: 0, ...v, ...storefrontFields(v) })) })
   res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate")
   return res
 })

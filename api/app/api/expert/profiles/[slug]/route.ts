@@ -2,11 +2,12 @@ import { type NextRequest, NextResponse } from "next/server"
 import { isUuidLike, normalizePublicSlug } from "@ciuna/shared"
 import { createServerClient } from "@/lib/supabase"
 import { safeSelect } from "@/lib/safe-select"
+import { expertFields } from "@/lib/merchant/storefront"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { EXPERT_CATALOG_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 
 const PROFILE_FIELDS =
-  "id, slug, display_name, headline, bio, is_published, category, image_url, capabilities, service_area, meeting_hint, rating_avg, rating_count, created_at"
+  "id, slug, display_name, headline, bio, is_published, category, image_url, capabilities, service_area, meeting_hint, rating_avg, rating_count, created_at, languages, time_zone, credentials, years_experience, is_verified, verification_tier"
 
 const SERVICE_FIELDS_BASE =
   "id, title, short_description, sort_order, is_published, pricing_type, hourly_rate, hourly_currency, fixed_amount, fixed_currency, package_label, default_duration_minutes, min_session_minutes, max_session_minutes"
@@ -36,8 +37,8 @@ export const GET = withErrorHandling(async (_request: NextRequest, context?: { p
   const { data: profileRaw, error } = await safeSelect("expert_profiles", PROFILE_FIELDS, (cols) => {
     const q = server.from("expert_profiles").select(cols).eq("is_published", true)
     return (isUuidLike(raw) ? q.eq("id", raw) : q.eq("slug", normalizePublicSlug(raw))).maybeSingle()
-  })
-  const profile = profileRaw ? ({ rating_avg: null, rating_count: 0, ...(profileRaw as any) } as any) : null
+  }, Date.now(), ["is_verified"])
+  const profile = profileRaw ? ({ rating_avg: null, rating_count: 0, ...(profileRaw as any), ...expertFields(profileRaw as any) } as any) : null
 
   if (error) {
     console.error("expert profile GET", error)

@@ -1144,7 +1144,8 @@
       "CONTACT_PHONE_REQUIRED": "Introduce un número de teléfono.",
       "AMOUNT_REQUIRED": "Introduce un importe dentro de los límites del producto.",
       "CONTACT_SUPPORT": "Contacta con soporte para cambiar un pedido aceptado.",
-      "CHECKOUT_UNAVAILABLE": "El pago aún no está disponible."
+      "CHECKOUT_UNAVAILABLE": "El pago aún no está disponible.",
+      "BELOW_MINIMUM_ORDER": "Esta tienda requiere un pedido mayor para la entrega."
     },
     "events": {
       "created": "Pendiente de pago",

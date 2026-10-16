@@ -1144,7 +1144,8 @@
       "CONTACT_PHONE_REQUIRED": "Enter a phone number for fulfillment.",
       "AMOUNT_REQUIRED": "Enter an amount within the product’s limits.",
       "CONTACT_SUPPORT": "Contact support to change an accepted order.",
-      "CHECKOUT_UNAVAILABLE": "Checkout is not available yet."
+      "CHECKOUT_UNAVAILABLE": "Checkout is not available yet.",
+      "BELOW_MINIMUM_ORDER": "This store needs a higher order total for delivery."
     },
     "events": {
       "created": "Awaiting payment",

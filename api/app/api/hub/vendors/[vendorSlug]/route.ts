@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { getPublishedHubVendorForLine } from "@/lib/hub-vendor-resolve"
+import { storefrontFields } from "@/lib/merchant/storefront"
 
 const ALLOWED_LINES = new Set(["food", "mart"])
 
@@ -51,6 +52,7 @@ export const GET = withErrorHandling(async (request: NextRequest, context?: { pa
       rating_count: Number(vendor.rating_count) || 0,
       created_at: String(vendor.created_at || ""),
       updated_at: String(vendor.updated_at || ""),
+      ...storefrontFields(vendor),
     },
   })
   res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate")

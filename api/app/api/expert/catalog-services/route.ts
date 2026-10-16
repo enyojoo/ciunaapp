@@ -3,7 +3,8 @@ import { createServerClient } from "@/lib/supabase"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { EXPERT_CATALOG_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 
-const PROFILE_FIELDS = "id, slug, display_name, image_url, category, is_published"
+const PROFILE_FIELDS = "id, slug, display_name, image_url, category, is_published, is_verified"
+const PROFILE_FIELDS_BASE = "id, slug, display_name, image_url, category, is_published"
 
 const SERVICE_FIELDS_BASE =
   "id, expert_profile_id, title, short_description, sort_order, is_published, pricing_type, hourly_rate, hourly_currency, fixed_amount, fixed_currency, package_label, default_duration_minutes, min_session_minutes, max_session_minutes, created_at"
@@ -27,7 +28,7 @@ type CatalogExpertSummary = {
   display_name: string
   image_url: string | null
   category: string | null
-  /** Reserved for a future `expert_profiles.is_verified` column; false until wired. */
+  /** From expert_profiles.is_verified (set when the merchant is live and has passed KYB); false until the column exists. */
   is_verified: boolean
 }
 
@@ -52,10 +53,16 @@ type CatalogServiceRow = {
 export const GET = withErrorHandling(async (_request: NextRequest) => {
   const server = createServerClient()
 
-  const { data: profiles, error: pErr } = await server
+  let { data: profiles, error: pErr } = await server
     .from("expert_profiles")
     .select(PROFILE_FIELDS)
     .eq("is_published", true)
+  if (pErr && /is_verified|does not exist|schema cache/i.test(String(pErr.message))) {
+    // The storefront-details migration has not been applied yet: fall back to the old columns.
+    const retry = await server.from("expert_profiles").select(PROFILE_FIELDS_BASE).eq("is_published", true)
+    profiles = retry.data as typeof profiles
+    pErr = retry.error
+  }
 
   if (pErr) {
     console.error("expert catalog-services profiles", pErr)
@@ -112,7 +119,7 @@ export const GET = withErrorHandling(async (_request: NextRequest) => {
         display_name: String(prof.display_name ?? ""),
         image_url: prof.image_url != null ? String(prof.image_url) : null,
         category: prof.category != null ? String(prof.category) : null,
-        is_verified: false,
+        is_verified: Boolean((prof as Record<string, unknown>).is_verified),
       },
     })
   }

@@ -356,6 +356,12 @@ export async function buildQuote(userId: string, input: MarketplacePreviewInput)
     corridorFeeType: rate.fee_type,
     corridorFeeAmount: Number(rate.fee_amount || 0),
   })
+  // The minimum only applies to delivery, and only when it is set in the same currency as the products.
+  const minAmount = vendor?.min_order_amount != null ? Number(vendor.min_order_amount) : null
+  const minOrder =
+    minAmount != null && fulfillmentMode === "delivery" && vendor?.min_order_currency === currency
+      ? { amount: minAmount, currency, met: totals.subtotal >= minAmount }
+      : undefined
   const snapshot: Omit<MarketplaceQuote, "id" | "expiresAt"> = {
     source: input.source,
     line,
@@ -370,6 +376,7 @@ export async function buildQuote(userId: string, input: MarketplacePreviewInput)
       district: z.district,
       fee: Number(z.fee),
       currency: z.currency,
+      ...(z.eta_minutes != null ? { etaMinutes: Number(z.eta_minutes) } : {}),
     })),
     deliveryZoneId: zone?.id,
     requirePhone,
@@ -387,10 +394,12 @@ export async function buildQuote(userId: string, input: MarketplacePreviewInput)
         return m ? Math.ceil(Number(m[1]) * 60 + Number(m[2]) + Number(m[3]) / 60) : 60
       }),
     ),
+    ...(minOrder ? { minOrder } : {}),
     checkoutReady:
       (await lineCheckoutEnabled(line)) &&
       available.options.length > 0 &&
-      (fulfillmentMode !== "delivery" || !!zone),
+      (fulfillmentMode !== "delivery" || !!zone) &&
+      (minOrder?.met ?? true),
   }
   return {
     snapshot,
@@ -454,6 +463,7 @@ export async function submit(user: { id: string; email: string }, body: Marketpl
   await requireEnabled(snapshot.line)
   const fresh = await buildQuote(user.id, q.payload.input)
   assert(hash(fresh) === hash(q.payload), "PRICE_CHANGED")
+  assert(snapshot.minOrder?.met ?? true, "BELOW_MINIMUM_ORDER")
   assert(snapshot.checkoutReady, "CHECKOUT_UNAVAILABLE")
   assert(
     typeof body.contactName === "string" &&
