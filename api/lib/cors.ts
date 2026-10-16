@@ -56,10 +56,10 @@ function isAllowedOrigin(origin: string): boolean {
   try {
     const { protocol, hostname } = new URL(origin)
     if (protocol !== "https:") return false
-    if (hostname === "ciunaapp.vercel.app" || hostname === "ciunaoffice.vercel.app") return true
+    if (hostname === "ciunaapp.vercel.app" || hostname === "ciunaoffice.vercel.app" || hostname === "ciunaseller.vercel.app") return true
     return (
       hostname.endsWith(".vercel.app") &&
-      (hostname.startsWith("ciunaapp-") || hostname.startsWith("ciunaoffice-"))
+      (hostname.startsWith("ciunaapp-") || hostname.startsWith("ciunaoffice-") || hostname.startsWith("ciunaseller-"))
     )
   } catch {
     return false
@@ -74,7 +74,7 @@ export function getCorsHeaders(request: NextRequest): Record<string, string> {
   const origin = request.headers.get("origin") || ""
   const headers: Record<string, string> = {
     "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Webhook-Secret, X-Internal-Secret",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Merchant-Id, X-Webhook-Secret, X-Internal-Secret",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   }
