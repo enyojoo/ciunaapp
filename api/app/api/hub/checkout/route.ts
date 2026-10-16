@@ -14,4 +14,4 @@ export const POST = marketplaceRoute(async (request, _, user) => {
     order = await getOrder(id, user.id)
   }
   return { order }
-})
+}, false, { name: "checkout", limit: 10, windowSeconds: 60 })

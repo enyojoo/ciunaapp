@@ -63,4 +63,6 @@ export const POST = marketplaceRoute(async (req: NextRequest, { params }, user) 
     const { review } = await loadOwn(String(params.id), user.id)
     return { review: view(review) }
   }),
+  false,
+  { name: "review", limit: 20, windowSeconds: 60 },
 )
