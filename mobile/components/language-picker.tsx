@@ -69,7 +69,42 @@ export function LanguagePicker({ last }: { last?: boolean }) {
   )
 }
 
+/** Compact flag-and-code chip that opens the same language sheet; for screens before sign-in (login, register). */
+export function LanguageChip() {
+  const { t } = useTranslation("common")
+  const [open, setOpen] = useState(false)
+  const current = (i18n.language.split("-")[0] || "en") as AppLocale
+  return (
+    <>
+      <Pressable
+        onPress={() => setOpen(true)}
+        accessibilityRole="button"
+        accessibilityLabel={t("app.language", { defaultValue: "Language" })}
+        hitSlop={8}
+        style={styles.chip}
+      >
+        <FlagIcon code={LANG_FLAG_COUNTRY[current]} size={16} />
+        <Text style={styles.chipText}>{current.toUpperCase()}</Text>
+        <ChevronDown size={14} color={colors.muted} strokeWidth={2.2} />
+      </Pressable>
+      <SheetPicker
+        open={open}
+        title={t("app.language", { defaultValue: "Language" })}
+        items={[...SUPPORTED_LOCALES]}
+        keyExtractor={(lng) => lng}
+        labelExtractor={(lng) => LANG_LABEL[lng]}
+        leadingExtractor={(lng) => <FlagIcon code={LANG_FLAG_COUNTRY[lng]} size={18} />}
+        selectedId={current}
+        onSelect={(lng) => void setAppLocale(lng)}
+        onClose={() => setOpen(false)}
+      />
+    </>
+  )
+}
+
 const styles = StyleSheet.create({
+  chip: { minHeight: 36, flexDirection: "row", alignItems: "center", gap: 6, borderRadius: 18, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, paddingHorizontal: 12 },
+  chipText: { fontSize: 13, fontWeight: "700", color: colors.text },
   row: { minHeight: 52, flexDirection: "row", alignItems: "center", paddingVertical: 14 },
   border: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   icon: {

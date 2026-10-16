@@ -669,7 +669,9 @@
     "shareTitle": "Enviar dinero con Ciuna",
     "shareMessagePrefix": "Usa mi enlace para registrarte y enviar dinero a más de 10 países africanos y a Rusia gratis en Ciuna:",
     "unnamedReferee": "Usuario",
-    "yourCode": "Tu código"
+    "yourCode": "Tu código",
+    "progress": "{{n}} de {{next}} amigos este trimestre para tu siguiente nivel",
+    "topTier": "Estás en el nivel más alto este trimestre."
   },
   "profile": {
     "title": "Tu perfil",

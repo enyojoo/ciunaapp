@@ -221,6 +221,24 @@ export default function ReferralsScreen() {
           <View style={styles.tierBlock}>
             <Text style={styles.tierHeading}>{t("referrals.commissionRules")}</Text>
             <Text style={styles.tierHint}>{t("referrals.commissionRulesHint")}</Text>
+            {(() => {
+              const tc = data.tierCommission!
+              const next = tc.tiers[tc.currentTierIndex + 1]
+              const have = tc.qualifiedRefereesThisQuarter
+              const pct = next ? Math.min(100, Math.round((have / Math.max(1, next.configuredQualifiedRefereesInQuarter)) * 100)) : 100
+              return (
+                <View style={styles.progress}>
+                  <View style={styles.progressTrack}>
+                    <View style={[styles.progressFill, { width: `${pct}%` }]} />
+                  </View>
+                  <Text style={styles.progressText}>
+                    {next
+                      ? t("referrals.progress", { n: have, next: next.configuredQualifiedRefereesInQuarter, defaultValue: "{{n}} of {{next}} friends this quarter for your next level" })
+                      : t("referrals.topTier", { defaultValue: "You are on the top level this quarter." })}
+                  </Text>
+                </View>
+              )
+            })()}
             <View style={styles.tierList}>
               {data.tierCommission.tiers.map((tier, i) => {
                 const active = i === data.tierCommission!.currentTierIndex
@@ -367,6 +385,10 @@ const styles = StyleSheet.create({
   codeValue: { flex: 1, fontSize: 15, fontWeight: "700", letterSpacing: 0.5, color: colors.text },
   copyBtn: { width: 32, height: 32, alignItems: "center", justifyContent: "center" },
   tierBlock: { marginTop: 18 },
+  progress: { marginTop: 12, gap: 6 },
+  progressTrack: { height: 8, borderRadius: 4, backgroundColor: colors.border, overflow: "hidden" },
+  progressFill: { height: 8, borderRadius: 4, backgroundColor: colors.primary },
+  progressText: { fontSize: typeSize.meta, color: colors.muted },
   tierHeading: { fontSize: 15, fontWeight: "600", color: colors.text },
   tierHint: { marginTop: 2, fontSize: 12, color: colors.muted },
   tierList: {

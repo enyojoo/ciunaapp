@@ -764,7 +764,9 @@
     "shareTitle": "用 Ciuna 汇款",
     "shareMessagePrefix": "使用我的链接注册，即可在 Ciuna 免费汇款，覆盖 10 多个非洲国家与俄罗斯之间的汇款：",
     "unnamedReferee": "用户",
-    "yourCode": "您的邀请码"
+    "yourCode": "您的邀请码",
+    "progress": "本季度已邀请 {{n}}/{{next}} 位好友，即可升级",
+    "topTier": "本季度您已达到最高等级。"
   },
   "profile": {
     "title": "个人资料",

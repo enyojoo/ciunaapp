@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 import Svg, { Path } from "react-native-svg"
 import { BRAND } from "@ciuna/shared"
 import { useToast } from "@/components/toast-provider"
+import { LanguageChip } from "@/components/language-picker"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
 export function useAuthBack() {
@@ -28,6 +29,7 @@ export function AuthTopBar({ onBack }: { onBack?: () => void }) {
       ) : (
         <View style={styles.iconHit} />
       )}
+      <LanguageChip />
       <Pressable
         onPress={() =>
           showInfo(
