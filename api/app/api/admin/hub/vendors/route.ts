@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 
 const ALLOWED_LINES = new Set(["food", "mart"])
 
@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error
     return NextResponse.json({ vendors: data || [] })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin hub vendors GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to load vendors" }, { status })
@@ -80,6 +81,7 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json({ vendor: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin hub vendors POST", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to create vendor" }, { status })

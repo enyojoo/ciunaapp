@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { buildExpertServiceRow } from "@/lib/expert-admin-validation"
 
 const SERVICE_SELECT =
@@ -27,6 +27,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (error) throw error
     return NextResponse.json({ services: data || [] })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert services GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to load services" }, { status })
@@ -55,6 +56,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (error) throw error
     return NextResponse.json({ service: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert services POST", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to create service" }, { status })

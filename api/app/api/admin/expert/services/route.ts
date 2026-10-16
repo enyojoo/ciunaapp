@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 
 const SERVICE_SELECT =
   "id, expert_profile_id, title, short_description, sort_order, is_published, fulfillment_type, pricing_type, hourly_rate, hourly_currency, fixed_amount, fixed_currency, package_label, default_duration_minutes, min_session_minutes, max_session_minutes, created_at, updated_at"
@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
     }))
     return NextResponse.json({ services: enriched })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert services list GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to load expert services" }, { status })

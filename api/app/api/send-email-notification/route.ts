@@ -1,3 +1,4 @@
+import { AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { NextRequest, NextResponse } from "next/server"
 import { EmailNotificationService } from "@/lib/email-notification-service"
 import { requireAdmin, requireUser } from "@/lib/auth-utils"
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: "Invalid parameters" }, { status: 400 })
   } catch (error) {
+    if (error instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     if (error instanceof Error && error.message === "Authentication required") {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 })
     }

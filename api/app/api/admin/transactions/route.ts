@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { combinedTransactionService } from "@/lib/combined-transaction-service"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
       adminUser = await requireAdmin(request)
       console.log("Admin authenticated:", adminUser.email)
     } catch (authError: any) {
+      if (authError instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
       console.error("Admin authentication failed:", authError?.message)
       return NextResponse.json({ 
         error: "Authentication failed",
@@ -38,6 +39,7 @@ export async function GET(request: NextRequest) {
       })
       console.log(`Admin transactions API - Found ${transactions.length} transactions`)
     } catch (fetchError: any) {
+      if (fetchError instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
       console.error("Error fetching transactions:", fetchError)
       console.error("Fetch error message:", fetchError?.message)
       console.error("Fetch error stack:", fetchError?.stack)
@@ -46,6 +48,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ transactions })
   } catch (error: any) {
+    if (error instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("Error loading admin transactions:", error)
     console.error("Error type:", typeof error)
     console.error("Error message:", error?.message)
@@ -67,6 +70,7 @@ export async function GET(request: NextRequest) {
         }
       }
     } catch (serializeError) {
+      if (serializeError instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
       console.error("Failed to serialize error:", serializeError)
     }
     

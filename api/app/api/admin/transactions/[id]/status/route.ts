@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import {
   processReferralRewardsOnCompletedSend,
   rollbackReferralRewardsForTransaction,
@@ -129,6 +129,7 @@ export async function PATCH(
       transaction: updatedTransaction 
     })
   } catch (error) {
+    if (error instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("Error updating transaction status:", error)
     const message = error instanceof Error ? error.message : "Failed to update transaction status"
     const statusCode = message.includes("Admin access required") ? 403 : 500

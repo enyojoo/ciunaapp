@@ -2,7 +2,7 @@ import { validateProduct, productExtras } from "@/lib/marketplace/catalog"
 import { MarketplaceError } from "@/lib/marketplace/service"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { assertHubProductCategoryAllowed } from "@/lib/hub-product-category-validation"
 import { hubMarketplaceLineFromCategory } from "@/lib/hub-slug"
 import { hubProductImageUrlPaymentQrBucketError } from "@/lib/hub-product-image-url"
@@ -30,6 +30,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (error) throw error
     return NextResponse.json({ product: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub product GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
@@ -188,6 +189,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
     return NextResponse.json({ product: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub product PATCH", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
@@ -208,6 +210,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     if (error) throw error
     return NextResponse.json({ ok: true })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub product DELETE", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500

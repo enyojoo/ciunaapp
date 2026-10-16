@@ -264,6 +264,8 @@ export function withErrorHandling(
               console.debug("API:", error.message)
             }
             return createErrorResponse("Admin access required", 403)
+          case "Admin permission required":
+            return createErrorResponse("You do not have permission to do this", 403)
           case "Account is suspended":
             if (process.env.NODE_ENV === "development") {
               console.debug("API:", error.message)

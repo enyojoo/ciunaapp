@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 
 /** Join profile, service, and slot for Office list; nullable FKs return null embeds. */
 const BOOKING_LIST_SELECT = `
@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error
     return NextResponse.json({ bookings: data || [] })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert bookings GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to load bookings" }, { status })

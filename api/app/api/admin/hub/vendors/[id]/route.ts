@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 
 const ALLOWED_LINES = new Set(["food", "mart"])
 
@@ -21,6 +21,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (error) throw error
     return NextResponse.json({ vendor: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin hub vendor GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Not found" }, { status })
@@ -71,6 +72,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (!data) return NextResponse.json({ error: "Vendor not found" }, { status: 404 })
     return NextResponse.json({ vendor: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin hub vendor PATCH", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to update vendor" }, { status })
@@ -89,6 +91,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     if (error) throw error
     return NextResponse.json({ ok: true })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin hub vendor DELETE", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to delete" }, { status })

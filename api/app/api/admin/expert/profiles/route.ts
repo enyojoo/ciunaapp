@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { allocateExpertSlug } from "@/lib/expert-slug-server"
 
 const PROFILE_SELECT =
@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error
     return NextResponse.json({ profiles: data || [] })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert profiles GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to load expert profiles" }, { status })
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
     try {
       slug = await allocateExpertSlug(server, slugSource)
     } catch (e) {
+      if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
       console.error("admin expert profiles slug", e)
       const detail = e instanceof Error ? e.message : String(e)
       return NextResponse.json({ error: "Failed to allocate URL slug", detail }, { status: 500 })
@@ -58,6 +60,7 @@ export async function POST(request: NextRequest) {
     if (error) throw error
     return NextResponse.json({ profile: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert profiles POST", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to create expert profile" }, { status })

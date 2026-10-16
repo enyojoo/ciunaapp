@@ -2,7 +2,7 @@ import { validateProduct, productExtras } from "@/lib/marketplace/catalog"
 import { MarketplaceError } from "@/lib/marketplace/service"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { assertHubProductCategoryAllowed } from "@/lib/hub-product-category-validation"
 import { hubMarketplaceLineFromCategory } from "@/lib/hub-slug"
 import { sortHubProductRows } from "@/lib/hub-products-sort"
@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error
     return NextResponse.json({ products: sortHubProductRows(data || []) })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub products GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
@@ -123,6 +124,7 @@ export async function POST(request: NextRequest) {
     if (error) throw error
     return NextResponse.json({ product: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     if (e instanceof MarketplaceError) return NextResponse.json({ error: e.code }, { status: e.status })
     console.error("admin hub products POST", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
-import { requireAdmin } from "@/lib/admin-auth-utils"
+import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { allocateExpertSlug } from "@/lib/expert-slug-server"
 
 const PROFILE_SELECT =
@@ -21,6 +21,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 })
     return NextResponse.json({ profile: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert profile GET", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to load profile" }, { status })
@@ -65,6 +66,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       try {
         patch.slug = await allocateExpertSlug(server, slugSource, id)
       } catch (e) {
+        if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
         console.error("admin expert profile slug", e)
         return NextResponse.json({ error: "Failed to update URL slug" }, { status: 500 })
       }
@@ -79,6 +81,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (error) throw error
     return NextResponse.json({ profile: data })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert profile PATCH", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to update profile" }, { status })
@@ -98,6 +101,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     if (error) throw error
     return NextResponse.json({ ok: true })
   } catch (e) {
+    if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     console.error("admin expert profile DELETE", e)
     const status = e instanceof Error && e.message === "Unauthorized" ? 401 : 500
     return NextResponse.json({ error: "Failed to delete profile" }, { status })
