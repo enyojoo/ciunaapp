@@ -1,5 +1,6 @@
 import { marketplaceRoute } from "@/lib/marketplace/http"
 import { getOrder, transition, assert } from "@/lib/marketplace/service"
+import { recordEarningForOrder, snapshotOrderFee } from "@/lib/merchant/money"
 export const POST = marketplaceRoute(async (request, ctx, user) => {
   const order = await getOrder(ctx.params.id, undefined, true),
     body = await request.json()
@@ -34,5 +35,7 @@ export const POST = marketplaceRoute(async (request, ctx, user) => {
       400,
     )
   await transition(order.id, body.action, user.id, body)
+  if (body.action === "accept") await snapshotOrderFee(order.id)
+  if (body.action === "fulfill") await recordEarningForOrder(order.id)
   return { order: await getOrder(order.id, undefined, true) }
 }, true)

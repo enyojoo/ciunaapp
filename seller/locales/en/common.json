@@ -67,5 +67,6 @@
   "image.replace": "Replace image",
   "action.upload": "Upload",
   "action.submit": "Submit",
-  "action.done": "Done"
+  "action.done": "Done",
+  "state.default": "default"
 }

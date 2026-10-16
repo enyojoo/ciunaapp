@@ -27,6 +27,7 @@ export const PATCH = adminRoute("merchants.manage", async (req, admin, params) =
   const body = await readJson(req)
   const patch: Record<string, any> = {}
   if (typeof body.owner_team === "string") patch.owner_team = body.owner_team.trim().slice(0, 40) || "operations"
+  if ("fee_plan_id" in body) patch.fee_plan_id = body.fee_plan_id ? String(body.fee_plan_id) : null
   assert(Object.keys(patch).length > 0, "NOTHING_TO_UPDATE")
   const { error } = await createServerClient().from("merchants").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", params.id)
   check(error)

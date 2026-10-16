@@ -78,7 +78,7 @@ test("earning is recorded once, balanced, and released after the hold", async ()
   assert.equal(await bal(db, m, "merchant_available"), 0)
   assert.equal(await platform(db, "platform_fees"), 80)
   assert.equal(await platform(db, "platform_funding"), -1100)
-  assert.equal((await db.query("select coalesce(sum(amount),0)::numeric s from ledger_entries")).rows[0].s, "0")
+  assert.equal((await db.query("select coalesce(sum(amount),0)::numeric s from ledger_entries")).rows[0].s, "0.00")
   assert.equal((await db.query("select earnings_release_due() as n")).rows[0].n, 0) // still on hold
   await db.query("update merchant_earnings set release_at = now() - interval '1 minute'")
   assert.equal((await db.query("select earnings_release_due() as n")).rows[0].n, 1)
@@ -117,7 +117,7 @@ test("payout request, approval and payment move money through the hold account",
   assert.equal(await platform(db, "platform_fees"), 430) // 400 commission + 30 payout fee
   assert.equal((await db.query("select net from payouts where id=$1", [pay])).rows[0].net, "2970.00")
   await assert.rejects(db.query("select payout_decide($1,'reject',$2,null,'late')", [pay, owner]), /INVALID_TRANSITION/)
-  assert.equal((await db.query("select coalesce(sum(amount),0)::numeric s from ledger_entries")).rows[0].s, "0")
+  assert.equal((await db.query("select coalesce(sum(amount),0)::numeric s from ledger_entries")).rows[0].s, "0.00")
 })
 
 test("rejected and cancelled payouts return the money; payout needs a verified method", async () => {

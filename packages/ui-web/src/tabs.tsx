@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
 import { cn } from "./cn"
+import { useUiStrings } from "./strings"
 
 /** Segmented tabs with optional counts; scrolls horizontally on narrow screens. */
 export function Tabs<T extends string>({ value, onChange, items, className }: { value: T; onChange: (v: T) => void; items: Array<{ value: T; label: string; count?: number }>; className?: string }) {
@@ -23,12 +24,13 @@ export const LANGUAGE_LABELS: Record<string, string> = { en: "English", ru: "Р�
 
 /** Edit listing copy per language; the default language is required. */
 export function LanguageTabs({ languages, defaultLanguage, active, onChange, filled }: { languages: string[]; defaultLanguage: string; active: string; onChange: (l: string) => void; filled?: Record<string, boolean> }) {
+  const strings = useUiStrings()
   return (
     <div role="tablist" aria-label="Language" className="flex gap-1 overflow-x-auto [scrollbar-width:none]">
       {languages.map((l) => (
         <button key={l} role="tab" type="button" aria-selected={active === l} onClick={() => onChange(l)} className={cn("flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-sm font-semibold outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50", active === l ? "border-primary bg-primary text-primary-foreground" : "border-input-edge bg-white text-ink")}>
           {LANGUAGE_LABELS[l] ?? l}
-          {l === defaultLanguage ? <span className="text-xs font-medium opacity-80">· default</span> : filled?.[l] ? <span aria-label="filled" className="size-1.5 rounded-full bg-success" /> : null}
+          {l === defaultLanguage ? <span className="text-xs font-medium opacity-80">· {strings.defaultLabel}</span> : filled?.[l] ? <span aria-label="filled" className="size-1.5 rounded-full bg-success" /> : null}
         </button>
       ))}
     </div>

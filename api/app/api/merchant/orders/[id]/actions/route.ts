@@ -4,6 +4,7 @@ import { toSellerOrder, sellerActions, loadOwnedOrder } from "@/lib/merchant/ord
 import { transition, MarketplaceError } from "@/lib/marketplace/service"
 import { createServerClient } from "@/lib/supabase"
 import { audit } from "@/lib/merchant/audit"
+import { recordEarningForOrder, snapshotOrderFee } from "@/lib/merchant/money"
 
 /** accept | start | fulfill | reject. Drives the same state machine Office uses (marketplace_transition). */
 export const POST = merchantRoute(
@@ -33,6 +34,8 @@ export const POST = merchantRoute(
       if (e instanceof MarketplaceError) throw new MerchantError(e.code, e.status)
       throw e
     }
+    if (action === "accept") await snapshotOrderFee(order.id)
+    if (action === "fulfill") await recordEarningForOrder(order.id)
     await audit({ actorKind: "merchant", actorId: user.id, merchantId: merchant.id, action: `order.${action}`, entityType: "marketplace_order", entityId: order.id, details: action === "reject" ? { reason: data.reason } : {} })
     const { data: fresh } = await createServerClient().from("marketplace_orders").select("*").eq("id", order.id).single()
     return { order: toSellerOrder(fresh) }
