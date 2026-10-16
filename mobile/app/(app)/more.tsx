@@ -7,7 +7,7 @@ import {
   FileText,
   Gift,
   Landmark,
-  LifeBuoy,
+  MessageCircleQuestion,
   Lock,
   LogOut,
   ShieldCheck,
@@ -117,7 +117,7 @@ export default function MoreScreen() {
           onPress={() => router.push("/recipients")}
         />
         <Row
-          icon={<LifeBuoy size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<MessageCircleQuestion size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
           label={t("more.support")}
           onPress={() => router.push("/support")}
         />
