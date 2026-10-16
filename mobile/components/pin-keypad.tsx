@@ -11,15 +11,15 @@ const ROWS: (string | "backspace" | null)[][] = [
   [null, "0", "backspace"],
 ]
 
-export function PinDots({ digits, length = PIN_LEN }: { digits: string; length?: number }) {
+export function PinDots({ digits, length = PIN_LEN, error }: { digits: string; length?: number; error?: boolean }) {
   return (
     <View style={styles.dots}>
       {Array.from({ length }).map((_, i) => {
         const filled = i < digits.length
         const active = i === digits.length
         return (
-          <View key={i} style={[styles.dot, (filled || active) && styles.dotActive]}>
-            {filled ? <View style={styles.dotFill} /> : null}
+          <View key={i} style={[styles.dot, (filled || active) && styles.dotActive, error && styles.dotError]}>
+            {filled ? <View style={[styles.dotFill, error && styles.dotFillError]} /> : null}
           </View>
         )
       })}
@@ -73,6 +73,8 @@ export function PinKeypad({
 }
 
 const styles = StyleSheet.create({
+  dotError: { borderColor: colors.danger },
+  dotFillError: { backgroundColor: colors.danger },
   dots: { marginTop: 40, flexDirection: "row", justifyContent: "center", gap: 12 },
   dot: {
     height: 48,

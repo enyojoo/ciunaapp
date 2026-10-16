@@ -10,7 +10,7 @@ import { useToast } from "@/components/toast-provider"
 import { apiFetch } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
 import { supabase } from "@/lib/supabase"
-import { ui } from "@/lib/theme"
+import { colors, radius, ui } from "@/lib/theme"
 
 export default function LoginScreen() {
   const { t } = useTranslation("app")
@@ -21,6 +21,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("")
   const [show, setShow] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [notice, setNotice] = useState<{ tone: "error" | "warn"; text: string } | null>(null)
 
   useEffect(() => {
     if (user) router.replace("/")
@@ -29,9 +30,10 @@ export default function LoginScreen() {
   const onSubmit = async () => {
     const trimmed = email.trim()
     if (!trimmed || !password) {
-      showError(t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }))
+      setNotice({ tone: "error", text: t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }) })
       return
     }
+    setNotice(null)
     setBusy(true)
     try {
       try {
@@ -43,12 +45,13 @@ export default function LoginScreen() {
         if (statusRes.ok) {
           const lockBody = (await statusRes.json()) as { locked?: boolean; remainingMinutes?: number }
           if (lockBody.locked) {
-            showError(
-              t("auth.accountTemporarilyLocked", {
+            setNotice({
+              tone: "warn",
+              text: t("auth.accountTemporarilyLocked", {
                 defaultValue: "Account locked. Try again in {{minutes}} minutes.",
                 minutes: lockBody.remainingMinutes ?? 0,
               }),
-            )
+            })
             return
           }
         }
@@ -62,7 +65,7 @@ export default function LoginScreen() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: trimmed }),
         }).catch(() => {})
-        showError(friendlyLoginError(err, t("auth.invalidCredentials", { defaultValue: "Invalid email or password" })))
+        setNotice({ tone: "error", text: friendlyLoginError(err, t("auth.invalidCredentials", { defaultValue: "Invalid email or password" })) })
         return
       }
       await apiFetch("/api/auth/login-attempt/success", {
@@ -72,7 +75,7 @@ export default function LoginScreen() {
       }).catch(() => {})
       router.replace("/")
     } catch {
-      showError(t("auth.genericError", { defaultValue: "An unexpected error occurred" }))
+      setNotice({ tone: "error", text: t("auth.genericError", { defaultValue: "An unexpected error occurred" }) })
     } finally {
       setBusy(false)
     }
@@ -103,6 +106,11 @@ export default function LoginScreen() {
           onGoogle={() => void onSocial(signInWithGoogle)}
           disabled={busy}
         />
+        {notice ? (
+          <View style={[styles.notice, notice.tone === "warn" ? styles.noticeWarn : styles.noticeError]} accessibilityRole="alert">
+            <Text style={[styles.noticeText, notice.tone === "warn" ? styles.noticeTextWarn : styles.noticeTextError]}>{notice.text}</Text>
+          </View>
+        ) : null}
         <Field
           label={t("auth.email", { defaultValue: "Email" })}
           autoCapitalize="none"
@@ -112,7 +120,10 @@ export default function LoginScreen() {
           textContentType="emailAddress"
           placeholder={t("auth.emailPlaceholder", { defaultValue: "you@example.com" })}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(v) => {
+            setEmail(v)
+            setNotice(null)
+          }}
           returnKeyType="next"
         />
         <Field
@@ -124,7 +135,10 @@ export default function LoginScreen() {
           textContentType="password"
           placeholder={t("auth.passwordPlaceholder", { defaultValue: "Enter your password" })}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={(v) => {
+            setPassword(v)
+            setNotice(null)
+          }}
           returnKeyType="done"
           onSubmitEditing={() => void onSubmit()}
           trailing={<PasswordEye show={show} onToggle={() => setShow((s) => !s)} />}
@@ -165,4 +179,10 @@ const styles = StyleSheet.create({
   content: { flexGrow: 1, paddingTop: 8 },
   form: { width: "100%", maxWidth: 448, alignSelf: "center" },
   forgot: { alignSelf: "flex-start", marginBottom: 16 },
+  notice: { borderRadius: radius.row, padding: 12, marginBottom: 12 },
+  noticeError: { backgroundColor: "#FEF2F2" },
+  noticeWarn: { backgroundColor: "#FFFBEB" },
+  noticeText: { fontSize: 14, lineHeight: 20, fontWeight: "600" },
+  noticeTextError: { color: colors.danger },
+  noticeTextWarn: { color: colors.warningText },
 })

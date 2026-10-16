@@ -4,7 +4,6 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-nati
 import { useTranslation } from "react-i18next"
 import { PinDots, PinKeypad, PIN_LEN } from "@/components/pin-keypad"
 import { Screen } from "@/components/screen"
-import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
 import { tryBiometricUnlock, verifyPin } from "@/lib/pin"
 import { colors, ui } from "@/lib/theme"
@@ -12,9 +11,9 @@ import { colors, ui } from "@/lib/theme"
 export default function PinScreen() {
   const { t } = useTranslation("common")
   const { user, loading, pinUnlocked, unlockPin, signOut } = useAuth()
-  const { showError } = useToast()
   const [pin, setPin] = useState("")
   const [busy, setBusy] = useState(false)
+  const [wrong, setWrong] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -32,11 +31,11 @@ export default function PinScreen() {
       setBusy(false)
       if (ok) unlockPin()
       else {
-        showError(t("pinLock.incorrectPin", { defaultValue: "Incorrect PIN" }))
+        setWrong(true)
         setPin("")
       }
     })()
-  }, [pin, user, unlockPin, t, showError])
+  }, [pin, user, unlockPin])
 
   if (loading) {
     return (
@@ -55,11 +54,15 @@ export default function PinScreen() {
         <Text style={[ui.subtitle, styles.centerText]}>
           {t("pinLock.enterPin", { defaultValue: "Enter your 4-digit PIN" })}
         </Text>
-        <PinDots digits={pin} />
+        <PinDots digits={pin} error={wrong} />
+        <Text style={styles.wrong} accessibilityRole="alert">
+          {wrong ? t("pinLock.incorrectPin", { defaultValue: "Incorrect PIN" }) : " "}
+        </Text>
       </View>
       <PinKeypad
         disabled={busy}
         onDigit={(d) => {
+          setWrong(false)
           setPin((p) => (p.length >= PIN_LEN ? p : p + d))
         }}
         onBackspace={() => setPin((p) => p.slice(0, -1))}
@@ -75,5 +78,6 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.paper },
   head: { alignItems: "center", paddingTop: 32 },
   centerText: { textAlign: "center" },
+  wrong: { marginTop: 12, minHeight: 20, fontSize: 14, fontWeight: "600", color: colors.danger, textAlign: "center" },
   logout: { minHeight: 48, alignItems: "center", paddingVertical: 12 },
 })
