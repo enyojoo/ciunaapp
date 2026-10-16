@@ -1,0 +1,159 @@
+<!-- @dsCard group="Office · Screens" width=1170 height=3836 subtitle="Products across Food and Mart: review queue, listing review with templated rejection reasons, edit dialog, empty and rejected states" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>OfficeCatalog</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.o-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.o-top{height:52px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 28px;background:var(--surface);border-bottom:1px solid var(--hairline)}
+.o-search{flex:1;max-width:420px;height:34px;border:1px solid var(--input-edge);border-radius:10px;display:flex;align-items:center;gap:8px;padding:0 10px;color:var(--muted);font-size:14px;background:var(--surface)}
+.o-search .ic{--s:16px}
+.o-search kbd{margin-left:auto;font:600 11px/1 var(--font-web);border:1px solid var(--hairline);border-radius:6px;padding:3px 6px;background:var(--neutral-surface);color:var(--neutral-text)}
+.o-role{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:var(--neutral-surface);color:var(--neutral-text);font:600 12px/1 var(--font-web)}
+.o-brand{display:flex;align-items:center;gap:10px;padding:2px 12px 8px;font:700 16px/1 var(--font-web)}
+.o-brand .lg{width:30px;height:30px;border-radius:9px;background:var(--primary);color:#fff;display:grid;place-items:center;font:700 14px/1 var(--font-web)}
+.o-brand small{display:block;font:500 11px/14px var(--font-web);color:var(--muted);margin-top:2px}
+.o-link .n{margin-left:auto;font:600 12px/1 var(--font-web);color:var(--muted)}
+.o-link .n.hot{background:var(--warning-surface);color:var(--warning-text);padding:3px 7px;border-radius:9px}
+.o-sp{flex:1}
+.o-link,.o-grp,.o-brand{flex-shrink:0}
+.o-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.o-head h1{margin:0;font:700 22px/28px var(--font-web);letter-spacing:-.3px}
+.o-head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.o-tb{display:flex;gap:10px;align-items:center;margin:14px 0;flex-wrap:wrap}
+.o-tb .input,.o-tb .select{height:36px;font-size:14px}
+.o-tb .w{width:260px}.o-tb .w2{width:150px}
+.views{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.views .v{padding:5px 11px;border-radius:999px;border:1px solid var(--hairline);background:var(--surface);font-weight:600;color:var(--ink)}
+.views .v.on{border-color:var(--primary-border);background:var(--primary-tint);color:var(--primary-text)}
+.ot{font-size:13.5px}
+.ot th{top:0;padding:9px 14px;z-index:1}
+.ot td{padding:10px 14px;vertical-align:middle}
+.ot tr.sel td{background:var(--primary-tint)}
+.ot tr.hov td{background:var(--paper)}
+.ot tr.dim td{color:var(--muted)}
+.ot tr.grp td{background:var(--paper);font:600 11px/16px var(--font-web);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 14px}
+.ot td.r,.ot th.r{text-align:right}
+.ot .nm{display:flex;align-items:center;gap:10px;font-weight:600}
+.ot .nm small,.ot small.s{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.age{font-variant-numeric:tabular-nums;white-space:nowrap}
+.age.warn{color:var(--warning-text);font-weight:700}
+.age.bad{color:var(--destructive-text);font-weight:700}
+.sub{color:var(--muted);font-size:12.5px}
+.pgn{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--hairline);font-size:13px;color:var(--muted)}
+.pgn .btns{display:flex;gap:8px}
+.scrim-o{position:absolute;inset:0;display:grid;place-items:center;background:rgba(17,24,39,.55);padding:24px}
+.dlg{width:540px;max-height:100%;padding:24px;display:grid;gap:14px;overflow:hidden}
+.dlg.w{width:780px}
+.dlg h2{margin:0;font:600 18px/24px var(--font-web)}
+.dlg p{margin:0}
+.dlg-f{display:flex;justify-content:flex-end;gap:10px;align-items:center}
+.dlg-f .sp{margin-right:auto}
+.rch{display:flex;flex-wrap:wrap;gap:8px}
+.rch span{padding:6px 12px;border-radius:999px;border:1px solid var(--input-edge);background:var(--surface);font:500 13px/18px var(--font-web)}
+.rch span.on{border-color:var(--primary-border);background:var(--primary-tint);color:var(--primary-text)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sw{display:flex;align-items:center;gap:10px;font-size:14px}
+.o-card .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hairline)}
+.o-card .hd h3{margin:0;font:600 15px/22px var(--font-web)}
+.o-card .bd{padding:14px 16px}
+.o-card+.o-card{margin-top:14px}
+.kv2{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;font-size:14px;margin:0}
+.kv2 dt{color:var(--muted)}.kv2 dd{margin:0}
+.kvl{margin:0;font-size:14px}
+.kvl>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0}
+.kvl>div+div{border-top:1px solid var(--hairline)}
+.kvl dt{color:var(--muted)}.kvl dd{margin:0;font-variant-numeric:tabular-nums;font-weight:600}
+.miss{color:var(--destructive-text);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.ok{color:var(--success-text);display:inline-flex;align-items:center;gap:6px}
+.ok .ic,.miss .ic{--s:15px}
+.json{margin:0;padding:12px 16px;background:var(--neutral-surface);border-radius:10px;font:12.5px/18px ui-monospace,Menlo,monospace;color:var(--ink);overflow:hidden;white-space:pre}
+.cap2{font:600 12px/16px var(--font-web);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.empty{text-align:center;padding:48px 24px}
+.empty .avatar{margin:0 auto 12px}
+.mutedbg{background:var(--neutral-surface);border-radius:var(--radius-control);padding:10px 12px;font-size:13px;color:var(--neutral-text)}
+.sg{display:inline-flex;gap:2px;padding:3px;background:var(--neutral-surface);border-radius:10px}
+.sg span{padding:6px 12px;border-radius:8px;font:600 13px/1 var(--font-web);color:var(--muted)}
+.sg span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-xs)}
+.ed{display:grid;gap:8px;align-items:center;font-size:13.5px}
+.ed.f{grid-template-columns:1fr 1.4fr 110px 96px 36px}
+.ed.d{grid-template-columns:1fr 1.4fr 96px 96px 36px}
+.ed .input,.ed .select{height:36px;font-size:13.5px}
+.ed .cb{display:inline-flex;align-items:center;gap:8px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin:2px 0}
+.sec-h h4{margin:0;font:600 14px/20px var(--font-web)}
+.fld{display:grid;gap:6px}
+.fld .label{font-size:12.5px}
+.stack{display:grid;gap:14px;align-content:start}
+.ro .input,.ro .select{background:var(--neutral-surface);color:var(--neutral-text)}
+.mono{font:12.5px/18px ui-monospace,Menlo,monospace}
+.chiprole{display:inline-flex;height:22px;align-items:center;padding:0 8px;border-radius:999px;font:600 12px/1 var(--font-web);background:var(--neutral-surface);color:var(--neutral-text)}
+.chiprole.sys{background:var(--paper);border:1px solid var(--hairline)}
+.chiprole.mer{background:var(--primary-tint);color:var(--primary-text)}
+.nx{font-size:12px;color:var(--muted)}
+
+.tbl-in{width:100%}
+.stat{padding:14px 16px}.stat b{display:block;font:700 22px/28px var(--font-web);font-variant-numeric:tabular-nums}.stat span{color:var(--muted);font-size:13px}
+.tile{display:flex;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--hairline);border-radius:var(--radius-card);background:var(--surface)}
+.tile.off{opacity:.6}.tile .g{flex:1;min-width:0}.tile .g b{display:block;font-weight:600;font-size:14px}
+.grip{color:var(--muted);cursor:grab}
+.two{display:grid;grid-template-columns:1fr 340px;gap:14px;align-items:start}
+.pn{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font:600 12px/1 var(--font-web);padding:4px 8px;border-radius:8px;background:var(--neutral-surface);color:var(--neutral-text)}
+.spark{display:flex;align-items:flex-end;gap:3px;height:34px}.spark i{display:block;width:8px;background:var(--neutral-text);opacity:.35;border-radius:2px}
+.fld{display:grid;gap:6px}
+.two>*{min-width:0}
+.scrim-o{z-index:5}
+.ficon{width:34px;height:40px;border-radius:8px;background:var(--neutral-surface);display:grid;place-items:center;color:var(--neutral-text)}
+.ot td{white-space:nowrap}
+.ot td{white-space:nowrap}
+.two .ot th,.two .ot td{padding:10px 8px}
+.two .rt th:nth-child(5),.two .rt td:nth-child(5),.two .rt th:nth-child(6),.two .rt td:nth-child(6){display:none}
+.two .rf th:nth-child(2),.two .rf td:nth-child(2){display:none}
+.dr{display:flex;align-items:center;gap:12px;padding:11px 16px}
+.dr+.dr{border-top:1px solid var(--hairline)}
+.dr .g{flex:1;min-width:0}
+.dr .g b{display:block;font-weight:600;font-size:14px}
+.tl2{display:grid;gap:0;font-size:13.5px}
+.tl2>div{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:8px 16px}
+.tl2>div+div{border-top:1px solid var(--hairline)}
+.tl2 time{color:var(--muted);font-variant-numeric:tabular-nums}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Needs review queue: Food and Mart together, age and owner, row selected</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:856px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><a class="o-link"><i data-i="refresh-cw"></i>Rates</a><a class="o-link"><i data-i="gift"></i>Referrals</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link on"><i data-i="package"></i>Catalog</a><a class="o-link"><i data-i="shopping-basket"></i>Orders</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><a class="o-link"><i data-i="calendar-days"></i>Bookings</a><div class="o-grp">Merchants</div><a class="o-link"><i data-i="store"></i>Merchants</a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="chart-column"></i>Analytics</a><a class="o-link"><i data-i="settings"></i>Settings</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>ops</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Catalog</h1><p>Products across Food and Mart. Review new listings before they go live.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div><div class="tabs"><span class="tab on">Needs review <span class="count">19</span></span><span class="tab">Live</span><span class="tab">Rejected</span><span class="tab">Paused</span><span class="tab">All</span></div><div class="o-tb"><div class="input-wrap"><i data-i="search"></i><input class="input w" placeholder="Search product or seller" style="height:36px"></div><select class="select w2"><option>All lines</option></select><select class="select w2"><option>All categories</option></select><div class="views"><span>Views</span><span class="v on">Needs review</span><span class="v">Mine</span><span class="v">Live</span></div><span class="o-sp"></span><span class="sub"><i data-i="sliders-horizontal" style="--s:14px"></i> Columns</span></div><div class="o-card"><table class="table ot"><thead><tr><th>Product</th><th>Line</th><th class="r">Price</th><th>Status</th><th>Waiting</th><th>Owner</th><th class="r"></th></tr></thead><tbody>
+ <tr class="sel"><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Jollof rice, family tray<small>Mama T's Kitchen</small></span></div></td><td>Food</td><td class="r num">₽1,450</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">2h 10m</span></td><td>Ada K.</td><td class="r"><a class="btn btn-secondary btn-sm">Review</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Egusi soup with pounded yam<small>Mama T's Kitchen</small></span></div></td><td>Food</td><td class="r num">₽890</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">2h 10m</span></td><td>Ada K.</td><td class="r"><a class="btn btn-secondary btn-sm">Review</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Plantain chips 500 g<small>Lagos Pantry</small></span></div></td><td>Mart</td><td class="r num">₽320</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">26h</span></td><td>Unassigned</td><td class="r"><a class="btn btn-secondary btn-sm">Claim</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Instant noodles, Lao Gan Ma pack<small>Guangzhou Market</small></span></div></td><td>Mart</td><td class="r num">₽1,180</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">31h</span></td><td>Unassigned</td><td class="r"><a class="btn btn-secondary btn-sm">Claim</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Dulce de leche 400 g<small>Latina Despensa</small></span></div></td><td>Mart</td><td class="r num">₽540</td><td><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></td><td><span class="age">1d</span></td><td>Ben O.</td><td class="r"><a class="btn btn-ghost btn-sm">View</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Suya spice mix<small>Sahel Spices</small></span></div></td><td>Mart</td><td class="r num">₽410</td><td><span class="badge badge-success"><i data-i="circle-check-big"></i>Live</span></td><td><span class="age">2d</span></td><td>Ada K.</td><td class="r"><a class="btn btn-ghost btn-sm">View</a></td></tr>
+ </tbody></table><div class="pgn"><span>1–6 of 19 needing review</span><span>Up and down to move, Enter to open, C to claim</span></div></div></div></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Review layout: listing on the left, templated reason and decision on the right</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:856px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><a class="o-link"><i data-i="refresh-cw"></i>Rates</a><a class="o-link"><i data-i="gift"></i>Referrals</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link on"><i data-i="package"></i>Catalog</a><a class="o-link"><i data-i="shopping-basket"></i>Orders</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><a class="o-link"><i data-i="calendar-days"></i>Bookings</a><div class="o-grp">Merchants</div><a class="o-link"><i data-i="store"></i>Merchants</a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="chart-column"></i>Analytics</a><a class="o-link"><i data-i="settings"></i>Settings</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>ops</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Catalog</h1><p>Products across Food and Mart. Review new listings before they go live.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div><div class="two" style="grid-template-columns:1fr 380px"><div><div class="o-card"><div class="hd"><h3>Jollof rice, family tray</h3><span class="badge badge-warning"><i data-i="clock"></i>In review</span></div><div class="bd" style="display:grid;gap:12px">
+ <div class="row3"><span class="ph" style="height:96px;border-radius:10px"></span><span class="ph" style="height:96px;border-radius:10px"></span><span class="ph" style="height:96px;border-radius:10px"></span></div>
+ <dl class="kv2"><dt>Seller</dt><dd>Mama T's Kitchen, Moscow</dd><dt>Line</dt><dd>Food · West African</dd><dt>Price</dt><dd class="num">₽1,450</dd><dt>Description</dt><dd>Serves 4. Party jollof with chicken. Order 24 hours ahead.</dd><dt>Allergens</dt><dd>None listed <span class="badge badge-warning"><i data-i="triangle-alert"></i>Check</span></dd></dl>
+ <div class="mutedbg">Checks: photo shows the product <span class="ok"><i data-i="check"></i></span> · price within category range <span class="ok"><i data-i="check"></i></span> · allergens missing <span class="miss"><i data-i="x"></i></span></div></div></div></div><div><div class="o-card"><div class="hd"><h3>Decision</h3></div><div class="bd" style="display:grid;gap:12px"><div class="cap2">Rejection reason, shown to the seller as written</div>
+ <div class="rch"><span>Photo does not show the product</span><span class="on">Allergens missing</span><span>Price looks wrong</span><span>Prohibited item</span><span>Duplicate listing</span><span>Other</span></div>
+ <div class="fld"><label class="label">Message to the seller</label><textarea class="textarea" rows="3">Please list allergens for this dish (for example nuts, gluten, fish) so customers can order safely.</textarea></div>
+ <div style="display:flex;gap:8px;justify-content:flex-end"><a class="btn btn-destructive btn-sm">Reject</a> <a class="btn btn-sm">Approve and publish</a></div></div></div></div></div></div></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Edit dialog from the table, with a translation validation error</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:856px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><a class="o-link"><i data-i="refresh-cw"></i>Rates</a><a class="o-link"><i data-i="gift"></i>Referrals</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link on"><i data-i="package"></i>Catalog</a><a class="o-link"><i data-i="shopping-basket"></i>Orders</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><a class="o-link"><i data-i="calendar-days"></i>Bookings</a><div class="o-grp">Merchants</div><a class="o-link"><i data-i="store"></i>Merchants</a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="chart-column"></i>Analytics</a><a class="o-link"><i data-i="settings"></i>Settings</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>ops</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Catalog</h1><p>Products across Food and Mart. Review new listings before they go live.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div><div class="tabs"><span class="tab">Needs review <span class="count">19</span></span><span class="tab on">Live</span><span class="tab">Rejected</span><span class="tab">Paused</span><span class="tab">All</span></div><div class="o-tb"><div class="input-wrap"><i data-i="search"></i><input class="input w" placeholder="Search product or seller" style="height:36px"></div><select class="select w2"><option>All lines</option></select><select class="select w2"><option>All categories</option></select><div class="views"><span>Views</span><span class="v on">Needs review</span><span class="v">Mine</span><span class="v">Live</span></div><span class="o-sp"></span><span class="sub"><i data-i="sliders-horizontal" style="--s:14px"></i> Columns</span></div><div class="o-card"><table class="table ot"><thead><tr><th>Product</th><th>Line</th><th class="r">Price</th><th>Status</th><th>Waiting</th><th>Owner</th><th class="r"></th></tr></thead><tbody>
+ <tr class="sel"><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Jollof rice, family tray<small>Mama T's Kitchen</small></span></div></td><td>Food</td><td class="r num">₽1,450</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">2h 10m</span></td><td>Ada K.</td><td class="r"><a class="btn btn-secondary btn-sm">Review</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Egusi soup with pounded yam<small>Mama T's Kitchen</small></span></div></td><td>Food</td><td class="r num">₽890</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">2h 10m</span></td><td>Ada K.</td><td class="r"><a class="btn btn-secondary btn-sm">Review</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Plantain chips 500 g<small>Lagos Pantry</small></span></div></td><td>Mart</td><td class="r num">₽320</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">26h</span></td><td>Unassigned</td><td class="r"><a class="btn btn-secondary btn-sm">Claim</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Instant noodles, Lao Gan Ma pack<small>Guangzhou Market</small></span></div></td><td>Mart</td><td class="r num">₽1,180</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age">31h</span></td><td>Unassigned</td><td class="r"><a class="btn btn-secondary btn-sm">Claim</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Dulce de leche 400 g<small>Latina Despensa</small></span></div></td><td>Mart</td><td class="r num">₽540</td><td><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></td><td><span class="age">1d</span></td><td>Ben O.</td><td class="r"><a class="btn btn-ghost btn-sm">View</a></td></tr>
+ <tr class=""><td><div class="nm"><span class="ph" style="width:36px;height:36px;border-radius:8px"></span><span>Suya spice mix<small>Sahel Spices</small></span></div></td><td>Mart</td><td class="r num">₽410</td><td><span class="badge badge-success"><i data-i="circle-check-big"></i>Live</span></td><td><span class="age">2d</span></td><td>Ada K.</td><td class="r"><a class="btn btn-ghost btn-sm">View</a></td></tr>
+ </tbody></table><div class="pgn"><span>1–6 of 19 needing review</span><span>Up and down to move, Enter to open, C to claim</span></div></div></div></div><div class="scrim-o"><div class="dialog dlg" style="width:560px"><div><h2>Edit Plantain chips 500 g</h2><p class="t-meta" style="margin-top:4px">Edits are saved to the seller's listing and logged. The seller is told what changed.</p></div><div class="fld"><label class="label">Name</label><input class="input " value="Plantain chips 500 g"></div><div class="row3"><div class="fld"><label class="label">Price (₽)</label><input class="input num" value="320"></div><div class="fld"><label class="label">Category</label><select class="select w"><option>Snacks</option></select></div><div class="fld"><label class="label">Status</label><select class="select w"><option>In review</option></select></div></div>
+   <div class="fld"><label class="label">Description</label><textarea class="textarea" rows="3">Crispy salted plantain chips from Lagos, 500 g bag.</textarea></div>
+   <p class="err" role="alert" style="margin:0">Name is longer than 60 characters in Russian. Shorten the Russian name.</p>
+   <div class="mutedbg">Languages: English complete, Russian needs a name.</div><div class="dlg-f"><a class="btn btn-secondary">Cancel</a><a class="btn">Save changes</a></div></div></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Empty queue and a rejected product with the seller-visible reason</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:856px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><a class="o-link"><i data-i="refresh-cw"></i>Rates</a><a class="o-link"><i data-i="gift"></i>Referrals</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link on"><i data-i="package"></i>Catalog</a><a class="o-link"><i data-i="shopping-basket"></i>Orders</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><a class="o-link"><i data-i="calendar-days"></i>Bookings</a><div class="o-grp">Merchants</div><a class="o-link"><i data-i="store"></i>Merchants</a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="chart-column"></i>Analytics</a><a class="o-link"><i data-i="settings"></i>Settings</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>ops</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Catalog</h1><p>Products across Food and Mart. Review new listings before they go live.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div><div class="row2"><div class="o-card"><div class="empty"><div class="avatar lg"><i data-i="circle-check-big" style="--s:26px"></i></div><div class="t-h2">Nothing to review</div><p class="t-meta" style="margin:6px 0 0">New and edited listings appear here.</p></div></div>
+ <div class="o-card"><div class="hd"><h3>Dulce de leche 400 g</h3><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></div><div class="bd"><dl class="kv2" style="grid-template-columns:110px 1fr"><dt>Reason</dt><dd>Photo does not show the product</dd><dt>Seller sees</dt><dd>"The photo shows a shelf, not the jar. Please upload a clear photo of the product."</dd><dt>By</dt><dd>Ben O., Oct 15, 14:20</dd></dl></div></div></div></div></div></div></div></div>
+</div></div></body></html>

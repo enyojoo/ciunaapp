@@ -1,0 +1,138 @@
+<!-- @dsCard group="Customer app · Screens" height=2902 width=1300 subtitle="Referrals: code and link, share, commission tier progress, balance and withdraw, friend list, empty, paused and first load" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CustomerReferrals</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.phone.native *{font-family:var(--font-native)}
+.cz-grid{gap:40px}
+.cz-grid+.cz-grid{margin-top:40px}
+.flag{display:inline-block;flex-shrink:0;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px rgba(17,24,39,.14);background:var(--surface)}
+.f16{width:16px;height:16px}.f20{width:20px;height:20px}.f24{width:24px;height:24px}.f32{width:32px;height:32px}
+.nt{font:700 24px/30px var(--font-native);letter-spacing:-.3px;margin:0}
+.nh{font:700 18px/24px var(--font-native)}
+.nl{font:600 15px/20px var(--font-native)}
+.nb{font:400 15px/22px var(--font-native)}
+.nm{font:400 13px/18px var(--font-native);color:var(--muted)}
+.pad{padding:0 16px}
+.grow{flex:1;min-width:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bk{width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;flex-shrink:0}
+.hd{display:flex;align-items:center;gap:10px;padding:8px 16px;flex-shrink:0}
+.hd .nh{flex:1}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.plate.p{padding:14px 16px}
+.stack{display:grid;gap:12px}
+.lbl{font:600 13px/18px var(--font-native);color:var(--muted)}
+.row2{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font:400 15px/22px var(--font-native)}
+.row2 span:first-child{color:var(--muted)}
+.row2 span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+.row2.tot{font:700 17px/24px var(--font-native);padding-top:10px;border-top:2px solid var(--ink)}
+.row2.tot span:first-child{color:var(--ink)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px 16px 0}
+.steps i{height:4px;border-radius:2px;background:var(--hairline);display:block}
+.steps i.on{background:var(--primary)}
+.cap2{display:flex;justify-content:space-between;padding:6px 16px 0;font:600 12px/16px var(--font-native);color:var(--muted)}
+.cap2 .on{color:var(--ink)}
+.chips{display:flex;gap:8px;padding:12px 16px 0;overflow:hidden}
+.chips .chip{font-family:var(--font-native);flex-shrink:0}
+.sec{display:flex;align-items:baseline;justify-content:space-between;padding:20px 16px 10px}
+.sec a{font:600 14px/20px var(--font-native);color:var(--primary-text);text-decoration:none}
+.fld{display:grid;gap:6px}
+.fld .l{font:600 14px/20px var(--font-native)}
+.fld .in{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native)}
+.fld .in .ph2{color:var(--subtle)}
+.fld .in .grow{overflow:hidden;white-space:nowrap}
+.fld .in .ic{--s:20px;color:var(--muted)}
+.fld .in.bad{border-color:var(--destructive-text)}
+.fld .in.dis{background:var(--neutral-surface);color:var(--muted)}
+.fld .in.f{border-color:var(--primary);box-shadow:0 0 0 3px rgba(205,75,14,.25)}
+.fld .e{font:400 13px/18px var(--font-native);color:var(--destructive-text);display:flex;gap:6px;align-items:flex-start}
+.fld .e .ic{--s:15px;margin-top:2px}
+.fld .h{font:400 13px/18px var(--font-native);color:var(--muted)}
+.ban{margin:10px 16px 0;padding:10px 14px;font:400 13px/18px var(--font-native);display:flex;gap:10px;align-items:center;border-radius:var(--radius-card)}
+.ban .ic{--s:18px;flex-shrink:0}
+.ban b{font-weight:600}
+.ban a{font-weight:700;margin-left:auto;white-space:nowrap;text-decoration:underline;text-underline-offset:3px}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;z-index:5}
+.ov .scrim{position:absolute;inset:0}
+.ov .sheet{position:relative;padding:0 16px 34px;display:grid;gap:4px}
+.ov .sheet .grab{margin:10px auto 8px}
+.ov .sheet h3{margin:0 4px 6px;font:700 18px/24px var(--font-native)}
+.dlgw{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 28px;z-index:5}
+.dlgw .scrim{position:absolute;inset:0}
+.dlgw .dialog{position:relative;padding:22px 20px 18px;display:grid;gap:8px;width:100%}
+.dlgw h3{margin:0;font:700 18px/24px var(--font-native)}
+.dlgw p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.dlgw .acts{display:flex;gap:10px;margin-top:10px}
+.dlgw .acts .btn{flex:1}
+.toastw{position:absolute;left:16px;right:16px;bottom:92px;display:flex;justify-content:center;z-index:6}
+.mid3{display:grid;justify-items:center;text-align:center;gap:8px;padding:44px 32px}
+.mid3 p{margin:0 0 10px;font:400 14px/20px var(--font-native);color:var(--muted)}
+.mid3 .nl{font-size:17px;line-height:22px}
+.mid3 .big{width:64px;height:64px;border-radius:50%;background:var(--neutral-surface);color:var(--muted);display:grid;place-items:center;margin-bottom:6px}
+.mid3 .big .ic{--s:28px}
+.mid3 .big.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.mid3 .big.ok{background:var(--success-surface);color:var(--success-text)}
+.mid3 .big.warn{background:var(--warning-surface);color:var(--warning-text)}
+.mid3 .btn{margin-top:4px}
+.mi{width:36px;height:36px;border-radius:10px;background:var(--neutral-surface);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.mi .ic{--s:18px}
+.mi.ok{background:var(--success-surface);color:var(--success-text)}
+.mi.warn{background:var(--warning-surface);color:var(--warning-text)}
+.mi.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.mi.pr{background:var(--primary-tint);color:var(--primary-text)}
+.srch{display:flex;align-items:center;gap:10px;margin:10px 16px 0;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native);color:var(--subtle)}
+.srch .ic{--s:18px;color:var(--muted)}
+.srch.f{color:var(--ink);border-color:var(--primary);box-shadow:0 0 0 3px rgba(205,75,14,.25)}
+.sk{border-radius:10px}
+.skr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--hairline);background:var(--surface)}
+.pdots{display:flex;gap:18px;margin:18px 0 6px}
+.pdots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--input-edge);display:block}
+.pdots i.on{background:var(--ink);border-color:var(--ink)}
+.pdots.bad i{border-color:var(--destructive-text)}
+.pdots.bad i.on{background:var(--destructive-text);border-color:var(--destructive-text)}
+.pkeys{display:grid;grid-template-columns:repeat(3,72px);gap:12px 28px;margin-top:18px;justify-content:center}
+.pkeys span{width:72px;height:72px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;font:600 28px/1 var(--font-native);font-variant-numeric:tabular-nums}
+.pkeys span.z{background:transparent;border-color:transparent}
+.pkeys span .ic{--s:24px}
+.pkeys.off span{opacity:.4}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt.off{opacity:.55}
+.opt .grow{display:grid;gap:2px}
+
+.lab{font:600 12px/16px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:20px 20px 8px}
+.rh{margin:6px 16px 0;padding:18px 16px;display:grid;gap:8px;background:var(--refer-surface);border-color:transparent}
+.rh .top{display:flex;gap:12px;align-items:center}
+.rh .big{width:44px;height:44px;border-radius:50%;background:var(--surface);color:var(--refer);display:grid;place-items:center;flex-shrink:0}
+.rh .big .ic{--s:22px}
+.rh h2{margin:0;font:700 20px/26px var(--font-native)}
+.rh p{margin:0;font:400 14px/20px var(--font-native);color:var(--ink)}
+.code{margin:12px 16px 0;padding:14px 16px;display:grid;gap:10px}
+.code .cd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;height:56px;border:1px dashed var(--input-edge);border-radius:var(--radius-control);background:var(--neutral-surface)}
+.code .cd b{font:700 22px/1 var(--font-native);letter-spacing:.14em;font-variant-numeric:tabular-nums}
+.code .cd a{display:inline-flex;align-items:center;gap:6px;font:600 14px/1 var(--font-native);color:var(--primary-text);height:44px}
+.code .cd a .ic{--s:16px}
+.code .lk{font:400 13px/18px var(--font-native);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tier{margin:12px 16px 0;padding:16px;display:grid;gap:12px}
+.tier .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tier .big{font:700 28px/34px var(--font-native);font-variant-numeric:tabular-nums}
+.tier .steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.tier .steps3 div{display:grid;align-content:start;gap:4px;justify-items:start;font:600 12px/16px var(--font-native);color:var(--muted)}
+.tier .steps3 i{height:6px;border-radius:3px;background:var(--neutral-surface);display:block;width:100%}
+.tier .steps3 .on i{background:var(--primary)}
+.tier .steps3 .on{color:var(--ink)}
+.bal{margin:12px 16px 0;padding:16px;display:grid;gap:4px}
+.bal .l{font:600 13px/18px var(--font-native);color:var(--muted)}
+.bal .v{font:700 32px/38px var(--font-native);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.rf{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:68px}
+.rf+.rf{border-top:1px solid var(--hairline)}
+.rf .t{font:600 15px/20px var(--font-native)}
+.rf .s{font:400 13px/18px var(--font-native);color:var(--muted)}
+.rf .tr{display:grid;justify-items:end;gap:4px}
+.acts2{display:flex;gap:10px;padding:14px 16px 0}
+.acts2 .btn{flex:1}
+.sheet.w{padding-bottom:30px}
+.ov .sheet .form{display:grid;gap:12px;padding:0 4px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid"><div class="cz-col"><div class="cz-cap">1 · Default</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Referrals</span></div><div class="scroll"><div class="plate rh"><div class="top"><span class="big"><i data-i="gift"></i></span><div><h2>Refer a friend</h2></div></div><p>Share your link and earn when friends send money. Example: a completed $100 transfer at 0.5% earns you $0.50.</p></div><div class="plate code"><div class="lbl">Your code</div><div class="cd"><b>AMARA7K2</b><a><i data-i="copy"></i>Copy</a></div><div class="lk">ciuna.com/r/amara7k2</div></div><div class="plate tier"><div class="row"><span class="nl">Your commission rate</span><span class="big">0.75%</span></div><div class="steps3"><div class="on"><i></i>0–2 friends · 0.5%</div><div class="on"><i></i>3–5 friends · 0.75%</div><div><i></i>6+ friends · 1%</div></div><div class="nm"><b style="color:var(--ink)">3</b> qualified friends this quarter. 3 more to reach 1%.</div></div><div class="plate bal"><div class="l">Available to withdraw</div><div class="v">₽3,840</div><div class="nm">Lifetime earned: ₽11,230</div></div><div class="acts2"><a class="btn btn-lg"><i data-i="share-2"></i>Share link</a><a class="btn btn-lg btn-secondary">Withdraw</a></div><div style="height:12px"></div></div></div><div class="homebar"></div></div><div class="cz-note">Code and link with a copy action, the commission tier with progress, the balance, then Share and Withdraw.</div></div><div class="cz-col"><div class="cz-cap">2 · Share sheet</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Referrals</span></div><div class="scroll"><div class="plate rh"><div class="top"><span class="big"><i data-i="gift"></i></span><div><h2>Refer a friend</h2></div></div><p>Share your link and earn when friends send money. Example: a completed $100 transfer at 0.5% earns you $0.50.</p></div><div class="plate code"><div class="lbl">Your code</div><div class="cd"><b>AMARA7K2</b><a><i data-i="copy"></i>Copy</a></div><div class="lk">ciuna.com/r/amara7k2</div></div><div class="plate tier"><div class="row"><span class="nl">Your commission rate</span><span class="big">0.75%</span></div><div class="steps3"><div class="on"><i></i>0–2 friends · 0.5%</div><div class="on"><i></i>3–5 friends · 0.75%</div><div><i></i>6+ friends · 1%</div></div><div class="nm"><b style="color:var(--ink)">3</b> qualified friends this quarter. 3 more to reach 1%.</div></div><div class="plate bal"><div class="l">Available to withdraw</div><div class="v">₽3,840</div><div class="nm">Lifetime earned: ₽11,230</div></div><div class="acts2"><a class="btn btn-lg"><i data-i="share-2"></i>Share link</a><a class="btn btn-lg btn-secondary">Withdraw</a></div><div style="height:12px"></div></div><div class="ov"><div class="scrim"></div><div class="sheet"><div class="grab"></div><h3>Share your link</h3><div class="plate p" style="display:flex;gap:12px;align-items:center"><span class="mi pr"><i data-i="gift"></i></span><div class="grow"><div class="nl">Send money with Ciuna</div><div class="nm trunc">ciuna.com/r/amara7k2</div></div></div><div class="g2" style="margin-top:8px"><a class="btn btn-secondary btn-lg"><i data-i="copy"></i>Copy link</a><a class="btn btn-lg"><i data-i="share-2"></i>Share</a></div><a class="btn btn-ghost btn-lg" style="margin-top:2px">Cancel</a></div></div></div><div class="homebar"></div></div><div class="cz-note">Share opens the system sheet with a ready message; Copy link confirms with a toast.</div></div><div class="cz-col"><div class="cz-cap">3 · My referrals</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">My referrals</span></div><div class="scroll"><div class="lab" style="padding-top:10px">3 friends · 2 active</div><div class="plate" style="margin:0 16px;overflow:hidden"><div class="rf"><span class="avatar">CH</span><div class="grow"><div class="t">Chen Hui</div><div class="s">4 completed transactions · reward window ends Dec 12</div></div><div class="tr"><span class="num nl">₽1,420</span></div></div><div class="rf"><span class="avatar">KM</span><div class="grow"><div class="t">Kwame Mensah</div><div class="s">2 completed transactions · reward window ends Nov 30</div></div><div class="tr"><span class="num nl">₽860</span></div></div><div class="rf"><span class="avatar">SR</span><div class="grow"><div class="t">Sofia Ramirez</div><div class="s">1 completed transaction · reward window ends Jan 8</div></div><div class="tr"><span class="num nl">₽310</span></div></div></div><div class="nm" style="padding:10px 20px">Earnings are per friend over the reward window, from their first transaction on Ciuna.</div></div></div><div class="homebar"></div></div><div class="cz-note">Per-friend earnings and when each reward window ends.</div></div><div class="cz-col"><div class="cz-cap">4 · Withdraw</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Referrals</span></div><div class="scroll"><div class="plate rh"><div class="top"><span class="big"><i data-i="gift"></i></span><div><h2>Refer a friend</h2></div></div><p>Share your link and earn when friends send money. Example: a completed $100 transfer at 0.5% earns you $0.50.</p></div><div class="plate code"><div class="lbl">Your code</div><div class="cd"><b>AMARA7K2</b><a><i data-i="copy"></i>Copy</a></div><div class="lk">ciuna.com/r/amara7k2</div></div><div class="plate tier"><div class="row"><span class="nl">Your commission rate</span><span class="big">0.75%</span></div><div class="steps3"><div class="on"><i></i>0–2 friends · 0.5%</div><div class="on"><i></i>3–5 friends · 0.75%</div><div><i></i>6+ friends · 1%</div></div><div class="nm"><b style="color:var(--ink)">3</b> qualified friends this quarter. 3 more to reach 1%.</div></div><div class="plate bal"><div class="l">Available to withdraw</div><div class="v">₽3,840</div><div class="nm">Lifetime earned: ₽11,230</div></div><div class="acts2"><a class="btn btn-lg"><i data-i="share-2"></i>Share link</a><a class="btn btn-lg btn-secondary">Withdraw</a></div><div style="height:12px"></div></div><div class="ov"><div class="scrim"></div><div class="sheet"><div class="grab"></div><h3>Request payout</h3><div class="form"><p class="nm" style="margin:0">Choose a saved recipient and amount. Our team will process the transfer. Available: ₽3,840.</p><div class="fld"><div class="l">Recipient</div><div class="in"><span class="grow">Amara Okafor · Sber ••• 4410</span><i data-i="chevron-down"></i></div></div><div class="fld"><div class="l">Amount</div><div class="in f"><span class="grow" style="color:var(--muted)">₽</span><span class="grow" style="flex:9">3,000</span></div><div class="h">Minimum payout ₽500</div></div><div class="acts2" style="padding:6px 0 0"><a class="btn btn-lg btn-secondary">Cancel</a><a class="btn btn-lg ">Submit request</a></div></div></div></div></div><div class="homebar"></div></div><div class="cz-note">Payout goes to a saved recipient. The balance and minimum are stated before typing.</div></div><div class="cz-col"><div class="cz-cap">5 · Withdraw, over balance</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Referrals</span></div><div class="scroll"><div class="plate rh"><div class="top"><span class="big"><i data-i="gift"></i></span><div><h2>Refer a friend</h2></div></div><p>Share your link and earn when friends send money. Example: a completed $100 transfer at 0.5% earns you $0.50.</p></div><div class="plate code"><div class="lbl">Your code</div><div class="cd"><b>AMARA7K2</b><a><i data-i="copy"></i>Copy</a></div><div class="lk">ciuna.com/r/amara7k2</div></div><div class="plate tier"><div class="row"><span class="nl">Your commission rate</span><span class="big">0.75%</span></div><div class="steps3"><div class="on"><i></i>0–2 friends · 0.5%</div><div class="on"><i></i>3–5 friends · 0.75%</div><div><i></i>6+ friends · 1%</div></div><div class="nm"><b style="color:var(--ink)">3</b> qualified friends this quarter. 3 more to reach 1%.</div></div><div class="plate bal"><div class="l">Available to withdraw</div><div class="v">₽3,840</div><div class="nm">Lifetime earned: ₽11,230</div></div><div class="acts2"><a class="btn btn-lg"><i data-i="share-2"></i>Share link</a><a class="btn btn-lg btn-secondary">Withdraw</a></div><div style="height:12px"></div></div><div class="ov"><div class="scrim"></div><div class="sheet"><div class="grab"></div><h3>Request payout</h3><div class="form"><p class="nm" style="margin:0">Choose a saved recipient and amount. Our team will process the transfer. Available: ₽3,840.</p><div class="fld"><div class="l">Recipient</div><div class="in"><span class="grow">Amara Okafor · Sber ••• 4410</span><i data-i="chevron-down"></i></div></div><div class="fld"><div class="l">Amount</div><div class="in bad"><span class="grow" style="color:var(--muted)">₽</span><span class="grow" style="flex:9">5,000</span></div><div class="e"><i data-i="triangle-alert"></i>That is more than your available balance (₽3,840). Enter a lower amount.</div></div><div class="acts2" style="padding:6px 0 0"><a class="btn btn-lg btn-secondary">Cancel</a><a class="btn btn-lg is-disabled">Submit request</a></div></div></div></div></div><div class="homebar"></div></div><div class="cz-note">Says what is wrong and the number to stay under. The Submit button disables.</div></div><div class="cz-col"><div class="cz-cap">6 · Empty, no referrals</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Referrals</span></div><div class="scroll"><div class="plate rh"><div class="top"><span class="big"><i data-i="gift"></i></span><div><h2>Refer a friend</h2></div></div><p>Share your link and earn when friends send money. Example: a completed $100 transfer at 0.5% earns you $0.50.</p></div><div class="plate code"><div class="lbl">Your code</div><div class="cd"><b>AMARA7K2</b><a><i data-i="copy"></i>Copy</a></div><div class="lk">ciuna.com/r/amara7k2</div></div><div class="plate bal" style="text-align:center"><div class="mid3" style="padding:18px 8px"><span class="big"><i data-i="users"></i></span><div class="nl">You have no referrals yet</div><p>When a friend signs up with your link and sends money, they will show up here.</p></div></div><div class="acts2"><a class="btn btn-lg"><i data-i="share-2"></i>Share link</a><a class="btn btn-lg btn-secondary">Withdraw</a></div><div style="height:12px"></div></div></div><div class="homebar"></div></div><div class="cz-note">The code and link stay the hero; the empty line says exactly what makes a referral appear.</div></div><div class="cz-col"><div class="cz-cap">7 · Program paused</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Referrals</span></div><div class="scroll"><div class="ban" style="background:var(--neutral-surface);color:var(--neutral-text)"><i data-i="info"></i><span>The referral program is paused. Check back later. Your balance is safe.</span></div><div class="plate rh"><div class="top"><span class="big"><i data-i="gift"></i></span><div><h2>Refer a friend</h2></div></div><p>Share your link and earn when friends send money. Example: a completed $100 transfer at 0.5% earns you $0.50.</p></div><div class="plate code"><div class="lbl">Your code</div><div class="cd"><b>AMARA7K2</b><a><i data-i="copy"></i>Copy</a></div><div class="lk">ciuna.com/r/amara7k2</div></div><div class="plate tier"><div class="row"><span class="nl">Your commission rate</span><span class="big">0.75%</span></div><div class="steps3"><div class="on"><i></i>0–2 friends · 0.5%</div><div class="on"><i></i>3–5 friends · 0.75%</div><div><i></i>6+ friends · 1%</div></div><div class="nm"><b style="color:var(--ink)">3</b> qualified friends this quarter. 3 more to reach 1%.</div></div><div class="plate bal"><div class="l">Available to withdraw</div><div class="v">₽0</div><div class="nm">Lifetime earned: ₽11,230</div></div><div class="acts2"><a class="btn btn-lg"><i data-i="share-2"></i>Share link</a><a class="btn btn-lg btn-secondary">Withdraw</a></div><div style="height:12px"></div></div></div><div class="homebar"></div></div><div class="cz-note">A neutral banner explains the pause; the code still copies, withdrawals remain available.</div></div><div class="cz-col"><div class="cz-cap">8 · First load</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Referrals</span></div><div class="scroll"><div class="plate" style="margin:6px 16px 0;padding:18px 16px;display:grid;gap:10px"><div class="sk" style="width:50%;height:22px"></div><div class="sk" style="width:90%;height:14px"></div></div><div class="plate" style="margin:12px 16px 0;padding:16px;display:grid;gap:10px"><div class="sk" style="width:30%;height:14px"></div><div class="sk" style="width:100%;height:56px"></div></div><div class="plate" style="margin:12px 16px 0;padding:16px;display:grid;gap:10px"><div class="sk" style="width:45%;height:18px"></div><div class="sk" style="width:100%;height:6px"></div></div><div class="plate" style="margin:12px 16px 0;padding:16px;display:grid;gap:10px"><div class="sk" style="width:35%;height:14px"></div><div class="sk" style="width:55%;height:32px"></div></div></div></div><div class="homebar"></div></div><div class="cz-note">Layout-matched placeholders until the first fetch settles.</div></div><div class="cz-col"><div class="cz-cap">9 · Russian</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="hd"><span class="bk"><i data-i="arrow-left"></i></span><span class="nh trunc">Рефералы</span></div><div class="scroll"><div class="plate rh"><div class="top"><span class="big"><i data-i="gift"></i></span><div><h2>Пригласите друга</h2></div></div><p>Делитесь ссылкой и получайте вознаграждение, когда друзья отправляют деньги.</p></div><div class="plate code"><div class="lbl">Ваш код</div><div class="cd"><b>AMARA7K2</b><a><i data-i="copy"></i>Копировать</a></div><div class="lk">ciuna.com/r/amara7k2</div></div><div class="plate tier"><div class="row"><span class="nl">Ваша ставка</span><span class="big">0.75%</span></div><div class="steps3"><div class="on"><i></i>0–2 friends · 0.5%</div><div class="on"><i></i>3–5 friends · 0.75%</div><div><i></i>6+ friends · 1%</div></div><div class="nm">3 подходящих друга в этом квартале. Ещё 3 до ставки 1%.</div></div><div class="plate bal"><div class="l">Доступно к выводу</div><div class="v">₽3,840</div><div class="nm">Всего заработано: ₽11,230</div></div><div class="acts2"><a class="btn btn-lg"><i data-i="share-2"></i>Поделиться</a><a class="btn btn-lg btn-secondary">Вывести</a></div><div style="height:12px"></div></div></div><div class="homebar"></div></div><div class="cz-note">Headings and tier labels wrap without clipping.</div></div></div></div></body></html>

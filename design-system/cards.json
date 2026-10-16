@@ -531,7 +531,7 @@
    "name": "StatementRow",
    "group": "Marketplace",
    "subtitle": "Statement line per order: items, delivery, Ciuna fee as a negative and net, with pending, available and reversed statuses as a table row and a stacked phone row",
-   "height": 784,
+   "height": 1167,
    "width": null,
    "page": false,
    "readme": true
@@ -549,7 +549,7 @@
    "name": "StoreCard",
    "group": "Marketplace",
    "subtitle": "Store in the catalog: rail and full-width variants, verified, favourite, closed with opening time, long Russian name, skeleton",
-   "height": 1590,
+   "height": 1648,
    "width": null,
    "page": false,
    "readme": true
@@ -654,11 +654,74 @@
    "readme": true
   },
   {
+   "name": "CustomerKyc",
+   "group": "Customer app · Screens",
+   "subtitle": "Verification: status hub with limit levels, document capture steps, review, in review, approved, rejected with reason and address proof",
+   "height": 3864,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "CustomerMore",
    "group": "Customer app · Screens",
    "subtitle": "Account tab: identity first, grouped Account and App rows, verification chip, language picker with six languages, sign-out confirmation",
    "height": 1986,
    "width": 900,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerPin",
+   "group": "Customer app · Screens",
+   "subtitle": "App PIN: create, confirm, mismatch, change, unlock, wrong PIN, locked out, Face ID prompt and the Security settings",
+   "height": 3864,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerProfile",
+   "group": "Customer app · Screens",
+   "subtitle": "Profile and account settings: view, edit with errors, photo and language sheets, delete account confirm and blocked, and a Chinese variant",
+   "height": 2921,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerRecipients",
+   "group": "Customer app · Screens",
+   "subtitle": "Recipients: list, search, add recipient with country-based fields, currency picker, edit, empty, first load and delete confirm",
+   "height": 3883,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerReferrals",
+   "group": "Customer app · Screens",
+   "subtitle": "Referrals: code and link, share, commission tier progress, balance and withdraw, friend list, empty, paused and first load",
+   "height": 2902,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerSend",
+   "group": "Customer app · Screens",
+   "subtitle": "Send flow: amount with live rate, recipient, review with fees and pay methods, status (processing, completed, failed) and the below-minimum, over-limit and verification errors",
+   "height": 4883,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerSupport",
+   "group": "Customer app · Screens",
+   "subtitle": "Support page with contact options, FAQ and hours, requests and chat threads, plus the AI assistant chat: first open, answers, thinking, unavailable and handoff",
+   "height": 3864,
+   "width": 1300,
    "page": true,
    "readme": true
   },
@@ -721,6 +784,15 @@
    "group": "Customer app · Screens",
    "subtitle": "Marketplace checkout as a merchant flow: details and delivery or pickup, ruble payment methods, review and place order; address, zone, loading and pending states",
    "height": 2910,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "MartHome",
+   "group": "Customer app · Screens",
+   "subtitle": "The Mart line page like Food: search, category chips, Stores rail, products grid and cart bar, with loading, filter, empty, closed store, offline and error",
+   "height": 2921,
    "width": 1300,
    "page": true,
    "readme": true
@@ -828,7 +900,7 @@
    "name": "SellerEarnings",
    "group": "Seller · Screens",
    "subtitle": "Earnings overview: four balances with the hold note, Withdraw, the statement as a table or stacked cards with statuses, CSV download with a date error, the empty state and every Withdraw sheet state",
-   "height": 5377,
+   "height": 5452,
    "width": 1240,
    "page": true,
    "readme": true
@@ -927,7 +999,7 @@
    "name": "SellerProfile",
    "group": "Seller · Screens",
    "subtitle": "Business profile for a store and an expert: name, per-language description with tabs, logo and cover, contact, currency and countries, credentials, languages spoken, intro video and a sticky save bar",
-   "height": 4458,
+   "height": 4340,
    "width": 1240,
    "page": true,
    "readme": true
@@ -990,8 +1062,8 @@
    "name": "OfficeAnalytics",
    "group": "Office · Screens",
    "subtitle": "Marketplace analytics: period presets, eight tiles, daily GMV bars with accessible table, orders by section, top sellers, applications, payouts, zero state, currency toggle",
-   "height": 2885,
-   "width": 1170,
+   "height": 3232,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -999,7 +1071,52 @@
    "name": "OfficeAudit",
    "group": "Office · Screens",
    "subtitle": "Audit log: filters, actor role chips, expandable details JSON, saved views, pagination, no-match state",
-   "height": 1568,
+   "height": 1852,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeBookings",
+   "group": "Office · Screens",
+   "subtitle": "Expert bookings: table with both time zones, detail with meeting link, dispute decision, empty disputes",
+   "height": 2884,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeCatalog",
+   "group": "Office · Screens",
+   "subtitle": "Products across Food and Mart: review queue, listing review with templated rejection reasons, edit dialog, empty and rejected states",
+   "height": 3836,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeCompliance",
+   "group": "Office · Screens",
+   "subtitle": "Compliance cases and screening alerts: list with severity and SLA, case detail with hit and audit trail, resolve dialog with required note, empty",
+   "height": 3772,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeDashboard",
+   "group": "Office · Screens",
+   "subtitle": "Home for ops: queues needing action with age and SLA, key tiles, recent activity; support and finance variants, all-clear and loading",
+   "height": 4328,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeExperts",
+   "group": "Office · Screens",
+   "subtitle": "Experts list with approval status and detail: services, credentials, decision with reasons, empty queue",
+   "height": 2884,
    "width": 1170,
    "page": true,
    "readme": true
@@ -1008,8 +1125,8 @@
    "name": "OfficeFees",
    "group": "Office · Screens",
    "subtitle": "Fees and commissions: rules by scope with dates and active toggle, rule dialog, payout fees with waive-above, plans not billed yet, fee calculator, money settings",
-   "height": 4526,
-   "width": 1170,
+   "height": 4670,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -1018,6 +1135,24 @@
    "group": "Office · Screens",
    "subtitle": "KYB requirements by country: grouped list, edit dialog with field and document row editors, validation, read-only for support",
    "height": 3641,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeKyc",
+   "group": "Office · Screens",
+   "subtitle": "Customer KYC review: queue with age and SLA, documents left and decision right, templated rejection reasons, reject and approve dialogs, empty queue",
+   "height": 4580,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeMarketplace",
+   "group": "Office · Screens",
+   "subtitle": "Marketplace home configuration: tiles for Food, Mart, Send, Experts with order, on and off, copy per language, preview, turn-off guard",
+   "height": 2884,
    "width": 1170,
    "page": true,
    "readme": true
@@ -1026,8 +1161,8 @@
    "name": "OfficeMerchantMoney",
    "group": "Office · Screens",
    "subtitle": "One merchant: balances per currency, payout methods with verify switch, earnings and payouts tables, link back to the review page",
-   "height": 2756,
-   "width": 1170,
+   "height": 3132,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -1050,10 +1185,37 @@
    "readme": true
   },
   {
+   "name": "OfficeOrders",
+   "group": "Office · Screens",
+   "subtitle": "Marketplace orders: filters, status and exception flag, detail with timeline, cancel and refund by role",
+   "height": 3836,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "OfficePayouts",
    "group": "Office · Screens",
    "subtitle": "Payout queue: tabs, age over 48h, Verified or Unverified method, detail with logged reveal, verify switch, approve, mark paid, reject",
-   "height": 4760,
+   "height": 5014,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeRates",
+   "group": "Office · Screens",
+   "subtitle": "FX rates and markups per corridor: table with stale and manual states, edit dialog with validation, history, read-only role",
+   "height": 3836,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeReferrals",
+   "group": "Office · Screens",
+   "subtitle": "Referral programme settings and referrals table: rewards, limits, referrer detail, block dialog, programme off",
+   "height": 3914,
    "width": 1170,
    "page": true,
    "readme": true
@@ -1062,7 +1224,16 @@
    "name": "OfficeReviewsModeration",
    "group": "Office · Screens",
    "subtitle": "Reviews moderation: ratings table with excerpt, merchant, status and reply flag; hide with reason chips; unhide; filters; read-only for support",
-   "height": 3193,
+   "height": 3476,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeSettings",
+   "group": "Office · Screens",
+   "subtitle": "Platform settings and roles: hold days, support contacts, languages, maintenance mode, people and role matrix, role change",
+   "height": 4156,
    "width": 1170,
    "page": true,
    "readme": true
@@ -1072,6 +1243,24 @@
    "group": "Office · Screens",
    "subtitle": "Office shell: grouped sidebar, role chip, Cmd-K search open, and what ops, finance and support see",
    "height": 2980,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeTransactions",
+   "group": "Office · Screens",
+   "subtitle": "Send transfers table with filters and status badges, detail panel with timeline and provider names, retry for ops, refund for finance, read-only support, refund dialog",
+   "height": 5410,
+   "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeUsers",
+   "group": "Office · Screens",
+   "subtitle": "Customer list with filters, side panel with profile, KYC level, limits, orders and transfers, block and unblock dialogs with required reason",
+   "height": 4602,
    "width": 1170,
    "page": true,
    "readme": true
