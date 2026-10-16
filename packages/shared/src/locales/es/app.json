@@ -27,7 +27,8 @@
     "sendAmount": "Enviado",
     "receiveAmount": "Recibido",
     "fullAmountAria": "Monto completo: {{label}}",
-    "fullAmountCaption": "Monto completo"
+    "fullAmountCaption": "Monto completo",
+    "referShort": "Invitar"
   },
   "hub": {
     "hub": "Centro",

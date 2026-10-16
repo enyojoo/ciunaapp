@@ -27,7 +27,8 @@
     "sendAmount": "Send Amount",
     "receiveAmount": "Receive Amount",
     "fullAmountAria": "Full amount: {{label}}",
-    "fullAmountCaption": "Full amount"
+    "fullAmountCaption": "Full amount",
+    "referShort": "Refer"
   },
   "hub": {
     "hub": "Hub",

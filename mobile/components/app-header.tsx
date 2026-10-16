@@ -1,22 +1,20 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet, Text, View } from "react-native"
-import { LinearGradient } from "expo-linear-gradient"
-import { BadgeDollarSign } from "lucide-react-native"
+import { Gift, MessageCircleQuestion } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
-import { Avatar } from "./avatar"
 import { BrandLogo } from "./brand-logo"
-import { useAuth } from "@/lib/auth-context"
 import { useOptionalResponsiveLayout } from "@/lib/responsive-layout"
 import { colors, radius, space } from "@/lib/theme"
 
-/** Native / mobile-web chrome. Desktop web uses `DesktopHeader` instead. */
+/**
+ * Home header, as in design-system/components/CustomerHome: logo left, Refer (teal pill) and Support (outline pill)
+ * right. No avatar here: the account lives in More. Desktop web uses `DesktopHeader` instead.
+ */
 export function AppHeader() {
   const router = useRouter()
   const { t } = useTranslation("app")
-  const { profile } = useAuth()
   const layout = useOptionalResponsiveLayout()
   if (layout?.showSidebarShell) return null
-  const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Account"
   return (
     <View style={styles.row}>
       <BrandLogo height={28} />
@@ -24,28 +22,26 @@ export function AppHeader() {
         <Pressable
           onPress={() => router.push("/referrals")}
           accessibilityRole="button"
-          accessibilityLabel={t("dashboard.referEarn", { defaultValue: "Refer & Earn" })}
+          accessibilityLabel={t("dashboard.referEarn", { defaultValue: "Refer" })}
+          style={({ pressed }) => [styles.pill, styles.refer, pressed && styles.pressed]}
           hitSlop={8}
         >
-          <LinearGradient
-            colors={[colors.referBg, colors.referBgEnd]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={styles.refer}
-          >
-            <BadgeDollarSign size={14} color={colors.referIcon} strokeWidth={2.25} />
-            <Text style={styles.referLabel} numberOfLines={1}>
-              {t("dashboard.referEarn", { defaultValue: "Refer & Earn" })}
-            </Text>
-          </LinearGradient>
+          <Gift size={16} color={colors.refer} strokeWidth={2} />
+          <Text style={[styles.label, { color: colors.refer }]} numberOfLines={1}>
+            {t("dashboard.referShort", { defaultValue: "Refer" })}
+          </Text>
         </Pressable>
         <Pressable
-          onPress={() => router.push("/profile")}
+          onPress={() => router.push("/support")}
           accessibilityRole="button"
-          accessibilityLabel={t("dashboard.profileAria", { defaultValue: "Your profile" })}
+          accessibilityLabel={t("support.title", { defaultValue: "Support" })}
+          style={({ pressed }) => [styles.pill, styles.support, pressed && styles.pressed]}
           hitSlop={8}
         >
-          <Avatar name={name} size={40} uri={profile?.avatar_url} />
+          <MessageCircleQuestion size={16} color={colors.text} strokeWidth={2} />
+          <Text style={[styles.label, { color: colors.text }]} numberOfLines={1}>
+            {t("support.title", { defaultValue: "Support" })}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -62,17 +58,18 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: colors.surface,
   },
-  actions: { flexDirection: "row", alignItems: "center", gap: 6, marginLeft: 12, flexShrink: 1 },
-  refer: {
-    height: 32,
-    maxWidth: 180,
+  actions: { flexDirection: "row", alignItems: "center", gap: 8, marginLeft: 12, flexShrink: 1 },
+  pill: {
+    height: 36,
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
-    paddingHorizontal: 10,
+    gap: 6,
+    paddingHorizontal: 12,
     borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: colors.referBorder,
   },
-  referLabel: { fontSize: 12, fontWeight: "600", color: colors.referText },
+  refer: { backgroundColor: colors.referBg, borderColor: colors.referBorder, maxWidth: 140 },
+  support: { backgroundColor: colors.surface, borderColor: colors.border, maxWidth: 140 },
+  pressed: { opacity: 0.85 },
+  label: { fontSize: 14, fontWeight: "600" },
 })

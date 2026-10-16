@@ -27,7 +27,8 @@
     "sendAmount": "Valor enviado",
     "receiveAmount": "Valor recebido",
     "fullAmountAria": "Valor completo: {{label}}",
-    "fullAmountCaption": "Valor completo"
+    "fullAmountCaption": "Valor completo",
+    "referShort": "Indicar"
   },
   "hub": {
     "hub": "Hub",

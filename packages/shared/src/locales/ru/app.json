@@ -27,7 +27,8 @@
     "sendAmount": "Отправка",
     "receiveAmount": "Получение",
     "fullAmountAria": "Полная сумма: {{label}}",
-    "fullAmountCaption": "Полная сумма"
+    "fullAmountCaption": "Полная сумма",
+    "referShort": "Пригласить"
   },
   "hub": {
     "hub": "Хаб",

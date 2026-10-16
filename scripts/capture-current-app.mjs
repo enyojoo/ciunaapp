@@ -44,7 +44,9 @@ const serviceLines = () => {
 const json = (route, body, status = 200) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) })
 async function mock(page) {
   await page.route(/supabase\.co/, async (route) => {
-    const u = route.request().url()
+    const req = route.request()
+    if (req.resourceType() === "image") return route.continue()
+    const u = req.url()
     if (u.includes("/auth/v1/user")) return json(route, session.user)
     if (u.includes("/rest/v1/users")) {
       const accept = route.request().headers()["accept"] || ""

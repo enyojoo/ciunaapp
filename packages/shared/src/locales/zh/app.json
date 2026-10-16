@@ -27,7 +27,8 @@
     "sendAmount": "汇出金额",
     "receiveAmount": "到账金额",
     "fullAmountAria": "完整金额：{{label}}",
-    "fullAmountCaption": "完整金额"
+    "fullAmountCaption": "完整金额",
+    "referShort": "邀请"
   },
   "hub": {
     "hub": "Hub",

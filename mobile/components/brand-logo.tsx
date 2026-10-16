@@ -1,21 +1,13 @@
-import { Image } from "expo-image"
 import { View } from "react-native"
-import { BRAND } from "@ciuna/shared"
+import { SvgXml } from "react-native-svg"
+import { CIUNA_LOGO_SVG } from "./ciuna-logo-svg"
 
-const PWA_ICON =
-  "https://seeqjiebmrnolcyydewj.supabase.co/storage/v1/object/public/brand/ciuna%20pwa%20icon.png"
-
+/** Ciuna wordmark, bundled in the app (no network). Keeps the 4217:1167 aspect ratio. */
 export function BrandLogo({ height = 28 }: { height?: number }) {
-  const width = Math.round(height * 3.2)
+  const width = Math.round(height * (4217 / 1167))
   return (
     <View style={{ height, width }} accessibilityRole="image" accessibilityLabel="Ciuna">
-      <Image
-        source={{ uri: BRAND.logo }}
-        placeholder={{ uri: PWA_ICON }}
-        contentFit="contain"
-        style={{ height, width }}
-        accessibilityLabel="Ciuna"
-      />
+      <SvgXml xml={CIUNA_LOGO_SVG} width={width} height={height} />
     </View>
   )
 }
