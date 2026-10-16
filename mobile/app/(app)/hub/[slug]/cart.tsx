@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react"
-import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, Text, View } from "react-native"
+import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import * as Crypto from "expo-crypto"
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router"
@@ -45,6 +45,7 @@ export default function HubCartScreen() {
 
   const items = cart?.items || []
   const availableItems = items.filter((i) => !i.unavailable && i.product)
+  const unavailableItems = items.filter((i) => i.unavailable || !i.product)
   const currency = availableItems[0]?.product?.fixed_currency || ""
   const subtotal = availableItems.reduce((sum, i) => sum + hubProductEffectivePrice(i.product!) * i.quantity, 0)
 
@@ -76,7 +77,7 @@ export default function HubCartScreen() {
   }
 
   const goCheckout = () => {
-    if (!cart?.id || availableItems.length === 0) return
+    if (!cart?.id || availableItems.length === 0 || unavailableItems.length > 0) return
     const contactName =
       [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
       profile?.email?.split("@")[0] ||
@@ -97,8 +98,10 @@ export default function HubCartScreen() {
     return (
       <ScreenScroll edges={["left", "right"]}>
       <StatusBar style="dark" />
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
+        <View style={styles.list}>
+          {[0, 1, 2].map((i) => (
+            <View key={i} style={[styles.row, styles.skeletonRow]} />
+          ))}
         </View>
       </ScreenScroll>
     )
@@ -139,6 +142,25 @@ export default function HubCartScreen() {
         </Pressable>
       </View>
       <View style={styles.list}>
+        {unavailableItems.map((item) => (
+          <View key={item.id} style={[styles.row, styles.rowOff]}>
+            <View style={styles.rowBody}>
+              <Text style={styles.rowTitleOff} numberOfLines={2}>
+                {item.product?.title || ""}
+              </Text>
+              <Text style={styles.rowPrice}>{t("hub.cart.unavailable", { defaultValue: "No longer available" })}</Text>
+            </View>
+            <Pressable
+              onPress={() => onRemove(item.id)}
+              hitSlop={8}
+              style={styles.removeBtn}
+              accessibilityRole="button"
+              accessibilityLabel={t("hub.cart.remove", { defaultValue: "Remove item" })}
+            >
+              <Trash2 size={16} color={colors.danger} strokeWidth={2} />
+            </Pressable>
+          </View>
+        ))}
         {availableItems.map((item) => {
           const product = item.product!
           const unitPrice = hubProductEffectivePrice(product)
@@ -208,6 +230,9 @@ export default function HubCartScreen() {
         </Text>
       </View>
 
+      {unavailableItems.length > 0 ? (
+        <Text style={styles.blockedNote}>{t("hub.cart.unavailableNote", { defaultValue: "Remove unavailable items to check out." })}</Text>
+      ) : null}
       <View style={styles.checkoutBtn}>
         <PrimaryButton
           label={t("hub.cart.checkoutWithTotal", {
@@ -215,7 +240,7 @@ export default function HubCartScreen() {
             total: formatMoney(subtotal, currency),
           })}
           onPress={goCheckout}
-          disabled={availableItems.length === 0}
+          disabled={availableItems.length === 0 || unavailableItems.length > 0}
         />
       </View>
     </ScreenScroll>
@@ -229,13 +254,16 @@ const styles = StyleSheet.create({
   storeLogoInitial: { fontSize: 16, fontWeight: "700", color: colors.primaryText },
   storeName: { flex: 1, minWidth: 0, fontSize: 15, fontWeight: "700", color: colors.text },
   addMore: { fontSize: 14, fontWeight: "600", color: colors.primaryText },
+  skeletonRow: { height: 84, backgroundColor: colors.paper, borderColor: colors.paper },
+  rowOff: { opacity: 0.7 },
+  rowTitleOff: { fontSize: 15, fontWeight: "600", color: colors.muted, textDecorationLine: "line-through" },
+  blockedNote: { marginTop: 12, fontSize: 13, color: colors.warningText, textAlign: "center" },
   lineTotal: { fontSize: 15, fontWeight: "700", color: colors.text, marginBottom: 6 },
   summary: { marginTop: 16, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },
   totalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 },
   totalLabel: { fontSize: 16, fontWeight: "700", color: colors.text },
   totalValue: { fontSize: 18, fontWeight: "700", color: colors.text },
   deliveryNote: { fontSize: 12, color: colors.muted },
-  center: { paddingVertical: 60, alignItems: "center" },
   vendorName: { fontSize: 13, fontWeight: "600", color: colors.muted, marginBottom: 8 },
   list: { gap: 10 },
   row: {

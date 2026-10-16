@@ -193,7 +193,9 @@
       "addMore": "Adicionar mais",
       "total": "Total",
       "deliveryAtCheckout": "A entrega é adicionada no checkout.",
-      "checkoutWithTotal": "Finalizar · {{total}}"
+      "checkoutWithTotal": "Finalizar · {{total}}",
+      "unavailable": "Não está mais disponível",
+      "unavailableNote": "Remova os itens indisponíveis para finalizar."
     }
   },
   "assistant": {

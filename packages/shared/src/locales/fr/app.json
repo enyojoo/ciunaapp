@@ -193,7 +193,9 @@
       "addMore": "Ajouter",
       "total": "Total",
       "deliveryAtCheckout": "La livraison est ajoutée à la commande.",
-      "checkoutWithTotal": "Commander · {{total}}"
+      "checkoutWithTotal": "Commander · {{total}}",
+      "unavailable": "N’est plus disponible",
+      "unavailableNote": "Retirez les articles indisponibles pour commander."
     }
   },
   "assistant": {

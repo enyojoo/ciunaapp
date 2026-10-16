@@ -193,7 +193,9 @@
       "addMore": "Add more",
       "total": "Total",
       "deliveryAtCheckout": "Delivery is added at checkout.",
-      "checkoutWithTotal": "Checkout · {{total}}"
+      "checkoutWithTotal": "Checkout · {{total}}",
+      "unavailable": "No longer available",
+      "unavailableNote": "Remove unavailable items to check out."
     }
   },
   "assistant": {

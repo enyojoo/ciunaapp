@@ -193,7 +193,9 @@
       "addMore": "Añadir más",
       "total": "Total",
       "deliveryAtCheckout": "El envío se añade al pagar.",
-      "checkoutWithTotal": "Pagar · {{total}}"
+      "checkoutWithTotal": "Pagar · {{total}}",
+      "unavailable": "Ya no está disponible",
+      "unavailableNote": "Elimina los artículos no disponibles para continuar."
     }
   },
   "assistant": {

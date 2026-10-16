@@ -193,7 +193,9 @@
       "addMore": "Добавить ещё",
       "total": "Итого",
       "deliveryAtCheckout": "Доставка добавится при оформлении.",
-      "checkoutWithTotal": "Оформить · {{total}}"
+      "checkoutWithTotal": "Оформить · {{total}}",
+      "unavailable": "Больше недоступно",
+      "unavailableNote": "Удалите недоступные товары, чтобы оформить заказ."
     }
   },
   "assistant": {
