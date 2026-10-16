@@ -4,6 +4,7 @@
 export type AdminRole = "ops" | "support" | "finance" | "compliance" | "super_admin"
 
 export type AdminPermission =
+  | "merchants.read"
   | "merchants.review"
   | "merchants.manage"
   | "listings.review"
@@ -16,16 +17,16 @@ export type AdminPermission =
   | "support.read"
 
 const ALL: AdminPermission[] = [
-  "merchants.review", "merchants.manage", "listings.review", "orders.manage", "finance.manage",
+  "merchants.read", "merchants.review", "merchants.manage", "listings.review", "orders.manage", "finance.manage",
   "fees.manage", "kyb.manage", "roles.manage", "audit.read", "support.read",
 ]
 
 export const ADMIN_ROLE_PERMISSIONS: Record<AdminRole, ReadonlySet<AdminPermission>> = {
   super_admin: new Set(ALL),
-  ops: new Set<AdminPermission>(["merchants.review", "merchants.manage", "listings.review", "orders.manage", "audit.read", "support.read"]),
-  support: new Set<AdminPermission>(["orders.manage", "support.read"]),
-  finance: new Set<AdminPermission>(["finance.manage", "orders.manage", "audit.read", "support.read"]),
-  compliance: new Set<AdminPermission>(["merchants.review", "kyb.manage", "audit.read", "support.read"]),
+  ops: new Set<AdminPermission>(["merchants.read", "merchants.review", "merchants.manage", "listings.review", "orders.manage", "audit.read", "support.read"]),
+  support: new Set<AdminPermission>(["merchants.read", "orders.manage", "support.read"]),
+  finance: new Set<AdminPermission>(["merchants.read", "finance.manage", "orders.manage", "audit.read", "support.read"]),
+  compliance: new Set<AdminPermission>(["merchants.read", "merchants.review", "kyb.manage", "audit.read", "support.read"]),
 }
 
 export function normalizeAdminRole(role: string | null | undefined): AdminRole {

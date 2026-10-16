@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { UserRound, ShieldCheck, Users, Globe, LogOut, Store, ChevronRight, Wallet, Package, Clock } from "lucide-react"
+import { UserRound, ShieldCheck, Users, Globe, LogOut, Store, ChevronRight, Wallet, Package, Clock, Bell } from "lucide-react"
 import { Card, PageHeader, LANGUAGE_LABELS } from "@ciuna/ui-web"
 import { useSeller } from "@/lib/session"
 import { useT, LOCALE_LIST } from "@/lib/i18n"
@@ -13,6 +13,8 @@ export default function MorePage() {
     { href: "/profile", icon: UserRound, label: t(merchant.type === "store" ? "more.storeProfile" : "more.expertProfile"), show: can("profile") },
     { href: "/setup", icon: ShieldCheck, label: t("more.verification"), show: can("documents") },
     ...(merchant.type === "store" ? [{ href: "/catalog/fulfillment", icon: Package, label: t("more.fulfillment"), show: can("catalog") }] : [{ href: "/availability", icon: Clock, label: t("nav.availability"), show: can("availability") }]),
+    { href: "/earnings/methods", icon: Wallet, label: t("more.payoutMethods"), show: can("payouts") },
+    { href: "/settings/notifications", icon: Bell, label: t("more.alerts"), show: true },
     { href: "/settings/team", icon: Users, label: t("more.team"), show: can("team") },
   ].filter((r) => r.show)
 

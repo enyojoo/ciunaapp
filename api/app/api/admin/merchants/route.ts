@@ -3,7 +3,7 @@ import { createServerClient } from "@/lib/supabase"
 import { check } from "@/lib/merchant/errors"
 
 /** Office list and review queue. ?status=in_review&type=store&q=name */
-export const GET = adminRoute("merchants.review", async (req) => {
+export const GET = adminRoute("merchants.read", async (req) => {
   const sp = new URL(req.url).searchParams
   let q = createServerClient().from("merchants").select("id,type,slug,display_name,country,operating_country,status,kyb_tier,office_managed,submitted_at,approved_at,created_at", { count: "exact" })
   const status = sp.get("status")

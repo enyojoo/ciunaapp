@@ -69,3 +69,9 @@ test("profile patch validates languages, currency, urls and default language", (
   bad({ display_name: "x" }, "DISPLAY_NAME_INVALID")
   bad({ languages: ["ru"] }, "DEFAULT_LANGUAGE_NOT_IN_LANGUAGES")
 })
+
+test("finance can read the merchant list but not review applications", () => {
+  assert.ok(adminCan("finance", "merchants.read"))
+  assert.ok(!adminCan("finance", "merchants.review"))
+  assert.ok(adminCan("support", "merchants.read"))
+})

@@ -24,6 +24,9 @@ import {
   Building2,
   ListChecks,
   ScrollText,
+  Wallet,
+  Percent,
+  Settings2,
 } from "lucide-react"
 import { BrandLogo } from "@ciuna/shared"
 import { Button } from "@/components/ui/button"
@@ -203,6 +206,38 @@ function MerchantsSectionSubnav({ pathname, onNavigate }: { pathname: string | n
   )
 }
 
+function FinanceSectionSubnav({ pathname, onNavigate }: { pathname: string | null; onNavigate: () => void }) {
+  const items = [
+    { name: "Payouts", href: "/finance/payouts", icon: Wallet },
+    { name: "Fees and commissions", href: "/fees", icon: Percent, exact: true },
+    { name: "Marketplace money settings", href: "/fees/settings", icon: Settings2 },
+  ]
+  return (
+    <div className="mt-1 space-y-0.5 border-l border-sidebar-border/80 ml-[1.125rem] pl-2">
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={cn(
+            "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200",
+            (item.exact ? pathname === item.href : hubPathActive(pathname, item.href))
+              ? "bg-accent text-accent-foreground font-medium"
+              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+          )}
+          onClick={onNavigate}
+        >
+          <item.icon className="h-4 w-4 shrink-0 opacity-80" />
+          <span className="truncate">{item.name}</span>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+function isFinanceSectionPath(pathname: string | null): boolean {
+  return hubPathActive(pathname, "/finance") || hubPathActive(pathname, "/fees")
+}
+
 function isMerchantsSectionPath(pathname: string | null): boolean {
   return hubPathActive(pathname, "/merchants") || hubPathActive(pathname, "/kyb") || hubPathActive(pathname, "/audit")
 }
@@ -237,6 +272,7 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
   const [hubNavOpen, setHubNavOpen] = useState(false)
   const [operationsNavOpen, setOperationsNavOpen] = useState(false)
   const [merchantsNavOpen, setMerchantsNavOpen] = useState(false)
+  const [financeNavOpen, setFinanceNavOpen] = useState(false)
   const { signOut, isSuperAdmin } = useAuth()
 
   const navigation = isSuperAdmin
@@ -247,6 +283,8 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
     if (isHubSectionPath(pathname)) {
       setHubNavOpen(true)
       setOperationsNavOpen(false)
+    } else if (isFinanceSectionPath(pathname)) {
+      setFinanceNavOpen(true)
     } else if (isMerchantsSectionPath(pathname)) {
       setMerchantsNavOpen(true)
     } else if (isOperationsSectionPath(pathname)) {
@@ -367,6 +405,38 @@ export function OfficeDashboardLayout({ children }: OfficeDashboardLayoutProps) 
               </div>
               {merchantsNavOpen ? (
                 <MerchantsSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
+              ) : null}
+            </div>
+
+            <div className="pt-1">
+              <div className="flex items-center gap-0.5 rounded-md">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 shrink-0 text-muted-foreground"
+                  aria-expanded={financeNavOpen}
+                  aria-label={financeNavOpen ? "Collapse Finance menu" : "Expand Finance menu"}
+                  onClick={() => setFinanceNavOpen((o) => !o)}
+                >
+                  <ChevronRight className={cn("h-4 w-4 transition-transform", financeNavOpen && "rotate-90")} />
+                </Button>
+                <Link
+                  href="/finance/payouts"
+                  className={cn(
+                    "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium transition-all duration-200",
+                    isFinanceSectionPath(pathname)
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  )}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <Wallet className="h-5 w-5 shrink-0" />
+                  <span className="truncate">Finance</span>
+                </Link>
+              </div>
+              {financeNavOpen ? (
+                <FinanceSectionSubnav pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
               ) : null}
             </div>
 

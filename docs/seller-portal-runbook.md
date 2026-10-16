@@ -12,7 +12,7 @@ What exists, how to run it, and what must be set before it can take real money. 
 | Merchant API | `api/app/api/merchant/**` | Membership-checked on the server (`api/lib/merchant/auth.ts`). |
 | Office APIs | `api/app/api/admin/{merchants,kyb-profiles,audit,fee-rules,fee-plans,payouts,payout-methods,marketplace-settings}` | Roles in `api/lib/admin-roles.ts`. |
 | Office pages | `office/app/{merchants,kyb,audit,finance,fees}` | |
-| Migrations | `supabase/migrations/20261016100000_merchants_foundation.sql`, `20261016110000_ledger_fees_payouts.sql` | Additive. Apply in order, after the marketplace migrations. |
+| Migrations | `supabase/migrations/20261016100000_merchants_foundation.sql`, `20261016110000_ledger_fees_payouts.sql`, `20261016120000_seller_notifications.sql` | Additive. Apply in order, after the marketplace migrations. |
 
 ## Before first deploy
 
@@ -21,7 +21,9 @@ What exists, how to run it, and what must be set before it can take real money. 
 3. **Env on `seller`:** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SELLER_URL` (see `seller/env.example`). Never set `NEXT_PUBLIC_SELLER_MOCK` outside local review.
 4. **API CORS:** `seller.ciuna.com` is allowed by default; set `NEXT_PUBLIC_SELLER_URL` on `api` for other hosts.
 5. **Vercel project for Seller:** root directory `seller`, install from the repo root (workspaces), framework Next.js, domain `seller.ciuna.com`.
-6. **Cron:** `api/vercel.json` schedules `/api/cron/merchant-money` every 15 minutes (releases earnings after the hold, backfills missing earnings). Vercel Hobby only allows daily crons; use Pro or call the endpoint from another scheduler with `Authorization: Bearer $CRON_SECRET`.
+6. **Alerts (email + Telegram):** `SES_REGION`, `SES_FROM_EMAIL` are already used for customer email. For Telegram create a bot with @BotFather and set on `api`: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_BOT_USERNAME` (without @), `TELEGRAM_WEBHOOK_SECRET` (random string). Register the webhook once:
+   `curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" -d url=https://api.ciuna.com/api/webhooks/telegram -d secret_token=$TELEGRAM_WEBHOOK_SECRET`. Without these, email still works and Seller hides the Connect button. Alerts are rows in `seller_outbox` created by database triggers; `/api/cron/seller-notifications` (every minute) sends them with retry/backoff.
+6b. **Cron:** `api/vercel.json` schedules `/api/cron/merchant-money` every 15 minutes (releases earnings after the hold, backfills missing earnings) and `/api/cron/seller-notifications` every minute. Vercel Hobby only allows daily crons; use Pro or call the endpoint from another scheduler with `Authorization: Bearer $CRON_SECRET`.
 7. **Storage:** buckets `merchant-assets` (public) and `merchant-documents` (private) are created on first upload by the API.
 8. **Launch commissions:** the migration seeds 8% food, 6% mart, 12% experts as placeholders. Set the real numbers in Office (Fees) before approving the first merchant. Hold days default to 2, minimum payouts per currency are in Office (Fees, settings).
 9. **Office roles:** existing admins with role `admin` behave as `ops`. Assign `finance` and `compliance` roles to the right people; only `super_admin` edits fees and settings.
@@ -59,4 +61,4 @@ npx tsc --noEmit -p seller && npx tsc --noEmit -p api && npx tsc --noEmit -p pac
 - Customer time zone is not stored on bookings; the seller sees the service zone and their device zone.
 - Variants and multi-image display on the customer side need checkout and catalog changes.
 - No automated payout rails yet; payouts are manual in Office.
-- Web push and Telegram order alerts: the portal polls every 30 seconds; the notification service is not built.
+- Web push is not built (email and Telegram alerts are). The portal also polls every 30 seconds and puts the new-order count in the tab title.

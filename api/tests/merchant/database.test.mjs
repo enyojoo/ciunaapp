@@ -11,6 +11,7 @@ const MIGRATIONS = [
   "20260925152000_marketplace_cancel_restore_cart.sql",
   "20261016100000_merchants_foundation.sql",
   "20261016110000_ledger_fees_payouts.sql",
+  "20261016120000_seller_notifications.sql",
 ]
 const uid = "11111111-1111-4111-8111-111111111111"
 const pid = "22222222-2222-4222-8222-222222222222"
@@ -169,4 +170,88 @@ test("fee rules enforce a coherent scope and seeded commissions exist", async ()
   await assert.rejects(db.query("insert into fee_rules(kind,scope,percent) values('commission','merchant',5)"), /violates check/)
   await assert.rejects(db.query("insert into fee_rules(kind,scope,service_line) values('commission','service_line','food')"), /violates check/)
   await assert.rejects(db.query("insert into fee_rules(kind,scope,fixed_amount) values('commission','platform',10)"), /violates check/)
+})
+
+async function outbox(db) {
+  return (await db.query("select channel, kind, user_id, status from seller_outbox order by id")).rows
+}
+
+test("a paid order alerts the seller by email and by Telegram when linked, once", async () => {
+  const db = await setup()
+  const m = await merchant(db)
+  await db.query("insert into telegram_links(user_id, chat_id) values($1, 12345)", [owner])
+  const key = "n1"
+  const vrow = (await db.query("select id, updated_at::text as v from hub_vendors where merchant_id=$1", [m])).rows[0]
+  // reuse the order helper up to payment, then check alerts before acceptance
+  const id = await fulfilledOrder(db, m)
+  const rows = await outbox(db)
+  assert.deepEqual(rows.map((r) => `${r.channel}:${r.kind}`).sort(), ["email:order_new", "telegram:order_new"])
+  // updating again does not duplicate
+  await db.query("update marketplace_orders set fulfillment_state = fulfillment_state where id=$1", [id])
+  assert.equal((await outbox(db)).length, 2)
+  assert.ok(key && vrow)
+})
+
+test("muted kinds and preferences suppress alerts; unlinked Telegram sends email only", async () => {
+  const db = await setup()
+  const m = await merchant(db)
+  await db.query("insert into merchant_notification_prefs(user_id, merchant_id, email, telegram, muted_kinds) values($1,$2,true,true,'{}')", [owner, m])
+  await fulfilledOrder(db, m)
+  assert.deepEqual((await outbox(db)).map((r) => r.channel), ["email"])
+  await db.query("delete from seller_outbox")
+  await db.query("update merchant_notification_prefs set muted_kinds = array['order_new']")
+  const m2 = await merchant(db)
+  await db.query("insert into merchant_notification_prefs(user_id, merchant_id, muted_kinds) values($1,$2,array['order_new'])", [owner, m2])
+  await fulfilledOrder(db, m2)
+  assert.equal((await outbox(db)).length, 0)
+})
+
+test("finance and staff get only the alerts that concern them", async () => {
+  const db = await setup()
+  const m = await merchant(db)
+  const finance = "55555555-5555-4555-8555-555555555555"
+  const staff = "66666666-6666-4666-8666-666666666666"
+  await db.query("insert into users(id,email,first_name,last_name) values($1,'fin@example.com','F','Fin'),($2,'staff@example.com','S','Staff')", [finance, staff])
+  await db.query("insert into merchant_members(merchant_id,user_id,role) values($1,$2,'finance'),($1,$3,'staff')", [m, finance, staff])
+  await fulfilledOrder(db, m)
+  const orderRecipients = (await outbox(db)).map((r) => r.user_id).sort()
+  assert.deepEqual(orderRecipients, [owner, staff].sort())
+  await db.query("delete from seller_outbox")
+  const method = (await db.query("insert into merchant_payout_methods(merchant_id,kind,currency,label,details_encrypted,verified) values($1,'sbp','RUB','x','enc',true) returning id", [m])).rows[0].id
+  const id = await fulfilledOrder(db, m, 5000, 0)
+  await db.query("select earning_record($1, 0, '{}', 0)", [id])
+  await db.query("select earnings_release_due()")
+  await db.query("delete from seller_outbox")
+  const pay = (await db.query("select payout_request($1,$2,2000,'RUB',$3,1000,0) as id", [m, method, owner])).rows[0].id
+  await db.query("select payout_decide($1,'paid',$2,'REF-1')", [pay, owner])
+  const recipients = (await outbox(db)).filter((r) => r.kind === "payout_update").map((r) => r.user_id).sort()
+  assert.deepEqual(recipients, [owner, finance].sort())
+})
+
+test("outbox claim backs off, caps attempts, and records the result", async () => {
+  const db = await setup()
+  const m = await merchant(db)
+  await db.query("insert into seller_outbox(dedupe_key, merchant_id, user_id, channel, kind) values('d1',$1,$2,'email','order_new')", [m, owner])
+  const first = (await db.query("select * from seller_outbox_claim(10)")).rows
+  assert.equal(first.length, 1)
+  assert.equal(first[0].attempts, 1)
+  assert.equal((await db.query("select * from seller_outbox_claim(10)")).rows.length, 0) // backed off
+  await db.query("update seller_outbox set run_after = now() - interval '1 second'")
+  assert.equal((await db.query("select * from seller_outbox_claim(10)")).rows[0].attempts, 2)
+  await db.query("select seller_outbox_done(1, 'sent')")
+  assert.equal((await db.query("select status from seller_outbox")).rows[0].status, "sent")
+  await db.query("update seller_outbox set status='pending', attempts=6, run_after=now()-interval '1 second'")
+  assert.equal((await db.query("select * from seller_outbox_claim(10)")).rows.length, 0) // gave up
+})
+
+test("merchant approval and rejection alert the owner; pause and resume do not", async () => {
+  const db = await setup()
+  const m = (await db.query("insert into merchants(type,slug,display_name,status) values('store','s-x','X','in_review') returning id")).rows[0].id
+  await db.query("insert into merchant_members(merchant_id,user_id,role) values($1,$2,'owner')", [m, owner])
+  await db.query("update merchants set status='live' where id=$1", [m])
+  assert.equal((await outbox(db)).filter((r) => r.kind === "merchant_status").length, 1)
+  await db.query("delete from seller_outbox")
+  await db.query("update merchants set status='paused' where id=$1", [m])
+  await db.query("update merchants set status='live' where id=$1", [m])
+  assert.equal((await outbox(db)).length, 0)
 })

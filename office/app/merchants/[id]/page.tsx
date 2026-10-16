@@ -285,6 +285,13 @@ export default function MerchantDetailPage() {
                 </Card>
               )}
               {!manage && <p className="text-xs text-muted-foreground">Owner team: {m.owner_team || "-"}</p>}
+
+              <Card>
+                <CardHeader><CardTitle className="text-base">Money</CardTitle></CardHeader>
+                <CardContent>
+                  <Link href={`/finance/merchants/${id}`} className="text-sm text-primary-text hover:underline">Balances, earnings and payouts</Link>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

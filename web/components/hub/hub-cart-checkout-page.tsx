@@ -77,7 +77,7 @@ export function HubCartCheckoutPage({ lineSlug }: { lineSlug: "food" | "mart" })
       if (raw) {
         try {
           setSavedSeed(JSON.parse(raw) as CheckoutSeed)
-        } catch {
+    } catch {
           setSavedSeed(undefined)
         }
       }

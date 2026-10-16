@@ -21,7 +21,7 @@ export const DELETE = merchantRoute("payouts", async (_req, { user, merchant }, 
   assert((open.count ?? 0) === 0, "METHOD_IN_USE", 409)
   const { data, error } = await db.from("merchant_payout_methods").delete().eq("id", params.id).eq("merchant_id", merchant.id).select("id")
   // historical payouts keep a snapshot; a method referenced by a past payout can't be deleted (FK) and is reported clearly
-  if (error?.code === "23503") assert(false, "METHOD_IN_USE", 409)
+  if (error?.code === "23503") assert(false, "METHOD_HAS_HISTORY", 409)
   check(error)
   assert(data?.length, "PAYOUT_METHOD_NOT_FOUND", 404)
   await audit({ actorKind: "merchant", actorId: user.id, merchantId: merchant.id, action: "payout_method.removed", entityType: "merchant_payout_method", entityId: params.id })

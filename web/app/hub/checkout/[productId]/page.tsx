@@ -37,13 +37,13 @@ export default function ProductCheckout() {
             {modeKey ? (
               <span className="rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-700">
                 {t(modeKey)}
-              </span>
-            ) : null}
+                              </span>
+              ) : null}
             {sla ? (
               <span className="rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-700">
                 {t("marketplace.usuallyWithin", { duration: sla })}
-              </span>
-            ) : null}
+                        </span>
+                      ) : null}
           </div>
         )}
         {product.long_description || product.short_description ? (
