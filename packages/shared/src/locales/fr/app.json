@@ -1154,7 +1154,15 @@
     "orderCancelled": "Commande annulée",
     "progressDetails": "Détails",
     "progressReview": "Vérification",
-    "placed": "Commande passée"
+    "placed": "Commande passée",
+    "statusLine": {
+      "awaiting_payment": "Terminez le paiement pour passer la commande.",
+      "awaiting_acceptance": "En attente de l’acceptation du vendeur.",
+      "accepted": "Le vendeur a accepté votre commande.",
+      "in_progress": "Votre commande est en préparation.",
+      "fulfilled": "Votre commande est terminée.",
+      "cancelled": "Cette commande a été annulée."
+    }
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

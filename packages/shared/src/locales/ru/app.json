@@ -1154,7 +1154,15 @@
     "orderCancelled": "Заказ отменён",
     "progressDetails": "Детали",
     "progressReview": "Проверка",
-    "placed": "Заказ оформлен"
+    "placed": "Заказ оформлен",
+    "statusLine": {
+      "awaiting_payment": "Завершите оплату, чтобы оформить заказ.",
+      "awaiting_acceptance": "Ждём, пока продавец примет заказ.",
+      "accepted": "Продавец принял ваш заказ.",
+      "in_progress": "Ваш заказ готовится.",
+      "fulfilled": "Ваш заказ выполнен.",
+      "cancelled": "Этот заказ отменён."
+    }
   },
   "social": {
     "loadFailed": "Не удалось загрузить, попробуйте ещё раз",

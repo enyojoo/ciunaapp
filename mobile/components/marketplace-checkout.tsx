@@ -19,6 +19,7 @@ import { MarketplacePayStep, type MarketplacePayTab } from "@/components/marketp
 import { useToast } from "@/components/toast-provider"
 import { OrderReviewCard } from "@/components/review-sheet"
 import { OrderTimeline } from "@/components/order-timeline"
+import { OrderPlaceCard, OrderStatusHeader } from "@/components/order-status-header"
 import { SellerChatCard } from "@/components/seller-chat-card"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { startYooKassaPayment, resumeYooKassaPayment, isYooKassaNativeAvailable } from "@/lib/yookassa-native"
@@ -813,6 +814,7 @@ export function MarketplaceOrderView({
   return (
     <ScreenScroll keyboard edges={["left", "right", "bottom"]} contentStyle={styles.scroll}>
       <View style={styles.stack}>
+        <OrderStatusHeader order={order} />
         <SummaryCard
           title={order.snapshot.title}
           publicId={order.public_id}
@@ -822,6 +824,7 @@ export function MarketplaceOrderView({
           paymentState={order.payment_state}
           label={label}
         />
+        <OrderPlaceCard order={order} />
         <View style={styles.timelineCard}>
           <Text style={styles.sectionTitle}>{label("fulfillment", "Fulfillment")}</Text>
           <OrderTimeline order={order} />

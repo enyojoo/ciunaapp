@@ -1154,7 +1154,15 @@
     "orderCancelled": "Order cancelled",
     "progressDetails": "Details",
     "progressReview": "Review",
-    "placed": "Order placed"
+    "placed": "Order placed",
+    "statusLine": {
+      "awaiting_payment": "Complete your payment to place the order.",
+      "awaiting_acceptance": "Waiting for the seller to accept your order.",
+      "accepted": "The seller accepted your order.",
+      "in_progress": "Your order is being prepared.",
+      "fulfilled": "Your order is complete.",
+      "cancelled": "This order was cancelled."
+    }
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

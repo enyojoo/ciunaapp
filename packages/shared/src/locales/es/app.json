@@ -1154,7 +1154,15 @@
     "orderCancelled": "Pedido cancelado",
     "progressDetails": "Detalles",
     "progressReview": "Revisión",
-    "placed": "Pedido realizado"
+    "placed": "Pedido realizado",
+    "statusLine": {
+      "awaiting_payment": "Completa el pago para realizar el pedido.",
+      "awaiting_acceptance": "Esperando a que el vendedor acepte tu pedido.",
+      "accepted": "El vendedor aceptó tu pedido.",
+      "in_progress": "Tu pedido se está preparando.",
+      "fulfilled": "Tu pedido está completo.",
+      "cancelled": "Este pedido fue cancelado."
+    }
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",

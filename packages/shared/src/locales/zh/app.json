@@ -1154,7 +1154,15 @@
     "orderCancelled": "订单已取消",
     "progressDetails": "详情",
     "progressReview": "确认",
-    "placed": "订单已下达"
+    "placed": "订单已下达",
+    "statusLine": {
+      "awaiting_payment": "请完成付款以提交订单。",
+      "awaiting_acceptance": "等待卖家接单。",
+      "accepted": "卖家已接受您的订单。",
+      "in_progress": "您的订单正在准备中。",
+      "fulfilled": "您的订单已完成。",
+      "cancelled": "此订单已取消。"
+    }
   },
   "social": {
     "loadFailed": "加载失败，请重试",
