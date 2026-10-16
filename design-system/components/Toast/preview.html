@@ -1,0 +1,68 @@
+<!-- @dsCard group="Feedback" height=1542 subtitle="Brief confirmations: success, error, with an action, and stacked on a phone above the bottom nav" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Toast</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.toast{max-width:100%}
+.toast .a{font-weight:700;margin-left:6px;padding:4px 8px;border-radius:8px;text-decoration:underline;text-underline-offset:3px}
+.toast .x{opacity:.8;margin-left:4px}
+.toast .ic{--s:18px}
+.toast.ok .ic.lead{color:#fff}
+.tstack{position:absolute;left:12px;right:12px;bottom:12px;display:grid;gap:8px}
+.tstack .toast{width:100%;justify-content:flex-start}
+.tstack .toast .a{margin-left:auto}
+.phone .s-bottom{position:relative}
+.pos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.zone{height:160px;border:1px dashed var(--input-edge);border-radius:var(--radius-card);position:relative;background:var(--surface)}
+.zone .toast{position:absolute}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Variants</p>
+<div class="cz-row">
+  <span class="toast"><i data-i="circle-check-big" class="lead"></i>Order accepted</span>
+  <span class="toast"><i data-i="circle-check-big"></i>Product saved<span class="a">View</span></span>
+  <span class="toast"><i data-i="trash-2"></i>Photo removed<span class="a">Undo</span></span>
+  <span class="toast err"><i data-i="triangle-alert"></i>Could not save. Check your connection and try again.<span class="a">Retry</span></span>
+</div>
+<p class="hint">Dark plate with white text for neutral and success confirmations (icon says which); destructive fill only for errors. One line, ideally under 60 characters, with at most one text action. Auto-dismiss after 5 seconds; errors with an action stay for 8 and pause while hovered or focused.</p></div>
+
+<div class="cz-section"><p class="cz-h">Placement</p>
+<div class="g2">
+  <div class="cell"><span class="st">Desktop: bottom centre</span><div class="zone"><span class="toast" style="left:50%;transform:translateX(-50%);bottom:16px"><i data-i="circle-check-big"></i>Store profile saved</span></div></div>
+  <div class="cell"><span class="st">Phone: above the bottom nav, full width</span><div class="zone"><span class="toast" style="left:12px;right:12px;bottom:12px"><i data-i="circle-check-big"></i>Store profile saved</span></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Stacked on a phone, above the bottom nav</p>
+<div class="cz-grid" style="justify-content:flex-start;gap:40px">
+<div class="phone" style="height:640px">
+  <div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b></span></div><i data-i="menu" style="--s:22px"></i></div>
+  <div class="screen"><div class="scroll" style="padding:18px 16px 0">
+    <h1 class="t-title" style="margin:0 0 12px">Catalog</h1>
+    <div class="ocard"><div class="top"><div><div class="id">Jollof rice, large</div><div class="t-meta">₽650 · 24 sold</div></div><span class="badge badge-success"><i data-i="check"></i>Live</span></div></div>
+    <div class="ocard" style="margin-top:12px"><div class="top"><div><div class="id">Egusi soup with pounded yam</div><div class="t-meta">₽700 · 11 sold</div></div><span class="badge badge-neutral">Paused</span></div></div>
+    <div class="tstack">
+      <span class="toast err"><i data-i="triangle-alert"></i>Could not pause. Try again.<span class="a">Retry</span></span>
+      <span class="toast"><i data-i="trash-2"></i>Suya skewers deleted<span class="a">Undo</span></span>
+    </div>
+  </div></div>
+  <div class="s-bottom" style="grid-template-columns:repeat(4,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi"><i data-i="clipboard-list"></i>Orders</span><span class="s-bi on"><i data-i="package"></i>Catalog</span><span class="s-bi"><i data-i="menu"></i>More</span></div>
+  <div class="homebar"></div>
+</div>
+<div class="cz-note" style="text-align:left;max-width:360px">At most two toasts show at once; the newest sits closest to the nav. A new toast replaces one with the same message. Toasts never cover the primary action: they sit 12px above the nav, and above a sticky action bar when one is present.</div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Confirm something the user just did: "Order accepted".</li><li>Offer Undo for removal instead of a confirm dialog.</li><li><code>role="status"</code> for success, <code>role="alert"</code> for errors.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use a toast for something the user must act on later; use a banner.</li><li>Don't put the only copy of an error in a toast; show the error on the field too.</li><li>Don't say "Success!" or end with an exclamation mark.</li></ul></div></div></div>
+
+</div></div></body></html>

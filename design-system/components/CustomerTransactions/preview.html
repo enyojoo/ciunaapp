@@ -1,0 +1,172 @@
+<!-- @dsCard group="Customer app · Screens" height=2940 width=1300 subtitle="Orders tab activity list: transfers, marketplace orders and expert bookings with filters, empty, no match, loading, error, offline and Russian" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CustomerTransactions</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.phone.native *{font-family:var(--font-native)}
+.cz-grid{gap:40px}
+.nt{font:700 24px/30px var(--font-native);letter-spacing:-.3px;margin:0}
+.nl{font:600 15px/20px var(--font-native)}
+.nm{font:400 13px/18px var(--font-native);color:var(--muted)}
+.nb{font:400 15px/22px var(--font-native)}
+.grow{flex:1;min-width:0}
+.pad{padding:0 16px}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.plate.p{padding:14px 16px}
+.mt{padding:4px 20px 10px}
+.mg{padding:0 16px;margin-top:14px}
+.mgt{font:600 12px/16px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 4px 8px}
+.mrow{display:flex;align-items:center;gap:12px;padding:0 14px;min-height:52px}
+.mi{width:32px;height:32px;border-radius:10px;background:var(--neutral-surface);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.mi .ic{--s:18px}
+.mi.refer{background:var(--refer-surface);color:var(--refer)}
+.mi.ok{background:var(--success-surface);color:var(--success-text)}
+.mrow .chev{--s:18px;color:var(--subtle)}
+.mval{font:400 14px/20px var(--font-native);color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.mid2{display:flex;align-items:center;gap:14px;margin:6px 16px 0;padding:16px}
+.mid2 .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mid2 .t{font:700 18px/24px var(--font-native);display:flex;align-items:center;gap:6px}
+.mid2 .t .ic{--s:18px;color:var(--success-text)}
+.openchip{height:34px;padding:0 14px;border-radius:17px;background:var(--neutral-surface);display:inline-flex;align-items:center;font:600 13px/1 var(--font-native)}
+.out{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin-top:6px;font:600 15px/1 var(--font-native);color:var(--destructive-text)}
+.out .ic{--s:18px}
+.ver{text-align:center;font:400 12px/16px var(--font-native);color:var(--muted)}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+.ov .scrim{position:absolute;inset:0}
+.ov .sheet{position:relative;padding:0 16px 34px;display:grid;gap:4px}
+.ov .sheet .grab{margin:10px auto 8px}
+.ov .sheet h3{margin:0 4px 6px;font:700 18px/24px var(--font-native)}
+.lang{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 4px;border-top:1px solid var(--hairline)}
+.lang .t{font:600 16px/22px var(--font-native)}
+.lang .s{font:400 13px/18px var(--font-native);color:var(--muted)}
+.lang.on{background:var(--primary-tint);border-radius:12px;border-top-color:transparent;padding:0 12px;margin:0 -8px}
+.dlgw{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 28px}
+.dlgw .scrim{position:absolute;inset:0}
+.dlgw .dialog{position:relative;padding:22px 20px 18px;display:grid;gap:8px;width:100%}
+.dlgw h3{margin:0;font:700 18px/24px var(--font-native)}
+.dlgw p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.dlgw .acts{display:flex;gap:10px;margin-top:10px}
+.dlgw .acts .btn{flex:1}
+.x-ico{width:40px;height:40px;border-radius:12px;background:var(--neutral-surface);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.x-ico .ic{--s:20px}
+.x-ico.ok{background:var(--success-surface);color:var(--success-text)}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.sum .plate{padding:12px 14px}
+.sum .v{font:700 18px/24px var(--font-native);font-variant-numeric:tabular-nums}
+.srch{display:flex;align-items:center;gap:10px;margin:10px 16px 0;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native);color:var(--subtle)}
+.srch .ic{--s:18px;color:var(--muted)}
+.srch.f{color:var(--ink);border-color:var(--primary);box-shadow:0 0 0 3px rgba(205,75,14,.25)}
+.chips{display:flex;gap:8px;padding:10px 16px 2px;overflow:hidden}
+.chips .chip{font-family:var(--font-native);flex-shrink:0}
+.dh{font:600 12px/16px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 20px 6px}
+.tx{display:flex;align-items:center;gap:12px;padding:10px 16px;min-height:68px;background:var(--surface);border-top:1px solid var(--hairline)}
+.tx:last-child{border-bottom:1px solid var(--hairline)}
+.tx.pr{background:var(--neutral-surface)}
+.tx .t{font:600 15px/20px var(--font-native);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx .s{font:400 13px/18px var(--font-native);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx .tr{display:grid;justify-items:end;gap:4px;flex-shrink:0}
+.tx .a{font:700 15px/20px var(--font-native);font-variant-numeric:tabular-nums}
+.tx .a.in{color:var(--success-text)}
+.tx .badge{height:22px;padding:0 8px;font-size:11px}
+.tx .badge .ic{--s:12px}
+.skr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--hairline);background:var(--surface)}
+.mid3{display:grid;justify-items:center;text-align:center;gap:8px;padding:44px 32px}
+.mid3 p{margin:0 0 10px;font:400 14px/20px var(--font-native);color:var(--muted)}
+.mid3 .nl{font-size:17px;line-height:22px}
+.mid3 .big{width:64px;height:64px;border-radius:50%;background:var(--neutral-surface);color:var(--muted);display:grid;place-items:center;margin-bottom:6px}
+.mid3 .big .ic{--s:28px}
+.mid3 .big.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.ban{margin:10px 16px 0;padding:10px 14px;font:400 13px/18px var(--font-native);display:flex;gap:10px;align-items:center;border-radius:var(--radius-card)}
+.ban .ic{--s:18px}
+.tgt{display:grid;gap:8px;margin:10px 16px 0;padding:12px 14px}
+.tgt div{display:flex;gap:10px;align-items:center;font:400 13px/18px var(--font-native);color:var(--muted)}
+.tgt b{font-weight:600;color:var(--ink)}
+.tgt .ic{--s:16px;color:var(--ink)}
+.atop{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 0;min-height:56px}
+.alogo{height:24px}
+.lg{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:20px;background:var(--surface);border:1px solid var(--hairline);font:600 14px/1 var(--font-native)}
+.lg .ic{--s:16px}
+.abk{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;margin-left:-10px}
+.abody{padding:10px 20px 0;display:grid;gap:14px;align-content:start}
+.abody h1{margin:0;font:700 28px/34px var(--font-native);letter-spacing:-.4px}
+.abody .sub{margin:-8px 0 0;font:400 15px/22px var(--font-native);color:var(--muted)}
+.fld{display:grid;gap:6px}
+.fld .l{font:600 14px/20px var(--font-native)}
+.fld .in{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native)}
+.fld .in .ph2{color:var(--subtle)}
+.fld .in .grow{overflow:hidden;white-space:nowrap}
+.fld .in .ic{--s:20px;color:var(--muted)}
+.fld .in.bad{border-color:var(--destructive-text)}
+.fld .in.dis{background:var(--neutral-surface);color:var(--muted)}
+.fld .e{font:400 13px/18px var(--font-native);color:var(--destructive-text);display:flex;gap:6px;align-items:flex-start}
+.fld .e .ic{--s:15px;margin-top:2px}
+.fld .h{font:400 13px/18px var(--font-native);color:var(--muted)}
+.soc{display:grid;gap:10px}
+.soc .btn{font-family:var(--font-native);height:50px}
+.or{display:flex;align-items:center;gap:12px;font:400 13px/18px var(--font-native);color:var(--muted)}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--hairline)}
+.afoot{text-align:center;font:400 14px/20px var(--font-native);color:var(--muted)}
+.afoot a{font-weight:600}
+.flk{font:600 14px/20px var(--font-native);color:var(--primary-text);justify-self:start;min-height:32px;display:inline-flex;align-items:center}
+.rules{display:grid;gap:4px}
+.rules div{display:flex;gap:8px;align-items:center;font:400 13px/18px var(--font-native);color:var(--muted)}
+.rules .ic{--s:15px}
+.rules .ok{color:var(--success-text)}
+.rules .ok .ic{color:var(--success-text)}
+.terms{display:flex;gap:10px;align-items:flex-start;font:400 14px/20px var(--font-native)}
+.pinw{display:grid;justify-items:center;gap:8px;padding:14px 20px 0;text-align:center}
+.pinw .avatar{width:64px;height:64px;font-size:22px}
+.pinw h1{margin:6px 0 0;font:700 22px/28px var(--font-native)}
+.pinw p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.pdots{display:flex;gap:18px;margin:18px 0 6px}
+.pdots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--input-edge);display:block}
+.pdots i.on{background:var(--ink);border-color:var(--ink)}
+.pdots.bad i{border-color:var(--destructive-text)}
+.pdots.bad i.on{background:var(--destructive-text);border-color:var(--destructive-text)}
+.pkeys{display:grid;grid-template-columns:repeat(3,72px);gap:12px 28px;margin-top:18px;justify-content:center}
+.pkeys span{width:72px;height:72px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;font:600 28px/1 var(--font-native);font-variant-numeric:tabular-nums}
+.pkeys span.z{background:transparent;border-color:transparent}
+.pkeys span .ic{--s:24px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Combined list</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Activity</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Total volume</div><div class="v">₽86,420</div></div><div class="plate"><div class="nm">Completed</div><div class="v">24</div></div></div><div class="srch"><i data-i="search"></i><span>Search activity</span></div><div class="chips"><span class="chip on">All</span><span class="chip">Transfers</span><span class="chip">Orders</span><span class="chip">Bookings</span><span class="chip">Payouts</span></div><div class="scroll"><div class="dh">Today</div><div class="list">
+<div class="tx"><span class="x-ico"><i data-i="utensils"></i></span><div class="grow"><div class="t">Mama T's Kitchen</div><div class="s">Food · 12:40 PM</div></div><div class="tr"><span class="a">−₽1,100</span><span class="badge badge-warning"><i data-i="clock"></i>Preparing</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="arrow-up-right"></i></span><div class="grow"><div class="t">Sent to Ngozi Okafor</div><div class="s">Transfer · 11:15 AM</div></div><div class="tr"><span class="a">−₽25,000</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="graduation-cap"></i></span><div class="grow"><div class="t">Dr. Amina Yusuf</div><div class="s">Expert · Immigration, Oct 18</div></div><div class="tr"><span class="a">−₽4,500</span><span class="badge badge-warning"><i data-i="hourglass"></i>Awaiting</span></div></div>
+</div><div class="dh">Yesterday</div><div class="list">
+<div class="tx"><span class="x-ico"><i data-i="shopping-basket"></i></span><div class="grow"><div class="t">Sahel Spices</div><div class="s">Mart · 6:02 PM</div></div><div class="tr"><span class="a">−₽2,380</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="arrow-up-right"></i></span><div class="grow"><div class="t">Sent to Wang Fang</div><div class="s">Transfer · 9:30 AM</div></div><div class="tr"><span class="a">−₽40,000</span><span class="badge badge-warning"><i data-i="clock"></i>Pending</span></div></div>
+<div class="tx"><span class="x-ico ok"><i data-i="hand-coins"></i></span><div class="grow"><div class="t">Referral payout</div><div class="s">Referrals · 8:10 AM</div></div><div class="tr"><span class="a in">+₽300</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div></div>
+</div><div class="dh">Oct 12</div><div class="list">
+<div class="tx"><span class="x-ico"><i data-i="shopping-basket"></i></span><div class="grow"><div class="t">Lagos Pantry</div><div class="s">Mart · 4:48 PM</div></div><div class="tr"><span class="a">−₽1,640</span><span class="badge badge-neutral"><i data-i="x"></i>Cancelled</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="arrow-up-right"></i></span><div class="grow"><div class="t">Sent to Kojo Mensah</div><div class="s">Transfer · 1:05 PM</div></div><div class="tr"><span class="a">−₽15,000</span><span class="badge badge-destructive"><i data-i="triangle-alert"></i>Failed</span></div></div>
+</div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab on"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Transfers, marketplace orders and expert bookings in one list, grouped by day. Amount, counterparty, line and time on the left; amount and status chip on the right.</div></div>
+<div class="cz-col"><div class="cz-cap">Filtered: Bookings, Chen Hui</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Activity</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Total volume</div><div class="v">₽31,760</div></div><div class="plate"><div class="nm">Completed</div><div class="v">11</div></div></div><div class="srch"><i data-i="search"></i><span>Search activity</span></div><div class="chips"><span class="chip">All</span><span class="chip">Transfers</span><span class="chip">Orders</span><span class="chip on">Bookings</span><span class="chip">Payouts</span></div><div class="scroll"><div class="dh">Oct 14</div><div class="list">
+<div class="tx"><span class="x-ico"><i data-i="graduation-cap"></i></span><div class="grow"><div class="t">Li Wei, Russian tutor</div><div class="s">Expert · Lesson, Oct 19, 7:00 PM</div></div><div class="tr"><span class="a">−₽2,000</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Confirmed</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="graduation-cap"></i></span><div class="grow"><div class="t">Carlos Mendes, sworn translator</div><div class="s">Expert · Translation, Oct 14</div></div><div class="tr"><span class="a">−₽3,200</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div></div></div><div class="dh">Oct 3</div><div class="list">
+<div class="tx"><span class="x-ico"><i data-i="graduation-cap"></i></span><div class="grow"><div class="t">Dr. Amina Yusuf</div><div class="s">Expert · Consult, declined</div></div><div class="tr"><span class="a">₽4,500</span><span class="badge badge-neutral"><i data-i="undo-2"></i>Refunded</span></div></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab on"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">A chip filters the list in place. Orange fills only the active chip. A declined booking shows the full amount returned as Refunded.</div></div>
+<div class="cz-col"><div class="cz-cap">Empty, first use</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Activity</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Total volume</div><div class="v">—</div></div><div class="plate"><div class="nm">Completed</div><div class="v">0</div></div></div><div class="srch"><i data-i="search"></i><span>Search activity</span></div><div class="chips"><span class="chip on">All</span><span class="chip">Transfers</span><span class="chip">Orders</span><span class="chip">Bookings</span><span class="chip">Payouts</span></div><div class="scroll"><div class="mid3"><span class="big"><i data-i="history"></i></span><div class="nl">No activity yet</div><p>Send money, order a meal or book an expert and it will show up here.</p><a class="btn">Go to Home</a></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab on"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Title says what is missing, one sentence says what to do, one button takes them there.</div></div>
+<div class="cz-col"><div class="cz-cap">No search match</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Activity</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Total volume</div><div class="v">₽86,420</div></div><div class="plate"><div class="nm">Completed</div><div class="v">24</div></div></div><div class="srch f"><i data-i="search"></i><span>visa</span></div><div class="chips"><span class="chip on">All</span><span class="chip">Transfers</span><span class="chip">Orders</span><span class="chip">Bookings</span><span class="chip">Payouts</span></div><div class="scroll"><div class="mid3"><span class="big"><i data-i="search"></i></span><div class="nl">Nothing matches "visa"</div><p>Check the spelling, or search by a name or an order number such as CIU-1001.</p><a class="btn btn-secondary">Clear search</a></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab on"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Filtered-empty keeps the search field focused. The action clears the search.</div></div>
+<div class="cz-col"><div class="cz-cap">First load</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Activity</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Total volume</div><div class="sk" style="width:80px;height:20px;margin-top:2px"></div></div><div class="plate"><div class="nm">Completed</div><div class="sk" style="width:80px;height:20px;margin-top:2px"></div></div></div><div class="srch"><i data-i="search"></i><span>Search activity</span></div><div class="chips"><span class="chip on">All</span><span class="chip">Transfers</span><span class="chip">Orders</span><span class="chip">Bookings</span><span class="chip">Payouts</span></div><div class="scroll" style="margin-top:10px"><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div><div class="skr"><div class="sk" style="width:40px;height:40px;border-radius:12px"></div><div class="grow" style="display:grid;gap:8px"><div class="sk" style="width:55%;height:14px"></div><div class="sk" style="width:35%;height:12px"></div></div><div style="display:grid;gap:8px;justify-items:end"><div class="sk" style="width:58px;height:14px"></div><div class="sk" style="width:74px;height:18px;border-radius:9px"></div></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab on"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Skeleton rows match the real row layout. Shown only until the first fetch settles.</div></div>
+<div class="cz-col"><div class="cz-cap">Error with retry</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Activity</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Total volume</div><div class="v">—</div></div><div class="plate"><div class="nm">Completed</div><div class="v">—</div></div></div><div class="srch"><i data-i="search"></i><span>Search activity</span></div><div class="chips"><span class="chip on">All</span><span class="chip">Transfers</span><span class="chip">Orders</span><span class="chip">Bookings</span><span class="chip">Payouts</span></div><div class="scroll"><div class="mid3"><span class="big bad"><i data-i="triangle-alert"></i></span><div class="nl">Couldn't load your activity</div><p>Check your connection and try again. Your money is not affected.</p><a class="btn"><i data-i="refresh-cw"></i>Try again</a></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab on"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Failure is calm and specific, with one retry. It never blames the user.</div></div>
+<div class="cz-col"><div class="cz-cap">Offline, cached</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Activity</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Total volume</div><div class="v">₽86,420</div></div><div class="plate"><div class="nm">Completed</div><div class="v">24</div></div></div><div class="ban banner-neutral"><i data-i="wifi"></i><span>You are offline. Showing activity saved at 9:20 AM.</span></div><div class="srch"><i data-i="search"></i><span>Search activity</span></div><div class="scroll"><div class="list" style="margin-top:6px">
+<div class="tx"><span class="x-ico"><i data-i="utensils"></i></span><div class="grow"><div class="t">Mama T's Kitchen</div><div class="s">Food · 12:40 PM</div></div><div class="tr"><span class="a">−₽1,100</span><span class="badge badge-warning"><i data-i="clock"></i>Preparing</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="arrow-up-right"></i></span><div class="grow"><div class="t">Sent to Ngozi Okafor</div><div class="s">Transfer · 11:15 AM</div></div><div class="tr"><span class="a">−₽25,000</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="shopping-basket"></i></span><div class="grow"><div class="t">Sahel Spices</div><div class="s">Mart · Yesterday</div></div><div class="tr"><span class="a">−₽2,380</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div></div>
+<div class="tx"><span class="x-ico ok"><i data-i="hand-coins"></i></span><div class="grow"><div class="t">Referral payout</div><div class="s">Referrals · Yesterday</div></div><div class="tr"><span class="a in">+₽300</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div></div>
+</div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab on"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Cached rows stay readable with a one-line banner stating the saved time. Statuses may be stale until the connection returns.</div></div>
+<div class="cz-col"><div class="cz-cap">Russian, row pressed</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Операции</h1></div>
+<div class="sum"><div class="plate"><div class="nm">Объём</div><div class="v">₽52,300</div></div><div class="plate"><div class="nm">Завершено</div><div class="v">9</div></div></div><div class="srch"><i data-i="search"></i><span>Поиск по операциям</span></div><div class="chips"><span class="chip on">Все</span><span class="chip">Переводы</span><span class="chip">Заказы</span><span class="chip">Записи</span><span class="chip">Выплаты</span></div><div class="scroll"><div class="dh">Сегодня</div><div class="list">
+<div class="tx pr"><span class="x-ico"><i data-i="utensils"></i></span><div class="grow"><div class="t">Mama T's Kitchen</div><div class="s">Еда · 12:40</div></div><div class="tr"><span class="a">−₽1,100</span><span class="badge badge-warning"><i data-i="clock"></i>Готовится</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="arrow-up-right"></i></span><div class="grow"><div class="t">Перевод: Ngozi Okafor</div><div class="s">Перевод · 11:15</div></div><div class="tr"><span class="a">−₽25,000</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Выполнен</span></div></div>
+<div class="tx"><span class="x-ico"><i data-i="graduation-cap"></i></span><div class="grow"><div class="t">Д-р Амина Юсуф, юрист</div><div class="s">Эксперт · 18 окт., 15:00</div></div><div class="tr"><span class="a">−₽4,500</span><span class="badge badge-warning"><i data-i="hourglass"></i>Ждём ответ</span></div></div>
+</div><div class="dh">Вчера</div><div class="list">
+<div class="tx"><span class="x-ico"><i data-i="shopping-basket"></i></span><div class="grow"><div class="t">Sahel Spices</div><div class="s">Маркет · 18:02</div></div><div class="tr"><span class="a">−₽2,380</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Выполнен</span></div></div>
+</div><div class="tgt plate"><div><i data-i="clipboard-list"></i><span><b>Заказ</b> открывает отслеживание заказа</span></div><div><i data-i="calendar-check"></i><span><b>Запись</b> открывает встречу и чат</span></div><div><i data-i="receipt"></i><span><b>Перевод</b> открывает квитанцию</span></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Главная</span><span class="a-tab on"><i data-i="clipboard-list"></i>Заказы</span><span class="a-tab"><i data-i="user-round"></i>Аккаунт</span></div><div class="homebar"></div></div><div class="cz-note">Entry to detail: the whole row is the tap target (pressed grey). A marketplace order opens OrderTracking, a booking opens its meeting, a transfer opens its receipt.</div></div>
+</div></div></body></html>

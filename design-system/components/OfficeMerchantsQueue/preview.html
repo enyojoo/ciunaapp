@@ -1,0 +1,106 @@
+<!-- @dsCard group="Office · Screens" height=1682 subtitle="Merchant applications queue: In review default, tabs, type filter, age and SLA, country base to operating, empty queue" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>OfficeMerchantsQueue</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.o-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.o-top{height:52px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 28px;background:var(--surface);border-bottom:1px solid var(--hairline)}
+.o-search{flex:1;max-width:420px;height:34px;border:1px solid var(--input-edge);border-radius:10px;display:flex;align-items:center;gap:8px;padding:0 10px;color:var(--muted);font-size:14px;background:var(--surface)}
+.o-search .ic{--s:16px}
+.o-search kbd{margin-left:auto;font:600 11px/1 var(--font-web);border:1px solid var(--hairline);border-radius:6px;padding:3px 6px;background:var(--neutral-surface);color:var(--neutral-text)}
+.o-role{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:var(--neutral-surface);color:var(--neutral-text);font:600 12px/1 var(--font-web)}
+.o-brand{display:flex;align-items:center;gap:10px;padding:2px 12px 8px;font:700 16px/1 var(--font-web)}
+.o-brand .lg{width:30px;height:30px;border-radius:9px;background:var(--primary);color:#fff;display:grid;place-items:center;font:700 14px/1 var(--font-web)}
+.o-brand small{display:block;font:500 11px/14px var(--font-web);color:var(--muted);margin-top:2px}
+.o-link .n{margin-left:auto;font:600 12px/1 var(--font-web);color:var(--muted)}
+.o-link .n.hot{background:var(--warning-surface);color:var(--warning-text);padding:3px 7px;border-radius:9px}
+.o-sp{flex:1}
+.o-link,.o-grp,.o-brand{flex-shrink:0}
+.o-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.o-head h1{margin:0;font:700 22px/28px var(--font-web);letter-spacing:-.3px}
+.o-head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.o-tb{display:flex;gap:10px;align-items:center;margin:14px 0;flex-wrap:wrap}
+.o-tb .input,.o-tb .select{height:36px;font-size:14px}
+.o-tb .w{width:260px}.o-tb .w2{width:150px}
+.views{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.views .v{padding:5px 11px;border-radius:999px;border:1px solid var(--hairline);background:var(--surface);font-weight:600;color:var(--ink)}
+.views .v.on{border-color:var(--primary-border);background:var(--primary-tint);color:var(--primary-text)}
+.ot{font-size:13.5px}
+.ot th{position:sticky;top:0;padding:9px 14px;z-index:1}
+.ot td{padding:10px 14px}
+.ot tr.sel td{background:var(--primary-tint)}
+.ot tr.hov td{background:var(--paper)}
+.ot td.r,.ot th.r{text-align:right}
+.ot .nm{display:flex;align-items:center;gap:10px;font-weight:600}
+.ot .nm small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.age{font-variant-numeric:tabular-nums;white-space:nowrap}
+.age.warn{color:var(--warning-text);font-weight:700}
+.age.bad{color:var(--destructive-text);font-weight:700}
+.sub{color:var(--muted);font-size:12.5px}
+.pgn{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--hairline);font-size:13px;color:var(--muted)}
+.scrim-o{position:absolute;inset:0;display:grid;place-items:center;background:rgba(17,24,39,.55);padding:24px}
+.dlg{width:540px;max-height:100%;padding:24px;display:grid;gap:14px}
+.dlg h2{margin:0;font:600 18px/24px var(--font-web)}
+.dlg p{margin:0}
+.dlg-f{display:flex;justify-content:flex-end;gap:10px;align-items:center}
+.dlg-f .sp{margin-right:auto}
+.rch{display:flex;flex-wrap:wrap;gap:8px}
+.rch span{padding:6px 12px;border-radius:999px;border:1px solid var(--input-edge);background:var(--surface);font:500 13px/18px var(--font-web)}
+.rch span.on{border-color:var(--primary-border);background:var(--primary-tint);color:var(--primary-text)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sw{display:flex;align-items:center;gap:10px;font-size:14px}
+.o-card .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hairline)}
+.o-card .hd h3{margin:0;font:600 15px/22px var(--font-web)}
+.o-card .bd{padding:14px 16px}
+.kv2{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;font-size:14px;margin:0}
+.kv2 dt{color:var(--muted)}.kv2 dd{margin:0}
+.miss{color:var(--destructive-text);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.ok{color:var(--success-text);display:inline-flex;align-items:center;gap:6px}
+.ok .ic,.miss .ic{--s:15px}
+.dr{display:flex;align-items:center;gap:12px;padding:11px 16px}
+.dr+.dr{border-top:1px solid var(--hairline)}
+.dr .g{flex:1;min-width:0}
+.dr .g b{display:block;font-weight:600;font-size:14px}
+.dr .ficon{width:34px;height:40px;border-radius:8px;background:var(--neutral-surface);display:grid;place-items:center;color:var(--neutral-text)}
+.tl2{display:grid;gap:0;font-size:13.5px}
+.tl2>div{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 16px}
+.tl2>div+div{border-top:1px solid var(--hairline)}
+.tl2 time{color:var(--muted);font-variant-numeric:tabular-nums}
+.stk{position:sticky;top:0}
+.json{margin:0;padding:12px 16px;background:var(--neutral-surface);border-radius:10px;font:12.5px/18px ui-monospace,Menlo,monospace;color:var(--ink);overflow:hidden;white-space:pre}
+.cap2{font:600 12px/16px var(--font-web);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.gcol{display:grid;gap:14px;align-content:start}
+.empty{text-align:center;padding:48px 24px}
+.empty .avatar{margin:0 auto 12px}
+.mutedbg{background:var(--neutral-surface);border-radius:var(--radius-control);padding:10px 12px;font-size:13px;color:var(--neutral-text)}
+.sg{display:inline-flex;gap:2px;padding:3px;background:var(--neutral-surface);border-radius:10px}
+.sg span{padding:6px 12px;border-radius:8px;font:600 13px/1 var(--font-web);color:var(--muted)}
+.sg span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-xs)}
+.pal{width:560px;background:var(--surface);border-radius:var(--radius-sheet);box-shadow:var(--shadow-lg);overflow:hidden;align-self:start;margin-top:56px}
+.pal .q{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--hairline);font-size:15px}
+.pal .g2{padding:10px 18px 4px;font:600 11px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pal .it{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:14px}
+.pal .it.on{background:var(--primary-tint);color:var(--primary-text);font-weight:600}
+.pal .it small{margin-left:auto;color:var(--muted);font-weight:400}
+.pal .ft{display:flex;gap:16px;padding:10px 18px;border-top:1px solid var(--hairline);font-size:12px;color:var(--muted)}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">In review: default tab, age past 24h in warning, row selected and hovered</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:960px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><div class="o-grp">Merchants</div><a class="o-link on"><i data-i="store"></i>Merchants<span class="n hot">7</span></a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="chart-column"></i>Analytics</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>ops</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Merchants</h1><p>Applications and live sellers. Oldest first.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div>
+<div class="tabs"><span class="tab on">In review <span class="count">7</span></span><span class="tab">Live</span><span class="tab">Paused</span><span class="tab">Rejected</span><span class="tab">Suspended</span><span class="tab">All</span></div>
+<div class="o-tb"><div class="input-wrap"><i data-i="search"></i><input class="input w" placeholder="Search by name" style="height:36px"></div><select class="select w2"><option>All types</option></select><div class="views"><span>Views</span><span class="v on">All in review</span><span class="v">Mine</span><span class="v">Over 24h</span></div><span class="o-sp"></span><span class="sub"><i data-i="sliders-horizontal" style="--s:14px"></i> Columns</span></div><div class="o-card"><table class="table ot"><thead><tr><th>Business</th><th>Country</th><th>Tier</th><th>Status</th><th>Age</th><th>Owner</th><th>SLA</th><th>Next action</th></tr></thead><tbody>
+<tr class="sel"><td><div class="nm"><span class="avatar sm sq">M</span><span>Mama T's Kitchen<small>Store · Moscow</small></span></div></td><td>NG → RU</td><td>Standard</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age ">2h 10m</span></td><td>Ada K.</td><td><span class="age ">21h left</span></td><td><a class="btn btn-secondary btn-sm">Review</a></td></tr>
+<tr class="hov"><td><div class="nm"><span class="avatar sm sq">L</span><span>Lagos Pantry<small>Store · Moscow</small></span></div></td><td>NG → RU</td><td>Standard</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age warn">26h</span></td><td>Unassigned</td><td><span class="age bad">Over by 2h</span></td><td><a class="btn btn-secondary btn-sm">Claim</a></td></tr>
+<tr class=""><td><div class="nm"><span class="avatar sm sq">G</span><span>Guangzhou Market<small>Store · St Petersburg</small></span></div></td><td>CN → RU</td><td>Standard</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age warn">31h</span></td><td>Unassigned</td><td><span class="age bad">Over by 7h</span></td><td><a class="btn btn-secondary btn-sm">Claim</a></td></tr>
+<tr class=""><td><div class="nm"><span class="avatar sm sq">D</span><span>Dr. Amina Yusuf<small>Expert · immigration law</small></span></div></td><td>GH → RU</td><td>Expert</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age ">5h 40m</span></td><td>Ben O.</td><td><span class="age ">18h left</span></td><td><a class="btn btn-secondary btn-sm">Review</a></td></tr>
+<tr class=""><td><div class="nm"><span class="avatar sm sq">L</span><span>Latina Despensa<small>Store · Moscow</small></span></div></td><td>BR → RU</td><td>Standard</td><td><span class="badge badge-warning"><i data-i="clock"></i>In review</span></td><td><span class="age ">9h</span></td><td>Ada K.</td><td><span class="age ">15h left</span></td><td><a class="btn btn-secondary btn-sm">Review</a></td></tr>
+<tr class=""><td><div class="nm"><span class="avatar sm sq">S</span><span>Sahel Spices<small>Store · Moscow</small></span></div></td><td>GH → RU</td><td>Standard</td><td><span class="badge badge-warning"><i data-i="clock"></i>Changes requested</span></td><td><span class="age warn">52h</span></td><td>Ben O.</td><td><span class="age ">Waiting on seller</span></td><td><a class="btn btn-secondary btn-sm">Nudge</a></td></tr>
+</tbody></table><div class="pgn"><span>1–6 of 7</span><span>Up and down to move, Enter to open, C to claim</span></div></div></div></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Empty queue</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:496px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><div class="o-grp">Merchants</div><a class="o-link on"><i data-i="store"></i>Merchants<span class="n hot">7</span></a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="chart-column"></i>Analytics</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>ops</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Merchants</h1><p>Applications and live sellers. Oldest first.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div>
+<div class="tabs"><span class="tab on">In review</span><span class="tab">Live</span><span class="tab">Paused</span><span class="tab">Rejected</span><span class="tab">Suspended</span><span class="tab">All</span></div>
+<div class="o-tb"><div class="input-wrap"><i data-i="search"></i><input class="input w" placeholder="Search by name" style="height:36px"></div><select class="select w2"><option>All types</option></select><div class="views"><span>Views</span><span class="v on">All in review</span><span class="v">Mine</span><span class="v">Over 24h</span></div><span class="o-sp"></span><span class="sub"><i data-i="sliders-horizontal" style="--s:14px"></i> Columns</span></div><div class="o-card"><div class="empty"><div class="avatar lg"><i data-i="circle-check-big" style="--s:26px"></i></div><div class="t-h2">Nothing waiting for review</div><p class="t-meta" style="margin:6px 0 0">New applications appear here. Everything submitted has a decision.</p></div></div></div></div></div></div></div>
+</div></div></body></html>

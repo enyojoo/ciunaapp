@@ -1,0 +1,40 @@
+<!-- @dsCard group="Documents and email" height=2240 width=1100 subtitle="Customer marketplace emails: order received, payment received, accepted, ready, completed with a rating button, cancelled with a refund note, and booking confirmed with a meeting link" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>EmailCustomerOrder</title>
+<link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.em{width:480px;padding:20px 14px}
+.em .inner{padding:26px 26px 22px}
+.em-logo{height:22px;display:block;margin:0 0 22px}
+.em h1{margin:0 0 8px;font:700 20px/26px var(--font-web);letter-spacing:-.2px}
+.em p{margin:0 0 20px;font:400 16px/24px var(--font-web);color:var(--muted)}
+.em .btn{height:46px;padding:0 22px}
+.em-foot{margin:24px 0 0;padding-top:16px;border-top:1px solid var(--hairline);font:400 13px/19px var(--font-web);color:var(--muted)}
+.em-kv{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:0 0 22px;padding:14px 16px;background:var(--paper);border-radius:12px;font-size:14px;line-height:20px}
+.em-kv dt{color:var(--muted)} .em-kv dd{margin:0;text-align:right;color:var(--ink)}
+.em-kv .tot{font-weight:700}
+.em-meta{width:480px;font:400 12px/17px var(--font-web);color:var(--muted);text-align:left}
+.em-meta b{color:var(--ink);font-weight:600}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Order received, awaiting payment</div>
+<div class="em-meta"><b>Subject</b> Order CIU-1001 received: pay to confirm</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Order received</h1><p>Mama T's Kitchen will start once you pay. Your order is held for 30 minutes.</p><dl class="em-kv"><dt>Order</dt><dd>CIU-1001</dd><dt>Store</dt><dd>Mama T's Kitchen</dd><dt>Items</dt><dd>₽1,100.00</dd><dt>Delivery</dt><dd>₽150.00</dd><dt>Total</dt><dd class="tot num">₽1,250.00</dd></dl><a class="btn">Pay ₽1,250</a><div class="em-foot">You get this because you placed order CIU-1001 on Ciuna.<br>Questions? Write to support@ciuna.com.</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Payment received</div>
+<div class="em-meta"><b>Subject</b> Payment received for order CIU-1001</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Payment received</h1><p>We received ₽1,250.00 for order CIU-1001. Mama T's Kitchen has been told and will confirm shortly.</p><a class="btn">View order</a><div class="em-foot">You get this because you placed order CIU-1001 on Ciuna.<br>Questions? Write to support@ciuna.com.</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Order accepted</div>
+<div class="em-meta"><b>Subject</b> Mama T's Kitchen accepted order CIU-1001</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Your order is accepted</h1><p>Mama T's Kitchen is preparing your food. We will tell you when it is ready.</p><a class="btn">View order</a><div class="em-foot">You get this because you placed order CIU-1001 on Ciuna.<br>Questions? Write to support@ciuna.com.</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Order ready</div>
+<div class="em-meta"><b>Subject</b> Your order CIU-1001 is ready</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Your order is ready</h1><p>The courier will bring it to Tverskaya 12, flat 45 at about 7:30 PM MSK.</p><a class="btn">Track order</a><div class="em-foot">You get this because you placed order CIU-1001 on Ciuna.<br>Questions? Write to support@ciuna.com.</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Completed, ask for a rating</div>
+<div class="em-meta"><b>Subject</b> How was order CIU-1001?</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Your order is complete</h1><p>Thank you, Amara. Tell others how Mama T's Kitchen did. It takes ten seconds.</p><a class="btn">Rate your order</a><div class="em-foot">You get this because you placed order CIU-1001 on Ciuna.<br>Questions? Write to support@ciuna.com.</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Cancelled, with refund note</div>
+<div class="em-meta"><b>Subject</b> Order CIU-1001 was cancelled</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Your order was cancelled</h1><p>Mama T's Kitchen could not take this order today. ₽1,250.00 is going back to your card and usually arrives within 5 business days.</p><a class="btn">View order</a><div class="em-foot">You get this because you placed order CIU-1001 on Ciuna.<br>Questions? Write to support@ciuna.com.</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Booking confirmed, with meeting link</div>
+<div class="em-meta"><b>Subject</b> Your consultation with Dr. Amina Yusuf is confirmed</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Your booking is confirmed</h1><p>Chen Hui, your video call is booked. The link opens 10 minutes before the start.</p><dl class="em-kv"><dt>Expert</dt><dd>Dr. Amina Yusuf, immigration lawyer</dd><dt>Your time</dt><dd>Oct 21, 2026 • 5:00 PM MSK</dd><dt>Expert's time</dt><dd>3:00 PM WAT</dd><dt>Length</dt><dd>60 min</dd><dt>Paid</dt><dd class="tot num">₽4,500</dd><dt>Link</dt><dd>meet.ciuna.com/b/CIU-B2044</dd></dl><a class="btn">Join meeting</a><div class="em-foot">You get this because you booked CIU-B2044 on Ciuna.<br>Questions? Write to support@ciuna.com.</div></div></div></div></div></div></body></html>

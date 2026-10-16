@@ -1,0 +1,43 @@
+<!-- @dsCard group="Marketplace" height=1179 width=900 subtitle="One verification document row: required or optional, upload, in review, approved, rejected with the Office reason, expiry and a locked approved file" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>DocumentUpload</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.doc-row{display:grid;gap:10px;padding:14px 18px}
+.doc-row .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.doc-row .nm{display:flex;align-items:center;gap:8px;font:500 15px/20px var(--font-web);flex:1;min-width:200px}
+.doc-row .nm .ic{--s:18px;color:var(--muted)}
+.doc-row .nm .o{font-size:12px;color:var(--muted)}
+.file{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--hairline);border-radius:12px;background:var(--paper);font-size:14px}
+.file .sz{color:var(--muted);font-size:13px;margin-left:auto;white-space:nowrap}
+.ib{width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;color:var(--destructive-text)}
+.ib:hover{background:var(--destructive-surface)}
+.exp{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.exp.warn{color:var(--warning-text)}
+.exp.bad{color:var(--destructive-text)}
+.exp .ic{--s:14px}
+.drop{border:1.5px dashed var(--input-edge);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;justify-content:center;font-size:14px;color:var(--muted);background:var(--surface)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+<div class="card list">
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Passport or ID<span class="badge badge-neutral">Required</span></span><a class="btn btn-secondary btn-sm"><i data-i="upload"></i>Upload</a></div><div class="hint">PDF, JPG or PNG, up to 10 MB.</div></div>
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Business registration (OGRN)<span class="badge badge-neutral">Required</span></span><a class="btn btn-secondary btn-sm is-disabled"><span class="spinner"></span>Uploading</a></div><div class="progress"><i style="width:62%"></i></div></div>
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Tax registration (INN)<span class="badge badge-neutral">Required</span></span><span class="badge badge-warning"><i data-i="hourglass"></i>In review</span></div>
+<div class="file"><i data-i="file-text" style="--s:18px"></i>inn-certificate.pdf<span class="sz">412 KB</span><span class="ib" aria-label="Remove"><i data-i="trash-2" style="--s:16px"></i></span></div></div>
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Food safety certificate<span class="o">Optional</span></span><span class="badge badge-success"><i data-i="circle-check-big"></i>Approved</span></div>
+<div class="file"><i data-i="file-text" style="--s:18px"></i>food-safety-2026.pdf<span class="sz">1.2 MB</span><span class="t-meta" style="display:flex;gap:4px;align-items:center;font-size:13px"><i data-i="lock" style="--s:14px"></i>Locked</span></div>
+<div class="exp"><i data-i="calendar-days"></i>Valid until Mar 14, 2027</div></div>
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Proof of address<span class="badge badge-neutral">Required</span></span><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></div>
+<div class="banner banner-destructive" style="padding:10px 12px"><div><b>Reason from Ciuna</b>The utility bill is older than 3 months. Upload one dated in the last 3 months.</div></div>
+<div class="top"><a class="btn btn-secondary btn-sm"><i data-i="upload"></i>Upload a new file</a></div></div>
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Sanitary permit<span class="badge badge-neutral">Required</span></span><span class="badge badge-destructive"><i data-i="triangle-alert"></i>Expired</span></div>
+<div class="exp bad"><i data-i="calendar-days"></i>Expired Sep 30, 2026. Upload the renewed permit.</div><div class="top"><a class="btn btn-sm"><i data-i="upload"></i>Upload renewed permit</a></div></div>
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Lease agreement<span class="o">Optional</span></span><span class="badge badge-success"><i data-i="circle-check-big"></i>Approved</span></div>
+<div class="exp warn"><i data-i="timer"></i>Expires in 21 days (Nov 6, 2026). Upload a new one before it lapses.</div></div>
+<div class="doc-row"><div class="top"><span class="nm"><i data-i="file-text"></i>Паспорт или удостоверение<span class="badge badge-neutral">Обязательно</span></span><a class="btn btn-secondary btn-sm"><i data-i="upload"></i>Загрузить</a></div><div class="err"><i data-i="triangle-alert" style="--s:14px"></i>Файл слишком большой. Выберите файл до 10 МБ.</div></div>
+</div>
+<div class="two">
+<div class="cz-section"><p class="cz-h">Use</p><ul><li>Mark each document Required or Optional in words.</li><li>Quote the Office reason on rejection and offer upload in the same row.</li><li>Show expiry in the seller's date format, and warn 30 days ahead.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't let a seller remove an approved document.</li><li>Don't show only a red dot; always say Rejected or Expired.</li><li>Don't ask for the same document twice.</li></ul></div>
+</div></div></div></body></html>

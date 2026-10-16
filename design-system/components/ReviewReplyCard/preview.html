@@ -1,0 +1,60 @@
+<!-- @dsCard group="Marketplace" height=1295 subtitle="Seller view of a customer review: reply button, reply sheet with character counter, an existing reply with the edit-window note, and a review with no text" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ReviewReplyCard</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rv{width:440px;padding:18px 20px;display:grid;gap:12px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.rv .top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;align-items:center}
+.rv .who{font-size:14px;color:var(--muted)}.rv .who b{color:var(--ink);font-weight:600}
+.rv p{margin:0;font-size:15px;line-height:22px}
+.rv .re{background:var(--neutral-surface);border-radius:16px;padding:14px}
+.rv .re b{display:block;font-size:14px;line-height:20px;margin-bottom:2px}
+.rv .win{font-size:13px;line-height:18px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.rv .win .ic{--s:14px}
+.ws{width:440px;background:var(--surface);border-radius:var(--radius-sheet);box-shadow:var(--shadow-lg);border:1px solid var(--hairline)}
+.ws .h{padding:20px 24px 4px}.ws .h h3{margin:0;font:700 20px/26px var(--font-web)}.ws .h p{margin:4px 0 0;font-size:14px;line-height:20px;color:var(--muted)}
+.ws .b{padding:16px 24px;display:grid;gap:12px}
+.ws .f{padding:14px 24px 20px;border-top:1px solid var(--hairline);display:flex;justify-content:flex-end;gap:10px}
+.quote{border-radius:16px;background:var(--neutral-surface);padding:14px;font-size:15px;line-height:22px}
+.cnt{font-size:13px;color:var(--muted);text-align:right;margin-top:-6px}
+.cnt.bad{color:var(--destructive-text);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Needs a reply</div>
+<div class="rv"><div class="top"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><span class="who"><b>Amara</b> · Oct 14</span></div>
+<p>The jollof was hot and arrived early. Portions are generous. I will order again for the weekend.</p>
+<div><a class="btn btn-secondary btn-sm">Reply</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Replied, still editable</div>
+<div class="rv"><div class="top"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star" class="off"></i></span><span class="who"><b>Chen Hui</b> · Oct 12</span></div>
+<p>Very tasty egusi. Delivery took a bit longer than the app said.</p>
+<div class="re"><b>Your reply</b><p>Thank you, Chen. We are adjusting our delivery times for the evening rush.</p></div>
+<div class="win"><i data-i="clock"></i>You can edit your reply for 23 more hours.</div>
+<div><a class="btn btn-secondary btn-sm">Edit reply</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Replied, edit window closed</div>
+<div class="rv"><div class="top"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i></span><span class="who"><b>Kwame</b> · Sep 28</span></div>
+<p>Good food, but the chin chin was stale.</p>
+<div class="re"><b>Your reply</b><p>Sorry about that, Kwame. We changed our supplier and refunded the item.</p></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Rating only, no text</div>
+<div class="rv"><div class="top"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><span class="who"><b>Sofia</b> · Oct 10</span></div>
+<p class="t-meta">No written review.</p>
+<div><a class="btn btn-secondary btn-sm">Reply</a></div></div></div>
+</div>
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Reply sheet</div>
+<div class="ws"><div class="h"><h3>Reply</h3><p>Your reply is public and shown under the review.</p></div>
+<div class="b"><div class="quote">The jollof was hot and arrived early. Portions are generous. I will order again for the weekend.</div>
+<div class="field"><span class="label">Your reply</span><textarea class="textarea" rows="4" readonly>Thank you, Amara. See you at the weekend.</textarea></div><div class="cnt num">42 / 500</div></div>
+<div class="f"><a class="btn btn-secondary">Cancel</a><a class="btn">Send reply</a></div></div></div>
+<div class="cz-col"><div class="cz-cap">Editing, over the limit</div>
+<div class="ws"><div class="h"><h3>Edit reply</h3><p>Your reply is public and shown under the review.</p></div>
+<div class="b"><div class="field"><span class="label">Your reply</span><textarea class="textarea is-error" rows="4" readonly>Thank you, Chen. We are adjusting our delivery times for the evening rush and we have hired two more riders for the Tverskaya and Arbat areas starting next week, plus ...</textarea><span class="hint">You can edit your reply for 23 more hours.</span></div><div class="cnt bad num">512 / 500</div><div class="err"><i data-i="triangle-alert" style="--s:14px"></i>Shorten your reply by 12 characters.</div></div>
+<div class="f"><a class="btn btn-secondary">Cancel</a><a class="btn is-disabled">Save</a></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Reply is a secondary button; it is never the page's main action.</li><li>Tell the seller the reply is public and how long it stays editable.</li><li>Show the counter as used / max and turn it destructive when over.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't show Edit reply after the window closes.</li><li>Don't let sellers delete or hide reviews; they reply, Office moderates.</li><li>Don't show the customer's full name or contact; first name only.</li></ul></div></div>
+</div></div></body></html>

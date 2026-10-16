@@ -1,0 +1,66 @@
+<!-- @dsCard group="Marketplace" height=1064 subtitle="Set up and verify checklist: seven steps in done, to do, blocked, in review and rejected states, on desktop and phone" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>OnboardingChecklist</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.cl{display:grid;gap:12px}
+.step{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.step .h{display:flex;align-items:center;gap:12px;padding:14px 18px}
+.step .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 13px/1 var(--font-web);background:var(--neutral-surface);color:var(--neutral-text);flex-shrink:0}
+.step .n .ic{--s:16px}
+.step.done .n{background:var(--success);color:#fff}
+.step.cur{border-color:var(--primary-border)}
+.step.cur .n{background:var(--primary);color:#fff}
+.step.blk{background:var(--paper)}
+.step.blk .h{color:var(--muted)}
+.step.bad .n{background:var(--destructive);color:#fff}
+.step .t{font:600 15px/20px var(--font-web);flex:1;min-width:0}
+.step .t small{display:block;font:400 13px/18px var(--font-web);color:var(--muted)}
+.step .b{padding:0 18px 16px 58px;display:grid;gap:10px;font-size:14px}
+.sum{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);margin-bottom:12px}
+.sum .progress{flex:1}
+.cols{display:grid;grid-template-columns:1fr 390px;gap:32px;align-items:start;max-width:1120px;margin:0 auto}
+.mini-phone{width:390px;border-radius:32px;overflow:hidden;box-shadow:0 0 0 8px var(--ink),var(--shadow-lg);background:var(--paper);padding:16px;display:grid;gap:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1120px;margin:20px auto 0}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+.opt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt .o{border:1px solid var(--input-edge);border-radius:14px;padding:12px;display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.opt .o b{color:var(--ink);font-size:14px}
+.opt .o.on{border-color:var(--primary);background:var(--primary-tint)}
+</style></head>
+<body><div class="cz-page">
+<div class="cols">
+<div>
+<div class="cz-cap" style="text-align:left;margin-bottom:8px">Desktop · in progress</div>
+<div class="sum"><div style="flex-shrink:0"><b>Set up and verify</b><div class="t-meta">Complete these steps. Ciuna reviews your business before you go live.</div></div><div class="progress"><i style="width:43%"></i></div><b class="num">3 of 7</b></div>
+<div class="cl">
+<div class="step done"><div class="h"><span class="n"><i data-i="check"></i></span><div class="t">Business profile<small>Mama T's Kitchen · Moscow</small></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Done</span></div></div>
+<div class="step done"><div class="h"><span class="n"><i data-i="check"></i></span><div class="t">Logo</div><span class="badge badge-success"><i data-i="circle-check-big"></i>Done</span></div></div>
+<div class="step cur"><div class="h"><span class="n">3</span><div class="t">Choose verification type<small>We ask for different documents depending on where your business is based.</small></div><span class="badge badge-neutral">To do</span></div>
+ <div class="b"><div class="opt"><div class="o"><b>Individual</b>For individuals and self-employed sellers. Lower limits.</div><div class="o"><b>Registered company</b>For registered companies. Full limits.</div></div></div></div>
+<div class="step done"><div class="h"><span class="n"><i data-i="check"></i></span><div class="t">Verification details</div><span class="badge badge-success"><i data-i="circle-check-big"></i>Done</span></div></div>
+<div class="step blk"><div class="h"><span class="n"><i data-i="lock"></i></span><div class="t">Verification documents<small>Choose a verification type first.</small></div><span class="badge badge-neutral"><i data-i="lock"></i>Blocked</span></div></div>
+<div class="step"><div class="h"><span class="n">6</span><div class="t">First listing<small>Save it as a draft now. You can publish once Ciuna approves your business.</small></div><a class="btn btn-secondary btn-sm">Add product</a></div></div>
+<div class="step blk"><div class="h"><span class="n"><i data-i="lock"></i></span><div class="t">Submit for review<small>Some steps are still open. You can submit once they are done.</small></div><a class="btn btn-sm is-disabled">Submit for review</a></div></div>
+</div></div>
+
+<div style="display:grid;gap:28px;justify-items:center">
+<div class="cz-col"><div class="cz-cap">Phone · in review</div>
+<div class="mini-phone">
+<div><b style="font-size:18px">Set up and verify</b></div>
+<div class="banner banner-neutral" style="align-items:flex-start"><div><b>Under review</b>Ciuna usually reviews within one business day. We will email you.</div></div>
+<div class="cl">
+<div class="step done"><div class="h"><span class="n"><i data-i="check"></i></span><div class="t">Business profile</div></div></div>
+<div class="step done"><div class="h"><span class="n"><i data-i="check"></i></span><div class="t">Verification documents<small>3 of 3 uploaded</small></div><span class="badge badge-warning"><i data-i="hourglass"></i>In review</span></div></div>
+<div class="step done"><div class="h"><span class="n"><i data-i="check"></i></span><div class="t">First listing</div></div></div>
+</div></div></div>
+<div class="cz-col"><div class="cz-cap">Phone · rejected with reason</div>
+<div class="mini-phone">
+<div class="banner banner-destructive" style="align-items:flex-start"><div><b>Not approved yet</b>The passport scan is blurry and the registration number is cut off. Upload clear copies and submit again.</div></div>
+<div class="cl">
+<div class="step bad"><div class="h"><span class="n"><i data-i="x"></i></span><div class="t">Verification documents<small>1 document rejected</small></div><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></div><div class="b"><a class="btn btn-secondary btn-sm" style="justify-self:start">Replace document</a></div></div>
+<div class="step"><div class="h"><span class="n">7</span><div class="t">Submit for review<small>Everything is ready.</small></div><a class="btn btn-sm">Submit again</a></div></div>
+</div></div></div>
+</div></div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Show every step in order with one call to action each.</li><li>Say what blocks a step and what to do first.</li><li>Quote the Office reason verbatim when something is rejected.</li><li>State the expected turnaround while in review.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't hide locked steps; show them as Blocked with the reason.</li><li>Don't use orange for a status; the current step is only outlined.</li><li>Don't allow Submit until every required step is done.</li></ul></div></div>
+</div></body></html>

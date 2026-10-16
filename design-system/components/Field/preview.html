@@ -1,0 +1,45 @@
+<!-- @dsCard group="Forms" height=1176 subtitle="Label, hint and error wrapper around any control, plus a full store-profile form with validation" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Field</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.fm{max-width:560px}
+.fm .field{margin-bottom:18px}
+.fm-foot{display:flex;justify-content:flex-end;gap:10px;padding-top:6px}
+.cnt{text-align:right}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Anatomy and states</p>
+<div class="g3">
+  <div class="cell"><span class="st">Optional, with hint</span>
+    <div class="field"><label class="label">Website</label><input class="input" placeholder="https://"><span class="hint">Leave blank if you only sell through Ciuna.</span></div></div>
+  <div class="cell"><span class="st">Required</span>
+    <div class="field"><label class="label">Store name <span class="req">Required</span></label><input class="input" placeholder="Mama T's Kitchen"><span class="hint">Customers see this on your store page.</span></div></div>
+  <div class="cell"><span class="st">Error</span>
+    <div class="field"><label class="label">Store name <span class="req">Required</span></label><input class="input is-error" value=""><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter a store name</span></div></div>
+</div>
+<p class="hint">Order is fixed: label, control, hint or error. An error replaces the hint, it never stacks with it. "Required" is written out as text; optional fields carry no marker.</p></div>
+
+<div class="cz-section"><p class="cz-h">Example: store profile form</p>
+<div class="fm">
+  <div class="field"><label class="label" for="a">Store name <span class="req">Required</span></label><input class="input" id="a" value="Mama T's Kitchen"><span class="hint">Customers see this on your store page and receipts.</span></div>
+  <div class="field"><label class="label" for="b">Description</label><textarea class="textarea" id="b" style="min-height:88px">Home-style Nigerian cooking, made to order. Jollof, egusi, suya. Delivery across central Moscow.</textarea><span class="hint cnt">93 / 500</span></div>
+  <div class="field"><label class="label" for="c">Phone number <span class="req">Required</span></label><input class="input is-error" id="c" value="495 12"><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter a 10-digit phone number, for example 495 123 45 67</span></div>
+  <div class="field"><label class="label" for="d">Website</label><input class="input" id="d" placeholder="https://"><span class="hint">Optional. Shown as a link on your store page.</span></div>
+  <div class="fm-foot"><a class="btn btn-secondary">Cancel</a><a class="btn">Save changes</a></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Label above the control, left-aligned, sentence case.</li><li>Link label and control with <code>for</code>/<code>id</code>; connect hint and error with <code>aria-describedby</code>.</li><li>One short error that says what to fix. Summarise errors at the top only on long forms.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't mark required with a colour or an asterisk alone: write "Required".</li><li>Don't place labels inside the control or rely on the placeholder.</li><li>Don't show a hint and an error together; the error wins.</li></ul></div></div></div>
+
+</div></div></body></html>

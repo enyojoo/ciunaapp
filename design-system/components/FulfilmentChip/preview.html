@@ -1,0 +1,30 @@
+<!-- @dsCard group="Marketplace" height=782 width=900 subtitle="How an order reaches the customer: delivery, pickup, digital, online booking and in-person booking" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FulfilmentChip</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.fchip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:var(--neutral-surface);color:var(--neutral-text);font:600 12px/1 var(--font-web);white-space:nowrap}
+.fchip .ic{--s:14px}
+.fchip.lg{height:36px;padding:0 14px;font-size:14px}
+.fchip.lg .ic{--s:16px}
+.tbl{display:grid;grid-template-columns:200px 180px 1fr;align-items:center;font-size:14px}
+.tbl>*{padding:12px 16px;border-bottom:1px solid var(--hairline)}
+.tbl .h{font:600 12px/16px var(--font-web);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+<div class="cz-section"><p class="cz-h">Kinds</p>
+<div class="tbl"><div class="h">Kind</div><div class="h">Chip</div><div class="h">Meaning</div>
+<div>Delivery</div><div><span class="fchip"><i data-i="truck"></i>Delivery</span></div><div class="t-meta">Product goes to the customer's address.</div>
+<div>Pickup</div><div><span class="fchip"><i data-i="store"></i>Pickup</span></div><div class="t-meta">Customer collects from the store.</div>
+<div>Digital</div><div><span class="fchip"><i data-i="file-text"></i>Digital</span></div><div class="t-meta">File or text is sent in the order chat.</div>
+<div>Online booking</div><div><span class="fchip"><i data-i="video"></i>Online</span></div><div class="t-meta">Video call at the booked time.</div>
+<div>In-person booking</div><div><span class="fchip"><i data-i="map-pin"></i>In person</span></div><div class="t-meta">Customer visits the expert's address.</div>
+</div></div>
+<div class="cz-section"><p class="cz-h">Sizes and languages</p><div class="cz-row">
+<span class="fchip"><i data-i="truck"></i>Delivery</span><span class="fchip lg"><i data-i="truck"></i>Delivery</span><span class="fchip"><i data-i="truck"></i>Доставка</span><span class="fchip"><i data-i="store"></i>Самовывоз</span><span class="fchip"><i data-i="store"></i>Retrait en magasin</span><span class="fchip"><i data-i="store"></i>自提</span></div>
+<p class="hint">Neutral pill: it describes the order, it is not a status. Always an icon and a word.</p></div>
+<div class="two">
+<div class="cz-section"><p class="cz-h">Use</p><ul><li>Put it on every order card, row and detail header.</li><li>Keep the word; the icon alone is not enough.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't colour it. Colour belongs to status.</li><li>Don't invent new kinds. Unknown modes fall back to Delivery.</li></ul></div>
+</div></div></div></body></html>

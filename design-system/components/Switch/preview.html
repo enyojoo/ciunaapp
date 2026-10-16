@@ -1,0 +1,60 @@
+<!-- @dsCard group="Forms" height=976 subtitle="Switch, checkbox, radio and segmented choice in on, off and disabled, with the Accepting orders settings row" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Switch</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.opt{display:flex;align-items:center;gap:12px;min-height:44px;font:500 15px/20px var(--font-web)}
+.opt.dis{opacity:.5}
+.opt .s{display:block;font:400 13px/18px var(--font-web);color:var(--muted)}
+.seg{display:inline-flex;padding:4px;gap:4px;border-radius:14px;background:var(--neutral-surface)}
+.seg span{height:36px;padding:0 16px;border-radius:10px;display:inline-flex;align-items:center;font:600 14px/1 var(--font-web);color:var(--muted)}
+.seg span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-xs)}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px}
+.srow .t{font:600 15px/22px var(--font-web)}
+.srow .s{font:400 13px/18px var(--font-web);color:var(--muted)}
+.switch.dis{opacity:.5}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Controls and states</p>
+<div class="g4">
+  <div class="cell"><span class="st">Switch</span>
+    <div class="opt"><span class="switch on"></span>On</div>
+    <div class="opt"><span class="switch"></span>Off</div>
+    <div class="opt dis"><span class="switch on"></span>On, disabled</div>
+    <div class="opt dis"><span class="switch"></span>Off, disabled</div></div>
+  <div class="cell"><span class="st">Checkbox</span>
+    <div class="opt"><span class="check on"><i data-i="check"></i></span>Checked</div>
+    <div class="opt"><span class="check"></span>Unchecked</div>
+    <div class="opt dis"><span class="check on"><i data-i="check"></i></span>Checked, disabled</div>
+    <div class="opt dis"><span class="check"></span>Unchecked, disabled</div></div>
+  <div class="cell"><span class="st">Radio</span>
+    <div class="opt"><span class="radio on"></span>Delivery</div>
+    <div class="opt"><span class="radio"></span>Pickup</div>
+    <div class="opt dis"><span class="radio"></span>Courier (unavailable)</div></div>
+  <div class="cell"><span class="st">Segmented choice</span>
+    <div class="seg"><span class="on">Daily</span><span>Weekly</span><span>Monthly</span></div>
+    <div class="t-meta">Two to four short options. One is always selected.</div></div>
+</div></div>
+
+<div class="cz-section" style="padding:0;overflow:hidden"><p class="cz-h" style="padding:20px 20px 0">Settings rows: a switch applies immediately</p>
+  <div class="list">
+    <div class="srow"><div><div class="t">Accepting orders</div><div class="s">Customers can place new orders. Turn off to pause your store.</div></div><span class="switch on"></span></div>
+    <div class="srow"><div><div class="t">New order alerts by email</div><div class="s">Sent to owner@mamatskitchen.ru</div></div><span class="switch on"></span></div>
+    <div class="srow"><div><div class="t">New order alerts by Telegram</div><div class="s">Connect Telegram to turn this on.</div></div><span class="switch dis"></span></div>
+    <div class="srow"><div><div class="t">Offer pickup</div><div class="s">Customers collect from Tverskaya 12.</div></div><span class="switch"></span></div>
+  </div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Switch for a setting that takes effect now. The label states the on-state: "Accepting orders".</li><li>Checkbox for choices that are saved with a form, or for several selections.</li><li>Radio for one of a few options you want visible; segmented when they are short and switch a view or mode.</li><li>Whole row is the tap target, at least 48px tall.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use a switch inside a form that needs a Save button.</li><li>Don't label a switch with a verb ("Enable") or an on/off pair.</li><li>Don't rely on colour: the thumb position and the on-state label say it.</li><li>Don't disable without a line saying how to unlock it.</li></ul></div></div></div>
+
+</div></div></body></html>

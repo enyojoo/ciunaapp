@@ -1,0 +1,36 @@
+<!-- @dsCard group="Marketplace" height=660 subtitle="Business switcher in the Seller shell: one business, several, store and expert labels with the signed-in role, and the open list" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>BusinessSwitcher</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.bs{width:248px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:12px}
+.sw{display:flex;align-items:center;gap:12px;padding:8px;border-radius:12px}
+.sw.hov{background:var(--neutral-surface)}
+.sw .logo{width:36px;height:36px;border-radius:10px;background:var(--primary);color:#fff;display:grid;place-items:center;font:700 15px/1 var(--font-web);flex-shrink:0}
+.sw .logo.ex{border-radius:50%}
+.sw .tx{flex:1;min-width:0}
+.sw .tx b{display:block;font:600 14px/20px var(--font-web)}
+.sw .tx span{display:block;font-size:12px;line-height:16px;color:var(--muted)}
+.sw .ic{--s:16px;color:var(--muted)}
+.menu{width:280px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);box-shadow:var(--shadow-md);padding:6px}
+.menu .sw{min-height:56px}
+.menu .sw.cur{background:var(--primary-tint)}
+.menu .sw .ic.ck{color:var(--primary-text)}
+.menu hr{margin:6px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">One business · no chevron</div><div class="bs"><div class="sw"><span class="logo">M</span><span class="tx"><b class="trunc">Mama T's Kitchen</b><span>Store · Owner</span></span></div></div></div>
+<div class="cz-col"><div class="cz-cap">Several businesses · closed</div><div class="bs"><div class="sw hov"><span class="logo">M</span><span class="tx"><b class="trunc">Mama T's Kitchen</b><span>Store · Owner</span></span><i data-i="chevron-down"></i></div></div></div>
+<div class="cz-col"><div class="cz-cap">Expert, other role</div><div class="bs"><div class="sw hov"><span class="logo ex">A</span><span class="tx"><b class="trunc">Dr. Amina Yusuf</b><span>Expert · Manager</span></span><i data-i="chevron-down"></i></div></div></div>
+<div class="cz-col"><div class="cz-cap">Long name</div><div class="bs"><div class="sw hov"><span class="logo">G</span><span class="tx"><b class="trunc">Guangzhou Market Wholesale and Delivery</b><span class="trunc">Store · Finance</span></span><i data-i="chevron-down"></i></div></div></div>
+<div class="cz-col"><div class="cz-cap">Open list</div><div class="menu">
+<div class="sw cur"><span class="logo">M</span><span class="tx"><b>Mama T's Kitchen</b><span>Store · Owner</span></span><i class="ck" data-i="check" style="--s:18px;color:var(--primary-text)"></i></div>
+<div class="sw"><span class="logo ex">A</span><span class="tx"><b>Dr. Amina Yusuf</b><span>Expert · Manager</span></span></div>
+<div class="sw"><span class="logo">L</span><span class="tx"><b>Li Wei Tutoring</b><span>Expert · Owner</span></span></div>
+<hr class="divider"><div class="sw"><span class="logo" style="background:var(--neutral-surface);color:var(--ink)"><i data-i="plus" style="--s:18px;color:var(--ink)"></i></span><span class="tx"><b>Add a business</b></span></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Always show type (Store or Expert) and the signed-in role under the name.</li><li>Show the chevron only when there is more than one business.</li><li>Truncate long names; the open list shows them in full.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't use the orange logo tile as a status; it is the business mark.</li><li>Don't switch business without going back to Home.</li><li>Don't hide the role; permissions depend on it.</li></ul></div></div>
+</div></div></body></html>

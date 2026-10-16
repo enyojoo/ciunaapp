@@ -1,0 +1,61 @@
+<!-- @dsCard group="Documents and email" height=930 width=1360 subtitle="Seller earnings statement as a PDF-style page: per-order items, delivery, Ciuna fee and net, totals, payouts in the period and closing balance, plus the CSV export with its exact columns" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SellerStatement</title>
+<link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pg{background:#fff;border:1px solid var(--hairline);box-shadow:var(--shadow-md);position:relative;font-family:var(--font-web);color:var(--ink)}
+.a4{width:595px;height:842px;padding:48px 48px}
+.letter{width:612px;height:792px;padding:48px 48px}
+.rc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px}
+.rc-top img{height:26px}
+.rc-top .r{text-align:right;font-size:13px;line-height:19px;color:var(--muted)}
+.rc h1{margin:0;font:700 24px/30px var(--font-web);letter-spacing:-.3px}
+.rc .sub{font-size:14px;color:var(--muted);margin:2px 0 22px}
+.rc-kv{display:grid;grid-template-columns:130px 1fr;gap:8px 16px;font-size:14px;line-height:20px;margin-bottom:22px}
+.rc-kv dt{color:var(--muted)} .rc-kv dd{margin:0}
+.rc table{width:100%;border-collapse:collapse;font-size:14px}
+.rc th{text-align:left;font:600 11px/16px var(--font-web);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--input-edge)}
+.rc td{padding:10px 0;border-bottom:1px solid var(--hairline)}
+.rc .r{text-align:right}
+.rc .sum{margin:12px 0 0 auto;width:60%;display:grid;gap:6px;font-size:14px}
+.rc .sum div{display:flex;justify-content:space-between}
+.rc .sum .tot{border-top:1px solid var(--ink);padding-top:10px;margin-top:4px;font:700 18px/24px var(--font-web)}
+.rc-foot{position:absolute;left:48px;right:48px;bottom:36px;font-size:12px;line-height:18px;color:var(--muted);border-top:1px solid var(--hairline);padding-top:12px}
+.scr{width:100%;padding:16px;background:var(--surface)}
+.scr .rc-kv{grid-template-columns:104px 1fr}
+
+.st{width:640px;height:842px;padding:44px 44px}
+.st .rc-kv{grid-template-columns:110px 1fr;margin-bottom:16px}
+.st table{font-size:12.5px} .st th{font-size:10.5px}
+.st .sum{width:100%;grid-template-columns:1fr auto;column-gap:24px}
+.st .sum div{display:contents}
+.st h2{font:600 13px/18px var(--font-web);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:20px 0 6px}
+.csvw{width:640px}
+.csvw table{font:400 12px/16px ui-monospace,Menlo,Consolas,monospace;border-collapse:collapse;background:var(--surface);border:1px solid var(--hairline)}
+.csvw th{text-align:left;font:600 12px/16px ui-monospace,Menlo,Consolas,monospace;text-transform:none;letter-spacing:0;color:var(--ink);padding:8px 10px;border-bottom:1px solid var(--input-edge);background:var(--neutral-surface);white-space:nowrap}
+.csvw td{padding:7px 10px;border-bottom:1px solid var(--hairline);white-space:nowrap}
+.csvw .scrl{overflow:hidden;border-radius:12px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Statement page (PDF)</div>
+<div class="pg st rc">
+<div class="rc-top"><img src="../../assets/logos/ciuna.svg" alt="Ciuna"><div class="r">Statement ST-2026-10-A<br>Generated Oct 16, 2026 • 9:05 AM MSK</div></div>
+<h1>Earnings statement</h1>
+<dl class="rc-kv" style="margin-top:12px"><dt>Business</dt><dd>Mama T's Kitchen, Moscow</dd><dt>Period</dt><dd>Oct 1 – Oct 15, 2026 (UTC)</dd><dt>Currency</dt><dd>Russian rouble (RUB)</dd></dl>
+<h2>Orders</h2>
+<table><thead><tr><th>Order</th><th>Date</th><th class="r">Items</th><th class="r">Delivery</th><th class="r">Ciuna fee</th><th class="r">Net</th></tr></thead><tbody>
+<tr><td>CIU-1001</td><td>Oct 2</td><td class="r num">₽1,100.00</td><td class="r num">₽150.00</td><td class="r num">−₽110.00</td><td class="r num">₽1,140.00</td></tr><tr><td>CIU-1004</td><td>Oct 4</td><td class="r num">₽2,400.00</td><td class="r num">₽0.00</td><td class="r num">−₽240.00</td><td class="r num">₽2,160.00</td></tr><tr><td>CIU-1007</td><td>Oct 6</td><td class="r num">₽1,800.00</td><td class="r num">₽200.00</td><td class="r num">−₽180.00</td><td class="r num">₽1,820.00</td></tr><tr><td>CIU-1011</td><td>Oct 9</td><td class="r num">₽950.00</td><td class="r num">₽150.00</td><td class="r num">−₽95.00</td><td class="r num">₽1,005.00</td></tr><tr><td>CIU-1015</td><td>Oct 12</td><td class="r num">₽3,100.00</td><td class="r num">₽300.00</td><td class="r num">−₽310.00</td><td class="r num">₽3,090.00</td></tr>
+<tr style="font-weight:700"><td colspan="2">Total, 5 orders</td><td class="r num">₽9,350.00</td><td class="r num">₽800.00</td><td class="r num">−₽935.00</td><td class="r num">₽9,215.00</td></tr></tbody></table>
+<h2>Payouts in this period</h2>
+<table><thead><tr><th>Date</th><th>Reference</th><th>Status</th><th class="r">Amount</th></tr></thead><tbody>
+<tr><td>Oct 8</td><td>PAY-20412</td><td><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></td><td class="r num">−₽3,300.00</td></tr></tbody></table>
+<h2>Closing balance, Oct 15</h2>
+<div class="sum" style="margin-top:4px"><div><span class="t-muted">Net earnings</span><span class="num">₽9,215.00</span></div><div><span class="t-muted">Paid out</span><span class="num">−₽3,300.00</span></div><div><span class="t-muted">Pending, available Oct 18</span><span class="num">₽3,090.00</span></div><div class="tot"><span>Available balance</span><span class="num">₽2,825.00</span></div></div>
+<div class="rc-foot">Ciuna statement. Fee is charged on items only. Orders are listed on the date they were marked fulfilled. support@ciuna.com</div></div></div>
+
+<div class="cz-col"><div class="cz-cap">CSV export, ciuna-statement-2026-10-01-2026-10-15.csv</div>
+<div class="csvw"><div class="scrl"><table><thead><tr><th>order</th><th>date</th><th>currency</th><th>items</th><th>delivery</th><th>ciuna_fee</th><th>net</th><th>status</th><th>available_on</th></tr></thead><tbody>
+<tr><td>CIU-1001</td><td>2026-10-02T14:20:11.000Z</td><td>RUB</td><td>1100</td><td>150</td><td>110</td><td>1140</td><td>available</td><td>2026-10-05T14:20:11.000Z</td></tr><tr><td>CIU-1004</td><td>2026-10-04T10:02:45.000Z</td><td>RUB</td><td>2400</td><td>0</td><td>240</td><td>2160</td><td>available</td><td>2026-10-07T10:02:45.000Z</td></tr><tr><td>CIU-1007</td><td>2026-10-06T17:41:09.000Z</td><td>RUB</td><td>1800</td><td>200</td><td>180</td><td>1820</td><td>available</td><td>2026-10-09T17:41:09.000Z</td></tr><tr><td>CIU-1011</td><td>2026-10-09T12:15:30.000Z</td><td>RUB</td><td>950</td><td>150</td><td>95</td><td>1005</td><td>available</td><td>2026-10-12T12:15:30.000Z</td></tr><tr><td>CIU-1015</td><td>2026-10-12T19:08:52.000Z</td><td>RUB</td><td>3100</td><td>300</td><td>310</td><td>3090</td><td>pending</td><td></td></tr></tbody></table></div></div>
+<p class="cz-note" style="text-align:left;max-width:640px">Columns are fixed and in this order. Amounts are plain numbers in major units, with no symbol or thousands separator, so spreadsheets read them as numbers. <b>date</b> is when the order was fulfilled (UTC, ISO 8601). <b>status</b> is pending, available or reversed. <b>available_on</b> is empty while pending. A value starting with = + - or @ is prefixed with an apostrophe to neutralise spreadsheet formulas. The file is the statement's source of truth: its totals match the PDF.</p>
+<div class="cz-row"><a class="btn btn-sm"><i data-i="download"></i>Download CSV</a><a class="btn btn-secondary btn-sm"><i data-i="file-text"></i>Download PDF</a><span class="t-meta">From and to dates are inclusive, UTC</span></div></div>
+</div></div></body></html>

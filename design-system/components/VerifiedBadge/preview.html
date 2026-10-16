@@ -1,0 +1,37 @@
+<!-- @dsCard group="Marketplace" height=700 subtitle="Verified seller tiers (individual, registered business), compact icon, inline with a name, and the tooltip explaining what was checked" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>VerifiedBadge</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.vi{display:inline-flex;color:var(--success-text)}.vi .ic{--s:18px}
+.tip{width:300px;padding:14px 16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);box-shadow:var(--shadow-md);display:grid;gap:8px}
+.tip h4{margin:0;font:600 15px/20px var(--font-native)}
+.tip ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;font:400 13px/18px var(--font-native)}
+.tip li{display:flex;gap:8px;align-items:flex-start}.tip li .ic{--s:15px;color:var(--success);margin-top:2px}
+.tip .nt{color:var(--muted);font-size:12px;line-height:17px;border-top:1px solid var(--hairline);padding-top:8px}
+.cell{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:16px 18px;display:grid;gap:10px;min-width:250px}
+.nm{display:flex;align-items:center;gap:6px;font:600 16px/22px var(--font-native)}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:940px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Individual</div><div class="cell"><span class="badge badge-success"><i data-i="badge-check"></i>Verified seller</span><span class="t-meta">A person whose ID and phone Ciuna has checked</span></div></div>
+<div class="cz-col"><div class="cz-cap">Registered business</div><div class="cell"><span class="badge badge-success"><i data-i="building-2"></i>Verified business</span><span class="t-meta">A company or sole trader whose registration Ciuna has checked</span></div></div>
+<div class="cz-col"><div class="cz-cap">Compact (icon only)</div><div class="cell"><div class="nm">Lagos Pantry <span class="vi" role="img" aria-label="Verified business"><i data-i="badge-check"></i></span></div><span class="t-meta">Inline after a store or expert name. Always has an aria-label</span></div></div>
+<div class="cz-col"><div class="cz-cap">Unverified</div><div class="cell"><div class="nm">Sahel Spices</div><span class="t-meta">No badge, no "Not verified" label. Absence is the signal</span></div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:940px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">Tooltip, individual</div><div class="tip" role="tooltip"><h4>Verified seller</h4><ul><li><i data-i="check"></i>Government ID checked</li><li><i data-i="check"></i>Phone number confirmed</li><li><i data-i="check"></i>Face matches the ID photo</li></ul><div class="nt">Checked by Ciuna on Aug 12, 2026. Verification does not guarantee quality; read reviews too.</div></div></div>
+<div class="cz-col"><div class="cz-cap">Tooltip, registered business</div><div class="tip" role="tooltip"><h4>Verified business</h4><ul><li><i data-i="check"></i>Company registration confirmed (INN)</li><li><i data-i="check"></i>Owner's ID checked</li><li><i data-i="check"></i>Business bank account confirmed</li></ul><div class="nt">Checked by Ciuna on Jul 3, 2026. Verification does not guarantee quality; read reviews too.</div></div></div>
+<div class="cz-col"><div class="cz-cap">In context: store header</div><div class="cell" style="min-width:300px"><div style="display:flex;gap:12px;align-items:center"><span class="avatar lg sq">G</span><div><div class="nm">Guangzhou Market <span class="vi" role="img" aria-label="Verified business"><i data-i="badge-check"></i></span></div><div class="t-meta">Moscow · 4.7 <span class="stars sm" role="img" aria-label="Rated 5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span> (312)</div></div></div></div><div class="cz-note">Tap the icon to open the tooltip as a sheet on phones</div></div>
+</div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>Name the tier: "Verified seller" or "Verified business".</li><li>List what was actually checked, with the date.</li><li>Keep the badge green with a check icon; it is a status, not a decoration.</li><li>Open the explanation on tap on phones, on hover or focus on desktop.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Show "Not verified" or a grey badge on others.</li><li>Imply quality: no gold, stars or "Top seller" on this badge.</li><li>Use orange; verified is success green.</li><li>Name the checking provider; Ciuna says "checked by Ciuna".</li></ul></div></div></div></body></html>

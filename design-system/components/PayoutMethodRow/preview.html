@@ -1,0 +1,30 @@
+<!-- @dsCard group="Marketplace" height=490 subtitle="Saved payout methods: SBP and bank account, verified and waiting for verification, with the default marker and row actions" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>PayoutMethodRow</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pm{display:flex;align-items:center;gap:14px;padding:14px 20px;background:var(--surface)}
+.pm .ico{width:40px;height:40px;border-radius:12px;background:var(--neutral-surface);display:grid;place-items:center;flex-shrink:0}
+.pm .grow{flex:1;min-width:0}
+.pm .n{font:600 15px/20px var(--font-web);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pm .s{font-size:13px;line-height:18px;color:var(--muted)}
+.pm .acts{display:flex;gap:8px;align-items:center}
+.cols{display:grid;grid-template-columns:660px 380px;gap:28px;align-items:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+<div class="cols">
+<div><div class="cz-cap" style="text-align:left;margin-bottom:8px">Wide, Earnings · Methods</div>
+<div class="card list" style="overflow:hidden">
+<div class="pm"><span class="ico"><i data-i="send"></i></span><div class="grow"><div class="n">SBP · +7 999 ••• 42 17<span class="badge badge-primary">Default</span></div><div class="s">Mama T's Kitchen · added Sep 3</div></div><span class="badge badge-success"><i data-i="badge-check"></i>Verified</span><div class="acts"><a class="btn btn-ghost btn-sm">Remove</a></div></div>
+<div class="pm"><span class="ico"><i data-i="landmark"></i></span><div class="grow"><div class="n">Bank account ••4410</div><div class="s">ООО «Мама Ти» · BIC 044525225 · added Oct 8</div></div><span class="badge badge-success"><i data-i="badge-check"></i>Verified</span><div class="acts"><a class="btn btn-secondary btn-sm">Make default</a><a class="btn btn-ghost btn-sm">Remove</a></div></div>
+<div class="pm"><span class="ico"><i data-i="landmark"></i></span><div class="grow"><div class="n">Bank account ••7782</div><div class="s">Waiting for verification. We check new accounts within 1 business day.</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Waiting</span><div class="acts"><a class="btn btn-ghost btn-sm">Remove</a></div></div>
+</div></div>
+<div><div class="cz-cap" style="margin-bottom:8px">Phone, stacked</div>
+<div class="card list" style="overflow:hidden">
+<div class="pm" style="flex-wrap:wrap"><span class="ico"><i data-i="send"></i></span><div class="grow"><div class="n">SBP ••42 17</div><div class="s">Verified</div></div><span class="badge badge-primary">Default</span></div>
+<div class="pm" style="flex-wrap:wrap"><span class="ico"><i data-i="landmark"></i></span><div class="grow"><div class="n">Bank account ••7782</div><div class="s">Waiting for verification</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Waiting</span></div>
+</div></div></div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Pair the verified or waiting badge with a one-line reason or timing.</li><li>Mark the default with a badge and hide its Make default action.</li><li>Mask account numbers and phones.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't offer a waiting method in the Withdraw method list.</li><li>Don't remove the only verified method without a warning.</li><li>Don't name payment providers.</li></ul></div></div>
+</div></div></body></html>

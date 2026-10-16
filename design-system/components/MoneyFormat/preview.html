@@ -1,0 +1,81 @@
+<!-- @dsCard group="Money" height=1750 subtitle="The money format rules with correct and incorrect examples, rates, converted amounts, fee lines and an earnings statement" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Money format</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules td{vertical-align:top}
+.rules td:first-child{width:200px;font-weight:600}
+.ok,.bad{display:inline-flex;align-items:center;gap:6px;font:600 14px/20px var(--font-web);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ok{color:var(--success-text)}.bad{color:var(--destructive-text);text-decoration:line-through;text-decoration-thickness:1px}
+.ok .ic,.bad .ic{--s:14px}
+.col{display:grid;gap:4px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px}
+.stmt{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:20px;display:grid;gap:0}
+.stmt .r{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:14px;font-variant-numeric:tabular-nums}
+.stmt .r+.r{border-top:1px solid var(--hairline)}
+.stmt .r span:first-child{color:var(--muted)}
+.stmt .r.tot{font-weight:700;font-size:16px;border-top:2px solid var(--ink)}
+.stmt .r.tot span:first-child{color:var(--ink)}
+.stmt .sub{font:400 13px/18px var(--font-web);color:var(--muted);padding:2px 0 8px}
+.rate{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:999px;background:var(--neutral-surface);font:600 13px/1 var(--font-web);font-variant-numeric:tabular-nums;color:var(--neutral-text)}
+.rate .ic{--s:14px}
+.cv{display:grid;gap:2px}
+.cv b{font:700 20px/26px var(--font-web);font-variant-numeric:tabular-nums}
+.cv span{font:400 13px/18px var(--font-web);color:var(--muted);font-variant-numeric:tabular-nums}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Rules</p>
+<table class="table rules"><thead><tr><th>Rule</th><th>Correct</th><th>Incorrect</th></tr></thead><tbody>
+<tr><td>Symbol first, no space</td><td><span class="ok"><i data-i="check"></i>₽12,500 · $24.50 · €9 · ¥380</span></td><td><div class="col"><span class="bad">12,500 ₽</span><span class="bad">24.50 USD</span><span class="bad">$ 24.50</span></div></td></tr>
+<tr><td>Letter symbols take a space</td><td><span class="ok"><i data-i="check"></i>CFA 250,000 · KSh1,500</span></td><td><span class="bad">CFA250,000</span></td></tr>
+<tr><td>Comma thousands, dot decimals</td><td><span class="ok"><i data-i="check"></i>₽1,250,000 · $1,234.56</span></td><td><div class="col"><span class="bad">₽1 250 000</span><span class="bad">€12.480,00</span></div></td></tr>
+<tr><td>No .00 in lists</td><td><span class="ok"><i data-i="check"></i>₽1,250 · $450 · €9</span></td><td><span class="bad">₽1,250.00</span></td></tr>
+<tr><td>Keep real cents</td><td><span class="ok"><i data-i="check"></i>$24.50 · ₽99.90</span></td><td><span class="bad">$24.5</span></td></tr>
+<tr><td>Cents always in breakdowns and balances</td><td><span class="ok"><i data-i="check"></i>₽900.00 + ₽12.50 = ₽912.50</span></td><td><span class="bad">₽900 + ₽12.50 = ₽912.50</span></td></tr>
+<tr><td>No minor unit, no decimals</td><td><span class="ok"><i data-i="check"></i>CFA 250,000 · ¥380</span></td><td><span class="bad">CFA 250,000.00</span></td></tr>
+<tr><td>True minus</td><td><span class="ok"><i data-i="check"></i>−₽450 · −$12.50</span></td><td><div class="col"><span class="bad">-₽450</span><span class="bad">₽−450</span><span class="bad">(₽450)</span></div></td></tr>
+<tr><td>Plus on credits only</td><td><span class="ok"><i data-i="check"></i>+₽1,250</span></td><td><span class="bad">+−₽1,250</span></td></tr>
+<tr><td>Tabular figures, right aligned</td><td><span class="ok"><i data-i="check"></i>Amounts in a column share a right edge</span></td><td><span class="bad">Centred or left-aligned amounts</span></td></tr>
+<tr><td>Symbols, not codes</td><td><span class="ok"><i data-i="check"></i>₦12,500 · R$89</span></td><td><span class="bad">NGN 12,500 · BRL 89</span></td></tr>
+<tr><td>No abbreviations</td><td><span class="ok"><i data-i="check"></i>₽1,200,000</span></td><td><span class="bad">₽1.2M</span></td></tr>
+</tbody></table></div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Rates</p>
+  <div class="cz-stack" style="gap:10px">
+    <div class="cz-row"><span class="rate"><i data-i="refresh-cw"></i>$1 = ₽92.40</span><span class="rate">¥1 = ₽12.80</span><span class="rate">€1 = ₽100.50</span></div>
+    <div class="cz-row"><span class="rate">₦1 = ₽0.06</span><span class="rate">₵1 = ₽6.20</span><span class="rate">R$1 = ₽16.80</span></div></div>
+  <table class="table" style="margin-top:6px"><tbody>
+    <tr><td><span class="ok"><i data-i="check"></i>$1 = ₽92.40</span></td><td><span class="bad">1 USD = 92.40 RUB</span></td></tr>
+    <tr><td><span class="ok"><i data-i="check"></i>₽92 whole rate drops .00</span></td><td><span class="bad">₽92.00</span></td></tr>
+    <tr><td><span class="ok"><i data-i="check"></i>₦1 = $0.00074</span></td><td><span class="bad">₦1 = $0.0007</span></td></tr></tbody></table>
+  <p class="hint">Symbols on both sides. Rates of 1 or more show two decimals (a whole rate drops them); rates under 1 show at least two decimals and two or three significant digits. Rates follow this rule, not the money one. The rate is shown with its time: "Rate updated 2:14 PM MSK".</p></div>
+<div class="cz-section"><p class="cz-h">Converted amounts</p>
+  <div class="cz-stack" style="gap:16px">
+    <div class="cv"><b>$100</b><span>≈ ₽9,240 at $1 = ₽92.40</span></div>
+    <div class="cv"><b>₽9,240</b><span>You pay · listed at $100 at $1 = ₽92.40</span></div>
+    <div class="cv"><b>¥380</b><span>≈ ₽4,864 · price set in CNY</span></div></div>
+  <p class="hint">The amount in the customer's currency leads, in bold. The converted figure is secondary, muted, prefixed with "≈" (approximate) unless it is the amount actually charged. Always show the rate used. Round to whole units in the target currency in lists; keep cents in breakdowns.</p></div>
+</div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Fee lines</p>
+  <div class="stmt">
+    <div class="r"><span>Items</span><span>₽1,250.00</span></div>
+    <div class="r"><span>Delivery</span><span>₽150.00</span></div>
+    <div class="r"><span>Service fee</span><span>₽62.50</span></div>
+    <div class="r"><span>Promo WELCOME</span><span>−₽100.00</span></div>
+    <div class="r tot"><span>Total</span><span>₽1,362.50</span></div></div>
+  <p class="hint">Label left in muted, amount right in ink, total in bold above a 2px rule. Discounts use the true minus. Every fee is named; there are no hidden or "other" lines. The total is the amount charged.</p></div>
+<div class="cz-section"><p class="cz-h">Earnings statement (seller)</p>
+  <div class="stmt">
+    <div class="sub">Mama T's Kitchen · Sep 21 to Sep 27</div>
+    <div class="r"><span>Items (14 orders)</span><span>₽18,740.00</span></div>
+    <div class="r"><span>Delivery collected</span><span>₽2,100.00</span></div>
+    <div class="r"><span>Ciuna fee (8% of ₽20,840)</span><span>−₽1,667.20</span></div>
+    <div class="r"><span>Refunds (1 order)</span><span>−₽700.00</span></div>
+    <div class="r tot"><span>Net payout</span><span>₽18,472.80</span></div></div>
+  <p class="hint">Order of lines: items, delivery, Ciuna fee, adjustments, net. Fees and refunds are negative. The net is the payout. Name the percentage. Customer and seller screens say "Ciuna fee", never a provider or "commission".</p></div>
+</div>
+
+</div></div></body></html>

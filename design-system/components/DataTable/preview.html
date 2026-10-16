@@ -1,0 +1,91 @@
+<!-- @dsCard group="Data display" height=2116 subtitle="Desktop table with sticky and sortable header, money right-aligned, selection, row actions, pagination, loading and empty rows; stacked cards on phones" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>DataTable</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.tb{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.tb-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hairline)}
+.tb-bar.sel{background:var(--primary-tint);border-color:var(--primary-border)}
+.table th .sort{display:inline-flex;align-items:center;gap:4px;color:var(--ink)}
+.table th .sort .ic{--s:14px}
+.table th.sticky{position:sticky;top:0}
+.table td.sel,.table tr.is-sel td{background:var(--primary-tint)}
+.table .r{text-align:right;font-variant-numeric:tabular-nums}
+.table td.act{width:48px;text-align:right;padding-right:8px}
+.table td .id{font-weight:600}
+.table .cb{width:44px;padding-right:0}
+.tb-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--hairline);font-size:13px;color:var(--muted)}
+.pg{display:inline-flex;gap:4px}
+.pg span{min-width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font:600 13px/1 var(--font-web);color:var(--ink)}
+.pg span.on{background:var(--primary);color:#fff}
+.ib{width:36px;height:36px;border-radius:10px;display:inline-grid;place-items:center;color:var(--muted)}
+.sk-cell{height:14px}
+.empty{padding:40px 16px;text-align:center}
+.phones{display:flex;gap:28px;flex-wrap:wrap}
+.stk{width:360px;display:grid;gap:10px}
+.stk .ocard{padding:14px}
+.tb-wrap{max-height:none}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Seller desktop: orders (sortable, sticky header, selection, row actions)</p>
+<div class="tb">
+  <div class="tb-bar"><div class="input-wrap" style="width:280px"><i data-i="search"></i><input class="input" style="height:36px" placeholder="Search orders"></div><div class="cz-row" style="gap:8px"><span class="chip on" style="height:32px">All <span style="opacity:.8">48</span></span><span class="chip" style="height:32px">New <span style="opacity:.8">3</span></span><span class="chip" style="height:32px">Preparing <span style="opacity:.8">5</span></span></div></div>
+  <table class="table">
+    <thead><tr><th class="cb"><span class="check"></span></th><th><span class="sort">Order<i data-i="chevron-up"></i></span></th><th>Customer</th><th>Status</th><th>Placed</th><th class="r">Total</th><th></th></tr></thead>
+    <tbody>
+      <tr class="is-sel"><td class="cb"><span class="check on"><i data-i="check"></i></span></td><td class="id">CIU-1001</td><td>Amara Okafor</td><td><span class="badge badge-warning"><i data-i="clock"></i>New</span></td><td>Sep 24 · 2:14 PM</td><td class="r">₽1,250</td><td class="act"><span class="ib"><i data-i="ellipsis"></i></span></td></tr>
+      <tr><td class="cb"><span class="check"></span></td><td class="id">CIU-1002</td><td>Chen Hui</td><td><span class="badge badge-warning"><i data-i="clock"></i>Preparing</span></td><td>Sep 24 · 2:02 PM</td><td class="r">₽700</td><td class="act"><span class="ib"><i data-i="ellipsis"></i></span></td></tr>
+      <tr><td class="cb"><span class="check"></span></td><td class="id">CIU-0998</td><td>Sofia Ramirez</td><td><span class="badge badge-success"><i data-i="check"></i>Completed</span></td><td>Sep 24 · 12:40 PM</td><td class="r">₽2,380</td><td class="act"><span class="ib"><i data-i="ellipsis"></i></span></td></tr>
+      <tr><td class="cb"><span class="check"></span></td><td class="id">CIU-0997</td><td>Kwame Mensah</td><td><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></td><td>Sep 24 · 11:58 AM</td><td class="r">₽450</td><td class="act"><span class="ib"><i data-i="ellipsis"></i></span></td></tr>
+      <tr><td class="cb"><span class="check"></span></td><td class="id">CIU-0990</td><td>Li Wei</td><td><span class="badge badge-neutral">Refunded</span></td><td>Sep 23 · 7:21 PM</td><td class="r" style="color:var(--muted)">−₽1,100</td><td class="act"><span class="ib"><i data-i="ellipsis"></i></span></td></tr>
+    </tbody></table>
+  <div class="tb-foot"><span>Showing 1–5 of 48</span><div class="pg"><span><i data-i="chevron-left" style="--s:16px"></i></span><span class="on">1</span><span>2</span><span>3</span><span>…</span><span>10</span><span><i data-i="chevron-right" style="--s:16px"></i></span></div></div>
+</div>
+<p class="hint">Header stays pinned while rows scroll; the sorted column shows an arrow and has <code>aria-sort</code>. Money is right-aligned with tabular figures and a true minus. The first row is selected: its checkbox and tint show it.</p></div>
+
+<div class="cz-section"><p class="cz-h">With rows selected: bulk bar replaces the filter bar</p>
+<div class="tb"><div class="tb-bar sel"><b style="font-size:14px">2 orders selected</b><div class="cz-row" style="gap:8px"><a class="btn btn-sm">Accept</a><a class="btn btn-secondary btn-sm">Print labels</a><a class="btn btn-ghost btn-sm">Clear</a></div></div></div></div>
+
+<div class="g2" style="align-items:start">
+<div class="cz-section"><p class="cz-h">Loading: skeleton rows (first load only)</p>
+<div class="tb"><table class="table"><thead><tr><th>Order</th><th>Customer</th><th>Status</th><th class="r">Total</th></tr></thead><tbody>
+  <tr><td><div class="sk sk-cell" style="width:70px"></div></td><td><div class="sk sk-cell" style="width:100px"></div></td><td><div class="sk" style="width:76px;height:22px;border-radius:11px"></div></td><td class="r"><div class="sk sk-cell" style="width:50px;margin-left:auto"></div></td></tr>
+  <tr><td><div class="sk sk-cell" style="width:64px"></div></td><td><div class="sk sk-cell" style="width:84px"></div></td><td><div class="sk" style="width:90px;height:22px;border-radius:11px"></div></td><td class="r"><div class="sk sk-cell" style="width:56px;margin-left:auto"></div></td></tr>
+  <tr><td><div class="sk sk-cell" style="width:72px"></div></td><td><div class="sk sk-cell" style="width:92px"></div></td><td><div class="sk" style="width:70px;height:22px;border-radius:11px"></div></td><td class="r"><div class="sk sk-cell" style="width:44px;margin-left:auto"></div></td></tr></tbody></table></div></div>
+<div class="cz-section"><p class="cz-h">Empty</p>
+<div class="tb"><table class="table"><thead><tr><th>Order</th><th>Customer</th><th>Status</th><th class="r">Total</th></tr></thead></table><div class="empty"><div class="avatar lg" style="margin:0 auto 10px"><i data-i="clipboard-list" style="--s:24px"></i></div><div class="t-h3">No orders yet</div><p class="t-meta" style="margin:4px 0 0">Orders appear here when customers pay.</p></div></div></div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Office: dense variant (36px rows, providers named only here)</p>
+<div class="tb"><table class="table" style="font-size:13px">
+  <thead><tr><th><span class="sort">Reference<i data-i="chevron-down"></i></span></th><th>Seller</th><th>Method</th><th>Status</th><th class="r">Amount</th><th class="r">Fee</th></tr></thead>
+  <tbody>
+    <tr><td style="padding:8px 16px" class="id">PAY-48211</td><td style="padding:8px 16px">Mama T's Kitchen</td><td style="padding:8px 16px">Card via YooKassa</td><td style="padding:8px 16px"><span class="badge badge-success">Paid</span></td><td class="r" style="padding:8px 16px">₽1,250</td><td class="r" style="padding:8px 16px">₽37.50</td></tr>
+    <tr><td style="padding:8px 16px" class="id">PAY-48210</td><td style="padding:8px 16px">Guangzhou Market</td><td style="padding:8px 16px">Crypto via Bitbanker</td><td style="padding:8px 16px"><span class="badge badge-warning">Pending</span></td><td class="r" style="padding:8px 16px">$24.50</td><td class="r" style="padding:8px 16px">$0.74</td></tr>
+    <tr><td style="padding:8px 16px" class="id">PAY-48207</td><td style="padding:8px 16px">Latina Despensa</td><td style="padding:8px 16px">Card via YooKassa</td><td style="padding:8px 16px"><span class="badge badge-destructive">Failed</span></td><td class="r" style="padding:8px 16px">₽890</td><td class="r" style="padding:8px 16px">₽0</td></tr>
+  </tbody></table></div></div>
+
+<div class="cz-section"><p class="cz-h">Under 768px: the same rows become stacked cards</p>
+<div class="phones">
+  <div class="stk">
+    <div class="ocard"><div class="top"><div><div class="id">CIU-1001</div><div class="t-meta">Amara Okafor · Sep 24, 2:14 PM</div></div><span class="badge badge-warning"><i data-i="clock"></i>New</span></div><div style="display:flex;align-items:center;justify-content:space-between"><span class="t-h2 num">₽1,250</span><a class="btn btn-sm">Accept</a></div></div>
+    <div class="ocard"><div class="top"><div><div class="id">CIU-1002</div><div class="t-meta">Chen Hui · Sep 24, 2:02 PM</div></div><span class="badge badge-warning"><i data-i="clock"></i>Preparing</span></div><div style="display:flex;align-items:center;justify-content:space-between"><span class="t-h2 num">₽700</span><a class="btn btn-secondary btn-sm">Mark ready</a></div></div>
+    <div class="ocard"><div class="top"><div><div class="id">CIU-0998</div><div class="t-meta">Sofia Ramirez · Sep 24, 12:40 PM</div></div><span class="badge badge-success"><i data-i="check"></i>Completed</span></div><div style="display:flex;align-items:center;justify-content:space-between"><span class="t-h2 num">₽2,380</span><a class="btn btn-ghost btn-sm">View</a></div></div>
+  </div>
+  <div class="cz-note" style="text-align:left;max-width:380px">Each row becomes one card: identifier and status on top, the key amount and the one row action at the bottom. Sorting moves to a "Sort" menu; selection mode is dropped on phones. Columns that do not fit are dropped in order of least importance, not squeezed.</div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Left-align text, right-align money and quantities, tabular figures.</li><li>Status always a badge with a word and icon.</li><li>The whole row opens the detail; the overflow menu holds secondary actions. Row height 48 Seller, 36 Office.</li><li>Pagination for tables; "Load more" for phone lists.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't scroll a table horizontally on phones.</li><li>Don't show a skeleton over rows already loaded.</li><li>Don't mix currencies in one sum column without a symbol on every value.</li></ul></div></div></div>
+
+</div></div></body></html>

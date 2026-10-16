@@ -1,0 +1,56 @@
+<!-- @dsCard group="Customer app · Screens" height=0 width=900 subtitle="Expert profile: photo, headline, verified badge, languages, rating, about, credentials, intro video, services with Book, availability hint, no-availability and unpublished states" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ExpertProfile</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.phone.native *{font-family:var(--font-native)}
+.x-nav{display:flex;align-items:center;gap:4px;padding:2px 8px 2px 4px;min-height:52px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--hairline)}
+.x-nav .tt{flex:1;min-width:0;font:600 17px/22px var(--font-native)}
+.x-nav .tt small{display:block;font:400 12px/16px var(--font-native);color:var(--muted)}
+.x-ib{width:44px;height:44px;display:grid;place-items:center;flex-shrink:0;position:relative}
+.x-ib .ic{--s:22px}
+.x-pad{padding:14px 16px;display:grid;gap:12px;align-content:start}
+.x-card{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px;display:grid;gap:10px}
+.x-card h4{margin:0;font:600 15px/20px var(--font-native)}
+.x-row{display:flex;align-items:center;gap:12px}
+.x-grow{flex:1;min-width:0}
+.x-between{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font:400 14px/20px var(--font-native)}
+.x-between.b{font-weight:700;font-size:15px}
+.x-sm{font:400 13px/18px var(--font-native);color:var(--muted)}
+.x-t{font:600 15px/20px var(--font-native)}
+.x-ud{position:absolute;top:8px;right:8px;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid var(--surface)}
+.x-ud.inl{position:static;display:inline-block;margin-left:2px}
+.x-pulse{width:8px;height:8px;border-radius:50%;background:var(--primary);display:block}
+.tl .s b{display:block;font:600 15px/22px var(--font-native)}
+.tl .s .sub{display:block;font:400 13px/18px var(--font-native);color:var(--muted)}
+.tl .up b{color:var(--muted);font-weight:500}
+.tl .bad .dot{background:var(--destructive);border-color:var(--destructive);color:#fff}
+.tl .neutral .dot{background:var(--neutral-text);border-color:var(--neutral-text);color:#fff}
+.x-side{width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--hairline);padding:20px 12px;display:grid;gap:4px;align-content:start}
+.x-brand{font:700 22px/28px var(--font-web);padding:0 12px 14px;letter-spacing:-.5px}
+.x-main{flex:1;min-width:0;padding:24px 28px;display:grid;gap:14px;align-content:start}
+.x-big .ic{--s:40px}
+.x-over{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+.x-over .scrim{position:absolute;inset:0}
+.x-over .sheet{position:relative;padding:0 20px 34px;display:grid;gap:14px}
+.x-over .sheet .grab{margin:10px auto 4px}
+.x-sk{display:grid;gap:10px;padding:16px}
+.x-ico{width:40px;height:40px;border-radius:12px;background:var(--neutral-surface);color:var(--neutral-text);display:grid;place-items:center;flex-shrink:0}
+.x-ico .ic{--s:20px}
+.x-ico.p{background:var(--primary-tint);color:var(--primary-text)}
+.x-center{display:grid;justify-items:center;text-align:center;gap:8px;padding:48px 28px}
+.x-center p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.x-chips{display:flex;gap:8px;overflow:hidden;padding:0 16px}
+.x-toast{position:absolute;left:16px;right:16px;bottom:34px;justify-content:flex-start}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Loaded: top</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="x-nav"><span class="x-ib"><i data-i="chevron-left"></i></span><div class="tt">Expert</div><span class="x-ib"><i data-i="share-2"></i></span></div><div class="scroll"><div class="x-pad" style="padding-bottom:0"><div class="x-row" style="align-items:flex-start;gap:14px"><div class="ph ph-4" style="width:88px;height:88px;border-radius:50%;flex-shrink:0"><i data-i="user-round"></i></div><div class="x-grow"><div class="t-title" style="font-family:var(--font-native);font-size:22px;line-height:28px">Dr. Amina Yusuf</div><div class="x-sm" style="color:var(--ink)">Immigration lawyer, residence permits and work visas</div><div style="margin-top:6px" class="badge badge-success"><i data-i="badge-check"></i>Verified</div></div></div>
+<div class="x-row x-sm" style="flex-wrap:wrap;gap:6px 14px"><i data-i="languages" style="--s:16px"></i><span>English · Français · Русский · Hausa</span></div>
+<div class="x-row x-sm"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><b style="color:var(--ink)">4.9</b><span>126 reviews · 9 years in practice</span></div></div><div class="x-pad"><div class="x-card"><h4>About</h4><div class="x-sm" style="color:var(--ink)">I help people from Africa, Asia and Latin America with residence permits, work patents, family reunification and extensions in Moscow. Sessions in English, French or Russian.</div></div>
+<div class="x-card"><h4>Credentials</h4><div class="x-row x-sm" style="color:var(--ink)"><i data-i="graduation-cap" style="--s:18px"></i>LLM, Moscow State Law University</div><div class="x-row x-sm" style="color:var(--ink)"><i data-i="scale" style="--s:18px"></i>Member, Moscow Bar Chamber</div><div class="x-row x-sm" style="color:var(--ink)"><i data-i="shield-check" style="--s:18px"></i>Identity and licence checked by Ciuna</div></div>
+<div class="x-card" style="padding:0;overflow:hidden"><div class="ph ph-6" style="height:150px;border-radius:0"><i data-i="video"></i></div><div class="x-between" style="padding:10px 16px"><span><b>Introduction</b><span class="x-sm"> · 1:12</span></span><span class="x-sm">Video coming soon</span></div></div></div></div></div><div class="homebar"></div></div><div class="cz-note">Photo, headline, verified, languages, rating, then about and credentials.</div></div>
+<div class="cz-col"><div class="cz-cap">Loaded: services</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="x-nav"><span class="x-ib"><i data-i="chevron-left"></i></span><div class="tt">Dr. Amina Yusuf</div><span class="x-ib"><i data-i="share-2"></i></span></div><div class="scroll x-pad" style="padding-bottom:0"><div class="x-card" style="background:var(--primary-tint);border-color:var(--primary-border);padding:10px 16px"><div class="x-row" style="font:600 14px/20px var(--font-native);color:var(--ink)"><i data-i="calendar-check" style="--s:18px"></i>Next available: tomorrow, 10:00 AM MSK</div></div><div class="x-t" style="margin:4px 0 -4px">Services</div><div class="x-card" style="gap:6px"><div class="x-between"><span class="x-t">First consultation</span><b class="num">₽3,500</b></div><div class="x-sm">30 min · Online</div><a class="btn btn-block" style="height:48px">Book</a></div><div class="x-card" style="gap:6px"><div class="x-between"><span class="x-t">Residence permit review</span><b class="num">₽6,000</b></div><div class="x-sm">60 min · Online or in person</div><a class="btn btn-block" style="height:48px">Book</a></div><div class="x-card" style="gap:6px"><div class="x-between"><span class="x-t">Document check</span><b class="num">₽4,200</b></div><div class="x-sm">30 min · Online</div><a class="btn btn-block" style="height:48px">Book</a></div></div><div class="stickybar"><a class="btn btn-lg btn-block">Book a session</a></div></div><div class="homebar"></div></div><div class="cz-note">Availability hint above the services. Book on each; a sticky bar repeats it.</div></div>
+<div class="cz-col"><div class="cz-cap">No availability</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="x-nav"><span class="x-ib"><i data-i="chevron-left"></i></span><div class="tt">Expert</div></div><div class="scroll"><div class="x-pad" style="padding-bottom:0"><div class="x-row" style="align-items:flex-start;gap:14px"><div class="ph ph-4" style="width:88px;height:88px;border-radius:50%;flex-shrink:0"><i data-i="user-round"></i></div><div class="x-grow"><div class="t-title" style="font-family:var(--font-native);font-size:22px;line-height:28px">Dr. Amina Yusuf</div><div class="x-sm" style="color:var(--ink)">Immigration lawyer, residence permits and work visas</div><div style="margin-top:6px" class="badge badge-success"><i data-i="badge-check"></i>Verified</div></div></div>
+<div class="x-row x-sm" style="flex-wrap:wrap;gap:6px 14px"><i data-i="languages" style="--s:16px"></i><span>English · Français · Русский · Hausa</span></div>
+<div class="x-row x-sm"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><b style="color:var(--ink)">4.9</b><span>126 reviews · 9 years in practice</span></div></div><div class="x-pad"><div class="banner banner-warning" style="justify-content:flex-start;align-items:flex-start"><i data-i="calendar-days" style="--s:18px"></i><div>No times available right now<span style="display:block;font-weight:400">Dr. Amina has no open slots in the next 30 days. Check back soon or message us for similar experts.</span></div></div><div class="x-card" style="gap:6px"><div class="x-between"><span class="x-t">First consultation</span><b class="num">₽3,500</b></div><div class="x-sm">30 min · Online</div><a class="btn btn-block is-disabled" style="height:48px">No times available</a></div><a class="btn btn-secondary btn-block"><i data-i="bell"></i>Notify me when she opens times</a></div></div></div><div class="homebar"></div></div></div>
+<div class="cz-col"><div class="cz-cap">Unpublished</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="x-nav"><span class="x-ib"><i data-i="chevron-left"></i></span><div class="tt">Expert</div></div><div class="x-center" style="margin:auto"><span class="avatar lg" style="background:var(--neutral-surface);color:var(--neutral-text)"><i data-i="user-round" style="--s:26px"></i></span><div class="t-h2" style="font-family:var(--font-native)">This expert isn't available</div><p>The profile may have been unpublished or the link is wrong.</p><a class="btn" style="margin-top:6px">Browse experts</a></div></div><div class="homebar"></div></div><div class="cz-note">An unpublished profile is never shown, and its link ends here.</div></div>
+</div></div></body></html>

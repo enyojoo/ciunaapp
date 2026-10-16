@@ -1,0 +1,48 @@
+<!-- @dsCard group="Marketplace" height=665 width=1300 subtitle="Cart item row with quantity stepper, remove and price, sold out and price changed lines, and the other-store notice" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CartLine</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.cl{width:390px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.line{display:flex;gap:12px;padding:14px 16px;align-items:flex-start}
+.line+.line{border-top:1px solid var(--hairline)}
+.line .ph{width:80px;height:80px;flex-shrink:0}
+.line .grow{flex:1;min-width:0;display:grid;gap:2px}
+.line .n{font:600 15px/20px var(--font-native)}
+.line .m{font:400 13px/18px var(--font-native);color:var(--muted)}
+.line .bt{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.line .p{font:600 15px/20px var(--font-native);font-variant-numeric:tabular-nums}
+.line .p s{font-weight:400;color:var(--muted);margin-right:6px;font-size:13px}
+.step{display:inline-flex;align-items:center;border:1px solid var(--input-edge);border-radius:999px;height:44px;background:var(--surface);font:600 16px/1 var(--font-native)}
+.step span{width:44px;height:44px;display:grid;place-items:center}
+.step b{min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+.rm{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;color:var(--muted)}
+.line.out .ph{opacity:.5}
+.line.out .n{color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:6px;font:600 13px/18px var(--font-native);color:var(--destructive-text)}
+.tag.w{color:var(--warning-text)}
+.tag .ic{--s:14px}
+.notice{width:390px;border-radius:var(--radius-card);background:var(--warning-surface);color:var(--warning-text);padding:14px 16px;display:grid;gap:10px;font:400 14px/20px var(--font-native)}
+.notice b{display:block;font:600 15px/20px var(--font-native)}
+.notice .r{display:flex;gap:10px}
+.notice .ic{--s:20px;margin-top:1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font:14px/22px var(--font-native)}
+</style></head>
+<body><div class="cz-page native"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Default and quantity 1 (remove)</div>
+<div class="cl"><div class="line"><div class="ph ph-1"><i data-i="utensils"></i></div><div class="grow"><span class="n">Jollof rice with chicken</span><span class="m">Medium spice</span><div class="bt"><span class="step"><span><i data-i="minus" style="--s:18px"></i></span><b>2</b><span><i data-i="plus" style="--s:18px"></i></span></span><span class="p">₽1,300</span></div></div></div>
+<div class="line"><div class="ph ph-3"><i data-i="utensils"></i></div><div class="grow"><span class="n">Egusi soup with pounded yam</span><span class="m">&nbsp;</span><div class="bt"><span class="step"><span><i data-i="trash-2" style="--s:18px"></i></span><b>1</b><span><i data-i="plus" style="--s:18px"></i></span></span><span class="p">₽700</span></div></div></div>
+<div class="line"><div class="ph ph-6"><i data-i="utensils"></i></div><div class="grow"><span class="n">Chin chin, 200 g with a very long name that wraps onto a second line</span><span class="m">Crunchy</span><div class="bt"><span class="step"><span><i data-i="trash-2" style="--s:18px"></i></span><b>1</b><span><i data-i="plus" style="--s:18px"></i></span></span><span class="p">₽250</span></div></div></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Problem lines</div>
+<div class="cl"><div class="line out"><div class="ph ph-2"><i data-i="utensils"></i></div><div class="grow"><span class="n">Pepper soup</span><span class="tag"><i data-i="triangle-alert"></i>Sold out</span><div class="bt"><span class="btn btn-secondary btn-sm">Remove</span><span class="p" style="color:var(--muted)">₽540</span></div></div></div>
+<div class="line"><div class="ph ph-4"><i data-i="utensils"></i></div><div class="grow"><span class="n">Zobo drink, 500 ml</span><span class="tag w"><i data-i="info"></i>Price changed from ₽230</span><div class="bt"><span class="step"><span><i data-i="minus" style="--s:18px"></i></span><b>1</b><span><i data-i="plus" style="--s:18px"></i></span></span><span class="p">₽260</span></div></div></div>
+<div class="line"><div class="ph ph-5"><i data-i="utensils"></i></div><div class="grow"><span class="n">Meat pie</span><span class="tag w"><i data-i="info"></i>Only 3 left</span><div class="bt"><span class="step"><span><i data-i="minus" style="--s:18px"></i></span><b>3</b><span style="opacity:.35"><i data-i="plus" style="--s:18px"></i></span></span><span class="p">₽225</span></div></div></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Another store</div>
+<div class="notice"><div class="r"><i data-i="store"></i><div><b>Your cart has items from another store</b>You can order from one store at a time. Adding from Lagos Pantry will clear your Mama T's Kitchen cart (4 items).</div></div><div style="display:grid;gap:8px"><a class="btn btn-lg btn-block" style="height:52px">Start new cart</a><a class="btn btn-secondary btn-lg btn-block" style="height:52px">Keep current cart</a></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Turn the minus into a bin at quantity 1; removing is then one clear tap.</li><li>Say why a line has a problem (sold out, price changed, only N left) with an icon and words.</li><li>Ask before clearing the cart for another store, with two named actions.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't remove a line silently when it sells out; show it muted with Remove.</li><li>Don't let the stepper go past stock; disable plus.</li><li>Don't use red for a price change; it is a warning.</li></ul></div></div>
+</div></div></body></html>

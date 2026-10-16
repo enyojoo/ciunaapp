@@ -1,0 +1,89 @@
+<!-- @dsCard group="Foundations" height=1900 subtitle="Web scale in Geist, native scale in the system font, weights, tabular numerals, line length and long-language strings" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Typography</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.spec{display:grid;grid-template-columns:150px 1fr;gap:6px 24px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--hairline)}
+.spec:last-child{border-bottom:0}
+.spec .k{font:600 13px/18px var(--font-web)}
+.spec .k small{display:block;font:400 12px/16px var(--font-mono);color:var(--muted);margin-top:2px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px}
+.n-title{font:700 24px/30px var(--font-native)}
+.n-body{font:400 16px/24px var(--font-native)}
+.n-label{font:600 15px/20px var(--font-native)}
+.n-meta{font:400 13px/18px var(--font-native);color:var(--muted)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.meas{border-left:3px solid var(--primary-border);padding-left:14px}
+.ex{border:1px solid var(--hairline);border-radius:var(--radius-control);padding:12px 14px;background:var(--surface);display:grid;gap:4px}
+.ex .lg{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.btn.fit{max-width:200px;white-space:normal;height:auto;min-height:44px;padding:10px 14px;text-align:center;line-height:1.2}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Web scale (Geist)</p>
+<p class="hint" style="margin:0">Customer web, Seller and Office. Geist 400, 500, 600 and 700. Tailwind scale with a fluid body.</p>
+<div>
+  <div class="spec"><div class="k">Display<small>32/38 · 700 · -0.5</small></div><div class="t-display">Your payout is on its way</div></div>
+  <div class="spec"><div class="k">Title<small>24/30 · 700 · -0.3</small></div><div class="t-title">Orders</div></div>
+  <div class="spec"><div class="k">H2<small>18/24 · 600</small></div><div class="t-h2">Mama T's Kitchen</div></div>
+  <div class="spec"><div class="k">H3<small>15/22 · 600</small></div><div class="t-h3">Order CIU-1001</div></div>
+  <div class="spec"><div class="k">Body<small>15/22 · 400</small></div><div class="t-body">Accept new orders quickly to keep customers waiting less. Payouts arrive within two business days.</div></div>
+  <div class="spec"><div class="k">Meta<small>13/19 · 400 · muted</small></div><div class="t-meta">Sep 24, 2026 • 2:14 PM MSK</div></div>
+  <div class="spec"><div class="k">Eyebrow<small>11/15 · 600 · +0.1em · caps</small></div><div class="t-eyebrow">Available balance</div></div>
+  <div class="spec"><div class="k">Money<small>40/46 · 700 · tabular</small></div><div class="t-money">₽128,450<small>.00</small></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Native scale (system font)</p>
+<p class="hint" style="margin:0">Customer app on iPhone and Android uses SF Pro or Roboto by design, so it feels at home. Four sizes only.</p>
+<div class="native">
+  <div class="spec"><div class="k">Title<small>24/30 · 700</small></div><div class="n-title">My orders</div></div>
+  <div class="spec"><div class="k">Body<small>16/24 · 400</small></div><div class="n-body">Your order is being prepared. Mama T's Kitchen will hand it to the courier at 6:40 PM MSK.</div></div>
+  <div class="spec"><div class="k">Label<small>15/20 · 600</small></div><div class="n-label">Track order</div></div>
+  <div class="spec"><div class="k">Meta<small>13/18 · 400 · muted</small></div><div class="n-meta">Delivery to Tverskaya St 12, Moscow</div></div>
+</div></div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Weights</p>
+  <div style="font-size:20px;line-height:30px">
+    <div style="font-weight:400">Regular 400: body copy</div>
+    <div style="font-weight:500">Medium 500: dense table cells, toasts</div>
+    <div style="font-weight:600">Semibold 600: labels, buttons, h2, h3</div>
+    <div style="font-weight:700">Bold 700: titles, money, display</div></div>
+  <p class="hint">Never use weights lighter than 400. Emphasis is semibold, not italic. Never underline except links.</p></div>
+<div class="cz-section"><p class="cz-h">Tabular numerals</p>
+  <div class="cz-row" style="align-items:flex-start;gap:28px">
+    <div><div class="t-eyebrow">Proportional</div><div style="font:600 20px/28px var(--font-web)">₽1,111<br>₽8,888<br>₽12,500</div></div>
+    <div><div class="t-eyebrow">Tabular (.num)</div><div class="num" style="font:600 20px/28px var(--font-web);text-align:right">₽1,111<br>₽8,888<br>₽12,500</div></div></div>
+  <p class="hint">Apply <code>.num</code> to money, quantities, times and table columns so digits line up and figures do not jitter when they change. Right-align number columns.</p></div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Line length</p>
+<div class="cols">
+  <div><div class="t-eyebrow" style="margin-bottom:8px">Too long (110+)</div><p class="t-body" style="margin:0;max-width:none;font-size:13px">Payouts are sent to your bank account every Monday for all orders completed during the previous week, after Ciuna deducts its fee and any refunds issued to customers during that time frame, and you can always see the exact breakdown.</p></div>
+  <div class="meas"><div class="t-eyebrow" style="margin-bottom:8px">Good (45-75)</div><p class="t-body" style="margin:0;max-width:34em">Payouts are sent to your bank account every Monday for orders completed the previous week. We take our fee and any refunds first, and show the full breakdown.</p></div>
+  <div><div class="t-eyebrow" style="margin-bottom:8px">Too short (under 30)</div><p class="t-body" style="margin:0;max-width:16em">Payouts are sent to your bank every Monday for orders completed the week before.</p></div>
+</div>
+<p class="hint">Reading text caps at about 65 characters (34em at 15px). Dense tables and buttons are exempt. Headings never run past two lines.</p></div>
+
+<div class="cz-section"><p class="cz-h">Long strings: English, Russian, Chinese, French</p>
+<p class="hint" style="margin:0">Layouts survive 40% more text. Russian and French run longest, Chinese is shorter but taller (CJK needs more line height). Buttons wrap instead of clipping; titles wrap to two lines.</p>
+<div class="cols">
+  <div class="ex"><span class="lg">English</span><div class="t-h2">Reject this order?</div><div class="t-meta">The customer is refunded in full.</div><a class="btn fit btn-destructive">Reject order</a></div>
+  <div class="ex"><span class="lg">Russian</span><div class="t-h2">Отклонить этот заказ?</div><div class="t-meta">Покупателю будет возвращена вся сумма.</div><a class="btn fit btn-destructive">Отклонить заказ</a></div>
+  <div class="ex"><span class="lg">Chinese</span><div class="t-h2" style="line-height:28px">要拒绝这笔订单吗？</div><div class="t-meta" style="line-height:21px">我们会全额退款给买家。</div><a class="btn fit btn-destructive">拒绝订单</a></div>
+  <div class="ex"><span class="lg">French</span><div class="t-h2">Refuser cette commande ?</div><div class="t-meta">Le client sera intégralement remboursé.</div><a class="btn fit btn-destructive">Refuser la commande</a></div>
+</div>
+<div class="cols" style="margin-top:4px">
+  <div class="ex"><span class="lg">Russian, longest case</span><div class="t-body">Подтвердите бронирование консультации с юристом по вопросам иммиграции</div></div>
+  <div class="ex"><span class="lg">French, longest case</span><div class="t-body">Confirmez la réservation de votre consultation avec l'avocate en droit de l'immigration</div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p>
+<ul class="t-body" style="margin:0;padding-left:20px;display:grid;gap:4px">
+  <li>Sentence case everywhere. Caps only for the eyebrow style.</li>
+  <li>Minimum 13px for text that matters, 11px only for eyebrows and tab labels. Works at 200% text size.</li>
+  <li>Body copy uses <code>ink</code> or <code>muted</code>. Orange text uses <code>primary-text</code>.</li>
+  <li>Names, addresses and listing titles accept any script and wrap or truncate with an ellipsis, never overflow.</li>
+  <li>Native screens use the system font; web uses Geist. Do not mix on one screen.</li>
+</ul></div>
+
+</div></div></body></html>

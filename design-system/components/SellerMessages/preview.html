@@ -1,0 +1,104 @@
+<!-- @dsCard group="Seller · Screens" height=1000 subtitle="Customer chat: thread list with unread badges, order number and status, thread view with bubbles, quick replies and a 2000-character composer, and the closed notice" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SellerMessages</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pg{padding:18px 16px 16px}
+.pg h1{margin:0;font:700 24px/30px var(--font-web);letter-spacing:-.3px}
+.sub{margin:4px 0 14px;color:var(--muted);font-size:14px;line-height:20px}
+.stk{display:grid;gap:12px}
+.rw{display:flex;align-items:center;gap:10px}
+.rw.top{align-items:flex-start}
+.sp{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gr{flex:1;min-width:0}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.pad{padding:16px}
+.sec{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px 20px;display:grid;gap:14px;align-content:start}
+.sec h2{margin:0;font:600 16px/22px var(--font-web)}
+.sec .hp{margin:2px 0 0;font-size:13px;line-height:18px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.phone .two,.phone .three,.sf .two{grid-template-columns:1fr}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sf{width:390px;border-radius:var(--radius-sheet);overflow:hidden;padding-top:44px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--shadow-md)}
+.sf .sheet{border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;box-shadow:none;padding:0 20px 24px;display:grid;gap:14px}
+.df{width:390px;border-radius:var(--radius-sheet);padding:28px 18px;box-shadow:var(--shadow-md)}
+.dialog.dg{padding:22px;display:grid;gap:12px}
+.dg h3{margin:0;font:600 18px/24px var(--font-web)}
+.dg p{margin:0;color:var(--muted);font-size:14px;line-height:20px}
+.dg .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.sh-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:16px}
+.sh-h h3{margin:0;font:600 18px/24px var(--font-web)}
+.sh-h p{margin:2px 0 0;font-size:14px;line-height:20px;color:var(--muted)}
+.x{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:var(--neutral-surface);flex-shrink:0}
+.ovl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;z-index:5}
+.ovl>.scrim{position:absolute;inset:0}
+.ovl>.sheet{position:relative;padding:0 20px 28px;display:grid;gap:14px}
+.ovl.mid{justify-content:center;align-items:center;padding:24px}
+.ovl.mid>.dialog{position:relative;width:100%;max-width:440px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;min-height:56px}
+.sw .t{font:600 15px/20px var(--font-web)}
+.sw .s{font-size:13px;line-height:18px;color:var(--muted)}
+.opt{border:1px solid var(--input-edge);border-radius:var(--radius-control);padding:12px 14px;display:flex;gap:10px;align-items:center;background:var(--surface);font:600 14px/20px var(--font-web)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt small{display:block;font:400 12px/16px var(--font-web);color:var(--muted)}
+.ctr{font-size:12px;line-height:16px;color:var(--muted);text-align:right}
+.ctr.bad{color:var(--destructive-text)}
+.unit{display:grid;grid-template-columns:1fr 112px;gap:8px}
+.dbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 36px;background:var(--surface);border-top:1px solid var(--hairline)}
+.s-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.wm{font:700 22px/1 var(--font-web);letter-spacing:-.5px;display:inline-flex;align-items:center;gap:6px}
+.wm i{width:10px;height:10px;border-radius:50%;background:var(--brand-primary);display:block}
+.side-sp{flex:1}
+.bdg-n{margin-left:auto}
+.mini.ok{background:var(--success-surface);color:var(--success-text)}
+.crumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap}
+.hs{height:1px;background:var(--hairline)}
+.line{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px}
+.line.tot{font-weight:600;border-top:1px solid var(--hairline);padding-top:10px}
+.line .m{color:var(--muted)}
+.sf-wrap{display:grid;gap:12px;justify-items:center}
+</style></head>
+<body><div class="cz-page">
+<div class="cz-grid"><div class="cz-col"><div class="cz-cap">Desktop: split view</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/messages/CIU-1001</span></div>
+<div class="desk-body" style="position:relative">
+<aside class="s-side"><div class="rw" style="padding:4px 12px 0"><span class="wm"><i></i>ciuna</span><span class="badge badge-neutral">Seller</span></div>
+<nav class="s-nav"><span class="s-link"><i data-i="house"></i>Home</span><span class="s-link"><i data-i="clipboard-list"></i>Orders</span><span class="s-link on"><i data-i="message-square"></i>Messages</span><span class="s-link"><i data-i="package"></i>Catalog</span><span class="s-link"><i data-i="wallet"></i>Earnings</span><span class="s-link"><i data-i="star"></i>Reviews</span><span class="s-link"><i data-i="menu"></i>More</span></nav>
+<div class="s-biz"><span class="logo">M</span><span class="gr"><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span><i data-i="chevron-down" style="--s:16px"></i></div></aside>
+<div class="s-col"><div class="s-top" style="height:64px;padding:0 36px"><div class="input-wrap" style="width:320px"><i data-i="search" style="--s:18px"></i><input class="input" style="height:40px" placeholder="Search"></div><div class="rw"><i data-i="bell" style="--s:20px"></i><span class="avatar sm">M</span></div></div>
+<main class="s-main gr"><div class="page-h"><div><h1>Messages</h1><p>Chat with customers about their orders. Reply quickly to keep orders moving.</p></div></div>
+<div class="plate" style="display:grid;grid-template-columns:340px 1fr;overflow:hidden;height:560px"><div style="border-right:1px solid var(--hairline);overflow:hidden" class="list"><div class="item" style="align-items:flex-start;padding:14px 16px;background:var(--primary-tint)"><span class="avatar">AO</span><div class="grow"><div class="sp"><b class="trunc">Amara Okafor</b><span class="t-meta num" style="white-space:nowrap">10:42</span></div>
+<div class="t-meta num">Order CIU-1001</div><div class="trunc" style="font-size:14px;font-weight:600">Could you add less pepper to the jollof?</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-warning">Preparing</span></div></div><span class="count" aria-label="2 unread">2</span></div><div class="item" style="align-items:flex-start;padding:14px 16px;"><span class="avatar">SR</span><div class="grow"><div class="sp"><b class="trunc">Sofia Ramirez</b><span class="t-meta num" style="white-space:nowrap">9:05</span></div>
+<div class="t-meta num">Order CIU-1012</div><div class="trunc" style="font-size:14px;font-weight:600">Is delivery possible to Khimki?</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-warning">New</span></div></div><span class="count" aria-label="1 unread">1</span></div><div class="item" style="align-items:flex-start;padding:14px 16px;"><span class="avatar">CH</span><div class="grow"><div class="sp"><b class="trunc">Chen Hui</b><span class="t-meta num" style="white-space:nowrap">Yesterday</span></div>
+<div class="t-meta num">Order CIU-1007</div><div class="trunc" style="font-size:14px;color:var(--muted)">Thank you, it arrived warm.</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-success">Completed</span></div></div></div><div class="item" style="align-items:flex-start;padding:14px 16px;"><span class="avatar">KM</span><div class="grow"><div class="sp"><b class="trunc">Kwame Mensah</b><span class="t-meta num" style="white-space:nowrap">4 Oct</span></div>
+<div class="t-meta num">Order CIU-0994</div><div class="trunc" style="font-size:14px;color:var(--muted)">You: Your order is being prepared.</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-success">Completed</span><span class="badge badge-neutral"><i data-i="lock"></i>Chat closed</span></div></div></div></div>
+<div style="display:flex;flex-direction:column;min-height:0"><div class="sp" style="padding:12px 16px;border-bottom:1px solid var(--hairline)"><div class="rw"><span class="avatar">AO</span><div><b>Amara Okafor</b><div class="t-meta num">Order CIU-1001 · <span style="color:var(--warning-text)">Preparing</span></div></div></div><a class="btn btn-secondary btn-sm"><i data-i="external-link"></i>View order</a></div><div style="flex:1;padding:16px 20px;overflow:hidden"><div class="t-eyebrow" style="text-align:center;margin-bottom:8px">Today</div><div class="stk" style="padding:4px 0"><div class="bubble in" style="font-family:var(--font-web)">Hello, I ordered 2 portions of jollof rice for 14:00.<small>10:31</small></div><div class="bubble out" style="font-family:var(--font-web)">Hello Amara, your order is being prepared.<small>10:34 · Seen</small></div><div class="bubble in" style="font-family:var(--font-web)">Could you add less pepper to the jollof?<small>10:42</small></div></div></div><div style="padding:12px 20px 16px;border-top:1px solid var(--hairline)"><div class="stk" style="gap:8px"><div style="display:flex;gap:8px;overflow:hidden;white-space:nowrap" aria-label="Quick replies"><span class="chip" style="height:40px;flex-shrink:0">Your order is being prepared.</span><span class="chip" style="height:40px;flex-shrink:0">We will deliver within the hour.</span><span class="chip" style="height:40px;flex-shrink:0">Thank you for your order!</span><span class="chip" style="height:40px;flex-shrink:0">Could you confirm your address, please?</span></div><div class="rw top"><textarea class="textarea gr" style="min-height:48px;height:48px" placeholder="Write a message">We can reduce the pepper. Is a mild level fine?</textarea><a class="btn btn-icon" aria-label="Send"><i data-i="send"></i></a></div><div class="ctr num">47 / 2000</div></div></div></div></div></main></div></div></div><div class="cz-note">List on the left, thread on the right. The open thread is tinted.</div></div>
+<div class="cz-col"><div class="cz-cap">Phone: list</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span></div><i data-i="menu" style="--s:22px"></i></div>
+  <div class="screen"><div class="scroll pg"><h1>Messages</h1><p class="sub">Chat with customers about their orders. Reply quickly to keep orders moving.</p><div class="plate list" style="overflow:hidden"><div class="item" style="align-items:flex-start;padding:14px 16px;background:var(--primary-tint)"><span class="avatar">AO</span><div class="grow"><div class="sp"><b class="trunc">Amara Okafor</b><span class="t-meta num" style="white-space:nowrap">10:42</span></div>
+<div class="t-meta num">Order CIU-1001</div><div class="trunc" style="font-size:14px;font-weight:600">Could you add less pepper to the jollof?</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-warning">Preparing</span></div></div><span class="count" aria-label="2 unread">2</span></div><div class="item" style="align-items:flex-start;padding:14px 16px;"><span class="avatar">SR</span><div class="grow"><div class="sp"><b class="trunc">Sofia Ramirez</b><span class="t-meta num" style="white-space:nowrap">9:05</span></div>
+<div class="t-meta num">Order CIU-1012</div><div class="trunc" style="font-size:14px;font-weight:600">Is delivery possible to Khimki?</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-warning">New</span></div></div><span class="count" aria-label="1 unread">1</span></div><div class="item" style="align-items:flex-start;padding:14px 16px;"><span class="avatar">CH</span><div class="grow"><div class="sp"><b class="trunc">Chen Hui</b><span class="t-meta num" style="white-space:nowrap">Yesterday</span></div>
+<div class="t-meta num">Order CIU-1007</div><div class="trunc" style="font-size:14px;color:var(--muted)">Thank you, it arrived warm.</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-success">Completed</span></div></div></div><div class="item" style="align-items:flex-start;padding:14px 16px;"><span class="avatar">KM</span><div class="grow"><div class="sp"><b class="trunc">Kwame Mensah</b><span class="t-meta num" style="white-space:nowrap">4 Oct</span></div>
+<div class="t-meta num">Order CIU-0994</div><div class="trunc" style="font-size:14px;color:var(--muted)">You: Your order is being prepared.</div>
+<div class="rw" style="margin-top:6px;gap:6px"><span class="badge badge-success">Completed</span><span class="badge badge-neutral"><i data-i="lock"></i>Chat closed</span></div></div></div></div></div></div>
+  <div class="s-bottom" style="grid-template-columns:repeat(5,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi"><i data-i="clipboard-list"></i>Orders</span><span class="s-bi on"><i data-i="message-square"></i>Messages</span><span class="s-bi"><i data-i="package"></i>Catalog</span><span class="s-bi"><i data-i="menu"></i>More</span></div>
+  <div class="homebar"></div></div></div>
+<div class="cz-col"><div class="cz-cap">Phone: thread</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="rw"><i data-i="arrow-left" style="--s:22px"></i><b style="font-size:16px">Amara Okafor</b></div></div>
+  <div class="screen"><div class="scroll pg"><div class="rw" style="margin-bottom:10px;flex-wrap:wrap"><span class="mini">Order CIU-1001</span><span class="mini warn">Preparing</span><a class="btn-link" style="font-size:13px">View order</a></div><div class="stk" style="padding:4px 0"><div class="bubble in" style="font-family:var(--font-web)">Hello, I ordered 2 portions of jollof rice for 14:00.<small>10:31</small></div><div class="bubble out" style="font-family:var(--font-web)">Hello Amara, your order is being prepared.<small>10:34 · Seen</small></div><div class="bubble in" style="font-family:var(--font-web)">Could you add less pepper to the jollof?<small>10:42</small></div></div></div><div style="padding:12px 16px 14px;background:var(--surface);border-top:1px solid var(--hairline)"><div class="stk" style="gap:8px"><div style="display:flex;gap:8px;overflow:hidden;white-space:nowrap" aria-label="Quick replies"><span class="chip" style="height:40px;flex-shrink:0">Your order is being prepared.</span><span class="chip" style="height:40px;flex-shrink:0">We will deliver within the hour.</span><span class="chip" style="height:40px;flex-shrink:0">Thank you for your order!</span><span class="chip" style="height:40px;flex-shrink:0">Could you confirm your address, please?</span></div><div class="rw top"><textarea class="textarea gr" style="min-height:48px;height:48px" placeholder="Write a message">We can reduce the pepper. Is a mild level fine?</textarea><a class="btn btn-icon" aria-label="Send"><i data-i="send"></i></a></div><div class="ctr num">47 / 2000</div></div></div></div>
+  <div class="homebar"></div></div><div class="cz-note">Quick replies scroll sideways above the composer.</div></div>
+<div class="cz-col"><div class="cz-cap">Phone: closed chat</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="rw"><i data-i="arrow-left" style="--s:22px"></i><b style="font-size:16px">Kwame Mensah</b></div></div>
+  <div class="screen"><div class="scroll pg"><div class="rw" style="margin-bottom:10px;flex-wrap:wrap"><span class="mini">Order CIU-0994</span><span class="mini"><i data-i="lock"></i>Chat closed</span><a class="btn-link" style="font-size:13px">View order</a></div><div class="stk" style="padding:4px 0"><div class="bubble in" style="font-family:var(--font-web)">Hello, I ordered 2 portions of jollof rice for 14:00.<small>10:31</small></div><div class="bubble out" style="font-family:var(--font-web)">Hello Amara, your order is being prepared.<small>10:34 · Seen</small></div><div class="bubble in" style="font-family:var(--font-web)">Could you add less pepper to the jollof?<small>10:42</small></div></div></div><div style="padding:12px 16px 14px;background:var(--surface);border-top:1px solid var(--hairline)"><div class="banner banner-neutral" style="align-items:flex-start"><i data-i="lock" style="--s:18px"></i><span class="gr"><b>This chat is closed</b>Chats close 14 days after an order is completed or cancelled. You can still see the history.</span></div></div></div>
+  <div class="homebar"></div></div><div class="cz-note">Closed after 14 days; history stays readable.</div></div>
+<div class="cz-col"><div class="cz-cap">Phone: message too long</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="rw"><i data-i="arrow-left" style="--s:22px"></i><b style="font-size:16px">Amara Okafor</b></div></div>
+  <div class="screen"><div class="scroll pg"><div class="rw" style="margin-bottom:10px;flex-wrap:wrap"><span class="mini">Order CIU-1001</span><span class="mini warn">Preparing</span><a class="btn-link" style="font-size:13px">View order</a></div><div class="stk" style="padding:4px 0"><div class="bubble in" style="font-family:var(--font-web)">Hello, I ordered 2 portions of jollof rice for 14:00.<small>10:31</small></div><div class="bubble out" style="font-family:var(--font-web)">Hello Amara, your order is being prepared.<small>10:34 · Seen</small></div><div class="bubble in" style="font-family:var(--font-web)">Could you add less pepper to the jollof?<small>10:42</small></div></div></div><div style="padding:12px 16px 14px;background:var(--surface);border-top:1px solid var(--hairline)"><div class="stk" style="gap:8px"><div style="display:flex;gap:8px;overflow:hidden;white-space:nowrap" aria-label="Quick replies"><span class="chip" style="height:40px;flex-shrink:0">Your order is being prepared.</span><span class="chip" style="height:40px;flex-shrink:0">We will deliver within the hour.</span><span class="chip" style="height:40px;flex-shrink:0">Thank you for your order!</span><span class="chip" style="height:40px;flex-shrink:0">Could you confirm your address, please?</span></div><div class="rw top"><textarea class="textarea gr is-error" style="min-height:48px;height:48px" placeholder="Write a message"></textarea><a class="btn btn-icon" aria-label="Send"><i data-i="send"></i></a></div><div class="ctr bad num">2,014 / 2000 · Keep it under 2000 characters.</div></div></div></div>
+  <div class="homebar"></div></div><div class="cz-note">Counter turns into an error sentence; Send stays available only under 2,000.</div></div></div>
+</div></body></html>

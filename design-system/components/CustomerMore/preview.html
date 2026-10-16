@@ -1,0 +1,163 @@
+<!-- @dsCard group="Customer app · Screens" height=1978 width=900 subtitle="Account tab: identity first, grouped Account and App rows, verification chip, language picker with six languages, sign-out confirmation" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CustomerMore</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.phone.native *{font-family:var(--font-native)}
+.cz-grid{gap:40px}
+.nt{font:700 24px/30px var(--font-native);letter-spacing:-.3px;margin:0}
+.nl{font:600 15px/20px var(--font-native)}
+.nm{font:400 13px/18px var(--font-native);color:var(--muted)}
+.nb{font:400 15px/22px var(--font-native)}
+.grow{flex:1;min-width:0}
+.pad{padding:0 16px}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.plate.p{padding:14px 16px}
+.mt{padding:4px 20px 10px}
+.mg{padding:0 16px;margin-top:14px}
+.mgt{font:600 12px/16px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 4px 8px}
+.mrow{display:flex;align-items:center;gap:12px;padding:0 14px;min-height:52px}
+.mi{width:32px;height:32px;border-radius:10px;background:var(--neutral-surface);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.mi .ic{--s:18px}
+.mi.refer{background:var(--refer-surface);color:var(--refer)}
+.mi.ok{background:var(--success-surface);color:var(--success-text)}
+.mrow .chev{--s:18px;color:var(--subtle)}
+.mval{font:400 14px/20px var(--font-native);color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.mid2{display:flex;align-items:center;gap:14px;margin:6px 16px 0;padding:16px}
+.mid2 .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mid2 .t{font:700 18px/24px var(--font-native);display:flex;align-items:center;gap:6px}
+.mid2 .t .ic{--s:18px;color:var(--success-text)}
+.openchip{height:34px;padding:0 14px;border-radius:17px;background:var(--neutral-surface);display:inline-flex;align-items:center;font:600 13px/1 var(--font-native)}
+.out{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin-top:6px;font:600 15px/1 var(--font-native);color:var(--destructive-text)}
+.out .ic{--s:18px}
+.ver{text-align:center;font:400 12px/16px var(--font-native);color:var(--muted)}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+.ov .scrim{position:absolute;inset:0}
+.ov .sheet{position:relative;padding:0 16px 34px;display:grid;gap:4px}
+.ov .sheet .grab{margin:10px auto 8px}
+.ov .sheet h3{margin:0 4px 6px;font:700 18px/24px var(--font-native)}
+.lang{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 4px;border-top:1px solid var(--hairline)}
+.lang .t{font:600 16px/22px var(--font-native)}
+.lang .s{font:400 13px/18px var(--font-native);color:var(--muted)}
+.lang.on{background:var(--primary-tint);border-radius:12px;border-top-color:transparent;padding:0 12px;margin:0 -8px}
+.dlgw{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 28px}
+.dlgw .scrim{position:absolute;inset:0}
+.dlgw .dialog{position:relative;padding:22px 20px 18px;display:grid;gap:8px;width:100%}
+.dlgw h3{margin:0;font:700 18px/24px var(--font-native)}
+.dlgw p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.dlgw .acts{display:flex;gap:10px;margin-top:10px}
+.dlgw .acts .btn{flex:1}
+.x-ico{width:40px;height:40px;border-radius:12px;background:var(--neutral-surface);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.x-ico .ic{--s:20px}
+.x-ico.ok{background:var(--success-surface);color:var(--success-text)}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.sum .plate{padding:12px 14px}
+.sum .v{font:700 18px/24px var(--font-native);font-variant-numeric:tabular-nums}
+.srch{display:flex;align-items:center;gap:10px;margin:10px 16px 0;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native);color:var(--subtle)}
+.srch .ic{--s:18px;color:var(--muted)}
+.srch.f{color:var(--ink);border-color:var(--primary);box-shadow:0 0 0 3px rgba(205,75,14,.25)}
+.chips{display:flex;gap:8px;padding:10px 16px 2px;overflow:hidden}
+.chips .chip{font-family:var(--font-native);flex-shrink:0}
+.dh{font:600 12px/16px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 20px 6px}
+.tx{display:flex;align-items:center;gap:12px;padding:10px 16px;min-height:68px;background:var(--surface);border-top:1px solid var(--hairline)}
+.tx:last-child{border-bottom:1px solid var(--hairline)}
+.tx.pr{background:var(--neutral-surface)}
+.tx .t{font:600 15px/20px var(--font-native);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx .s{font:400 13px/18px var(--font-native);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx .tr{display:grid;justify-items:end;gap:4px;flex-shrink:0}
+.tx .a{font:700 15px/20px var(--font-native);font-variant-numeric:tabular-nums}
+.tx .a.in{color:var(--success-text)}
+.tx .badge{height:22px;padding:0 8px;font-size:11px}
+.tx .badge .ic{--s:12px}
+.skr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--hairline);background:var(--surface)}
+.mid3{display:grid;justify-items:center;text-align:center;gap:8px;padding:44px 32px}
+.mid3 p{margin:0 0 10px;font:400 14px/20px var(--font-native);color:var(--muted)}
+.mid3 .nl{font-size:17px;line-height:22px}
+.mid3 .big{width:64px;height:64px;border-radius:50%;background:var(--neutral-surface);color:var(--muted);display:grid;place-items:center;margin-bottom:6px}
+.mid3 .big .ic{--s:28px}
+.mid3 .big.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.ban{margin:10px 16px 0;padding:10px 14px;font:400 13px/18px var(--font-native);display:flex;gap:10px;align-items:center;border-radius:var(--radius-card)}
+.ban .ic{--s:18px}
+.tgt{display:grid;gap:8px;margin:10px 16px 0;padding:12px 14px}
+.tgt div{display:flex;gap:10px;align-items:center;font:400 13px/18px var(--font-native);color:var(--muted)}
+.tgt b{font-weight:600;color:var(--ink)}
+.tgt .ic{--s:16px;color:var(--ink)}
+.atop{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 0;min-height:56px}
+.alogo{height:24px}
+.lg{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:20px;background:var(--surface);border:1px solid var(--hairline);font:600 14px/1 var(--font-native)}
+.lg .ic{--s:16px}
+.abk{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;margin-left:-10px}
+.abody{padding:10px 20px 0;display:grid;gap:14px;align-content:start}
+.abody h1{margin:0;font:700 28px/34px var(--font-native);letter-spacing:-.4px}
+.abody .sub{margin:-8px 0 0;font:400 15px/22px var(--font-native);color:var(--muted)}
+.fld{display:grid;gap:6px}
+.fld .l{font:600 14px/20px var(--font-native)}
+.fld .in{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native)}
+.fld .in .ph2{color:var(--subtle)}
+.fld .in .grow{overflow:hidden;white-space:nowrap}
+.fld .in .ic{--s:20px;color:var(--muted)}
+.fld .in.bad{border-color:var(--destructive-text)}
+.fld .in.dis{background:var(--neutral-surface);color:var(--muted)}
+.fld .e{font:400 13px/18px var(--font-native);color:var(--destructive-text);display:flex;gap:6px;align-items:flex-start}
+.fld .e .ic{--s:15px;margin-top:2px}
+.fld .h{font:400 13px/18px var(--font-native);color:var(--muted)}
+.soc{display:grid;gap:10px}
+.soc .btn{font-family:var(--font-native);height:50px}
+.or{display:flex;align-items:center;gap:12px;font:400 13px/18px var(--font-native);color:var(--muted)}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--hairline)}
+.afoot{text-align:center;font:400 14px/20px var(--font-native);color:var(--muted)}
+.afoot a{font-weight:600}
+.flk{font:600 14px/20px var(--font-native);color:var(--primary-text);justify-self:start;min-height:32px;display:inline-flex;align-items:center}
+.rules{display:grid;gap:4px}
+.rules div{display:flex;gap:8px;align-items:center;font:400 13px/18px var(--font-native);color:var(--muted)}
+.rules .ic{--s:15px}
+.rules .ok{color:var(--success-text)}
+.rules .ok .ic{color:var(--success-text)}
+.terms{display:flex;gap:10px;align-items:flex-start;font:400 14px/20px var(--font-native)}
+.pinw{display:grid;justify-items:center;gap:8px;padding:14px 20px 0;text-align:center}
+.pinw .avatar{width:64px;height:64px;font-size:22px}
+.pinw h1{margin:6px 0 0;font:700 22px/28px var(--font-native)}
+.pinw p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.pdots{display:flex;gap:18px;margin:18px 0 6px}
+.pdots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--input-edge);display:block}
+.pdots i.on{background:var(--ink);border-color:var(--ink)}
+.pdots.bad i{border-color:var(--destructive-text)}
+.pdots.bad i.on{background:var(--destructive-text);border-color:var(--destructive-text)}
+.pkeys{display:grid;grid-template-columns:repeat(3,72px);gap:12px 28px;margin-top:18px;justify-content:center}
+.pkeys span{width:72px;height:72px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;font:600 28px/1 var(--font-native);font-variant-numeric:tabular-nums}
+.pkeys span.z{background:transparent;border-color:transparent}
+.pkeys span .ic{--s:24px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Verified, English</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Account</h1></div>
+<div class="scroll">
+<div class="plate mid2"><span class="avatar lg">AO</span><div class="grow"><div class="t"><span class="trunc">Amara Okafor</span><i data-i="badge-check"></i></div><div class="nm">amara.okafor@gmail.com</div></div><span class="openchip">Profile</span></div>
+<div class="mg"><div class="mgt">Account</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="shield-check"></i></span><span class="grow nl">Verification</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Verified</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="heart"></i></span><span class="grow nl">Favourites</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi refer"><i data-i="gift"></i></span><span class="grow nl">Refer a friend</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="lock"></i></span><span class="grow nl">Login PIN</span><span class="mval">On</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="mg"><div class="mgt">App</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="languages"></i></span><span class="grow nl">Language</span><span class="mval">English</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="landmark"></i></span><span class="grow nl">Recipients</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="life-buoy"></i></span><span class="grow nl">Support</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="file-text"></i></span><span class="grow nl">Legal</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="out"><i data-i="log-out"></i>Sign out</div>
+<div class="ver">Version 1.0.0</div>
+</div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab on"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Identity first: avatar, name, a green verified tick and email. Two grouped plates, then a quiet sign out.</div></div>
+<div class="cz-col"><div class="cz-cap">Verification in review, Chinese</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">账户</h1></div>
+<div class="scroll">
+<div class="plate mid2"><span class="avatar lg">陈</span><div class="grow"><div class="t"><span class="trunc">陈慧</span></div><div class="nm">chen.hui@163.com</div></div><span class="openchip">资料</span></div>
+<div class="mg"><div class="mgt">账户</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="shield-check"></i></span><span class="grow nl">身份验证</span><span class="badge badge-warning"><i data-i="clock"></i>审核中</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="heart"></i></span><span class="grow nl">收藏</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi refer"><i data-i="gift"></i></span><span class="grow nl">邀请好友</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="lock"></i></span><span class="grow nl">登录 PIN 码</span><span class="mval">未设置</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="mg"><div class="mgt">应用</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="languages"></i></span><span class="grow nl">语言</span><span class="mval">中文</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="landmark"></i></span><span class="grow nl">收款人</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="life-buoy"></i></span><span class="grow nl">客服</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="file-text"></i></span><span class="grow nl">法律条款</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="out"><i data-i="log-out"></i>退出登录</div>
+<div class="ver">版本 1.0.0</div>
+</div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>首页</span><span class="a-tab"><i data-i="clipboard-list"></i>订单</span><span class="a-tab on"><i data-i="user-round"></i>账户</span></div><div class="homebar"></div></div><div class="cz-note">Verification chip is amber while documents are being checked, with no tick beside the name. Rows keep 52px height.</div></div>
+<div class="cz-col"><div class="cz-cap">Language picker sheet</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Account</h1></div>
+<div class="scroll">
+<div class="plate mid2"><span class="avatar lg">AO</span><div class="grow"><div class="t"><span class="trunc">Amara Okafor</span><i data-i="badge-check"></i></div><div class="nm">amara.okafor@gmail.com</div></div><span class="openchip">Profile</span></div>
+<div class="mg"><div class="mgt">Account</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="shield-check"></i></span><span class="grow nl">Verification</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Verified</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="heart"></i></span><span class="grow nl">Favourites</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi refer"><i data-i="gift"></i></span><span class="grow nl">Refer a friend</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="lock"></i></span><span class="grow nl">Login PIN</span><span class="mval">On</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="mg"><div class="mgt">App</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="languages"></i></span><span class="grow nl">Language</span><span class="mval">English</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="landmark"></i></span><span class="grow nl">Recipients</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="life-buoy"></i></span><span class="grow nl">Support</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="file-text"></i></span><span class="grow nl">Legal</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="out"><i data-i="log-out"></i>Sign out</div>
+<div class="ver">Version 1.0.0</div>
+</div><div class="ov"><div class="scrim"></div><div class="sheet"><div class="grab"></div><h3>Language</h3><div class="lang on"><div class="grow"><div class="t">English</div><div class="s">English</div></div><span class="radio on"></span></div><div class="lang"><div class="grow"><div class="t">Русский</div><div class="s">Russian</div></div><span class="radio"></span></div><div class="lang"><div class="grow"><div class="t">Français</div><div class="s">French</div></div><span class="radio"></span></div><div class="lang"><div class="grow"><div class="t">Español</div><div class="s">Spanish</div></div><span class="radio"></span></div><div class="lang"><div class="grow"><div class="t">中文</div><div class="s">Chinese</div></div><span class="radio"></span></div><div class="lang"><div class="grow"><div class="t">Português</div><div class="s">Portuguese</div></div><span class="radio"></span></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab on"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">All six languages in their own script with the English name beneath. The current one is tinted with a filled radio; tapping applies at once and closes the sheet.</div></div>
+<div class="cz-col"><div class="cz-cap">Russian, sign-out confirmation</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="mt"><h1 class="nt">Аккаунт</h1></div>
+<div class="scroll">
+<div class="plate mid2"><span class="avatar lg">КМ</span><div class="grow"><div class="t"><span class="trunc">Кваме Менса</span></div><div class="nm">kwame.mensah@mail.ru</div></div><span class="openchip">Профиль</span></div>
+<div class="mg"><div class="mgt">Аккаунт</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="shield-check"></i></span><span class="grow nl">Проверка личности</span><span class="badge badge-warning"><i data-i="triangle-alert"></i>Подтвердить</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="heart"></i></span><span class="grow nl">Избранное</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi refer"><i data-i="gift"></i></span><span class="grow nl">Пригласить друга</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="lock"></i></span><span class="grow nl">PIN-код для входа</span><span class="mval">Выкл.</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="mg"><div class="mgt">Приложение</div><div class="plate list"><div class="mrow"><span class="mi "><i data-i="languages"></i></span><span class="grow nl">Язык</span><span class="mval">Русский</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="landmark"></i></span><span class="grow nl">Получатели</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="life-buoy"></i></span><span class="grow nl">Поддержка</span><i data-i="chevron-right" class="ic chev"></i></div><div class="mrow"><span class="mi "><i data-i="file-text"></i></span><span class="grow nl">Правовая информация</span><i data-i="chevron-right" class="ic chev"></i></div></div></div>
+<div class="out"><i data-i="log-out"></i>Выйти из аккаунта</div>
+<div class="ver">Версия 1.0.0</div>
+</div><div class="dlgw"><div class="scrim"></div><div class="dialog"><h3>Выйти из аккаунта?</h3><p>Чтобы войти снова, понадобится пароль или PIN-код.</p><div class="acts"><a class="btn btn-secondary">Отмена</a><a class="btn btn-destructive">Выйти</a></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Главная</span><span class="a-tab"><i data-i="clipboard-list"></i>Заказы</span><span class="a-tab on"><i data-i="user-round"></i>Аккаунт</span></div><div class="homebar"></div></div><div class="cz-note">Longer Russian labels fit on one line beside the amber action chip. Sign out always asks first; the destructive button is the only red.</div></div>
+</div></div></body></html>

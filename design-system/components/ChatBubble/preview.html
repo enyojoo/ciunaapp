@@ -1,0 +1,68 @@
+<!-- @dsCard group="Marketplace" height=1360 subtitle="Customer and seller bubbles, timestamps, Seen, day separator, closed-chat notice, quick replies and the composer with 2000-character counter and disabled states" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ChatBubble</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.chat{width:358px;background:var(--paper);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden;font-family:var(--font-native);display:grid}
+.chat .body{padding:14px;display:grid;gap:8px}
+.mr{display:grid;gap:2px}.mr .seen{justify-self:end;font:400 12px/16px var(--font-native);color:var(--muted);margin-right:4px}
+.mr.mine{justify-items:end}.mr.theirs{justify-items:start}
+.bubble.in{background:var(--surface);border:1px solid var(--hairline)}
+.bubble small{opacity:1}
+.bubble.in small{color:var(--muted)}
+.bubble.out small{color:#fff;opacity:.85}
+.day{justify-self:center;font:600 12px/16px var(--font-native);color:var(--muted);background:var(--neutral-surface);padding:4px 10px;border-radius:999px;margin:4px 0}
+.sysn{justify-self:center;display:flex;gap:8px;align-items:center;max-width:300px;text-align:center;font:400 13px/18px var(--font-native);color:var(--neutral-text);background:var(--neutral-surface);padding:8px 12px;border-radius:12px}
+.sysn .ic{--s:15px;flex-shrink:0}
+.who{display:flex;gap:10px;align-items:center;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--hairline)}
+.who .t{font:600 15px/20px var(--font-native)}.who .s{font:400 12px/16px var(--font-native);color:var(--muted)}
+.qr{display:flex;gap:8px;flex-wrap:wrap;padding:0 14px 10px}
+.qr .chip{font-family:var(--font-native)}
+.cmp{background:var(--surface);border-top:1px solid var(--hairline);padding:10px 12px;display:grid;gap:6px}
+.cmp .row{display:flex;gap:8px;align-items:flex-end}
+.cmp .ta{flex:1;min-height:44px;border:1px solid var(--input-edge);border-radius:22px;padding:11px 16px;font:400 15px/22px var(--font-native);background:var(--surface);overflow:hidden}
+.cmp .ta.err{border-color:var(--destructive-text)}
+.cmp .ph-t{color:var(--subtle)}
+.cmp .send{width:44px;height:44px;border-radius:22px;background:var(--primary);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.cmp .send.off{background:var(--neutral-surface);color:var(--subtle)}
+.cmp .send .ic{--s:20px}
+.cmp .cnt{font:400 12px/16px var(--font-native);color:var(--muted);text-align:right}
+.cmp .cnt.bad{color:var(--destructive-text);font-weight:600}
+.cmp.dis .ta{background:var(--neutral-surface);border-color:var(--hairline)}
+.cmp.dis .ph-t{color:var(--muted)}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:1000px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Conversation</div><div class="chat"><div class="who"><span class="avatar sm">M</span><div><div class="t">Mama T's Kitchen</div><div class="s">Order CIU-1001 · replies in about 10 min</div></div></div>
+<div class="body"><span class="day">Today</span>
+<div class="mr theirs"><div class="bubble in">Hello Amara, your order is accepted. We will start cooking now.<small>12:04</small></div></div>
+<div class="mr mine"><div class="bubble out">Thank you. Can you make the jollof less spicy please?<small>12:06</small></div></div>
+<div class="mr theirs"><div class="bubble in">Of course. Mild for the party tray, noted.<small>12:07</small></div></div>
+<div class="mr mine"><div class="bubble out">Perfect, thanks!<small>12:08</small></div><span class="seen">Seen</span></div>
+</div><div class="qr"><span class="chip">Where is my order?</span><span class="chip">Change the address</span><span class="chip">Thank you</span></div><div class="cmp "><div class="row"><div class="ta "><span class="ph-t">Write a message</span></div><span class="send " role="button" aria-label="Send" ><i data-i="send"></i></span></div></div></div><div class="cz-note">Customer bubble: primary fill, white text (4.56:1). Seller bubble: white with edge. Time inside, Seen under the last customer message only</div></div>
+<div class="cz-col"><div class="cz-cap">Closed chat</div><div class="chat"><div class="who"><span class="avatar sm">M</span><div><div class="t">Mama T's Kitchen</div><div class="s">Order CIU-0987 · completed Sep 14</div></div></div>
+<div class="body"><span class="day">Sep 14</span>
+<div class="mr theirs"><div class="bubble in">Your order has been delivered. Enjoy.<small>19:20</small></div></div>
+<div class="mr mine"><div class="bubble out">Got it, thank you<small>19:22</small></div><span class="seen">Seen</span></div>
+<span class="sysn"><i data-i="lock"></i>This chat is closed. To ask something new, contact support from the order page.</span></div>
+<div class="cmp dis"><div class="row"><div class="ta "><span class="ph-t">Chat is closed</span></div><span class="send off" role="button" aria-label="Send" aria-disabled="true"><i data-i="send"></i></span></div></div></div><div class="cz-note">Chats close 14 days after completion</div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:1000px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">Composer, empty</div><div class="chat"><div class="cmp "><div class="row"><div class="ta "><span class="ph-t">Write a message</span></div><span class="send off" role="button" aria-label="Send" aria-disabled="true"><i data-i="send"></i></span></div></div></div><div class="cz-note">Send disabled until there is text</div></div>
+<div class="cz-col"><div class="cz-cap">Composer, typing</div><div class="chat"><div class="cmp "><div class="row"><div class="ta ">Can you deliver after 6 PM?</div><span class="send " role="button" aria-label="Send" ><i data-i="send"></i></span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Composer, near limit</div><div class="chat"><div class="cmp "><div class="row"><div class="ta ">…and finally, the gate code is 4471, ring the second bell if nobody opens.</div><span class="send " role="button" aria-label="Send" ><i data-i="send"></i></span></div><div class="cnt ">1,964 / 2,000</div></div></div><div class="cz-note">Counter appears from 1,900 characters</div></div>
+<div class="cz-col"><div class="cz-cap">Composer, at limit</div><div class="chat"><div class="cmp "><div class="row"><div class="ta err">…and finally, the gate code is 4471, ring the second bell if nobody opens.</div><span class="send off" role="button" aria-label="Send" aria-disabled="true"><i data-i="send"></i></span></div><div class="cnt bad">2,000 / 2,000 · Message is at the limit</div></div></div><div class="cz-note">Typing stops; Send stays disabled until the text is shortened? No: send is allowed at 2,000 but not over</div></div>
+<div class="cz-col"><div class="cz-cap">Composer, sending offline</div><div class="chat"><div class="cmp "><div class="row"><div class="ta ">Can you deliver after 6 PM?</div><span class="send " role="button" aria-label="Send" ><i data-i="send"></i></span></div><div class="cnt ">You are offline. Your message will send when you reconnect.</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Long Russian + Chinese</div><div class="chat"><div class="body"><div class="mr mine"><div class="bubble out">Здравствуйте! Подскажите, пожалуйста, можно ли заменить рис на фуфу и добавить острый соус отдельно?<small>14:31</small></div></div><div class="mr theirs"><div class="bubble in">你好，可以的。辣酱会单独放在小袋子里，另外收费 ₽50。<small>14:33</small></div></div></div></div><div class="cz-note">Bubbles wrap at 78% width; CJK breaks anywhere</div></div>
+</div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>Show the time inside each bubble and Seen under the last customer message.</li><li>Add a day separator when the date changes.</li><li>Close the chat with a system notice that says what to do next.</li><li>Offer 2 or 3 quick replies for the usual questions.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Name the other person's "Typing…" without a guarantee; skip presence indicators.</li><li>Allow messages over 2,000 characters, or cut them silently.</li><li>Show Seen on every message; only the last one.</li><li>Share phone numbers or emails; the chat is the channel.</li></ul></div></div></div></body></html>

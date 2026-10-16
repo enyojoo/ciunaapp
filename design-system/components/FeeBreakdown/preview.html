@@ -1,0 +1,51 @@
+<!-- @dsCard group="Marketplace" height=888 subtitle="What the seller sees on an order and in earnings detail: items, delivery, Ciuna fee with its rule name, what you keep, and when it becomes available" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FeeBreakdown</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.fb{width:380px;padding:18px 20px;display:grid;gap:10px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.fb h3{margin:0;font:600 16px/22px var(--font-web)}
+.ln{display:flex;justify-content:space-between;gap:12px;font-size:15px}
+.ln span:last-child{font-variant-numeric:tabular-nums}
+.ln.fee span:last-child{color:var(--destructive-text)}
+.ln .rule{display:block;font-size:13px;color:var(--muted)}
+.ln.sub{color:var(--muted)}
+.tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--hairline);padding-top:12px;font:700 18px/24px var(--font-web)}
+.tot span:last-child{font-variant-numeric:tabular-nums}
+.when{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:18px;color:var(--muted);padding:10px 12px;border-radius:12px;background:var(--neutral-surface)}
+.when .ic{--s:16px;margin-top:1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Store order · pending</div>
+<div class="fb"><h3>Order CIU-0995</h3>
+<div class="ln"><span>Items (4 × Meat pie)</span><span>₽900.00</span></div>
+<div class="ln"><span>Delivery</span><span>₽0.00</span></div>
+<div class="ln fee"><span>Ciuna fee<span class="rule">Food 8%</span></span><span>−₽72.00</span></div>
+<div class="tot"><span>You keep</span><span>₽828.00</span></div>
+<div class="when"><i data-i="hourglass"></i>Available on Oct 22, 7 days after the order is fulfilled.</div></div></div>
+<div class="cz-col"><div class="cz-cap">With delivery · available</div>
+<div class="fb"><h3>Order CIU-0980</h3>
+<div class="ln"><span>Items (2 × Jollof rice, 1 × Zobo)</span><span>₽1,000.00</span></div>
+<div class="ln"><span>Delivery you charged</span><span>₽150.00</span></div>
+<div class="ln fee"><span>Ciuna fee<span class="rule">Food 8% of items</span></span><span>−₽80.00</span></div>
+<div class="tot"><span>You keep</span><span>₽1,070.00</span></div>
+<div class="when"><i data-i="circle-check-big"></i>Available since Oct 21. Ready to withdraw.</div></div></div>
+<div class="cz-col"><div class="cz-cap">Expert booking</div>
+<div class="fb"><h3>Booking CIU-2001</h3>
+<div class="ln"><span>Immigration consultation, 45 min</span><span>₽5,000.00</span></div>
+<div class="ln fee"><span>Ciuna fee<span class="rule">Expert services 10%</span></span><span>−₽500.00</span></div>
+<div class="tot"><span>You keep</span><span>₽4,500.00</span></div>
+<div class="when"><i data-i="hourglass"></i>Available on Oct 22, 7 days after you mark the session as done.</div></div></div>
+<div class="cz-col"><div class="cz-cap">Reversed</div>
+<div class="fb" style="background:var(--paper)"><h3>Order CIU-0970</h3>
+<div class="ln sub"><span>Items</span><span>₽700.00</span></div>
+<div class="ln sub"><span>Delivery</span><span>₽150.00</span></div>
+<div class="ln sub"><span>Ciuna fee<span class="rule">Food 8%</span></span><span>−₽56.00</span></div>
+<div class="tot"><span>You keep</span><span>₽0.00</span></div>
+<div class="when"><i data-i="undo-2"></i>The order was refunded, so these earnings were taken back on Oct 13.</div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Name the rule behind the fee ("Food 8%") so it is never a surprise.</li><li>Keep cents; the lines must add up to the penny.</li><li>End with one sentence on when the money becomes available.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't show only the net.</li><li>Don't use words like "commission adjustment"; say Ciuna fee.</li><li>Don't name payment providers.</li></ul></div></div>
+</div></div></body></html>

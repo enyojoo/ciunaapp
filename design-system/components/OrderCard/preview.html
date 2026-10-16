@@ -1,0 +1,119 @@
+<!-- @dsCard group="Marketplace" height=1934 subtitle="Seller order card: every status, fulfilment type and overdue state with its single primary action, plus the desktop board column" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>OrderCard</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.fchip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:var(--neutral-surface);color:var(--neutral-text);font:600 12px/1 var(--font-web)}
+.fchip .ic{--s:14px}
+.due{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--hairline);background:var(--surface);color:var(--ink);font:600 12px/1 var(--font-web)}
+.due .ic{--s:14px}
+.due.warn{background:var(--warning-surface);border-color:transparent;color:var(--warning-text)}
+.due.bad{background:var(--destructive-surface);border-color:transparent;color:var(--destructive-text)}
+.oc{width:340px}
+.oc .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.oc.done{background:var(--paper)}
+.oc .note{font-size:13px;line-height:18px;color:var(--muted)}
+.board{width:1120px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:20px}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:12px}
+.colh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font:600 14px/20px var(--font-web)}
+.colbody{display:grid;gap:10px;background:var(--paper);border-radius:14px;padding:10px;align-content:start;min-height:360px}
+.colbody .ocard{padding:12px;gap:8px}
+.colbody .id{font-size:15px}
+.rule{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:1120px}
+.rule .cz-section ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="justify-items:center;gap:28px">
+
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">New · delivery · running</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Order CIU-1001</div><div class="t-meta">Amara Okafor · 3 min ago</div></div><span class="badge badge-warning"><i data-i="clock"></i>New</span></div>
+<div class="t-body">2 × Jollof rice, 1 × Fried plantain</div>
+<div class="chipline"><span class="fchip"><i data-i="truck"></i>Delivery</span><span class="due"><i data-i="timer"></i>Due in 12 min</span></div>
+<div class="row"><span class="t-h2 num">₽1,250</span><a class="btn btn-lg">Accept order</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">New · pickup · under 5 min</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Order CIU-1002</div><div class="t-meta">Chen Hui · 11 min ago</div></div><span class="badge badge-warning"><i data-i="clock"></i>New</span></div>
+<div class="t-body">1 × Egusi soup with pounded yam</div>
+<div class="chipline"><span class="fchip"><i data-i="store"></i>Pickup</span><span class="due warn"><i data-i="timer"></i>Due in 4 min</span></div>
+<div class="row"><span class="t-h2 num">₽700</span><a class="btn btn-lg">Accept order</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">New · overdue</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Order CIU-1003</div><div class="t-meta">Sofia Ramirez · 34 min ago</div></div><span class="badge badge-warning"><i data-i="clock"></i>New</span></div>
+<div class="t-body">3 × Suya skewers, +2 more</div>
+<div class="chipline"><span class="fchip"><i data-i="truck"></i>Delivery</span><span class="due bad"><i data-i="timer"></i>Overdue by 6 min</span></div>
+<div class="row"><span class="t-h2 num">₽2,140</span><a class="btn btn-lg">Accept order</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Accepted</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Order CIU-0998</div><div class="t-meta">Kwame Mensah · 25 min ago</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Accepted</span></div>
+<div class="t-body">1 × Party tray, serves 6</div>
+<div class="chipline"><span class="fchip"><i data-i="store"></i>Pickup</span><span class="due"><i data-i="timer"></i>Due in 1 h 20 min</span></div>
+<div class="row"><span class="t-h2 num">₽4,800</span><a class="btn btn-lg">Start preparing</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Preparing</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Order CIU-0995</div><div class="t-meta">Amara Okafor · 52 min ago</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Preparing</span></div>
+<div class="t-body">4 × Meat pie</div>
+<div class="chipline"><span class="fchip"><i data-i="truck"></i>Delivery</span><span class="due"><i data-i="timer"></i>Due in 35 min</span></div>
+<div class="row"><span class="t-h2 num">₽960</span><span class="t-h3 t-primary">View order</span></div>
+<div class="note">Marking fulfilled needs a note, so it happens in the order detail.</div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Ready · waiting for pickup</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Order CIU-0994</div><div class="t-meta">Chen Hui · 1 h ago</div></div><span class="badge badge-success"><i data-i="package-check"></i>Ready</span></div>
+<div class="t-body">2 × Jollof rice</div>
+<div class="chipline"><span class="fchip"><i data-i="store"></i>Pickup</span></div>
+<div class="row"><span class="t-h2 num">₽900</span><span class="t-h3 t-primary">View order</span></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Digital · new</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Order CIU-1010</div><div class="t-meta">Sofia Ramirez · 2 min ago</div></div><span class="badge badge-warning"><i data-i="clock"></i>New</span></div>
+<div class="t-body">Residence permit checklist (PDF)</div>
+<div class="chipline"><span class="fchip"><i data-i="file-text"></i>Digital</span><span class="due"><i data-i="timer"></i>Due in 3 h</span></div>
+<div class="row"><span class="t-h2 num">₽1,500</span><a class="btn btn-lg">Accept order</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Online booking · new</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Booking CIU-2001</div><div class="t-meta">Kwame Mensah · 8 min ago</div></div><span class="badge badge-warning"><i data-i="clock"></i>New</span></div>
+<div class="t-body">Immigration consultation, 45 min<br><span class="t-meta">Oct 21, 11:00 AM MSK · Kwame sees 8:00 AM WAT</span></div>
+<div class="chipline"><span class="fchip"><i data-i="video"></i>Online</span><span class="due"><i data-i="timer"></i>Due in 22 h</span></div>
+<div class="row"><span class="t-h2 num">₽5,000</span><a class="btn btn-lg">Accept booking</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">In-person booking · accepted</div>
+<div class="ocard oc"><div class="top"><div><div class="id">Booking CIU-2002</div><div class="t-meta">Amara Okafor · yesterday</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Accepted</span></div>
+<div class="t-body">Document review, 30 min<br><span class="t-meta">Oct 22, 3:00 PM MSK · Tverskaya office</span></div>
+<div class="chipline"><span class="fchip"><i data-i="map-pin"></i>In person</span></div>
+<div class="row"><span class="t-h2 num">₽3,000</span><span class="t-h3 t-primary">View booking</span></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Completed</div>
+<div class="ocard oc done"><div class="top"><div><div class="id">Order CIU-0980</div><div class="t-meta">Chen Hui · Oct 14</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span></div>
+<div class="t-body">2 × Jollof rice, 1 × Zobo drink</div>
+<div class="chipline"><span class="fchip"><i data-i="truck"></i>Delivery</span></div>
+<div class="row"><span class="t-h2 num">₽1,150</span><span class="t-h3 t-primary">View order</span></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Rejected</div>
+<div class="ocard oc done"><div class="top"><div><div class="id">Order CIU-0977</div><div class="t-meta">Sofia Ramirez · Oct 13</div></div><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></div>
+<div class="t-body">1 × Egusi soup</div>
+<div class="chipline"><span class="fchip"><i data-i="truck"></i>Delivery</span></div>
+<div class="note">Reason: out of egusi today. The customer was refunded.</div>
+<div class="row"><span class="t-h2 num">₽700</span><span class="t-h3 t-primary">View order</span></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Cancelled by customer</div>
+<div class="ocard oc done"><div class="top"><div><div class="id">Order CIU-0975</div><div class="t-meta">Kwame Mensah · Oct 13</div></div><span class="badge badge-neutral"><i data-i="x"></i>Cancelled</span></div>
+<div class="t-body">3 × Meat pie</div>
+<div class="chipline"><span class="fchip"><i data-i="store"></i>Pickup</span></div>
+<div class="row"><span class="t-h2 num">₽720</span><span class="t-h3 t-primary">View order</span></div></div></div>
+</div>
+
+<div class="cz-col" style="width:1120px"><div class="cz-cap">Desktop board: one column per status</div>
+<div class="board"><div class="colh" style="margin:0"><span class="t-h2">Orders</span><span class="t-meta">Mama T's Kitchen · today</span></div>
+<div class="cols">
+<div><div class="colh">New <span class="count">2</span></div><div class="colbody">
+<div class="ocard"><div class="top"><div><div class="id">CIU-1001</div><div class="t-meta">Amara Okafor · 3 min</div></div><span class="fchip"><i data-i="truck"></i>Delivery</span></div><div class="t-meta">2 × Jollof rice, +1 more</div><div class="chipline"><span class="due warn"><i data-i="timer"></i>Due in 4 min</span></div><div class="row" style="display:flex;justify-content:space-between;align-items:center"><b class="num">₽1,250</b><a class="btn btn-sm">Accept order</a></div></div>
+<div class="ocard"><div class="top"><div><div class="id">CIU-1003</div><div class="t-meta">Sofia Ramirez · 34 min</div></div><span class="fchip"><i data-i="truck"></i>Delivery</span></div><div class="t-meta">3 × Suya skewers, +2 more</div><div class="chipline"><span class="due bad"><i data-i="timer"></i>Overdue by 6 min</span></div><div style="display:flex;justify-content:space-between;align-items:center"><b class="num">₽2,140</b><a class="btn btn-sm">Accept order</a></div></div></div></div>
+<div><div class="colh">Accepted <span class="count">1</span></div><div class="colbody">
+<div class="ocard"><div class="top"><div><div class="id">CIU-0998</div><div class="t-meta">Kwame Mensah · 25 min</div></div><span class="fchip"><i data-i="store"></i>Pickup</span></div><div class="t-meta">1 × Party tray</div><div class="chipline"><span class="due"><i data-i="timer"></i>Due in 1 h 20 min</span></div><div style="display:flex;justify-content:space-between;align-items:center"><b class="num">₽4,800</b><a class="btn btn-sm">Start preparing</a></div></div></div></div>
+<div><div class="colh">Preparing <span class="count">1</span></div><div class="colbody">
+<div class="ocard"><div class="top"><div><div class="id">CIU-0995</div><div class="t-meta">Amara Okafor · 52 min</div></div><span class="fchip"><i data-i="truck"></i>Delivery</span></div><div class="t-meta">4 × Meat pie</div><div class="chipline"><span class="due"><i data-i="timer"></i>Due in 35 min</span></div><div style="display:flex;justify-content:space-between;align-items:center"><b class="num">₽960</b><span class="t-h3 t-primary">View order</span></div></div></div></div>
+<div><div class="colh">Ready <span class="t-meta">0</span></div><div class="colbody"><div class="t-meta" style="text-align:center;padding:40px 8px">Nothing ready yet. Orders you finish preparing appear here.</div></div></div>
+</div></div></div>
+
+<div class="rule">
+<div class="cz-section"><p class="cz-h">Use</p><ul><li>One primary button per card: Accept order on New, Start preparing on Accepted.</li><li>Show the due timer only while the order is live; state overdue in words.</li><li>Make the whole card open the order detail.</li><li>Keep the fulfilment chip and total on every card.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't put Reject on the card. It asks for a reason and lives in the detail.</li><li>Don't show a primary button on completed, rejected or cancelled cards.</li><li>Don't use orange for the timer or status. Overdue is destructive text.</li><li>Don't hide the customer's name or the total behind the detail.</li></ul></div>
+</div>
+</div></div></body></html>

@@ -1,0 +1,98 @@
+<!-- @dsCard group="Customer app · Screens" height=936 width=1300 subtitle="Product detail: gallery, price and sale, vendor, delivery or pickup, stock, translation hint, reviews teaser and the sticky add-to-cart bar" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ProductPage</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.cz-grid{gap:40px}
+.nt{font:700 24px/30px var(--font-native);letter-spacing:-.3px;margin:0}
+.nh{font:700 18px/24px var(--font-native)}
+.nl{font:600 15px/20px var(--font-native)}
+.nb{font:400 15px/22px var(--font-native)}
+.nm{font:400 13px/18px var(--font-native);color:var(--muted)}
+.pad{padding:0 16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.bk{width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;flex-shrink:0}
+.hd{display:flex;align-items:center;gap:10px;padding:8px 16px}
+.hd .nh{flex:1}
+.chips{display:flex;gap:8px;padding:12px 16px 0;overflow:hidden}
+.sec{display:flex;align-items:baseline;justify-content:space-between;padding:20px 16px 10px}
+.sec a{font:600 14px/20px var(--font-native);color:var(--primary-text);text-decoration:none}
+.rail{display:flex;gap:12px;padding:0 16px;overflow:hidden}
+.scard{width:268px;flex-shrink:0;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.scard.wide{width:auto}
+.scard .ph{height:104px;border-radius:0}
+.scard .b{padding:12px;display:grid;gap:4px}
+.scard.closed .ph{opacity:.55}
+.scard.closed .nl{color:var(--muted)}
+.verified{color:var(--success-text);display:inline-flex;vertical-align:middle}
+.verified .ic{--s:16px}
+.mr{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:400 13px/18px var(--font-native);color:var(--muted)}
+.mr .ic{--s:14px}
+.star{--s:14px;fill:currentColor;color:var(--primary-text)}
+.step{display:inline-flex;align-items:center;border:1px solid var(--input-edge);border-radius:999px;height:48px;background:var(--surface);font:600 16px/1 var(--font-native)}
+.step span{width:48px;height:48px;display:grid;place-items:center}
+.step b{min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+.step.sm{height:44px}.step.sm span{width:44px;height:44px}
+.float{position:absolute;left:0;right:0;bottom:0;padding:0 16px 10px}
+.cartbar{height:56px;border-radius:16px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:600 15px/1 var(--font-native);box-shadow:var(--shadow-md)}
+.cartbar .ic{--s:20px}
+.prow{display:flex;gap:12px;padding:14px 16px;align-items:center}
+.prow .ph{width:80px;height:80px;flex-shrink:0}
+.prow .grow{flex:1;min-width:0;display:grid;gap:2px}
+.add{width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.add.off{background:var(--neutral-surface);color:var(--muted)}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.plate.p{padding:14px 16px}
+.stack{display:grid;gap:12px}
+.lbl{font:600 13px/18px var(--font-native);color:var(--muted)}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt.off{opacity:.55}
+.opt .grow{flex:1;min-width:0;display:grid;gap:2px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--neutral-surface);border-radius:16px}
+.seg span{height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 14px/1 var(--font-native);color:var(--muted)}
+.seg span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-xs)}
+.seg .ic{--s:18px}
+.fs.tabs{display:flex;width:100%}
+.fs.tabs .tab{flex:1;justify-content:center;padding:0 6px}
+.row2{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font:400 15px/22px var(--font-native)}
+.row2.tot{font:700 17px/24px var(--font-native)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px 16px 0}
+.steps i{height:4px;border-radius:2px;background:var(--hairline);display:block}
+.steps i.on{background:var(--primary)}
+.cap2{display:flex;justify-content:space-between;padding:6px 16px 0;font:600 12px/16px var(--font-native);color:var(--muted)}
+.cap2 .on{color:var(--ink)}
+.dots2{display:flex;gap:6px;justify-content:center}
+.dots2 i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6);display:block}
+.dots2 i.on{background:#fff;width:18px;border-radius:4px}
+.mid{text-align:center;padding:48px 28px}
+.mid .avatar{margin:0 auto 14px}
+.mid p{margin:6px 0 18px}
+.sheetov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+.sheetov .scrim{position:absolute;inset:0}
+.sheetov .sheet{position:relative;padding:8px 20px 28px;display:grid;gap:12px}
+.dn{height:64px;display:flex;align-items:center;gap:32px;padding:0 32px;background:var(--surface);border-bottom:1px solid var(--hairline)}
+.dn nav{display:flex;gap:6px;flex:1}
+.dn nav span{padding:8px 14px;border-radius:12px;font:600 15px/20px var(--font-web);color:var(--muted)}
+.dn nav span.on{background:var(--primary-tint);color:var(--primary-text)}
+.dn .r{display:flex;gap:10px;align-items:center}
+.dmain{padding:28px 32px;max-width:1136px;margin:0 auto}
+.dmain .nt,.dmain .nh,.dmain .nl,.dmain .nb,.dmain .nm{font-family:var(--font-web)}
+.dside{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
+.toastw{position:absolute;left:16px;right:16px;bottom:96px;display:flex;justify-content:center}
+.gal{position:relative;height:340px;border-radius:0}
+.gal .ov{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between}
+.gal .dots2{position:absolute;left:0;right:0;bottom:14px}
+.rv{display:grid;gap:4px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid"><div class="cz-col"><div class="cz-cap">Default</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="scroll" style=""><div class="gal ph ph-1" style=""><i data-i="utensils"></i><div class="ov"><span class="bk"><i data-i="arrow-left"></i></span><span class="heart on"><i data-i="heart"></i></span></div><div class="dots2"><i class="on"></i><i></i><i></i><i></i></div></div><div class="pad stack" style="padding-top:16px;padding-bottom:20px">
+<div><h1 class="nt" style="font-size:24px;line-height:30px">Jollof rice with chicken</h1><div class="num" style="font:700 22px/30px var(--font-native);margin-top:6px">₽520 <s class="nm" style="font-weight:400;font-size:15px">₽650</s></div></div>
+<span class="badge badge-neutral" style="justify-self:start"><i data-i="package-check"></i>12 left</span><div class="plate p" style="display:flex;align-items:center;gap:12px"><span class="avatar sq" style="background:var(--surface);border:1px solid var(--hairline)">MT</span><div style="flex:1"><div class="nl">Mama T's Kitchen <span class="verified"><i data-i="badge-check"></i></span></div><div class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.8</b> (126) · Moscow</div></div><i data-i="chevron-right"></i></div><div class="stack"><span class="lbl">Get it by</span><div class="opt on"><span class="radio on"></span><div class="grow"><span class="nl">Delivery</span><span class="nm">35–50 min · ₽150 · Moscow within the Garden Ring</span></div><i data-i="truck"></i></div><div class="opt"><span class="radio"></span><div class="grow"><span class="nl">Pickup</span><span class="nm">Tverskaya 12 · ready in 25 min · free</span></div><i data-i="store"></i></div></div>
+<div><span class="lbl">Description</span><p class="nb" style="margin:4px 0 0">Smoky party jollof with grilled chicken, fried plantain and coleslaw. Medium spice. Serves one.</p></div><div class="plate p rv"><div style="display:flex;justify-content:space-between"><span class="nl">Reviews</span><a class="nl" style="color:var(--primary-text)">See all 126</a></div><div style="display:flex;gap:8px;align-items:center"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><b>4.8</b></div><p class="nb" style="margin:4px 0 0">"Tastes like my friend's kitchen in Lagos. Arrived hot." <span class="nm">Chen Hui</span></p></div></div></div></div><div class="stickybar" style="align-items:center"><span class="step"><span><i data-i="minus" style="--s:18px"></i></span><b>1</b><span><i data-i="plus" style="--s:18px"></i></span></span><a class="btn btn-lg" style="flex:1;height:52px">Add to cart · ₽650</a></div><div class="homebar"></div></div><div class="cz-note">Sale price shows the old price struck through. The bar stays pinned; the stepper sets quantity before adding.</div></div><div class="cz-col"><div class="cz-cap">Sold out</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="scroll" style=""><div class="gal ph ph-1" style="opacity:1"><i data-i="utensils"></i><div class="ov"><span class="bk"><i data-i="arrow-left"></i></span><span class="heart on"><i data-i="heart"></i></span></div><div class="dots2"><i class="on"></i><i></i><i></i><i></i></div></div><div class="pad stack" style="padding-top:16px;padding-bottom:20px">
+<div><h1 class="nt" style="font-size:24px;line-height:30px">Egusi soup with pounded yam</h1><div class="num" style="font:700 22px/30px var(--font-native);margin-top:6px">₽700</div></div>
+<span class="badge badge-neutral" style="justify-self:start"><i data-i="circle"></i>Sold out</span><div class="plate p" style="display:flex;align-items:center;gap:12px"><span class="avatar sq" style="background:var(--surface);border:1px solid var(--hairline)">MT</span><div style="flex:1"><div class="nl">Mama T's Kitchen <span class="verified"><i data-i="badge-check"></i></span></div><div class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.8</b> (126) · Moscow</div></div><i data-i="chevron-right"></i></div><div class="stack"><span class="lbl">Get it by</span><div class="opt on off"><span class="radio on"></span><div class="grow"><span class="nl">Delivery</span><span class="nm">35–50 min · ₽150 · Moscow within the Garden Ring</span></div><i data-i="truck"></i></div><div class="opt off"><span class="radio"></span><div class="grow"><span class="nl">Pickup</span><span class="nm">Tverskaya 12 · ready in 25 min · free</span></div><i data-i="store"></i></div></div><div class="banner banner-neutral" style="padding:10px 14px"><span style="display:flex;gap:10px;align-items:center"><i data-i="languages"></i><span>Shown in Русский. Translated by the seller. <a>Show original</a></span></span></div>
+<div><span class="lbl">Description</span><p class="nb" style="margin:4px 0 0">Melon-seed stew with goat meat and spinach, served with pounded yam. Back on Thursday.</p></div><div class="plate p rv"><div style="display:flex;justify-content:space-between"><span class="nl">Reviews</span><a class="nl" style="color:var(--primary-text)">See all 126</a></div><div style="display:flex;gap:8px;align-items:center"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><b>4.8</b></div><p class="nb" style="margin:4px 0 0">"Tastes like my friend's kitchen in Lagos. Arrived hot." <span class="nm">Chen Hui</span></p></div></div></div></div><div class="stickybar" style="align-items:center"><a class="btn btn-lg is-disabled" style="flex:1;height:52px">Sold out</a></div><div class="homebar"></div></div><div class="cz-note">Fulfilment is dimmed and the bar offers no add action. The hint shows when the seller translated the text.</div></div><div class="cz-col"><div class="cz-cap">Long text, Russian</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="scroll" style=""><div class="gal ph ph-1" style=""><i data-i="utensils"></i><div class="ov"><span class="bk"><i data-i="arrow-left"></i></span><span class="heart on"><i data-i="heart"></i></span></div><div class="dots2"><i class="on"></i><i></i><i></i><i></i></div></div><div class="pad stack" style="padding-top:16px;padding-bottom:20px">
+<div><h1 class="nt" style="font-size:24px;line-height:30px">Нигерийский праздничный набор: джоллоф, жареные бананы, куриные ножки гриль и острый соус на четверых</h1><div class="num" style="font:700 22px/30px var(--font-native);margin-top:6px">₽2,400</div></div>
+<span class="badge badge-warning" style="justify-self:start"><i data-i="timer"></i>Only 3 left</span><div class="plate p" style="display:flex;align-items:center;gap:12px"><span class="avatar sq" style="background:var(--surface);border:1px solid var(--hairline)">MT</span><div style="flex:1"><div class="nl">Mama T's Kitchen <span class="verified"><i data-i="badge-check"></i></span></div><div class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.8</b> (126) · Moscow</div></div><i data-i="chevron-right"></i></div><div class="stack"><span class="lbl">Get it by</span><div class="opt on"><span class="radio on"></span><div class="grow"><span class="nl">Delivery</span><span class="nm">35–50 min · ₽150 · Moscow within the Garden Ring</span></div><i data-i="truck"></i></div><div class="opt"><span class="radio"></span><div class="grow"><span class="nl">Pickup</span><span class="nm">Tverskaya 12 · ready in 25 min · free</span></div><i data-i="store"></i></div></div><div class="banner banner-neutral" style="padding:10px 14px"><span style="display:flex;gap:10px;align-items:center"><i data-i="languages"></i><span>Shown in Русский. Translated by the seller. <a>Show original</a></span></span></div>
+<div><span class="lbl">Description</span><p class="nb" style="margin:4px 0 0">Большая порция джоллоф-риса с куриными ножками гриль, жареными бананами плантана и салатом коул-слоу. Соус шито подаётся отдельно, степень остроты выбирается при заказе. Подходит для семейного ужина или встречи друзей. Заказывайте за два часа до доставки, чтобы мы приготовили всё свежим.</p></div><div class="plate p rv"><div style="display:flex;justify-content:space-between"><span class="nl">Reviews</span><a class="nl" style="color:var(--primary-text)">See all 126</a></div><div style="display:flex;gap:8px;align-items:center"><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><b>4.8</b></div><p class="nb" style="margin:4px 0 0">"Tastes like my friend's kitchen in Lagos. Arrived hot." <span class="nm">Chen Hui</span></p></div></div></div></div><div class="stickybar" style="align-items:center"><span class="step"><span><i data-i="minus" style="--s:18px"></i></span><b>1</b><span><i data-i="plus" style="--s:18px"></i></span></span><a class="btn btn-lg" style="flex:1;height:52px">Add to cart · ₽650</a></div><div class="homebar"></div></div><div class="cz-note">Titles wrap to three lines, never truncate; the bar and price stay in view.</div></div></div></div></body></html>

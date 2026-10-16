@@ -1,0 +1,60 @@
+<!-- @dsCard group="Forms" height=1184 subtitle="Store logo (square), cover image (wide) and product gallery grid with eight slots, primary photo and reorder handles" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ImageUpload</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.slot{aspect-ratio:1;border:1.5px dashed var(--input-edge);border-radius:var(--radius-control);background:var(--surface);display:grid;place-items:center;color:var(--muted);text-align:center;font:600 12px/16px var(--font-web)}
+.slot .ic{--s:22px}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:520px}
+.gi{position:relative;aspect-ratio:1}
+.gi .ph{position:absolute;inset:0}
+.gi .grip{position:absolute;left:6px;top:6px;width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.95);display:grid;place-items:center;color:var(--ink);box-shadow:var(--shadow-xs)}
+.gi .x{position:absolute;right:6px;top:6px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;color:var(--ink);box-shadow:var(--shadow-xs)}
+.gi .grip .ic,.gi .x .ic{--s:15px}
+.gi .main{position:absolute;left:6px;bottom:6px}
+.gi.drag{transform:rotate(-3deg);box-shadow:var(--shadow-lg);z-index:2;border-radius:12px;outline:2px solid var(--primary)}
+.logo-u{display:flex;gap:16px;align-items:center}
+.logo-box{width:96px;height:96px;border-radius:20px;background:var(--primary);color:#fff;display:grid;place-items:center;font:700 38px/1 var(--font-web)}
+.cover-box{aspect-ratio:3/1;border-radius:var(--radius-card);position:relative}
+.cover-box .acts{position:absolute;right:12px;bottom:12px;display:flex;gap:8px}
+.cover-box .acts .btn{background:rgba(255,255,255,.95);color:var(--ink);border-color:transparent}
+.dashbox{border:1.5px dashed var(--input-edge);border-radius:var(--radius-card);background:var(--surface);display:grid;place-items:center;text-align:center;aspect-ratio:3/1;gap:4px;align-content:center}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Logo: square, 512 × 512</p>
+<div class="g2">
+  <div class="cell"><span class="st">Empty</span><div class="logo-u"><div class="slot" style="width:96px;border-radius:20px"><span><i data-i="image-plus"></i><br>Logo</span></div><div><a class="btn btn-secondary btn-sm"><i data-i="upload"></i>Upload logo</a><p class="hint" style="margin:6px 0 0">Square PNG or JPG, at least 512 px.<br>No logo yet: your initial is shown.</p></div></div></div>
+  <div class="cell"><span class="st">Set</span><div class="logo-u"><div class="logo-box">M</div><div style="display:grid;gap:6px;justify-items:start"><a class="btn btn-secondary btn-sm"><i data-i="refresh-cw"></i>Replace</a><a class="btn btn-ghost btn-sm" style="color:var(--destructive-text)"><i data-i="trash-2"></i>Remove</a></div></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Cover: wide, 1500 × 500 (3:1)</p>
+<div class="g2">
+  <div class="cell"><span class="st">Empty</span><div class="dashbox"><i data-i="image-plus" style="--s:24px;color:var(--muted)"></i><div class="t-h3">Add a cover image</div><div class="t-meta">JPG or PNG, 1500 × 500. Keep the subject in the centre.</div></div></div>
+  <div class="cell"><span class="st">Set</span><div class="cover-box"><div class="ph ph-3" style="position:absolute;inset:0;border-radius:var(--radius-card)"><i data-i="store"></i></div><div class="acts"><a class="btn btn-sm"><i data-i="refresh-cw"></i>Replace</a><a class="btn btn-sm" aria-label="Remove cover"><i data-i="trash-2"></i></a></div></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Gallery: up to 8 photos, first is the main photo</p>
+<div class="gal">
+  <div class="gi"><div class="ph ph-1"><i data-i="utensils"></i></div><span class="grip" title="Drag to reorder"><i data-i="ellipsis-vertical"></i></span><span class="x"><i data-i="x"></i></span><span class="badge badge-primary main">Main</span></div>
+  <div class="gi"><div class="ph ph-2"><i data-i="utensils"></i></div><span class="grip"><i data-i="ellipsis-vertical"></i></span><span class="x"><i data-i="x"></i></span></div>
+  <div class="gi drag"><div class="ph ph-3"><i data-i="utensils"></i></div><span class="grip"><i data-i="ellipsis-vertical"></i></span></div>
+  <div class="gi"><div class="ph ph-4"><i data-i="utensils"></i></div><span class="grip"><i data-i="ellipsis-vertical"></i></span><span class="x"><i data-i="x"></i></span></div>
+  <div class="slot"><span><i data-i="plus"></i><br>Add photo</span></div>
+  <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+</div>
+<p class="hint">4 of 8 added. The third photo is being dragged: grab the handle, or on a phone use the move buttons in the photo's menu. The first photo is the main photo and the one shown in lists.</p></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>State the size and ratio next to the control. Show a preview as soon as the file is picked.</li><li>Reorder by handle on desktop; "Move earlier / later" in the menu on phones for keyboard and touch parity.</li><li>Empty slots stay visible so the limit is clear.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't stretch a photo to fit; crop with a preview.</li><li>Don't bury remove: one tap with an undo toast, no confirm dialog.</li><li>Don't allow upload without alt text on product photos where the form asks for it.</li></ul></div></div></div>
+
+</div></div></body></html>

@@ -1,0 +1,110 @@
+<!-- @dsCard group="Seller · Screens" height=1000 subtitle="Expert bookings: Requests, Upcoming and Past tabs, detail with session and device time zones, meeting link form, Mark as completed and Decline with refund note" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SellerBookings</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pg{padding:18px 16px 16px}
+.pg h1{margin:0;font:700 24px/30px var(--font-web);letter-spacing:-.3px}
+.sub{margin:4px 0 14px;color:var(--muted);font-size:14px;line-height:20px}
+.stk{display:grid;gap:12px}
+.rw{display:flex;align-items:center;gap:10px}
+.rw.top{align-items:flex-start}
+.sp{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gr{flex:1;min-width:0}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.pad{padding:16px}
+.sec{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px 20px;display:grid;gap:14px;align-content:start}
+.sec h2{margin:0;font:600 16px/22px var(--font-web)}
+.sec .hp{margin:2px 0 0;font-size:13px;line-height:18px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.phone .two,.phone .three,.sf .two{grid-template-columns:1fr}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sf{width:390px;border-radius:var(--radius-sheet);overflow:hidden;padding-top:44px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--shadow-md)}
+.sf .sheet{border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;box-shadow:none;padding:0 20px 24px;display:grid;gap:14px}
+.df{width:390px;border-radius:var(--radius-sheet);padding:28px 18px;box-shadow:var(--shadow-md)}
+.dialog.dg{padding:22px;display:grid;gap:12px}
+.dg h3{margin:0;font:600 18px/24px var(--font-web)}
+.dg p{margin:0;color:var(--muted);font-size:14px;line-height:20px}
+.dg .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.sh-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:16px}
+.sh-h h3{margin:0;font:600 18px/24px var(--font-web)}
+.sh-h p{margin:2px 0 0;font-size:14px;line-height:20px;color:var(--muted)}
+.x{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:var(--neutral-surface);flex-shrink:0}
+.ovl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;z-index:5}
+.ovl>.scrim{position:absolute;inset:0}
+.ovl>.sheet{position:relative;padding:0 20px 28px;display:grid;gap:14px}
+.ovl.mid{justify-content:center;align-items:center;padding:24px}
+.ovl.mid>.dialog{position:relative;width:100%;max-width:440px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;min-height:56px}
+.sw .t{font:600 15px/20px var(--font-web)}
+.sw .s{font-size:13px;line-height:18px;color:var(--muted)}
+.opt{border:1px solid var(--input-edge);border-radius:var(--radius-control);padding:12px 14px;display:flex;gap:10px;align-items:center;background:var(--surface);font:600 14px/20px var(--font-web)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt small{display:block;font:400 12px/16px var(--font-web);color:var(--muted)}
+.ctr{font-size:12px;line-height:16px;color:var(--muted);text-align:right}
+.ctr.bad{color:var(--destructive-text)}
+.unit{display:grid;grid-template-columns:1fr 112px;gap:8px}
+.dbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 36px;background:var(--surface);border-top:1px solid var(--hairline)}
+.s-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.wm{font:700 22px/1 var(--font-web);letter-spacing:-.5px;display:inline-flex;align-items:center;gap:6px}
+.wm i{width:10px;height:10px;border-radius:50%;background:var(--brand-primary);display:block}
+.side-sp{flex:1}
+.bdg-n{margin-left:auto}
+.mini.ok{background:var(--success-surface);color:var(--success-text)}
+.crumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap}
+.hs{height:1px;background:var(--hairline)}
+.line{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px}
+.line.tot{font-weight:600;border-top:1px solid var(--hairline);padding-top:10px}
+.line .m{color:var(--muted)}
+.sf-wrap{display:grid;gap:12px;justify-items:center}
+</style></head>
+<body><div class="cz-page">
+<div class="cz-grid"><div class="cz-col"><div class="cz-cap">Desktop: requests</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/bookings</span></div>
+<div class="desk-body" style="position:relative">
+<aside class="s-side"><div class="rw" style="padding:4px 12px 0"><span class="wm"><i></i>ciuna</span><span class="badge badge-neutral">Seller</span></div>
+<nav class="s-nav"><span class="s-link"><i data-i="house"></i>Home</span><span class="s-link on"><i data-i="calendar-check"></i>Bookings</span><span class="s-link"><i data-i="message-square"></i>Messages</span><span class="s-link"><i data-i="briefcase"></i>Services</span><span class="s-link"><i data-i="clock"></i>Availability</span><span class="s-link"><i data-i="wallet"></i>Earnings</span><span class="s-link"><i data-i="star"></i>Reviews</span><span class="s-link"><i data-i="menu"></i>More</span></nav>
+<div class="s-biz"><span class="logo">A</span><span class="gr"><b style="font-size:14px">Dr. Amina Yusuf</b><br><span class="t-meta">Expert · Owner</span></span><i data-i="chevron-down" style="--s:16px"></i></div></aside>
+<div class="s-col"><div class="s-top" style="height:64px;padding:0 36px"><div class="input-wrap" style="width:320px"><i data-i="search" style="--s:18px"></i><input class="input" style="height:40px" placeholder="Search"></div><div class="rw"><i data-i="bell" style="--s:20px"></i><span class="avatar sm">A</span></div></div>
+<main class="s-main gr"><div class="page-h"><div><h1>Bookings</h1><p>Sessions customers have booked and paid for.</p></div></div><div style="margin-bottom:16px"><div class="tabs" style="max-width:100%"><span class="tab on">Requests <span class="count">2</span></span><span class="tab">Upcoming <span class="count">3</span></span><span class="tab">Past</span></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div class="ocard"><div class="top"><div class="gr"><div class="id">Amara Okafor</div><div class="t-meta">Residence permit consultation · ₽4,500</div></div><span class="badge badge-warning">New request</span></div>
+<div class="chipline"><span class="mini num"><i data-i="calendar-days"></i>Mon 19 Oct, 14:00 MSK</span><span class="mini warn"><i data-i="timer"></i>Respond by 11:30</span></div><div class="rw" style="justify-content:flex-end"><a class="btn btn-secondary btn-sm">Decline</a><a class="btn btn-sm">Accept</a></div></div><div class="ocard"><div class="top"><div class="gr"><div class="id">Chen Hui</div><div class="t-meta">Document review before filing · ₽2,500</div></div><span class="badge badge-warning">New request</span></div>
+<div class="chipline"><span class="mini num"><i data-i="calendar-days"></i>Tue 20 Oct, 10:30 MSK</span><span class="mini bad"><i data-i="timer"></i>Answer now, this request is overdue</span></div><div class="rw" style="justify-content:flex-end"><a class="btn btn-secondary btn-sm">Decline</a><a class="btn btn-sm">Accept</a></div></div></div></main></div></div></div><div class="cz-note">Requests carry a respond-by timer; overdue turns destructive and says so in words.</div></div>
+<div class="cz-col"><div class="cz-cap">Phone: upcoming</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">A</span><span><b style="font-size:14px">Dr. Amina Yusuf</b><br><span class="t-meta">Expert · Owner</span></span></div><i data-i="menu" style="--s:22px"></i></div>
+  <div class="screen"><div class="scroll pg"><h1>Bookings</h1><p class="sub">Sessions customers have booked and paid for.</p><div style="margin-bottom:12px"><div class="tabs" style="max-width:100%"><span class="tab">Requests <span class="count">2</span></span><span class="tab on">Upcoming <span class="count">3</span></span><span class="tab">Past</span></div></div><div class="stk"><div class="ocard"><div class="top"><div class="gr"><div class="id">Sofia Ramirez</div><div class="t-meta">Residence permit consultation · ₽4,500</div></div><span class="badge badge-success">Accepted</span></div>
+<div class="chipline"><span class="mini num"><i data-i="calendar-days"></i>Wed 21 Oct, 12:00 MSK</span><span class="mini ok"><i data-i="video"></i>Link added</span></div><div class="rw" style="justify-content:flex-end"><a class="btn btn-secondary btn-sm">View details</a></div></div><div class="ocard"><div class="top"><div class="gr"><div class="id">Kwame Mensah</div><div class="t-meta">Work visa renewal advice · ₽5,200</div></div><span class="badge badge-success">Accepted</span></div>
+<div class="chipline"><span class="mini num"><i data-i="calendar-days"></i>Thu 22 Oct, 16:00 MSK</span><span class="mini warn"><i data-i="video"></i>Add meeting link</span></div><div class="rw" style="justify-content:flex-end"><a class="btn btn-secondary btn-sm">View details</a></div></div><div class="ocard"><div class="top"><div class="gr"><div class="id">Amara Okafor</div><div class="t-meta">Document review before filing · ₽2,500</div></div><span class="badge badge-success">Completed</span></div>
+<div class="chipline"><span class="mini num"><i data-i="calendar-days"></i>Mon 12 Oct, 11:00 MSK</span></div></div></div></div></div>
+  <div class="s-bottom" style="grid-template-columns:repeat(5,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi on"><i data-i="calendar-check"></i>Bookings</span><span class="s-bi"><i data-i="message-square"></i>Messages</span><span class="s-bi"><i data-i="briefcase"></i>Services</span><span class="s-bi"><i data-i="menu"></i>More</span></div>
+  <div class="homebar"></div></div></div>
+<div class="cz-col"><div class="cz-cap">Phone: no requests</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">A</span><span><b style="font-size:14px">Dr. Amina Yusuf</b><br><span class="t-meta">Expert · Owner</span></span></div><i data-i="menu" style="--s:22px"></i></div>
+  <div class="screen"><div class="scroll pg"><h1>Bookings</h1><p class="sub">Sessions customers have booked and paid for.</p><div style="margin-bottom:12px"><div class="tabs" style="max-width:100%"><span class="tab on">Requests</span><span class="tab">Upcoming</span><span class="tab">Past</span></div></div><div style="text-align:center;padding:56px 20px"><div class="avatar lg" style="margin:0 auto 14px"><i data-i="calendar-check" style="--s:26px"></i></div><div class="t-h2">No requests to answer</div><p class="t-meta" style="margin:6px 0 0">New paid bookings appear here for you to accept.</p></div></div></div>
+  <div class="s-bottom" style="grid-template-columns:repeat(5,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi on"><i data-i="calendar-check"></i>Bookings</span><span class="s-bi"><i data-i="message-square"></i>Messages</span><span class="s-bi"><i data-i="briefcase"></i>Services</span><span class="s-bi"><i data-i="menu"></i>More</span></div>
+  <div class="homebar"></div></div></div>
+<div class="cz-col"><div class="cz-cap">Detail: new request</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="rw"><i data-i="arrow-left" style="--s:22px"></i><b style="font-size:16px">Booking</b></div></div>
+  <div class="screen"><div class="scroll pg"><div class="stk">
+<div class="plate pad"><div class="sp"><div><div class="t-eyebrow">Customer</div><div class="rw" style="margin-top:6px"><span class="avatar">AO</span><div><b>Amara Okafor</b><div class="t-meta">amara.okafor@mail.com</div></div></div></div><span class="badge badge-warning">New request</span></div>
+<div class="hs" style="margin:14px 0"></div>
+<dl class="kv"><dt>Session</dt><dd>Residence permit consultation</dd><dt>Price</dt><dd class="num">₽4,500</dd><dt>Session time (MSK)</dt><dd class="num"><b>Mon 19 Oct, 14:00–15:00</b></dd><dt>Your device time (WAT)</dt><dd class="num">Mon 19 Oct, 12:00–13:00</dd></dl></div>
+<div class="plate pad"><div class="t-eyebrow">Note from the customer</div><p style="margin:6px 0 0;font-size:14px">I renew my residence permit in December. Can we also talk about the medical certificate?</p></div>
+<div class="banner banner-warning"><i data-i="timer" style="--s:18px"></i><span class="gr">Respond by 11:30. After that the booking may expire and the customer is refunded.</span></div></div></div><div class="stickyact"><a class="btn btn-secondary gr" style="color:var(--destructive-text)">Decline</a><a class="btn gr">Accept</a></div></div>
+  <div class="homebar"></div></div><div class="cz-note">Accept and Decline are the only actions on a request.</div></div>
+<div class="cz-col"><div class="cz-cap">Detail: accepted, before it ends</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="rw"><i data-i="arrow-left" style="--s:22px"></i><b style="font-size:16px">Booking</b></div></div>
+  <div class="screen"><div class="scroll pg"><div class="stk">
+<div class="plate pad"><div class="sp"><div><div class="t-eyebrow">Customer</div><div class="rw" style="margin-top:6px"><span class="avatar">AO</span><div><b>Amara Okafor</b><div class="t-meta">amara.okafor@mail.com</div></div></div></div><span class="badge badge-success">Accepted</span></div>
+<div class="hs" style="margin:14px 0"></div>
+<dl class="kv"><dt>Session</dt><dd>Residence permit consultation</dd><dt>Price</dt><dd class="num">₽4,500</dd><dt>Session time (MSK)</dt><dd class="num"><b>Mon 19 Oct, 14:00–15:00</b></dd><dt>Your device time (WAT)</dt><dd class="num">Mon 19 Oct, 12:00–13:00</dd></dl></div>
+<div class="plate pad"><div class="t-eyebrow">Note from the customer</div><p style="margin:6px 0 0;font-size:14px">I renew my residence permit in December. Can we also talk about the medical certificate?</p></div>
+<div class="sec"><div><h2>Meeting link</h2><p class="hp">The customer sees this once you save it.</p></div>
+<div class="field"><label class="label">Meeting link (https)</label><input class="input is-error" value="meet.google.com/abc-defg"></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter a link that starts with https://</span>
+<div class="field"><label class="label">Instructions for the customer</label><textarea class="textarea" style="min-height:72px">Please join 5 minutes early and have your passport ready.</textarea></div><a class="btn btn-secondary">Save meeting details</a></div></div></div><div class="stickyact" style="flex-direction:column"><a class="btn btn-block is-disabled" aria-disabled="true">Mark as completed</a><span class="t-meta" style="text-align:center">You can complete this session after it ends at 15:00 MSK.</span><a class="btn btn-ghost btn-block" style="color:var(--destructive-text)">Decline</a></div></div>
+  <div class="homebar"></div></div><div class="cz-note">Mark as completed is disabled until the session ends and says when it unlocks.</div></div>
+<div class="cz-col"><div class="cz-cap">Decline sheet</div><div class="sf scrim"><div class="sheet"><div class="grab"></div><div class="sh-h"><div><h3>Decline this booking?</h3><p>The customer is refunded in full (₽4,500) and told why. This can't be undone.</p></div><span class="x"><i data-i="x" style="--s:18px"></i></span></div>
+<div class="field"><label class="label">Reason for declining <span class="req">Required</span></label><textarea class="textarea is-error" style="min-height:84px" placeholder="For example, I am unwell and can't hold sessions this week."></textarea></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Add a reason so the customer understands.</span>
+<a class="btn btn-destructive btn-block">Decline booking</a><a class="btn btn-secondary btn-block">Keep booking</a></div></div><div class="cz-note">Reason is required; the refund is stated up front.</div></div>
+<div class="cz-col"><div class="cz-cap">Complete sheet</div><div class="sf scrim"><div class="sheet"><div class="grab"></div><div class="sh-h"><div><h3>Mark this session as completed?</h3><p>This confirms the session took place and starts your payout.</p></div><span class="x"><i data-i="x" style="--s:18px"></i></span></div>
+<div class="field"><label class="label">Note about the session <span class="req">Optional</span></label><textarea class="textarea" style="min-height:72px"></textarea></div><a class="btn btn-block">Mark as completed</a><a class="btn btn-secondary btn-block">Not yet</a></div></div><div class="cz-note">Confirms and explains that it starts the payout.</div></div></div>
+</div></body></html>

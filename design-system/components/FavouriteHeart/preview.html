@@ -1,0 +1,44 @@
+<!-- @dsCard group="Marketplace" height=760 subtitle="Save button on card corners and in headers: off, on, pressed, disabled, focus and the sign-in needed state" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FavouriteHeart</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.hit{width:48px;height:48px;display:grid;place-items:center}
+.heart.is-press{transform:scale(.9);box-shadow:0 0 0 4px var(--primary-tint)}
+.heart.is-focus{outline:2px solid var(--primary);outline-offset:2px}
+.heart.is-disabled{opacity:.5}
+.heart.on .ic{fill:currentColor}
+.corner{position:relative;width:176px}
+.corner .ph{aspect-ratio:4/3;border-radius:14px}
+.corner .hit{position:absolute;right:-2px;top:-2px}
+.dark .heart{background:rgba(255,255,255,.95)}
+.cell{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px;display:grid;gap:6px;justify-items:center}
+.hdr{display:flex;align-items:center;gap:12px;width:358px;padding:8px 12px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.hdr .grow{flex:1;min-width:0}
+.hdr .heart{background:var(--surface);border:1px solid var(--hairline)}
+.signin{width:358px;padding:16px;display:grid;gap:12px}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:900px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Off</div><div class="cell"><span class="hit"><span class="heart" role="button" aria-pressed="false" aria-label="Save to favourites"><i data-i="heart"></i></span></span><span class="t-meta">Outline, ink</span></div></div>
+<div class="cz-col"><div class="cz-cap">On</div><div class="cell"><span class="hit"><span class="heart on" role="button" aria-pressed="true" aria-label="Remove from favourites"><i data-i="heart"></i></span></span><span class="t-meta">Filled, orange text colour</span></div></div>
+<div class="cz-col"><div class="cz-cap">Pressed</div><div class="cell"><span class="hit"><span class="heart on is-press"><i data-i="heart"></i></span></span><span class="t-meta">Scale .9 + tint ring, 150ms</span></div></div>
+<div class="cz-col"><div class="cz-cap">Keyboard focus</div><div class="cell"><span class="hit"><span class="heart is-focus"><i data-i="heart"></i></span></span><span class="t-meta">2px primary ring</span></div></div>
+<div class="cz-col"><div class="cz-cap">Disabled</div><div class="cell"><span class="hit"><span class="heart is-disabled" aria-disabled="true"><i data-i="heart"></i></span></span><span class="t-meta">While the save request is in flight</span></div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:900px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">On a card corner</div><div class="corner"><div class="ph ph-1" ><i data-i="utensils"></i></div><span class="hit"><span class="heart on" aria-label="Remove from favourites"><i data-i="heart"></i></span></span></div><div class="cz-note">34px visual, 48px hit area, 4px in from the corner</div></div>
+<div class="cz-col"><div class="cz-cap">In a header (store page)</div><div class="hdr"><span class="avatar sq">M</span><div class="grow"><div class="t-h3 trunc">Mama T's Kitchen</div><div class="t-meta">Saved by you</div></div><span class="heart on"><i data-i="heart"></i></span><span class="heart"><i data-i="share-2"></i></span></div></div>
+<div class="cz-col"><div class="cz-cap">Sign-in needed</div><div class="card signin"><div style="display:flex;gap:12px;align-items:center"><span class="avatar"><i data-i="heart"></i></span><div><div class="t-h3">Sign in to save favourites</div><div class="t-meta">Your saved stores and products follow you to every device.</div></div></div><div style="display:flex;gap:8px"><a class="btn btn-block">Sign in</a><a class="btn btn-ghost">Not now</a></div></div><div class="cz-note">Tapping the heart signed out opens this sheet; the heart does not toggle</div></div>
+</div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>Keep the heart in the same corner on every tile.</li><li>Update the heart instantly, roll back with a toast if the save fails.</li><li>Give toggles aria-pressed and a label that names the next action.</li><li>Show the signed-out prompt as a sheet, not a full page.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Use a different icon (star, bookmark) for the same job.</li><li>Fill a heart orange on a photo it cannot be seen against; keep the white plate.</li><li>Make the hit area smaller than 48px.</li><li>Announce saving with a success toast every tap.</li></ul></div></div></div></body></html>

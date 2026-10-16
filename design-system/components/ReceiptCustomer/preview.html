@@ -1,0 +1,74 @@
+<!-- @dsCard group="Documents and email" height=1790 width=1360 subtitle="Customer order receipt on screen and as a printed A4 page, plus the booking variant on a Letter page with the session in both time zones" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ReceiptCustomer</title>
+<link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pg{background:#fff;border:1px solid var(--hairline);box-shadow:var(--shadow-md);position:relative;font-family:var(--font-web);color:var(--ink)}
+.a4{width:595px;height:842px;padding:48px 48px}
+.letter{width:612px;height:792px;padding:48px 48px}
+.rc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px}
+.rc-top img{height:26px}
+.rc-top .r{text-align:right;font-size:13px;line-height:19px;color:var(--muted)}
+.rc h1{margin:0;font:700 24px/30px var(--font-web);letter-spacing:-.3px}
+.rc .sub{font-size:14px;color:var(--muted);margin:2px 0 22px}
+.rc-kv{display:grid;grid-template-columns:130px 1fr;gap:8px 16px;font-size:14px;line-height:20px;margin-bottom:22px}
+.rc-kv dt{color:var(--muted)} .rc-kv dd{margin:0}
+.rc table{width:100%;border-collapse:collapse;font-size:14px}
+.rc th{text-align:left;font:600 11px/16px var(--font-web);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--input-edge)}
+.rc td{padding:10px 0;border-bottom:1px solid var(--hairline)}
+.rc .r{text-align:right}
+.rc .sum{margin:12px 0 0 auto;width:60%;display:grid;gap:6px;font-size:14px}
+.rc .sum div{display:flex;justify-content:space-between}
+.rc .sum .tot{border-top:1px solid var(--ink);padding-top:10px;margin-top:4px;font:700 18px/24px var(--font-web)}
+.rc-foot{position:absolute;left:48px;right:48px;bottom:36px;font-size:12px;line-height:18px;color:var(--muted);border-top:1px solid var(--hairline);padding-top:12px}
+.scr{width:100%;padding:16px;background:var(--surface)}
+.scr .rc-kv{grid-template-columns:104px 1fr}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid rc">
+<div class="cz-col"><div class="cz-cap">On screen, customer app</div>
+<div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="a-head"><i data-i="chevron-left" style="--s:24px"></i><b style="font-size:17px">Receipt</b><i data-i="share-2" style="--s:22px"></i></div>
+<div class="screen"><div class="scroll" style="padding:8px 16px 0">
+<div class="card scr" style="border-radius:var(--radius-card)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:18px">Order CIU-1001</b><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></div>
+<div class="t-meta" style="margin-bottom:14px">Oct 16, 2026 • 2:14 PM MSK</div>
+<dl class="rc-kv" style="font-size:14px"><dt>Store</dt><dd>Mama T's Kitchen</dd><dt>Pay method</dt><dd>Card ending 4242</dd><dt>Deliver to</dt><dd>Tverskaya 12, flat 45, Moscow</dd></dl>
+<div style="display:grid;gap:8px;font-size:14px;border-top:1px solid var(--hairline);padding-top:12px">
+<div style="display:flex;justify-content:space-between"><span>2 × Jollof rice</span><span class="num">₽900.00</span></div>
+<div style="display:flex;justify-content:space-between"><span>1 × Fried plantain</span><span class="num">₽200.00</span></div>
+<div style="display:flex;justify-content:space-between" class="t-muted"><span>Delivery fee</span><span class="num">₽150.00</span></div>
+<div style="display:flex;justify-content:space-between;border-top:1px solid var(--hairline);padding-top:10px;font:700 17px/22px var(--font-native)"><span>Total paid</span><span class="num">₽1,250.00</span></div></div>
+</div>
+<div style="display:grid;gap:10px;margin-top:16px"><a class="btn btn-block"><i data-i="download"></i>Download PDF</a><a class="btn btn-secondary btn-block"><i data-i="life-buoy"></i>Get help with this order</a></div>
+</div></div><div class="homebar"></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Printed, A4 (210 × 297 mm)</div>
+<div class="pg a4 rc">
+<div class="rc-top"><img src="../../assets/logos/ciuna.svg" alt="Ciuna"><div class="r">Receipt No. R-CIU-1001<br>Oct 16, 2026 • 2:14 PM MSK</div></div>
+<h1>Receipt for order CIU-1001</h1><div class="sub"><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></div>
+<dl class="rc-kv"><dt>Customer</dt><dd>Amara Okafor</dd><dt>Store</dt><dd>Mama T's Kitchen, Moscow</dd><dt>Delivered to</dt><dd>Tverskaya 12, flat 45, Moscow</dd><dt>Pay method</dt><dd>Card ending 4242</dd><dt>Paid in</dt><dd>Russian rouble (RUB)</dd></dl>
+<table><thead><tr><th>Item</th><th class="r">Qty</th><th class="r">Price</th><th class="r">Amount</th></tr></thead><tbody>
+<tr><td>Jollof rice with chicken</td><td class="r num">2</td><td class="r num">₽450.00</td><td class="r num">₽900.00</td></tr>
+<tr><td>Fried plantain</td><td class="r num">1</td><td class="r num">₽200.00</td><td class="r num">₽200.00</td></tr></tbody></table>
+<div class="sum"><div><span class="t-muted">Items</span><span class="num">₽1,100.00</span></div><div><span class="t-muted">Delivery fee</span><span class="num">₽150.00</span></div><div class="tot"><span>Total paid</span><span class="num">₽1,250.00</span></div></div>
+<div class="rc-foot">Ciuna receipt. This is not a tax invoice. Questions: support@ciuna.com</div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Booking variant, printed Letter (8.5 × 11 in)</div>
+<div class="pg letter rc">
+<div class="rc-top"><img src="../../assets/logos/ciuna.svg" alt="Ciuna"><div class="r">Receipt No. R-CIU-B2044<br>Oct 16, 2026 • 2:31 PM MSK</div></div>
+<h1>Receipt for booking CIU-B2044</h1><div class="sub"><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></div>
+<dl class="rc-kv"><dt>Customer</dt><dd>Chen Hui</dd><dt>Expert</dt><dd>Dr. Amina Yusuf, immigration lawyer</dd><dt>Service</dt><dd>Residence permit consultation, 60 min, video</dd><dt>Your time</dt><dd>Oct 21, 2026 • 5:00 PM MSK (Moscow)</dd><dt>Expert's time</dt><dd>Oct 21, 2026 • 3:00 PM WAT (Lagos)</dd><dt>Pay method</dt><dd>Card ending 1881</dd><dt>Paid in</dt><dd>Russian rouble (RUB)</dd></dl>
+<table><thead><tr><th>Service</th><th class="r">Length</th><th class="r">Amount</th></tr></thead><tbody>
+<tr><td>Residence permit consultation</td><td class="r num">60 min</td><td class="r num">₽4,500</td></tr></tbody></table>
+<div class="sum"><div class="tot"><span>Total paid</span><span class="num">₽4,500</span></div></div>
+<p style="font-size:13px;color:var(--muted);margin-top:20px">The meeting link is in your booking and opens 10 minutes before the start. Cancel up to 24 hours before for a full refund.</p>
+<div class="rc-foot">Ciuna receipt. This is not a tax invoice. Questions: support@ciuna.com</div></div></div>
+
+<div class="cz-col" style="width:420px"><div class="cz-cap">Rules</div><ul class="t-meta" style="margin:0;padding-left:18px;display:grid;gap:8px">
+<li>Date and time always carry a zone: MSK for Moscow, WAT for Lagos. Bookings show both.</li>
+<li>Total is in the pay currency, with cents when there is a breakdown; bookings priced in whole units drop the cents.</li>
+<li>The pay method is a plain name ("Card ending 4242"). No provider or acquirer names.</li>
+<li>One status badge: Paid, Refunded or Cancelled, each with its word and icon.</li>
+<li>White page with a hairline edge on screen; no fill on print. A4 and Letter use the same 48px margins.</li>
+<li>"This is not a tax invoice" stays on every page until tax documents are added.</li></ul></div>
+</div></div></body></html>

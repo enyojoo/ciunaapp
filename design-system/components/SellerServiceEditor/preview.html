@@ -1,0 +1,101 @@
+<!-- @dsCard group="Seller · Screens" height=2693 subtitle="Service editor: pricing, duration, booking rules in hours or minutes, meeting instructions required to publish, sticky bar, and the unpublish confirm" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SellerServiceEditor</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pg{padding:18px 16px 16px}
+.pg h1{margin:0;font:700 24px/30px var(--font-web);letter-spacing:-.3px}
+.sub{margin:4px 0 14px;color:var(--muted);font-size:14px;line-height:20px}
+.stk{display:grid;gap:12px}
+.rw{display:flex;align-items:center;gap:10px}
+.rw.top{align-items:flex-start}
+.sp{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gr{flex:1;min-width:0}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.pad{padding:16px}
+.sec{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px 20px;display:grid;gap:14px;align-content:start}
+.sec h2{margin:0;font:600 16px/22px var(--font-web)}
+.sec .hp{margin:2px 0 0;font-size:13px;line-height:18px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sf{width:390px;border-radius:var(--radius-sheet);overflow:hidden;padding-top:44px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--shadow-md)}
+.sf .sheet{border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;box-shadow:none;padding:0 20px 24px;display:grid;gap:14px}
+.df{width:390px;border-radius:var(--radius-sheet);padding:28px 18px;box-shadow:var(--shadow-md)}
+.dialog.dg{padding:22px;display:grid;gap:12px}
+.dg h3{margin:0;font:600 18px/24px var(--font-web)}
+.dg p{margin:0;color:var(--muted);font-size:14px;line-height:20px}
+.dg .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.sh-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:16px}
+.sh-h h3{margin:0;font:600 18px/24px var(--font-web)}
+.sh-h p{margin:2px 0 0;font-size:14px;line-height:20px;color:var(--muted)}
+.x{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:var(--neutral-surface);flex-shrink:0}
+.ovl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;z-index:5}
+.ovl>.scrim{position:absolute;inset:0}
+.ovl>.sheet{position:relative;padding:0 20px 28px;display:grid;gap:14px}
+.ovl.mid{justify-content:center;align-items:center;padding:24px}
+.ovl.mid>.dialog{position:relative;width:100%;max-width:440px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;min-height:56px}
+.sw .t{font:600 15px/20px var(--font-web)}
+.sw .s{font-size:13px;line-height:18px;color:var(--muted)}
+.opt{border:1px solid var(--input-edge);border-radius:var(--radius-control);padding:12px 14px;display:flex;gap:10px;align-items:center;background:var(--surface);font:600 14px/20px var(--font-web)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt small{display:block;font:400 12px/16px var(--font-web);color:var(--muted)}
+.ctr{font-size:12px;line-height:16px;color:var(--muted);text-align:right}
+.ctr.bad{color:var(--destructive-text)}
+.unit{display:grid;grid-template-columns:1fr 112px;gap:8px}
+.dbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 36px;background:var(--surface);border-top:1px solid var(--hairline)}
+.s-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.wm{font:700 22px/1 var(--font-web);letter-spacing:-.5px;display:inline-flex;align-items:center;gap:6px}
+.wm i{width:10px;height:10px;border-radius:50%;background:var(--brand-primary);display:block}
+.side-sp{flex:1}
+.bdg-n{margin-left:auto}
+.mini.ok{background:var(--success-surface);color:var(--success-text)}
+.crumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap}
+.hs{height:1px;background:var(--hairline)}
+.line{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px}
+.line.tot{font-weight:600;border-top:1px solid var(--hairline);padding-top:10px}
+.line .m{color:var(--muted)}
+.sf-wrap{display:grid;gap:12px;justify-items:center}
+</style></head>
+<body><div class="cz-page">
+<div class="cz-grid"><div class="cz-col"><div class="cz-cap">Desktop: new service, publish blocked</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/services/new</span></div>
+<div class="desk-body" style="position:relative">
+<aside class="s-side"><div class="rw" style="padding:4px 12px 0"><span class="wm"><i></i>ciuna</span><span class="badge badge-neutral">Seller</span></div>
+<nav class="s-nav"><span class="s-link"><i data-i="house"></i>Home</span><span class="s-link"><i data-i="calendar-check"></i>Bookings</span><span class="s-link"><i data-i="message-square"></i>Messages</span><span class="s-link on"><i data-i="briefcase"></i>Services</span><span class="s-link"><i data-i="clock"></i>Availability</span><span class="s-link"><i data-i="wallet"></i>Earnings</span><span class="s-link"><i data-i="star"></i>Reviews</span><span class="s-link"><i data-i="menu"></i>More</span></nav>
+<div class="s-biz"><span class="logo">A</span><span class="gr"><b style="font-size:14px">Dr. Amina Yusuf</b><br><span class="t-meta">Expert · Owner</span></span><i data-i="chevron-down" style="--s:16px"></i></div></aside>
+<div class="s-col"><div class="s-top" style="height:64px;padding:0 36px"><div class="input-wrap" style="width:320px"><i data-i="search" style="--s:18px"></i><input class="input" style="height:40px" placeholder="Search"></div><div class="rw"><i data-i="bell" style="--s:20px"></i><span class="avatar sm">A</span></div></div>
+<main class="s-main gr"><div class="crumb"><i data-i="arrow-left" style="--s:14px"></i>Services</div><div class="page-h"><div><h1>New service</h1></div></div>
+<div class="banner banner-neutral" style="margin-bottom:16px"><i data-i="info" style="--s:18px"></i><span class="gr">Changes to the title, description or instructions are reviewed by Ciuna before customers see them.</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start"><div class="stk"><div class="sec"><div><h2>Basics</h2><p class="hp">Write in the language you serve. Other languages are optional.</p></div><div class="tabs" style="margin-bottom:2px"><span class="tab on">English</span><span class="tab">Русский</span><span class="tab">Français</span></div>
+<div class="field"><label class="label">Service title <span class="req">Required</span></label><input class="input" value="Residence permit consultation"></div>
+<div class="field"><label class="label">Short description</label><textarea class="textarea" style="min-height:84px">One hour with an immigration lawyer. We review your documents and agree the steps for your residence permit application.</textarea><span class="hint">If you leave this empty, customers see the default language.</span></div></div><div class="sec"><div><h2>Pricing</h2></div>
+<div class="two"><span class="opt on"><span class="radio on"></span>Fixed price per session</span><span class="opt"><span class="radio"></span>Hourly rate</span></div>
+<div class="two"><div class="field"><label class="label">Price per session</label><div style="position:relative"><span style="position:absolute;left:14px;top:0;height:44px;display:flex;align-items:center;color:var(--muted)">₽</span><input class="input num" style="padding-left:32px" value="4,500"></div></div>
+<div class="field"><label class="label">Currency</label><select class="select"><option>RUB · Russian rouble</option></select></div></div>
+<p class="hint">Services priced on request can't be booked online, so they aren't offered here.</p></div><div class="sec"><div><h2>Duration</h2></div>
+<div class="field"><label class="label">Session length</label><div class="unit"><input class="input num" value="60"><select class="select"><option>minutes</option></select></div></div></div></div><div class="stk"><div class="sec"><div><h2>Delivery</h2></div>
+<div class="field"><label class="label">Where sessions happen</label><select class="select"><option>Online</option></select></div>
+<div class="field"><label class="label">Meeting instructions <span class="req">Required to publish</span></label><textarea class="textarea is-error" style="min-height:84px" placeholder="For example, I send a video link by email one hour before the session."></textarea></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Add meeting instructions to publish.</span></div><div class="sec"><div><h2>Booking rules</h2></div>
+<div class="field"><label class="label">Minimum notice before a session</label><div class="unit"><input class="input num" value="24"><select class="select"><option>hours</option></select></div><span class="hint">Customers can't book slots that start sooner than this.</span></div>
+<div class="field"><label class="label">Payment deadline before a session</label><div class="unit"><input class="input num" value="90"><select class="select"><option>minutes</option></select></div><span class="hint">A booking must be paid at least this long before it starts.</span></div>
+<div class="field"><label class="label">Service time zone</label><select class="select"><option>Moscow (MSK, UTC+3)</option></select><span class="hint">Customers see session times with this zone.</span></div></div><div class="sec"><div><h2>Languages</h2><p class="hp">Languages you hold sessions in. Customers can filter by them.</p></div><div class="pill-row"><span class="chip on"><i data-i="check"></i>English</span><span class="chip on"><i data-i="check"></i>Français</span><span class="chip">Русский</span><span class="chip">中文</span><span class="chip">Português</span></div></div></div></div></main><div class="dbar"><span class="rw"><span class="badge badge-warning"><i data-i="pencil"></i>Unsaved changes</span></span><div class="rw"><a class="btn btn-secondary">Save draft</a><a class="btn is-disabled">Publish</a></div></div></div></div></div><div class="cz-note">Publish stays disabled until the required fields are valid. Instructions show the error inline.</div></div>
+<div class="cz-col"><div class="cz-cap">Phone: hourly service</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="rw"><i data-i="arrow-left" style="--s:22px"></i><b style="font-size:16px">Edit service</b></div><span class="badge badge-warning">Unsaved</span></div>
+  <div class="screen"><div class="scroll pg"><div class="stk"><div class="sec"><div><h2>Pricing</h2></div>
+<div class="two"><span class="opt"><span class="radio"></span>Fixed price per session</span><span class="opt on"><span class="radio on"></span>Hourly rate</span></div>
+<div class="two"><div class="field"><label class="label">Rate per hour</label><div style="position:relative"><span style="position:absolute;left:14px;top:0;height:44px;display:flex;align-items:center;color:var(--muted)">₽</span><input class="input num" style="padding-left:32px" value="6,000"></div></div>
+<div class="field"><label class="label">Currency</label><select class="select"><option>RUB · Russian rouble</option></select></div></div>
+<p class="hint">Services priced on request can't be booked online, so they aren't offered here.</p></div><div class="sec"><div><h2>Duration</h2></div>
+<div class="three"><div class="field"><label class="label">Session length</label><div class="unit" style="grid-template-columns:1fr 84px"><input class="input num" value="90"><select class="select" style="padding-left:10px"><option>min</option></select></div></div><div class="field"><label class="label">Shortest session <span class="req">Optional</span></label><div class="unit" style="grid-template-columns:1fr 84px"><input class="input num" value="60"><select class="select" style="padding-left:10px"><option>min</option></select></div></div><div class="field"><label class="label">Longest session <span class="req">Optional</span></label><div class="unit" style="grid-template-columns:1fr 84px"><input class="input num" value="180"><select class="select" style="padding-left:10px"><option>min</option></select></div></div></div></div><div class="sec"><div><h2>Delivery</h2></div>
+<div class="field"><label class="label">Where sessions happen</label><select class="select"><option>Online</option></select></div>
+<div class="field"><label class="label">Meeting instructions <span class="req">Required to publish</span></label><textarea class="textarea" style="min-height:84px" placeholder="For example, I send a video link by email one hour before the session.">I send a Google Meet link by email one hour before the session. Please have your passport and migration card ready.</textarea><span class="hint">How customers join or where to meet. Required to publish.</span></div></div></div></div><div class="stickyact"><a class="btn btn-secondary gr">Save draft</a><a class="btn gr">Publish</a></div></div>
+  <div class="homebar"></div></div><div class="cz-note">Sections stack. The bar sticks above the keyboard with Save draft and Publish.</div></div>
+<div class="cz-col"><div class="cz-cap">Phone: rejected, live actions</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="rw"><i data-i="arrow-left" style="--s:22px"></i><b style="font-size:16px">Edit service</b></div></div>
+  <div class="screen"><div class="scroll pg"><div class="stk"><div class="banner banner-destructive" style="align-items:flex-start"><i data-i="triangle-alert" style="--s:18px"></i><span class="gr"><b>Rejected</b>This service was rejected. Edit the title, description or instructions and save to send it for review again.</span></div><div class="sec"><div><h2>Basics</h2><p class="hp">Write in the language you serve. Other languages are optional.</p></div><div class="tabs" style="margin-bottom:2px"><span class="tab on">English</span><span class="tab">Русский</span><span class="tab">Français</span></div>
+<div class="field"><label class="label">Service title <span class="req">Required</span></label><input class="input" value="Residence permit consultation"></div>
+<div class="field"><label class="label">Short description</label><textarea class="textarea" style="min-height:84px">One hour with an immigration lawyer. We review your documents and agree the steps for your residence permit application.</textarea><span class="hint">If you leave this empty, customers see the default language.</span></div></div><div class="plate pad"><div class="rw top"><div class="gr"><b>Stop accepting bookings</b><div class="t-meta">The service is hidden from customers and its open slots are removed.</div></div></div><a class="btn btn-secondary btn-block" style="margin-top:12px;color:var(--destructive-text)">Unpublish</a></div></div></div><div class="stickyact"><a class="btn btn-secondary gr">Save draft</a><a class="btn gr">Publish</a></div></div>
+  <div class="homebar"></div></div><div class="cz-note">A rejected service keeps its edit form and shows the reason first.</div></div>
+<div class="cz-col"><div class="cz-cap">Unpublish confirm</div><div class="df scrim"><div class="dialog dg"><h3>Unpublish this service?</h3><p>Customers will no longer see it and its open slots will be removed. Existing bookings stay. To offer it again, publish it and save your availability.</p><div class="acts"><a class="btn btn-secondary">Keep it live</a><a class="btn btn-destructive">Unpublish</a></div></div></div><div class="cz-note">Destructive confirm. Names what happens to slots and bookings.</div></div>
+<div class="cz-col"><div class="cz-cap">Unpublish refused</div><div class="df scrim"><div class="dialog dg"><h3>Can't unpublish yet</h3><p>This service has 3 upcoming booked sessions. Complete or decline them first, then unpublish.</p><div class="acts"><a class="btn btn-secondary">Close</a><a class="btn">View bookings</a></div></div></div><div class="cz-note">The server refuses with HAS_FUTURE_BOOKINGS; the dialog says how many.</div></div></div>
+</div></body></html>

@@ -1,0 +1,62 @@
+<!-- @dsCard group="Marketplace" height=900 subtitle="A customer review: first name, stars, date, text, seller reply, long text clamp, rating-only; moderation-hidden reviews never render for customers" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ReviewCard</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.rv{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px;display:grid;gap:10px;font-family:var(--font-native)}
+.rv .hd{display:flex;gap:10px;align-items:center}
+.rv .id{flex:1;min-width:0}
+.rv .nm{font:600 15px/20px var(--font-native)}
+.rv .dt{font:400 12px/16px var(--font-native);color:var(--muted)}
+.rv .vp{display:inline-flex;gap:3px;align-items:center;color:var(--success-text);font-weight:600}.rv .vp .ic{--s:12px}
+.rv .tx{margin:0;font:400 15px/22px var(--font-native)}
+.rv .tx.none{color:var(--muted);font-size:13px}
+.rv .clamp4{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.rv .more{justify-self:start;font:600 14px/20px var(--font-native)}
+.rv .rp{background:var(--neutral-surface);border-radius:12px;padding:10px 12px;display:grid;gap:4px}
+.rv .rp .rh{display:flex;gap:6px;align-items:center;font:600 12px/16px var(--font-native);color:var(--neutral-text)}.rv .rp .ic{--s:13px}
+.rv .rp p{margin:0;font:400 14px/20px var(--font-native);color:var(--ink)}
+.ghost{width:358px;border:1.5px dashed var(--input-edge);border-radius:var(--radius-card);padding:16px;display:grid;gap:6px;justify-items:center;text-align:center;color:var(--muted);font:400 13px/18px var(--font-native)}
+.ghost .ic{--s:22px}
+.list3{display:grid;gap:10px}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:1000px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Default</div><div class="rv w358"><div class="hd"><span class="avatar sm">A</span><div class="id"><div class="nm">Amara</div><div class="dt">Sep 24, 2026 · <span class="vp"><i data-i="badge-check"></i>Verified order</span></div></div><span class="stars " role="img" aria-label="Rated 5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p class="tx ">Jollof was hot, spicy just right and tasted like home. Arrived 10 minutes early. Ordering again for the weekend.</p>
+</div></div>
+<div class="cz-col"><div class="cz-cap">With seller reply</div><div class="rv w358"><div class="hd"><span class="avatar sm">C</span><div class="id"><div class="nm">Chen</div><div class="dt">Sep 20, 2026 · <span class="vp"><i data-i="badge-check"></i>Verified order</span></div></div><span class="stars " role="img" aria-label="Rated 4 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star" class="off"></i></span></div>
+<p class="tx ">Good portions. The rice was a little cold when it arrived.</p>
+<div class="rp"><div class="rh"><i data-i="store"></i>Reply from Mama T's Kitchen · Sep 21</div><p>Thank you, Chen. We now pack in insulated bags, so it should stay hot next time.</p></div></div></div>
+<div class="cz-col"><div class="cz-cap">Rating only</div><div class="rv w358"><div class="hd"><span class="avatar sm">K</span><div class="id"><div class="nm">Kwame</div><div class="dt">Sep 18, 2026 · <span class="vp"><i data-i="badge-check"></i>Verified order</span></div></div><span class="stars " role="img" aria-label="Rated 5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p class="tx none">Rating only</p>
+</div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:1000px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">Long text, clamped at 4 lines</div><div class="rv w358"><div class="hd"><span class="avatar sm">S</span><div class="id"><div class="nm">Sofia</div><div class="dt">Sep 12, 2026 · <span class="vp"><i data-i="badge-check"></i>Verified order</span></div></div><span class="stars " role="img" aria-label="Rated 3 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i></span></div>
+<p class="tx clamp4">I ordered the party tray for my daughter's birthday and some things were great and others not. The rice and the chicken were excellent and everyone asked where I bought it. The plantain arrived a bit soft and the sauce was missing from the bag, so I had to message the store. They answered quickly and sent a refund for the sauce the same day.</p><a class="btn-link more">Read more</a>
+</div><div class="cz-note">Read more expands in place, no new page</div></div>
+<div class="cz-col"><div class="cz-cap">Russian review</div><div class="rv w358"><div class="hd"><span class="avatar sm">Д</span><div class="id"><div class="nm">Дмитрий</div><div class="dt">12 сент. 2026 · <span class="vp"><i data-i="badge-check"></i>Verified order</span></div></div><span class="stars " role="img" aria-label="Rated 5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p class="tx ">Заказывал суп эгуси впервые, очень понравилось. Упаковка надёжная, ничего не протекло.</p>
+</div></div>
+<div class="cz-col"><div class="cz-cap">Chinese review</div><div class="rv w358"><div class="hd"><span class="avatar sm">李</span><div class="id"><div class="nm">Hui</div><div class="dt">Sep 9, 2026 · <span class="vp"><i data-i="badge-check"></i>Verified order</span></div></div><span class="stars " role="img" aria-label="Rated 5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p class="tx ">老干妈和火锅底料都是正品，价格合理，第二天就送到了。</p>
+</div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:1000px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">Moderated review: what customers see</div><div class="list3"><div class="rv w358"><div class="hd"><span class="avatar sm">A</span><div class="id"><div class="nm">Amara</div><div class="dt">Sep 24, 2026 · <span class="vp"><i data-i="badge-check"></i>Verified order</span></div></div><span class="stars " role="img" aria-label="Rated 5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p class="tx ">Jollof was hot, spicy just right and tasted like home.</p>
+</div><div class="cz-note" style="max-width:358px">The review hidden by moderation is simply absent. The count and the average were already recalculated without it.</div></div><div class="cz-note">No placeholder, no "removed" note, no reason. Sellers see the reason in Seller; Office sees it in the moderation queue.</div></div>
+<div class="cz-col"><div class="cz-cap">Never render this to customers</div><div class="ghost"><i data-i="eye"></i><b style="color:var(--ink)">Hidden by moderation</b>Not shown to customers. Reason is for the seller and Office only.</div><div class="cz-note">Documented so nobody builds it</div></div>
+</div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>Show the customer's first name only, with the date and a Verified order mark.</li><li>Show the seller's reply under the review, labelled with the store name and date.</li><li>Clamp long text at 4 lines with Read more.</li><li>Allow rating-only reviews; show "Rating only" in muted text.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Show surnames, photos or emails of reviewers.</li><li>Show a "This review was removed" placeholder for moderated reviews.</li><li>Let the reply look like a second review; keep it in the grey block.</li><li>Edit or trim review text in the card; show what the customer wrote.</li></ul></div></div></div></body></html>

@@ -1,0 +1,57 @@
+<!-- @dsCard group="Data display" height=920 subtitle="Initials, photo placeholder and square logo avatars in five sizes, group stack and verified badge overlay" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Avatar</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.av-xs{width:24px;height:24px;font-size:10px}
+.av{position:relative;display:inline-block;flex-shrink:0}
+.av .vb{position:absolute;right:-3px;bottom:-3px;width:20px;height:20px;border-radius:50%;background:var(--surface);display:grid;place-items:center;color:var(--success)}
+.av .vb .ic{--s:20px}
+.av.xl .vb{width:26px;height:26px}
+.stackav{display:inline-flex}
+.stackav .avatar{border:2px solid var(--surface);margin-left:-10px}
+.stackav .avatar:first-child{margin-left:0}
+.photo{background:var(--ph-bg)}
+.lbl{display:grid;justify-items:center;gap:6px;font:500 12px/16px var(--font-web);color:var(--muted)}
+.row2{display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap}
+.nm{display:flex;align-items:center;gap:12px}
+.nm b{display:block;font-size:15px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Sizes: 24, 32, 40, 56, 72</p>
+<div class="row2">
+  <div class="lbl"><span class="avatar av-xs">AO</span>24</div>
+  <div class="lbl"><span class="avatar sm">AO</span>32</div>
+  <div class="lbl"><span class="avatar">AO</span>40</div>
+  <div class="lbl"><span class="avatar lg">AO</span>56</div>
+  <div class="lbl"><span class="avatar xl">AO</span>72</div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Kinds</p>
+<div class="g3">
+  <div class="cell"><span class="st">Initials (people)</span><div class="row2"><span class="avatar">AO</span><span class="avatar" style="background:var(--refer-surface);color:var(--refer)">CH</span><span class="avatar" style="background:var(--neutral-surface);color:var(--neutral-text)">KM</span></div><span class="hint">Up to two letters, from first and last name. Any script: 陈, Ай.</span></div>
+  <div class="cell"><span class="st">Photo (placeholder)</span><div class="row2"><span class="avatar photo ph-1"></span><span class="avatar photo ph-4"></span><span class="avatar lg photo ph-5"></span></div><span class="hint">Circle crop, centre-weighted. Falls back to initials if the image fails.</span></div>
+  <div class="cell"><span class="st">Store logo (square)</span><div class="row2"><span class="avatar sq" style="background:var(--primary);color:#fff">M</span><span class="avatar sq lg" style="background:var(--primary);color:#fff">M</span><span class="avatar sq lg photo ph-2"></span></div><span class="hint">Radius 12 for stores and brands; circles are for people.</span></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Verified overlay, group stack and in context</p>
+<div class="g3">
+  <div class="cell"><span class="st">Verified</span><div class="nm"><span class="av lg"><span class="avatar lg">AY</span><span class="vb"><i data-i="badge-check"></i></span></span><div><b>Dr. Amina Yusuf</b><span class="t-meta">Immigration lawyer · Verified</span></div></div><span class="hint">Badge is a check shape plus text nearby, so colour is never the only cue.</span></div>
+  <div class="cell"><span class="st">Group stack</span><span class="stackav"><span class="avatar">AO</span><span class="avatar" style="background:var(--refer-surface);color:var(--refer)">CH</span><span class="avatar photo ph-3"></span><span class="avatar" style="background:var(--neutral-surface);color:var(--neutral-text)">+4</span></span><span class="hint">Max three avatars, then a "+N" counter.</span></div>
+  <div class="cell"><span class="st">In a list item</span><div class="card list"><div class="item"><span class="avatar">LW</span><div class="grow"><div class="t">Li Wei</div><div class="s">Russian tutor · Online</div></div><span class="badge badge-success"><i data-i="check"></i>Available</span></div><div class="item"><span class="avatar sq" style="background:var(--primary);color:#fff">M</span><div class="grow"><div class="t">Mama T's Kitchen</div><div class="s">Store · Moscow</div></div></div></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>People are circles, businesses are rounded squares.</li><li>Tinted primary ground with primary-text initials; the logo orange fill is allowed only for a store's own logo mark.</li><li>Always provide <code>alt</code> or an accessible name; decorative when beside the name.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use a stock face as a default; show initials.</li><li>Don't show the verified badge on avatars under 32px.</li><li>Don't stack more than three.</li></ul></div></div></div>
+
+</div></div></body></html>

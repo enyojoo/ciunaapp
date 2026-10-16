@@ -1,0 +1,53 @@
+<!-- @dsCard group="Data display" height=1311 subtitle="Plain, selected and interactive cards with header action and footer, and the one-level nesting rule" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Card</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.card.int{cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.card.int.hov{box-shadow:var(--shadow-md);border-color:var(--input-edge)}
+.card.int.foc{outline:2px solid var(--primary);outline-offset:2px}
+.card-f{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--hairline);background:var(--paper);border-radius:0 0 var(--radius-card) var(--radius-card)}
+.sel-row{display:flex;gap:12px;align-items:flex-start;padding:16px}
+.inner{border:1px solid var(--hairline);border-radius:12px;padding:12px;background:var(--paper)}
+.bad{border-color:var(--destructive-text);background:var(--destructive-surface)}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">States</p>
+<div class="g3">
+  <div class="cell"><span class="st">Default</span><div class="card"><div class="card-b"><div class="t-h3">Payout schedule</div><p class="t-meta" style="margin:4px 0 0">Every weekday for orders completed the day before.</p></div></div></div>
+  <div class="cell"><span class="st">Selected</span><div class="card sel"><div class="sel-row"><span class="radio on"></span><div><div class="t-h3">Delivery by courier</div><p class="t-meta" style="margin:4px 0 0">Ready in 45 to 60 min · ₽199</p></div></div></div></div>
+  <div class="cell"><span class="st">Interactive: hover</span><div class="card int hov"><div class="card-b" style="display:flex;justify-content:space-between;align-items:center"><div><div class="t-h3">Mama T's Kitchen</div><p class="t-meta" style="margin:2px 0 0">Open until 21:00 · Tverskoy</p></div><i data-i="chevron-right" style="color:var(--muted)"></i></div></div></div>
+  <div class="cell"><span class="st">Interactive: keyboard focus</span><div class="card int foc"><div class="card-b" style="display:flex;justify-content:space-between;align-items:center"><div><div class="t-h3">Lagos Pantry</div><p class="t-meta" style="margin:2px 0 0">Open until 20:00 · Basmanny</p></div><i data-i="chevron-right" style="color:var(--muted)"></i></div></div></div>
+  <div class="cell"><span class="st">Attention (status surface)</span><div class="card bad"><div class="card-b" style="display:flex;gap:10px;color:var(--destructive-text)"><i data-i="triangle-alert"></i><div><b>Payout failed</b><div style="font-size:14px">The bank returned ₽18,400.</div></div></div></div></div>
+  <div class="cell"><span class="st">Muted: disabled or sold out</span><div class="card" style="opacity:.55"><div class="card-b"><div class="t-h3">Suya platter</div><p class="t-meta" style="margin:2px 0 0">Sold out today</p></div></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Anatomy: header with action, body, footer</p>
+<div class="g2">
+  <div class="card"><div class="card-h"><div><h3>Delivery address</h3><div class="t-meta">Used for new orders</div></div><a class="btn btn-secondary btn-sm"><i data-i="pencil"></i>Edit</a></div>
+    <div class="card-b"><div class="t-body">Amara Okafor<br>ul. Tverskaya 12, kv. 45<br>Moscow, 125009</div></div>
+    <div class="card-f"><span class="t-meta">Last used Sep 22</span><a class="btn btn-link">Use another address</a></div></div>
+  <div class="card"><div class="card-h"><div><h3>Today</h3><div class="t-meta">Sep 24, 2026</div></div><span class="badge badge-success"><i data-i="check"></i>Open</span></div>
+    <div class="card-b"><dl class="kv"><dt>Orders</dt><dd class="num">12</dd><dt>Sales</dt><dd class="num">₽14,250</dd><dt>Avg. prep time</dt><dd class="num">18 min</dd></dl></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Nesting: one level only</p>
+<div class="g2">
+  <div class="cell"><span class="st">Do: a plain inner block</span><div class="card"><div class="card-b" style="display:grid;gap:10px"><div class="t-h3">Order CIU-1001</div><div class="inner"><div class="t-body">2 × Jollof rice</div><div class="t-meta">₽1,300</div></div><div class="inner"><div class="t-body">Delivery fee</div><div class="t-meta">₽199</div></div></div></div><span class="hint">Inner groups use a tinted block with a hairline, no shadow and a smaller radius (12).</span></div>
+  <div class="cell"><span class="st">Don't: card in card in card</span><div class="card" style="padding:12px"><div class="card" style="padding:12px;background:var(--paper)"><div class="card" style="padding:12px;background:var(--neutral-surface)"><div class="t-meta">Three plates deep: shadows and borders pile up, and the content shrinks.</div></div></div></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Surface plate on the paper canvas, hairline border, radius 16, no shadow at rest.</li><li>Padding 16 on phones, 24 on desktop (the body class gives 20 for dense layouts).</li><li>Selected = primary-tint + primary-border, plus a check or filled radio so it never relies on colour.</li><li>An interactive card is one link or button: the whole plate is the target.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't nest cards more than once.</li><li>Don't put two primary buttons in a card.</li><li>Don't fill a large card with orange.</li><li>Don't make a card clickable and also put links inside it.</li></ul></div></div></div>
+
+</div></div></body></html>

@@ -1,0 +1,116 @@
+<!-- @dsCard group="Marketplace" height=1180 subtitle="Grid tile and list row: default, sale, sold out, low stock, in cart with stepper, long Russian and Chinese titles, skeleton" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ProductCard</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.pc .media{position:relative;aspect-ratio:4/3}
+.pc .media .ph{position:absolute;inset:0;aspect-ratio:auto}
+.pc .hz{position:absolute;right:8px;top:8px}
+.pc .bd{position:absolute;left:8px;top:8px}
+.pc .row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;min-height:40px}
+.pc .p{white-space:nowrap}
+.pcard .n,.prow .n{color:var(--ink)}
+.vchip{display:inline-flex;align-items:center;gap:4px;font:500 12px/16px var(--font-native);color:var(--muted);max-width:100%}
+.vchip .ic{--s:12px}
+.low{display:inline-flex;align-items:center;gap:4px;font:600 12px/16px var(--font-native);color:var(--warning-text)}
+.low .ic{--s:13px}
+.add{width:40px;height:40px;border-radius:20px;background:var(--primary);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.add .ic{--s:20px}
+.add.is-disabled{background:var(--neutral-surface);color:var(--subtle)}
+.pc.out .ph{filter:grayscale(1)}
+.pc.out .n,.pc.out .p{color:var(--muted)}
+.sold{position:absolute;left:8px;bottom:8px}
+.pc .step{height:40px}
+.pc .step b{width:32px}
+.pc.incart{border-color:var(--primary-border)}
+.prow{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);width:358px}
+.prow .ph{width:88px;aspect-ratio:1;flex-shrink:0}
+.prow .grow{flex:1;min-width:0;display:grid;gap:3px}
+.prow .n{font:600 14px/19px var(--font-native)}
+.prow .p{font:700 15px/20px var(--font-native)}
+.prow .p s{font-weight:400;font-size:12px;color:var(--muted);margin-left:6px}
+.prow .side{display:grid;gap:10px;justify-items:end;align-self:stretch;align-content:space-between}
+.prow .heart{box-shadow:none;background:var(--surface);border:1px solid var(--hairline)}
+.prow.out .ph{filter:grayscale(1)}
+.prow .n+.vchip+.p{margin-top:2px}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:1000px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Default</div><div class="pcard pc w176 ">
+  <div class="media"><div class="ph ph-1" ><i data-i="utensils"></i></div><span class="hz"><span class="heart "><i data-i="heart"></i></span></span></div>
+  <div class="b">
+    <div class="n clamp2">Jollof rice party tray, serves 6</div>
+    <span class="vchip"><i data-i="store"></i>Mama T's Kitchen</span>
+    
+    <div class="row"><div class="p">₽1,250</div><span class="add" role="button" aria-label="Add to cart"><i data-i="plus"></i></span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Sale + favourite</div><div class="pcard pc w176 ">
+  <div class="media"><div class="ph ph-2" ><i data-i="chef-hat"></i></div><span class="bd"><span class="badge badge-success">−20%</span></span><span class="hz"><span class="heart on"><i data-i="heart"></i></span></span></div>
+  <div class="b">
+    <div class="n clamp2">Egusi soup, 1 L, ready to heat</div>
+    <span class="vchip"><i data-i="store"></i>Lagos Pantry</span>
+    
+    <div class="row"><div class="p">₽640<s>₽800</s></div><span class="add" role="button" aria-label="Add to cart"><i data-i="plus"></i></span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Low stock</div><div class="pcard pc w176 ">
+  <div class="media"><div class="ph ph-3" ><i data-i="package"></i></div><span class="hz"><span class="heart "><i data-i="heart"></i></span></span></div>
+  <div class="b">
+    <div class="n clamp2">Shea butter, raw, 250 g</div>
+    <span class="vchip"><i data-i="store"></i>Sahel Spices</span>
+    <span class="low"><i data-i="triangle-alert"></i>Only 3 left</span>
+    <div class="row"><div class="p">₽590</div><span class="add" role="button" aria-label="Add to cart"><i data-i="plus"></i></span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">In cart</div><div class="pcard pc w176 incart">
+  <div class="media"><div class="ph ph-5" ><i data-i="gift"></i></div><span class="hz"><span class="heart "><i data-i="heart"></i></span></span></div>
+  <div class="b">
+    <div class="n clamp2">Suya spice mix, 100 g</div>
+    <span class="vchip"><i data-i="store"></i>Lagos Pantry</span>
+    
+    <div class="row"><div class="p">₽310</div><span class="step"><b aria-label="Remove one"><i data-i="minus"></i></b><span>2</span><b aria-label="Add one"><i data-i="plus"></i></b></span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Sold out</div><div class="pcard pc w176 out">
+  <div class="media"><div class="ph ph-6" ><i data-i="package"></i></div><span class="hz"><span class="heart "><i data-i="heart"></i></span></span><span class="sold"><span class="badge badge-neutral">Sold out</span></span></div>
+  <div class="b">
+    <div class="n clamp2">Plantain chips, salted, 200 g</div>
+    <span class="vchip"><i data-i="store"></i>Lagos Pantry</span>
+    
+    <div class="row"><div class="p">₽220</div><span class="add is-disabled" aria-disabled="true"><i data-i="plus"></i></span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Skeleton</div><div class="pcard pc w176 ">
+  <div class="media"><div class="sk" style="width:100%;height:100%;border-radius:0"></div></div>
+  <div class="b"><div class="sk" style="height:14px;width:90%"></div><div class="sk" style="height:12px;width:55%"></div><div class="sk" style="height:18px;width:40%;margin-top:6px"></div></div></div><div class="cz-note">True first load only, never over cached content</div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:1000px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">Long Russian title</div><div class="pcard pc w176 ">
+  <div class="media"><div class="ph ph-2" ><i data-i="shopping-basket"></i></div><span class="hz"><span class="heart "><i data-i="heart"></i></span></span></div>
+  <div class="b">
+    <div class="n clamp2">Африканская приправа для супа «Эгуси», молотая, свежий помол, 250 г</div>
+    <span class="vchip"><i data-i="store"></i>Lagos Pantry · Москва</span>
+    
+    <div class="row"><div class="p">₽480</div><span class="add" role="button" aria-label="Add to cart"><i data-i="plus"></i></span></div></div></div><div class="cz-note">Title clamps at two lines, vendor chip truncates</div></div>
+<div class="cz-col"><div class="cz-cap">Long Chinese title</div><div class="pcard pc w176 ">
+  <div class="media"><div class="ph ph-4" ><i data-i="shopping-basket"></i></div><span class="hz"><span class="heart "><i data-i="heart"></i></span></span></div>
+  <div class="b">
+    <div class="n clamp2">老干妈香辣脆油辣椒 275克 玻璃瓶装 中国进口 火锅蘸料</div>
+    <span class="vchip"><i data-i="store"></i>Guangzhou Market</span>
+    
+    <div class="row"><div class="p">₽420</div><span class="add" role="button" aria-label="Add to cart"><i data-i="plus"></i></span></div></div></div><div class="cz-note">No letter-spacing, line-height holds for CJK</div></div>
+<div class="cz-col"><div class="cz-cap">Unavailable store closed</div><div class="pcard pc w176 ">
+  <div class="media"><div class="ph ph-6" ><i data-i="utensils"></i></div><span class="hz"><span class="heart "><i data-i="heart"></i></span></span></div>
+  <div class="b">
+    <div class="n clamp2">Fufu flour, 1 kg</div>
+    <span class="vchip"><i data-i="store"></i>Mama T's Kitchen · Opens 9:00</span>
+    
+    <div class="row"><div class="p">₽380</div><span class="add is-disabled" aria-disabled="true"><i data-i="plus"></i></span></div></div></div><div class="cz-note">Add is disabled while the store is closed; the tile stays browsable</div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:1000px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">List row, default</div><div class="prow "><div class="ph ph-1" ><i data-i="utensils"></i></div><div class="grow"><div class="n clamp2">Jollof rice party tray, serves 6</div><span class="vchip"><i data-i="store"></i>Mama T's Kitchen</span><div class="p">₽1,250</div></div><div class="side"><span class="heart "><i data-i="heart"></i></span><span class="add" role="button" aria-label="Add to cart"><i data-i="plus"></i></span></div></div></div>
+<div class="cz-col"><div class="cz-cap">List row, sale + in cart</div><div class="prow "><div class="ph ph-2" ><i data-i="chef-hat"></i></div><div class="grow"><div class="n clamp2">Egusi soup, 1 L, ready to heat</div><span class="vchip"><i data-i="store"></i>Lagos Pantry</span><div class="p">₽640<s>₽800</s></div></div><div class="side"><span class="heart on"><i data-i="heart"></i></span><span class="step"><b aria-label="Remove one"><i data-i="minus"></i></b><span>2</span><b aria-label="Add one"><i data-i="plus"></i></b></span></div></div></div>
+<div class="cz-col"><div class="cz-cap">List row, sold out</div><div class="prow out"><div class="ph ph-6" ><i data-i="utensils"></i></div><div class="grow"><div class="n clamp2">Plantain chips, salted, 200 g</div><span class="vchip"><i data-i="store"></i>Lagos Pantry</span><div class="p">₽220</div></div><div class="side"><span class="heart "><i data-i="heart"></i></span><span class="add is-disabled" aria-disabled="true"><i data-i="plus"></i></span></div></div></div>
+</div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>One action per card: Add, then a stepper once it is in the cart.</li><li>Keep the 4:3 photo, two-line name, vendor chip, price, in that order.</li><li>Show sale as the current price plus a muted strike-through of the old one.</li><li>Keep sold-out tiles visible, desaturated, with the Add button disabled.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Add a second button (Buy now, Compare) to the tile.</li><li>Fill the card or the price in orange; only the Add button is orange.</li><li>Truncate to one line; titles in Russian and Chinese need two.</li><li>Hide low stock; say "Only 3 left" in warning text with an icon.</li></ul></div></div></div></body></html>

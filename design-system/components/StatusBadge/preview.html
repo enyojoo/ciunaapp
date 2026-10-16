@@ -1,0 +1,89 @@
+<!-- @dsCard group="Feedback" height=1750 subtitle="One word, one colour pair, always with an icon: the full status vocabulary, sizes, dot variant, badges in rows" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>StatusBadge</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.badge-sm{height:22px;padding:0 8px;font-size:11px;gap:4px}.badge-sm .ic{--s:12px}
+.badge-lg{height:32px;padding:0 14px;font-size:14px;gap:8px}.badge-lg .ic{--s:16px}
+.sdot{display:inline-flex;align-items:center;gap:8px;font:600 13px/18px var(--font-web)}
+.sdot i{width:8px;height:8px;border-radius:50%;display:block}
+.sdot.success{color:var(--success-text)}.sdot.success i{background:var(--success)}
+.sdot.warning{color:var(--warning-text)}.sdot.warning i{background:var(--warning)}
+.sdot.destructive{color:var(--destructive-text)}.sdot.destructive i{background:var(--destructive)}
+.sdot.neutral{color:var(--neutral-text)}.sdot.neutral i{background:var(--input-edge)}
+.vocab td:first-child{width:170px}
+.words{display:flex;flex-wrap:wrap;gap:8px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px}
+.rowx{display:flex;align-items:center;gap:12px;padding:12px 16px;min-height:56px}
+.rowx .g{flex:1;min-width:0}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cmp>div{padding:14px;border:1px solid var(--hairline);border-radius:var(--radius-control);background:var(--surface);display:grid;gap:10px;justify-items:start}
+.cmp .y{border-left:4px solid var(--success)}.cmp .n{border-left:4px solid var(--destructive)}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Four tones</p>
+<div class="cz-row" style="gap:24px">
+  <div class="cz-stack" style="gap:6px"><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span><span class="hint">success-text on success-surface<br>It is done and fine</span></div>
+  <div class="cz-stack" style="gap:6px"><span class="badge badge-warning"><i data-i="clock"></i>Pending</span><span class="hint">warning-text on warning-surface<br>Waiting, in progress, needs a look</span></div>
+  <div class="cz-stack" style="gap:6px"><span class="badge badge-destructive"><i data-i="triangle-alert"></i>Failed</span><span class="hint">destructive-text on destructive-surface<br>Went wrong, act now</span></div>
+  <div class="cz-stack" style="gap:6px"><span class="badge badge-neutral"><i data-i="minus"></i>Draft</span><span class="hint">neutral-text on neutral-surface<br>Inactive, finished, no action</span></div></div>
+<p class="hint">Every badge pair is at least 4.5:1 (see Colour). Orange is never a status: <code>badge-primary</code> is for "Featured" or "New feature" labels, not state.</p></div>
+
+<div class="cz-section"><p class="cz-h">Status vocabulary</p>
+<p class="hint" style="margin:0">Map by the status word, never by whoever calls it. Words are the same on customer, Seller and Office, and translate in all six languages.</p>
+<table class="table vocab"><thead><tr><th>Tone</th><th>Words</th></tr></thead><tbody id="vocab"></tbody></table></div>
+
+<div class="cz-section"><p class="cz-h">By area</p>
+<table class="table"><thead><tr><th style="width:150px">Area</th><th>Lifecycle, in order</th></tr></thead><tbody id="areas"></tbody></table></div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Sizes</p>
+  <div class="cz-row" style="gap:18px;align-items:center">
+    <span class="badge badge-sm badge-success"><i data-i="circle-check-big"></i>Paid</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span><span class="badge badge-lg badge-success"><i data-i="circle-check-big"></i>Paid</span></div>
+  <p class="hint">Small 22 (dense tables, Office), default 26 (rows, cards), large 32 (page headers, order detail). Text 11, 12, 14. Never wraps: one word, up to two for the long ones ("Awaiting payment").</p>
+  <p class="cz-h" style="margin-top:8px">Dot variant</p>
+  <div class="cz-row" style="gap:20px"><span class="sdot success"><i></i>Live</span><span class="sdot warning"><i></i>In review</span><span class="sdot destructive"><i></i>Suspended</span><span class="sdot neutral"><i></i>Paused</span></div>
+  <p class="hint">For dense lists where a pill is too heavy: a dot and the word in the tone's text colour. The word is always there.</p></div>
+
+<div class="cz-section"><p class="cz-h">Never colour alone</p>
+  <div class="cmp">
+   <div class="y"><span class="t-eyebrow">Do</span><span class="badge badge-destructive"><i data-i="triangle-alert"></i>Rejected</span><span class="hint">Word and icon. Readable in greyscale, to colour-blind users and in screen readers.</span></div>
+   <div class="n"><span class="t-eyebrow">Don't</span><span style="width:14px;height:14px;border-radius:50%;background:var(--destructive);display:block"></span><span class="hint">A bare coloured dot or pill with no label.</span></div></div>
+  <p class="hint">Icons carry the tone: check for success, clock for waiting, triangle for destructive, minus for neutral. Do not invent icons per status. The word always sits beside the icon.</p></div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Badges in rows</p>
+<div class="two" style="gap:20px">
+<div class="card list" style="font-family:var(--font-web)">
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Order CIU-1001</div><div class="t-meta">Amara Okafor · Sep 24</div></div><span class="num t-h3">₽1,250</span><span class="badge badge-warning"><i data-i="clock"></i>Preparing</span></div>
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Order CIU-0998</div><div class="t-meta">Chen Hui · Sep 23</div></div><span class="num t-h3">₽2,840</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Delivered</span></div>
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Order CIU-0991</div><div class="t-meta">Sofia Ramirez · Sep 22</div></div><span class="num t-h3">₽700</span><span class="badge badge-neutral"><i data-i="minus"></i>Refunded</span></div>
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Order CIU-0987</div><div class="t-meta">Kwame Mensah · Sep 21</div></div><span class="num t-h3">₽1,090</span><span class="badge badge-destructive"><i data-i="triangle-alert"></i>Failed</span></div></div>
+<div class="card list" style="font-family:var(--font-web)">
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Payout · Mon, Sep 28</div><div class="t-meta">Bank account ending 4417</div></div><span class="num t-h3">₽12,400</span><span class="badge badge-warning"><i data-i="clock"></i>Processing</span></div>
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Payout · Mon, Sep 21</div><div class="t-meta">Bank account ending 4417</div></div><span class="num t-h3">₽9,870</span><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></div>
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Review · "Best jollof in Moscow"</div><div class="t-meta">4 stars · Amara Okafor</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Published</span></div>
+  <div class="rowx"><div class="g"><div class="t-h3 trunc">Lagos Pantry</div><div class="t-meta">Seller application</div></div><span class="badge badge-warning"><i data-i="clock"></i>In review</span></div></div>
+</div>
+<p class="hint">The badge sits at the end of the row after the amount. On narrow phones it moves under the title; it is never truncated. A row's own title may truncate before the badge does.</p></div>
+
+</div></div>
+<script>
+var I={success:'circle-check-big',warning:'clock',destructive:'triangle-alert',neutral:'minus'};
+var V={
+success:['Completed','Paid','Live','Verified','Accepted','Delivered','Confirmed','Approved','Published','Active','Released','Resolved'],
+warning:['Pending','Preparing','In review','New','Awaiting payment','Awaiting pickup','Processing','Out for delivery','On hold'],
+destructive:['Failed','Rejected','Overdue','Suspended','Declined','Disputed','Reported'],
+neutral:['Draft','Paused','Cancelled','Refunded','Archived','Hidden','Expired','Closed']};
+function b(t,w){return '<span class="badge badge-'+t+'"><i data-i="'+I[t]+'"></i>'+w+'</span>'}
+var names={success:'Success',warning:'Warning',destructive:'Destructive',neutral:'Neutral'};
+document.getElementById('vocab').innerHTML=Object.keys(V).map(function(t){return '<tr><td><b>'+names[t]+'</b><div class="hint">badge-'+t+'</div></td><td><div class="words">'+V[t].map(function(w){return b(t,w)}).join('')+'</div></td></tr>'}).join('');
+var A=[['Order',[['warning','New'],['warning','Preparing'],['warning','Out for delivery'],['success','Delivered'],['neutral','Cancelled'],['neutral','Refunded']]],
+['Booking',[['warning','Pending'],['success','Confirmed'],['success','Completed'],['neutral','Cancelled'],['destructive','Declined']]],
+['Payout',[['warning','Pending'],['warning','Processing'],['success','Paid'],['destructive','Failed'],['destructive','Overdue']]],
+['Seller / merchant',[['neutral','Draft'],['warning','In review'],['success','Verified'],['success','Live'],['neutral','Paused'],['destructive','Suspended'],['destructive','Rejected']]],
+['Review',[['warning','In review'],['success','Published'],['neutral','Hidden'],['destructive','Rejected'],['destructive','Reported']]],
+['Payment',[['warning','Awaiting payment'],['success','Paid'],['destructive','Failed'],['neutral','Refunded'],['neutral','Expired']]]];
+document.getElementById('areas').innerHTML=A.map(function(a){return '<tr><td><b>'+a[0]+'</b></td><td><div class="words" style="align-items:center">'+a[1].map(function(x,i){return (i?'<i data-i="chevron-right" style="--s:14px;color:var(--subtle)"></i>':'')+b(x[0],x[1])}).join('')+'</div></td></tr>'}).join('');
+if(window.czIcons) czIcons();
+</script></body></html>

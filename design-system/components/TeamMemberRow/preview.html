@@ -1,0 +1,36 @@
+<!-- @dsCard group="Marketplace" height=695 subtitle="Team list: owner, manager, staff and finance with a permissions summary, a pending invite, and the role picker" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>TeamMemberRow</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.tm{display:flex;align-items:center;gap:14px;padding:14px 20px;background:var(--surface)}
+.tm .grow{flex:1;min-width:0}
+.tm .n{font:600 15px/20px var(--font-web)}
+.tm .s{font-size:13px;line-height:18px;color:var(--muted)}
+.tm .perm{margin-top:4px;font-size:13px;line-height:18px;color:var(--neutral-text)}
+.tm.pend .avatar{background:var(--neutral-surface);color:var(--muted)}
+.rp{width:300px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);box-shadow:var(--shadow-md);padding:6px}
+.rp .o{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:12px}
+.rp .o.on{background:var(--primary-tint)}
+.rp .o .grow{flex:1}
+.rp .o b{display:block;font:600 14px/20px var(--font-web)}
+.rp .o span{display:block;font-size:13px;line-height:18px;color:var(--muted)}
+.cols{display:grid;grid-template-columns:700px 300px;gap:28px;align-items:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+<div class="cols">
+<div><div class="cz-cap" style="text-align:left;margin-bottom:8px">Settings · Team</div>
+<div class="card list" style="overflow:hidden">
+<div class="tm"><span class="avatar">TA</span><div class="grow"><div class="n">Tolu Adeyemi (you)</div><div class="s">tolu@mamatskitchen.ru</div><div class="perm">Everything, including payouts and team</div></div><span class="badge badge-primary">Owner</span></div>
+<div class="tm"><span class="avatar">EK</span><div class="grow"><div class="n">Esi Koranteng</div><div class="s">esi@mamatskitchen.ru</div><div class="perm">Orders, catalog, messages and reviews. No money.</div></div><span class="badge badge-neutral">Manager</span><a class="btn btn-ghost btn-sm">Change role</a></div>
+<div class="tm"><span class="avatar">DO</span><div class="grow"><div class="n">Dayo Olawale</div><div class="s">dayo@mamatskitchen.ru</div><div class="perm">Orders and messages only</div></div><span class="badge badge-neutral">Staff</span><a class="btn btn-ghost btn-sm">Change role</a></div>
+<div class="tm"><span class="avatar">NB</span><div class="grow"><div class="n">Ngozi Bello</div><div class="s">ngozi@mamatskitchen.ru</div><div class="perm">Earnings, statements and payouts. No catalog.</div></div><span class="badge badge-neutral">Finance</span><a class="btn btn-ghost btn-sm">Change role</a></div>
+<div class="tm pend"><span class="avatar"><i data-i="mail" style="--s:18px"></i></span><div class="grow"><div class="n">kofi@mamatskitchen.ru</div><div class="s">Invited Oct 14 as Staff · expires Oct 21</div></div><span class="badge badge-warning"><i data-i="clock"></i>Invite pending</span><a class="btn btn-ghost btn-sm">Resend</a><a class="btn btn-ghost btn-sm">Revoke</a></div>
+</div></div>
+<div><div class="cz-cap" style="margin-bottom:8px">Role picker</div>
+<div class="rp"><div class="o"><span class="radio"></span><div class="grow"><b>Manager</b><span>Orders, catalog, messages, reviews</span></div></div><div class="o on"><span class="radio on"></span><div class="grow"><b>Staff</b><span>Orders and messages only</span></div></div><div class="o"><span class="radio"></span><div class="grow"><b>Finance</b><span>Earnings, statements, payouts</span></div></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Write each role's access in one plain sentence under the person.</li><li>Show who invited and when an invite expires.</li><li>Keep the owner's row without actions; ownership is transferred elsewhere.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't show only a role name; the permissions are the point.</li><li>Don't let a person change their own role.</li><li>Don't use red for Pending invite; it is waiting, not failed.</li></ul></div></div>
+</div></div></body></html>

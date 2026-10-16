@@ -1,0 +1,115 @@
+<!-- @dsCard group="Office · Screens" height=1566 subtitle="Audit log: filters, actor role chips, expandable details JSON, saved views, pagination, no-match state" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>OfficeAudit</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.o-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.o-top{height:52px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 28px;background:var(--surface);border-bottom:1px solid var(--hairline)}
+.o-search{flex:1;max-width:420px;height:34px;border:1px solid var(--input-edge);border-radius:10px;display:flex;align-items:center;gap:8px;padding:0 10px;color:var(--muted);font-size:14px;background:var(--surface)}
+.o-search .ic{--s:16px}
+.o-search kbd{margin-left:auto;font:600 11px/1 var(--font-web);border:1px solid var(--hairline);border-radius:6px;padding:3px 6px;background:var(--neutral-surface);color:var(--neutral-text)}
+.o-role{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:var(--neutral-surface);color:var(--neutral-text);font:600 12px/1 var(--font-web)}
+.o-brand{display:flex;align-items:center;gap:10px;padding:2px 12px 8px;font:700 16px/1 var(--font-web)}
+.o-brand .lg{width:30px;height:30px;border-radius:9px;background:var(--primary);color:#fff;display:grid;place-items:center;font:700 14px/1 var(--font-web)}
+.o-brand small{display:block;font:500 11px/14px var(--font-web);color:var(--muted);margin-top:2px}
+.o-link .n{margin-left:auto;font:600 12px/1 var(--font-web);color:var(--muted)}
+.o-link .n.hot{background:var(--warning-surface);color:var(--warning-text);padding:3px 7px;border-radius:9px}
+.o-sp{flex:1}
+.o-link,.o-grp,.o-brand{flex-shrink:0}
+.o-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.o-head h1{margin:0;font:700 22px/28px var(--font-web);letter-spacing:-.3px}
+.o-head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.o-tb{display:flex;gap:10px;align-items:center;margin:14px 0;flex-wrap:wrap}
+.o-tb .input,.o-tb .select{height:36px;font-size:14px}
+.o-tb .w{width:260px}.o-tb .w2{width:150px}
+.views{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.views .v{padding:5px 11px;border-radius:999px;border:1px solid var(--hairline);background:var(--surface);font-weight:600;color:var(--ink)}
+.views .v.on{border-color:var(--primary-border);background:var(--primary-tint);color:var(--primary-text)}
+.ot{font-size:13.5px}
+.ot th{position:sticky;top:0;padding:9px 14px;z-index:1}
+.ot td{padding:10px 14px;vertical-align:middle}
+.ot tr.sel td{background:var(--primary-tint)}
+.ot tr.hov td{background:var(--paper)}
+.ot tr.dim td{color:var(--muted)}
+.ot tr.grp td{background:var(--paper);font:600 11px/16px var(--font-web);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 14px}
+.ot td.r,.ot th.r{text-align:right}
+.ot .nm{display:flex;align-items:center;gap:10px;font-weight:600}
+.ot .nm small,.ot small.s{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.age{font-variant-numeric:tabular-nums;white-space:nowrap}
+.age.warn{color:var(--warning-text);font-weight:700}
+.age.bad{color:var(--destructive-text);font-weight:700}
+.sub{color:var(--muted);font-size:12.5px}
+.pgn{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--hairline);font-size:13px;color:var(--muted)}
+.pgn .btns{display:flex;gap:8px}
+.scrim-o{position:absolute;inset:0;display:grid;place-items:center;background:rgba(17,24,39,.55);padding:24px}
+.dlg{width:540px;max-height:100%;padding:24px;display:grid;gap:14px;overflow:hidden}
+.dlg.w{width:780px}
+.dlg h2{margin:0;font:600 18px/24px var(--font-web)}
+.dlg p{margin:0}
+.dlg-f{display:flex;justify-content:flex-end;gap:10px;align-items:center}
+.dlg-f .sp{margin-right:auto}
+.rch{display:flex;flex-wrap:wrap;gap:8px}
+.rch span{padding:6px 12px;border-radius:999px;border:1px solid var(--input-edge);background:var(--surface);font:500 13px/18px var(--font-web)}
+.rch span.on{border-color:var(--primary-border);background:var(--primary-tint);color:var(--primary-text)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sw{display:flex;align-items:center;gap:10px;font-size:14px}
+.o-card .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hairline)}
+.o-card .hd h3{margin:0;font:600 15px/22px var(--font-web)}
+.o-card .bd{padding:14px 16px}
+.o-card+.o-card{margin-top:14px}
+.kv2{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;font-size:14px;margin:0}
+.kv2 dt{color:var(--muted)}.kv2 dd{margin:0}
+.kvl{margin:0;font-size:14px}
+.kvl>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0}
+.kvl>div+div{border-top:1px solid var(--hairline)}
+.kvl dt{color:var(--muted)}.kvl dd{margin:0;font-variant-numeric:tabular-nums;font-weight:600}
+.miss{color:var(--destructive-text);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.ok{color:var(--success-text);display:inline-flex;align-items:center;gap:6px}
+.ok .ic,.miss .ic{--s:15px}
+.json{margin:0;padding:12px 16px;background:var(--neutral-surface);border-radius:10px;font:12.5px/18px ui-monospace,Menlo,monospace;color:var(--ink);overflow:hidden;white-space:pre}
+.cap2{font:600 12px/16px var(--font-web);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.empty{text-align:center;padding:48px 24px}
+.empty .avatar{margin:0 auto 12px}
+.mutedbg{background:var(--neutral-surface);border-radius:var(--radius-control);padding:10px 12px;font-size:13px;color:var(--neutral-text)}
+.sg{display:inline-flex;gap:2px;padding:3px;background:var(--neutral-surface);border-radius:10px}
+.sg span{padding:6px 12px;border-radius:8px;font:600 13px/1 var(--font-web);color:var(--muted)}
+.sg span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-xs)}
+.ed{display:grid;gap:8px;align-items:center;font-size:13.5px}
+.ed.f{grid-template-columns:1fr 1.4fr 110px 96px 36px}
+.ed.d{grid-template-columns:1fr 1.4fr 96px 96px 36px}
+.ed .input,.ed .select{height:36px;font-size:13.5px}
+.ed .cb{display:inline-flex;align-items:center;gap:8px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin:2px 0}
+.sec-h h4{margin:0;font:600 14px/20px var(--font-web)}
+.fld{display:grid;gap:6px}
+.fld .label{font-size:12.5px}
+.stack{display:grid;gap:14px;align-content:start}
+.ro .input,.ro .select{background:var(--neutral-surface);color:var(--neutral-text)}
+.mono{font:12.5px/18px ui-monospace,Menlo,monospace}
+.chiprole{display:inline-flex;height:22px;align-items:center;padding:0 8px;border-radius:999px;font:600 12px/1 var(--font-web);background:var(--neutral-surface);color:var(--neutral-text)}
+.chiprole.sys{background:var(--paper);border:1px solid var(--hairline)}
+.chiprole.mer{background:var(--primary-tint);color:var(--primary-text)}
+.nx{font-size:12px;color:var(--muted)}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Filtered to one merchant and entity: first row expanded to its details, actor role chips</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:920px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><div class="o-grp">Merchants</div><a class="o-link"><i data-i="store"></i>Merchants<span class="n hot">7</span></a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link on"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="wallet"></i>Payouts<span class="n hot">4</span></a><a class="o-link"><i data-i="percent"></i>Fees</a><a class="o-link"><i data-i="chart-column"></i>Analytics</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>compliance</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Audit log</h1><p>Append-only record of admin, merchant and system actions. Nothing here can be edited.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div><div class="o-tb" style="align-items:flex-end"><div class="fld"><label class="label">Merchant</label><input class="input" style="width:210px;height:36px" value="Lagos Pantry"></div><div class="fld"><label class="label">Entity type</label><select class="select" style="width:150px;height:36px"><option>Payout</option></select></div><div class="fld"><label class="label">Action</label><input class="input" style="width:190px;height:36px" placeholder="payout.reveal"></div><div class="fld"><label class="label">Actor</label><select class="select" style="width:160px;height:36px"><option>Anyone</option></select></div><a class="btn btn-sm">Apply</a><a class="btn btn-secondary btn-sm">Clear</a></div><div class="views" style="margin-bottom:10px"><span>Views</span><span class="v on">All</span><span class="v">Money actions</span><span class="v">Role changes</span><span class="v">Mine</span></div><div class="o-card"><table class="table ot"><thead><tr><th></th><th>When</th><th>Actor</th><th>Action</th><th>Entity</th><th>Merchant</th></tr></thead><tbody>
+<tr class="sel"><td style="width:28px"><i data-i="chevron-down" style="--s:16px"></i></td><td style="white-space:nowrap">Oct 16, 10:42 AM</td><td><span class="chiprole ">Admin · finance</span></td><td><b class="mono">payout.reveal</b></td><td>Payout po_8f31c2</td><td>Lagos Pantry</td></tr><tr><td></td><td colspan="5" style="padding:4px 14px 14px"><pre class="json">{
+  "payout_id": "po_8f31c2",
+  "currency": "RUB",
+  "amount": 126500,
+  "revealed": ["account_number", "bic"],
+  "ip": "185.44.12.9"
+}</pre></td></tr>
+<tr class=""><td style="width:28px"><i data-i="chevron-right" style="--s:16px"></i></td><td style="white-space:nowrap">Oct 16, 10:41 AM</td><td><span class="chiprole ">Admin · finance</span></td><td><b class="mono">payout.approve</b></td><td>Payout po_8f31c2</td><td>Lagos Pantry</td></tr>
+<tr class=""><td style="width:28px"><i data-i="chevron-right" style="--s:16px"></i></td><td style="white-space:nowrap">Oct 16, 9:15 AM</td><td><span class="chiprole ">Admin · compliance</span></td><td><b class="mono">merchant.approve</b></td><td>Merchant</td><td>Guangzhou Market</td></tr>
+<tr class=""><td style="width:28px"><i data-i="chevron-right" style="--s:16px"></i></td><td style="white-space:nowrap">Oct 16, 8:02 AM</td><td><span class="chiprole mer">Merchant</span></td><td><b class="mono">payout_method.add</b></td><td>Payout method</td><td>Lagos Pantry</td></tr>
+<tr class=""><td style="width:28px"><i data-i="chevron-right" style="--s:16px"></i></td><td style="white-space:nowrap">Oct 16, 3:00 AM</td><td><span class="chiprole sys">System</span></td><td><b class="mono">earnings.release</b></td><td>Earning batch</td><td>Mama T's Kitchen</td></tr>
+<tr class=""><td style="width:28px"><i data-i="chevron-right" style="--s:16px"></i></td><td style="white-space:nowrap">Oct 15, 6:48 PM</td><td><span class="chiprole ">Admin · ops</span></td><td><b class="mono">review.hide</b></td><td>Review</td><td>Lagos Pantry</td></tr>
+</tbody></table><div class="pgn"><span>1–50 of 1,284</span><span class="btns"><a class="btn btn-secondary btn-sm">Previous</a><a class="btn btn-secondary btn-sm">Next</a></span></div></div></div></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">No entries match the filters</div>
+<div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">office.ciuna.com</span></div>
+<div class="desk-body" style="position:relative;height:420px;min-height:0;overflow:hidden"><div class="o-side"><div class="o-brand"><span class="lg">C</span><span>Ciuna Office<small>Moscow · MSK</small></span></div><div class="o-grp">Operations</div><a class="o-link"><i data-i="house"></i>Dashboard</a><a class="o-link"><i data-i="receipt"></i>Transactions</a><a class="o-link"><i data-i="users"></i>Users</a><div class="o-grp">Marketplace</div><a class="o-link"><i data-i="layout-grid"></i>Marketplace</a><a class="o-link"><i data-i="utensils"></i>Food and Mart hub</a><a class="o-link"><i data-i="briefcase"></i>Experts</a><div class="o-grp">Merchants</div><a class="o-link"><i data-i="store"></i>Merchants<span class="n hot">7</span></a><a class="o-link"><i data-i="list-checks"></i>KYB requirements</a><a class="o-link on"><i data-i="scroll-text"></i>Audit log</a><a class="o-link"><i data-i="star"></i>Reviews</a><div class="o-grp">Finance</div><a class="o-link"><i data-i="wallet"></i>Payouts<span class="n hot">4</span></a><a class="o-link"><i data-i="percent"></i>Fees</a><a class="o-link"><i data-i="chart-column"></i>Analytics</a></div><div class="o-col"><div class="o-top"><div class="o-search"><i data-i="search"></i>Search merchants, orders, payouts<kbd>⌘K</kbd></div><span class="o-sp"></span><i data-i="bell" style="--s:18px"></i><span class="o-role"><i data-i="user-check" style="--s:14px"></i>compliance</span><span class="avatar sm">A</span></div><div class="o-main"><div class="o-head"><div><h1>Audit log</h1><p>Append-only record of admin, merchant and system actions. Nothing here can be edited.</p></div><div style="display:flex;gap:8px"><a class="btn btn-secondary btn-sm"><i data-i="download"></i>Export</a></div></div><div class="o-tb" style="align-items:flex-end"><div class="fld"><label class="label">Merchant</label><input class="input" style="width:210px;height:36px" value="Sahel Spices"></div><div class="fld"><label class="label">Entity type</label><select class="select" style="width:150px;height:36px"><option>Payout</option></select></div><div class="fld"><label class="label">Action</label><input class="input" style="width:190px;height:36px" placeholder="payout.reveal"></div><div class="fld"><label class="label">Actor</label><select class="select" style="width:160px;height:36px"><option>Anyone</option></select></div><a class="btn btn-sm">Apply</a><a class="btn btn-secondary btn-sm">Clear</a></div><div class="o-card"><div class="empty"><div class="t-h2">No entries match</div><p class="t-meta" style="margin:6px 0 0">Nothing was recorded for Sahel Spices with these filters. Clear a filter to widen the search.</p></div></div></div></div></div></div></div>
+</div></div></body></html>

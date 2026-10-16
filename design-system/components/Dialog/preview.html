@@ -1,0 +1,69 @@
+<!-- @dsCard group="Feedback" height=1489 subtitle="Confirm dialog with a direct question and reason field, plain information dialog, and the bottom-sheet version on a phone" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Dialog</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.stage{position:relative;border-radius:var(--radius-card);overflow:hidden;background:var(--paper);border:1px solid var(--hairline);display:grid;place-items:center;padding:36px 20px}
+.stage .scrim{position:absolute;inset:0}
+.stage .back{position:absolute;inset:0;padding:20px;display:grid;gap:10px;align-content:start}
+.stage .back i{display:block;height:44px;border-radius:12px;background:var(--surface);border:1px solid var(--hairline)}
+.dialog{position:relative;width:100%;max-width:440px;padding:24px;display:grid;gap:14px}
+.dialog h2{margin:0;font:700 20px/26px var(--font-web);letter-spacing:-.2px}
+.dialog p{margin:0;color:var(--muted);font-size:15px;line-height:22px}
+.dialog .foot{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.dialog .close{position:absolute;right:12px;top:12px;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;color:var(--muted)}
+.dialog .ico{width:44px;height:44px;border-radius:50%;display:grid;place-items:center}
+.ico.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.ico.info{background:var(--neutral-surface);color:var(--ink)}
+.pstage{position:relative;width:390px;height:560px;border-radius:32px;overflow:hidden;background:var(--paper);box-shadow:0 0 0 8px var(--ink),var(--shadow-lg)}
+.pstage .scrim{position:absolute;inset:0}
+.pstage .back{position:absolute;inset:0;padding:60px 16px;display:grid;gap:10px;align-content:start}
+.pstage .back i{display:block;height:64px;border-radius:16px;background:var(--surface);border:1px solid var(--hairline)}
+.pstage .sheet{position:absolute;left:0;right:0;bottom:0;padding:0 20px 28px}
+.pstage .sheet .in{display:grid;gap:14px;padding-top:14px}
+.pstage .sheet h2{margin:0;font:700 20px/26px var(--font-native)}
+.pstage .sheet p{margin:0;color:var(--muted);font:400 15px/22px var(--font-native)}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="g2" style="align-items:start">
+<div class="cz-section"><p class="cz-h">Confirm: destructive, with a reason</p>
+<div class="stage"><div class="back"><i></i><i></i><i></i><i></i></div><div class="scrim"></div>
+  <div class="dialog" role="alertdialog" aria-labelledby="t1"><span class="close"><i data-i="x" style="--s:20px"></i></span>
+    <span class="ico bad"><i data-i="triangle-alert" style="--s:22px"></i></span>
+    <h2 id="t1">Reject this order?</h2>
+    <p>The customer will be refunded ₽1,250 in full and told you could not fulfil it. This cannot be undone.</p>
+    <div class="field"><label class="label">Reason for the customer <span class="req">Required</span></label><textarea class="textarea" style="min-height:80px" placeholder="For example: we are out of egusi today."></textarea></div>
+    <div class="foot"><a class="btn btn-secondary">Keep order</a><a class="btn btn-destructive">Reject order</a></div></div></div></div>
+
+<div class="cz-section"><p class="cz-h">Plain information</p>
+<div class="stage"><div class="back"><i></i><i></i><i></i><i></i></div><div class="scrim"></div>
+  <div class="dialog" role="dialog" aria-labelledby="t2"><span class="close"><i data-i="x" style="--s:20px"></i></span>
+    <span class="ico info"><i data-i="info" style="--s:22px"></i></span>
+    <h2 id="t2">How payouts work</h2>
+    <p>We pay out every weekday for orders marked completed the day before. Your bank usually receives the money within one business day. Cut-off is 6:40 PM MSK.</p>
+    <div class="foot"><a class="btn">Got it</a></div></div></div></div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Phone: the same confirm becomes a bottom sheet</p>
+<div class="cz-grid" style="justify-content:flex-start;gap:44px">
+<div class="pstage"><div class="back"><i></i><i></i><i></i><i></i></div><div class="scrim"></div>
+  <div class="sheet"><div class="grab"></div><div class="in">
+    <h2>Reject this order?</h2><p>The customer will be refunded ₽1,250 in full. This cannot be undone.</p>
+    <div class="field"><label class="label">Reason for the customer <span class="req">Required</span></label><textarea class="textarea" style="min-height:72px" placeholder="For example: we are out of egusi today."></textarea></div>
+    <div style="display:grid;gap:8px"><a class="btn btn-destructive btn-lg btn-block">Reject order</a><a class="btn btn-secondary btn-lg btn-block">Keep order</a></div></div></div></div>
+<div class="cz-note" style="text-align:left;max-width:380px">On phones a dialog is a bottom sheet: grabber, full-width stacked buttons with the confirm on top, 48px+ targets. Tapping the scrim or swiping down cancels, except when text has been entered (then ask before discarding). Desktop dialogs are centred, 440px wide, with Cancel left of the confirm.</div></div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Title is the direct question: "Reject this order?". Body says what happens to the money, in one or two sentences.</li><li>Buttons name the action ("Reject order") and the safe option ("Keep order"). Never "OK" or "Yes".</li><li>Focus lands on the safe action for destructive dialogs. Escape closes. Focus returns to the trigger.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use a dialog for success messages or for anything that Undo could cover.</li><li>Don't open a dialog from a dialog.</li><li>Don't make the destructive button the default focus.</li></ul></div></div></div>
+
+</div></div></body></html>

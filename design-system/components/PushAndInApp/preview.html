@@ -1,0 +1,63 @@
+<!-- @dsCard group="Documents and email" height=1340 width=1560 subtitle="Push notifications on an iPhone lock screen and an Android shade for seller alerts and customer order updates, plus in-app toast and tab badge usage" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>PushAndInApp</title>
+<link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.lock{background:var(--ph-bg);color:#fff}
+.ph-wall{--ph-bg:linear-gradient(160deg,var(--ink),var(--neutral-text))}
+.lock .big{text-align:center;margin-top:30px}
+.lock .big small{display:block;font:500 17px/22px var(--font-native);opacity:.9}
+.lock .big b{display:block;font:300 84px/88px var(--font-native)}
+.nt{display:flex;gap:10px;padding:12px 14px;border-radius:22px;background:rgba(255,255,255,.88);color:var(--ink);font-family:var(--font-native)}
+.nt img{width:38px;height:38px;border-radius:9px;background:var(--primary-tint);padding:6px;flex-shrink:0}
+.nt .t{display:flex;justify-content:space-between;font-size:12px;line-height:16px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.nt b{display:block;font:600 15px/20px var(--font-native)} .nt p{margin:0;font:400 14px/19px var(--font-native);color:var(--neutral-text)}
+.ntl{padding:0 14px;display:grid;gap:8px;margin-top:26px}
+.andr{background:var(--neutral-surface)}
+.andr .nt{background:var(--surface);border-radius:26px;padding:14px 16px;box-shadow:var(--shadow-sm);border:1px solid var(--hairline)}
+.andr .nt .t{text-transform:none;letter-spacing:0;justify-content:flex-start;gap:6px}
+.andr .acts{display:flex;gap:16px;margin-top:8px}
+.andr .acts span{font:600 13px/18px var(--font-native);color:var(--primary-text)}
+.dot-badge{position:relative}
+.dot-badge .bd{position:absolute;top:-4px;right:calc(50% - 22px);min-width:18px;height:18px;border-radius:9px;background:var(--primary);color:#fff;font:700 11px/18px var(--font-native);text-align:center;padding:0 5px}
+.toastbar{position:absolute;left:14px;right:14px;top:56px}
+.toastbar .toast{width:100%;align-items:flex-start}
+.toastbar .toast .ic{--s:18px;margin-top:1px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">iPhone lock screen, seller alerts</div>
+<div class="phone native lock ph-wall"><div class="statusbar" style="color:#fff"><span></span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="big"><small>Friday, October 16</small><b>2:14</b></div>
+<div class="ntl">
+<div class="nt"><img src="../../assets/logos/ciuna-mark.svg" alt=""><div style="flex:1"><div class="t"><span>Ciuna Seller</span><span>now</span></div><b>New order CIU-1001</b><p>₽1,250.00 · 2 × Jollof rice, 1 × Fried plantain. Accept it to start.</p></div></div>
+<div class="nt"><img src="../../assets/logos/ciuna-mark.svg" alt=""><div style="flex:1"><div class="t"><span>Ciuna Seller</span><span>3m ago</span></div><b>New message on order CIU-1001</b><p>Amara Okafor: Can you add extra pepper sauce on the side?</p></div></div>
+<div class="nt"><img src="../../assets/logos/ciuna-mark.svg" alt=""><div style="flex:1"><div class="t"><span>Ciuna Seller</span><span>1h ago</span></div><b>Payout sent</b><p>₽3,300.00 was sent to your account. Reference: PAY-20412.</p></div></div>
+</div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Android shade, customer order updates</div>
+<div class="phone native andr"><div class="statusbar"><span>2:14 PM</span><span class="r"><i data-i="wifi"></i><i data-i="signal"></i><i data-i="battery-full"></i></span></div>
+<div class="ntl" style="margin-top:12px">
+<div class="nt"><img src="../../assets/logos/ciuna-mark.svg" alt=""><div style="flex:1"><div class="t"><span>Ciuna</span><span>2:14 PM</span></div><b>Your order is ready</b><p>Mama T's Kitchen packed CIU-1001. Courier arrives about 7:30 PM MSK.</p><div class="acts"><span>Track order</span></div></div></div>
+<div class="nt"><img src="../../assets/logos/ciuna-mark.svg" alt=""><div style="flex:1"><div class="t"><span>Ciuna</span><span>1:52 PM</span></div><b>Order accepted</b><p>Mama T's Kitchen is preparing CIU-1001.</p></div></div>
+<div class="nt"><img src="../../assets/logos/ciuna-mark.svg" alt=""><div style="flex:1"><div class="t"><span>Ciuna</span><span>Yesterday</span></div><b>Order cancelled</b><p>₽1,250.00 is going back to your card, usually within 5 business days.</p></div></div>
+<div class="nt"><img src="../../assets/logos/ciuna-mark.svg" alt=""><div style="flex:1"><div class="t"><span>Ciuna</span><span>4:00 PM</span></div><b>Booking in 1 hour</b><p>Dr. Amina Yusuf, 5:00 PM MSK (3:00 PM WAT). Tap to join.</p><div class="acts"><span>Join meeting</span></div></div></div>
+</div></div></div>
+
+<div class="cz-col"><div class="cz-cap">In-app: toast and tab badge (Ciuna Seller)</div>
+<div class="phone"><div class="statusbar"><span>2:14</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b></span></div><i data-i="bell" style="--s:22px"></i></div>
+<div class="screen"><div class="toastbar"><div class="toast"><i data-i="bell"></i><span><b style="display:block">New order CIU-1001</b>₽1,250.00 · Accept it to start.</span></div></div>
+<div class="scroll" style="padding:18px 16px 0;padding-top:96px"><h1 class="t-title" style="margin:0 0 12px">Orders</h1>
+<div class="tabs" style="margin-bottom:14px"><span class="tab on">New <span class="count">3</span></span><span class="tab">In progress <span class="count">1</span></span><span class="tab">Completed</span></div>
+<div class="ocard"><div class="top"><div><div class="id">Order CIU-1001</div><div class="t-meta">just now</div></div><span class="badge badge-warning"><i data-i="clock"></i>New</span></div><div class="t-body">2 × Jollof rice, +1 more</div><div style="display:flex;justify-content:space-between;align-items:center"><span class="t-h2 num">₽1,250</span><a class="btn">Accept order</a></div></div>
+</div></div>
+<div class="s-bottom" style="grid-template-columns:repeat(4,1fr)"><span class="s-bi on dot-badge"><i data-i="clipboard-list"></i>Orders<span class="bd">3</span></span><span class="s-bi dot-badge"><i data-i="messages-square"></i>Messages<span class="bd">1</span></span><span class="s-bi"><i data-i="wallet"></i>Earnings</span><span class="s-bi"><i data-i="store"></i>Store</span></div><div class="homebar"></div></div></div>
+
+<div class="cz-col" style="width:300px"><div class="cz-cap">Rules</div><ul class="t-meta" style="margin:0;padding-left:18px;display:grid;gap:8px">
+<li>Title is the event, body is one sentence, same strings as email and Telegram.</li>
+<li>Tap opens the order, booking or thread, never a home screen.</li>
+<li>Android notifications may carry one action ("Track order", "Join meeting"). Sellers' push has none: accepting needs the order open.</li>
+<li>The toast shows only while the app is open and in the foreground; it replaces the push, never repeats it. Auto-dismiss in 5 seconds, a tap opens the order.</li>
+<li>Badges count what needs action (new orders, unread messages), cap at 99+, clear when the item is opened.</li>
+<li>Lock screens show amounts but no customer address or phone.</li></ul></div>
+</div></div></body></html>

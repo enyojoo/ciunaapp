@@ -1,0 +1,42 @@
+<!-- @dsCard group="Documents and email" height=820 subtitle="The shared email frame: logo, title, one orange button with a white label, muted text, support footer, and the plain-text fallback beside it" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>EmailLayout</title>
+<link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.em{width:480px;padding:20px 14px}
+.em .inner{padding:26px 26px 22px}
+.em-logo{height:22px;display:block;margin:0 0 22px}
+.em h1{margin:0 0 8px;font:700 20px/26px var(--font-web);letter-spacing:-.2px}
+.em p{margin:0 0 20px;font:400 16px/24px var(--font-web);color:var(--muted)}
+.em .btn{height:46px;padding:0 22px}
+.em-foot{margin:24px 0 0;padding-top:16px;border-top:1px solid var(--hairline);font:400 13px/19px var(--font-web);color:var(--muted)}
+.em-kv{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:0 0 22px;padding:14px 16px;background:var(--paper);border-radius:12px;font-size:14px;line-height:20px}
+.em-kv dt{color:var(--muted)} .em-kv dd{margin:0;text-align:right;color:var(--ink)}
+.em-kv .tot{font-weight:700}
+.em-meta{width:480px;font:400 12px/17px var(--font-web);color:var(--muted);text-align:left}
+.em-meta b{color:var(--ink);font-weight:600}
+
+.pt{width:430px;background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:20px;font:400 13px/20px ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;color:var(--ink);margin:0}
+.anno{width:430px;display:grid;gap:8px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.anno li{margin-left:18px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Light only: HTML version</div>
+<div class="em-meta"><b>From</b> Ciuna &lt;no-reply@ciuna.com&gt; &nbsp; <b>Subject</b> Your order CIU-1001 is ready</div>
+<div class="email em"><div class="inner"><img class="em-logo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><h1>Your order is ready</h1><p>Mama T's Kitchen has packed order CIU-1001. The courier will bring it to Tverskaya 12 at about 7:30 PM MSK.</p><a class="btn">View order</a>
+<div class="em-foot">You get this because you placed order CIU-1001 on Ciuna.<br>Questions? Write to support@ciuna.com.<br>Ciuna, Moscow</div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Plain-text fallback</div>
+<div class="em-meta"><b>Content-Type</b> text/plain; charset=utf-8. Same words, same order, link on its own line.</div>
+<pre class="pt">Your order is ready
+
+Mama T's Kitchen has packed order CIU-1001. The courier will bring it to Tverskaya 12 at about 7:30 PM MSK.
+
+View order: https://app.ciuna.com/orders/CIU-1001
+
+--
+You get this because you placed order CIU-1001 on Ciuna.
+Questions? Write to support@ciuna.com.
+Ciuna, Moscow</pre>
+<div class="cz-cap" style="margin-top:8px">Anatomy</div>
+<ul class="anno" style="padding:0;margin:0"><li>Logo top-left, 22px high, on white. No hero image, no banner colour.</li><li>Title in ink, one sentence in muted, 16px, max 480px wide.</li><li>One button: white label on the primary orange (4.56:1). Never two orange buttons.</li><li>Footer in muted 13px: why you get this, support address, then the company line.</li><li>Page behind the card is paper. No dark mode.</li></ul></div>
+</div></div></body></html>

@@ -1,0 +1,51 @@
+<!-- @dsCard group="Marketplace" height=745 width=1300 subtitle="Order summary at checkout: items, delivery fee, total in the pay currency and the list of pay methods, for delivery, pickup and an expert booking" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>OrderSummary</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.os{width:390px;display:grid;gap:12px}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px;display:grid;gap:10px}
+.os h3{margin:0;font:700 18px/24px var(--font-native)}
+.os .st{font:600 13px/18px var(--font-native);color:var(--muted)}
+.ln{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font:400 15px/22px var(--font-native)}
+.ln span:last-child{font-variant-numeric:tabular-nums}
+.ln .q{color:var(--muted)}
+.ln.tot{font:700 18px/24px var(--font-native);padding-top:10px;border-top:1px solid var(--hairline)}
+.pay{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);font:600 15px/20px var(--font-native)}
+.pay.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.pay .grow{flex:1}
+.pay small{display:block;font:400 13px/18px var(--font-native);color:var(--muted)}
+.pay .ic{--s:22px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font:14px/22px var(--font-native)}
+</style></head>
+<body><div class="cz-page native"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Delivery order</div>
+<div class="os"><h3>Order summary</h3><div class="st">Mama T's Kitchen</div>
+<div class="plate"><div class="ln"><span>2 × Jollof rice with chicken</span><span>₽1,300</span></div><div class="ln"><span>1 × Egusi soup with pounded yam</span><span>₽700</span></div><div class="ln"><span>1 × Chin chin, 200 g</span><span>₽250</span></div>
+<div class="ln"><span class="q">Delivery</span><span>₽150</span></div><div class="ln tot"><span>Total</span><span>₽2,400</span></div></div>
+<div class="st">Pay with</div>
+<div class="pay on"><span class="radio on"></span><i data-i="credit-card"></i><span class="grow">Bank card<small>Visa, Mastercard, Mir</small></span></div>
+<div class="pay"><span class="radio"></span><i data-i="send"></i><span class="grow">SBP<small>Pay in your banking app</small></span></div>
+<a class="btn btn-lg btn-block" style="height:52px">Pay ₽2,400</a></div></div>
+
+<div class="cz-col"><div class="cz-cap">Pickup, no delivery fee</div>
+<div class="os"><h3>Order summary</h3><div class="st">Mama T's Kitchen · Pickup</div>
+<div class="plate"><div class="ln"><span>1 × Jollof rice with chicken</span><span>₽650</span></div><div class="ln"><span>1 × Zobo drink, 500 ml</span><span>₽260</span></div>
+<div class="ln"><span class="q">Delivery</span><span>Pickup, free</span></div><div class="ln tot"><span>Total</span><span>₽910</span></div></div>
+<div class="st">Pay with</div>
+<div class="pay"><span class="radio"></span><i data-i="credit-card"></i><span class="grow">Bank card<small>Visa, Mastercard, Mir</small></span></div>
+<div class="pay on"><span class="radio on"></span><i data-i="send"></i><span class="grow">SBP<small>Pay in your banking app</small></span></div>
+<a class="btn btn-lg btn-block" style="height:52px">Pay ₽910</a></div></div>
+
+<div class="cz-col"><div class="cz-cap">Expert booking</div>
+<div class="os"><h3>Booking summary</h3><div class="st">Dr. Amina Yusuf · Immigration lawyer</div>
+<div class="plate"><div class="ln"><span>Immigration consultation, 45 min</span><span>₽5,000</span></div><div class="ln"><span class="q">Sat, Oct 18 · 11:30 MSK</span><span></span></div><div class="ln tot"><span>Total</span><span>₽5,000</span></div></div>
+<div class="st">Pay with</div>
+<div class="pay on"><span class="radio on"></span><i data-i="credit-card"></i><span class="grow">Bank card<small>Visa, Mastercard, Mir</small></span></div>
+<div class="pay"><span class="radio"></span><i data-i="send"></i><span class="grow">SBP<small>Pay in your banking app</small></span></div>
+<a class="btn btn-lg btn-block" style="height:52px">Pay ₽5,000</a></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Show one total in the currency the customer pays; lines add up to it.</li><li>Put the amount on the Pay button so the commitment is clear.</li><li>Name pay methods by what the customer sees (Bank card, SBP).</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't show exchange rates, conversion fees or other currency chrome.</li><li>Don't name payment providers or processors.</li><li>Don't add a service fee line; Ciuna's fee is the seller's, not the customer's.</li></ul></div></div>
+</div></div></body></html>

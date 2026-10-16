@@ -1,0 +1,109 @@
+<!-- @dsCard group="Seller · Screens" height=2880 subtitle="Payout history as cards: requested with cancel, approved, paid with reference, rejected with reason, cancelled, the cancel confirm and the empty state" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SellerPayouts</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pg{padding:18px 16px 16px}
+.pg h1{margin:0;font:700 24px/30px var(--font-web);letter-spacing:-.3px}
+.sub{margin:4px 0 14px;color:var(--muted);font-size:14px;line-height:20px}
+.stk{display:grid;gap:12px}
+.rw{display:flex;align-items:center;gap:10px}
+.rw.top{align-items:flex-start}
+.sp{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gr{flex:1;min-width:0}
+.sec{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px 20px;display:grid;gap:14px;align-content:start}
+.sec h2{margin:0;font:600 16px/22px var(--font-web)}
+.sec .hp{margin:2px 0 0;font-size:13px;line-height:18px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sf{width:390px;border-radius:var(--radius-sheet);overflow:hidden;padding-top:44px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--shadow-md);background:var(--neutral-surface)}
+.sf .sheet{border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;box-shadow:none;padding:0 20px 24px;display:grid;gap:14px}
+.sh-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:16px}
+.sh-h h3{margin:0;font:600 18px/24px var(--font-web)}
+.sh-h p{margin:2px 0 0;font-size:14px;line-height:20px;color:var(--muted)}
+.x{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:var(--neutral-surface);flex-shrink:0}
+.ovl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;z-index:5}
+.ovl>.scrim{position:absolute;inset:0}
+.ovl>.sheet{position:relative;padding:0 20px 28px;display:grid;gap:14px}
+.ovl.mid{justify-content:center;align-items:center;padding:24px}
+.ovl.mid>.dialog{position:relative;width:100%;max-width:440px}
+.dialog.dg{padding:22px;display:grid;gap:12px}
+.dg h3{margin:0;font:600 18px/24px var(--font-web)}
+.dg p{margin:0;color:var(--muted);font-size:14px;line-height:20px}
+.dg .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.dfr{width:390px;border-radius:var(--radius-sheet);padding:28px 18px;box-shadow:var(--shadow-md);background:var(--neutral-surface)}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;min-height:56px}
+.sw .t{font:600 15px/20px var(--font-web)}
+.sw .s{font-size:13px;line-height:18px;color:var(--muted)}
+.opt{border:1px solid var(--input-edge);border-radius:var(--radius-control);padding:12px 14px;display:flex;gap:10px;align-items:center;background:var(--surface);font:600 14px/20px var(--font-web)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt.off{background:var(--neutral-surface);color:var(--muted)}
+.opt small{display:block;font:400 12px/16px var(--font-web);color:var(--muted)}
+.dbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 36px;background:var(--surface);border-top:1px solid var(--hairline)}
+.sbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:var(--surface);border-top:1px solid var(--hairline);flex-shrink:0}
+.s-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.wm{font:700 22px/1 var(--font-web);letter-spacing:-.5px;display:inline-flex;align-items:center;gap:6px}
+.wm i{width:10px;height:10px;border-radius:50%;background:var(--brand-primary);display:block}
+.mini.ok{background:var(--success-surface);color:var(--success-text)}
+.hs{height:1px;background:var(--hairline)}
+.line{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px}
+.line.tot{font-weight:600;border-top:1px solid var(--hairline);padding-top:10px}
+.line .m{color:var(--muted)}
+.neg{color:var(--destructive-text)}
+.list>*{padding:14px 16px;border-top:1px solid var(--hairline)}
+.list>*:first-child{border-top:0}
+.lnk{font-size:14px}
+.cap-n{font-size:12px;line-height:16px;color:var(--muted)}
+.ctr{font-size:12px;line-height:16px;color:var(--muted);text-align:right}
+.def{font:600 10px/1 var(--font-web);color:var(--primary-text);background:var(--primary-tint);padding:3px 5px;border-radius:5px;text-transform:uppercase}
+.lt{display:flex;gap:2px;border-bottom:1px solid var(--hairline);overflow:hidden}
+.lt .lang{display:flex;align-items:center;gap:7px;height:44px;padding:0 14px;font:600 14px/1 var(--font-web);color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.lt .lang.on{color:var(--ink);border-color:var(--primary)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--success)}
+.dot.miss{background:var(--warning)}
+.dot.none{background:var(--input-edge)}
+</style></head>
+<body><div class="cz-page">
+<div class="cz-stack" style="gap:28px"><div class="cz-grid"><div class="cz-col"><div class="cz-cap">Desktop</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/earnings/payouts</span></div>
+<div class="desk-body" style="position:relative;"><aside class="s-side"><div class="rw" style="padding:4px 12px 0"><span class="wm"><i></i>ciuna</span><span class="badge badge-neutral">Seller</span></div>
+<nav class="s-nav"><span class="s-link"><i data-i="house"></i>Home</span><span class="s-link"><i data-i="clipboard-list"></i>Orders</span><span class="s-link"><i data-i="package"></i>Catalog</span><span class="s-link"><i data-i="message-square"></i>Messages</span><span class="s-link on"><i data-i="wallet"></i>Earnings</span><span class="s-link"><i data-i="star"></i>Reviews</span><span class="s-link"><i data-i="menu"></i>More</span></nav><div class="s-biz"><span class="logo">M</span><span class="gr"><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span><i data-i="chevron-down" style="--s:16px"></i></div></aside>
+<div class="s-col"><div class="s-top" style="height:64px;padding:0 36px"><div class="input-wrap" style="width:320px"><i data-i="search" style="--s:18px"></i><input class="input" style="height:40px" placeholder="Search"></div><div class="rw"><i data-i="bell" style="--s:20px"></i><span class="avatar sm">M</span></div></div>
+<main class="s-main gr"><div class="page-h"><div><h1>Payouts</h1><p>Every payout you requested, and where it stands.</p></div></div><div class="tabs" style="margin-bottom:20px"><span class="tab">Earnings</span><span class="tab on">Payouts</span><span class="tab">Payout methods</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start"><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽5,000</div><div class="t-meta">Requested Oct 16</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Requested</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽50</span></div><div class="line"><span class="m">You receive</span><span class="num">₽4,950</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div></div>
+<div class="t-meta">Waiting for Ciuna to review. You can cancel until it is approved.</div><div><a class="btn btn-secondary btn-sm">Cancel request</a></div></div><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽8,000</div><div class="t-meta">Requested Oct 14</div></div><span class="badge badge-warning"><i data-i="circle-check-big"></i>Approved</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽80</span></div><div class="line"><span class="m">You receive</span><span class="num">₽7,920</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div></div>
+<div class="t-meta">Approved. Ciuna will send the money to your account.</div></div><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽12,000</div><div class="t-meta">Requested Oct 9</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽120</span></div><div class="line"><span class="m">You received</span><span class="num">₽11,880</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div><div class="line"><span class="m">Paid on</span><span>Oct 10, 2026 • 11:32 AM MSK</span></div><div class="line"><span class="m">Reference</span><span class="num">SBP-20261010-48213</span></div></div>
+<div class="t-meta">Sent to your account.</div></div><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽3,000</div><div class="t-meta">Requested Oct 6</div></div><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽30</span></div><div class="line"><span class="m">You receive</span><span class="num">₽2,970</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div><div class="line"><span class="m">Reason</span><span>Recipient name does not match the verified method.</span></div></div>
+<div class="t-meta">Not paid. The money is back in your available balance.</div></div><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽1,500</div><div class="t-meta">Requested Oct 2</div></div><span class="badge badge-neutral"><i data-i="minus"></i>Cancelled</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽15</span></div><div class="line"><span class="m">You receive</span><span class="num">₽1,485</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div></div>
+<div class="t-meta">Cancelled. The money is back in your available balance.</div></div></div></main></div></div></div></div></div><div class="cz-grid"><div class="cz-col"><div class="cz-cap">Phone: open payouts</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span></div><i data-i="bell" style="--s:22px"></i></div>
+<div class="screen"><div class="scroll" style="padding:18px 16px 0"><h1 class="t-title" style="margin:0">Payouts</h1><p class="t-meta" style="margin:4px 0 12px">Every payout you requested, and where it stands.</p><div style="overflow:hidden;margin-bottom:14px"><div class="tabs" style="max-width:none"><span class="tab" style="padding:0 12px">Earnings</span><span class="tab on" style="padding:0 12px">Payouts</span><span class="tab" style="padding:0 12px">Methods</span></div></div><div class="stk"><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽5,000</div><div class="t-meta">Requested Oct 16</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Requested</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽50</span></div><div class="line"><span class="m">You receive</span><span class="num">₽4,950</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div></div>
+<div class="t-meta">Waiting for Ciuna to review. You can cancel until it is approved.</div><div><a class="btn btn-secondary btn-sm">Cancel request</a></div></div><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽8,000</div><div class="t-meta">Requested Oct 14</div></div><span class="badge badge-warning"><i data-i="circle-check-big"></i>Approved</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽80</span></div><div class="line"><span class="m">You receive</span><span class="num">₽7,920</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div></div>
+<div class="t-meta">Approved. Ciuna will send the money to your account.</div></div></div></div></div>
+<div class="s-bottom" style="grid-template-columns:repeat(4,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi"><i data-i="clipboard-list"></i>Orders</span><span class="s-bi"><i data-i="package"></i>Catalog</span><span class="s-bi on"><i data-i="menu"></i>More</span></div>
+<div class="homebar"></div></div></div>
+<div class="cz-col"><div class="cz-cap">Phone: paid and rejected</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span></div><i data-i="bell" style="--s:22px"></i></div>
+<div class="screen"><div class="scroll" style="padding:18px 16px 0"><h1 class="t-title" style="margin:0">Payouts</h1><p class="t-meta" style="margin:4px 0 12px">Every payout you requested, and where it stands.</p><div style="overflow:hidden;margin-bottom:14px"><div class="tabs" style="max-width:none"><span class="tab" style="padding:0 12px">Earnings</span><span class="tab on" style="padding:0 12px">Payouts</span><span class="tab" style="padding:0 12px">Methods</span></div></div><div class="stk"><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽12,000</div><div class="t-meta">Requested Oct 9</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽120</span></div><div class="line"><span class="m">You received</span><span class="num">₽11,880</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div><div class="line"><span class="m">Paid on</span><span>Oct 10, 2026 • 11:32 AM MSK</span></div><div class="line"><span class="m">Reference</span><span class="num">SBP-20261010-48213</span></div></div>
+<div class="t-meta">Sent to your account.</div></div><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽3,000</div><div class="t-meta">Requested Oct 6</div></div><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽30</span></div><div class="line"><span class="m">You receive</span><span class="num">₽2,970</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div><div class="line"><span class="m">Reason</span><span>Recipient name does not match the verified method.</span></div></div>
+<div class="t-meta">Not paid. The money is back in your available balance.</div></div></div></div></div>
+<div class="s-bottom" style="grid-template-columns:repeat(4,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi"><i data-i="clipboard-list"></i>Orders</span><span class="s-bi"><i data-i="package"></i>Catalog</span><span class="s-bi on"><i data-i="menu"></i>More</span></div>
+<div class="homebar"></div></div></div>
+<div class="cz-col"><div class="cz-cap">Cancel confirm</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span></div><i data-i="bell" style="--s:22px"></i></div>
+<div class="screen"><div class="scroll" style="padding:18px 16px 0"><h1 class="t-title" style="margin:0">Payouts</h1><p class="t-meta" style="margin:4px 0 12px">Every payout you requested, and where it stands.</p><div style="overflow:hidden;margin-bottom:14px"><div class="tabs" style="max-width:none"><span class="tab" style="padding:0 12px">Earnings</span><span class="tab on" style="padding:0 12px">Payouts</span><span class="tab" style="padding:0 12px">Methods</span></div></div><div class="stk"><div class="card" style="padding:16px;display:grid;gap:10px"><div class="sp" style="align-items:flex-start"><div><div class="t-h2 num">₽5,000</div><div class="t-meta">Requested Oct 16</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Requested</span></div>
+<div class="stk" style="gap:3px"><div class="line"><span class="m">Payout fee</span><span class="num neg">−₽50</span></div><div class="line"><span class="m">You receive</span><span class="num">₽4,950</span></div><div class="line"><span class="m">Paid to</span><span>SBP · +7 ••• •• 12</span></div></div>
+<div class="t-meta">Waiting for Ciuna to review. You can cancel until it is approved.</div><div><a class="btn btn-secondary btn-sm">Cancel request</a></div></div></div></div></div>
+<div class="s-bottom" style="grid-template-columns:repeat(4,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi"><i data-i="clipboard-list"></i>Orders</span><span class="s-bi"><i data-i="package"></i>Catalog</span><span class="s-bi on"><i data-i="menu"></i>More</span></div>
+<div class="homebar"></div><div class="ovl mid"><div class="scrim"></div><div class="dialog dg"><h3>Cancel this payout request?</h3><p>The money returns to your available balance right away.</p><div class="acts"><a class="btn btn-secondary">Keep request</a><a class="btn btn-destructive">Cancel request</a></div></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Empty</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span></div><i data-i="bell" style="--s:22px"></i></div>
+<div class="screen"><div class="scroll" style="padding:18px 16px 0"><h1 class="t-title" style="margin:0">Payouts</h1><p class="t-meta" style="margin:4px 0 12px">Every payout you requested, and where it stands.</p><div style="overflow:hidden;margin-bottom:14px"><div class="tabs" style="max-width:none"><span class="tab" style="padding:0 12px">Earnings</span><span class="tab on" style="padding:0 12px">Payouts</span><span class="tab" style="padding:0 12px">Methods</span></div></div><div style="text-align:center;padding:56px 20px"><div class="avatar lg" style="margin:0 auto 14px"><i data-i="banknote" style="--s:26px"></i></div><div class="t-h2">No payouts yet</div><p class="t-meta" style="margin:6px 0 18px">When you withdraw, the request and its status appear here.</p><a class="btn btn-secondary">Go to earnings</a></div></div></div>
+<div class="s-bottom" style="grid-template-columns:repeat(4,1fr)"><span class="s-bi"><i data-i="house"></i>Home</span><span class="s-bi"><i data-i="clipboard-list"></i>Orders</span><span class="s-bi"><i data-i="package"></i>Catalog</span><span class="s-bi on"><i data-i="menu"></i>More</span></div>
+<div class="homebar"></div></div></div></div></div></div></body></html>

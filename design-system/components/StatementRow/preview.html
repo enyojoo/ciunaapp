@@ -1,0 +1,42 @@
+<!-- @dsCard group="Marketplace" height=779 subtitle="Statement line per order: items, delivery, Ciuna fee as a negative and net, with pending, available and reversed statuses as a table row and a stacked phone row" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>StatementRow</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.neg{color:var(--destructive-text)}
+.net{font-weight:700}
+.rev td{color:var(--muted)}
+.rev .net{text-decoration:line-through}
+.sr{padding:14px 16px;display:grid;gap:8px;background:var(--surface)}
+.sr .t{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sr .id{font:600 15px/20px var(--font-web)}
+.sr .k{display:grid;grid-template-columns:1fr auto;gap:2px 12px;font-size:14px}
+.sr .k span:nth-child(odd){color:var(--muted)}
+.sr .k span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums}
+.sr .k .net-l{color:var(--ink);font-weight:600;border-top:1px solid var(--hairline);padding-top:6px;margin-top:4px}
+.sr .k .net-v{font-weight:700;border-top:1px solid var(--hairline);padding-top:6px;margin-top:4px}
+.sr .when{font-size:13px;color:var(--muted)}
+.cols{display:grid;grid-template-columns:1fr 390px;gap:28px;align-items:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+<div class="cols">
+<div><div class="cz-cap" style="text-align:left;margin-bottom:8px">Desktop table</div>
+<div class="card" style="overflow:hidden"><table class="table"><thead><tr><th>Order</th><th>Date</th><th class="r">Items</th><th class="r">Delivery</th><th class="r">Ciuna fee</th><th class="r">You keep</th><th>Status</th></tr></thead><tbody>
+<tr><td><b>CIU-0980</b><div class="t-meta">Chen Hui</div></td><td>Oct 14</td><td class="r num">₽1,000</td><td class="r num">₽150</td><td class="r num neg">−₽80</td><td class="r num net">₽1,070</td><td><span class="badge badge-success"><i data-i="circle-check-big"></i>Available</span><div class="t-meta" style="margin-top:4px">Since Oct 21</div></td></tr>
+<tr><td><b>CIU-0995</b><div class="t-meta">Amara Okafor</div></td><td>Oct 15</td><td class="r num">₽900</td><td class="r num">₽0</td><td class="r num neg">−₽72</td><td class="r num net">₽828</td><td><span class="badge badge-warning"><i data-i="hourglass"></i>Pending</span><div class="t-meta" style="margin-top:4px">Available Oct 22</div></td></tr>
+<tr><td><b>CIU-2001</b><div class="t-meta">Kwame Mensah · booking</div></td><td>Oct 15</td><td class="r num">₽5,000</td><td class="r num">–</td><td class="r num neg">−₽500</td><td class="r num net">₽4,500</td><td><span class="badge badge-warning"><i data-i="hourglass"></i>Pending</span><div class="t-meta" style="margin-top:4px">Available Oct 22</div></td></tr>
+<tr class="rev"><td><b>CIU-0970</b><div class="t-meta">Sofia Ramirez</div></td><td>Oct 12</td><td class="r num">₽700</td><td class="r num">₽150</td><td class="r num">−₽56</td><td class="r num net">₽794</td><td><span class="badge badge-neutral"><i data-i="undo-2"></i>Reversed</span><div class="t-meta" style="margin-top:4px">Order refunded</div></td></tr>
+</tbody></table></div></div>
+<div><div class="cz-cap" style="margin-bottom:8px">Phone, stacked</div>
+<div class="card list" style="overflow:hidden">
+<div class="sr"><div class="t"><div><div class="id">CIU-0980</div><div class="t-meta">Chen Hui · Oct 14</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Available</span></div>
+<div class="k"><span>Items</span><span>₽1,000</span><span>Delivery</span><span>₽150</span><span>Ciuna fee</span><span class="neg">−₽80</span><span class="net-l">You keep</span><span class="net-v">₽1,070</span></div><div class="when">Available since Oct 21</div></div>
+<div class="sr"><div class="t"><div><div class="id">CIU-0995</div><div class="t-meta">Amara Okafor · Oct 15</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Pending</span></div>
+<div class="k"><span>Items</span><span>₽900</span><span>Ciuna fee</span><span class="neg">−₽72</span><span class="net-l">You keep</span><span class="net-v">₽828</span></div><div class="when">Available on Oct 22</div></div>
+<div class="sr" style="background:var(--paper)"><div class="t"><div><div class="id">CIU-0970</div><div class="t-meta">Sofia Ramirez · Oct 12</div></div><span class="badge badge-neutral"><i data-i="undo-2"></i>Reversed</span></div>
+<div class="k"><span>Items</span><span>₽700</span><span>Ciuna fee</span><span>−₽56</span></div><div class="when">Order refunded, earnings taken back</div></div>
+</div></div></div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Show gross, fee and net on every row; fees are never a surprise.</li><li>Use a true minus for the Ciuna fee and tabular figures.</li><li>Say when pending money becomes available, with the date.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't hide the fee inside the net figure.</li><li>Don't colour the net green or red; status badges carry state.</li><li>Don't drop a reversed order; keep it muted with the reason.</li></ul></div></div>
+</div></div></body></html>

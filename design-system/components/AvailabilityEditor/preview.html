@@ -1,0 +1,95 @@
+<!-- @dsCard group="Marketplace" height=3039 page subtitle="Expert availability: schedule settings, weekly hours with several ranges per day, copy to days, overlap error, 14-day slot preview, on desktop and phone" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>AvailabilityEditor</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.day{padding:14px 20px;display:grid;gap:10px}
+.day .hd{display:flex;align-items:center;gap:10px}
+.day .hd b{flex:1;font:600 15px/20px var(--font-web)}
+.rg{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rg .input{width:120px;flex:0 0 auto;text-align:center}
+.rg .to{color:var(--muted);font-size:14px}
+.ib{width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;color:var(--muted)}
+.slots{display:flex;flex-wrap:wrap;gap:6px}
+.slots span{height:30px;padding:0 10px;border-radius:10px;background:var(--neutral-surface);font:600 12px/30px var(--font-web);font-variant-numeric:tabular-nums}
+.pv{display:grid;grid-template-columns:130px 1fr;gap:10px 16px;padding:16px 20px;font-size:14px;align-items:center}
+.pv>b{font-weight:600}
+.save{display:flex;align-items:center;gap:12px;padding:14px 36px;background:var(--surface);border-top:1px solid var(--hairline)}
+.save .m{flex:1;font-size:14px;color:var(--muted)}
+.stk{display:grid;gap:16px}
+.mp{padding:16px;display:grid;gap:14px;align-content:start}
+.mp .day{padding:12px 14px}
+.mp .rg .input{width:auto;flex:1;min-width:0}
+.sheetbox{position:absolute;left:0;right:0;bottom:0;padding:0 16px 24px;background:var(--surface);border-radius:24px 24px 0 0;box-shadow:var(--shadow-lg)}
+.dpick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.dpick span{height:44px;border-radius:12px;border:1px solid var(--input-edge);display:flex;align-items:center;justify-content:center;gap:6px;font:600 14px/1 var(--font-web)}
+.dpick span.on{background:var(--primary-tint);border-color:var(--primary);color:var(--primary-text)}
+.notes{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:1200px;margin:24px auto 0}
+.notes ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="justify-items:center;gap:32px">
+
+<div class="cz-col"><div class="cz-cap">Desktop · with an overlap error on Wednesday</div>
+<div class="desk"><div class="desk-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">seller.ciuna.com/availability</div></div>
+<div class="desk-body" style="min-height:0">
+<aside class="s-side"><div class="s-biz"><span class="logo">A</span><span><b style="font-size:14px">Dr. Amina Yusuf</b><br><span class="t-meta">Expert · Owner</span></span></div>
+<nav class="s-nav"><span class="s-link"><i data-i="house"></i>Home</span><span class="s-link"><i data-i="calendar-check"></i>Bookings</span><span class="s-link"><i data-i="briefcase"></i>Services</span><span class="s-link on"><i data-i="calendar-days"></i>Availability</span><span class="s-link"><i data-i="messages-square"></i>Messages</span><span class="s-link"><i data-i="wallet"></i>Earnings</span></nav></aside>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column"><div class="s-main">
+<div class="page-h"><div><h1>Availability</h1><p>Set when customers can book you. Saving rebuilds your open slots.</p></div><div class="field" style="min-width:260px"><span class="label">Service</span><select class="select"><option>Immigration consultation, 45 min</option></select></div></div>
+<div class="stk">
+<div class="card"><div class="card-h"><h3>Schedule settings</h3></div><div class="card-b" style="display:grid;gap:14px">
+<div class="g3"><div class="field"><span class="label">Time zone</span><select class="select"><option>Europe/Moscow (MSK, UTC+3)</option></select><span class="hint">Your weekly hours are in this time zone.</span></div>
+<div class="field"><span class="label">Slot length</span><select class="select"><option>45 min</option></select><span class="hint">Each open range is cut into slots of this length.</span></div><div></div></div>
+<div class="g3"><div class="field"><span class="label">Bookable from</span><input class="input" value="Oct 16, 2026"></div><div class="field"><span class="label">Bookable until</span><input class="input" value="Dec 15, 2026"></div><div style="align-self:end"><a class="btn btn-secondary">Next 60 days</a></div></div>
+<span class="hint">Customers can book 60 days ahead (up to 90).</span></div></div>
+
+<div class="card"><div class="card-h"><div><h3>Weekly hours</h3><div class="t-meta">Times are in MSK. Add several ranges to a day for breaks.</div></div></div>
+<div class="list">
+<div class="day"><div class="hd"><b>Monday</b><a class="btn btn-ghost btn-sm"><i data-i="copy"></i>Copy to other days</a><a class="btn btn-secondary btn-sm"><i data-i="plus"></i>Add hours</a></div><div class="rg"><input class="input" value="10:00"><span class="to">to</span><input class="input" value="13:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div><div class="rg"><input class="input" value="14:00"><span class="to">to</span><input class="input" value="18:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div></div>
+<div class="day"><div class="hd"><b>Tuesday</b><a class="btn btn-ghost btn-sm"><i data-i="copy"></i>Copy to other days</a><a class="btn btn-secondary btn-sm"><i data-i="plus"></i>Add hours</a></div><div class="rg"><input class="input" value="10:00"><span class="to">to</span><input class="input" value="13:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div></div>
+<div class="day"><div class="hd"><b>Wednesday</b><a class="btn btn-ghost btn-sm"><i data-i="copy"></i>Copy to other days</a><a class="btn btn-secondary btn-sm"><i data-i="plus"></i>Add hours</a></div><div class="rg"><input class="input" value="10:00"><span class="to">to</span><input class="input is-error" value="14:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div><div class="rg"><input class="input is-error" value="13:00"><span class="to">to</span><input class="input" value="17:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>This range overlaps another range on the same day.</span></div>
+<div class="day"><div class="hd"><b>Thursday</b><a class="btn btn-ghost btn-sm"><i data-i="copy"></i>Copy to other days</a><a class="btn btn-secondary btn-sm"><i data-i="plus"></i>Add hours</a></div><div class="rg"><input class="input" value="12:00"><span class="to">to</span><input class="input" value="19:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div></div>
+<div class="day"><div class="hd"><b>Friday</b><a class="btn btn-secondary btn-sm"><i data-i="plus"></i>Add hours</a></div><div class="rg"><input class="input" value="09:00"><span class="to">to</span><input class="input is-error" value=""><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter both a start and an end time.</span></div>
+<div class="day"><div class="hd"><b>Saturday</b><span class="t-meta">Not available</span><a class="btn btn-secondary btn-sm"><i data-i="plus"></i>Add hours</a></div></div>
+<div class="day"><div class="hd"><b>Sunday</b><span class="t-meta">Not available</span><a class="btn btn-secondary btn-sm"><i data-i="plus"></i>Add hours</a></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><div><h3>Next 14 days</h3><div class="t-meta">Slots customers can book, in MSK. 58 slots created.</div></div></div>
+<div class="pv"><b>Mon, Oct 19</b><div class="slots"><span>10:00</span><span>10:45</span><span>11:30</span><span>12:15</span><span>14:00</span><span>14:45</span><span>15:30</span><span>16:15</span><span>17:00</span></div>
+<b>Tue, Oct 20</b><div class="slots"><span>10:00</span><span>10:45</span><span>11:30</span><span>12:15</span></div>
+<b>Thu, Oct 22</b><div class="slots"><span>12:00</span><span>12:45</span><span>13:30</span><span>14:15</span><span>15:00</span><span>15:45</span><span>16:30</span><span>17:15</span><span>18:00</span></div>
+<b>Sat, Oct 24</b><span class="t-meta">No hours</span></div></div>
+</div></div>
+<div class="save"><span class="m" style="color:var(--destructive-text);font-weight:600">Fix the highlighted fields to save.</span><a class="btn is-disabled">Save and update slots</a></div>
+</div></div></div></div>
+
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Phone · weekly hours</div>
+<div class="phone">
+<div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">A</span><span><b style="font-size:14px">Dr. Amina Yusuf</b><br><span class="t-meta">Expert · Owner</span></span></div><i data-i="menu" style="--s:22px"></i></div>
+<div class="screen"><div class="scroll mp">
+<div><h1 class="t-title" style="margin:0">Availability</h1><p class="t-meta" style="margin:4px 0 0">Saving rebuilds your open slots.</p></div>
+<div class="card" style="padding:14px;display:grid;gap:12px"><div class="field"><span class="label">Time zone</span><select class="select"><option>Europe/Moscow (MSK)</option></select></div><div class="g2"><div class="field"><span class="label">Slot length</span><select class="select"><option>45 min</option></select></div><div class="field"><span class="label">Window</span><select class="select"><option>60 days</option></select></div></div></div>
+<div class="card list">
+<div class="day"><div class="hd"><b>Monday</b><a class="btn btn-ghost btn-icon btn-sm" aria-label="Copy"><i data-i="copy"></i></a><a class="btn btn-secondary btn-icon btn-sm" aria-label="Add"><i data-i="plus"></i></a></div><div class="rg"><input class="input" value="10:00"><span class="to">to</span><input class="input" value="13:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div><div class="rg"><input class="input" value="14:00"><span class="to">to</span><input class="input" value="18:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div></div>
+<div class="day"><div class="hd"><b>Wednesday</b><a class="btn btn-ghost btn-icon btn-sm" aria-label="Copy"><i data-i="copy"></i></a><a class="btn btn-secondary btn-icon btn-sm" aria-label="Add"><i data-i="plus"></i></a></div><div class="rg"><input class="input" value="10:00"><span class="to">to</span><input class="input is-error" value="14:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div><div class="rg"><input class="input is-error" value="13:00"><span class="to">to</span><input class="input" value="17:00"><span class="ib"><i data-i="trash-2" style="--s:16px"></i></span></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>This range overlaps another range on the same day.</span></div>
+<div class="day"><div class="hd"><b>Saturday</b><span class="t-meta">Not available</span><a class="btn btn-secondary btn-icon btn-sm" aria-label="Add"><i data-i="plus"></i></a></div></div>
+</div></div></div>
+<div class="stickyact"><a class="btn btn-lg btn-block is-disabled">Save and update slots</a></div><div class="homebar"></div>
+</div></div>
+
+<div class="cz-col"><div class="cz-cap">Phone · copy to other days sheet</div>
+<div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+<div class="screen" style="background:var(--paper)"><div class="scroll mp" style="opacity:.35"><h1 class="t-title" style="margin:0">Availability</h1><div class="card" style="height:300px"></div></div>
+<div class="scrim" style="position:absolute;inset:0"></div>
+<div class="sheet sheetbox"><div class="grab"></div><h2 class="t-h2" style="margin:16px 0 4px">Copy Monday to other days</h2><p class="t-meta" style="margin:0 0 14px">Hours on the days you choose will be replaced.</p>
+<div class="dpick"><span>Tue</span><span class="on"><i data-i="check" style="--s:14px"></i>Wed</span><span class="on"><i data-i="check" style="--s:14px"></i>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+<div class="banner banner-neutral" style="margin:14px 0;font-size:13px">Monday: 10:00 to 13:00 and 14:00 to 18:00. Wednesday and Thursday will get the same hours.</div>
+<div style="display:grid;gap:10px"><a class="btn btn-lg btn-block">Copy hours</a><a class="btn btn-secondary btn-lg btn-block">Cancel</a></div></div></div></div></div>
+</div>
+
+<div class="notes"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Show the time zone beside the hours and name it ("Times are in MSK").</li><li>Allow several ranges a day for breaks; copy a day to others in one step.</li><li>Preview the next 14 days so the seller sees exactly what customers can book.</li><li>Say that booked sessions are never changed by saving.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't let overlapping or half-filled ranges save; mark both fields and explain.</li><li>Don't hide the booking window; state how many days ahead customers can book.</li><li>Don't use 12-hour times without AM or PM; the editor uses 24-hour entry.</li></ul></div></div>
+</div></div></body></html>

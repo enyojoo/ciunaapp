@@ -1,0 +1,58 @@
+<!-- @dsCard group="Feedback" height=1103 subtitle="Loading placeholders for card, row and table, and the rule that skeletons appear on a true first load only" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Skeleton</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.sk-card{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.sk-card .img{aspect-ratio:4/3;border-radius:0}
+.sk-card .b{padding:12px;display:grid;gap:8px}
+.sk-row{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.sk-row+.sk-row{border-top:1px solid var(--hairline)}
+.sk-row .l{flex:1;display:grid;gap:8px}
+.sk-tbl{border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden;background:var(--surface)}
+.sk-tbl .h{display:grid;grid-template-columns:1.2fr 2fr 1fr 1fr;gap:16px;padding:12px 16px;border-bottom:1px solid var(--hairline)}
+.sk-tbl .r{display:grid;grid-template-columns:1.2fr 2fr 1fr 1fr;gap:16px;padding:16px;align-items:center}
+.sk-tbl .r+.r{border-top:1px solid var(--hairline)}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.flow>div{border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px;background:var(--surface);display:grid;gap:8px}
+.flow .n{font:700 12px/1 var(--font-web);width:22px;height:22px;border-radius:50%;background:var(--neutral-surface);display:grid;place-items:center}
+.flow .no{background:var(--destructive-surface);border-color:var(--destructive-surface)}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Shapes match the content they replace</p>
+<div class="g3" style="grid-template-columns:220px 1fr 1fr">
+  <div class="cell"><span class="st">Card</span><div class="sk-card"><div class="sk img"></div><div class="b"><div class="sk" style="height:14px;width:80%"></div><div class="sk" style="height:12px;width:50%"></div><div class="sk" style="height:16px;width:35%"></div></div></div></div>
+  <div class="cell"><span class="st">Row (orders, list items)</span><div class="sk-card"><div class="sk-row"><div class="sk" style="width:40px;height:40px;border-radius:50%"></div><div class="l"><div class="sk" style="height:14px;width:60%"></div><div class="sk" style="height:12px;width:35%"></div></div><div class="sk" style="width:60px;height:24px;border-radius:12px"></div></div>
+    <div class="sk-row"><div class="sk" style="width:40px;height:40px;border-radius:50%"></div><div class="l"><div class="sk" style="height:14px;width:70%"></div><div class="sk" style="height:12px;width:40%"></div></div><div class="sk" style="width:60px;height:24px;border-radius:12px"></div></div>
+    <div class="sk-row"><div class="sk" style="width:40px;height:40px;border-radius:50%"></div><div class="l"><div class="sk" style="height:14px;width:50%"></div><div class="sk" style="height:12px;width:30%"></div></div><div class="sk" style="width:60px;height:24px;border-radius:12px"></div></div></div></div>
+  <div class="cell"><span class="st">Money tile</span><div class="bal-card"><div class="sk" style="height:13px;width:40%"></div><div class="sk" style="height:34px;width:65%;margin-top:6px"></div><div class="sk" style="height:12px;width:50%;margin-top:6px"></div></div></div>
+</div>
+<div class="cell" style="margin-top:8px"><span class="st">Table (Office, Seller desktop): real header, skeleton rows</span>
+  <div class="sk-tbl"><div class="h"><span class="t-eyebrow">Order</span><span class="t-eyebrow">Customer</span><span class="t-eyebrow">Status</span><span class="t-eyebrow" style="text-align:right">Total</span></div>
+    <div class="r"><div class="sk" style="height:14px;width:70%"></div><div class="sk" style="height:14px;width:60%"></div><div class="sk" style="height:22px;width:70px;border-radius:11px"></div><div class="sk" style="height:14px;width:50%;margin-left:auto"></div></div>
+    <div class="r"><div class="sk" style="height:14px;width:65%"></div><div class="sk" style="height:14px;width:45%"></div><div class="sk" style="height:22px;width:80px;border-radius:11px"></div><div class="sk" style="height:14px;width:45%;margin-left:auto"></div></div>
+    <div class="r"><div class="sk" style="height:14px;width:72%"></div><div class="sk" style="height:14px;width:55%"></div><div class="sk" style="height:22px;width:64px;border-radius:11px"></div><div class="sk" style="height:14px;width:55%;margin-left:auto"></div></div></div></div></div>
+
+<div class="cz-section"><p class="cz-h">First load only</p>
+<div class="flow">
+  <div><span class="n">1</span><b>No cache, no data</b><span class="t-meta">Show a skeleton for the content area. Keep the header, tabs and page title real.</span></div>
+  <div><span class="n">2</span><b>Cached data exists</b><span class="t-meta">Show it immediately, refresh in the background. No skeleton, no spinner over it.</span></div>
+  <div><span class="n">3</span><b>Refreshing or paging</b><span class="t-meta">Keep rows on screen; a thin progress hint or a spinner on the button is enough.</span></div>
+  <div class="no"><span class="n">4</span><b>Never over cached content</b><span class="t-meta">Replacing visible rows with a skeleton makes the app feel slower than it is.</span></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Match the final layout so nothing jumps when data arrives.</li><li>Show 3 rows or 4 cards, not a screenful.</li><li>Shimmer at 1.4s, off under reduced motion. Mark the container <code>aria-busy="true"</code>.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't skeleton text that is already known (titles, labels, tabs).</li><li>Don't show a skeleton for more than about 8 seconds: switch to an error with retry.</li><li>Don't use a full-screen spinner.</li></ul></div></div></div>
+
+</div></div></body></html>

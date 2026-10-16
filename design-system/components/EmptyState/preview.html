@@ -1,0 +1,37 @@
+<!-- @dsCard group="Feedback" height=1369 subtitle="First use, filtered empty, error with retry and no access: icon, title that says what is missing, one sentence, one action" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>EmptyState</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.es{text-align:center;padding:36px 24px;display:grid;justify-items:center;gap:6px}
+.es .ico{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--neutral-surface);color:var(--ink);margin-bottom:8px}
+.es .ico.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.es .ico.pri{background:var(--primary-tint);color:var(--primary-text)}
+.es h3{margin:0;font:600 18px/24px var(--font-web)}
+.es p{margin:0;color:var(--muted);font-size:14px;max-width:300px}
+.es .acts{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:center}
+.card.es{height:100%}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+<div class="cz-section"><p class="cz-h">Four situations</p>
+<div class="g2">
+  <div class="cell"><span class="st">First use</span><div class="card es"><span class="ico pri"><i data-i="package" style="--s:26px"></i></span><h3>Add your first product</h3><p>Products you add here appear on your store page once it is approved.</p><div class="acts"><a class="btn"><i data-i="plus"></i>Add product</a><a class="btn btn-secondary">Import from CSV</a></div></div></div>
+  <div class="cell"><span class="st">Filtered empty</span><div class="card es"><span class="ico"><i data-i="filter" style="--s:26px"></i></span><h3>No orders match these filters</h3><p>There are no orders marked "Ready" in the last 7 days.</p><div class="acts"><a class="btn btn-secondary">Clear filters</a></div></div></div>
+  <div class="cell"><span class="st">Error with retry</span><div class="card es"><span class="ico bad"><i data-i="triangle-alert" style="--s:26px"></i></span><h3>Orders did not load</h3><p>Check your connection and try again. Your orders are safe.</p><div class="acts"><a class="btn"><i data-i="refresh-cw"></i>Try again</a></div></div></div>
+  <div class="cell"><span class="st">No access</span><div class="card es"><span class="ico"><i data-i="lock" style="--s:26px"></i></span><h3>You do not have access to Payouts</h3><p>Only the store owner and managers can see payouts. Ask the owner to change your role.</p><div class="acts"><a class="btn btn-secondary">Back to Home</a></div></div></div>
+</div></div>
+<div class="cz-section"><p class="cz-h">Compact: inside a table or phone list</p>
+<div class="g2"><div class="cell"><span class="st">Phone, nothing to do</span><div class="card" style="max-width:360px"><div class="es" style="padding:28px 20px"><span class="ico pri"><i data-i="clipboard-list" style="--s:24px"></i></span><h3 style="font-size:16px">No new orders</h3><p>When a customer pays for an order it shows up here, and we alert you by email or Telegram.</p><div class="acts"><a class="btn btn-secondary">Set up alerts</a></div></div></div></div>
+<div class="cell"><span class="st">Другой язык: Russian</span><div class="card" style="max-width:360px"><div class="es" style="padding:28px 20px"><span class="ico"><i data-i="search" style="--s:24px"></i></span><h3 style="font-size:16px">Ничего не найдено</h3><p>По запросу «жареный рис» ничего нет. Проверьте написание или попробуйте короче.</p><div class="acts"><a class="btn btn-secondary">Сбросить поиск</a></div></div></div></div></div></div>
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Title says what is missing, in plain words. Body gives one reason or reassurance. The action says how to fix it.</li><li>Errors say whether data is safe and offer retry.</li><li>No access names the role that can grant it.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use an illustration larger than 56px; orange is for intent, not decoration.</li><li>Don't show two primary actions.</li><li>Don't use an empty state while loading; use a skeleton on first load.</li></ul></div></div></div>
+</div></div></body></html>

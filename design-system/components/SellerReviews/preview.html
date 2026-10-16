@@ -1,0 +1,89 @@
+<!-- @dsCard group="Seller · Screens" height=1000 subtitle="Reviews: average and 5-bar distribution, All and Needs reply tabs, review cards with Reply, the public-reply sheet with a 600 counter and edit window, and empty states" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SellerReviews</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pg{padding:18px 16px 16px}
+.pg h1{margin:0;font:700 24px/30px var(--font-web);letter-spacing:-.3px}
+.sub{margin:4px 0 14px;color:var(--muted);font-size:14px;line-height:20px}
+.stk{display:grid;gap:12px}
+.rw{display:flex;align-items:center;gap:10px}
+.rw.top{align-items:flex-start}
+.sp{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gr{flex:1;min-width:0}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.pad{padding:16px}
+.sec{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px 20px;display:grid;gap:14px;align-content:start}
+.sec h2{margin:0;font:600 16px/22px var(--font-web)}
+.sec .hp{margin:2px 0 0;font-size:13px;line-height:18px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.phone .two,.phone .three,.sf .two{grid-template-columns:1fr}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sf{width:390px;border-radius:var(--radius-sheet);overflow:hidden;padding-top:44px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--shadow-md)}
+.sf .sheet{border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;box-shadow:none;padding:0 20px 24px;display:grid;gap:14px}
+.df{width:390px;border-radius:var(--radius-sheet);padding:28px 18px;box-shadow:var(--shadow-md)}
+.dialog.dg{padding:22px;display:grid;gap:12px}
+.dg h3{margin:0;font:600 18px/24px var(--font-web)}
+.dg p{margin:0;color:var(--muted);font-size:14px;line-height:20px}
+.dg .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.sh-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:16px}
+.sh-h h3{margin:0;font:600 18px/24px var(--font-web)}
+.sh-h p{margin:2px 0 0;font-size:14px;line-height:20px;color:var(--muted)}
+.x{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:var(--neutral-surface);flex-shrink:0}
+.ovl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;z-index:5}
+.ovl>.scrim{position:absolute;inset:0}
+.ovl>.sheet{position:relative;padding:0 20px 28px;display:grid;gap:14px}
+.ovl.mid{justify-content:center;align-items:center;padding:24px}
+.ovl.mid>.dialog{position:relative;width:100%;max-width:440px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;min-height:56px}
+.sw .t{font:600 15px/20px var(--font-web)}
+.sw .s{font-size:13px;line-height:18px;color:var(--muted)}
+.opt{border:1px solid var(--input-edge);border-radius:var(--radius-control);padding:12px 14px;display:flex;gap:10px;align-items:center;background:var(--surface);font:600 14px/20px var(--font-web)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt small{display:block;font:400 12px/16px var(--font-web);color:var(--muted)}
+.ctr{font-size:12px;line-height:16px;color:var(--muted);text-align:right}
+.ctr.bad{color:var(--destructive-text)}
+.unit{display:grid;grid-template-columns:1fr 112px;gap:8px}
+.dbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 36px;background:var(--surface);border-top:1px solid var(--hairline)}
+.s-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.wm{font:700 22px/1 var(--font-web);letter-spacing:-.5px;display:inline-flex;align-items:center;gap:6px}
+.wm i{width:10px;height:10px;border-radius:50%;background:var(--brand-primary);display:block}
+.side-sp{flex:1}
+.bdg-n{margin-left:auto}
+.mini.ok{background:var(--success-surface);color:var(--success-text)}
+.crumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap}
+.hs{height:1px;background:var(--hairline)}
+.line{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px}
+.line.tot{font-weight:600;border-top:1px solid var(--hairline);padding-top:10px}
+.line .m{color:var(--muted)}
+.sf-wrap{display:grid;gap:12px;justify-items:center}
+</style></head>
+<body><div class="cz-page">
+<div class="cz-grid"><div class="cz-col"><div class="cz-cap">Desktop</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/reviews</span></div>
+<div class="desk-body" style="position:relative">
+<aside class="s-side"><div class="rw" style="padding:4px 12px 0"><span class="wm"><i></i>ciuna</span><span class="badge badge-neutral">Seller</span></div>
+<nav class="s-nav"><span class="s-link"><i data-i="house"></i>Home</span><span class="s-link"><i data-i="clipboard-list"></i>Orders</span><span class="s-link"><i data-i="message-square"></i>Messages</span><span class="s-link"><i data-i="package"></i>Catalog</span><span class="s-link"><i data-i="wallet"></i>Earnings</span><span class="s-link on"><i data-i="star"></i>Reviews</span><span class="s-link"><i data-i="menu"></i>More</span></nav>
+<div class="s-biz"><span class="logo">M</span><span class="gr"><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span><i data-i="chevron-down" style="--s:16px"></i></div></aside>
+<div class="s-col"><div class="s-top" style="height:64px;padding:0 36px"><div class="input-wrap" style="width:320px"><i data-i="search" style="--s:18px"></i><input class="input" style="height:40px" placeholder="Search"></div><div class="rw"><i data-i="bell" style="--s:20px"></i><span class="avatar sm">M</span></div></div>
+<main class="s-main gr"><div class="page-h"><div><h1>Reviews</h1><p>What customers say about your orders.</p></div></div><div style="display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start"><div><div class="plate pad" style="display:grid;gap:14px"><div class="rw" style="gap:16px"><div><div class="t-money num" style="font-size:44px">4.6</div><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><div class="t-meta">24 reviews</div></div>
+<div class="gr stk" style="gap:6px" aria-label="Reviews by star rating"><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">5 stars</span><div class="progress gr"><i style="width:75%"></i></div><span class="num t-meta" style="width:22px;text-align:right">18</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">4 stars</span><div class="progress gr"><i style="width:17%"></i></div><span class="num t-meta" style="width:22px;text-align:right">4</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">3 stars</span><div class="progress gr"><i style="width:4%"></i></div><span class="num t-meta" style="width:22px;text-align:right">1</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">2 stars</span><div class="progress gr"><i style="width:4%"></i></div><span class="num t-meta" style="width:22px;text-align:right">1</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">1 stars</span><div class="progress gr"><i style="width:0%"></i></div><span class="num t-meta" style="width:22px;text-align:right">0</span></div></div></div></div></div><div><div class="tabs" style="margin-bottom:14px"><span class="tab on">All</span><span class="tab">Needs reply <span class="count">2</span></span></div><div class="stk"><div class="ocard"><div class="top"><div class="rw"><span class="avatar sm">AO</span><div><b>Amara Okafor</b><div class="t-meta num">14 Oct · Order CIU-1001</div></div></div><span class="stars" aria-label="5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p style="margin:0;font-size:15px">The jollof rice tasted like home. Hot, on time, and nicely packed.</p><div><a class="btn btn-secondary btn-sm"><i data-i="message-square"></i>Reply</a></div></div><div class="ocard"><div class="top"><div class="rw"><span class="avatar sm">KM</span><div><b>Kwame Mensah</b><div class="t-meta num">11 Oct · Order CIU-0994</div></div></div><span class="stars" aria-label="2 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i></span></div>
+<p style="margin:0;font-size:15px">The egusi was good but it arrived 40 minutes late and lukewarm.</p><div><a class="btn btn-secondary btn-sm"><i data-i="message-square"></i>Reply</a></div></div><div class="ocard"><div class="top"><div class="rw"><span class="avatar sm">CH</span><div><b>Chen Hui</b><div class="t-meta num">9 Oct · Order CIU-0987</div></div></div><span class="stars" aria-label="4 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star" class="off"></i></span></div>
+<p style="margin:0;font-size:15px">Very tasty. A little too much pepper for me.</p><div style="background:var(--neutral-surface);border-radius:12px;padding:12px"><div class="t-eyebrow">Your reply</div><p style="margin:4px 0 0;font-size:14px">Thank you, Chen. We will mark mild on your next order.</p><a class="btn-link" style="font-size:13px;display:inline-block;margin-top:6px">Edit reply</a></div></div><div class="ocard"><div class="top"><div class="rw"><span class="avatar sm">SR</span><div><b>Sofia Ramirez</b><div class="t-meta num">2 Oct · Order CIU-0971</div></div></div><span class="stars" aria-label="5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p class="t-meta" style="margin:0">No written review.</p><div><a class="btn btn-secondary btn-sm"><i data-i="message-square"></i>Reply</a></div></div></div></div></div></main></div></div></div><div class="cz-note">Summary stays beside the list. Replied reviews show the reply and Edit reply.</div></div>
+<div class="cz-col"><div class="cz-cap">Phone: needs reply</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div>
+  <div class="s-top"><div class="s-biz" style="padding:0"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span></div><i data-i="menu" style="--s:22px"></i></div>
+  <div class="screen"><div class="scroll pg"><h1>Reviews</h1><p class="sub">What customers say about your orders.</p><div class="stk"><div class="plate pad" style="display:grid;gap:14px"><div class="rw" style="gap:16px"><div><div class="t-money num" style="font-size:44px">4.6</div><span class="stars"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span><div class="t-meta">24 reviews</div></div>
+<div class="gr stk" style="gap:6px" aria-label="Reviews by star rating"><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">5 stars</span><div class="progress gr"><i style="width:75%"></i></div><span class="num t-meta" style="width:22px;text-align:right">18</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">4 stars</span><div class="progress gr"><i style="width:17%"></i></div><span class="num t-meta" style="width:22px;text-align:right">4</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">3 stars</span><div class="progress gr"><i style="width:4%"></i></div><span class="num t-meta" style="width:22px;text-align:right">1</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">2 stars</span><div class="progress gr"><i style="width:4%"></i></div><span class="num t-meta" style="width:22px;text-align:right">1</span></div><div class="rw" style="gap:8px;font-size:13px"><span class="num" style="width:34px">1 stars</span><div class="progress gr"><i style="width:0%"></i></div><span class="num t-meta" style="width:22px;text-align:right">0</span></div></div></div></div></div><div class="tabs" style="margin:14px 0"><span class="tab">All</span><span class="tab on">Needs reply <span class="count">2</span></span></div><div class="stk"><div class="ocard"><div class="top"><div class="rw"><span class="avatar sm">AO</span><div><b>Amara Okafor</b><div class="t-meta num">14 Oct · Order CIU-1001</div></div></div><span class="stars" aria-label="5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span></div>
+<p style="margin:0;font-size:15px">The jollof rice tasted like home. Hot, on time, and nicely packed.</p><div><a class="btn btn-secondary btn-sm"><i data-i="message-square"></i>Reply</a></div></div><div class="ocard"><div class="top"><div class="rw"><span class="avatar sm">KM</span><div><b>Kwame Mensah</b><div class="t-meta num">11 Oct · Order CIU-0994</div></div></div><span class="stars" aria-label="2 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i></span></div>
+<p style="margin:0;font-size:15px">The egusi was good but it arrived 40 minutes late and lukewarm.</p><div><a class="btn btn-secondary btn-sm"><i data-i="message-square"></i>Reply</a></div></div></div></div></div>
+  <div class="s-bottom" style="grid-template-columns:repeat(5,1fr)"><span class="s-bi on"><i data-i="house"></i>Home</span><span class="s-bi"><i data-i="clipboard-list"></i>Orders</span><span class="s-bi"><i data-i="message-square"></i>Messages</span><span class="s-bi"><i data-i="package"></i>Catalog</span><span class="s-bi"><i data-i="menu"></i>More</span></div>
+  <div class="homebar"></div></div></div>
+<div class="cz-col"><div class="cz-cap">Reply sheet</div><div class="sf scrim"><div class="sheet"><div class="grab"></div><div class="sh-h"><div><h3>Reply to Kwame Mensah</h3><p>2 stars · Order CIU-0994</p></div><span class="x"><i data-i="x" style="--s:18px"></i></span></div>
+<div class="banner banner-neutral"><i data-i="eye" style="--s:18px"></i><span class="gr">Your reply is public.</span></div>
+<div class="field"><label class="label">Reply</label><textarea class="textarea" style="min-height:120px">Kwame, I am sorry about the delay and the cold food. Our rider was held up on the MKAD. Your next order is on us.</textarea></div><div class="ctr num">112 / 600</div><p class="hint" style="margin:0">You can edit this reply for 24 hours after posting.</p><a class="btn btn-block">Post reply</a></div></div><div class="cz-note">States that the reply is public and how long it stays editable.</div></div>
+<div class="cz-col"><div class="cz-cap">Reply sheet: error</div><div class="sf scrim"><div class="sheet"><div class="grab"></div><div class="sh-h"><div><h3>Reply to Kwame Mensah</h3></div><span class="x"><i data-i="x" style="--s:18px"></i></span></div>
+<div class="field"><label class="label">Reply</label><textarea class="textarea is-error" style="min-height:96px"></textarea></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Write a reply.</span><div class="ctr num">0 / 600</div><a class="btn btn-block">Post reply</a></div></div></div>
+<div class="cz-col"><div class="cz-cap">Empty: no reviews yet</div><div class="plate" style="width:390px;text-align:center;padding:44px 24px"><div class="avatar lg" style="margin:0 auto 12px"><i data-i="star" style="--s:26px"></i></div><div class="t-h2">No reviews yet</div><p class="t-meta" style="margin:6px 0 0">Customers can review an order after it is fulfilled. Reviews show up here.</p></div></div>
+<div class="cz-col"><div class="cz-cap">Empty: caught up</div><div class="plate" style="width:390px;text-align:center;padding:44px 24px"><div class="avatar lg" style="margin:0 auto 12px"><i data-i="circle-check-big" style="--s:26px"></i></div><div class="t-h2">You're all caught up</div><p class="t-meta" style="margin:6px 0 0">Every review has a reply.</p></div></div></div>
+</div></body></html>

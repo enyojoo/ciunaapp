@@ -1,0 +1,37 @@
+<!-- @dsCard group="Forms" height=891 subtitle="Single-select and multi-select chips, chips with counts, and a horizontally scrolling row on a phone" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FilterChips</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.chip .n{font-weight:500;opacity:.8;font-variant-numeric:tabular-nums}
+.chip.dis{opacity:.5}
+.chip.menu{padding-right:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.scrollrow{display:flex;gap:8px;overflow:hidden;padding:0 16px;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.mini-phone{width:390px;border:1px solid var(--hairline);border-radius:24px;background:var(--paper);padding:16px 0;overflow:hidden}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+<div class="cz-section"><p class="cz-h">Single select</p>
+  <div class="row"><span class="chip on">All</span><span class="chip">Food</span><span class="chip">Fashion</span><span class="chip">Groceries</span><span class="chip">Beauty</span><span class="chip dis">Services</span></div>
+  <p class="hint">One is always on. Selecting another replaces it; the first chip resets.</p></div>
+<div class="cz-section"><p class="cz-h">Multi select, with icons and a clear action</p>
+  <div class="row"><span class="chip on"><i data-i="check"></i>Halal</span><span class="chip on"><i data-i="check"></i>Vegetarian</span><span class="chip">Gluten free</span><span class="chip">Under ₽500</span><span class="chip menu">Delivery time<i data-i="chevron-down"></i></span><a class="btn btn-link" style="margin-left:6px">Clear all</a></div>
+  <p class="hint">Selected chips show a check so selection does not depend on colour. Several may be on.</p></div>
+<div class="cz-section"><p class="cz-h">With counts (order status filters)</p>
+  <div class="row"><span class="chip on">All <span class="n">48</span></span><span class="chip">New <span class="n">3</span></span><span class="chip">Preparing <span class="n">5</span></span><span class="chip">Ready <span class="n">2</span></span><span class="chip">Completed <span class="n">36</span></span><span class="chip dis">Disputed <span class="n">0</span></span></div></div>
+<div class="cz-section"><p class="cz-h">Phone: one scrolling row, never wraps</p>
+  <div class="cz-grid" style="justify-content:flex-start">
+  <div class="mini-phone"><div class="scrollrow"><span class="chip on">All</span><span class="chip">Food</span><span class="chip">Fashion</span><span class="chip">Groceries</span><span class="chip">Beauty</span><span class="chip">Services</span></div></div>
+  <div class="cz-note" style="text-align:left;max-width:380px">The row scrolls sideways, bleeds to the screen edge, and fades at the right to hint at more. The selected chip scrolls into view. Chips keep a 36px visual height inside a 48px touch row.</div></div></div>
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Chips filter the list below them in place; no page reload.</li><li>Keep labels to one or two words; counts only when they help.</li><li>Put the most common choice first.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use chips as navigation (use tabs) or as form choices (use radio).</li><li>Don't wrap chips to a second line on phones.</li><li>Don't show a chip with count 0 as active; dim it.</li></ul></div></div></div>
+</div></div></body></html>

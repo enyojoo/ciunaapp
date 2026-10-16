@@ -1,0 +1,52 @@
+<!-- @dsCard group="Forms" height=1374 subtitle="Language tabs en ru fr es zh pt with default marker, filled dot and missing-translation state, shown on a product form" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>LanguageTabs</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.lt{display:flex;gap:4px;border-bottom:1px solid var(--hairline);overflow:hidden}
+.lt .lang{display:flex;align-items:center;gap:7px;height:44px;padding:0 14px;font:600 14px/1 var(--font-web);color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.lt .lang.on{color:var(--ink);border-color:var(--primary)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block}
+.dot.miss{background:transparent;border:1.5px solid var(--warning)}
+.dot.none{background:transparent;border:1.5px solid var(--input-edge)}
+.lt .def{font:600 10px/1 var(--font-web);letter-spacing:.06em;text-transform:uppercase;color:var(--primary-text);background:var(--primary-tint);padding:3px 5px;border-radius:5px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font:400 13px/18px var(--font-web);color:var(--muted)}
+.legend span{display:inline-flex;gap:7px;align-items:center}
+.ftr{max-width:640px}
+.ftr .field{margin-bottom:16px}
+.mt{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--font-web);color:var(--muted)}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Tab states</p>
+  <div class="lt"><span class="lang on">en <span class="def">Default</span><span class="dot"></span></span><span class="lang">ru<span class="dot"></span></span><span class="lang">fr<span class="dot"></span></span><span class="lang">es<span class="dot miss"></span></span><span class="lang">zh<span class="dot none"></span></span><span class="lang">pt<span class="dot none"></span></span></div>
+  <div class="legend"><span><i class="dot"></i>Complete</span><span><i class="dot miss"></i>Started, a field is missing</span><span><i class="dot none"></i>Not translated yet</span><span><span class="def" style="font:600 10px/1 var(--font-web);color:var(--primary-text);background:var(--primary-tint);padding:3px 5px;border-radius:5px;text-transform:uppercase">Default</span>Required language; others are optional</span></div></div>
+
+<div class="cz-section"><p class="cz-h">On a product form: default language</p>
+  <div class="ftr">
+  <div class="lt" style="margin-bottom:18px"><span class="lang on">en <span class="def">Default</span><span class="dot"></span></span><span class="lang">ru<span class="dot"></span></span><span class="lang">fr<span class="dot"></span></span><span class="lang">es<span class="dot miss"></span></span><span class="lang">zh<span class="dot none"></span></span><span class="lang">pt<span class="dot none"></span></span></div>
+  <div class="field"><label class="label">Product name <span class="req">Required</span></label><input class="input" value="Jollof rice, large"></div>
+  <div class="field"><label class="label">Description <span class="req">Required</span></label><textarea class="textarea">Smoky party-style jollof with fried plantain. Serves two. Made to order.</textarea></div>
+  </div></div>
+
+<div class="cz-section"><p class="cz-h">Other language: missing translation</p>
+  <div class="ftr">
+  <div class="lt" style="margin-bottom:14px"><span class="lang">en <span class="def">Default</span><span class="dot"></span></span><span class="lang">ru<span class="dot"></span></span><span class="lang">fr<span class="dot"></span></span><span class="lang on">es<span class="dot miss"></span></span><span class="lang">zh<span class="dot none"></span></span><span class="lang">pt<span class="dot none"></span></span></div>
+  <div class="banner banner-warning" style="margin-bottom:16px"><div><b>Description is missing in Spanish</b>Spanish-speaking customers will see the English text until you add it.</div><a class="btn btn-secondary btn-sm">Copy from English</a></div>
+  <div class="field"><label class="label">Nombre del producto</label><input class="input" value="Arroz jollof, grande"><span class="hint">English: Jollof rice, large</span></div>
+  <div class="field"><label class="label">Descripción</label><textarea class="textarea is-error" style="border-color:var(--warning)"></textarea><span class="hint">English: Smoky party-style jollof with fried plantain. Serves two. Made to order.</span></div>
+  </div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Order is fixed: en, ru, fr, es, zh, pt. The default language is marked and required.</li><li>Each tab carries a status dot plus a word in the tooltip; the missing banner names the field.</li><li>Show the default-language text as a hint under other languages for reference.</li><li>Fallback is the default language, and the banner says so.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't block saving because an optional language is empty.</li><li>Don't auto-translate silently; machine translation needs a visible badge and an edit.</li><li>Don't show flags for languages.</li></ul></div></div></div>
+
+</div></div></body></html>

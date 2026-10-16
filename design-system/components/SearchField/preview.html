@@ -1,0 +1,51 @@
+<!-- @dsCard group="Forms" height=731 subtitle="Search input with clear button, grouped results dropdown, no-results state and recent searches" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SearchField</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.sf{position:relative}
+.sf .ic.l{position:absolute;left:14px;top:12px;color:var(--muted)}
+.sf .input{padding-left:42px;padding-right:44px}
+.sf .clr{position:absolute;right:6px;top:4px;width:36px;height:36px;display:grid;place-items:center;color:var(--muted);border-radius:50%}
+.dd{margin-top:6px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);box-shadow:var(--shadow-md);overflow:hidden}
+.dd .grp{font:600 11px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:12px 16px 4px}
+.dd .r{display:flex;align-items:center;gap:12px;padding:10px 16px;min-height:48px}
+.dd .r.act{background:var(--primary-tint)}
+.dd .r .t{font:600 15px/20px var(--font-web)}
+.dd .r .s{font:400 13px/18px var(--font-web);color:var(--muted)}
+.dd mark{background:transparent;color:var(--primary-text);font-weight:700}
+.dd .foot{display:flex;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--hairline);font:400 13px/18px var(--font-web);color:var(--muted)}
+.kbd{display:inline-block;padding:1px 6px;border:1px solid var(--input-edge);border-radius:6px;font:600 12px/16px var(--font-mono);color:var(--ink);background:var(--surface)}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+<div class="cz-section"><p class="cz-h">States</p><div class="g3">
+  <div class="cell"><span class="st">Empty, focused: recent</span>
+    <div class="sf"><i data-i="search" class="l"></i><input class="input is-focus" placeholder="Search Ciuna"></div>
+    <div class="dd"><div class="grp">Recent</div>
+      <div class="r"><i data-i="history" style="--s:18px;color:var(--muted)"></i><span class="t">jollof rice</span></div>
+      <div class="r"><i data-i="history" style="--s:18px;color:var(--muted)"></i><span class="t">russian tutor</span></div>
+      <div class="r"><i data-i="history" style="--s:18px;color:var(--muted)"></i><span class="t">ankara fabric</span></div></div></div>
+  <div class="cell"><span class="st">Typing: results</span>
+    <div class="sf"><i data-i="search" class="l"></i><input class="input is-focus" value="jol"><span class="clr"><i data-i="x" style="--s:18px"></i></span></div>
+    <div class="dd"><div class="grp">Products</div>
+      <div class="r act"><div class="ph ph-1" style="width:36px;height:36px"></div><div><div class="t"><mark>Jol</mark>lof rice, large</div><div class="s">Mama T's Kitchen · ₽650</div></div></div>
+      <div class="r"><div class="ph ph-3" style="width:36px;height:36px"></div><div><div class="t"><mark>Jol</mark>lof party tray</div><div class="s">Lagos Pantry · ₽4,800</div></div></div>
+      <div class="grp">Stores</div>
+      <div class="r"><span class="avatar sm sq">M</span><div><div class="t">Mama T's Kitchen</div><div class="s">Food · Moscow</div></div></div>
+      <div class="foot"><span>See all results for "jol"</span><span><span class="kbd">Enter</span></span></div></div></div>
+  <div class="cell"><span class="st">No results</span>
+    <div class="sf"><i data-i="search" class="l"></i><input class="input is-focus" value="jolfff"><span class="clr"><i data-i="x" style="--s:18px"></i></span></div>
+    <div class="dd"><div style="padding:24px 16px;text-align:center"><div class="t-h3">No results for "jolfff"</div><p class="t-meta" style="margin:4px 0 0">Check the spelling or try a shorter word, such as "rice".</p></div></div></div>
+</div></div>
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Search icon on the left, clear button on the right once there is text.</li><li>Debounce 250ms; keep the previous results visible while loading.</li><li>Arrow keys move through results, Enter opens, Escape closes. The dropdown is a listbox with <code>aria-activedescendant</code>.</li><li>Highlight the match with <code>primary-text</code> bold.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't show a skeleton over results the user already sees.</li><li>Don't leave "no results" bare: suggest a next step.</li><li>Don't show more than six suggestions; link to the full results page.</li></ul></div></div></div>
+</div></div></body></html>

@@ -1,0 +1,89 @@
+<!-- @dsCard group="Customer app · Screens" height=1848 width=1300 subtitle="Saved stores, products and experts in tabs, with hearts to remove, the undo toast, an empty tab and the signed-out state" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Favourites</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.cz-grid{gap:40px}
+.nt{font:700 24px/30px var(--font-native);letter-spacing:-.3px;margin:0}
+.nh{font:700 18px/24px var(--font-native)}
+.nl{font:600 15px/20px var(--font-native)}
+.nb{font:400 15px/22px var(--font-native)}
+.nm{font:400 13px/18px var(--font-native);color:var(--muted)}
+.pad{padding:0 16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.bk{width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;flex-shrink:0}
+.hd{display:flex;align-items:center;gap:10px;padding:8px 16px}
+.hd .nh{flex:1}
+.chips{display:flex;gap:8px;padding:12px 16px 0;overflow:hidden}
+.sec{display:flex;align-items:baseline;justify-content:space-between;padding:20px 16px 10px}
+.sec a{font:600 14px/20px var(--font-native);color:var(--primary-text);text-decoration:none}
+.rail{display:flex;gap:12px;padding:0 16px;overflow:hidden}
+.scard{width:268px;flex-shrink:0;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.scard.wide{width:auto}
+.scard .ph{height:104px;border-radius:0}
+.scard .b{padding:12px;display:grid;gap:4px}
+.scard.closed .ph{opacity:.55}
+.scard.closed .nl{color:var(--muted)}
+.verified{color:var(--success-text);display:inline-flex;vertical-align:middle}
+.verified .ic{--s:16px}
+.mr{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:400 13px/18px var(--font-native);color:var(--muted)}
+.mr .ic{--s:14px}
+.star{--s:14px;fill:currentColor;color:var(--primary-text)}
+.step{display:inline-flex;align-items:center;border:1px solid var(--input-edge);border-radius:999px;height:48px;background:var(--surface);font:600 16px/1 var(--font-native)}
+.step span{width:48px;height:48px;display:grid;place-items:center}
+.step b{min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+.step.sm{height:44px}.step.sm span{width:44px;height:44px}
+.float{position:absolute;left:0;right:0;bottom:0;padding:0 16px 10px}
+.cartbar{height:56px;border-radius:16px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:600 15px/1 var(--font-native);box-shadow:var(--shadow-md)}
+.cartbar .ic{--s:20px}
+.prow{display:flex;gap:12px;padding:14px 16px;align-items:center}
+.prow .ph{width:80px;height:80px;flex-shrink:0}
+.prow .grow{flex:1;min-width:0;display:grid;gap:2px}
+.add{width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.add.off{background:var(--neutral-surface);color:var(--muted)}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.plate.p{padding:14px 16px}
+.stack{display:grid;gap:12px}
+.lbl{font:600 13px/18px var(--font-native);color:var(--muted)}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt.off{opacity:.55}
+.opt .grow{flex:1;min-width:0;display:grid;gap:2px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--neutral-surface);border-radius:16px}
+.seg span{height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 14px/1 var(--font-native);color:var(--muted)}
+.seg span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-xs)}
+.seg .ic{--s:18px}
+.fs.tabs{display:flex;width:100%}
+.fs.tabs .tab{flex:1;justify-content:center;padding:0 6px}
+.row2{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font:400 15px/22px var(--font-native)}
+.row2.tot{font:700 17px/24px var(--font-native)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px 16px 0}
+.steps i{height:4px;border-radius:2px;background:var(--hairline);display:block}
+.steps i.on{background:var(--primary)}
+.cap2{display:flex;justify-content:space-between;padding:6px 16px 0;font:600 12px/16px var(--font-native);color:var(--muted)}
+.cap2 .on{color:var(--ink)}
+.dots2{display:flex;gap:6px;justify-content:center}
+.dots2 i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6);display:block}
+.dots2 i.on{background:#fff;width:18px;border-radius:4px}
+.mid{text-align:center;padding:48px 28px}
+.mid .avatar{margin:0 auto 14px}
+.mid p{margin:6px 0 18px}
+.sheetov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+.sheetov .scrim{position:absolute;inset:0}
+.sheetov .sheet{position:relative;padding:8px 20px 28px;display:grid;gap:12px}
+.dn{height:64px;display:flex;align-items:center;gap:32px;padding:0 32px;background:var(--surface);border-bottom:1px solid var(--hairline)}
+.dn nav{display:flex;gap:6px;flex:1}
+.dn nav span{padding:8px 14px;border-radius:12px;font:600 15px/20px var(--font-web);color:var(--muted)}
+.dn nav span.on{background:var(--primary-tint);color:var(--primary-text)}
+.dn .r{display:flex;gap:10px;align-items:center}
+.dmain{padding:28px 32px;max-width:1136px;margin:0 auto}
+.dmain .nt,.dmain .nh,.dmain .nl,.dmain .nb,.dmain .nm{font-family:var(--font-web)}
+.dside{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
+.toastw{position:absolute;left:16px;right:16px;bottom:96px;display:flex;justify-content:center}
+.gal{position:relative;height:340px;border-radius:0}
+.gal .ov{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between}
+.gal .dots2{position:absolute;left:0;right:0;bottom:14px}
+.rv{display:grid;gap:4px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid"><div class="cz-col"><div class="cz-cap">Stores</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="a-head" style="padding-bottom:4px"><h1 class="nt">Favourites</h1></div><div class="pad" style="padding-top:8px"><div class="tabs fs"><span class="tab on">Stores</span><span class="tab">Products</span><span class="tab">Experts</span></div></div><div class="scroll" style=""><div class="list" style="margin-top:8px"><div class="prow"><div class="ph ph-1" style="width:64px;height:64px"><i data-i="utensils"></i></div><div class="grow"><span class="nl">Mama T's Kitchen <span class="verified"><i data-i="badge-check"></i></span></span><span class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.8</b> · Nigerian</span><span class="mr"><i data-i="truck"></i>35–50 min · ₽150</span></div><span class="heart on" style="box-shadow:none;border:1px solid var(--hairline)"><i data-i="heart"></i></span></div><div class="prow"><div class="ph ph-3" style="width:64px;height:64px"><i data-i="store"></i></div><div class="grow"><span class="nl">Lagos Pantry <span class="verified"><i data-i="badge-check"></i></span></span><span class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.7</b> · West African groceries</span><span class="mr"><i data-i="truck"></i>45–60 min · ₽200</span></div><span class="heart on" style="box-shadow:none;border:1px solid var(--hairline)"><i data-i="heart"></i></span></div><div class="prow"><div class="ph ph-4" style="width:64px;height:64px"><i data-i="store"></i></div><div class="grow"><span class="nl">Guangzhou Market <span class="verified"><i data-i="badge-check"></i></span></span><span class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.6</b> · Chinese groceries</span><span class="mr"><i data-i="truck"></i>40–55 min · ₽180</span></div><span class="heart on" style="box-shadow:none;border:1px solid var(--hairline)"><i data-i="heart"></i></span></div><div class="prow"><div class="ph ph-2" style="width:64px;height:64px"><i data-i="store"></i></div><div class="grow"><span class="nl">Latina Despensa <span class="verified"><i data-i="badge-check"></i></span></span><span class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.9</b> · Latin American</span><span class="mr"><i data-i="truck"></i>50–65 min · ₽220</span></div><span class="heart on" style="box-shadow:none;border:1px solid var(--hairline)"><i data-i="heart"></i></span></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab on"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">A filled heart on the row removes it; the row leaves the list.</div></div><div class="cz-col"><div class="cz-cap">Products, after removing</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="a-head" style="padding-bottom:4px"><h1 class="nt">Favourites</h1></div><div class="pad" style="padding-top:8px"><div class="tabs fs"><span class="tab">Stores</span><span class="tab on">Products</span><span class="tab">Experts</span></div></div><div class="scroll" style=""><div class="pad g2" style="margin-top:12px"><div style="position:relative"><div class="pcard"><div class="ph ph-1" style=""><i data-i="utensils"></i></div><div class="b"><div class="n">Jollof rice with chicken</div><div class="nm trunc">Mama T's Kitchen</div><div class="p num">₽650</div></div></div><span class="heart on" style="position:absolute;right:8px;top:8px"><i data-i="heart"></i></span></div><div style="position:relative"><div class="pcard"><div class="ph ph-4" style=""><i data-i="utensils"></i></div><div class="b"><div class="n">Hand-pulled noodles</div><div class="nm trunc">Guangzhou Market</div><div class="p num">₽480<s>₽550</s></div></div></div><span class="heart on" style="position:absolute;right:8px;top:8px"><i data-i="heart"></i></span></div><div style="position:relative"><div class="pcard"><div class="ph ph-6" style=""><i data-i="package"></i></div><div class="b"><div class="n">Pão de queijo, 12 pcs</div><div class="nm trunc">Latina Despensa</div><div class="p num">₽420</div></div></div><span class="heart on" style="position:absolute;right:8px;top:8px"><i data-i="heart"></i></span></div><div style="position:relative"><div class="pcard"><div class="ph ph-3" style=""><i data-i="utensils"></i></div><div class="b"><div class="n">Egusi soup, pounded yam</div><div class="nm trunc">Mama T's Kitchen</div><div class="p num">₽700</div></div></div><span class="heart on" style="position:absolute;right:8px;top:8px"><i data-i="heart"></i></span></div></div></div><div class="toastw"><span class="toast">Removed from favourites <b style="margin-left:12px;text-decoration:underline">Undo</b></span></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab on"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Removal is undoable for a few seconds.</div></div><div class="cz-col"><div class="cz-cap">Experts</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="a-head" style="padding-bottom:4px"><h1 class="nt">Favourites</h1></div><div class="pad" style="padding-top:8px"><div class="tabs fs"><span class="tab">Stores</span><span class="tab">Products</span><span class="tab on">Experts</span></div></div><div class="scroll" style=""><div class="list" style="margin-top:8px"><div class="prow"><span class="avatar lg">AY</span><div class="grow"><span class="nl">Dr. Amina Yusuf</span><span class="nm">Immigration lawyer · English, Hausa, Russian</span><span class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.9</b></span></div><span class="heart on" style="box-shadow:none;border:1px solid var(--hairline)"><i data-i="heart"></i></span></div><div class="prow"><span class="avatar lg">LW</span><div class="grow"><span class="nl">Li Wei</span><span class="nm">Russian tutor · Chinese, English</span><span class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.9</b></span></div><span class="heart on" style="box-shadow:none;border:1px solid var(--hairline)"><i data-i="heart"></i></span></div><div class="prow"><span class="avatar lg">CM</span><div class="grow"><span class="nl">Carlos Mendes</span><span class="nm">Sworn translator · Spanish, Russian</span><span class="mr"><i data-i="star" class="star"></i><b style="color:var(--ink)">4.8</b></span></div><span class="heart on" style="box-shadow:none;border:1px solid var(--hairline)"><i data-i="heart"></i></span></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab on"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div></div><div class="cz-col"><div class="cz-cap">Empty tab</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="a-head" style="padding-bottom:4px"><h1 class="nt">Favourites</h1></div><div class="pad" style="padding-top:8px"><div class="tabs fs"><span class="tab on">Stores</span><span class="tab">Products</span><span class="tab">Experts</span></div></div><div class="scroll" style=""><div class="mid" style="padding-top:110px"><div class="avatar lg"><i data-i="heart" style="--s:26px"></i></div><div class="nh">No favourite stores yet</div><p class="nm">Tap the heart on a store to keep it here for quick reordering.</p><a class="btn">Browse Food</a></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab on"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">Each tab has its own empty message and a way to start.</div></div><div class="cz-col"><div class="cz-cap">Signed out</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="a-head" style="padding-bottom:4px"><h1 class="nt">Favourites</h1></div><div class="scroll" style=""><div class="mid" style="padding-top:150px"><div class="avatar lg"><i data-i="heart" style="--s:26px"></i></div><div class="nh">Sign in to save favourites</div><p class="nm">Keep your favourite stores, dishes and experts on every device.</p><div style="display:grid;gap:10px"><a class="btn btn-lg">Sign in</a><a class="btn btn-secondary btn-lg">Create account</a></div></div></div></div><div class="a-tabbar"><span class="a-tab"><i data-i="house"></i>Home</span><span class="a-tab"><i data-i="clipboard-list"></i>Orders</span><span class="a-tab on"><i data-i="user-round"></i>Account</span></div><div class="homebar"></div></div><div class="cz-note">No tabs. Hearts everywhere ask to sign in first.</div></div></div></div></body></html>

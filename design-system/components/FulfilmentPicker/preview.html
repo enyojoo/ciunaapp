@@ -1,0 +1,48 @@
+<!-- @dsCard group="Marketplace" height=685 width=1300 subtitle="Checkout fulfilment choice: delivery with fee, ETA and address, pickup with location and hours, digital with instant access, and an unavailable option" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FulfilmentPicker</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.fp{width:390px;display:grid;gap:12px}
+.fp h3{margin:0;font:700 18px/24px var(--font-native)}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;min-height:64px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt.off{opacity:.55}
+.opt .ic{--s:22px;margin-top:1px}
+.opt .grow{flex:1;min-width:0;display:grid;gap:2px}
+.opt .n{font:600 15px/20px var(--font-native)}
+.opt .m{font:400 13px/18px var(--font-native);color:var(--muted)}
+.opt .p{font:600 15px/20px var(--font-native);font-variant-numeric:tabular-nums}
+.detail{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px;display:grid;gap:10px}
+.detail .r{display:flex;gap:10px;align-items:flex-start;font:400 15px/21px var(--font-native)}
+.detail .r .ic{--s:18px;margin-top:2px;color:var(--muted)}
+.detail .r small{display:block;font:400 13px/18px var(--font-native);color:var(--muted)}
+.lbl{font:600 13px/18px var(--font-native);color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font:14px/22px var(--font-native)}
+</style></head>
+<body><div class="cz-page native"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Delivery chosen</div>
+<div class="fp"><h3>How do you want it?</h3>
+<div class="opt on"><span class="radio on"></span><i data-i="truck"></i><div class="grow"><span class="n">Delivery</span><span class="m">35–50 min · Presnensky zone</span></div><span class="p">₽150</span></div>
+<div class="opt"><span class="radio"></span><i data-i="store"></i><div class="grow"><span class="n">Pickup</span><span class="m">Ready in about 25 min</span></div><span class="p">Free</span></div>
+<div class="detail"><span class="lbl">Delivery address</span><div class="r"><i data-i="map-pin"></i><div>ul. Tverskaya 12, kv. 34, Moscow<small>Entrance 2, intercom 34</small></div></div><a class="btn btn-secondary btn-sm" style="justify-self:start">Change address</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Pickup chosen</div>
+<div class="fp"><h3>How do you want it?</h3>
+<div class="opt"><span class="radio"></span><i data-i="truck"></i><div class="grow"><span class="n">Delivery</span><span class="m">35–50 min</span></div><span class="p">₽150</span></div>
+<div class="opt on"><span class="radio on"></span><i data-i="store"></i><div class="grow"><span class="n">Pickup</span><span class="m">Ready in about 25 min</span></div><span class="p">Free</span></div>
+<div class="detail"><span class="lbl">Pickup location</span><div class="r"><i data-i="map-pin"></i><div>Mama T's Kitchen, ul. Profsoyuznaya 21, Moscow<small>Ask for Tolu at the counter</small></div></div><div class="r"><i data-i="clock"></i><div>Open today 10:00–21:00</div></div></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Digital, and one option unavailable</div>
+<div class="fp"><h3>How do you want it?</h3>
+<div class="opt on"><span class="radio on"></span><i data-i="download"></i><div class="grow"><span class="n">Digital</span><span class="m">Instant access after payment</span></div><span class="p">Free</span></div>
+<div class="detail"><div class="r"><i data-i="info"></i><div>You get a download link in the order and by email as soon as it is paid.</div></div></div>
+<hr class="divider" style="margin:6px 0">
+<h3 style="font-size:15px;line-height:20px">Same store, delivery closed</h3>
+<div class="opt off"><span class="radio"></span><i data-i="truck"></i><div class="grow"><span class="n">Delivery</span><span class="m">Not available right now. Delivery resumes at 10:00.</span></div></div>
+<div class="opt on"><span class="radio on"></span><i data-i="store"></i><div class="grow"><span class="n">Pickup</span><span class="m">Ready in about 25 min</span></div><span class="p">Free</span></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Put the fee and the time on the option itself, so the choice is made with both known.</li><li>Show only the options the store offers; explain any that are closed.</li><li>Reveal the address or pickup details directly under the chosen option.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't ask for an address before Delivery is chosen.</li><li>Don't preselect Delivery when the address is outside every zone.</li><li>Don't use colour alone for the chosen option; the radio fills too.</li></ul></div></div>
+</div></div></body></html>

@@ -1,0 +1,44 @@
+<!-- @dsCard group="Marketplace" height=865 subtitle="Order alert channels: email, and Telegram not linked, link opened and waiting, linked, each with mute toggles per alert type" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>AlertChannelRow</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.ac{width:440px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.ac .top{display:flex;align-items:center;gap:12px;padding:16px 20px}
+.ac .ico{width:40px;height:40px;border-radius:12px;background:var(--neutral-surface);display:grid;place-items:center;flex-shrink:0}
+.ac .grow{flex:1;min-width:0}
+.ac .n{font:600 15px/20px var(--font-web)}
+.ac .s{font-size:13px;line-height:18px;color:var(--muted)}
+.ac .mutes{border-top:1px solid var(--hairline)}
+.mu{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;min-height:52px;font-size:14px}
+.mu+.mu{border-top:1px solid var(--hairline)}
+.mu small{display:block;color:var(--muted);font-size:13px}
+.ac .note{margin:0 20px 16px;padding:10px 12px;border-radius:12px;background:var(--neutral-surface);font-size:13px;line-height:18px;color:var(--neutral-text);display:flex;gap:8px}
+.ac .note .ic{--s:16px;margin-top:1px}
+.mu.off{color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Email, on</div>
+<div class="ac"><div class="top"><span class="ico"><i data-i="mail"></i></span><div class="grow"><div class="n">Email</div><div class="s">tolu@mamatskitchen.ru</div></div><span class="badge badge-success"><i data-i="badge-check"></i>On</span></div>
+<div class="mutes"><div class="mu"><span>New orders</span><span class="switch on"></span></div><div class="mu"><span>Messages from customers</span><span class="switch on"></span></div><div class="mu"><span>Payouts and reviews</span><span class="switch"></span></div></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Telegram · not linked</div>
+<div class="ac"><div class="top"><span class="ico"><i data-i="send"></i></span><div class="grow"><div class="n">Telegram</div><div class="s">Get new orders on your phone in seconds</div></div><span class="badge badge-neutral">Not linked</span></div>
+<div class="note"><i data-i="info"></i>Tap Connect Telegram, open the chat and press Start. We link it for you.</div>
+<div style="padding:0 20px 16px"><a class="btn btn-block"><i data-i="external-link"></i>Connect Telegram</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Telegram · link opened, waiting</div>
+<div class="ac"><div class="top"><span class="ico"><i data-i="send"></i></span><div class="grow"><div class="n">Telegram</div><div class="s">Waiting for you to press Start in Telegram</div></div><span class="badge badge-warning"><i data-i="hourglass"></i>Waiting</span></div>
+<div class="note"><i data-i="timer"></i>The link works for 10 minutes. Nothing happened? Open it again.</div>
+<div style="padding:0 20px 16px;display:flex;gap:10px"><a class="btn btn-secondary" style="flex:1"><i data-i="external-link"></i>Open link again</a><a class="btn btn-ghost">Cancel</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Telegram · linked, one muted</div>
+<div class="ac"><div class="top"><span class="ico"><i data-i="send"></i></span><div class="grow"><div class="n">Telegram</div><div class="s">@tolu_mamat</div></div><span class="badge badge-success"><i data-i="badge-check"></i>Linked</span></div>
+<div class="mutes"><div class="mu"><span>New orders</span><span class="switch on"></span></div><div class="mu"><span>Messages from customers</span><span class="switch"></span></div><div class="mu"><span>Payouts and reviews</span><span class="switch on"></span></div></div>
+<div style="padding:12px 20px 16px;border-top:1px solid var(--hairline)"><a class="btn btn-secondary btn-sm">Disconnect</a></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Show the channel state with a badge and one line saying what happens next.</li><li>Keep mute toggles per alert type, not one switch for the channel.</li><li>Warn before the last channel is turned off: new orders go unseen.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't show mute toggles before a channel is linked.</li><li>Don't use a red state for Not linked; it is neutral.</li><li>Don't send marketing through alert channels.</li></ul></div></div>
+</div></div></body></html>

@@ -1,0 +1,61 @@
+<!-- @dsCard group="Foundations" height=1700 subtitle="The whole Lucide icon set in use, labelled, with sizes, stroke and colour rules" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Icons</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.ico{display:grid;justify-items:center;gap:8px;padding:14px 6px 10px;border:1px solid var(--hairline);border-radius:var(--radius-control);background:var(--surface);color:var(--muted)}
+.ico svg{width:24px;height:24px}
+.ico span{font:500 11px/14px var(--font-mono);color:var(--ink);text-align:center;word-break:break-all}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px}
+.sz{display:flex;gap:28px;align-items:flex-end}
+.sz div{display:grid;gap:6px;justify-items:center;font:500 12px/16px var(--font-mono);color:var(--muted)}
+.nav{display:flex;gap:6px}
+.nav .it{display:grid;justify-items:center;gap:4px;width:84px;padding:10px 0;font:600 11px/14px var(--font-web);color:var(--muted)}
+.nav .it.on{color:var(--primary-text)}
+.nav .it .ic{--s:24px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Rules</p>
+<div class="two" style="gap:24px">
+<div class="cz-stack">
+  <div><div class="t-h3" style="margin-bottom:8px">Sizes</div>
+  <div class="sz">
+    <div><i data-i="truck" style="--s:16px"></i>16 · inline, badges, chips</div>
+    <div><i data-i="truck" style="--s:20px"></i>20 · buttons, rows, nav</div>
+    <div><i data-i="truck" style="--s:24px"></i>24 · tab bar, headers</div>
+    <div><i data-i="truck" style="--s:32px"></i>32 · empty state wells</div></div></div>
+  <div><div class="t-h3" style="margin-bottom:8px">Stroke</div>
+  <div class="sz">
+    <div><i data-i="package" style="--s:28px" data-w="1.5"></i>1.5 · no</div>
+    <div><i data-i="package" style="--s:28px"></i>2 · always</div>
+    <div><i data-i="package" style="--s:28px" data-w="2.5"></i>2.5 · no</div></div>
+  <p class="hint">Outline Lucide, stroke 2, round caps and joins, on a 24 grid. Never filled glyphs, except a filled star for ratings and a filled heart when saved.</p></div></div>
+<div class="cz-stack">
+  <div><div class="t-h3" style="margin-bottom:8px">Colour</div>
+  <div class="nav" style="background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);width:max-content;padding:4px">
+    <span class="it on"><i data-i="house"></i>Home</span><span class="it"><i data-i="clipboard-list"></i>Orders</span><span class="it"><i data-i="wallet"></i>Wallet</span><span class="it"><i data-i="user-round"></i>Profile</span></div>
+  <table class="table" style="margin-top:12px"><tbody>
+   <tr><td>Default</td><td><code>muted</code></td></tr>
+   <tr><td>Active or selected</td><td><code>primary-text</code></td></tr>
+   <tr><td>Placeholder, chevron</td><td><code>subtle</code></td></tr>
+   <tr><td>On a fill</td><td>white on <code>primary</code>, <code>success</code>, <code>destructive</code></td></tr>
+   <tr><td>Status</td><td>the status <code>-text</code> colour (see StatusBadge)</td></tr>
+   <tr><td>Logo orange</td><td>Never for icons that carry meaning</td></tr></tbody></table></div></div>
+</div>
+<p class="hint">Icons support a label; they do not replace one. Icon-only buttons have an <code>aria-label</code> and a 48px hit area. Icons are decorative (<code>aria-hidden</code>) when a word sits beside them. Use the Lucide name as the key; add a new icon through <code>scripts/build-icons.mjs</code>, never by hand-drawing.</p></div>
+
+<div class="cz-section"><p class="cz-h">Icon set <span id="count" class="t-muted" style="text-transform:none;letter-spacing:0"></span></p>
+<div class="grid" id="grid"></div></div>
+
+</div></div>
+<script>
+(function(){
+  var icons = window.CZ_ICONS || {}, names = Object.keys(icons).sort(), out = '';
+  names.forEach(function (n) {
+    out += '<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + icons[n] + '</svg><span>' + n + '</span></div>';
+  });
+  document.getElementById('grid').innerHTML = out;
+  document.getElementById('count').textContent = '· ' + names.length + ' icons, alphabetical';
+})();
+</script></body></html>

@@ -1,0 +1,76 @@
+<!-- @dsCard group="Marketplace" height=2331 page subtitle="Product editor as a desktop screen: basics with language tabs, photos, price, stock, fulfilment, visibility, validation errors, review-pending hint and sticky save bar" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ListingEditor</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.fgrid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+.stk{display:grid;gap:16px}
+.sec .card-h{padding:14px 20px}
+.sec .card-b{display:grid;gap:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.photos{display:grid;grid-template-columns:200px 1fr;gap:16px}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.add{aspect-ratio:1;border:1.5px dashed var(--input-edge);border-radius:12px;display:grid;place-items:center;color:var(--muted);font:600 12px/1.3 var(--font-web);text-align:center;gap:4px;align-content:center}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border-radius:16px;background:var(--neutral-surface)}
+.seg span{height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 14px/1 var(--font-web);color:var(--muted)}
+.seg span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-xs)}
+.seg .ic{--s:16px}
+.save{position:sticky;bottom:0;display:flex;align-items:center;gap:12px;padding:14px 36px;background:var(--surface);border-top:1px solid var(--hairline)}
+.save .m{flex:1;font-size:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lt{display:flex;gap:6px;flex-wrap:wrap}
+.lt span{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--input-edge);display:inline-flex;align-items:center;gap:6px;font:600 14px/1 var(--font-web);background:var(--surface)}
+.lt span.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.lt .dot{width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block}
+.lt .dot.no{background:var(--input-edge)}
+.cap2{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1200px;margin:24px auto 0}
+.cap2 ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="justify-items:center">
+<div class="cz-col"><div class="cz-cap">Desktop · editing a draft with errors, review pending</div>
+<div class="desk"><div class="desk-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">seller.ciuna.com/catalog/jollof-rice</div></div>
+<div class="desk-body" style="min-height:0">
+<aside class="s-side"><div class="s-biz"><span class="logo">M</span><span><b style="font-size:14px">Mama T's Kitchen</b><br><span class="t-meta">Store · Owner</span></span></div>
+<nav class="s-nav"><span class="s-link"><i data-i="house"></i>Home</span><span class="s-link"><i data-i="clipboard-list"></i>Orders</span><span class="s-link on"><i data-i="package"></i>Catalog</span><span class="s-link"><i data-i="messages-square"></i>Messages</span><span class="s-link"><i data-i="wallet"></i>Earnings</span><span class="s-link"><i data-i="star"></i>Reviews</span><span class="s-link"><i data-i="settings"></i>Settings</span></nav></aside>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;background:var(--paper)">
+<div class="s-main" style="padding-bottom:24px">
+<div class="page-h"><div><div class="t-meta"><a href="#">Catalog</a> / Jollof rice</div><h1>Edit product</h1></div><div class="row" style="gap:10px"><span class="badge badge-warning"><i data-i="hourglass"></i>In review</span><a class="btn btn-secondary">Preview</a></div></div>
+<div class="banner banner-warning" style="margin-bottom:14px"><div><b>Waiting for Ciuna review</b>You changed the price and photos. Customers keep seeing the last approved version until review is done, usually within one business day.</div></div>
+<div class="banner banner-destructive" style="margin-bottom:16px"><div><b>Fix 2 fields to publish</b>Price and sale price need attention. They are marked below.</div></div>
+<div class="fgrid">
+<div class="stk">
+<div class="card sec"><div class="card-h"><h3>Basics</h3></div><div class="card-b">
+<div class="field"><span class="label">Language</span><div class="lt"><span class="on">English <i class="dot"></i></span><span>Русский <i class="dot"></i></span><span>中文 <i class="dot no"></i></span><span>Français <i class="dot no"></i></span></div><span class="hint">English is your default language and is required. Other languages are optional; customers who read them see your text.</span></div>
+<div class="field"><span class="label">Title<span class="req">Required</span></span><input class="input" value="Jollof rice with fried plantain"><span class="hint">31 / 120</span></div>
+<div class="field"><span class="label">Short description</span><input class="input" value="Smoky party jollof, slow-cooked, with ripe plantain."><span class="hint">One line shown in lists.</span></div>
+<div class="g2"><div class="field"><span class="label">Category</span><select class="select"><option>Hot meals</option></select></div><div class="field"><span class="label">Unit</span><select class="select"><option>Portion (450 g)</option></select></div></div>
+<div class="field"><span class="label">Full description</span><textarea class="textarea" rows="3">Cooked fresh each morning. Medium spice; ask for extra pepper in the order note. Contains tomato and groundnut oil.</textarea></div>
+</div></div>
+<div class="card sec"><div class="card-h"><div><h3>Photos</h3><div class="t-meta">The first photo is the main image. Photos are cropped to 4:3.</div></div></div><div class="card-b"><div class="photos"><div><div class="label" style="margin-bottom:6px">Main photo</div><div class="ph ph-1" style="aspect-ratio:1"><i data-i="utensils"></i></div></div>
+<div><div class="label" style="margin-bottom:6px">Gallery · 2 of 8</div><div class="gal"><div class="ph ph-3" style="aspect-ratio:1"><i data-i="utensils"></i></div><div class="ph ph-2" style="aspect-ratio:1"><i data-i="utensils"></i></div><div class="add"><i data-i="image-plus" style="--s:22px"></i>Add photo</div></div><div class="hint" style="margin-top:8px">Drag to reorder. On phones, choose camera or gallery.</div></div></div></div></div>
+<div class="card sec"><div class="card-h"><h3>Price and stock</h3></div><div class="card-b">
+<div class="g2"><div class="field"><span class="label">Price<span class="req">Required</span></span><input class="input is-error" value="0"><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter a price above zero.</span></div>
+<div class="field"><span class="label">Sale price</span><input class="input is-error" value="650"><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>The sale price must be lower than the price.</span></div></div>
+<div class="g2"><div class="field"><span class="label">Currency</span><select class="select"><option>₽ Russian ruble</option></select></div><div></div></div>
+<hr class="divider"><div class="row"><div><b>Unlimited stock</b><div class="t-meta">Turn off to count portions.</div></div><span class="switch"></span></div>
+<div class="field" style="max-width:220px"><span class="label">Portions left today</span><input class="input" value="24"></div>
+<div class="row"><div><b>Sold out</b><div class="t-meta">Customers can't order it until you switch this off.</div></div><span class="switch"></span></div>
+</div></div>
+</div>
+<div class="stk">
+<div class="card sec"><div class="card-h"><h3>Fulfilment</h3></div><div class="card-b"><div class="seg"><span class="on"><i data-i="truck"></i>Delivery</span><span><i data-i="store"></i>Pickup</span><span><i data-i="file-text"></i>Digital</span></div>
+<div class="banner banner-warning" style="align-items:flex-start"><div><b>No delivery zones yet</b>Add at least one zone so customers can order this.</div></div><a class="btn btn-secondary btn-sm" style="justify-self:start">Set up delivery</a></div></div>
+<div class="card sec"><div class="card-h"><h3>Visibility</h3></div><div class="card-b"><div class="row"><span class="badge badge-neutral">Draft</span><span class="t-meta">Not visible to customers</span></div><p class="hint" style="margin:0">Publish when ready. Edits to live listings go to review before customers see them.</p>
+<a class="btn btn-secondary btn-sm" style="justify-self:start;color:var(--destructive-text)"><i data-i="trash-2"></i>Archive product</a></div></div>
+<div class="card sec"><div class="card-h"><h3>Listing health</h3></div><div class="card-b" style="gap:8px;font-size:14px"><div class="row"><span>Title in 2 of 4 languages</span><i data-i="check" style="color:var(--success-text)"></i></div><div class="row"><span>Main photo</span><i data-i="check" style="color:var(--success-text)"></i></div><div class="row"><span>Price</span><i data-i="triangle-alert" style="color:var(--destructive-text)"></i></div><div class="row"><span>Delivery zone</span><i data-i="triangle-alert" style="color:var(--warning-text)"></i></div></div></div>
+</div></div></div>
+<div class="save"><span class="m" style="color:var(--warning-text);font-weight:600">You have unsaved changes</span><a class="btn btn-secondary">Save as draft</a><a class="btn is-disabled">Publish</a></div>
+</div></div></div></div>
+
+<div class="cap2">
+<div class="cz-section"><p class="cz-h">Save bar states</p><div style="display:grid;gap:10px;font-size:14px">
+<div class="card" style="padding:10px 14px;display:flex;gap:10px;align-items:center"><span class="t-meta" style="flex:1">Saved just now</span><a class="btn btn-secondary btn-sm">Move to draft</a><a class="btn btn-sm">Save changes</a></div>
+<div class="card" style="padding:10px 14px;display:flex;gap:10px;align-items:center"><span class="t-meta" style="flex:1;color:var(--destructive-text)">Fix the highlighted fields</span><a class="btn btn-secondary btn-sm">Save as draft</a><a class="btn btn-sm is-busy"><span class="spinner"></span>Publishing</a></div>
+<div class="card" style="padding:10px 14px;display:flex;gap:10px;align-items:center"><span class="t-meta" style="flex:1">Rejected: "Photo shows another brand." Edit and resubmit.</span><a class="btn btn-sm">Resubmit</a></div></div></div>
+<div class="cz-section"><p class="cz-h">Use</p><ul><li>Keep sections in the order basics, photos, price, stock, fulfilment, visibility.</li><li>Put errors under the field in destructive text with an icon, and say what to fix.</li><li>Explain review in a banner: what customers see meanwhile and how long.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't make non-default languages required.</li><li>Don't hide Save behind scrolling; the bar is sticky.</li><li>Don't publish silently when edits need review; say so.</li></ul></div>
+</div></div></div></body></html>

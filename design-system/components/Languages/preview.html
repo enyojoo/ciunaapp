@@ -1,0 +1,84 @@
+<!-- @dsCard group="Foundations" height=1560 subtitle="One order card, booking confirmation and error in en, ru, fr, es, zh and pt, plus the language picker and text expansion" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Languages</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.langs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start}
+.lc{display:grid;gap:12px;padding:16px;background:var(--paper);border:1px solid var(--hairline);border-radius:var(--radius-card);font-family:var(--font-native)}
+.lc>.hd{display:flex;align-items:center;justify-content:space-between}
+.lc .code{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lc .nm{font:700 16px/22px var(--font-native)}
+.lc .card{padding:14px;display:grid;gap:8px}
+.lc .card .ttl{font:600 16px/22px var(--font-native)}
+.lc .card .m{font:400 13px/18px var(--font-native);color:var(--muted)}
+.lc .card .b{font:400 15px/21px var(--font-native)}
+.lc .btn{font-family:var(--font-native);white-space:normal;height:auto;min-height:44px;padding:10px 16px;line-height:1.2;text-align:center}
+.row2{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lc .err-box{display:flex;gap:10px;align-items:flex-start;padding:14px;border-radius:var(--radius-card);background:var(--destructive-surface);color:var(--destructive-text)}
+.lc .err-box b{display:block;font:600 15px/20px var(--font-native)}
+.lc .err-box span{font:400 14px/20px var(--font-native)}
+.cjk .ttl,.cjk .b,.cjk .m,.cjk b,.cjk span{line-height:1.5}
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px}
+.opt .t{font:600 16px/20px var(--font-native)}
+.opt .s{font:400 13px/18px var(--font-native);color:var(--muted)}
+.bar{height:10px;border-radius:5px;background:var(--primary-border)}
+.exp{display:grid;grid-template-columns:90px 1fr 60px;gap:10px;align-items:center;font:500 13px/18px var(--font-web)}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Same screens, six languages</p>
+<p class="hint" style="margin:0">Order card, booking confirmation and error. Every string is a whole string with placeholders; layouts wrap, never clip. Names, addresses and ids keep their original script.</p>
+<div class="langs" id="langs"></div></div>
+
+<div class="pick">
+<div class="cz-section"><p class="cz-h">Language picker: row</p>
+  <p class="hint" style="margin:0">A select-style row in Settings shows the current language in its own script.</p>
+  <div class="card list" style="font-family:var(--font-native)">
+    <div class="opt"><div><div class="s">Language</div><div class="t">Русский</div></div><span class="cz-row" style="gap:6px;color:var(--muted)">Russian<i data-i="chevron-right" style="--s:20px"></i></span></div></div>
+  <p class="hint" style="margin:0">Compact version for headers and the sign-in screen:</p>
+  <div class="cz-row"><span class="pill-ico"><i data-i="globe" style="--s:16px"></i>RU<i data-i="chevron-down" style="--s:14px"></i></span><span class="pill-ico"><i data-i="languages" style="--s:16px"></i>Language</span></div></div>
+<div class="cz-section"><p class="cz-h">Language picker: sheet</p>
+  <div class="sheet" style="border:1px solid var(--hairline);border-radius:var(--radius-sheet);overflow:hidden;font-family:var(--font-native)">
+    <div class="grab"></div><div style="padding:14px 16px 6px;font:700 18px/24px var(--font-native)">Language</div>
+    <div class="list" id="picker"></div></div>
+  <p class="hint">Each language is named in its own script first, with the English name below. The selected row is marked with a check and <code>primary-text</code>, never colour alone. Defaults to the phone language; switching applies at once with no restart.</p></div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Text expansion (title of the booking confirmation, characters vs English)</p>
+<div id="exp" style="display:grid;gap:8px"></div>
+<p class="hint">Russian and French run 20 to 60% longer on words; Chinese is much shorter in characters but needs more line height and a minimum 14px size. Design for 140% of English and test with Russian and French.</p></div>
+
+</div></div>
+<script>
+var L=[
+{c:'en',n:'English',en:'English',o:['Order CIU-1001','Preparing','2 × Jollof rice, +1 more','Delivery · by 6:40 PM MSK','Track order'],
+ b:['Booking confirmed','Dr. Amina Yusuf, immigration lawyer','Fri, Oct 2 · 3:00 PM your time','₽4,500 paid. Held until the consultation ends.','Add to calendar'],
+ e:['Payment didn\'t go through','Your card was declined. Try another card or a different amount.','Try another card']},
+{c:'ru',n:'Русский',en:'Russian',o:['Заказ CIU-1001','Готовится','2 × Джоллоф-рис, ещё 1 позиция','Доставка · до 18:40 МСК','Отследить заказ'],
+ b:['Бронирование подтверждено','Др. Амина Юсуф, юрист по вопросам иммиграции','Пт, 2 окт · 15:00 по вашему времени','Оплачено ₽4,500. Деньги хранятся до конца консультации.','Добавить в календарь'],
+ e:['Платёж не прошёл','Банк отклонил карту. Попробуйте другую карту или другую сумму.','Использовать другую карту']},
+{c:'fr',n:'Français',en:'French',o:['Commande CIU-1001','En préparation','2 × Riz jollof, +1 autre article','Livraison · avant 18 h 40 (Moscou)','Suivre la commande'],
+ b:['Réservation confirmée','Dr Amina Yusuf, avocate en droit de l\'immigration','Ven. 2 oct. · 15 h 00, votre heure','₽4,500 payés. La somme est conservée jusqu\'à la fin de la consultation.','Ajouter au calendrier'],
+ e:['Le paiement n\'a pas abouti','Votre carte a été refusée. Essayez une autre carte ou un autre montant.','Essayer une autre carte']},
+{c:'es',n:'Español',en:'Spanish',o:['Pedido CIU-1001','En preparación','2 × Arroz jollof, +1 más','Entrega · antes de las 18:40 (Moscú)','Seguir pedido'],
+ b:['Reserva confirmada','Dra. Amina Yusuf, abogada de inmigración','Vie, 2 oct · 15:00, tu hora','Pagaste ₽4,500. El dinero se retiene hasta que termine la consulta.','Añadir al calendario'],
+ e:['El pago no se completó','Tu tarjeta fue rechazada. Prueba con otra tarjeta o con otro importe.','Probar con otra tarjeta']},
+{c:'zh',n:'中文',en:'Chinese',cjk:1,o:['订单 CIU-1001','准备中','2 × 乔洛夫饭，另加 1 件','配送 · 莫斯科时间 18:40 前送达','查看订单'],
+ b:['预约已确认','阿米娜·优素福博士，移民律师','10月2日 周五 · 您所在时区 15:00','已支付 ₽4,500。款项会保管到咨询结束。','添加到日历'],
+ e:['付款未成功','您的银行卡被拒绝。请换一张卡或更改金额后重试。','换一张卡']},
+{c:'pt',n:'Português',en:'Portuguese',o:['Pedido CIU-1001','Em preparação','2 × Arroz jollof, +1 item','Entrega · até 18:40 (Moscou)','Acompanhar pedido'],
+ b:['Reserva confirmada','Dra. Amina Yusuf, advogada de imigração','Sex., 2 de out. · 15:00, seu horário','₽4,500 pagos. O valor fica retido até o fim da consulta.','Adicionar ao calendário'],
+ e:['O pagamento não foi concluído','Seu cartão foi recusado. Tente outro cartão ou outro valor.','Tentar outro cartão']}];
+var h='';
+L.forEach(function(l){
+ h+='<div class="lc'+(l.cjk?' cjk':'')+'"><div class="hd"><span class="nm">'+l.n+'</span><span class="code">'+l.c+'</span></div>'+
+ '<div class="card"><div class="row2"><div><div class="ttl">'+l.o[0]+'</div><div class="m">Mama T\'s Kitchen</div></div><span class="badge badge-warning"><i data-i="clock"></i>'+l.o[1]+'</span></div><div class="b">'+l.o[2]+'</div><div class="m">'+l.o[3]+'</div><div class="row2"><b class="num" style="font:700 17px/22px var(--font-native)">₽1,250</b><a class="btn btn-sm" style="height:auto">'+l.o[4]+'</a></div></div>'+
+ '<div class="card"><div class="row2" style="justify-content:flex-start;gap:8px;color:var(--success-text)"><i data-i="calendar-check" style="--s:20px"></i><span class="ttl">'+l.b[0]+'</span></div><div class="b">'+l.b[1]+'</div><div class="m">'+l.b[2]+'</div><div class="m">'+l.b[3]+'</div><a class="btn btn-secondary">'+l.b[4]+'</a></div>'+
+ '<div class="err-box"><i data-i="triangle-alert" style="--s:20px"></i><div><b>'+l.e[0]+'</b><span>'+l.e[1]+'</span></div></div><a class="btn btn-secondary">'+l.e[2]+'</a></div>';
+});
+document.getElementById('langs').innerHTML=h;
+document.getElementById('picker').innerHTML=L.map(function(l){var on=l.c==='ru';return '<div class="opt"><div><div class="t" style="'+(on?'color:var(--primary-text)':'')+'">'+l.n+'</div><div class="s">'+l.en+'</div></div>'+(on?'<i data-i="check" style="--s:22px;color:var(--primary-text)"></i>':'<span class="radio"></span>')+'</div>'}).join('');
+var base=L[0].b[0].length;
+document.getElementById('exp').innerHTML=L.map(function(l){var n=l.b[0].length,p=Math.round(n/base*100);return '<div class="exp"><span>'+l.n+'</span><div style="width:100%"><div class="bar" style="width:'+Math.min(100,p/1.8)+'%"></div></div><span class="num">'+p+'%</span></div>'}).join('');
+if(window.czIcons) czIcons();
+</script></body></html>

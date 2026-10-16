@@ -1,0 +1,136 @@
+<!-- @dsCard group="Seller · Screens" height=5348 subtitle="Sign in and register on phone and desktop with the language select, wrong password and field errors, a Russian variant and check-your-email" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SellerAuth</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.desk{position:relative}
+.grow{flex:1;min-width:0}
+.row{display:flex;align-items:center;gap:10px}
+.rowt{display:flex;align-items:flex-start;gap:10px}
+.between{justify-content:space-between}
+.wrap{flex-wrap:wrap}
+.g8{display:grid;gap:8px}
+.g12{display:grid;gap:12px}
+.g16{display:grid;gap:16px}
+.g20{display:grid;gap:20px}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.seg{display:flex;width:100%}
+.seg .tab{flex:1;justify-content:center;padding:0 8px}
+.opt{display:grid;gap:4px;padding:14px 16px;border:1px solid var(--hairline);border-radius:var(--radius-card);background:var(--surface)}
+.opt.on{border-color:var(--primary-border);background:var(--primary-tint)}
+.opt .ic{color:var(--primary-text)}
+.sw-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px}
+.stepn{width:28px;height:28px;border-radius:50%;display:inline-grid;place-items:center;font:700 13px/1 var(--font-web);background:var(--neutral-surface);color:var(--neutral-text);flex-shrink:0}
+.stepn.done{background:var(--success);color:#fff}
+.stepn .ic{--s:15px}
+.docrow{border:1px solid var(--hairline);border-radius:12px;padding:12px;display:grid;gap:8px;background:var(--surface)}
+.up{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--input-edge);border-radius:10px;background:var(--surface);font:600 14px/1 var(--font-web)}
+.up .ic{--s:16px}
+.dz{border:1.5px dashed var(--input-edge);border-radius:var(--radius-card);padding:22px;text-align:center;background:var(--surface);display:grid;gap:6px;justify-items:center}
+.pop{position:absolute;background:var(--surface);border:1px solid var(--hairline);border-radius:16px;box-shadow:var(--shadow-lg);padding:6px}
+.pop .it{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px}
+.pop .it.on{background:var(--primary-tint)}
+.tile-n{font:700 32px/38px var(--font-web);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.savebar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 20px;background:var(--surface);border-top:1px solid var(--hairline)}
+.chk{display:flex;align-items:center;gap:12px;min-height:40px;font-size:15px}
+.thumb{width:56px;height:56px;border-radius:12px;flex-shrink:0}
+.mini.ok{background:var(--success-surface);color:var(--success-text)}
+.overlay{position:absolute;inset:0}
+.dialogc{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:440px;padding:24px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Phone · sign in</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="row between" style="padding:10px 16px 0"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:28px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div class="screen"><div class="scroll" style="padding:26px 20px 0;">
+<h1 class="t-title" style="margin:0">Sign in to Ciuna Seller</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Use your Ciuna account. New to Ciuna? Create one in a minute.</p>
+<div class="g16">
+
+<div class="field"><label class="label">Email</label><input class="input is-focus "  value="tunde@mamatskitchen.ru" placeholder="you@example.com" readonly ></div>
+<div class="field"><label class="label">Password<span style="float:right;font-weight:500"><a class="btn-link" style="font-size:13px;text-decoration:none">Forgot password?</a></span></label><input class="input " type="password" value="••••••••••" placeholder="" readonly ></div>
+<a class="btn btn-lg btn-block">Sign in</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">No account yet? <a class="btn-link" style="text-decoration:none;font-weight:600">Create account</a></p></div></div><div class="homebar"></div></div><p class="cz-note">Language select top right. The page follows the chosen language straight away.</p></div>
+<div class="cz-col"><div class="cz-cap">Phone · wrong password</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="row between" style="padding:10px 16px 0"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:28px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div class="screen"><div class="scroll" style="padding:26px 20px 0;">
+<h1 class="t-title" style="margin:0">Sign in to Ciuna Seller</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Use your Ciuna account. New to Ciuna? Create one in a minute.</p>
+<div class="g16">
+<div class="banner banner-destructive"><div class="row" style="align-items:flex-start;gap:10px;flex:1;min-width:0"><i data-i="triangle-alert" style="--s:20px"></i><div><b>Email or password is incorrect.</b></div></div></div>
+<div class="field"><label class="label">Email</label><input class="input "  value="tunde@mamatskitchen.ru" placeholder="you@example.com" readonly ></div>
+<div class="field"><label class="label">Password<span style="float:right;font-weight:500"><a class="btn-link" style="font-size:13px;text-decoration:none">Forgot password?</a></span></label><input class="input " type="password" value="••••••" placeholder="" readonly ></div>
+<a class="btn btn-lg btn-block">Sign in</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">No account yet? <a class="btn-link" style="text-decoration:none;font-weight:600">Create account</a></p></div></div><div class="homebar"></div></div><p class="cz-note">One banner for a failed sign in. It never says which of the two was wrong.</p></div>
+<div class="cz-col"><div class="cz-cap">Phone · language list open</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="row between" style="padding:10px 16px 0"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:28px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div class="screen"><div class="scroll" style="padding:26px 20px 0;">
+<h1 class="t-title" style="margin:0">Sign in to Ciuna Seller</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Use your Ciuna account. New to Ciuna? Create one in a minute.</p>
+<div class="g16">
+
+<div class="field"><label class="label">Email</label><input class="input "  value="tunde@mamatskitchen.ru" placeholder="you@example.com" readonly ></div>
+<div class="field"><label class="label">Password<span style="float:right;font-weight:500"><a class="btn-link" style="font-size:13px;text-decoration:none">Forgot password?</a></span></label><input class="input " type="password" value="••••••••••" placeholder="" readonly ></div>
+<a class="btn btn-lg btn-block">Sign in</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">No account yet? <a class="btn-link" style="text-decoration:none;font-weight:600">Create account</a></p></div></div><div class="homebar"></div><div class="pop" style="right:16px;top:116px;width:190px"><div class="it on"><span class="grow" style="font-weight:600">English</span><i data-i="check" style="--s:16px"></i></div><div class="it"><span class="grow" style="font-weight:600">Русский</span></div><div class="it"><span class="grow" style="font-weight:600">中文</span></div><div class="it"><span class="grow" style="font-weight:600">Español</span></div><div class="it"><span class="grow" style="font-weight:600">Français</span></div><div class="it"><span class="grow" style="font-weight:600">Português</span></div></div></div><p class="cz-note">Six languages, each in its own script. On phones this is the native picker.</p></div>
+<div class="cz-col"><div class="cz-cap">Phone · Russian sign in</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="row between" style="padding:10px 16px 0"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:28px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>Русский</option></select></div><div class="screen"><div class="scroll" style="padding:26px 20px 0;">
+<h1 class="t-title" style="margin:0">Вход в Ciuna Seller</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Используйте аккаунт Ciuna. Впервые у нас? Создайте его за минуту.</p>
+<div class="g16">
+
+<div class="field"><label class="label">Электронная почта</label><input class="input "  value="tunde@mamatskitchen.ru" placeholder="you@example.com" readonly ></div>
+<div class="field"><label class="label">Пароль<span style="float:right;font-weight:500"><a class="btn-link" style="font-size:13px;text-decoration:none">Забыли пароль?</a></span></label><input class="input " type="password" value="••••••••••" placeholder="" readonly ></div>
+<a class="btn btn-lg btn-block">Войти</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">Нет аккаунта? <a class="btn-link" style="text-decoration:none;font-weight:600">Создать аккаунт</a></p></div></div><div class="homebar"></div></div><p class="cz-note">Longer strings wrap, never truncate; the button stays one line.</p></div>
+<div class="cz-col"><div class="cz-cap">Phone · register, field errors</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="row between" style="padding:10px 16px 0"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:28px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div class="screen"><div class="scroll" style="padding:26px 20px 0;">
+<h1 class="t-title" style="margin:0">Start selling on Ciuna</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Reach people living abroad who are looking for what you offer.</p>
+<div class="g16">
+
+<div class="col2"><div class="field"><label class="label">First name</label><input class="input "  value="Tunde" placeholder="" readonly ></div><div class="field"><label class="label">Last name</label><input class="input "  value="Adeyemi" placeholder="" readonly ></div></div>
+<div class="field"><label class="label">Email</label><input class="input is-error "  value="tunde@mamatskitchen" placeholder="" readonly ><div class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter a valid email address.</div></div>
+<div class="field"><label class="label">Password</label><input class="input is-error " type="password" value="••••••" placeholder="" readonly ><div class="err"><i data-i="triangle-alert" style="--s:14px"></i>Use at least 8 characters for your password.</div></div>
+<a class="btn btn-lg btn-block">Create account</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">Already have an account? <a class="btn-link" style="text-decoration:none;font-weight:600">Sign in</a></p></div></div><div class="homebar"></div></div><p class="cz-note">Errors sit under the field, in words plus an icon.</p></div>
+<div class="cz-col"><div class="cz-cap">Phone · email already used</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="row between" style="padding:10px 16px 0"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:28px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div class="screen"><div class="scroll" style="padding:26px 20px 0;">
+<h1 class="t-title" style="margin:0">Start selling on Ciuna</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Reach people living abroad who are looking for what you offer.</p>
+<div class="g16">
+<div class="banner banner-destructive"><div class="row" style="align-items:flex-start;gap:10px;flex:1;min-width:0"><i data-i="triangle-alert" style="--s:20px"></i><div><b>An account with this email already exists. Sign in instead.</b></div></div></div>
+<div class="col2"><div class="field"><label class="label">First name</label><input class="input "  value="Tunde" placeholder="" readonly ></div><div class="field"><label class="label">Last name</label><input class="input "  value="Adeyemi" placeholder="" readonly ></div></div>
+<div class="field"><label class="label">Email</label><input class="input "  value="tunde@mamatskitchen.ru" placeholder="" readonly ></div>
+<div class="field"><label class="label">Password</label><input class="input " type="password" value="••••••" placeholder="" readonly ><div class="hint">At least 8 characters.</div></div>
+<a class="btn btn-lg btn-block">Create account</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">Already have an account? <a class="btn-link" style="text-decoration:none;font-weight:600">Sign in</a></p></div></div><div class="homebar"></div></div><p class="cz-note">The banner names the way out: sign in instead.</p></div>
+<div class="cz-col"><div class="cz-cap">Phone · check your email</div><div class="phone"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="row between" style="padding:10px 16px 0"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:28px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div class="screen"><div class="scroll" style="padding:26px 20px 0;">
+<div style="text-align:center;padding:64px 8px 0"><div class="avatar xl" style="margin:0 auto 20px"><i data-i="mail" style="--s:30px"></i></div>
+<h1 class="t-title" style="margin:0">Check your email</h1>
+<p class="t-body t-muted" style="margin:10px 0 26px">We sent a confirmation link to <b style="color:var(--ink)">tunde@mamatskitchen.ru</b>. Open it, then sign in.</p>
+<a class="btn btn-lg btn-block">Open sign in</a>
+<p class="t-meta" style="margin:18px 0 0">Nothing arrived after a few minutes? Check spam, or <a class="btn-link" style="text-decoration:none;font-weight:600">send it again</a>.</p></div></div></div><div class="homebar"></div></div><p class="cz-note">Shown after Create account. The link confirms the email, then sign in.</p></div>
+<div class="cz-col"><div class="cz-cap">Desktop · sign in</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/login</span></div><div style="min-height:700px;padding:28px 40px 40px;background:var(--paper)"><div class="row between" style="max-width:1120px;margin:0 auto 36px"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:30px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div style="width:440px;margin:0 auto;padding:36px 36px 32px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-sheet);box-shadow:var(--shadow-sm)">
+<h1 class="t-title" style="margin:0">Sign in to Ciuna Seller</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Use your Ciuna account. New to Ciuna? Create one in a minute.</p>
+<div class="g16">
+
+<div class="field"><label class="label">Email</label><input class="input is-focus "  value="tunde@mamatskitchen.ru" placeholder="you@example.com" readonly ></div>
+<div class="field"><label class="label">Password<span style="float:right;font-weight:500"><a class="btn-link" style="font-size:13px;text-decoration:none">Forgot password?</a></span></label><input class="input " type="password" value="••••••••••" placeholder="" readonly ></div>
+<a class="btn btn-lg btn-block">Sign in</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">No account yet? <a class="btn-link" style="text-decoration:none;font-weight:600">Create account</a></p></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Desktop · register</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/register</span></div><div style="min-height:700px;padding:28px 40px 40px;background:var(--paper)"><div class="row between" style="max-width:1120px;margin:0 auto 36px"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:30px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div style="width:440px;margin:0 auto;padding:36px 36px 32px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-sheet);box-shadow:var(--shadow-sm)">
+<h1 class="t-title" style="margin:0">Start selling on Ciuna</h1>
+<p class="t-meta" style="margin:6px 0 22px;font-size:15px">Reach people living abroad who are looking for what you offer.</p>
+<div class="g16">
+
+<div class="col2"><div class="field"><label class="label">First name</label><input class="input "  value="Tunde" placeholder="" readonly ></div><div class="field"><label class="label">Last name</label><input class="input "  value="Adeyemi" placeholder="" readonly ></div></div>
+<div class="field"><label class="label">Email</label><input class="input "  value="tunde@mamatskitchen.ru" placeholder="" readonly ></div>
+<div class="field"><label class="label">Password</label><input class="input is-error " type="password" value="••••••" placeholder="" readonly ><div class="err"><i data-i="triangle-alert" style="--s:14px"></i>Use at least 8 characters for your password.</div></div>
+<a class="btn btn-lg btn-block">Create account</a>
+</div>
+<p class="t-meta" style="text-align:center;margin:26px 0 0;font-size:14px">Already have an account? <a class="btn-link" style="text-decoration:none;font-weight:600">Sign in</a></p></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Desktop · check your email</div><div class="desk"><div class="desk-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">seller.ciuna.com/register</span></div><div style="min-height:700px;padding:28px 40px 40px;background:var(--paper)"><div class="row between" style="max-width:1120px;margin:0 auto 36px"><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:30px;display:block"><select class="select" style="width:auto;height:40px;border-radius:12px;font-size:14px"><option>English</option></select></div><div style="width:440px;margin:0 auto;padding:36px 36px 32px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-sheet);box-shadow:var(--shadow-sm)">
+<div style="text-align:center;padding:20px 8px 0"><div class="avatar xl" style="margin:0 auto 20px"><i data-i="mail" style="--s:30px"></i></div>
+<h1 class="t-title" style="margin:0">Check your email</h1>
+<p class="t-body t-muted" style="margin:10px 0 26px">We sent a confirmation link to <b style="color:var(--ink)">tunde@mamatskitchen.ru</b>. Open it, then sign in.</p>
+<a class="btn btn-lg btn-block">Open sign in</a>
+<p class="t-meta" style="margin:18px 0 0">Nothing arrived after a few minutes? Check spam, or <a class="btn-link" style="text-decoration:none;font-weight:600">send it again</a>.</p></div></div></div></div></div>
+</div></div></body></html>

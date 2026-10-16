@@ -1,0 +1,35 @@
+<!-- @dsCard group="Marketplace" height=610 subtitle="Seller inbox row per order conversation: unread badge, last message preview, order number, order status and the closed chip" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ThreadRow</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.th{position:relative;display:grid;gap:8px;padding:16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);width:480px}
+.th.un{border-color:var(--primary)}
+.th .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.th .n{font:600 16px/22px var(--font-web)}
+.th .s{font-size:14px;line-height:20px;color:var(--muted)}
+.th .pv{margin:0;font-size:15px;line-height:21px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.th.un .pv{color:var(--ink);font-weight:600}
+.th .pv i{font-style:normal;font-weight:400;color:var(--muted)}
+.th .foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.th .cl{font-size:14px;color:var(--muted)}
+.th.done{background:var(--paper)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Unread</div>
+<div class="th un"><div class="top"><div><div class="n">Amara Okafor</div><div class="s">Order CIU-1001 · 4 minutes ago</div></div><span class="count" aria-label="2 unread">2</span></div>
+<p class="pv">Please can you add extra pepper sauce? I am at the gate on the 3rd floor.</p><div class="foot"><span class="badge badge-warning"><i data-i="clock"></i>Preparing</span></div></div>
+<div class="th un"><div class="top"><div><div class="n">Chen Hui</div><div class="s">Order CIU-0998 · 1 hour ago</div></div><span class="count" aria-label="1 unread">1</span></div>
+<p class="pv">我的订单什么时候到? 谢谢</p><div class="foot"><span class="badge badge-warning"><i data-i="clock"></i>Out for delivery</span></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Read, last message from you</div>
+<div class="th"><div class="top"><div><div class="n">Sofia Ramirez</div><div class="s">Order CIU-0990 · yesterday</div></div></div>
+<p class="pv"><i>You: </i>Your order is ready for pickup until 20:00. Ask for Tolu at the counter.</p><div class="foot"><span class="badge badge-warning"><i data-i="package-check"></i>Ready</span></div></div>
+<div class="th done"><div class="top"><div><div class="n">Kwame Mensah</div><div class="s">Order CIU-0970 · Oct 12</div></div></div>
+<p class="pv">Thank you, everything arrived fine. Very tasty egusi and the packaging kept it warm for the whole trip across the city.</p><div class="foot"><span class="badge badge-success"><i data-i="circle-check-big"></i>Completed</span><span class="cl">Chat closed</span></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Bold the preview and add a count badge only when there are unread messages.</li><li>Prefix your own last message with "You:".</li><li>Show the order status badge so sellers know the order's urgency.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't show phone numbers or addresses in the preview.</li><li>Don't hide closed chats; mark them "Chat closed" and mute the row.</li><li>Don't use orange for the badge on read threads.</li></ul></div></div>
+</div></div></body></html>

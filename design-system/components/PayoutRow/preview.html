@@ -1,0 +1,37 @@
+<!-- @dsCard group="Marketplace" height=780 subtitle="Withdrawal history row: requested with cancel, approved, paid with reference, rejected with reason and cancelled, wide and stacked" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>PayoutRow</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pr{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:start;padding:16px 20px;background:var(--surface)}
+.pr .amt{font:700 17px/24px var(--font-web);font-variant-numeric:tabular-nums}
+.pr .meta{font-size:13px;line-height:18px;color:var(--muted)}
+.pr .side{display:grid;gap:8px;justify-items:end}
+.pr .why{grid-column:1/-1;display:flex;gap:8px;font-size:13px;line-height:18px;padding:8px 12px;border-radius:12px;background:var(--neutral-surface);color:var(--neutral-text)}
+.pr .why.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.pr .why .ic{--s:16px;margin-top:1px}
+.pr.off .amt{color:var(--muted)}
+.pr.off .amt.x{text-decoration:line-through}
+.cols{display:grid;grid-template-columns:640px 380px;gap:28px;align-items:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+.lab{font:600 12px/16px var(--font-web);color:var(--muted);margin-bottom:4px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+<div class="cols">
+<div><div class="cz-cap" style="text-align:left;margin-bottom:8px">Wide, in Earnings · Payouts</div>
+<div class="card list" style="overflow:hidden">
+<div class="pr"><div><div class="amt">₽10,000</div><div class="meta">SBP · +7 999 ••• 42 17 · Requested Oct 15, 14:20</div></div><div class="side"><span class="badge badge-warning"><i data-i="clock"></i>Requested</span><a class="btn btn-secondary btn-sm">Cancel request</a></div></div>
+<div class="pr"><div><div class="amt">₽6,500</div><div class="meta">Bank account ••4410 · Requested Oct 14, 09:05</div></div><div class="side"><span class="badge badge-warning"><i data-i="hourglass"></i>Approved</span><span class="meta">Being sent, usually within 1 business day</span></div></div>
+<div class="pr"><div><div class="amt">₽18,200</div><div class="meta">SBP · +7 999 ••• 42 17 · Paid Oct 10</div></div><div class="side"><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span></div><div class="why"><i data-i="receipt"></i>Reference SBP-48213907. Fee ₽0, you received ₽18,200.</div></div>
+<div class="pr off"><div><div class="amt">₽3,000</div><div class="meta">Bank account ••4410 · Requested Oct 8</div></div><div class="side"><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span></div><div class="why bad"><i data-i="triangle-alert"></i>The account holder name does not match your business. Add a method in your business name and try again.</div></div>
+<div class="pr off"><div><div class="amt x">₽2,000</div><div class="meta">SBP · +7 999 ••• 42 17 · Cancelled by you Oct 6</div></div><div class="side"><span class="badge badge-neutral">Cancelled</span></div></div>
+</div></div>
+<div><div class="cz-cap" style="margin-bottom:8px">Phone, stacked</div>
+<div class="card list" style="overflow:hidden">
+<div class="pr"><div><div class="amt">₽10,000</div><div class="meta">SBP · Oct 15</div></div><span class="badge badge-warning"><i data-i="clock"></i>Requested</span><a class="btn btn-secondary btn-block" style="grid-column:1/-1;height:48px">Cancel request</a></div>
+<div class="pr"><div><div class="amt">₽18,200</div><div class="meta">SBP · Oct 10</div></div><span class="badge badge-success"><i data-i="circle-check-big"></i>Paid</span><div class="why"><i data-i="receipt"></i>Reference SBP-48213907</div></div>
+<div class="pr off"><div><div class="amt">₽3,000</div><div class="meta">Bank account · Oct 8</div></div><span class="badge badge-destructive"><i data-i="x"></i>Rejected</span><div class="why bad"><i data-i="triangle-alert"></i>The account holder name does not match your business.</div></div>
+</div></div></div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Offer Cancel request only while the payout is Requested.</li><li>Show the payment reference once paid so the seller can match it to their bank.</li><li>Give the rejection reason in plain words and say what to fix.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't show the full account or phone number; mask it.</li><li>Don't name payment providers; say SBP or Bank account.</li><li>Don't use orange or red for Requested; it is a waiting status.</li></ul></div></div>
+</div></div></body></html>

@@ -1,0 +1,83 @@
+<!-- @dsCard group="Money" height=1650 subtitle="Money at body, large and display sizes: cents shrink, minus, zero-minor currencies, breakdown vs list, long values and nine currencies" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Amount</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.amt{font-variant-numeric:tabular-nums;font-weight:700;letter-spacing:-.01em;white-space:nowrap;color:var(--ink)}
+.amt small{font-weight:600}
+.a-body{font-size:15px;line-height:22px;font-weight:600}.a-body small{font-size:1em}
+.a-lg{font-size:32px;line-height:38px;letter-spacing:-.4px}.a-lg small{font-size:.6em}
+.a-dp{font-size:56px;line-height:62px;letter-spacing:-1px}.a-dp small{font-size:.6em}
+.a-md{font-size:16px;line-height:22px}.a-md small{font-size:.8em}
+.a-neg{color:var(--ink)}.a-pos{color:var(--primary-text)}.a-mute{color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px}
+.sizes{display:grid;grid-template-columns:130px 1fr 1fr;gap:10px 20px;align-items:baseline}
+.sizes .k{font:600 12px/16px var(--font-web);color:var(--muted)}
+.cur{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.cur div{padding:12px 14px;border:1px solid var(--hairline);border-radius:var(--radius-control);background:var(--surface);display:grid;gap:2px}
+.cur .c{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.brk{display:grid;gap:8px;padding:16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.brk .r{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
+.brk .r.t{border-top:1px solid var(--hairline);padding-top:10px;font-weight:600}
+.fit{padding:16px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);width:300px;display:grid;gap:4px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Sizes</p>
+<div class="sizes">
+  <span class="k">Body · 15 semibold<br>cents 100%</span><span class="amt a-body">₽1,250</span><span class="amt a-body">$24<small>.50</small></span>
+  <span class="k">Medium · 16<br>cents 80%</span><span class="amt a-md">₽12,500</span><span class="amt a-md">$24<small>.50</small></span>
+  <span class="k">Large · 32<br>cents 60%</span><span class="amt a-lg">₽12,500</span><span class="amt a-lg">$2,419<small>.32</small></span>
+  <span class="k">Display · 56<br>cents 60%</span><span class="amt a-dp">₽128,450</span><span class="amt a-dp">$1,184<small>.50</small></span>
+</div>
+<p class="hint">Cents shrink so the whole units carry the eye: 60% at large and display, 80% at medium, full size at body so small text stays legible. Same colour as the whole units. Symbol is part of the figure: one text run, one baseline.</p></div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Sign and tone</p>
+  <div class="cz-stack" style="gap:10px">
+    <div class="cz-row" style="gap:28px"><span class="amt a-md a-pos">+₽1,250</span><span class="t-meta">Credit: +, primary-text</span></div>
+    <div class="cz-row" style="gap:28px"><span class="amt a-md a-neg">−₽450</span><span class="t-meta">Debit: true minus − in ink, never red or green</span></div>
+    <div class="cz-row" style="gap:28px"><span class="amt a-md a-mute">₽0</span><span class="t-meta">Zero is muted, no sign</span></div>
+    <div class="cz-row" style="gap:28px"><span class="amt a-md a-mute">₽2,100</span><span class="t-meta">Muted: struck-through or secondary amounts</span></div>
+    <div class="cz-row" style="gap:28px"><span class="amt a-md" style="color:var(--destructive-text)">₽2,100 overdue</span><span class="t-meta">Colour only with a status word beside it</span></div></div>
+  <p class="hint">Never a hyphen for minus. Never a second minus on an already signed value.</p></div>
+<div class="cz-section"><p class="cz-h">Zero-minor currencies</p>
+  <div class="cz-stack" style="gap:10px">
+    <div class="cz-row" style="gap:28px"><span class="amt a-lg">CFA 250,000</span></div>
+    <div class="cz-row" style="gap:28px"><span class="amt a-md">¥380</span><span class="amt a-md">₩45,000</span><span class="amt a-md">UGX 12,000</span></div></div>
+  <p class="hint">XOF, XAF, RWF, UGX, JPY and KRW have no minor unit: whole units only, never <code>.00</code>. Letter-only symbols (CFA, UGX) take a space before the figure; symbol glyphs do not.</p></div>
+</div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Breakdown: cents always</p>
+  <div class="brk">
+    <div class="r"><span>2 × Jollof rice</span><span class="amt a-body num" style="font-weight:500">₽900.00</span></div>
+    <div class="r"><span>Egusi soup</span><span class="amt a-body num" style="font-weight:500">₽350.00</span></div>
+    <div class="r"><span>Delivery</span><span class="amt a-body num" style="font-weight:500">₽150.00</span></div>
+    <div class="r"><span>Service fee</span><span class="amt a-body num" style="font-weight:500">₽12.50</span></div>
+    <div class="r t"><span>Total</span><span class="amt a-md">₽1,412<small>.50</small></span></div></div>
+  <p class="hint">Where lines add up (checkout, receipts, statements, payout detail) every row shows cents so the column aligns and the total visibly sums. Right-align, tabular figures.</p></div>
+<div class="cz-section"><p class="cz-h">List: no .00</p>
+  <div class="card list">
+    <div class="item"><div class="grow"><div class="t">Order CIU-1001</div><div class="s">Sep 24</div></div><span class="amt a-md">₽1,250</span></div>
+    <div class="item"><div class="grow"><div class="t">Order CIU-1002</div><div class="s">Sep 24</div></div><span class="amt a-md">₽700</span></div>
+    <div class="item"><div class="grow"><div class="t">Refund CIU-0991</div><div class="s">Sep 22</div></div><span class="amt a-md">−₽700</span></div>
+    <div class="item"><div class="grow"><div class="t">Order CIU-0987</div><div class="s">Sep 21</div></div><span class="amt a-md">$24<small>.50</small></span></div></div>
+  <p class="hint">In lists, tables, toasts and notifications a whole amount drops <code>.00</code>: <code>₽1,250</code>. An amount with real cents keeps them: <code>$24.50</code>. Balances show cents always.</p></div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Long values step down, never clip</p>
+<div class="cz-row" style="gap:20px;align-items:flex-start">
+  <div class="fit"><span class="t-meta">Up to 6 digits</span><span class="amt" style="font-size:32px;line-height:38px">₽128,450</span></div>
+  <div class="fit"><span class="t-meta">7 to 9 digits: one step down</span><span class="amt" style="font-size:26px;line-height:34px">₽12,845,000</span></div>
+  <div class="fit"><span class="t-meta">10+ digits: two steps down</span><span class="amt" style="font-size:20px;line-height:30px">₽1,284,500,000</span></div></div>
+<p class="hint">Large and display figures drop one size at 7 to 9 whole digits and two at 10 or more so they stay on one line. Money never wraps, truncates with an ellipsis, or abbreviates to "1.2M".</p></div>
+
+<div class="cz-section"><p class="cz-h">Currencies</p>
+<div class="cur" id="cur"></div>
+<p class="hint">Symbols, never codes, from the shared symbol map. The country flag beside a figure (see CurrencyFlag) tells shared symbols apart: CFA is XOF or XAF.</p></div>
+
+</div></div>
+<script>
+var C=[['RUB','Russian rouble','₽','12,500'],['USD','US dollar','$','24','.50'],['EUR','Euro','€','9'],['CNY','Chinese yuan','¥','380'],['NGN','Nigerian naira','₦','12,500'],['GHS','Ghanaian cedi','₵','5,512'],['KES','Kenyan shilling','KSh','1,500','.90'],['BRL','Brazilian real','R$','89'],['XOF','West African CFA franc','CFA ','250,000']];
+document.getElementById('cur').innerHTML=C.map(function(c){return '<div><span class="c">'+c[0]+' · '+c[1]+'</span><span class="amt a-lg">'+c[2]+c[3]+(c[4]?'<small>'+c[4]+'</small>':'')+'</span></div>'}).join('');
+</script></body></html>

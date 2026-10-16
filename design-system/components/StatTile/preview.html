@@ -1,0 +1,53 @@
+<!-- @dsCard group="Marketplace" height=718 subtitle="Seller home tiles: new orders, in progress, today's earnings and rating, with delta, loading, zero and phone layouts" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>StatTile</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.st{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:16px 18px;display:grid;gap:6px;align-content:start}
+.st .l{display:flex;align-items:center;gap:8px;font:600 13px/18px var(--font-web);color:var(--muted)}
+.st .l .ic{--s:16px}
+.st .v{font:700 30px/36px var(--font-web);letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.st .d{font:500 13px/18px var(--font-web);color:var(--muted);display:flex;align-items:center;gap:6px}
+.st .up{color:var(--success-text)}
+.st .down{color:var(--destructive-text)}
+.st.act{border-color:var(--primary-border);background:var(--primary-tint)}
+.st.zero .v{color:var(--muted)}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ph2{width:358px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ph2 .st{padding:14px}
+.ph2 .st .v{font-size:26px;line-height:32px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+<div class="cz-section"><p class="cz-h">Desktop home row</p>
+<div class="row4">
+<div class="st act"><div class="l"><i data-i="clipboard-list"></i>New orders</div><div class="v">3</div><div class="d"><span class="badge badge-warning"><i data-i="timer"></i>1 overdue</span></div></div>
+<div class="st"><div class="l"><i data-i="hourglass"></i>In progress</div><div class="v">5</div><div class="d">2 ready for pickup</div></div>
+<div class="st"><div class="l"><i data-i="banknote"></i>Today's earnings</div><div class="v">₽12,480</div><div class="d up"><i data-i="arrow-up-right" style="--s:14px"></i>₽2,300 more than yesterday</div></div>
+<div class="st"><div class="l"><i data-i="star"></i>Rating</div><div class="v">4.8</div><div class="d"><span class="stars"><i data-i="star"></i></span>126 reviews</div></div>
+</div></div>
+<div class="cz-grid" style="justify-content:flex-start;gap:20px">
+<div class="cz-col" style="justify-items:start"><div class="cz-cap">Phone, two per row</div>
+<div class="ph2">
+<div class="st act"><div class="l"><i data-i="clipboard-list"></i>New orders</div><div class="v">3</div><div class="d">Accept now</div></div>
+<div class="st"><div class="l"><i data-i="hourglass"></i>In progress</div><div class="v">5</div><div class="d">2 ready</div></div>
+<div class="st"><div class="l"><i data-i="banknote"></i>Today</div><div class="v">₽12,480</div><div class="d up">+₽2,300</div></div>
+<div class="st"><div class="l"><i data-i="star"></i>Rating</div><div class="v">4.8</div><div class="d">126 reviews</div></div>
+</div></div>
+<div class="cz-col" style="justify-items:start"><div class="cz-cap">Zero</div>
+<div style="display:grid;gap:12px;width:230px">
+<div class="st zero"><div class="l"><i data-i="clipboard-list"></i>New orders</div><div class="v">0</div><div class="d">Nothing waiting</div></div>
+<div class="st zero"><div class="l"><i data-i="banknote"></i>Today's earnings</div><div class="v">₽0</div><div class="d">No paid orders yet today</div></div></div></div>
+<div class="cz-col" style="justify-items:start"><div class="cz-cap">Negative delta · no rating</div>
+<div style="display:grid;gap:12px;width:230px">
+<div class="st"><div class="l"><i data-i="banknote"></i>Today's earnings</div><div class="v">₽4,100</div><div class="d down"><i data-i="arrow-up-right" style="--s:14px;transform:scaleY(-1)"></i>₽3,200 less than yesterday</div></div>
+<div class="st"><div class="l"><i data-i="star"></i>Rating</div><div class="v t-muted">No reviews</div><div class="d">Shows after the first review</div></div></div></div>
+<div class="cz-col" style="justify-items:start"><div class="cz-cap">First load, no cache</div>
+<div style="display:grid;gap:12px;width:230px">
+<div class="st"><div class="sk" style="height:16px;width:90px"></div><div class="sk" style="height:32px;width:110px"></div><div class="sk" style="height:14px;width:150px"></div></div>
+<div class="st"><div class="sk" style="height:16px;width:120px"></div><div class="sk" style="height:32px;width:130px"></div><div class="sk" style="height:14px;width:100px"></div></div></div></div>
+</div>
+<div class="two">
+<div class="cz-section"><p class="cz-h">Use</p><ul><li>Lead with what needs action: the New orders tile is tinted when it is above zero.</li><li>Say what a number compares to ("more than yesterday").</li><li>Show cached figures straight away; skeleton only on a true first load.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't colour the figure itself orange.</li><li>Don't show a delta as colour alone; keep the words and arrow.</li><li>Don't hide zero. Say "Nothing waiting".</li></ul></div>
+</div></div></div></body></html>

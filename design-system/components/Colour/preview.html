@@ -1,0 +1,134 @@
+<!-- @dsCard group="Foundations" height=2300 subtitle="Every colour token with hex, usage and AA ratio; brand orange vs primary vs primary-text; the live contrast gate" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Colour</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.sw{border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden;background:var(--surface);display:grid}
+.sw .chip-c{height:72px;display:flex;align-items:flex-end;justify-content:space-between;padding:8px 12px;font:600 12px/1 var(--font-mono)}
+.sw .b{padding:12px 14px;display:grid;gap:4px}
+.sw .n{font:600 14px/20px var(--font-web)}
+.sw .hex{font:500 12px/16px var(--font-mono);color:var(--muted)}
+.sw .u{font:400 13px/18px var(--font-web);color:var(--muted)}
+.sw .r{font:600 12px/16px var(--font-web);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pass{color:var(--success-text)}.fail{color:var(--destructive-text)}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.use{border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px;display:grid;gap:10px;align-content:start;background:var(--surface)}
+.use h3{margin:0;font:600 16px/22px var(--font-web)}
+.demo{border-radius:12px;background:var(--paper);border:1px dashed var(--hairline);padding:18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;min-height:84px}
+.dot-l{width:44px;height:44px;border-radius:50%;background:var(--brand-primary);display:inline-block}
+.tag-no{color:var(--destructive-text);font:600 12px/16px var(--font-web)}
+.tag-yes{color:var(--success-text);font:600 12px/16px var(--font-web)}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section">
+  <p class="cz-h">Principles</p>
+  <p class="t-body" style="margin:0;max-width:720px">Neutrals carry the surface. Orange signals intent: the one thing to do. Three oranges exist because white text, orange text and a logo have different contrast needs. Every pairing below is checked against WCAG AA by <code>npm run design:check</code>. Hex values are shown for reference; code always uses the token.</p>
+</div>
+
+<div class="cz-section"><p class="cz-h">Brand and primary</p><div class="sw-grid" data-group="brand"></div></div>
+
+<div class="cz-section">
+  <p class="cz-h">Which orange?</p>
+  <div class="three">
+    <div class="use"><span class="tag-yes">USE FOR CONTROLS</span><h3>primary</h3>
+      <p class="t-meta" style="margin:0">Fill behind a white label: buttons, active tabs, selected chips, count bubbles, focus rings. Hover goes deeper to <code>primary-hover</code>.</p>
+      <div class="demo"><a class="btn">Accept order</a><a class="btn is-hover">Hover</a><span class="count">3</span><span class="chip on">Delivery</span></div></div>
+    <div class="use"><span class="tag-yes">USE FOR TEXT</span><h3>primary-text</h3>
+      <p class="t-meta" style="margin:0">Orange as words or a link, and active nav on a tint. Never use the logo orange for small text.</p>
+      <div class="demo"><a href="#" onclick="return false">View all orders</a><span class="t-primary t-h3">Edit store</span><span class="badge badge-primary"><i data-i="sparkles"></i>Featured</span></div></div>
+    <div class="use"><span class="tag-yes">USE FOR BRAND</span><h3>brand-primary</h3>
+      <p class="t-meta" style="margin:0">The logo orange. Logo, illustrations, avatars and large decorative shapes only. White on it is 2.8:1, so it never sits behind a label.</p>
+      <div class="demo"><span class="dot-l"></span><img src="../../assets/logos/ciuna.svg" alt="Ciuna" style="height:26px"></div></div>
+  </div>
+  <div class="three">
+    <div class="use" style="border-color:var(--destructive-text)"><span class="tag-no">DON'T</span>
+      <div class="demo" style="background:var(--brand-primary);border-style:solid;border-color:var(--brand-primary)"><span style="color:#fff;font:600 15px/1 var(--font-web)">Accept order</span></div>
+      <p class="t-meta" style="margin:0">White label on the logo orange fails at 2.8:1. Use <code>primary</code>.</p></div>
+    <div class="use" style="border-color:var(--destructive-text)"><span class="tag-no">DON'T</span>
+      <div class="demo"><span style="color:var(--brand-primary);font:600 14px/20px var(--font-web)">Orders waiting for you</span></div>
+      <p class="t-meta" style="margin:0">Small text in the logo orange is too light. Use <code>primary-text</code>.</p></div>
+    <div class="use" style="border-color:var(--destructive-text)"><span class="tag-no">DON'T</span>
+      <div class="demo" style="background:var(--primary);border-style:solid;border-color:var(--primary);min-height:84px"></div>
+      <p class="t-meta" style="margin:0">Never fill a page or large card with orange. Orange marks one action.</p></div>
+  </div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Canvas and text</p><div class="sw-grid" data-group="canvas"></div></div>
+<div class="cz-section"><p class="cz-h">Status</p><div class="sw-grid" data-group="status"></div>
+  <p class="hint">Badges use <code>-surface</code> + <code>-text</code>. Solid fills are for emphasis and carry a white label. Orange is never a status. See StatusBadge.</p></div>
+<div class="cz-section"><p class="cz-h">Controls and overlays</p><div class="sw-grid" data-group="controls"></div></div>
+
+<div class="cz-section">
+  <p class="cz-h">Contrast gate</p>
+  <p class="hint" style="margin:0">Ratios are computed in this page from the CSS variables (WCAG 2.x relative luminance). The same pairs fail the build below their minimum. Text needs 4.5:1; large shapes and non-text edges 3:1.</p>
+  <table class="table"><thead><tr><th>Pair</th><th>Foreground</th><th>Background</th><th class="r">Ratio</th><th class="r">Min</th><th>Result</th></tr></thead><tbody id="gate"></tbody></table>
+</div>
+
+</div></div>
+<script>
+var css = getComputedStyle(document.documentElement);
+function v(n){ return css.getPropertyValue('--' + n).trim().toUpperCase(); }
+function lum(hex){ var c=[1,3,5].map(function(i){var x=parseInt(hex.substr(i,2),16)/255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4)}); return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]; }
+function ratio(a,b){ var l1=lum(v(a)),l2=lum(v(b)); if(l1<l2){var t=l1;l1=l2;l2=t} return (l1+0.05)/(l2+0.05); }
+// [token, usage, label colour on swatch, [fg, bg, min, "pairing"]]
+var G = {
+brand:[
+ ['brand-primary','Logo, illustrations, large decorative areas. Not for controls or small text.','ink',['ink','brand-primary',4.5,'Ink on it']],
+ ['primary','Buttons, active tabs, selected chips, focus rings. White label on it.','surface',['primary-foreground','primary',4.5,'White label']],
+ ['primary-foreground','Label colour on any primary fill.','ink',['primary-foreground','primary',4.5,'On primary']],
+ ['primary-hover','Hover and pressed fill.','surface',['primary-foreground','primary-hover',4.5,'White label']],
+ ['primary-text','Orange as text or a link on paper and white.','surface',['primary-text','surface',4.5,'On white']],
+ ['primary-tint','Selected rows, soft callouts, icon wells.','ink',['primary-text','primary-tint',4.5,'primary-text on it']],
+ ['primary-border','Selected outline on tint. Decorative.','ink',null]],
+canvas:[
+ ['paper','Canvas behind plates on native and Seller.','ink',['ink','paper',7,'Ink on it']],
+ ['surface','Plates, sheets, cards, inputs.','ink',['ink','surface',7,'Ink on it']],
+ ['ink','Primary text and dark surfaces. The only dark fill (white logo goes here).','surface',['surface','ink',7,'White on it']],
+ ['muted','Secondary text on paper and surface.','surface',['muted','paper',4.5,'On paper']],
+ ['subtle','Icons, chevrons and placeholders only. Never body text.','ink',null],
+ ['hairline','Decorative dividers and card edges.','ink',null]],
+status:[
+ ['success','Completed, Paid, Live, Verified. Solid fill.','surface',['primary-foreground','success',4.5,'White label']],
+ ['success-surface','Success badge or banner ground.','ink',['success-text','success-surface',4.5,'success-text on it']],
+ ['success-text','Success text and icons.','surface',['success-text','success-surface',4.5,'On its surface']],
+ ['warning','Pending, Preparing, In review. Solid fill.','surface',['primary-foreground','warning',4.5,'White label']],
+ ['warning-surface','Warning ground.','ink',['warning-text','warning-surface',4.5,'warning-text on it']],
+ ['warning-text','Warning text and icons.','surface',['warning-text','warning-surface',4.5,'On its surface']],
+ ['destructive','Failed, Rejected, Overdue, destructive actions.','surface',['primary-foreground','destructive',4.5,'White label']],
+ ['destructive-surface','Destructive ground.','ink',['destructive-text','destructive-surface',4.5,'destructive-text on it']],
+ ['destructive-text','Destructive text and icons.','surface',['destructive-text','destructive-surface',4.5,'On its surface']],
+ ['neutral-surface','Draft, Paused, Cancelled badge ground. Also skeletons and tab tracks.','ink',['neutral-text','neutral-surface',4.5,'neutral-text on it']],
+ ['neutral-text','Neutral badge text.','surface',['neutral-text','neutral-surface',4.5,'On its surface']],
+ ['refer','Refer and earn accent (teal). Never a status.','surface',['refer','refer-surface',4.5,'On refer-surface']],
+ ['refer-surface','Refer pill ground.','ink',['refer','refer-surface',4.5,'refer on it']]],
+controls:[
+ ['input-edge','Form-control edge. Non-text 3:1.','surface',['input-edge','surface',3,'Edge on white']],
+ ['scrim','Dialog and sheet overlay, shown at 55% opacity.','surface',null]]
+};
+G.brand[2][2]='ink'; // primary-foreground swatch sits on a light chip? keep readable
+function sw(t){
+  var tok=t[0], c=t[2], p=t[3];
+  var d=document.createElement('div'); d.className='sw';
+  var r=''; if(p){ var x=ratio(p[0],p[1]); var ok=x>=p[2]; r='<div class="r '+(ok?'pass':'fail')+'"><i data-i="'+(ok?'circle-check-big':'triangle-alert')+'" style="--s:14px"></i>'+x.toFixed(2)+':1 · '+p[3]+'</div>'; }
+  else r='<div class="r t-muted">Decorative, no text pairing</div>';
+  d.innerHTML='<div class="chip-c" style="background:var(--'+tok+');color:var(--'+c+')"><span>'+(tok==='scrim'?'55%':'Aa')+'</span><span>'+v(tok)+'</span></div><div class="b"><div class="n">--'+tok+'</div><div class="hex">'+v(tok)+'</div><div class="u">'+t[1]+'</div>'+r+'</div>';
+  return d;
+}
+Object.keys(G).forEach(function(k){ var el=document.querySelector('[data-group="'+k+'"]'); G[k].forEach(function(t){ el.appendChild(sw(t)); }); });
+// white swatch for primary-foreground needs a visible chip: draw it on ink
+var pf=document.querySelectorAll('.sw')[2].querySelector('.chip-c'); pf.style.background='var(--ink)'; pf.style.color='var(--primary-foreground)';
+var pairs=[
+['primary-foreground','primary',4.5,'White button label on primary'],['primary-foreground','primary-hover',4.5,'White button label on hover primary'],
+['primary','surface',4.5,'Focus ring / primary border on white'],['brand-primary','surface',2.5,'Logo orange: icons and large shapes only'],
+['primary-text','surface',4.5,'Orange link on white'],['primary-text','paper',4.5,'Orange link on paper'],['primary-text','primary-tint',4.5,'Orange text on tint'],
+['ink','paper',7,'Body on paper'],['ink','surface',7,'Body on white'],['muted','paper',4.5,'Secondary on paper'],['muted','surface',4.5,'Secondary on white'],
+['primary-foreground','success',4.5,'White on success fill'],['primary-foreground','warning',4.5,'White on warning fill'],['primary-foreground','destructive',4.5,'White on destructive fill'],
+['success-text','success-surface',4.5,'Success badge'],['warning-text','warning-surface',4.5,'Warning badge'],['destructive-text','destructive-surface',4.5,'Destructive badge'],['neutral-text','neutral-surface',4.5,'Neutral badge'],
+['refer','refer-surface',4.5,'Refer pill'],['input-edge','surface',3,'Input edge (non-text 3:1)']];
+var rows='';
+pairs.forEach(function(p){ var x=ratio(p[0],p[1]), ok=x>=p[2];
+ rows+='<tr><td>'+p[3]+'</td><td><span style="display:inline-flex;align-items:center;gap:8px"><i style="width:14px;height:14px;border-radius:4px;background:var(--'+p[0]+');border:1px solid var(--hairline);display:inline-block"></i>--'+p[0]+'</span></td><td><span style="display:inline-flex;align-items:center;gap:8px"><i style="width:14px;height:14px;border-radius:4px;background:var(--'+p[1]+');border:1px solid var(--hairline);display:inline-block"></i>--'+p[1]+'</span></td><td class="r num"><b>'+x.toFixed(2)+':1</b></td><td class="r num">'+p[2]+':1</td><td><span class="badge '+(ok?'badge-success':'badge-destructive')+'"><i data-i="'+(ok?'check':'x')+'"></i>'+(ok?'Pass':'Fail')+'</span></td></tr>'; });
+document.getElementById('gate').innerHTML=rows;
+if(window.czIcons) czIcons();
+</script></body></html>

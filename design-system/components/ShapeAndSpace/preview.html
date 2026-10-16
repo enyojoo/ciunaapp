@@ -1,0 +1,94 @@
+<!-- @dsCard group="Foundations" height=1850 subtitle="Radii, shadows, the 4px spacing scale, 48px tap target, breakpoints, motion durations and the focus ring" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Shape and space</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.tiles{display:flex;flex-wrap:wrap;gap:20px}
+.rd{display:grid;gap:8px;justify-items:start}
+.rd .box{width:120px;height:84px;background:var(--primary-tint);border:2px solid var(--primary-border)}
+.rd b{font:600 14px/18px var(--font-web)}.rd span{font:400 12px/16px var(--font-mono);color:var(--muted)}
+.sh{width:150px;height:96px;border-radius:var(--radius-card);background:var(--surface);display:grid;place-items:center;font:600 13px/1 var(--font-mono);color:var(--muted)}
+.shwrap{background:var(--paper);padding:22px;border-radius:var(--radius-card);border:1px solid var(--hairline)}
+.sp{display:grid;grid-template-columns:70px 60px 1fr;gap:12px;align-items:center;font:500 13px/18px var(--font-mono);padding:3px 0}
+.sp i{display:block;height:16px;background:var(--primary);border-radius:3px}
+.tap{position:relative;display:inline-grid;place-items:center;width:48px;height:48px;border:1.5px dashed var(--primary);border-radius:12px;background:var(--primary-tint)}
+.tap .ic-box{width:24px;height:24px;display:grid;place-items:center;background:var(--surface);border-radius:6px;border:1px solid var(--hairline)}
+.bp{display:grid;gap:8px}
+.bp .bar{height:30px;border-radius:8px;background:var(--neutral-surface);position:relative;overflow:hidden}
+.bp .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--primary-tint);border-right:2px solid var(--primary);display:flex;align-items:center;padding-left:10px;font:600 12px/1 var(--font-mono);color:var(--primary-text);white-space:nowrap}
+.mo{display:grid;gap:10px}
+.mo .track{height:36px;border-radius:10px;background:var(--neutral-surface);position:relative;overflow:hidden}
+.mo .ball{position:absolute;top:6px;left:6px;width:24px;height:24px;border-radius:50%;background:var(--primary)}
+.mo .track:hover .ball.fast{transform:translateX(220px);transition:transform 150ms ease-out}
+.mo .track:hover .ball.sheet{transform:translateX(220px);transition:transform 180ms ease-out}
+.mo .track:hover .ball.normal{transform:translateX(220px);transition:transform 220ms ease-out}
+.ring{width:150px}
+.f-demo{outline:3px solid var(--primary);outline-offset:2px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Radii</p>
+<div class="tiles">
+  <div class="rd"><div class="box" style="border-radius:var(--radius-control)"></div><b>Control · 12</b><span>--radius-control</span><span class="hint">Buttons, inputs, chips, menus</span></div>
+  <div class="rd"><div class="box" style="border-radius:var(--radius-card)"></div><b>Card · 16</b><span>--radius-card</span><span class="hint">Cards, tiles, banners</span></div>
+  <div class="rd"><div class="box" style="border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;height:84px"></div><b>Sheet · 24</b><span>--radius-sheet</span><span class="hint">Bottom sheets (top corners), dialogs</span></div>
+  <div class="rd"><div class="box" style="border-radius:var(--radius-pill);width:150px;height:44px"></div><b>Pill · 999</b><span>--radius-pill</span><span class="hint">Badges, chips, avatars</span></div>
+</div>
+<p class="hint">Nested radii step down: a 12 control inside a 16 card sits at least 4px from the edge. Inner radius = outer radius minus padding, never larger.</p></div>
+
+<div class="cz-section"><p class="cz-h">Shadows</p>
+<div class="shwrap"><div class="tiles">
+  <div class="sh" style="box-shadow:var(--shadow-xs)">xs</div><div class="sh" style="box-shadow:var(--shadow-sm)">sm</div><div class="sh" style="box-shadow:var(--shadow-md)">md</div><div class="sh" style="box-shadow:var(--shadow-lg)">lg</div>
+  <div class="sh" style="box-shadow:var(--shadow-card-face);background:var(--ink);color:var(--surface)">card-face</div></div></div>
+<table class="table"><thead><tr><th>Token</th><th>Use</th></tr></thead><tbody>
+<tr><td><code>shadow-xs</code></td><td>Selected tab, small lifted controls</td></tr>
+<tr><td><code>shadow-sm</code></td><td>Documents, resting floating cards</td></tr>
+<tr><td><code>shadow-md</code></td><td>Menus, popovers, toasts</td></tr>
+<tr><td><code>shadow-lg</code></td><td>Sheets, dialogs, device frames</td></tr>
+<tr><td><code>shadow-card-face</code></td><td>The payment card face only</td></tr></tbody></table>
+<p class="hint">Ordinary cards use a 1px <code>hairline</code> edge, not a shadow. Shadows mean "above the page".</p></div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Spacing scale (4px base)</p>
+  <div id="spacing"></div>
+  <p class="hint">Page gutter is 20 (16 on small phones). Gap between cards 12 or 16. Section gap 24 to 32. Never use values off the 4px grid.</p></div>
+<div class="cz-section"><p class="cz-h">48px tap target</p>
+  <div class="cz-row" style="gap:24px;align-items:center">
+    <div class="tap"><span class="ic-box"><i data-i="heart" style="--s:16px"></i></span></div>
+    <div class="t-meta" style="max-width:260px">A 16px icon still gets a 48 × 48 hit area. Rows are at least 56 tall. Controls are 44 tall on web and 48 on touch; space between targets is at least 8.</div></div>
+  <div class="cz-row"><a class="btn btn-lg" style="min-height:48px">Continue</a><span class="chip" style="height:48px">Delivery</span><span class="pill-ico" style="height:48px;min-width:48px"><i data-i="bell"></i></span></div>
+  <p class="hint">Dashed outline above shows the hit area. Desktop-only dense tools (Office) may drop to 36.</p></div>
+</div>
+
+<div class="two">
+<div class="cz-section"><p class="cz-h">Breakpoints</p>
+  <div class="bp" id="bps"></div>
+  <table class="table"><tbody>
+  <tr><td><b>Below 640</b></td><td>One column, bottom navigation, full-width buttons</td></tr>
+  <tr><td><b>640 sm</b></td><td>Two-column product grids</td></tr>
+  <tr><td><b>768 md</b></td><td>Seller and customer web switch to the sidebar</td></tr>
+  <tr><td><b>1024 lg</b></td><td>Three columns, tables show every column</td></tr>
+  <tr><td><b>1280 xl</b></td><td>Content max width 1200 and centred</td></tr></tbody></table></div>
+<div class="cz-section"><p class="cz-h">Motion</p>
+  <div class="mo">
+    <div><div class="t-h3">Fast · 150ms</div><div class="track"><i class="ball fast"></i></div><div class="hint">Hover, press, switch, chip select</div></div>
+    <div><div class="t-h3">Sheet · 180ms</div><div class="track"><i class="ball sheet"></i></div><div class="hint">Sheets and dialogs slide in, ease-out; the scrim fades over the same time</div></div>
+    <div><div class="t-h3">Normal · 220ms</div><div class="track"><i class="ball normal"></i></div><div class="hint">Page and content transitions, accordion open</div></div></div>
+  <p class="hint">Hover each track to play it. Ease-out for things entering, ease-in for leaving. Use only opacity and transform. With Reduce Motion on, replace movement with a plain fade or nothing. Never animate money counting up.</p></div>
+</div>
+
+<div class="cz-section"><p class="cz-h">Focus ring</p>
+<div class="cz-row" style="gap:28px">
+  <a class="btn is-focus">Accept order</a>
+  <a class="btn btn-secondary is-focus">Save as draft</a>
+  <input class="input is-focus" style="width:220px" value="Mama T's Kitchen" aria-label="Store name">
+  <span class="chip f-demo">Delivery</span></div>
+<p class="hint">2 to 3px ring in <code>primary</code> (4.56:1 on white, above the 3:1 non-text minimum) with a 2px offset on buttons; inputs get a 3px soft halo and a primary border. Shown with a keyboard or switch, never removed. Do not use the focus ring colour for selected state.</p></div>
+
+</div></div>
+<script>
+var S=[[1,4],[2,8],[3,12],[4,16],[5,20],[6,24],[8,32],[12,48]];
+document.getElementById('spacing').innerHTML=S.map(function(s){return '<div class="sp"><span>space-'+s[0]+'</span><span>'+s[1]+'px</span><i style="width:'+s[1]*3+'px"></i></div>'}).join('');
+var B=[['sm',640],['md',768],['lg',1024],['xl',1280]];
+document.getElementById('bps').innerHTML=B.map(function(b){return '<div class="bar"><i style="width:'+(b[1]/1280*100)+'%">'+b[0]+' '+b[1]+'</i></div>'}).join('');
+</script></body></html>

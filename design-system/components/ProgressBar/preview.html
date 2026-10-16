@@ -1,0 +1,65 @@
+<!-- @dsCard group="Data display" height=1019 subtitle="Linear progress with label, stepped progress and the profile-completion checklist progress" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ProgressBar</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.pl{display:flex;justify-content:space-between;font:500 13px/18px var(--font-web);margin-bottom:6px}
+.pl span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+.progress.ok>i{background:var(--success)}
+.progress.bad>i{background:var(--destructive)}
+.progress.lg{height:12px;border-radius:6px}
+.segs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.segs i{height:8px;border-radius:4px;background:var(--neutral-surface);display:block}
+.segs i.d{background:var(--primary)}
+.segs i.n{background:var(--primary-border)}
+.chk{display:grid;gap:0}
+.chk .it{display:flex;gap:12px;align-items:center;padding:11px 0;font:500 15px/20px var(--font-web)}
+.chk .it+.it{border-top:1px solid var(--hairline)}
+.chk .it .s{font:400 13px/18px var(--font-web);color:var(--muted)}
+.chk .it.done{color:var(--muted)}
+.chk .it.done .t{text-decoration:line-through}
+.chk .go{margin-left:auto}
+.ind{height:8px;border-radius:4px;background:var(--neutral-surface);overflow:hidden;position:relative}
+.ind i{position:absolute;top:0;bottom:0;width:35%;background:var(--primary);border-radius:4px;animation:cz-ind 1.2s ease-in-out infinite}
+@keyframes cz-ind{from{left:-35%}to{left:100%}}
+@media (prefers-reduced-motion:reduce){.ind i{animation:none;left:30%}}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Linear</p>
+<div class="g3">
+  <div class="cell"><span class="st">Default with label</span><div><div class="pl"><span>Uploading catalogue.csv</span><span>62%</span></div><div class="progress"><i style="width:62%"></i></div></div></div>
+  <div class="cell"><span class="st">Complete</span><div><div class="pl"><span>Upload complete</span><span>100%</span></div><div class="progress ok"><i style="width:100%"></i></div></div></div>
+  <div class="cell"><span class="st">Failed</span><div><div class="pl"><span>Upload failed at 38%</span><span>38%</span></div><div class="progress bad"><i style="width:38%"></i></div></div></div>
+  <div class="cell"><span class="st">Large, with amount</span><div><div class="pl"><span>Monthly sales goal</span><span>₽142,000 of ₽200,000</span></div><div class="progress lg"><i style="width:71%"></i></div></div></div>
+  <div class="cell"><span class="st">Indeterminate</span><div><div class="pl"><span>Checking your document</span><span>Please wait</span></div><div class="ind"><i></i></div></div></div>
+  <div class="cell"><span class="st">Empty</span><div><div class="pl"><span>Profile</span><span>0%</span></div><div class="progress"><i style="width:0"></i></div></div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Stepped: where you are in a flow</p>
+<div class="g2"><div class="cell"><span class="st">Step 2 of 4</span><div><div class="pl"><span>Business details</span><span>Step 2 of 4</span></div><div class="segs"><i class="d"></i><i class="d"></i><i class="n"></i><i></i></div></div></div>
+<div class="cell"><span class="st">Last step</span><div><div class="pl"><span>Review and submit</span><span>Step 4 of 4</span></div><div class="segs"><i class="d"></i><i class="d"></i><i class="d"></i><i class="n"></i></div></div></div></div></div>
+
+<div class="cz-section"><p class="cz-h">Checklist progress: set up your store</p>
+<div style="max-width:480px"><div class="pl"><span><b>3 of 5 steps done</b></span><span>60%</span></div><div class="progress" style="margin-bottom:10px"><i style="width:60%"></i></div>
+  <div class="chk">
+    <div class="it done"><span class="check on"><i data-i="check"></i></span><span class="t">Add store name and logo</span></div>
+    <div class="it done"><span class="check on"><i data-i="check"></i></span><span class="t">Add business documents</span></div>
+    <div class="it done"><span class="check on"><i data-i="check"></i></span><span class="t">Add bank details</span></div>
+    <div class="it"><span class="check"></span><div><div>Add your first product</div><div class="s">Takes about 3 minutes</div></div><a class="btn btn-secondary btn-sm go">Add product</a></div>
+    <div class="it"><span class="check"></span><div>Submit for review</div></div>
+  </div></div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Primary fill for work in progress; success only when finished, destructive only on failure.</li><li>Always pair the bar with a text value (percent, step, or amount).</li><li><code>role="progressbar"</code> with <code>aria-valuenow</code>; indeterminate omits the value.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't animate a fake progress; use indeterminate when unknown.</li><li>Don't use a bar for status: use a badge.</li><li>Don't make it thicker than 12px.</li></ul></div></div></div>
+
+</div></div></body></html>

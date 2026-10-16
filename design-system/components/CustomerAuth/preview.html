@@ -1,0 +1,173 @@
+<!-- @dsCard group="Customer app · Screens" height=2959 width=1300 subtitle="Sign in, register and PIN screens with wrong-password, locked, duplicate-email and wrong-PIN errors, plus Russian and Chinese with the language row" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CustomerAuth</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.phone.native *{font-family:var(--font-native)}
+.cz-grid{gap:40px}
+.nt{font:700 24px/30px var(--font-native);letter-spacing:-.3px;margin:0}
+.nl{font:600 15px/20px var(--font-native)}
+.nm{font:400 13px/18px var(--font-native);color:var(--muted)}
+.nb{font:400 15px/22px var(--font-native)}
+.grow{flex:1;min-width:0}
+.pad{padding:0 16px}
+.plate{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card)}
+.plate.p{padding:14px 16px}
+.mt{padding:4px 20px 10px}
+.mg{padding:0 16px;margin-top:14px}
+.mgt{font:600 12px/16px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 4px 8px}
+.mrow{display:flex;align-items:center;gap:12px;padding:0 14px;min-height:52px}
+.mi{width:32px;height:32px;border-radius:10px;background:var(--neutral-surface);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.mi .ic{--s:18px}
+.mi.refer{background:var(--refer-surface);color:var(--refer)}
+.mi.ok{background:var(--success-surface);color:var(--success-text)}
+.mrow .chev{--s:18px;color:var(--subtle)}
+.mval{font:400 14px/20px var(--font-native);color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.mid2{display:flex;align-items:center;gap:14px;margin:6px 16px 0;padding:16px}
+.mid2 .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mid2 .t{font:700 18px/24px var(--font-native);display:flex;align-items:center;gap:6px}
+.mid2 .t .ic{--s:18px;color:var(--success-text)}
+.openchip{height:34px;padding:0 14px;border-radius:17px;background:var(--neutral-surface);display:inline-flex;align-items:center;font:600 13px/1 var(--font-native)}
+.out{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin-top:6px;font:600 15px/1 var(--font-native);color:var(--destructive-text)}
+.out .ic{--s:18px}
+.ver{text-align:center;font:400 12px/16px var(--font-native);color:var(--muted)}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+.ov .scrim{position:absolute;inset:0}
+.ov .sheet{position:relative;padding:0 16px 34px;display:grid;gap:4px}
+.ov .sheet .grab{margin:10px auto 8px}
+.ov .sheet h3{margin:0 4px 6px;font:700 18px/24px var(--font-native)}
+.lang{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 4px;border-top:1px solid var(--hairline)}
+.lang .t{font:600 16px/22px var(--font-native)}
+.lang .s{font:400 13px/18px var(--font-native);color:var(--muted)}
+.lang.on{background:var(--primary-tint);border-radius:12px;border-top-color:transparent;padding:0 12px;margin:0 -8px}
+.dlgw{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 28px}
+.dlgw .scrim{position:absolute;inset:0}
+.dlgw .dialog{position:relative;padding:22px 20px 18px;display:grid;gap:8px;width:100%}
+.dlgw h3{margin:0;font:700 18px/24px var(--font-native)}
+.dlgw p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.dlgw .acts{display:flex;gap:10px;margin-top:10px}
+.dlgw .acts .btn{flex:1}
+.x-ico{width:40px;height:40px;border-radius:12px;background:var(--neutral-surface);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.x-ico .ic{--s:20px}
+.x-ico.ok{background:var(--success-surface);color:var(--success-text)}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.sum .plate{padding:12px 14px}
+.sum .v{font:700 18px/24px var(--font-native);font-variant-numeric:tabular-nums}
+.srch{display:flex;align-items:center;gap:10px;margin:10px 16px 0;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native);color:var(--subtle)}
+.srch .ic{--s:18px;color:var(--muted)}
+.srch.f{color:var(--ink);border-color:var(--primary);box-shadow:0 0 0 3px rgba(205,75,14,.25)}
+.chips{display:flex;gap:8px;padding:10px 16px 2px;overflow:hidden}
+.chips .chip{font-family:var(--font-native);flex-shrink:0}
+.dh{font:600 12px/16px var(--font-native);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 20px 6px}
+.tx{display:flex;align-items:center;gap:12px;padding:10px 16px;min-height:68px;background:var(--surface);border-top:1px solid var(--hairline)}
+.tx:last-child{border-bottom:1px solid var(--hairline)}
+.tx.pr{background:var(--neutral-surface)}
+.tx .t{font:600 15px/20px var(--font-native);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx .s{font:400 13px/18px var(--font-native);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx .tr{display:grid;justify-items:end;gap:4px;flex-shrink:0}
+.tx .a{font:700 15px/20px var(--font-native);font-variant-numeric:tabular-nums}
+.tx .a.in{color:var(--success-text)}
+.tx .badge{height:22px;padding:0 8px;font-size:11px}
+.tx .badge .ic{--s:12px}
+.skr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--hairline);background:var(--surface)}
+.mid3{display:grid;justify-items:center;text-align:center;gap:8px;padding:44px 32px}
+.mid3 p{margin:0 0 10px;font:400 14px/20px var(--font-native);color:var(--muted)}
+.mid3 .nl{font-size:17px;line-height:22px}
+.mid3 .big{width:64px;height:64px;border-radius:50%;background:var(--neutral-surface);color:var(--muted);display:grid;place-items:center;margin-bottom:6px}
+.mid3 .big .ic{--s:28px}
+.mid3 .big.bad{background:var(--destructive-surface);color:var(--destructive-text)}
+.ban{margin:10px 16px 0;padding:10px 14px;font:400 13px/18px var(--font-native);display:flex;gap:10px;align-items:center;border-radius:var(--radius-card)}
+.ban .ic{--s:18px}
+.tgt{display:grid;gap:8px;margin:10px 16px 0;padding:12px 14px}
+.tgt div{display:flex;gap:10px;align-items:center;font:400 13px/18px var(--font-native);color:var(--muted)}
+.tgt b{font-weight:600;color:var(--ink)}
+.tgt .ic{--s:16px;color:var(--ink)}
+.atop{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 0;min-height:56px}
+.alogo{height:24px}
+.lg{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:20px;background:var(--surface);border:1px solid var(--hairline);font:600 14px/1 var(--font-native)}
+.lg .ic{--s:16px}
+.abk{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;margin-left:-10px}
+.abody{padding:10px 20px 0;display:grid;gap:14px;align-content:start}
+.abody h1{margin:0;font:700 28px/34px var(--font-native);letter-spacing:-.4px}
+.abody .sub{margin:-8px 0 0;font:400 15px/22px var(--font-native);color:var(--muted)}
+.fld{display:grid;gap:6px}
+.fld .l{font:600 14px/20px var(--font-native)}
+.fld .in{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border:1px solid var(--input-edge);border-radius:var(--radius-control);background:var(--surface);font:400 15px/1 var(--font-native)}
+.fld .in .ph2{color:var(--subtle)}
+.fld .in .grow{overflow:hidden;white-space:nowrap}
+.fld .in .ic{--s:20px;color:var(--muted)}
+.fld .in.bad{border-color:var(--destructive-text)}
+.fld .in.dis{background:var(--neutral-surface);color:var(--muted)}
+.fld .e{font:400 13px/18px var(--font-native);color:var(--destructive-text);display:flex;gap:6px;align-items:flex-start}
+.fld .e .ic{--s:15px;margin-top:2px}
+.fld .h{font:400 13px/18px var(--font-native);color:var(--muted)}
+.soc{display:grid;gap:10px}
+.soc .btn{font-family:var(--font-native);height:50px}
+.or{display:flex;align-items:center;gap:12px;font:400 13px/18px var(--font-native);color:var(--muted)}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--hairline)}
+.afoot{text-align:center;font:400 14px/20px var(--font-native);color:var(--muted)}
+.afoot a{font-weight:600}
+.flk{font:600 14px/20px var(--font-native);color:var(--primary-text);justify-self:start;min-height:32px;display:inline-flex;align-items:center}
+.rules{display:grid;gap:4px}
+.rules div{display:flex;gap:8px;align-items:center;font:400 13px/18px var(--font-native);color:var(--muted)}
+.rules .ic{--s:15px}
+.rules .ok{color:var(--success-text)}
+.rules .ok .ic{color:var(--success-text)}
+.terms{display:flex;gap:10px;align-items:flex-start;font:400 14px/20px var(--font-native)}
+.pinw{display:grid;justify-items:center;gap:8px;padding:14px 20px 0;text-align:center}
+.pinw .avatar{width:64px;height:64px;font-size:22px}
+.pinw h1{margin:6px 0 0;font:700 22px/28px var(--font-native)}
+.pinw p{margin:0;font:400 14px/20px var(--font-native);color:var(--muted)}
+.pdots{display:flex;gap:18px;margin:18px 0 6px}
+.pdots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--input-edge);display:block}
+.pdots i.on{background:var(--ink);border-color:var(--ink)}
+.pdots.bad i{border-color:var(--destructive-text)}
+.pdots.bad i.on{background:var(--destructive-text);border-color:var(--destructive-text)}
+.pkeys{display:grid;grid-template-columns:repeat(3,72px);gap:12px 28px;margin-top:18px;justify-content:center}
+.pkeys span{width:72px;height:72px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;font:600 28px/1 var(--font-native);font-variant-numeric:tabular-nums}
+.pkeys span.z{background:transparent;border-color:transparent}
+.pkeys span .ic{--s:24px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Sign in</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><img class="alogo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><span class="lg"><i data-i="globe"></i>English<i data-i="chevron-down"></i></span></div><div class="abody"><h1>Welcome back</h1><div class="soc"><a class="btn btn-secondary btn-block">Sign in with Apple</a><a class="btn btn-secondary btn-block">Sign in with Google</a></div><div class="or">Or</div>
+<div class="fld"><div class="l">Email</div><div class="in"><span class="grow ph2">you@example.com</span></div></div>
+<div class="fld"><div class="l">Password</div><div class="in"><span class="grow ph2">Enter your password</span><i data-i="eye"></i></div></div>
+<a class="flk">Forgot password?</a>
+<a class="btn btn-lg btn-block">Sign in</a>
+<div class="afoot">Don't have an account? <a>Sign up</a></div></div></div><div class="homebar"></div></div><div class="cz-note">Apple and Google are outline buttons, then Or, email and password, forgot link and one orange Sign in. Language row top right.</div></div>
+<div class="cz-col"><div class="cz-cap">Sign in, wrong password</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><img class="alogo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><span class="lg"><i data-i="globe"></i>English<i data-i="chevron-down"></i></span></div><div class="abody"><h1>Welcome back</h1><div class="soc"><a class="btn btn-secondary btn-block">Sign in with Apple</a><a class="btn btn-secondary btn-block">Sign in with Google</a></div><div class="or">Or</div>
+<div class="fld"><div class="l">Email</div><div class="in"><span class="grow ">amara.okafor@gmail.com</span></div></div>
+<div class="fld"><div class="l">Password</div><div class="in bad"><span class="grow ">••••••••</span><i data-i="eye"></i></div><div class="e"><i data-i="triangle-alert"></i><span>Email or password is incorrect. Check both and try again.</span></div></div>
+<a class="flk">Forgot password?</a>
+<a class="btn btn-lg btn-block">Sign in</a>
+<div class="afoot">Don't have an account? <a>Sign up</a></div></div></div><div class="homebar"></div></div><div class="cz-note">Error sits under the field it concerns, in words and an icon, with a red border. The email stays filled.</div></div>
+<div class="cz-col"><div class="cz-cap">Sign in, account locked</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><img class="alogo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><span class="lg"><i data-i="globe"></i>English<i data-i="chevron-down"></i></span></div><div class="abody"><h1>Welcome back</h1><div class="banner banner-warning" style="font:400 14px/20px var(--font-native)"><i data-i="lock"></i><div><b>Too many attempts</b>Try again in 14 minutes, or reset your password.</div></div><div class="soc"><a class="btn btn-secondary btn-block">Sign in with Apple</a><a class="btn btn-secondary btn-block">Sign in with Google</a></div><div class="or">Or</div>
+<div class="fld"><div class="l">Email</div><div class="in dis"><span class="grow ">amara.okafor@gmail.com</span></div></div>
+<div class="fld"><div class="l">Password</div><div class="in dis"><span class="grow ">••••••••</span><i data-i="eye"></i></div></div>
+<a class="flk">Forgot password?</a>
+<a class="btn btn-lg btn-block is-disabled">Sign in</a>
+<div class="afoot">Don't have an account? <a>Sign up</a></div></div></div><div class="homebar"></div></div><div class="cz-note">After repeated failures the form is disabled and the banner says exactly when to retry. Apple and Google sign in stay available.</div></div>
+<div class="cz-col"><div class="cz-cap">Register</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><span class="abk"><i data-i="chevron-left"></i></span><span class="lg"><i data-i="globe"></i>English<i data-i="chevron-down"></i></span></div><div class="abody"><h1>Create your account</h1><div class="soc"><a class="btn btn-secondary btn-block">Sign up with Apple</a><a class="btn btn-secondary btn-block">Sign up with Google</a></div><div class="or">Or</div>
+<div class="fld"><div class="l">Full name</div><div class="in"><span class="grow ">Chen Hui</span></div></div><div class="fld"><div class="l">Email</div><div class="in"><span class="grow ">chen.hui@163.com</span></div></div><div class="fld"><div class="l">Password</div><div class="in"><span class="grow ">••••••••</span><i data-i="eye"></i></div></div>
+<div class="rules"><div class="ok"><i data-i="circle-check-big"></i>At least 8 characters</div><div><i data-i="circle"></i>One number or symbol</div></div>
+<div class="terms"><span class="check on"><i data-i="check"></i></span><span>I agree to the <a>Terms</a> and <a>Privacy policy</a></span></div>
+<a class="btn btn-lg btn-block">Create account</a></div></div><div class="homebar"></div></div><div class="cz-note">Password rules tick off as the user types. Create account stays enabled only once the terms box is ticked.</div></div>
+<div class="cz-col"><div class="cz-cap">Register, email already used</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><span class="abk"><i data-i="chevron-left"></i></span><span class="lg"><i data-i="globe"></i>English<i data-i="chevron-down"></i></span></div><div class="abody"><h1>Create your account</h1><div class="soc"><a class="btn btn-secondary btn-block">Sign up with Apple</a><a class="btn btn-secondary btn-block">Sign up with Google</a></div><div class="or">Or</div>
+<div class="fld"><div class="l">Full name</div><div class="in"><span class="grow ">Sofia Ramirez</span></div></div><div class="fld"><div class="l">Email</div><div class="in bad"><span class="grow ">sofia.ramirez@gmail.com</span></div><div class="e"><i data-i="triangle-alert"></i><span>This email already has an account. Sign in instead.</span></div></div><div class="fld"><div class="l">Password</div><div class="in"><span class="grow ">••••••••••</span><i data-i="eye"></i></div></div>
+<div class="rules"><div class="ok"><i data-i="circle-check-big"></i>At least 8 characters</div><div class="ok"><i data-i="circle-check-big"></i>One number or symbol</div></div>
+<div class="terms"><span class="check on"><i data-i="check"></i></span><span>I agree to the <a>Terms</a> and <a>Privacy policy</a></span></div>
+<a class="btn btn-lg btn-block">Create account</a></div></div><div class="homebar"></div></div><div class="cz-note">The error says what to do and the message links back to Sign in. Nothing the user typed is cleared.</div></div>
+<div class="cz-col"><div class="cz-cap">PIN, entering</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><img class="alogo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><span class="lg"><i data-i="globe"></i>English<i data-i="chevron-down"></i></span></div><div class="pinw"><span class="avatar">SR</span><h1>Welcome back, Sofia</h1><p>Enter your PIN to open Ciuna</p><div class="pdots"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></div><div class="pkeys"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span class="z"></span><span>0</span><span><i data-i="arrow-left"></i></span></div><a class="flk" style="margin-top:14px;justify-self:center">Forgot PIN? Sign in with password</a></div></div><div class="homebar"></div></div><div class="cz-note">Four dots, a 72px keypad and a way out. The dots fill in ink, not orange. Biometrics, when enabled, prompt before this screen.</div></div>
+<div class="cz-col"><div class="cz-cap">PIN, wrong</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><img class="alogo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><span class="lg"><i data-i="globe"></i>English<i data-i="chevron-down"></i></span></div><div class="pinw"><span class="avatar">SR</span><h1>Welcome back, Sofia</h1><p>Wrong PIN. 2 attempts left.</p><div class="pdots bad"><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="pkeys"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span class="z"></span><span>0</span><span><i data-i="arrow-left"></i></span></div><a class="flk" style="margin-top:14px;justify-self:center">Forgot PIN? Sign in with password</a></div></div><div class="homebar"></div></div><div class="cz-note">Dots turn red and clear; the message states the attempts left. After the last attempt the user signs in with their password.</div></div>
+<div class="cz-col"><div class="cz-cap">Russian</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><img class="alogo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><span class="lg"><i data-i="globe"></i>Русский<i data-i="chevron-down"></i></span></div><div class="abody"><h1>С возвращением</h1><div class="soc"><a class="btn btn-secondary btn-block">Войти через Apple</a><a class="btn btn-secondary btn-block">Войти через Google</a></div><div class="or">Или</div>
+<div class="fld"><div class="l">Эл. почта</div><div class="in"><span class="grow ph2">you@example.com</span></div></div>
+<div class="fld"><div class="l">Пароль</div><div class="in"><span class="grow ph2">Введите пароль</span><i data-i="eye"></i></div></div>
+<a class="flk">Забыли пароль?</a>
+<a class="btn btn-lg btn-block">Войти</a>
+<div class="afoot">Нет аккаунта? <a>Зарегистрироваться</a></div></div></div><div class="homebar"></div></div><div class="cz-note">Longer labels (Войти через Google, Зарегистрироваться) fit without truncation. The language chip shows the current language in its own script.</div></div>
+<div class="cz-col"><div class="cz-cap">Chinese, language sheet</div><div class="phone native"><div class="statusbar"><span>9:41</span><span class="r"><i data-i="signal"></i><i data-i="wifi"></i><i data-i="battery-full"></i></span></div><div class="screen"><div class="atop"><img class="alogo" src="../../assets/logos/ciuna.svg" alt="Ciuna"><span class="lg"><i data-i="globe"></i>中文<i data-i="chevron-down"></i></span></div><div class="abody"><h1>欢迎回来</h1><div class="soc"><a class="btn btn-secondary btn-block">通过 Apple 登录</a><a class="btn btn-secondary btn-block">通过 Google 登录</a></div><div class="or">或</div>
+<div class="fld"><div class="l">邮箱</div><div class="in"><span class="grow ph2">you@example.com</span></div></div>
+<div class="fld"><div class="l">密码</div><div class="in"><span class="grow ph2">请输入密码</span><i data-i="eye"></i></div></div>
+<a class="flk">忘记密码？</a>
+<a class="btn btn-lg btn-block">登录</a>
+<div class="afoot">还没有账户？ <a>注册</a></div></div><div class="ov"><div class="scrim"></div><div class="sheet"><div class="grab"></div><h3>语言 / Language</h3><div class="lang"><div class="grow"><div class="t">English</div><div class="s">English</div></div><span class="radio"></span></div><div class="lang"><div class="grow"><div class="t">Русский</div><div class="s">Russian</div></div><span class="radio"></span></div><div class="lang"><div class="grow"><div class="t">Français</div><div class="s">French</div></div><span class="radio"></span></div><div class="lang"><div class="grow"><div class="t">Español</div><div class="s">Spanish</div></div><span class="radio"></span></div><div class="lang on"><div class="grow"><div class="t">中文</div><div class="s">Chinese</div></div><span class="radio on"></span></div><div class="lang"><div class="grow"><div class="t">Português</div><div class="s">Portuguese</div></div><span class="radio"></span></div></div></div></div><div class="homebar"></div></div><div class="cz-note">The chip opens the same six-language sheet used in Account. The choice is saved on the device before sign in.</div></div>
+</div></div></body></html>

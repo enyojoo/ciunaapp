@@ -1,0 +1,29 @@
+<!-- @dsCard group="Marketplace" height=771 width=900 subtitle="Block a date range for one service or all: form, confirm dialog with scope and time zone, and the result" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>TimeOffPanel</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.dlg{padding:24px;display:grid;gap:12px;width:100%;max-width:400px}
+.stk{display:grid;gap:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+<div class="cols">
+<div class="stk"><div class="cz-cap" style="text-align:left">Form</div>
+<div class="card"><div class="card-h"><div><h3>Time off</h3><div class="t-meta">Block all open slots in a date range. Sessions already booked stay as they are.</div></div></div>
+<div class="card-b stk"><div class="g2"><div class="field"><span class="label">First day off</span><input class="input" value="Nov 2, 2026"></div><div class="field"><span class="label">Last day off</span><input class="input" value="Nov 6, 2026"></div></div>
+<div class="field"><span class="label">Service</span><select class="select"><option>All services</option></select></div>
+<span class="hint">Whole days in MSK.</span>
+<a class="btn btn-secondary" style="justify-self:start">Block these dates</a></div></div>
+<div class="card"><div class="card-b stk"><div class="field"><span class="label">Last day off</span><input class="input is-error" value="Oct 30, 2026"><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>The end date must be on or after the start date.</span></div></div></div></div>
+<div class="stk"><div class="cz-cap" style="text-align:left">Confirm, then result</div>
+<div class="dialog dlg" style="box-shadow:var(--shadow-md);border:1px solid var(--hairline)"><h3 class="t-h2" style="margin:0">Block Nov 2 to Nov 6?</h3><p class="t-body" style="margin:0;color:var(--muted)">All open slots for all services in this range will be blocked (time zone MSK). You can unblock them one by one.</p>
+<div style="display:flex;gap:10px;justify-content:flex-end"><a class="btn btn-secondary">Cancel</a><a class="btn">Block dates</a></div></div>
+<div class="toast"><i data-i="circle-check-big" style="--s:18px"></i>28 slots blocked.</div>
+<div class="banner banner-neutral"><div><b>Booked sessions are kept</b>Two sessions on Nov 3 and Nov 5 are already booked. Message those customers if you need to reschedule.</div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Say that booked sessions stay, and list the ones inside the range.</li><li>Name the scope (this service or all) and the time zone in the confirm.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't cancel bookings from this panel.</li><li>Don't block without a confirm; it removes many slots at once.</li></ul></div></div>
+</div></div></body></html>

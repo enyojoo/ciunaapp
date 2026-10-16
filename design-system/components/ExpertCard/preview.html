@@ -1,0 +1,85 @@
+<!-- @dsCard group="Marketplace" height=1080 subtitle="Expert in the directory: photo, headline, language codes, rating, from-price and next availability; unavailable, long text and compact variants" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ExpertCard</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.ex{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px;display:grid;gap:12px;font-family:var(--font-native)}
+.ex .top{display:flex;gap:12px;align-items:flex-start}
+.ex .grow{flex:1;min-width:0;display:grid;gap:2px}
+.ex .nm{display:flex;align-items:center;gap:5px;font:700 16px/22px var(--font-native);min-width:0}
+.ex .vi{display:inline-flex;color:var(--success-text);flex-shrink:0}.ex .vi .ic{--s:16px}
+.ex .hl{font:400 14px/19px var(--font-native);color:var(--muted)}
+.ex .rl{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+.ex .rt{display:inline-flex;align-items:center;gap:4px;font:600 13px/18px var(--font-native)}
+.ex .rt .ic{--s:13px;fill:var(--primary-text);color:var(--primary-text)}
+.ex .rt .c{font-weight:400;color:var(--muted)}
+.ex .langs{display:inline-flex;gap:4px}
+.ex .langs b{font:700 11px/1 var(--font-native);letter-spacing:.04em;padding:4px 6px;border-radius:6px;background:var(--neutral-surface);color:var(--neutral-text)}
+.ex .heart{box-shadow:none;border:1px solid var(--hairline);background:var(--surface);flex-shrink:0}
+.ex .bot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:12px;border-top:1px solid var(--hairline)}
+.ex .pr{font:700 16px/22px var(--font-native)}
+.ex .nx{display:inline-flex;align-items:center;gap:6px;font:600 13px/18px var(--font-native);color:var(--success-text)}
+.ex .nx .ic{--s:15px}
+.ex .nx.none{color:var(--muted)}
+.ex.off .top .ph{filter:grayscale(1)}
+.ex .btn{width:100%}
+.mini-ex{display:flex;align-items:center;gap:10px;padding:10px;width:260px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);font-family:var(--font-native)}
+.mini-ex .grow{flex:1;min-width:0}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:1000px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Default</div><div class="ex " style="width:358px">
+  <div class="top"><div class="ph ph-4" style="width:72px;height:72px;border-radius:16px;flex-shrink:0"><i data-i="user-round"></i></div>
+  <div class="grow"><div class="nm"><span class="trunc">Dr. Amina Yusuf</span><span class="vi" role="img" aria-label="Verified seller"><i data-i="badge-check"></i></span></div>
+  <div class="hl trunc">Immigration lawyer · residence permits, work visas</div>
+  <div class="rl"><span class="rt"><i data-i="star"></i>4.9<span class="c">(86)</span></span><span class="langs" aria-label="Languages: EN FR RU"><b>EN</b><b>FR</b><b>RU</b></span></div></div>
+  <span class="heart "><i data-i="heart"></i></span></div>
+  <div class="bot"><div class="pr"><span class="t-meta" style="font-weight:400">From</span> ₽2,500 <span class="t-meta" style="font-weight:400">/ hr</span></div><div class="nx "><i data-i="clock"></i>Today 18:30 MSK</div></div>
+  </div></div>
+<div class="cz-col"><div class="cz-cap">Favourite, tutor</div><div class="ex " style="width:358px">
+  <div class="top"><div class="ph ph-2" style="width:72px;height:72px;border-radius:16px;flex-shrink:0"><i data-i="user-round"></i></div>
+  <div class="grow"><div class="nm"><span class="trunc">Li Wei</span><span class="vi" role="img" aria-label="Verified seller"><i data-i="badge-check"></i></span></div>
+  <div class="hl trunc">Russian tutor · exams, daily conversation</div>
+  <div class="rl"><span class="rt"><i data-i="star"></i>4.8<span class="c">(142)</span></span><span class="langs" aria-label="Languages: ZH EN RU"><b>ZH</b><b>EN</b><b>RU</b></span></div></div>
+  <span class="heart on"><i data-i="heart"></i></span></div>
+  <div class="bot"><div class="pr"><span class="t-meta" style="font-weight:400">From</span> ₽1,200 <span class="t-meta" style="font-weight:400">/ hr</span></div><div class="nx "><i data-i="clock"></i>Tomorrow 10:00 MSK</div></div>
+  </div></div>
+<div class="cz-col"><div class="cz-cap">Unavailable</div><div class="ex off" style="width:358px">
+  <div class="top"><div class="ph ph-6" style="width:72px;height:72px;border-radius:16px;flex-shrink:0"><i data-i="user-round"></i></div>
+  <div class="grow"><div class="nm"><span class="trunc">Carlos Mendes</span><span class="vi" role="img" aria-label="Verified seller"><i data-i="badge-check"></i></span></div>
+  <div class="hl trunc">Sworn translator · ES, PT to RU</div>
+  <div class="rl"><span class="rt"><i data-i="star"></i>4.7<span class="c">(59)</span></span><span class="langs" aria-label="Languages: ES PT RU"><b>ES</b><b>PT</b><b>RU</b></span></div></div>
+  <span class="heart "><i data-i="heart"></i></span></div>
+  <div class="bot"><div class="pr"><span class="t-meta" style="font-weight:400">From</span> ₽900 <span class="t-meta" style="font-weight:400">/ page</span></div><div class="nx none"><i data-i="calendar-days"></i>No slots this week</div></div>
+  <a class="btn btn-secondary">Notify me</a></div><div class="cz-note">Photo greyscale, next-availability line replaced, Book is swapped for Notify me</div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:1000px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">Long Russian text</div><div class="ex " style="width:358px">
+  <div class="top"><div class="ph ph-5" style="width:72px;height:72px;border-radius:16px;flex-shrink:0"><i data-i="user-round"></i></div>
+  <div class="grow"><div class="nm"><span class="clamp2">Екатерина Владимировна Сидорова-Адеола</span><span class="vi" role="img" aria-label="Verified seller"><i data-i="badge-check"></i></span></div>
+  <div class="hl clamp2">Юрист по миграционному праву: ВНЖ, РВП, гражданство, трудовые патенты, консультации на русском и английском</div>
+  <div class="rl"><span class="rt"><i data-i="star"></i>4.9<span class="c">(211)</span></span><span class="langs" aria-label="Languages: RU EN"><b>RU</b><b>EN</b></span></div></div>
+  <span class="heart "><i data-i="heart"></i></span></div>
+  <div class="bot"><div class="pr"><span class="t-meta" style="font-weight:400">От</span> ₽3,000 <span class="t-meta" style="font-weight:400">/ час</span></div><div class="nx "><i data-i="clock"></i>Сегодня 19:00 МСК</div></div>
+  </div></div>
+<div class="cz-col"><div class="cz-cap">Unverified, new</div><div class="ex " style="width:358px">
+  <div class="top"><div class="ph ph-3" style="width:72px;height:72px;border-radius:16px;flex-shrink:0"><i data-i="user-round"></i></div>
+  <div class="grow"><div class="nm"><span class="trunc">Hassan Al-Farouq</span></div>
+  <div class="hl trunc">Arabic tutor · beginners</div>
+  <div class="rl"><span class="rt"><span class="c">New</span></span><span class="langs" aria-label="Languages: AR EN"><b>AR</b><b>EN</b></span></div></div>
+  <span class="heart "><i data-i="heart"></i></span></div>
+  <div class="bot"><div class="pr"><span class="t-meta" style="font-weight:400">From</span> ₽1,000 <span class="t-meta" style="font-weight:400">/ hr</span></div><div class="nx "><i data-i="clock"></i>Fri 12:00 MSK</div></div>
+  </div><div class="cz-note">New experts show no rating until their first review</div></div>
+<div class="cz-col"><div class="cz-cap">Compact (search suggestion)</div><div class="mini-ex"><div class="ph ph-4" style="width:48px;height:48px;border-radius:12px;flex-shrink:0"><i data-i="user-round"></i></div><div class="grow"><div class="t-h3 trunc" style="font-family:var(--font-native)">Dr. Amina Yusuf</div><div class="t-meta trunc">Immigration lawyer · EN FR RU</div></div><i data-i="chevron-right" style="--s:18px;color:var(--subtle)"></i></div></div>
+</div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>Show languages as 2-letter codes the viewer can filter by.</li><li>Show the next free slot in the viewer's time zone, with the zone.</li><li>Keep an unavailable expert listed, with Notify me.</li><li>Lead the headline with the profession, then the speciality.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Show a flag for a language; flags mean countries.</li><li>Show 0.0 or empty stars for a new expert; show "New".</li><li>Hide the price; always show From and the unit.</li><li>Use a stock photo; the photo is the expert's own or the placeholder.</li></ul></div></div></div></body></html>

@@ -1,0 +1,47 @@
+<!-- @dsCard group="Feedback" height=1301 subtitle="Inline banners: neutral, warning, destructive and success with title, body and action, plus the seller store status banners" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Alert</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.al{align-items:flex-start;gap:12px}
+.al .ic{margin-top:1px}
+.al .body{flex:1;min-width:0}
+.al .body span{display:block;font-weight:400;margin-top:2px}
+.al .acts{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.al .btn-secondary{background:var(--surface);color:var(--ink)}
+.al .x{width:32px;height:32px;display:grid;place-items:center;border-radius:8px}
+.stack{display:grid;gap:12px}
+.banner-inline{border-radius:12px;padding:10px 14px;font-size:13px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Variants</p><div class="stack">
+  <div class="banner banner-neutral al"><i data-i="info"></i><div class="body"><b>Statements are generated on the 1st</b><span>Your August statement will be ready on Sep 1. Payouts are not affected.</span></div><div class="acts"><a class="btn btn-secondary btn-sm">View schedule</a></div></div>
+  <div class="banner banner-warning al"><i data-i="triangle-alert"></i><div class="body"><b>3 orders are waiting for you</b><span>Accept within 10 minutes to keep your response rate.</span></div><div class="acts"><a class="btn btn-secondary btn-sm">Open orders</a></div></div>
+  <div class="banner banner-destructive al"><i data-i="circle"></i><div class="body"><b>Payout to ••4821 failed</b><span>The bank returned the transfer. Check the account details and try again.</span></div><div class="acts"><a class="btn btn-secondary btn-sm">Update bank details</a></div></div>
+  <div class="banner banner-success al"><i data-i="circle-check-big"></i><div class="body"><b>Payout sent</b><span>₽18,400 is on its way to ••4821. It usually arrives within a day.</span></div><div class="acts"><span class="x"><i data-i="x" style="--s:18px"></i></span></div></div>
+</div>
+<p class="hint">Icon plus title carry the meaning. Title is one short line, body one or two sentences, at most one action. Success banners are dismissible; warning and destructive stay until the cause is fixed.</p></div>
+
+<div class="cz-section"><p class="cz-h">Seller shell: store status banners (top of every Seller page)</p><div class="stack">
+  <div class="banner banner-neutral al"><i data-i="pencil"></i><div class="body"><b>Draft: your store is not visible yet</b><span>Finish your profile, add a product and submit for review.</span></div><div class="acts"><a class="btn btn-sm">Continue setup</a></div></div>
+  <div class="banner banner-warning al"><i data-i="hourglass"></i><div class="body"><b>In review</b><span>We usually answer within one business day. You can keep editing; your store goes live once approved.</span></div></div>
+  <div class="banner banner-destructive al"><i data-i="circle"></i><div class="body"><b>Rejected: registration document is unreadable</b><span>Upload a clearer scan of your registration certificate and resubmit.</span></div><div class="acts"><a class="btn btn-secondary btn-sm">Fix and resubmit</a></div></div>
+  <div class="banner banner-destructive al"><i data-i="shield-alert"></i><div class="body"><b>Suspended</b><span>Your store is hidden and payouts are on hold. Contact support with reference SUP-2044.</span></div><div class="acts"><a class="btn btn-secondary btn-sm">Contact support</a></div></div>
+  <div class="banner banner-neutral al"><i data-i="clock"></i><div class="body"><b>Paused: customers cannot order</b><span>Your store shows as "Back soon". Existing orders continue as normal.</span></div><div class="acts"><a class="btn btn-secondary btn-sm">Resume orders</a></div></div>
+</div>
+<div class="g2" style="margin-top:4px"><div class="t-meta">Mapping: Draft and Paused are neutral; In review is warning; Rejected and Suspended are destructive. Live shows no banner.</div><div class="t-meta">On phones the action drops below the text at full width, and the banner scrolls away with the page (it is not sticky).</div></div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>One banner per cause; the most severe sits on top.</li><li>Say what happened and what to do. Name the amount or order.</li><li>Use a toast for confirmation of an action; use a banner for a state that persists.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't stack more than two banners.</li><li>Don't use orange: it is not a status colour.</li><li>Don't name payment providers in seller banners.</li><li>Don't use exclamation marks on money or status.</li></ul></div></div></div>
+
+</div></div></body></html>

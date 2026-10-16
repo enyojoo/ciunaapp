@@ -1,0 +1,47 @@
+<!-- @dsCard group="Data display" height=928 subtitle="Numbered pagination for tables and a load-more button for phone lists, with first, middle, last and loading states" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Pagination</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.pgn{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.pgn .info{font:400 13px/18px var(--font-web);color:var(--muted)}
+.pg{display:inline-flex;gap:4px;align-items:center}
+.pg span{min-width:36px;height:36px;padding:0 8px;border-radius:10px;display:inline-grid;place-items:center;font:600 14px/1 var(--font-web);color:var(--ink);border:1px solid transparent}
+.pg span.on{background:var(--primary);color:#fff}
+.pg span.arrow{border-color:var(--input-edge);background:var(--surface)}
+.pg span.dis{opacity:.4}
+.pg span.gap{color:var(--muted);min-width:20px;padding:0}
+.size{display:flex;align-items:center;gap:8px;font:500 13px/1 var(--font-web);color:var(--muted)}
+.size .select{width:80px;height:36px;font-size:14px}
+.lm{display:grid;gap:10px;justify-items:center;width:360px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Numbered: tables on desktop</p>
+<div class="cell"><span class="st">First page</span><div class="pgn"><span class="info">Showing 1–20 of 248 orders</span><div class="pg"><span class="arrow dis"><i data-i="chevron-left" style="--s:16px"></i></span><span class="on">1</span><span>2</span><span>3</span><span>4</span><span class="gap">…</span><span>13</span><span class="arrow"><i data-i="chevron-right" style="--s:16px"></i></span></div></div></div>
+<hr class="divider">
+<div class="cell"><span class="st">Middle page</span><div class="pgn"><span class="info">Showing 101–120 of 248 orders</span><div class="pg"><span class="arrow"><i data-i="chevron-left" style="--s:16px"></i></span><span>1</span><span class="gap">…</span><span>5</span><span class="on">6</span><span>7</span><span class="gap">…</span><span>13</span><span class="arrow"><i data-i="chevron-right" style="--s:16px"></i></span></div></div></div>
+<hr class="divider">
+<div class="cell"><span class="st">Last page, with page size</span><div class="pgn"><div class="size">Rows per page<select class="select"><option>20</option></select></div><span class="info">Showing 241–248 of 248</span><div class="pg"><span class="arrow"><i data-i="chevron-left" style="--s:16px"></i></span><span>1</span><span class="gap">…</span><span>11</span><span>12</span><span class="on">13</span><span class="arrow dis"><i data-i="chevron-right" style="--s:16px"></i></span></div></div></div></div>
+
+<div class="cz-section"><p class="cz-h">Load more: phone lists and feeds</p>
+<div class="cz-grid" style="justify-content:flex-start">
+  <div class="cell lm"><span class="st">Ready</span><span class="t-meta">Showing 20 of 248</span><a class="btn btn-secondary btn-block">Show 20 more</a></div>
+  <div class="cell lm"><span class="st">Loading</span><span class="t-meta">Showing 20 of 248</span><a class="btn btn-secondary btn-block is-busy"><span class="spinner"></span>Loading</a></div>
+  <div class="cell lm"><span class="st">End of list</span><span class="t-meta">You have seen all 248 orders</span></div>
+  <div class="cell lm"><span class="st">Error</span><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Could not load more orders</span><a class="btn btn-secondary btn-block"><i data-i="refresh-cw"></i>Try again</a></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>Numbered pagination where people compare or return to rows (tables, Office). Load more on phones.</li><li>Always show the count: "Showing 1–20 of 248".</li><li>Current page is filled and has <code>aria-current="page"</code>; arrows are 36px (48 on touch).</li><li>Keep scroll position when loading more; never jump to the top.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use infinite scroll in tables or anywhere with a footer people need.</li><li>Don't show more than seven page buttons; collapse with an ellipsis.</li><li>Don't hide the arrows on the first and last page: dim them.</li></ul></div></div></div>
+
+</div></div></body></html>

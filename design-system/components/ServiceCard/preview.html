@@ -1,0 +1,51 @@
+<!-- @dsCard group="Marketplace" height=760 subtitle="A bookable service on an expert profile: hourly, fixed and quote pricing, online or in person, long title, fully booked" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ServiceCard</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.sv{width:358px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:16px;display:grid;gap:10px;font-family:var(--font-native)}
+.sv .t1{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.sv .tt{font:700 16px/22px var(--font-native)}
+.sv .ds{font:400 14px/20px var(--font-native);color:var(--muted)}
+.sv .mt{display:flex;gap:14px;font:600 13px/18px var(--font-native);color:var(--neutral-text);flex-wrap:wrap}
+.sv .mt span{display:inline-flex;align-items:center;gap:6px}.sv .mt .ic{--s:15px;color:var(--muted)}
+.sv .ft{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid var(--hairline)}
+.sv .pr{font:700 18px/24px var(--font-native);font-variant-numeric:tabular-nums}
+.sv .pr small{font:400 13px/18px var(--font-native);color:var(--muted)}
+.sv .badge{flex-shrink:0}
+.sv.full .pr{color:var(--muted)}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:1000px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Hourly, online</div><div class="sv "><div class="t1"><div class="tt ">Residence permit consultation</div><span class="badge badge-neutral"><i data-i="video"></i>Online</span></div>
+  <div class="ds ">Check your documents and the next steps for a temporary or permanent residence permit.</div>
+  <div class="mt"><span><i data-i="clock"></i>45 min</span></div>
+  <div class="ft"><div class="pr">₽3,000 <small>/ hour</small></div><a class="btn">Book</a></div></div></div>
+<div class="cz-col"><div class="cz-cap">Fixed price, in person</div><div class="sv "><div class="t1"><div class="tt ">Certified translation of a passport</div><span class="badge badge-neutral"><i data-i="map-pin"></i>In person · Moscow</span></div>
+  <div class="ds ">Translation, notary signature and stamp. Ready in 2 working days.</div>
+  <div class="mt"><span><i data-i="clock"></i>2 days</span></div>
+  <div class="ft"><div class="pr">₽4,500</div><a class="btn">Book</a></div></div></div>
+<div class="cz-col"><div class="cz-cap">Quote</div><div class="sv "><div class="t1"><div class="tt ">Company registration support</div><span class="badge badge-neutral"><i data-i="video"></i>Online</span></div>
+  <div class="ds ">Sole trader or LLC. Describe your plan and the expert replies with a fixed price.</div>
+  <div class="mt"><span><i data-i="clock"></i>Varies</span></div>
+  <div class="ft"><div class="pr"><span style="font-size:15px">Price on request</span></div><a class="btn btn-secondary">Request quote</a></div></div></div>
+<div class="cz-col"><div class="cz-cap">Fully booked</div><div class="sv full"><div class="t1"><div class="tt ">Russian for beginners, 60 min</div><span class="badge badge-neutral"><i data-i="video"></i>Online</span></div>
+  <div class="ds ">A first lesson with a plan for your level and goals.</div>
+  <div class="mt"><span><i data-i="clock"></i>60 min</span></div>
+  <div class="ft"><div class="pr">₽1,200 <small>/ lesson</small></div><a class="btn is-disabled" aria-disabled="true">Fully booked</a></div></div><div class="cz-note">No slots in the next 30 days. Price is muted, the button names the reason</div></div>
+<div class="cz-col"><div class="cz-cap">Long Russian title</div><div class="sv "><div class="t1"><div class="tt clamp2">Сопровождение подачи документов на вид на жительство и получение гражданства РФ «под ключ»</div><span class="badge badge-neutral"><i data-i="map-pin"></i>In person · СПб</span></div>
+  <div class="ds clamp2">Подготовим пакет документов, проверим переводы, запишем вас на приём и будем на связи до получения решения.</div>
+  <div class="mt"><span><i data-i="clock"></i>3 мес.</span></div>
+  <div class="ft"><div class="pr">₽45,000</div><a class="btn">Book</a></div></div><div class="cz-note">Title clamps at two lines; the chip never wraps</div></div>
+</div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>Show duration, mode and price before the Book button.</li><li>Use "Request quote" as a secondary button when there is no fixed price.</li><li>Name a disabled Book button with its reason (Fully booked).</li><li>Name the city for in-person services.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Show ₽0 or a blank price for quotes.</li><li>Use "Buy" or "Order" for a booking.</li><li>Hide a fully booked service; offer Notify me on the profile instead.</li><li>Make the online chip orange; mode is information, not status.</li></ul></div></div></div></body></html>

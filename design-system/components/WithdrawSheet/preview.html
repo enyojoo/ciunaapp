@@ -1,0 +1,54 @@
+<!-- @dsCard group="Marketplace" height=1295 subtitle="Withdraw sheet: amount with Withdraw all, method, fee preview and you receive, minimum and timing, and the three errors" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>WithdrawSheet</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.ws{width:420px;background:var(--surface);border-radius:var(--radius-sheet);box-shadow:var(--shadow-lg);border:1px solid var(--hairline);display:grid}
+.ws .h{padding:20px 24px 4px}
+.ws .h h3{margin:0;font:700 20px/26px var(--font-web)}
+.ws .h p{margin:4px 0 0;font-size:14px;line-height:20px;color:var(--muted)}
+.ws .b{padding:16px 24px;display:grid;gap:14px}
+.ws .f{padding:14px 24px 20px;border-top:1px solid var(--hairline);display:flex;justify-content:flex-end;gap:10px}
+.amtrow{display:flex;gap:8px}
+.well{display:grid;gap:8px;border-radius:16px;background:var(--neutral-surface);padding:14px 16px;font-size:15px}
+.well .l{display:flex;justify-content:space-between;gap:12px}
+.well .l span:first-child{color:var(--muted)}
+.well .l span:last-child{font-variant-numeric:tabular-nums}
+.well .t{border-top:1px solid var(--hairline);padding-top:8px;font-weight:600}
+.well .t span:first-child{color:var(--ink)}
+.well .t span:last-child{font:700 20px/26px var(--font-web)}
+.g{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;align-items:flex-start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:24px">
+<div class="g">
+<div class="cz-col"><div class="cz-cap">Ready, with fee preview</div>
+<div class="ws"><div class="h"><h3>Withdraw</h3><p>Requests are reviewed on business days and sent within 1 business day.</p></div>
+<div class="b">
+<div class="field"><span class="label">Method</span><div class="select" style="display:flex;align-items:center">SBP · +7 999 ••• 42 17</div></div>
+<div class="field"><span class="label">Amount</span><div class="amtrow"><input class="input num" value="₽10,000" readonly><a class="btn btn-secondary">Withdraw all</a></div><span class="hint">Available ₽24,310 · Minimum ₽500</span></div>
+<div class="well"><div class="l"><span>You request</span><span>₽10,000.00</span></div><div class="l"><span>Payout fee</span><span>₽0.00</span></div><div class="l t"><span>You receive</span><span>₽10,000.00</span></div></div>
+</div><div class="f"><a class="btn btn-secondary">Cancel</a><a class="btn">Request withdrawal</a></div></div></div>
+
+<div class="cz-col"><div class="cz-cap">Empty, button off</div>
+<div class="ws"><div class="h"><h3>Withdraw</h3><p>Requests are reviewed on business days and sent within 1 business day.</p></div>
+<div class="b">
+<div class="field"><span class="label">Method</span><div class="select" style="display:flex;align-items:center">SBP · +7 999 ••• 42 17</div></div>
+<div class="field"><span class="label">Amount</span><div class="amtrow"><input class="input num" placeholder="0.00" readonly><a class="btn btn-secondary">Withdraw all</a></div><span class="hint">Available ₽24,310 · Minimum ₽500</span></div>
+</div><div class="f"><a class="btn btn-secondary">Cancel</a><a class="btn is-disabled">Request withdrawal</a></div></div></div>
+</div>
+<div class="g">
+<div class="cz-col"><div class="cz-cap">Error · more than available</div>
+<div class="ws"><div class="b" style="padding-top:20px">
+<div class="field"><span class="label">Amount</span><div class="amtrow"><input class="input num is-error" value="₽30,000" readonly><a class="btn btn-secondary">Withdraw all</a></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>You have ₽24,310 available. Enter that or less.</span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Error · below minimum</div>
+<div class="ws"><div class="b" style="padding-top:20px">
+<div class="field"><span class="label">Amount</span><div class="amtrow"><input class="input num is-error" value="₽300" readonly><a class="btn btn-secondary">Withdraw all</a></div><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>The minimum withdrawal is ₽500.</span></div></div></div></div>
+<div class="cz-col"><div class="cz-cap">Error · method not verified</div>
+<div class="ws"><div class="b" style="padding-top:20px">
+<div class="field"><span class="label">Method</span><div class="select is-disabled" style="display:flex;align-items:center;color:var(--muted)">No verified method</div></div>
+<div class="banner banner-warning"><span><b>Verify a payout method first</b>Bank account ••4410 is waiting for verification.</span><a class="btn btn-secondary btn-sm">Manage methods</a></div></div></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Show the fee and You receive before the seller confirms.</li><li>Keep Withdraw all next to the amount; it fills the available balance.</li><li>State the minimum and the timing sentence in the sheet itself.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't let unverified methods be chosen; explain and link to Manage methods.</li><li>Don't show the fee preview while the amount has an error.</li><li>Don't name payment providers or mention conversion; payouts are in one currency.</li></ul></div></div>
+</div></div></body></html>

@@ -1,0 +1,48 @@
+<!-- @dsCard group="Forms" height=1080 subtitle="Text, number with prefix and suffix, password, search, textarea and select, each in default, focus, filled, error, disabled and read-only" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Input</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.in-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.in-cell{display:grid;gap:6px;align-content:start}
+.in-st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.in-aff{position:relative}
+.in-aff .pre,.in-aff .suf{position:absolute;top:0;height:44px;display:flex;align-items:center;color:var(--muted);font:500 15px/1 var(--font-web)}
+.in-aff .pre{left:14px}.in-aff .suf{right:14px}
+.in-aff.p .input{padding-left:32px}.in-aff.s .input{padding-right:52px}
+.in-eye{position:absolute;right:4px;top:0;width:40px;height:44px;display:grid;place-items:center;color:var(--muted)}
+.in-wrap2{position:relative}
+.input.ro{background:var(--neutral-surface);border-color:var(--hairline)}
+.in-sel-open{border:1px solid var(--input-edge);border-radius:12px;background:var(--surface);box-shadow:var(--shadow-md);overflow:hidden;margin-top:4px}
+.in-sel-open div{padding:11px 14px;font-size:15px;display:flex;justify-content:space-between}
+.in-sel-open .cur{background:var(--primary-tint);color:var(--primary-text);font-weight:600}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--ink)}
+.rules li{margin:3px 0}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Text input: every state</p>
+<div class="in-grid">
+  <div class="in-cell"><span class="in-st">Default</span><label class="label">Store name <span class="req">Required</span></label><input class="input" placeholder="Mama T's Kitchen"><span class="hint">Shown on your store page and receipts.</span></div>
+  <div class="in-cell"><span class="in-st">Focus</span><label class="label">Store name</label><input class="input is-focus" value="Mama T's"><span class="hint">3px orange ring, 3:1 against the page.</span></div>
+  <div class="in-cell"><span class="in-st">Filled</span><label class="label">Store name</label><input class="input" value="Mama T's Kitchen"><span class="hint">Shown on your store page and receipts.</span></div>
+  <div class="in-cell"><span class="in-st">Error</span><label class="label">Phone number</label><input class="input is-error" value="495 12"><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter a 10-digit phone number</span></div>
+  <div class="in-cell"><span class="in-st">Disabled</span><label class="label">Store name</label><input class="input is-disabled" value="Mama T's Kitchen" disabled><span class="hint">Locked while your store is in review.</span></div>
+  <div class="in-cell"><span class="in-st">Read-only</span><label class="label">Order number</label><input class="input ro" value="CIU-1001" readonly><span class="hint">Can be selected and copied, not edited.</span></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Types</p>
+<div class="in-grid">
+  <div class="in-cell"><span class="in-st">Number, prefix</span><label class="label">Price</label><div class="in-aff p"><span class="pre">₽</span><input class="input num" inputmode="decimal" value="1,250"></div><span class="hint">Symbol sits inside, figures are tabular.</span></div>
+  <div class="in-cell"><span class="in-st">Number, suffix</span><label class="label">Preparation time</label><div class="in-aff s"><input class="input num" inputmode="numeric" value="25"><span class="suf">min</span></div><span class="hint">Used for the customer's due time.</span></div>
+  <div class="in-cell"><span class="in-st">Password with toggle</span><label class="label">Password</label><div class="in-wrap2"><input class="input" type="password" value="correcthorse" style="padding-right:48px"><span class="in-eye"><i data-i="eye" style="--s:20px"></i></span></div><span class="hint">At least 8 characters.</span></div>
+  <div class="in-cell"><span class="in-st">Search</span><label class="label">Search orders</label><div class="input-wrap"><i data-i="search"></i><input class="input" placeholder="Order number or customer"></div></div>
+  <div class="in-cell"><span class="in-st">Select</span><label class="label">Category</label><select class="select"><option>Food and groceries</option></select><div class="in-sel-open"><div class="cur">Food and groceries<i data-i="check" style="--s:16px"></i></div><div>Fashion and fabrics</div><div>Home and kitchen</div></div></div>
+  <div class="in-cell"><span class="in-st">Textarea, with counter</span><label class="label">Description</label><textarea class="textarea" style="min-height:84px">Home-style Nigerian cooking, made to order in Tverskoy. Jollof, egusi, suya.</textarea><span class="hint" style="text-align:right">76 / 500</span></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>A visible label above every field. Placeholder shows an example, never the label.</li><li>Input edge <code>input-edge</code> (3:1), height 44 desktop, 48 on phones.</li><li>Error text says what to fix, with an icon, under the field.</li><li><code>inputMode</code> for numbers and phones so the right keyboard opens.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't turn the border red alone: pair it with the error text.</li><li>Don't validate while the user is still typing; validate on blur or submit.</li><li>Don't use disabled to hide why something is locked: say why in the hint.</li><li>Don't put a unit in the label if a suffix can carry it.</li></ul></div></div></div>
+
+</div></div></body></html>

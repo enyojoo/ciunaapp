@@ -1,0 +1,44 @@
+<!-- @dsCard group="Marketplace" height=760 subtitle="Display sizes, count, no-reviews state and the input stars with hover, selected and focus states, plus the aria rule" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>RatingStars</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.native .btn,.native .chip,.native .badge,.native .tab,.native .input{font-family:var(--font-native)}
+.ud{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:32px auto 0}
+.ud>div{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 16px}
+.ud h4{margin:0 0 6px;font:600 12px/16px var(--font-web);letter-spacing:.1em;text-transform:uppercase}
+.ud .u h4{color:var(--success-text)}.ud .d h4{color:var(--destructive-text)}
+.ud ul{margin:0;padding-left:18px;font:400 13px/19px var(--font-web);color:var(--muted)}
+.w358{width:358px}.w176{width:176px}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.step{display:inline-flex;align-items:center;height:40px;border-radius:20px;background:var(--surface);border:1px solid var(--input-edge);font:700 15px/1 var(--font-native)}
+.step b{width:40px;height:38px;display:grid;place-items:center;font-weight:400}
+.step b .ic{--s:18px}
+.step span{min-width:24px;text-align:center}
+.tap{display:inline-grid;place-items:center;width:48px;height:48px}
+.rs{display:inline-flex;gap:0}
+.rs .tap{color:var(--subtle);border-radius:12px}
+.rs .tap .ic{--s:32px}
+.rs .tap.on{color:var(--primary-text)}.rs .tap.on .ic{fill:currentColor}
+.rs .tap.is-hover{color:var(--primary-text);background:var(--primary-tint)}
+.rs .tap.is-focus{outline:2px solid var(--primary);outline-offset:2px}
+.cell{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:16px 18px;display:grid;gap:10px;min-width:230px}
+.rt{display:inline-flex;align-items:center;gap:6px;font:600 14px/1 var(--font-native)}
+.rt .c{font-weight:400;color:var(--muted)}
+.stars.lg .ic{--s:24px}.stars.sm .ic{--s:13px}</style></head>
+<body><div class="cz-page native"><div class="cz-grid" style="max-width:940px;margin:0 auto">
+<div class="cz-col"><div class="cz-cap">Display, sm 13</div><div class="cell"><span class="rt"><span class="stars sm" role="img" aria-label="Rated 4.6 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span>4.6<span class="c">(128)</span></span><span class="t-meta">Tiles and chips</span></div></div>
+<div class="cz-col"><div class="cz-cap">Display, md 16</div><div class="cell"><span class="rt"><span class="stars " role="img" aria-label="Rated 4.6 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span>4.6<span class="c">· 128 reviews</span></span><span class="t-meta">Cards and rows</span></div></div>
+<div class="cz-col"><div class="cz-cap">Display, lg 24</div><div class="cell"><span class="rt" style="font-size:20px"><span class="stars lg" role="img" aria-label="Rated 4.6 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span>4.6</span><span class="t-meta">Product and profile header</span></div></div>
+<div class="cz-col"><div class="cz-cap">Half values are text</div><div class="cell"><span class="rt"><span class="stars " role="img" aria-label="Rated 4.5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span>4.5</span><span class="t-meta">Stars round to whole; the number carries the decimal. 4.5 shows 5 filled stars with "4.5" beside them.</span></div></div>
+<div class="cz-col"><div class="cz-cap">Few reviews</div><div class="cell"><span class="rt"><span class="stars " role="img" aria-label="Rated 5 out of 5"><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i><i data-i="star"></i></span>5.0<span class="c">(1)</span></span><span class="t-meta">Show the count so one review is not mistaken for many</span></div></div>
+<div class="cz-col"><div class="cz-cap">No reviews yet</div><div class="cell"><span class="rt"><span class="stars " role="img" aria-label="Rated 0 out of 5"><i data-i="star" class="off"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i><i data-i="star" class="off"></i></span><span class="c">No reviews yet</span></span><span class="t-meta">Empty stars, no "0.0"</span></div></div>
+</div>
+<div class="cz-grid" style="margin-top:28px;max-width:940px;margin-left:auto;margin-right:auto">
+<div class="cz-col"><div class="cz-cap">Input, empty</div><div class="cell"><div class="rs" role="radiogroup" aria-label="Your rating"><span class="tap" role="radio" aria-checked="false" aria-label="1 star"><i data-i="star"></i></span><span class="tap" role="radio" aria-checked="false" aria-label="2 stars"><i data-i="star"></i></span><span class="tap" role="radio" aria-checked="false" aria-label="3 stars"><i data-i="star"></i></span><span class="tap" role="radio" aria-checked="false" aria-label="4 stars"><i data-i="star"></i></span><span class="tap" role="radio" aria-checked="false" aria-label="5 stars"><i data-i="star"></i></span></div><span class="t-meta">Tap a star to rate</span></div></div>
+<div class="cz-col"><div class="cz-cap">Input, hover / press at 3</div><div class="cell"><div class="rs"><span class="tap is-hover"><i data-i="star"></i></span><span class="tap is-hover"><i data-i="star"></i></span><span class="tap is-hover"><i data-i="star"></i></span><span class="tap "><i data-i="star"></i></span><span class="tap "><i data-i="star"></i></span></div><span class="t-meta">Stars up to the pointer preview the choice</span></div></div>
+<div class="cz-col"><div class="cz-cap">Input, selected 4</div><div class="cell"><div class="rs"><span class="tap on"><i data-i="star"></i></span><span class="tap on"><i data-i="star"></i></span><span class="tap on"><i data-i="star"></i></span><span class="tap on"><i data-i="star"></i></span><span class="tap "><i data-i="star"></i></span></div><div class="t-h3">Good</div></div><div class="cz-note">A word names the choice: Poor, Fair, OK, Good, Excellent</div></div>
+<div class="cz-col"><div class="cz-cap">Input, keyboard focus</div><div class="cell"><div class="rs"><span class="tap on "><i data-i="star"></i></span><span class="tap on is-focus"><i data-i="star"></i></span><span class="tap  "><i data-i="star"></i></span><span class="tap  "><i data-i="star"></i></span><span class="tap  "><i data-i="star"></i></span></div><span class="t-meta">Arrow keys move, space selects. Ring is 2px primary</span></div></div>
+</div>
+<div class="cz-section" style="max-width:740px;margin:28px auto 0"><p class="cz-h">Accessibility rule</p>
+<p class="t-body" style="margin:0">A display group is one image: <code>role="img" aria-label="Rated 4.6 out of 5, 128 reviews"</code>. The individual star icons are hidden. Input stars are a <code>radiogroup</code> with one <code>radio</code> per value, each named "3 stars". Never convey a rating with colour alone; the number is always in text near the stars.</p></div>
+<div class="ud"><div class="u"><h4>Use</h4><ul><li>Show the number next to the stars; it carries the decimal.</li><li>Show the review count on product and store tiles.</li><li>Make input stars 48px apart so thumbs hit the right one.</li><li>Name the chosen value in words under the input.</li></ul></div><div class="d"><h4>Don't</h4><ul><li>Draw half stars; round the stars and print the number.</li><li>Show 0.0 for an item with no reviews.</li><li>Make rating stars orange fill on an orange card.</li><li>Auto-submit when a star is tapped; the customer still confirms.</li></ul></div></div></div></body></html>

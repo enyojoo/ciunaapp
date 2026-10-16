@@ -1,0 +1,34 @@
+<!-- @dsCard group="Marketplace" height=692 subtitle="Balance tiles: pending, available, in payout and paid out with help text; the display-size available balance, zero and loading" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>EarningsTile</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.et{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px 20px;display:grid;gap:4px;align-content:start}
+.et .l{display:flex;align-items:center;gap:8px;font:600 13px/18px var(--font-web);color:var(--muted)}
+.et .l .ic{--s:16px}
+.et .v{font:700 28px/34px var(--font-web);letter-spacing:-.4px;font-variant-numeric:tabular-nums}
+.et .h{font:400 13px/18px var(--font-web);color:var(--muted)}
+.et.zero .v{color:var(--muted)}
+.hero{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:24px;display:grid;gap:6px}
+.hero .v{font:700 44px/50px var(--font-web);letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cols{display:grid;grid-template-columns:420px 1fr;gap:24px;align-items:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font-size:14px;line-height:22px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+<div class="cz-section"><p class="cz-h">Four balances</p><div class="row4">
+<div class="et"><div class="l"><i data-i="hourglass"></i>Pending</div><div class="v">₽8,640</div><div class="h">Available after 7 days, once the order is fulfilled</div></div>
+<div class="et" style="border-color:var(--primary-border);background:var(--primary-tint)"><div class="l"><i data-i="wallet"></i>Available</div><div class="v">₽24,310</div><div class="h">Ready to withdraw</div></div>
+<div class="et"><div class="l"><i data-i="send"></i>In payout</div><div class="v">₽10,000</div><div class="h">Requested and waiting to be sent</div></div>
+<div class="et"><div class="l"><i data-i="circle-check-big"></i>Paid out</div><div class="v">₽186,450</div><div class="h">Already sent to your account</div></div></div></div>
+<div class="cols">
+<div><div class="cz-cap" style="text-align:left;margin-bottom:8px">Display size, phone top of Earnings</div>
+<div class="hero"><div class="l t-meta" style="font-weight:600">Available to withdraw</div><div class="v">₽24,310</div><div class="t-meta">₽8,640 more becomes available over the next 7 days.</div><a class="btn btn-lg btn-block" style="margin-top:10px">Withdraw</a></div></div>
+<div><div class="cz-cap" style="text-align:left;margin-bottom:8px">Zero, loading and a second currency</div>
+<div class="row4" style="grid-template-columns:repeat(3,1fr)">
+<div class="et zero"><div class="l"><i data-i="wallet"></i>Available</div><div class="v">₽0</div><div class="h">Earnings become available after the hold period</div></div>
+<div class="et"><div class="sk" style="height:16px;width:80px"></div><div class="sk" style="height:30px;width:130px;margin:4px 0"></div><div class="sk" style="height:14px;width:170px"></div></div>
+<div class="et"><div class="l"><i data-i="wallet"></i>Available · USD</div><div class="v">$320.50</div><div class="h">Ready to withdraw</div></div></div></div></div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Always say what pending waits for (the hold days and fulfilment).</li><li>Tint only Available, the one balance you can act on.</li><li>Keep cents for non-ruble currencies; whole rubles in lists.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't mix currencies in one figure; one tile per currency.</li><li>Don't show a green or red number for balance; it is not a status.</li><li>Don't name payment providers in help text.</li></ul></div></div>
+</div></div></body></html>

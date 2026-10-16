@@ -1,0 +1,70 @@
+<!-- @dsCard group="Foundations" height=1500 subtitle="Wordmark, mark and white version: clear space, minimum sizes, approved backgrounds, app icon tile and misuse" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Logo</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.bgbox{height:130px;border-radius:var(--radius-card);display:grid;place-items:center;border:1px solid var(--hairline)}
+.bgbox img{height:34px}
+.clear{position:relative;display:inline-block;padding:44px;background:var(--surface);border:1px dashed var(--primary-border);border-radius:var(--radius-control)}
+.clear img{height:100px;display:block;outline:1px solid var(--primary-border)}
+.clear i{position:absolute;display:block;border:1px dashed var(--primary);background:var(--primary-tint);opacity:.8}
+.clear b{position:absolute;font:600 12px/1 var(--font-mono);color:var(--primary-text)}
+.tile-i{width:120px;height:120px;border-radius:27px;display:grid;place-items:center;box-shadow:var(--shadow-md)}
+.tile-i img{width:58px}
+.mis{display:grid;gap:8px;justify-items:center;text-align:center}
+.mis .bx{width:100%;height:100px;border-radius:var(--radius-control);border:1px solid var(--hairline);background:var(--surface);display:grid;place-items:center;overflow:hidden}
+.mis .bx img{height:30px}
+.yes{color:var(--success-text)}.no{color:var(--destructive-text)}
+.mis .t{font:600 12px/16px var(--font-web);display:flex;gap:6px;align-items:center}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Files</p>
+<div class="three">
+  <div class="cz-col"><div class="bgbox" style="background:var(--surface);width:100%"><img src="../../assets/logos/ciuna.svg" alt="Ciuna logo"></div><div class="t-h3">ciuna.svg</div><div class="hint">Wordmark with mark in the logo orange. Default on paper and white.</div></div>
+  <div class="cz-col"><div class="bgbox" style="background:var(--ink);width:100%"><img src="../../assets/logos/ciuna-white.svg" alt="Ciuna logo, white"></div><div class="t-h3">ciuna-white.svg</div><div class="hint">All white. Only on ink or primary.</div></div>
+  <div class="cz-col"><div class="bgbox" style="background:var(--surface);width:100%"><img src="../../assets/logos/ciuna-mark.svg" alt="Ciuna mark" style="height:64px"></div><div class="t-h3">ciuna-mark.svg</div><div class="hint">Four circles. Avatars, favicons, loading, app icon. Never beside the wordmark.</div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Clear space</p>
+<div class="cz-row" style="gap:32px;align-items:center">
+  <div class="clear"><img src="../../assets/logos/ciuna.svg" alt="Ciuna logo">
+    <i style="left:0;top:0;width:44px;height:100%"></i><i style="right:0;top:0;width:44px;height:100%"></i><i style="left:0;top:0;height:44px;width:100%"></i><i style="left:0;bottom:0;height:44px;width:100%"></i>
+    <b style="left:12px;top:50%">x</b><b style="right:16px;top:50%">x</b><b style="left:50%;top:14px">x</b><b style="left:50%;bottom:14px">x</b></div>
+  <div class="t-body" style="max-width:380px">Keep a margin of <b>x</b> on every side, where x is the diameter of one circle in the mark (about 44% of the logo height). Nothing else (text, edges, other logos, photos) enters the margin.</div></div></div>
+
+<div class="cz-section"><p class="cz-h">Minimum sizes</p>
+<div class="cz-row" style="gap:36px;align-items:flex-end">
+  <div class="cz-col" style="justify-items:start"><img src="../../assets/logos/ciuna.svg" alt="" style="height:22px"><span class="hint">Wordmark: 22px high (about 80px wide). The app header size.</span></div>
+  <div class="cz-col" style="justify-items:start"><img src="../../assets/logos/ciuna.svg" alt="" style="height:36px"><span class="hint">Seller and Office sidebar: 28 to 36px.</span></div>
+  <div class="cz-col" style="justify-items:start"><img src="../../assets/logos/ciuna-mark.svg" alt="" style="height:16px"><span class="hint">Mark alone: 16px (favicon).</span></div>
+  <div class="cz-col" style="justify-items:start"><img src="../../assets/logos/ciuna-mark.svg" alt="" style="height:32px"><span class="hint">Mark in headers and avatars: 32px.</span></div></div></div>
+
+<div class="cz-section"><p class="cz-h">Backgrounds</p>
+<div class="three" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+  <div class="cz-col"><div class="bgbox" style="background:var(--paper);width:100%"><img src="../../assets/logos/ciuna.svg" alt="Ciuna logo"></div><span class="cz-cap">Paper</span></div>
+  <div class="cz-col"><div class="bgbox" style="background:var(--surface);width:100%"><img src="../../assets/logos/ciuna.svg" alt="Ciuna logo"></div><span class="cz-cap">White</span></div>
+  <div class="cz-col"><div class="bgbox" style="background:var(--ink);width:100%"><img src="../../assets/logos/ciuna-white.svg" alt="Ciuna logo, white"></div><span class="cz-cap">Ink · white logo</span></div>
+  <div class="cz-col"><div class="bgbox" style="background:var(--primary);width:100%"><img src="../../assets/logos/ciuna-white.svg" alt="Ciuna logo, white"></div><span class="cz-cap">Primary · white logo</span></div>
+</div>
+<p class="hint">The orange logo only goes on paper, white or <code>primary-tint</code>. On photos, use a plain white or ink panel behind it. Never put the orange logo on <code>primary</code>: it vanishes.</p></div>
+
+<div class="cz-section"><p class="cz-h">App icon</p>
+<div class="cz-row" style="gap:28px;align-items:center">
+  <div class="tile-i" style="background:var(--surface);border:1px solid var(--hairline)"><img src="../../assets/logos/ciuna-mark.svg" alt="Ciuna app icon"></div>
+  <div class="tile-i" style="background:var(--ink)"><img src="../../assets/logos/ciuna-mark.svg" alt="Ciuna app icon, dark"></div>
+  <div class="t-body" style="max-width:360px">The mark centred on a rounded tile (corner radius 22%). Mark fills about half the tile. Default is the logo orange mark on white; a dark tile is allowed for notifications and the lock screen. The tile is never orange.</div></div></div>
+
+<div class="cz-section"><p class="cz-h">Do and don't</p>
+<div class="three" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+  <div class="mis"><div class="bx"><img src="../../assets/logos/ciuna.svg" alt=""></div><span class="t yes"><i data-i="circle-check-big" style="--s:15px"></i>Use as supplied</span></div>
+  <div class="mis"><div class="bx"><img src="../../assets/logos/ciuna.svg" alt="" style="height:30px;width:200px"></div><span class="t no"><i data-i="x" style="--s:15px"></i>Don't stretch or squash</span></div>
+  <div class="mis"><div class="bx"><img src="../../assets/logos/ciuna.svg" alt="" style="filter:hue-rotate(160deg)"></div><span class="t no"><i data-i="x" style="--s:15px"></i>Don't recolour</span></div>
+  <div class="mis"><div class="bx" style="background:var(--primary)"><img src="../../assets/logos/ciuna.svg" alt=""></div><span class="t no"><i data-i="x" style="--s:15px"></i>No orange logo on primary</span></div>
+  <div class="mis"><div class="bx"><img src="../../assets/logos/ciuna.svg" alt="" style="transform:rotate(-12deg)"></div><span class="t no"><i data-i="x" style="--s:15px"></i>Don't rotate or tilt</span></div>
+  <div class="mis"><div class="bx"><img src="../../assets/logos/ciuna.svg" alt="" style="filter:drop-shadow(3px 4px 3px rgba(17,24,39,.5))"></div><span class="t no"><i data-i="x" style="--s:15px"></i>No shadows or effects</span></div>
+  <div class="mis"><div class="bx" style="background:var(--ink)"><img src="../../assets/logos/ciuna.svg" alt=""></div><span class="t no"><i data-i="x" style="--s:15px"></i>Orange on ink: use white</span></div>
+  <div class="mis"><div class="bx" style="background:var(--neutral-surface)"><img src="../../assets/logos/ciuna-white.svg" alt=""></div><span class="t no"><i data-i="x" style="--s:15px"></i>White logo on light</span></div>
+</div></div>
+
+</div></div></body></html>

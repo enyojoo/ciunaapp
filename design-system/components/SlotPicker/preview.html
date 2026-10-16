@@ -1,0 +1,55 @@
+<!-- @dsCard group="Marketplace" height=770 width=1300 subtitle="Expert booking time picker: date strip, time slot grid, selected, unavailable and empty day, with the time zone line" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SlotPicker</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.sp{width:390px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:16px;display:grid;gap:14px}
+.sp h3{margin:0;font:700 18px/24px var(--font-native)}
+.sp .sub{font:400 13px/18px var(--font-native);color:var(--muted)}
+.days{display:flex;gap:8px;overflow:hidden}
+.day{flex:0 0 60px;height:72px;border-radius:16px;border:1px solid var(--input-edge);background:var(--surface);display:grid;align-content:center;justify-items:center;gap:2px;font-family:var(--font-native)}
+.day small{font:600 12px/16px var(--font-native);color:var(--muted);text-transform:uppercase}
+.day b{font:700 18px/22px var(--font-native)}
+.day.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.day.on small{color:#fff}
+.day.off{opacity:.45;background:var(--neutral-surface)}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.slot{height:48px;border-radius:14px;border:1px solid var(--input-edge);background:var(--surface);display:grid;place-items:center;font:600 15px/1 var(--font-native);font-variant-numeric:tabular-nums}
+.slot.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.slot.off{background:var(--neutral-surface);border-color:var(--hairline);color:var(--muted);text-decoration:line-through}
+.tz{display:flex;gap:8px;align-items:flex-start;font:400 13px/18px var(--font-native);color:var(--muted)}
+.tz .ic{--s:15px;margin-top:2px}
+.lbl{font:600 13px/18px var(--font-native);color:var(--muted)}
+.empty{text-align:center;padding:22px 12px;border-radius:16px;background:var(--neutral-surface);font:400 14px/20px var(--font-native)}
+.empty b{display:block;font:600 15px/20px var(--font-native);margin-bottom:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two ul{margin:0;padding-left:18px;font:14px/22px var(--font-native)}
+</style></head>
+<body><div class="cz-page native"><div class="cz-stack" style="gap:24px">
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Slot selected</div>
+<div class="sp"><h3>Pick a time</h3><div class="sub">Immigration consultation · 45 min · ₽5,000 with Dr. Amina Yusuf</div>
+<div class="days"><span class="day"><small>Thu</small><b>16</b></span><span class="day off"><small>Fri</small><b>17</b></span><span class="day on"><small>Sat</small><b>18</b></span><span class="day"><small>Sun</small><b>19</b></span><span class="day"><small>Mon</small><b>20</b></span></div>
+<div class="lbl">Saturday, October 18</div>
+<div class="slots"><span class="slot">10:00</span><span class="slot off">10:45</span><span class="slot on">11:30</span><span class="slot">12:15</span><span class="slot off">13:00</span><span class="slot">13:45</span><span class="slot">15:00</span><span class="slot">15:45</span><span class="slot">16:30</span></div>
+<div class="tz"><i data-i="globe"></i><span>Times shown in your time zone (MSK) · Expert in Lagos (WAT)</span></div>
+<a class="btn btn-lg btn-block">Book 11:30 · ₽5,000</a></div></div>
+
+<div class="cz-col"><div class="cz-cap">Nothing chosen yet</div>
+<div class="sp"><h3>Pick a time</h3><div class="sub">Russian lessons · 60 min · ₽1,800 with Li Wei</div>
+<div class="days"><span class="day on"><small>Thu</small><b>16</b></span><span class="day"><small>Fri</small><b>17</b></span><span class="day"><small>Sat</small><b>18</b></span><span class="day off"><small>Sun</small><b>19</b></span><span class="day"><small>Mon</small><b>20</b></span></div>
+<div class="lbl">Thursday, October 16</div>
+<div class="slots"><span class="slot">09:00</span><span class="slot">10:00</span><span class="slot">11:00</span><span class="slot off">12:00</span><span class="slot">18:00</span><span class="slot">19:00</span></div>
+<div class="tz"><i data-i="globe"></i><span>Times shown in your time zone (MSK). Li Wei is in Moscow too.</span></div>
+<a class="btn btn-lg btn-block is-disabled">Choose a time</a></div></div>
+
+<div class="cz-col"><div class="cz-cap">No times on the day</div>
+<div class="sp"><h3>Pick a time</h3><div class="sub">Sworn translation call · 30 min · ₽2,500 with Carlos Mendes</div>
+<div class="days"><span class="day"><small>Thu</small><b>16</b></span><span class="day"><small>Fri</small><b>17</b></span><span class="day on"><small>Sat</small><b>18</b></span><span class="day off"><small>Sun</small><b>19</b></span><span class="day"><small>Mon</small><b>20</b></span></div>
+<div class="lbl">Saturday, October 18</div>
+<div class="empty"><b>No times left on Saturday</b>Try Monday, October 20. Carlos has 6 times open.</div>
+<div class="tz"><i data-i="globe"></i><span>Times shown in your time zone (MSK) · Expert in Lisbon (WEST)</span></div>
+<a class="btn btn-lg btn-block is-disabled">Choose a time</a></div></div>
+</div>
+<div class="two"><div class="cz-section"><p class="cz-h">Use</p><ul><li>Always state the time zone, yours first, then the expert's.</li><li>Keep slots at least 48px tall in a 3-column grid.</li><li>Put the chosen time in the button so the price and time are confirmed together.</li></ul></div>
+<div class="cz-section"><p class="cz-h">Don't</p><ul><li>Don't hide unavailable slots; strike them through and mute them.</li><li>Don't show a day with no times as selectable without telling why.</li><li>Don't use orange for anything but the one selected day and slot.</li></ul></div></div>
+</div></div></body></html>

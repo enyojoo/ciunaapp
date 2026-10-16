@@ -1,0 +1,106 @@
+<!-- @dsCard group="Foundations" height=2250 subtitle="Plain, calm, specific: do and don't pairs for casing, buttons, errors, money states, providers, dates, languages and seller words" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Voice</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair>div{border-radius:var(--radius-control);padding:12px 14px;display:grid;gap:6px;align-content:start;border:1px solid var(--hairline);background:var(--surface)}
+.pair .y{border-left:4px solid var(--success)}
+.pair .n{border-left:4px solid var(--destructive)}
+.tg{display:flex;align-items:center;gap:6px;font:600 11px/14px var(--font-web);letter-spacing:.08em;text-transform:uppercase}
+.y .tg{color:var(--success-text)}.n .tg{color:var(--destructive-text)}
+.tg .ic{--s:14px}
+.say{font:500 15px/22px var(--font-web)}
+.why{font:400 13px/18px var(--font-web);color:var(--muted)}
+.rule{font:600 15px/22px var(--font-web);margin:0}
+.grp{display:grid;gap:10px}
+@media(max-width:700px){.pair{grid-template-columns:1fr}}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack" style="gap:20px">
+
+<div class="cz-section"><p class="cz-h">Tone</p>
+<p class="t-body" style="margin:0;max-width:760px"><b>Plain, calm, specific.</b> Ciuna talks to people who may be new to the country, new to the language and careful with money. Say what happens, to which money, and when. Warm, not cute. Short words. One idea per sentence. Address the person as "you"; the product speaks as the system.</p></div>
+
+<div class="cz-section grp"><p class="cz-h">Sentence case</p>
+<p class="rule">Titles, buttons, tabs and menu items use sentence case. Product names keep capitals: Ciuna, Ciuna Seller, Send, Experts.</p>
+<div class="pair">
+<div class="y"><span class="tg"><i data-i="circle-check-big"></i>Do</span><span class="say">Add a new product</span><span class="say">Payout history</span><span class="why">Only the first word and proper names are capitalised.</span></div>
+<div class="n"><span class="tg"><i data-i="x"></i>Don't</span><span class="say">Add A New Product</span><span class="say">PAYOUT HISTORY</span><span class="why">Title Case and shouting read as a form, not a person.</span></div></div></div>
+
+<div class="cz-section grp"><p class="cz-h">Buttons name the action</p>
+<p class="rule">A button says what will happen. A confirmation asks a direct question.</p>
+<div class="pair">
+<div class="y"><span class="tg"><i data-i="circle-check-big"></i>Do</span>
+  <div class="t-h3">Reject this order?</div><div class="cz-row"><a class="btn btn-destructive btn-sm">Reject order</a><a class="btn btn-secondary btn-sm">Keep order</a></div>
+  <div class="cz-row"><a class="btn btn-sm">Accept order</a><a class="btn btn-sm">Book consultation</a><a class="btn btn-sm">Request payout</a></div></div>
+<div class="n"><span class="tg"><i data-i="x"></i>Don't</span>
+  <div class="t-h3">Are you sure?</div><div class="cz-row"><a class="btn btn-secondary btn-sm">OK</a><a class="btn btn-secondary btn-sm">Cancel</a></div>
+  <div class="cz-row"><a class="btn btn-secondary btn-sm">Submit</a><a class="btn btn-secondary btn-sm">Click here</a><a class="btn btn-secondary btn-sm">Yes</a></div>
+  <span class="why">"OK" and "Cancel" next to "Are you sure?" force a re-read. A verb plus noun is clear in any language.</span></div></div></div>
+
+<div class="cz-section grp"><p class="cz-h">Errors say what to fix</p>
+<p class="rule">Name the field, say what is wrong and how to fix it. Never blame the person. Never show codes or stack text.</p>
+<div class="pair">
+<div class="y"><span class="tg"><i data-i="circle-check-big"></i>Do</span>
+  <div class="field"><label class="label">Phone number</label><input class="input is-error" value="8 912 345" aria-label="Phone number"><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Enter a 10-digit phone number</span></div>
+  <span class="say">We couldn't send your payout. Check your bank details, then try again.</span>
+  <span class="say">This card was declined. Try another card or a different amount.</span></div>
+<div class="n"><span class="tg"><i data-i="x"></i>Don't</span>
+  <div class="field"><label class="label">Phone number</label><input class="input is-error" value="8 912 345" aria-label="Phone number"><span class="err"><i data-i="triangle-alert" style="--s:14px"></i>Invalid input</span></div>
+  <span class="say">Oops! Something went wrong.</span>
+  <span class="say">Error 500: gateway_timeout</span>
+  <span class="say">You entered the wrong date.</span></div></div></div>
+
+<div class="cz-section grp"><p class="cz-h">Money states: say what happens and when</p>
+<p class="rule">Tell people where the money is. Calm statements, no exclamation marks, no celebration on a transaction.</p>
+<div class="pair">
+<div class="y"><span class="tg"><i data-i="circle-check-big"></i>Do</span>
+  <span class="say">Payment received. Mama T's Kitchen has your ₽1,250.</span>
+  <span class="say">Your payout of ₽12,400 will arrive by Tue, Sep 29.</span>
+  <span class="say">Refund of ₽700 sent. It can take up to 5 business days to appear.</span>
+  <span class="say">Held until the order is delivered, then released to the seller.</span></div>
+<div class="n"><span class="tg"><i data-i="x"></i>Don't</span>
+  <span class="say">Yay! You paid!!!</span>
+  <span class="say">Your money is on its way soon</span>
+  <span class="say">Transaction processed successfully</span>
+  <span class="say">Funds locked in escrow via YooKassa</span></div></div></div>
+
+<div class="cz-section grp"><p class="cz-h">No payment providers on customer or seller screens</p>
+<p class="rule">Customers and sellers never see YooKassa, Bitbanker or any other provider name: not on screens, emails, push or errors. Office is the only place providers are named.</p>
+<div class="pair">
+<div class="y"><span class="tg"><i data-i="circle-check-big"></i>Do</span><span class="say">Pay by card</span><span class="say">We couldn't take this payment. Try another card.</span><span class="say">Payout method: Bank account ending 4417</span></div>
+<div class="n"><span class="tg"><i data-i="x"></i>Don't</span><span class="say">Pay with YooKassa</span><span class="say">Bitbanker rejected the transaction</span><span class="say">Payout via provider balance</span></div></div></div>
+
+<div class="cz-section grp"><p class="cz-h">No emoji, no decoration</p>
+<p class="rule">Product UI uses icons from the set, never emoji, and no exclamation marks on money or status.</p>
+<div class="pair">
+<div class="y"><span class="tg"><i data-i="circle-check-big"></i>Do</span><span class="say" style="display:flex;gap:8px;align-items:center"><i data-i="package-check" style="--s:18px"></i>Your order is on its way</span><span class="why">An icon from the set, a calm sentence.</span></div>
+<div class="n"><span class="tg"><i data-i="x"></i>Don't</span><span class="say">Your order is on its way! :)</span><span class="say">Congratulations!!! You got paid</span><span class="why">Emoji render differently on every device and read as noise to screen readers.</span></div></div></div>
+
+<div class="cz-section grp"><p class="cz-h">Dates and times</p>
+<p class="rule">"Sep 24" in lists. "Sep 24, 2026 • 2:14 PM" in details. Cut-offs and bookings carry a time zone. Bookings show the viewer's zone and the expert's.</p>
+<div class="pair">
+<div class="y"><span class="tg"><i data-i="circle-check-big"></i>Do</span><span class="say">Sep 24</span><span class="say">Sep 24, 2026 • 2:14 PM</span><span class="say">Order by 6:40 PM MSK for same-day delivery</span><span class="say">Fri, Oct 2 · 3:00 PM your time (Lagos 1:00 PM)</span></div>
+<div class="n"><span class="tg"><i data-i="x"></i>Don't</span><span class="say">24/09/2026</span><span class="say">09-24-26 14:14:00</span><span class="say">Order before 18:40</span><span class="say">Tomorrow at 3 (which 3?)</span><span class="why">Numeric dates read differently in each country. A bare time causes missed bookings.</span></div></div></div>
+
+<div class="cz-section grp"><p class="cz-h">Seller words</p>
+<p class="rule">Use these words and no synonyms, in this and every language.</p>
+<table class="table"><thead><tr><th>Say</th><th>Means</th><th>Not</th></tr></thead><tbody>
+<tr><td><b>Seller</b></td><td>A business that sells on Ciuna</td><td>merchant, vendor, shop owner</td></tr>
+<tr><td><b>Store</b></td><td>A seller's page of products</td><td>shop, outlet, storefront</td></tr>
+<tr><td><b>Expert</b></td><td>A person who offers consultations</td><td>specialist, advisor, provider</td></tr>
+<tr><td><b>Profile</b></td><td>An expert's page</td><td>store, listing</td></tr>
+<tr><td><b>Order</b></td><td>A purchase of products</td><td>purchase, transaction</td></tr>
+<tr><td><b>Booking</b></td><td>A reserved consultation time</td><td>appointment, reservation, session</td></tr>
+<tr><td><b>Payout</b></td><td>Money sent to the seller's bank</td><td>withdrawal, cash-out, settlement</td></tr>
+<tr><td><b>Ciuna Seller</b></td><td>The seller portal</td><td>merchant portal, dashboard</td></tr></tbody></table></div>
+
+<div class="cz-section grp"><p class="cz-h">Many languages</p>
+<ul class="t-body" style="margin:0;padding-left:20px;display:grid;gap:6px">
+<li>Every string exists in <b>en, ru, fr, es, zh, pt</b>. Write the English so it translates: short sentences, no idioms, no puns, no jargon.</li>
+<li>Never build a sentence from pieces. Use whole strings with placeholders: "{name} accepted your order".</li>
+<li>Leave room for 40% more text. Russian and French run longest.</li>
+<li>Names, addresses and business names stay in the script they were written in. Never transliterate someone's name.</li>
+<li>Numbers, money and dates are formatted by the system, not typed into the string.</li>
+<li>Same voice in every language: polite, direct, no slang. Use the formal "you" where the language has one (Russian "вы", French "vous").</li></ul></div>
+
+</div></div></body></html>

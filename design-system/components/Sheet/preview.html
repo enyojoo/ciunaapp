@@ -1,0 +1,82 @@
+<!-- @dsCard group="Feedback" height=1753 subtitle="Bottom sheet on a phone with grabber: picker list and form sheet with sticky footer, plus the centred sheet on desktop" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Sheet</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.rules li{margin:3px 0}
+.st{font:600 11px/14px var(--font-web);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell{display:grid;gap:8px;align-content:start}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 24px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px}
+
+.pst{position:relative;width:390px;height:640px;border-radius:32px;overflow:hidden;background:var(--paper);box-shadow:0 0 0 8px var(--ink),var(--shadow-lg)}
+.pst .scrim{position:absolute;inset:0}
+.pst .back{position:absolute;inset:0;padding:56px 16px;display:grid;gap:10px;align-content:start}
+.pst .back i{display:block;height:64px;border-radius:16px;background:var(--surface);border:1px solid var(--hairline)}
+.pst .sheet{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;max-height:86%}
+.pst .sh-h{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px;font:700 18px/24px var(--font-native)}
+.pst .sh-h .x{width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:var(--neutral-surface)}
+.pst .sh-body{padding:4px 20px 16px;overflow:hidden;font-family:var(--font-native)}
+.pst .sh-foot{padding:12px 20px 28px;border-top:1px solid var(--hairline);display:flex;gap:10px;background:var(--surface)}
+.opt{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 4px;font:500 16px/22px var(--font-native)}
+.opt .grow{flex:1}
+.opt .fl{font:600 12px/1 var(--font-native);color:var(--muted);width:30px}
+.opt.sel{color:var(--primary-text);font-weight:700}
+.opt+.opt{border-top:1px solid var(--hairline)}
+.dstage{position:relative;border-radius:var(--radius-card);overflow:hidden;background:var(--paper);border:1px solid var(--hairline);padding:40px 20px;display:grid;place-items:center;min-height:520px}
+.dstage .scrim{position:absolute;inset:0}
+.dstage .back{position:absolute;inset:0;padding:20px;display:grid;gap:10px;align-content:start}
+.dstage .back i{display:block;height:48px;border-radius:12px;background:var(--surface);border:1px solid var(--hairline)}
+.cs{position:relative;width:100%;max-width:520px;border-radius:var(--radius-sheet);background:var(--surface);box-shadow:var(--shadow-lg);display:flex;flex-direction:column}
+.cs .sh-h{display:flex;justify-content:space-between;align-items:center;padding:20px 24px 4px;font:700 20px/26px var(--font-web)}
+.cs .sh-body{padding:8px 24px 16px;display:grid;gap:14px}
+.cs .sh-foot{padding:16px 24px;border-top:1px solid var(--hairline);display:flex;justify-content:flex-end;gap:10px}
+</style></head>
+<body><div class="cz-page"><div class="cz-stack">
+
+<div class="cz-section"><p class="cz-h">Phone: bottom sheets</p>
+<div class="cz-grid">
+<div class="cz-col"><div class="cz-cap">Picker list</div>
+<div class="pst"><div class="back"><i></i><i></i><i></i></div><div class="scrim"></div>
+  <div class="sheet sheet"><div class="grab"></div>
+    <div class="sh-h"><span>Choose currency</span><span class="x"><i data-i="x" style="--s:18px"></i></span></div>
+    <div class="sh-body">
+      <div class="opt sel"><span class="fl">RUB</span><span class="grow">Russian ruble ₽</span><i data-i="check" style="--s:20px"></i></div>
+      <div class="opt"><span class="fl">USD</span><span class="grow">US dollar $</span></div>
+      <div class="opt"><span class="fl">EUR</span><span class="grow">Euro €</span></div>
+      <div class="opt"><span class="fl">CNY</span><span class="grow">Chinese yuan ¥</span></div>
+      <div class="opt"><span class="fl">NGN</span><span class="grow">Nigerian naira ₦</span></div>
+      <div class="opt"><span class="fl">BRL</span><span class="grow">Brazilian real R$</span></div>
+    </div><div style="height:20px"></div></div></div>
+  <div class="cz-note">Rows 56px, selected row in primary-text with a check. Tapping a row selects and closes.</div></div>
+
+<div class="cz-col"><div class="cz-cap">Form sheet with sticky footer</div>
+<div class="pst"><div class="back"><i></i><i></i><i></i></div><div class="scrim"></div>
+  <div class="sheet"><div class="grab"></div>
+    <div class="sh-h"><span>Add a product</span><span class="x"><i data-i="x" style="--s:18px"></i></span></div>
+    <div class="sh-body" style="display:grid;gap:14px">
+      <div class="field"><label class="label">Name <span class="req">Required</span></label><input class="input" style="height:48px" value="Suya skewers"></div>
+      <div class="field"><label class="label">Price <span class="req">Required</span></label><input class="input num" style="height:48px" value="₽450"></div>
+      <div class="field"><label class="label">Preparation time</label><input class="input" style="height:48px" value="20 min"></div>
+      <div class="field"><label class="label">Description</label><textarea class="textarea" style="min-height:70px">Grilled beef, yaji spice, onions.</textarea></div>
+    </div>
+    <div class="sh-foot"><a class="btn btn-secondary btn-lg" style="flex:1">Cancel</a><a class="btn btn-lg" style="flex:1">Save product</a></div></div></div>
+  <div class="cz-note">Content scrolls, the footer stays. Sheet grows to 86% of the screen at most, then scrolls.</div></div>
+</div></div>
+
+<div class="cz-section"><p class="cz-h">Desktop: centred sheet</p>
+<div class="dstage"><div class="back"><i></i><i></i><i></i><i></i><i></i></div><div class="scrim"></div>
+  <div class="cs"><div class="sh-h"><span>Edit opening hours</span><span class="avatar sm" style="background:var(--neutral-surface);color:var(--ink)"><i data-i="x" style="--s:16px"></i></span></div>
+    <div class="sh-body"><p class="t-meta" style="margin:0">Shown on your store page. Times are in Moscow time (MSK).</p>
+      <div class="g2"><div class="field"><label class="label">Opens</label><select class="select"><option>09:00</option></select></div><div class="field"><label class="label">Closes</label><select class="select"><option>21:00</option></select></div></div>
+      <div class="opt" style="min-height:44px;font-family:var(--font-web)"><span class="switch"></span>Closed on Sundays</div></div>
+    <div class="sh-foot"><a class="btn btn-secondary">Cancel</a><a class="btn">Save hours</a></div></div></div>
+<p class="hint">At 768px and wider a sheet is a centred panel (max 520px, radius 24) with the footer pinned. Below that it docks to the bottom.</p></div>
+
+<div class="cz-section"><p class="cz-h">Rules</p><div class="rules">
+<div><b>Use</b><ul><li>A sheet is for a short task or a choice that keeps the user in context.</li><li>Grabber, title and close at the top; the main action in a sticky footer, full width on phones.</li><li>Trap focus, close on scrim tap and swipe down; ask before discarding entered text.</li></ul></div>
+<div><b>Don't</b><ul><li>Don't use a sheet for a multi-step flow; use a page.</li><li>Don't hide the confirm button below the fold; keep the footer pinned.</li><li>Don't stack sheets.</li></ul></div></div></div>
+
+</div></div></body></html>
