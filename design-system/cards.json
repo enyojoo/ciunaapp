@@ -636,6 +636,24 @@
    "readme": true
   },
   {
+   "name": "RateLine",
+   "group": "Money",
+   "subtitle": "Quote lines for a transfer: live rate, locked rate with countdown, expired with refresh, stale warning, rate changed, in compact and expanded form",
+   "height": 1757,
+   "width": null,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "SendAmountField",
+   "group": "Money",
+   "subtitle": "The lane-style amount input with its currency pill: default, focus, errors, disabled, long values, rate line, and the corridor picker sheet with recent, search and unsupported states",
+   "height": 3364,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "Cart",
    "group": "Customer app · Screens",
    "subtitle": "Single-store cart: lines with steppers, subtotal and delivery fee, minimum-order warning, the vendor-lock prompt and the empty cart",
@@ -667,6 +685,15 @@
    "group": "Customer app · Screens",
    "subtitle": "Verification: status hub with limit levels, document capture steps, review, in review, approved, rejected with reason and address proof",
    "height": 3864,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerLimits",
+   "group": "Customer app · Screens",
+   "subtitle": "How much can I send: monthly limit usage per verification level, remaining amount, near-limit and over-limit states with Verify identity, reset date and in-review; example numbers",
+   "height": 2940,
    "width": 1300,
    "page": true,
    "readme": true
@@ -726,6 +753,15 @@
    "readme": true
   },
   {
+   "name": "CustomerSendWeb",
+   "group": "Customer app · Screens",
+   "subtitle": "Desktop web Send: amount, recipient and add-recipient side panels, review with payment methods, SBP QR payment and status with a transfer detail panel, plus validation errors",
+   "height": 6234,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "CustomerSupport",
    "group": "Customer app · Screens",
    "subtitle": "Support page with contact options, FAQ and hours, requests and chat threads, plus the AI assistant chat: first open, answers, thinking, unavailable and handoff",
@@ -739,6 +775,15 @@
    "group": "Customer app · Screens",
    "subtitle": "Orders tab activity list: transfers, marketplace orders and expert bookings with filters, empty, no match, loading, error, offline and Russian",
    "height": 2948,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "CustomerTransferDetail",
+   "group": "Customer app · Screens",
+   "subtitle": "One transfer in full: awaiting payment, sending, delivered with amounts, recipient, method and reference, failed with refund, refunded, cancelled and Russian",
+   "height": 2940,
    "width": 1300,
    "page": true,
    "readme": true
@@ -1185,6 +1230,15 @@
    "readme": true
   },
   {
+   "name": "OfficeLimits",
+   "group": "Office · Screens",
+   "subtitle": "KYC levels and monthly Send limits per level and corridor, usage by level, per-user exceptions with reason and expiry, audit note; values labelled as seed examples",
+   "height": 6340,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "OfficeMarketplace",
    "group": "Office · Screens",
    "subtitle": "Marketplace home configuration: tiles for Food, Mart, Send, Experts with order, on and off, copy per language, preview, turn-off guard",
@@ -1248,6 +1302,24 @@
    "readme": true
   },
   {
+   "name": "OfficeRatesApproval",
+   "group": "Office · Screens",
+   "subtitle": "Rates workflow: corridor table with live, stale and manual rows, proposed markup change with diff and impact, four-eyes approve or reject, stale-rate Send block, history and validation",
+   "height": 6360,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeRecipientsAndBlocks",
+   "group": "Office · Screens",
+   "subtitle": "Recipient lookup by masked account number, related transfers, blocked recipients and senders with reason and evidence, block and unblock dialogs, empty and no-match states",
+   "height": 5572,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "OfficeReferrals",
    "group": "Office · Screens",
    "subtitle": "Referral programme settings and referrals table: rewards, limits, referrer detail, block dialog, programme off",
@@ -1261,6 +1333,15 @@
    "group": "Office · Screens",
    "subtitle": "Reviews moderation: ratings table with excerpt, merchant, status and reply flag; hide with reason chips; unhide; filters; read-only for support",
    "height": 3476,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeSendOps",
+   "group": "Office · Screens",
+   "subtitle": "Send operations dashboard: volume and success tiles, queues for payments waiting, failed and stuck payouts and pending refunds, provider status with maintenance toggle, role variants",
+   "height": 5501,
    "width": 1240,
    "page": true,
    "readme": true
@@ -1289,6 +1370,15 @@
    "subtitle": "Send transfers table with filters and status badges, detail panel with timeline and provider names, retry for ops, refund for finance, read-only support, refund dialog",
    "height": 5410,
    "width": 1170,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeTransferDetail",
+   "group": "Office · Screens",
+   "subtitle": "Full-page transfer detail: status and owner, sender and recipient, amounts and rate snapshot, provider timeline with raw ids and attempts, notes, audit trail, role-based actions and reason dialogs",
+   "height": 8041,
+   "width": 1240,
    "page": true,
    "readme": true
   },
@@ -1329,6 +1419,15 @@
    "readme": true
   },
   {
+   "name": "EmailTransfer",
+   "group": "Documents and email",
+   "subtitle": "Customer transfer emails: payment received, sent, delivered, failed with refund note and rate-expired reminder, with Russian and Chinese versions of the delivered email",
+   "height": 2779,
+   "width": 1100,
+   "page": false,
+   "readme": true
+  },
+  {
    "name": "PushAndInApp",
    "group": "Documents and email",
    "subtitle": "Push notifications on an iPhone lock screen and an Android shade for seller alerts and customer order updates, plus in-app toast and tab badge usage",
@@ -1338,10 +1437,28 @@
    "readme": true
   },
   {
+   "name": "PushTransfer",
+   "group": "Documents and email",
+   "subtitle": "Push and in-app notifications for transfer events: lock-screen and Android shade, rate-expiry reminder, failure with refund note, Russian variant and in-app toasts",
+   "height": 1840,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "ReceiptCustomer",
    "group": "Documents and email",
    "subtitle": "Customer order receipt on screen and as a printed A4 page, plus the booking variant on a Letter page with the session in both time zones",
    "height": 1790,
+   "width": 1360,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "ReceiptTransfer",
+   "group": "Documents and email",
+   "subtitle": "Transfer receipt on screen, printed A4 and as a shared image: sender, masked recipient account, amounts, rate, fee, reference, dated with time zone and status",
+   "height": 2239,
    "width": 1360,
    "page": false,
    "readme": true

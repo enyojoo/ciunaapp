@@ -72,3 +72,9 @@ Defaults chosen for Ciuna's interest: protect money and customers first, launch 
 - Maintenance mode is enforced in the API for all clients; money routes return 503 and apps show a banner.
 - PIN stays a local device lock for launch; a server PIN needs its own security review.
 - Rate limits at launch: auth 10/min per IP, chat 30/min per user, search 60/min per user, checkout 10/min per user, uploads 20/min per user.
+
+### Send money (added)
+- Every rate markup or manual-rate change needs a second finance approver (four-eyes), not only large ones. A stale corridor rate blocks new transfers on that corridor and shows a plain "paused" state to customers.
+- Limits are edited by compliance and super_admin only; finance sees them read-only.
+- Compliance has read-only access to Send operations.
+- All rates, markups, fees, limits and provider ids on Send cards are sample data.

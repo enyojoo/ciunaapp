@@ -8,6 +8,7 @@ The design system (`design-system/`, viewer at `viewer.html`) is the approved ta
 | `build-plan/office.md` | Office (O0 to O12) |
 | `build-plan/seller.md` | Seller (P0 to P11) |
 | `build-plan/customer-app.md` | Expo native and customer web (WP1 to WP13) |
+| `build-plan/send.md` | Send money: rates, limits, transfers, receipts, Office ops |
 | `build-plan/launch-readiness.md` | Staging, env, security, pilot, go/no-go |
 
 Rules for everything below:
@@ -42,6 +43,9 @@ Exit: a customer can search, favourite, order, chat and review against staging; 
 2. Office finance polish, listing review and catalog queue (needs API WP2 reason templates and catalog reviews), orders and exception queue with refund by role (needs API WP5), bookings (O6, O7, O8).
 3. Customer store and product pages, cart and checkout, experts, activity (WP6, WP7, WP9, WP10).
 4. Payout hardening (API WP13): card-number rejection, four-eyes approval, attempts table.
+
+### Stage C2: Send money
+See `build-plan/send.md` (S0 to S7). Depends on the permission model (Stage A item 2) and the data baseline.
 
 ### Stage D: after product decisions
 Customer KYC levels and limits (API WP3), support threads and assistant (WP9), push (WP8), chat translation (WP7), referral progress (WP10), Seller team and expert extras (P10, P11), Office dashboard, Cmd-K, users, KYC, referrals, rates (O9 to O11), rates approval and maintenance (API WP4), receipts and account deletion (WP12).
