@@ -139,7 +139,7 @@ export function BitbankerKycBridge() {
       <p className="text-sm text-muted-foreground leading-relaxed">
         {t("verification.kycBridge.lead", {
           defaultValue:
-            "Verify with our payment partner (Bitbanker). Russian and foreign passports are supported; routing to IIDX or Sumsub is handled on their secure page—not in Ciuna.",
+            "Verify with our verification partner. Russian and foreign passports are supported; the check happens on their secure page, not in Ciuna.",
         })}
       </p>
 
@@ -170,7 +170,7 @@ export function BitbankerKycBridge() {
         <p className="text-xs text-muted-foreground">
           {t("verification.kycBridge.reviewPending", {
             defaultValue:
-              "Verification in progress or under review. We will unlock send when Bitbanker confirms SBP.",
+              "Verification in progress or under review. We will unlock Send when it is confirmed.",
           })}
         </p>
       ) : null}
@@ -210,7 +210,7 @@ export function BitbankerKycBridge() {
               <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
                 {t("verification.kycBridge.inAppSecureBody", {
                   defaultValue:
-                    "For security, Bitbanker opens verification in a protected window. Finish KYC there — this screen stays open and updates when you’re verified.",
+                    "For security, our verification partner opens verification in a protected window. Finish KYC there — this screen stays open and updates when you’re verified.",
                 })}
               </p>
               <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">

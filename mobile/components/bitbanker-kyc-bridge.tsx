@@ -178,7 +178,7 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
             <Text style={styles.lead}>
               {t("verification.kycBridge.lead", {
                 defaultValue:
-                  "Verify with our payment partner (Bitbanker). Russian and foreign passports are supported; routing to IIDX or Sumsub is handled on their secure page—not in Ciuna.",
+                  "Verify with our verification partner. Russian and foreign passports are supported; the check happens on their secure page, not in Ciuna.",
               })}
             </Text>
 
@@ -204,7 +204,7 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
               <Text style={styles.meta}>
                 {t("verification.kycBridge.reviewPending", {
                   defaultValue:
-                    "Verification in progress or under review. We will unlock send when Bitbanker confirms SBP.",
+                    "Verification in progress or under review. We will unlock Send when it is confirmed.",
                 })}
               </Text>
             ) : null}

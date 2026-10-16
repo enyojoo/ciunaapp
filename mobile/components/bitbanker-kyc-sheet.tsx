@@ -134,7 +134,7 @@ export function BitbankerKycSheet({
       <Text style={styles.webBody}>
         {t("verification.kycBridge.inAppSecureBody", {
           defaultValue:
-            "For security, Bitbanker opens verification in a protected window. Finish KYC there — this screen stays open and updates when you’re verified.",
+            "For security, our verification partner opens verification in a protected window. Finish KYC there — this screen stays open and updates when you’re verified.",
         })}
       </Text>
       {waitingForPartner ? (
