@@ -1209,7 +1209,12 @@
     "seen": "Vu {{time}}",
     "unavailable": "La messagerie n'est pas disponible pour le moment",
     "unavailableBody": "Veuillez réessayer plus tard.",
-    "closedOn": "Chat fermé le {{date}}. Vous pouvez toujours lire la conversation."
+    "closedOn": "Chat fermé le {{date}}. Vous pouvez toujours lire la conversation.",
+    "quick": {
+      "where": "Où est ma commande ?",
+      "changeTime": "Changer l’heure de livraison",
+      "allergy": "Question sur les allergies"
+    }
   },
   "reviews": {
     "promptTitle": "Évaluez votre commande",

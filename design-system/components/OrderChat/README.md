@@ -21,7 +21,7 @@ Conversation, Empty ("Ask the seller a question about your order"), Closed (neut
 - Seen shows once per message, only on the last outgoing one.
 
 ## Upgrade
-New. The API exists (`api/app/api/hub/orders/[id]/messages`, 2000 characters, closes 14 days after completion); no customer UI is built today.
+Built in `mobile/app/orders/[id]/chat.tsx`: conversation, day separators, Seen, counter, closed banner (with date), rate-limit notice, send retry, card-number hint, skeleton, not-yet-available and empty states, and quick-reply chips that fill the composer (never send). Open: whether quick replies are customer-visible or seller-only (customer-app-plan section 6, item 10); the chips ship as the card shows them until that is answered. Not built: desktop side panel, "Report a problem" in the closed banner.
 
 ## Code
-To build in `mobile/app/orders/[id]/chat.tsx` and `web/components/hub/order-chat.tsx`.
+Mobile: `mobile/app/orders/[id]/chat.tsx`. Web: `web/components/hub/order-chat.tsx` (not built).

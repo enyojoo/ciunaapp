@@ -1209,7 +1209,12 @@
     "seen": "已读 {{time}}",
     "unavailable": "消息功能暂不可用",
     "unavailableBody": "请稍后再试。",
-    "closedOn": "聊天已于 {{date}} 关闭，您仍可查看聊天记录。"
+    "closedOn": "聊天已于 {{date}} 关闭，您仍可查看聊天记录。",
+    "quick": {
+      "where": "我的订单在哪里？",
+      "changeTime": "更改配送时间",
+      "allergy": "过敏问题"
+    }
   },
   "reviews": {
     "promptTitle": "为您的订单评分",

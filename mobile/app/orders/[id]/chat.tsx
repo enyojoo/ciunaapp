@@ -380,6 +380,21 @@ export default function OrderChatScreen() {
               {t("chat.cardHint", { defaultValue: "Please don't share card numbers or payment details here." })}
             </Text>
           ) : null}
+          {!draft.trim() ? (
+            // Quick replies fill the composer; they never send on their own.
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.quickRow} keyboardShouldPersistTaps="handled">
+              {(["where", "changeTime", "allergy"] as const).map((k) => (
+                <Pressable
+                  key={k}
+                  onPress={() => setDraft(t(`chat.quick.${k}`, { defaultValue: "" }))}
+                  accessibilityRole="button"
+                  style={styles.quickChip}
+                >
+                  <Text style={styles.quickText}>{t(`chat.quick.${k}`, { defaultValue: "" })}</Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+          ) : null}
           <View style={styles.composer}>
             <AppTextInput
               value={draft}
@@ -487,6 +502,9 @@ const styles = StyleSheet.create({
   inputOver: { borderColor: colors.danger },
   sendBtn: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center", backgroundColor: colors.primary },
   sendOff: { opacity: 0.4 },
+  quickRow: { gap: 8, paddingBottom: 8 },
+  quickChip: { minHeight: 34, justifyContent: "center", paddingHorizontal: 12, borderRadius: 17, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
+  quickText: { fontSize: 13, fontWeight: "600", color: colors.text },
   counter: { marginTop: 4, marginBottom: 6, textAlign: "right", fontSize: 12, color: colors.muted },
   counterOver: { color: colors.danger, fontWeight: "700" },
 })

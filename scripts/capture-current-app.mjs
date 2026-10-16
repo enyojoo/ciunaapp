@@ -78,6 +78,16 @@ async function mock(page) {
       ]
       return json(route, { cart: { id: "c1", user_id: profile.id, service_line_slug: "food", vendor_id: "v1", vendor, status: "active", items } })
     }
+    if (p === "/api/hub/orders/o1/messages") {
+      const now = Date.now()
+      const messages = [
+        { id: 1, senderKind: "customer", body: "Hi, is my order on the way?", language: "en", createdAt: new Date(now - 3600000).toISOString(), readAt: new Date(now - 3500000).toISOString() },
+        { id: 2, senderKind: "merchant", body: "Yes, it is being packed. About 20 minutes.", language: "en", createdAt: new Date(now - 1800000).toISOString(), readAt: null },
+        { id: 3, senderKind: "customer", body: "Thank you. Please add extra chilli.", language: "en", createdAt: new Date(now - 600000).toISOString(), readAt: new Date(now - 300000).toISOString() },
+      ]
+      return json(route, { messages, closed: false, available: true })
+    }
+    if (p === "/api/hub/orders/o1") return json(route, { order: { id: "o1", public_id: "CU-1042", created_at: new Date(Date.now() - 7200000).toISOString(), updated_at: new Date().toISOString(), payment_state: "paid", fulfillment_state: "preparing", events: [], seller: { name: "Mama T's Kitchen" }, snapshot: { title: "Mama T's Kitchen", line: "food", lines: [{ id: "ci1", quantity: 2, title: "Jollof rice with chicken", unitPrice: 450 }, { id: "ci2", quantity: 1, title: "Chin chin (200 g)", unitPrice: 250 }], totals: { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, convertedSubtotal: 1150, corridorFee: 0, total: 1150 } } } })
     if (p === "/api/hub/favorites") return json(route, { keys: [], vendors: [], experts: [], products: [] })
     if (p.startsWith("/api/referrals")) return json(route, { slug: "amara", balance: 0 })
     return route.continue()
@@ -92,6 +102,7 @@ const SHOTS = [
   { name: "cart-empty", path: "/hub/food/cart", wait: 2000, full: true },
   { name: "cart-filled", path: "/hub/food/cart", wait: 2500, full: true, filled: true },
   { name: "checkout-page", path: "/hub/food/checkout", wait: 3000, full: true, filled: true },
+  { name: "order-chat", path: "/orders/o1/chat", wait: 2500, full: true },
   { name: "more", path: "/more", wait: 2000, full: true },
   { name: "home", path: "/hub", wait: 2500, full: true },
 ]
