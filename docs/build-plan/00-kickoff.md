@@ -17,7 +17,7 @@ Use this to start a new session. Paste the prompt at the bottom.
 ## Stage A task list (start here; items are independent unless noted)
 | # | Task | Plan section | Exit test |
 | --- | --- | --- | --- |
-| A1 | Data baseline migration for tables with no DDL and core tables; CI Postgres job applies the chain twice | api-and-data WP0 | `npm run test:db` green; schema dump identical on second apply |
+| A1 | Data baseline: capture the live Supabase schema into one baseline migration (`supabase db dump --schema public --linked`, or the owner pastes a schema-only dump if the CLI is not linked) for the core tables with no DDL in the repo; CI Postgres job applies the chain twice. Also confirm the marketplace cron and vault SQL (`supabase/deploy/marketplace-cron.sql`) has been run. | api-and-data WP0 | `npm run test:db` green; schema dump identical on second apply; baseline lists every table the API reads |
 | A2 | Permission model: one matrix, `GET /api/admin/me`, convert legacy admin routes to `adminRoute(permission)`, client `<Can>` | api-and-data WP1, office O0 | matrix test: each role gets 403 or 200 per route |
 | A3 | Wire `zh` and `pt` into the language lists (`mobile/lib/i18n.ts`, `web/lib/i18n/config.ts`, `web/lib/auth-context.tsx`) | customer-app WP1 | six languages selectable on native and web, strings render |
 | A4 | Shared UI primitives and one status vocabulary (`packages/ui-web`, mobile status chip from tokens) | customer-app WP2, seller P3, office O3 | `design:check`, `design:cards`, `tsc` green |
@@ -26,6 +26,11 @@ Use this to start a new session. Paste the prompt at the bottom.
 | A7 | Seller alert emails: logo and recipient time zone | seller P2 | notify tests updated and green |
 
 Then Stage B (see master plan).
+
+## Owner actions that only the Supabase owner can do
+1. Back up, then run `supabase/deploy/seller-portal-all.sql` in the SQL Editor and send back the verify results (the build assumes these 7 migrations are applied; until then Seller and Office merchant features fail against the database).
+2. Run `supabase/deploy/marketplace-cron.sql` if not done.
+3. Create provider credentials when ready: Azure Translator, Expo push. Do not block on them; code uses fakes in tests.
 
 ## Settled (do not ask)
 Numbers are Office-editable seeds, translation is Azure AI Translator, Telegram is built but off until a bot token exists, account-deletion wording is final. See the end of `design-system/guides/80-decisions.md`. There is one Supabase project (production): apply SQL with a backup first (`supabase/deploy/seller-portal-all.sql`), never assume a staging copy.
