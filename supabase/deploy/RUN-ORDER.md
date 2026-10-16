@@ -1,0 +1,15 @@
+# SQL to run in Supabase (live project)
+
+Paste each file into the Supabase SQL Editor, in this order. Every file is additive, safe to re-run, and gives up after 5 seconds if it cannot lock a table (so it cannot hang your site; just run it again). **Take a backup first** (Dashboard, Database, Backups). The API and apps work without these files (new features show "unavailable" or empty states), so you can run them whenever you are ready; run them in order.
+
+| # | File | What it adds | After running, check |
+| --- | --- | --- | --- |
+| 1 | `seller-portal-all.sql` | Seller platform: merchants, team, applications, KYB, ledger, fees, payouts, alerts, reviews, order chat, analytics, search and favourites. Backfills a merchant for every existing vendor and expert. Starts with four pre-check queries: run those first and send me any rows they return. | verify queries at the bottom return 0 |
+| 2 | `rate-limits.sql` | Rate limiting table and function (search 60/min per IP, checkout 10/min, review 20/min). | none needed |
+| 3 | `office-queues.sql` | Office queues: claim and SLA on merchant applications and listing review, rejection reason templates (8), saved views. Needs file 1. | `select count(*) = 8 from reason_templates;` |
+| 4 | `seller-screens.sql` | Seller Home thresholds (low stock, document expiry warning). Needs file 1. | none needed |
+| 5 | `marketplace-cron.sql` (only if not done) | Marketplace background worker schedule and secrets. Needs the API deployed with `MARKETPLACE_WORKER_SECRET` and `MARKETPLACE_TOKEN_KEY`. Use `./scripts/marketplace-print-vault-cron.sh` to generate it. | `select * from cron.job;` |
+
+New SQL files from future work are appended to this table in the order to run them (see the rule in `docs/build-plan/00-kickoff.md`).
+
+If any file shows an error, stop and send me the error text; nothing is half-applied because each part is one transaction.

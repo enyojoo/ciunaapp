@@ -34,6 +34,9 @@ Marketplace checkout does not show a Ciuna-drawn list of payment methods. The cu
 ### Open fix for D0: payment frame placement (do first, verify in the running app)
 The `MarketCheckout`, `OrderSummary` and `ExpertBooking` cards currently draw the provider frame as a separate full screen. That is wrong. The current app opens the provider frame inline, under the order details, on the same screen. Task: run the Expo app (native and web build) through marketplace checkout, screenshot it, and redraw those frames to match: summary on top, frame beneath it, then the states (opening, waiting, paid, failed, cancelled). Check whether the frame mounts automatically or after a button press and whether native uses the same inline layout, and draw exactly that. Then look for improvements (sticky total, clearer failed state) as "Improved" frames. Do not re-decide this from code search alone.
 
+## Rule: every SQL file is listed in `supabase/deploy/RUN-ORDER.md`
+Whenever a task adds a migration, also add a paste-ready file in `supabase/deploy/` and a row in `supabase/deploy/RUN-ORDER.md` (order, what it adds, how to check it) in the same change. The owner runs those files in the Supabase SQL Editor in that order.
+
 ## Rule: build the API with every screen
 See "Rule: a screen is not done until its API and data exist" in `design-system/guides/80-decisions.md`. Gaps listed as "needs the API" in agent reports (Office queue counts, claim and SLA, search for Cmd-K, saved views, audit names, KYC and listing-review queues) are work items, not blockers.
 
