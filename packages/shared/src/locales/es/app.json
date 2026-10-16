@@ -611,7 +611,8 @@
       "sort_code": "ej. 123456",
       "iban": "ej. ES91 2100 0418 4502 0005 1332",
       "swift_bic": "ej. NWBKGB2L"
-    }
+    },
+    "confirmDeleteTitleNamed": "¿Eliminar a {{name}}?"
   },
   "referrals": {
     "pageTitle": "Referidos",
@@ -686,7 +687,8 @@
     "deleteTitle": "Eliminar cuenta",
     "deleteDescription": "¿Eliminar tu cuenta de forma permanente? No se puede deshacer. Se borrarán tus datos y transacciones.",
     "cancel": "Cancelar",
-    "deleting": "Eliminando…"
+    "deleting": "Eliminando…",
+    "emailHint": "Para cambiar tu correo, contacta con soporte."
   },
   "verification": {
     "hubTitle": "Verificación de cuenta",

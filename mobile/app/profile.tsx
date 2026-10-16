@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react"
 import * as ImagePicker from "expo-image-picker"
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { Camera, Image as ImageIcon, Pencil, Trash2 } from "lucide-react-native"
 import { Avatar } from "@/components/avatar"
 import { Field } from "@/components/field"
 import { GroupCard } from "@/components/row"
+import { ConfirmDialog } from "@/components/confirm-dialog"
+import { LanguagePicker } from "@/components/language-picker"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { CurrencyFlag } from "@/components/currency-flag"
@@ -148,27 +150,9 @@ export default function ProfileScreen() {
     }
   }
 
-  const confirmRemoveAvatar = () => {
-    Alert.alert(t("profile.removePhoto", { defaultValue: "Remove photo" }), t("profile.removePhotoConfirm", { defaultValue: "Remove your profile photo?" }), [
-      { text: t("profile.cancel"), style: "cancel" },
-      {
-        text: t("profile.removePhoto", { defaultValue: "Remove photo" }),
-        style: "destructive",
-        onPress: () => void removeAvatar(),
-      },
-    ])
-  }
-
-  const confirmDelete = () => {
-    Alert.alert(t("profile.deleteTitle"), t("profile.deleteDescription"), [
-      { text: t("profile.cancel"), style: "cancel" },
-      {
-        text: t("profile.deleteAccount"),
-        style: "destructive",
-        onPress: () => showError(t("profile.deleteNotImplemented")),
-      },
-    ])
-  }
+  const [confirm, setConfirm] = useState<"photo" | "delete" | null>(null)
+  const confirmRemoveAvatar = () => setConfirm("photo")
+  const confirmDelete = () => setConfirm("delete")
 
   return (
     <ScreenScroll edges={["left", "right"]}>
@@ -238,6 +222,7 @@ export default function ProfileScreen() {
             <InfoRow label={t("profile.firstName")} value={profile?.first_name || t("profile.notSet")} />
             <InfoRow label={t("profile.lastName")} value={profile?.last_name || t("profile.notSet")} />
             <InfoRow label={t("profile.email")} value={profile?.email || ""} />
+            <Text style={styles.hint}>{t("profile.emailHint", { defaultValue: "To change your email, contact support." })}</Text>
             <InfoRow label={t("profile.phone")} value={profile?.phone || t("profile.notSet")} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>{t("profile.baseCurrency")}</Text>
@@ -250,6 +235,7 @@ export default function ProfileScreen() {
                 <Text style={styles.infoValue}>{selectedCurrency?.code || baseCurrency}</Text>
               </View>
             </View>
+            <LanguagePicker />
           </View>
         )}
       </GroupCard>
@@ -293,6 +279,32 @@ export default function ProfileScreen() {
         }}
         onSelect={handlePhotoAction}
         onClose={() => setPhotoSheetOpen(false)}
+      />
+      <ConfirmDialog
+        open={confirm === "photo"}
+        title={t("profile.removePhoto", { defaultValue: "Remove photo" })}
+        description={t("profile.removePhotoConfirm", { defaultValue: "Remove your profile photo?" })}
+        confirmLabel={t("profile.removePhoto", { defaultValue: "Remove photo" })}
+        cancelLabel={t("profile.cancel")}
+        destructive
+        onCancel={() => setConfirm(null)}
+        onConfirm={() => {
+          setConfirm(null)
+          void removeAvatar()
+        }}
+      />
+      <ConfirmDialog
+        open={confirm === "delete"}
+        title={t("profile.deleteTitle")}
+        description={t("profile.deleteDescription")}
+        confirmLabel={t("profile.deleteAccount")}
+        cancelLabel={t("profile.cancel")}
+        destructive
+        onCancel={() => setConfirm(null)}
+        onConfirm={() => {
+          setConfirm(null)
+          showError(t("profile.deleteNotImplemented"))
+        }}
       />
     </ScreenScroll>
   )

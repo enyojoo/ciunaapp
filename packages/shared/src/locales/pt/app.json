@@ -701,7 +701,8 @@
       "sort_code": "ex.: 123456",
       "iban": "ex.: GB82 WEST 1234 5698 7654 32",
       "swift_bic": "ex.: NWBKGB2L"
-    }
+    },
+    "confirmDeleteTitleNamed": "Excluir {{name}}?"
   },
   "referrals": {
     "pageTitle": "Afiliados e indicações",
@@ -776,7 +777,8 @@
     "deleteTitle": "Excluir conta",
     "deleteDescription": "Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita. Todos os seus dados, transações e informações da conta serão excluídos permanentemente.",
     "cancel": "Cancelar",
-    "deleting": "Excluindo..."
+    "deleting": "Excluindo...",
+    "emailHint": "Para alterar seu e-mail, fale com o suporte."
   },
   "verification": {
     "hubTitle": "Verificação",

@@ -701,7 +701,8 @@
       "sort_code": "e.g., 123456",
       "iban": "e.g., GB82 WEST 1234 5698 7654 32",
       "swift_bic": "e.g., NWBKGB2L"
-    }
+    },
+    "confirmDeleteTitleNamed": "Delete {{name}}?"
   },
   "referrals": {
     "pageTitle": "Affiliates & Referrals",
@@ -776,7 +777,8 @@
     "deleteTitle": "Delete Account",
     "deleteDescription": "Are you sure you want to delete your account? This action cannot be undone. All your data, transactions, and account information will be permanently deleted.",
     "cancel": "Cancel",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "emailHint": "To change your email, contact support."
   },
   "verification": {
     "hubTitle": "Verification",

@@ -611,7 +611,8 @@
       "sort_code": "ex. : 123456",
       "iban": "ex. : FR76 3000 6000 0112 3456 7890 189",
       "swift_bic": "ex. : NWBKGB2L"
-    }
+    },
+    "confirmDeleteTitleNamed": "Supprimer {{name}} ?"
   },
   "referrals": {
     "pageTitle": "Parrainage",
@@ -686,7 +687,8 @@
     "deleteTitle": "Supprimer le compte",
     "deleteDescription": "Supprimer définitivement votre compte ? Cette action est irréversible. Toutes vos données et transactions seront effacées.",
     "cancel": "Annuler",
-    "deleting": "Suppression…"
+    "deleting": "Suppression…",
+    "emailHint": "Pour changer votre e-mail, contactez le support."
   },
   "verification": {
     "hubTitle": "Vérification du compte",

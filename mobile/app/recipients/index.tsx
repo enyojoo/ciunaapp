@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react"
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { AppTextInput } from "@/components/app-text-input"
 import { useInputFocusRing } from "@/lib/focused-input-box"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { SvgXml } from "react-native-svg"
 import { Pencil, Plus, Search, Trash2 } from "lucide-react-native"
 import { Avatar } from "@/components/avatar"
@@ -41,30 +42,17 @@ export default function RecipientsScreen() {
 
   const flagFor = (code?: string) => currencies.find((c) => c.code === code)?.flag_svg
 
-  const remove = (id: string) => {
-    Alert.alert(
-      t("recipients.confirmDeleteTitle", { defaultValue: "Delete recipient?" }),
-      t("recipients.confirmDeleteBody", { defaultValue: "This can't be undone." }),
-      [
-        { text: t("referrals.cancel", { defaultValue: "Cancel" }), style: "cancel" },
-        {
-          text: t("recipients.deleteAction", { defaultValue: "Delete" }),
-          style: "destructive",
-          onPress: () => {
-            void (async () => {
-              setDeletingId(id)
-              const { error } = await supabase.from("recipients").delete().eq("id", id)
-              setDeletingId(null)
-              if (error) {
-                showError(t("recipients.failedDeleteLinked"))
-                return
-              }
-              mutate((prev) => (prev || []).filter((r) => r.id !== id))
-            })()
-          },
-        },
-      ],
-    )
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null)
+  const remove = (id: string) => setPendingDelete({ id, name: rows.find((r) => r.id === id)?.full_name || "" })
+  const doDelete = async (id: string) => {
+    setDeletingId(id)
+    const { error } = await supabase.from("recipients").delete().eq("id", id)
+    setDeletingId(null)
+    if (error) {
+      showError(t("recipients.failedDeleteLinked"))
+      return
+    }
+    mutate((prev) => (prev || []).filter((r) => r.id !== id))
   }
 
   return (
@@ -144,6 +132,20 @@ export default function RecipientsScreen() {
           </View>
         ))
       )}
+      <ConfirmDialog
+        open={!!pendingDelete}
+        title={t("recipients.confirmDeleteTitleNamed", { name: pendingDelete?.name || "", defaultValue: "Delete {{name}}?" })}
+        description={t("recipients.confirmDeleteBody", { defaultValue: "This can't be undone." })}
+        confirmLabel={t("recipients.deleteAction", { defaultValue: "Delete" })}
+        cancelLabel={t("referrals.cancel", { defaultValue: "Cancel" })}
+        destructive
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => {
+          const id = pendingDelete?.id
+          setPendingDelete(null)
+          if (id) void doDelete(id)
+        }}
+      />
     </ScreenScroll>
   )
 }

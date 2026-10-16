@@ -701,7 +701,8 @@
       "sort_code": "例如：123456",
       "iban": "例如：GB82 WEST 1234 5698 7654 32",
       "swift_bic": "例如：NWBKGB2L"
-    }
+    },
+    "confirmDeleteTitleNamed": "删除 {{name}}？"
   },
   "referrals": {
     "pageTitle": "合作伙伴与推荐",
@@ -776,7 +777,8 @@
     "deleteTitle": "删除账户",
     "deleteDescription": "您确定要删除账户吗？此操作无法撤销。您的所有数据、交易和账户信息将被永久删除。",
     "cancel": "取消",
-    "deleting": "正在删除…"
+    "deleting": "正在删除…",
+    "emailHint": "如需更改邮箱，请联系客服。"
   },
   "verification": {
     "hubTitle": "身份验证",

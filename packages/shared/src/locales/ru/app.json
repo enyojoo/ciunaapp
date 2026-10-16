@@ -611,7 +611,8 @@
       "sort_code": "напр. 123456",
       "iban": "напр. DE89 3704 0044 0532 0130 00",
       "swift_bic": "напр. NWBKGB2L"
-    }
+    },
+    "confirmDeleteTitleNamed": "Удалить {{name}}?"
   },
   "referrals": {
     "pageTitle": "Рефералы",
@@ -686,7 +687,8 @@
     "deleteTitle": "Удалить аккаунт",
     "deleteDescription": "Удалить аккаунт безвозвратно? Все данные, операции и информация профиля будут удалены.",
     "cancel": "Отмена",
-    "deleting": "Удаление…"
+    "deleting": "Удаление…",
+    "emailHint": "Чтобы изменить email, свяжитесь с поддержкой."
   },
   "verification": {
     "hubTitle": "Верификация",
