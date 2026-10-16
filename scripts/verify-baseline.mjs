@@ -163,7 +163,7 @@ function ddlFromBaselineJson() {
   sql += "create table currencies (code varchar(3) primary key, name text, symbol text, status text default 'active');\n" +
     "insert into currencies (code, name) select c, c from unnest(array['RUB','USD','EUR','CNY','NGN','GHS','KES','BRL','GBP']) c;\n" +
     "create table recipients (id uuid primary key default gen_random_uuid(), user_id uuid references users(id), name text);\n" +
-    "create table expert_service_schedules (id uuid primary key default gen_random_uuid(), expert_service_id uuid);\n"
+    "create table expert_service_schedules (id uuid primary key default gen_random_uuid(), expert_service_id uuid, timezone text not null default 'UTC', window_start_date date not null default current_date, window_end_date date not null default current_date, slot_duration_minutes integer not null default 60, created_at timestamptz not null default now(), updated_at timestamptz not null default now());\n"
   for (const t of order) emit(t)
   for (const t of known) emit(t)
   // foreign keys after creation so order does not matter
@@ -287,6 +287,49 @@ compare("deploy files vs migration files", after1, await fingerprint(dbB))
 // the migrations themselves must also be re-runnable one by one
 for (const f of [...SELLER, RATE, OFFICE]) await dbB.exec(read("supabase/migrations/" + f))
 compare("migration files applied twice", after1, await fingerprint(dbB))
+
+// optional demo data: run twice, remove, run again
+if (synthetic) {
+  const demo = read("supabase/deploy/demo-data.sql"), demoRm = read("supabase/deploy/demo-data-remove.sql")
+  const q = async (sql) => (await dbA.query(sql)).rows
+  const num = async (sql) => Number(Object.values((await q(sql))[0])[0])
+  const counts = () => q(`select
+    (select count(*) from hub_products where owner_team='demo' and service_line_slug='food')::int food,
+    (select count(*) from hub_products p join hub_vendors v on v.id=p.vendor_id where p.owner_team='demo' and v.slug in ('demo-guangzhou-market','demo-latina-despensa'))::int mart,
+    (select count(*) from expert_profiles where slug like 'demo-%')::int experts,
+    (select count(*) from expert_services x join expert_profiles e on e.id=x.expert_profile_id where e.slug like 'demo-%')::int services,
+    (select count(*) from expert_service_slots)::int slots,
+    (select count(*) from marketplace_zones)::int zones, (select count(*) from hub_vendors)::int vendors, (select count(*) from merchants)::int merchants,
+    (select count(*) from hub_products)::int products, (select count(*) from expert_service_schedules)::int schedules`).then((r) => r[0])
+  // real Food stores the demo attaches to
+  await dbA.exec("insert into hub_vendors (service_line_slug,name,slug,is_published) values ('food','La Cabana','lacabana',true),('food','Harvest Lane','harvest-lane',true)")
+  const before = await counts()
+  try {
+    await dbA.exec(demo); const c1 = await counts()
+    await dbA.exec(demo); const c2 = await counts()
+    JSON.stringify(c1) === JSON.stringify(c2) ? ok("demo-data.sql second run adds nothing") : fail(`demo second run changed counts ${JSON.stringify(c1)} -> ${JSON.stringify(c2)}`)
+    c1.food === 9 && c1.mart === 9 && c1.experts === 3 && c1.services === 3 && c1.slots > 0 ? ok(`demo counts ${JSON.stringify(c1)}`) : fail(`demo counts wrong ${JSON.stringify(c1)}`)
+    const bad = await num(`select count(*) from expert_service_slots s where s.expert_service_id in (select id from expert_services where title in ('Immigration consultation (60 min)','Russian lesson (60 min)','Document translation check')) and not (
+      extract(isodow from s.slot_start at time zone 'Europe/Moscow') between 1 and 5 and (s.slot_start at time zone 'Europe/Moscow')::time >= '10:00' and (s.slot_end at time zone 'Europe/Moscow')::time <= '16:00' and (s.slot_end - s.slot_start) = interval '60 minutes')`)
+    bad === 0 ? ok("demo slots are weekdays 10:00-16:00 Moscow") : fail(`${bad} demo slots outside weekdays 10:00-16:00 Moscow`)
+    await dbA.exec(demoRm); const c3 = await counts()
+    const exp = { ...before }
+    JSON.stringify(c3) === JSON.stringify(exp) ? ok("demo-data-remove.sql restores the original counts (real rows untouched)") : fail(`remove left ${JSON.stringify(c3)} expected ${JSON.stringify(exp)}`)
+    await dbA.exec(demoRm); ok("demo-data-remove.sql is re-runnable")
+    const pk = await q("select pickup_location from hub_vendors where slug='lacabana'")
+    pk[0].pickup_location === null ? ok("pickup details reset") : fail("pickup details not reset")
+    await dbA.exec(demo); const c4 = await counts()
+    JSON.stringify(c4) === JSON.stringify(c1) ? ok("demo-data.sql again after remove matches first run") : fail(`demo rerun ${JSON.stringify(c4)} vs ${JSON.stringify(c1)}`)
+    // remove must refuse when a real order references a demo product
+    const pid = (await q("select id from hub_products where owner_team='demo' limit 1"))[0].id
+    await dbA.exec(`update marketplace_orders set snapshot = '{"items":[{"productId":"${pid}"}]}' where public_id='CI-1'`)
+    let refused = false
+    try { await dbA.exec(demoRm) } catch (e) { refused = /Cannot remove demo data/.test(e.message); await dbA.exec("rollback") }
+    refused ? ok("remove refuses when an order references a demo product") : fail("remove did not refuse for an order referencing a demo product")
+    const c5 = await counts()
+    JSON.stringify(c5) === JSON.stringify(c4) ? ok("refused remove changed nothing") : fail("refused remove changed data")
+  } catch (e) { fail("demo data: " + e.message) }
+}
 
 console.log(failures ? `\n${failures} problem(s)` : "\nall checks passed")
 process.exit(failures ? 1 : 0)

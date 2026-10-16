@@ -9,6 +9,8 @@ Paste each file into the Supabase SQL Editor, in this order. Every file is addit
 | 3 | `office-queues.sql` | Office queues: claim and SLA on merchant applications and listing review, rejection reason templates (8), saved views. Needs file 1. | `select count(*) = 8 from reason_templates;` |
 | 4 | `seller-screens.sql` | Seller Home thresholds (low stock, document expiry warning). Needs file 1. | none needed |
 | 5 | `marketplace-cron.sql` (only if not done) | Marketplace background worker schedule and secrets. Needs the API deployed with `MARKETPLACE_WORKER_SECRET` and `MARKETPLACE_TOKEN_KEY`. Use `./scripts/marketplace-print-vault-cron.sh` to generate it. | `select * from cron.job;` |
+| optional | `demo-data.sql` | Demo content: 9 Food products on lacabana and harvest-lane, 2 demo Mart stores with 9 products, Moscow delivery zones, 3 demo experts with services and weekday slots (next 14 days). Run after file 3 (needs file 1). Safe to re-run. | `select count(*) from hub_products where owner_team = 'demo';` returns 18 |
+| separate | `demo-data-remove.sql` | Removes only the demo rows. Refuses to run if a real order or booking references demo data. Not part of the normal order. | the count above returns 0 |
 
 New SQL files from future work are appended to this table in the order to run them (see the rule in `docs/build-plan/00-kickoff.md`).
 
