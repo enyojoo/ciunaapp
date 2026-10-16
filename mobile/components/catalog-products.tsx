@@ -19,6 +19,9 @@ export function CatalogProducts({
   onVendorPress,
   cartLineSlug,
   heading: headingProp,
+  category: categoryProp,
+  onCategoryChange,
+  hideChips,
 }: {
   products: HubProduct[]
   loading?: boolean
@@ -30,9 +33,17 @@ export function CatalogProducts({
   cartLineSlug?: "food" | "mart"
   /** Overrides the default "Products" heading — e.g. "More from {vendor}" on the product detail screen's recommendations. */
   heading?: string
+  /** Controlled category (a parent that shows the chips itself). Leave out to let this list own the filter. */
+  category?: string
+  onCategoryChange?: (category: string) => void
+  /** The parent shows the category chips elsewhere, so this list only shows the heading and products. */
+  hideChips?: boolean
 }) {
   const { t } = useTranslation("app")
-  const [category, setCategory] = useState("")
+  const [innerCategory, setInnerCategory] = useState("")
+  const controlled = categoryProp !== undefined && onCategoryChange !== undefined
+  const category = controlled ? categoryProp : innerCategory
+  const setCategory = controlled ? onCategoryChange : setInnerCategory
   const ordered = useMemo(() => sortHubCatalogProducts(products), [products])
   const options = useMemo(() => catalogCategories(ordered, category), [ordered, category])
   const visible = useMemo(() => filterCatalogByCategory(ordered, category), [ordered, category])
@@ -49,7 +60,7 @@ export function CatalogProducts({
       <Text style={styles.heading} numberOfLines={1}>
         {heading}
       </Text>
-      {options.length > 0 ? (
+      {options.length > 0 && !hideChips ? (
         <FilterChips
           options={chips}
           value={category || ALL_VALUE}

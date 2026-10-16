@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router"
 import { ChevronRight } from "lucide-react-native"
@@ -24,6 +24,8 @@ import {
 } from "@/lib/hub"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useHubCatalog } from "@/lib/use-hub-catalog"
+import { catalogCategories } from "@/lib/hub-catalog"
+import { FilterChips } from "@/components/filter-chips"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { colors } from "@/lib/theme"
 
@@ -56,11 +58,24 @@ export default function HubLineCatalog() {
 
   const catalogProducts = useMemo(() => attachVendorsToProducts(products, vendors, line), [products, vendors, line])
   const previewVendors = vendors.slice(0, STORES_PREVIEW)
+  // Category chips sit at the top, above Stores, and filter the product list below.
+  const [category, setCategory] = useState("")
+  const categoryOptions = useMemo(() => catalogCategories(catalogProducts, category), [catalogProducts, category])
   const storesLoading = loading && vendors.length === 0
 
   const catalog = (
     <>
       {marketplace ? <SearchEntryField line={line as "food" | "mart"} embedded /> : null}
+      {marketplace && categoryOptions.length > 0 ? (
+        <View style={styles.catChips}>
+          <FilterChips
+            options={[{ id: "__all__", label: t("hub.allCategories", { defaultValue: "All categories" }) }, ...categoryOptions.map((c) => ({ id: c, label: c }))]}
+            value={category || "__all__"}
+            onChange={(id) => setCategory(id === "__all__" ? "" : id)}
+            ariaLabel={t("hub.categoryFilterAria", { defaultValue: "Filter by category" })}
+          />
+        </View>
+      ) : null}
       {marketplace ? (
         <View style={styles.storesBlock}>
           <View style={styles.storesHead}>
@@ -105,6 +120,9 @@ export default function HubLineCatalog() {
       <CatalogProducts
         products={catalogProducts}
         loading={loading}
+        category={category}
+        onCategoryChange={setCategory}
+        hideChips={marketplace}
         showVendor
         onProductPress={(p) => router.push(hubProductDetailPath(line, p.id) as never)}
         onVendorPress={(p) => {
@@ -148,6 +166,7 @@ export default function HubLineCatalog() {
 }
 
 const styles = StyleSheet.create({
+  catChips: { marginBottom: 16 },
   flex: { flex: 1 },
   storesBlock: { marginBottom: 32 },
   storesHead: { marginBottom: 12, flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" },
