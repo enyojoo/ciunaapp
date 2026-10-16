@@ -13,7 +13,7 @@ Default; filtered; empty first use; no search match; first-load skeleton; error 
 Statuses follow StatusBadge: Completed and Confirmed green; Preparing, Pending, Awaiting amber; Cancelled and Refunded neutral; Failed red. Amounts: symbol first, no `.00`, tabular figures. Orange only on the active chip and the single empty/error action. Whole row is the tap target (68px).
 
 ## Upgrade
-Differs from the built app (`transactions.tsx`): title is Activity; adds the Bookings chip and expert rows; marketplace rows show one status chip instead of a "payment · fulfilment" text line; outgoing amounts carry a minus; skeleton rows replace the spinner; error and offline states are new.
+Built in `mobile/app/(app)/transactions.tsx`: summary tiles, search, chips (All, Send, Hub, Bookings, Payout), grouped rows, skeleton rows, retry state, saved-data note when a refresh fails.
 
 ## Code
 `mobile/app/(app)/transactions.tsx`

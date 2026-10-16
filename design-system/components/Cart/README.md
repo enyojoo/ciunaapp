@@ -13,7 +13,7 @@ Filled; below minimum order (warning banner, Checkout disabled); vendor lock she
 One store per cart. Money format: symbol first, no cents on whole amounts in lists, cents kept in breakdowns. The warning names the missing amount. The vendor-lock sheet never clears the cart silently.
 
 ## Upgrade
-Differs from the built app: the minimum-order warning, the vendor-lock sheet wording with two actions, and the store plate with Add more are New or reworded; lines and stepper exist today.
+Built in `mobile/app/(app)/hub/[slug]/cart.tsx`: shared top bar, store plate with Add more, lines with stepper and bin, unavailable items as muted rows with Remove (Checkout stays disabled until removed), subtotal and total, minimum-order note for delivery, closed-store note with opening time (Checkout disabled), skeleton rows, empty state.
 
 ## Code
 `mobile/app/(app)/hub/[slug]/cart.tsx`

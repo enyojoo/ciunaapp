@@ -13,7 +13,7 @@ default, sale, low stock (warning text with icon), in cart (stepper, primary-bor
 One action per card. Price follows PriceTag. Orange appears only on the Add button. Heart on a white plate. Tap targets 48px (visual 40px with padded hit area). Sold out stays visible. The skeleton shows only on a true first load.
 
 ## Upgrade
-Extends `mobile/components/product-card.tsx` and the web storefront tile: adds the in-cart stepper, low-stock line, closed-store state, list row variant, Chinese and Russian clamping.
+Built in `mobile/components/product-card.tsx`: fixed slots so every card has the same height (one-line name, cue line, store, price row), low-stock note in the cue line, shared `PriceTag`, stepper, sold-out state, favourite, skeleton, vendor-lock dialog before another store's cart is cleared, search match highlighting.
 
 ## Code
 `mobile/components/product-card.tsx`, `web/components/hub/hub-marketplace-vendor-storefront.tsx`

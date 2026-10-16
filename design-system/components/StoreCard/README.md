@@ -13,7 +13,7 @@ default, favourite, closed (greyscale cover and logo, 'Closed · Opens 9:00' chi
 Closed stores stay visible and favouritable but cannot be added to. Text colours never drop below AA when closed; only imagery goes greyscale. The verified icon follows VerifiedBadge. Opening time uses the viewer's time zone.
 
 ## Upgrade
-New; today only a plain vendor chip exists (`mobile/components/store-item.tsx`). Adds cover, logo, rating, closed state and the wide variant.
+Built in `mobile/components/store-item.tsx`: cover (the store's image when set, else the line's art), round logo, name with the verified mark (two tiers), rating or New store, location, favourite, and a dimmed cover with a Closed chip when the store has hours and is closed. Favourites lists use `StoreRow` (`list-rows.tsx`).
 
 ## Code
 `mobile/components/store-item.tsx`, `web/components/hub/hub-marketplace-vendor-storefront.tsx`

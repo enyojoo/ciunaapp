@@ -13,7 +13,7 @@ Awaiting payment (warning, exact amount, rate lock and deadline, Cancel transfer
 Say what happened to the money first. One status word per state: Awaiting payment, Processing, Completed, Failed, Refunded, Cancelled. Every time carries its zone. Methods by name (SBP QR, Bank transfer, Pay online); no provider names. The reference copies on tap. Report a problem opens a support request with the transfer attached (no refund workflow in the app; Office decides refunds). Share receipt only appears when a receipt exists. Repeat transfer starts Send with the same recipient and amount and a fresh quote.
 
 ## Upgrade
-Differs from the built app (`mobile/app/orders/[id].tsx`, `transaction-timeline.tsx`): the timeline has three stages today (initiated, processing, completed), so Payment received and Sent are separate steps (New); the screen shows one status headline and a failure box but no refund step or refund state (New); Share receipt, Repeat transfer (called Send Again today), Report a problem (Contact support today) and the awaiting-payment deadline with rate lock are New; the recipient card, copy of the transaction ID, amounts breakdown and receipt row exist.
+Built in `mobile/app/orders/[id].tsx`: status, timeline, recipient, amounts, Repeat transfer (opens Send with the same currencies, amount and recipient) and Share receipt (a text summary for completed transfers). A PDF receipt needs a backend route.
 
 ## Code
 `mobile/app/orders/[id].tsx`, `mobile/components/transaction-timeline.tsx`

@@ -5,24 +5,26 @@ This replaces the gap tables in `customer-app.md`, which are stale. It covers th
 ## Done
 
 **Home and discovery**
-- Home: sticky header (logo, Refer, avatar), purpose slider, drawn service tiles, no search. Dynamic height on small and large phones.
-- Food and Mart home: pill search field scoped to the line, stores rail, category chips (shared `FilterChips`), product grid.
+- Home: sticky header (logo, Refer, avatar), purpose slider, drawn service tiles with their descriptions, no search. Fits every screen with no scrolling (checked 320x568 to 430x932); four tiles in one row on wide web screens.
+- Food and Mart home: pill search field scoped to the line, category chips at the top (shared `FilterChips`), stores rail, product grid.
 - Product card: fixed slots (one-line name, cue line, store, price), low-stock note, shared `PriceTag`, favourite heart (34px, 48px target).
 - Store page: `StoreHeader` with fixed slots so every store has the same header height (cover scales with screen width, open state chip on the cover, one-line name, location, rating and count), minimum order line, pickup plate, reviews, skeleton.
 - Store card: cover image, closed state, verified tier.
 - Product page: swipeable gallery with dots, stock line, favourite in header, skeleton.
 - Search, favourites, empty states: built earlier. Skeletons now on product, store, cart, activity and expert browse.
 - `VerifiedBadge`: one component, two tiers (individual, registered business).
-- One top bar (`HubTopBar`) on Food and Mart, store, product, cart, checkout and the expert profile, service and booking screens: same back chip, bar height, hairline and action position, measured identical in screenshots. Content starts 16px under it.
-- Search: first four results per group in All with a See all link.
+- One top bar (`HubTopBar`) on every screen with a header: Food and Mart, store, product, cart, checkout, expert screens, and through one stack header all account, order, chat, favourites, referrals and support screens: same back chip, bar height, hairline and action position, measured identical in screenshots. Content starts 16px under it.
+- Search: first four results per group in All with a See all link; the matching text in names is highlighted.
+- Offline pill above the tab bar (no new dependency): the app's own requests and the browser's online and offline events drive it.
+- Web (Expo) desktop: sidebar shell, four-column catalog, forms and detail pages capped at a readable width and centred.
 
 **Cart, checkout, orders, reviews**
 - Cart: store plate, lines, unavailable items as rows with Remove, vendor-lock dialog, minimum-order note, closed-store block, skeleton.
-- Checkout: Details and Review progress header, item lines in the summary, inline payment frame (owner decision), delivery-not-available banner with Pick up instead, minimum-order banner, delivery time per area, closed-store banner. Closed stores block checkout (owner decision); placing the order fails with STORE_CLOSED.
+- Checkout: two real steps (Details with Continue, Review with a recap and Edit; bookings add Time), item lines in the summary, inline payment frame (owner decision), delivery-not-available banner with Pick up instead, minimum-order banner, delivery time per area, closed-store banner. Closed stores block checkout (owner decision); placing the order fails with STORE_CLOSED.
 - Order view: status header, summary, delivery or pickup card, stage timeline from real order states, Message seller, rate prompt, "Contact support" (owner decision).
 - Order chat: conversation, day separators, Seen, counter, closed and rate-limit states, quick replies (customer-visible, owner decision).
 - Reviews: summary, distribution, review cards with Read more and a Verified order mark, review sheet with edit window, shared `RatingInput` stars.
-- Order summary: "Pickup, Free" row and the booking date and time (in the expert's time zone) for expert orders. Order view: cancel reason in the status header, seller photo on Message seller, chat open until line.
+- Order summary: "Pickup, Free" row and the booking date and time (in the expert's time zone) for expert orders. Order view: cancel reason in the status header, seller photo on Message seller, chat open until line, sticky Message seller bar while the order is live.
 
 **Experts**
 - Directory: search, category chips, language chips, count, empty and error states. Card: rating or New, verified mark.
@@ -31,7 +33,7 @@ This replaces the gap tables in `customer-app.md`, which are stale. It covers th
 
 **Account**
 - More: Profile chip, language, Legal, in-app sign-out dialog. Profile: language row, email hint, in-app dialogs. Recipients: in-app delete dialog naming the recipient.
-- Login and register: inline errors (shared `AuthNotice`) and a language chip in the top bar. PIN: inline error and red dots. Referrals: code on its own copyable row and a progress strip to the next level. Activity: skeleton, retry, saved-data note, Bookings filter.
+- Login and register: inline errors (shared `AuthNotice`) and a language chip in the top bar. PIN: inline error and red dots. Referrals: code on its own copyable row and a progress strip to the next level. Activity: skeleton, retry, saved-data note, Bookings filter. Transfer detail: Repeat transfer (same currencies, amount, recipient) and Share receipt. Favourites: stores and experts as rows.
 
 **Backend, seller portal, data (needs `supabase/deploy/storefront-details.sql` run first)**
 - Migration and deploy file: opening hours and time zone, minimum order, delivery time per area, store cover, verification tier, expert languages, time zone, credentials, years, verified flag. Additive, backfills from merchants, applies cleanly on a test Postgres.
@@ -41,15 +43,10 @@ This replaces the gap tables in `customer-app.md`, which are stale. It covers th
 
 ## Left: can be built now (no backend)
 
-1. Orders: a Delivery or Pickup chip on Activity rows (needs the fulfilment mode in the transactions list); sticky Message seller bar while an order is live.
-2. ExpertBooking: step bar (Time, Details, Review) across the booking and checkout screens.
-3. Search: match highlighting inside product and store names, "Try instead" chips.
-4. Food and Mart home: move categories above Stores. Offline banner needs a network-status package (none installed; adding one is a dependency decision).
-5. Favourites: stores as rows, offline read-only list.
-6. Checkout: Review as its own step (today Details and Review share a screen).
-7. Transfer detail: Share receipt (when a receipt exists), Repeat transfer with the same recipient and amount (needs a Send change).
-8. FulfilmentPicker: delivery fee and time on each option.
-9. Top bar on the remaining screens: orders list, order view and chat (these still use native headers).
+1. Orders: a Delivery or Pickup chip on Activity rows (the transactions list needs to return the fulfilment mode).
+2. Order view and chat on wide web screens: the chat side panel next to the order (card's desktop layout).
+3. Store header: share button (needs a public store link).
+4. Design previews: the HTML frames in `design-system/components/*/preview.html` still show the older layouts for the cards changed in this pass (store header, top bar, Home tiles, checkout steps). The card READMEs are current; redraw the previews to match.
 
 ## Left: blocked on backend or a decision
 
@@ -60,6 +57,7 @@ This replaces the gap tables in `customer-app.md`, which are stale. It covers th
 - Account deletion; KYC levels, limits and the Limits screen; support requests and chat; push registration and in-app notifications; PDF receipts.
 - Popular near you; translation hint with Show original.
 - PIN attempts-left and lock rules (needs a rule decision).
+- A sticky Book bar on expert profiles (profiles have several services, so there is no single one to book).
 
 ## Web app (`web/`): not audited
 

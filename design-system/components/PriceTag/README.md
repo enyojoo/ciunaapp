@@ -13,7 +13,7 @@ list, sale, from, per hour, unit price, quote, free, sold out (muted), long sale
 Goes through `formatMoney` / `Amount`. Symbol first, no `.00` in lists, cents kept in breakdowns. Customers see only the pay currency, no FX chrome. Sale price keeps ink colour; the saving is a success badge, never orange or red. Quote and free are words, never ₽0.
 
 ## Upgrade
-Extracts the inline price markup in `mobile/components/product-card.tsx` and the web vendor storefront into one component. Adds unit price and quote.
+Built as `mobile/components/price-tag.tsx` (sm, md, lg): optional lead-in, struck list price, amount; whole amounts drop cents. Used on product cards and the product page.
 
 ## Code
 `packages/shared/src/money` (formatMoney), `web/components/ui/amount.tsx`

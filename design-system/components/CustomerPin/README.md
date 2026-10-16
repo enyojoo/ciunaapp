@@ -13,7 +13,7 @@ Create (empty, two digits); confirm; mismatch; change with a wrong current PIN; 
 Dots fill in ink and turn destructive red on an error, always with a message in words. The PIN submits itself on the fourth digit. After a wrong PIN the dots clear. Biometric opens first and falls back to the keypad. Keys are 72px and the whole keypad meets the 48px target. Log out is always available. The PIN never appears in text.
 
 ## Upgrade
-Differs from the built app (`pin.tsx`, `pin-setup.tsx`): errors move from a toast to the line under the title; the avatar and name greeting, attempts left, locked state and the biometric key in the keypad are New (biometric unlock runs on launch today without a visible key); the Security settings page groups PIN lock, change and biometrics.
+Built in `mobile/app/pin.tsx`: dots turn red and an inline Incorrect PIN line appears under the title on a wrong code, cleared on the next digit. Not built: attempts left and lock (needs a rule decision).
 
 ## Code
 `mobile/app/pin.tsx`, `mobile/app/pin-setup.tsx`, `mobile/components/pin-keypad.tsx`

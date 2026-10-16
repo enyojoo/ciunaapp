@@ -13,7 +13,7 @@ Delivery; pickup; address required (inline error); zone not served (destructive 
 No pay-method list: methods (card, SBP, others) appear inside the provider's payment frame, which we neither draw nor recreate (the card shows a plain placeholder, no provider logo or UI). Our own copy does not name the provider. The method is shown only afterwards, as the name returned. No FX rate, fee or delivery-time chrome from Send. Total is in RUB everywhere. The payment frame is inline below the order summary, not a separate screen or sheet (see 80-decisions). One tap on Pay, then the button is busy; never allow a second payment while checking.
 
 ## Upgrade
-Differs from the earlier design (which drew a method list; removed) and follows built behaviour: `marketplace-checkout.tsx` uses an embedded gateway on web and a native SDK gateway on mobile, driven by payment attempts. The two-step layout with progress, the pickup variant, the zone-not-served banner and the frame result screens are New or reworded.
+Built in `mobile/components/marketplace-checkout.tsx`: two real steps with a step bar (Details, Review; bookings add Time). Details has the form and Continue to review; Review has a recap of your details with Edit and the payment. Payment frame is inline (owner decision). Banners: delivery not available (with Pick up instead), minimum order, store closed (checkout blocked). Delivery and pickup options show fee, time and hours. Narrow centred column on wide screens.
 
 ## Code
 `mobile/components/marketplace-checkout.tsx`, `mobile/app/(app)/hub/[slug]/checkout/*`

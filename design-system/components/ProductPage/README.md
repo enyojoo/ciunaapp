@@ -13,7 +13,7 @@ Default; sold out (Sold out badge, fulfilment dimmed, the add button replaced by
 Stock is a word and an icon, never colour alone. Buttons name the action and the total. Adding from a different store than the cart asks first (see Cart). Fulfilment options come from the seller; unavailable ones are hidden, not disabled, unless the product is sold out.
 
 ## Upgrade
-Differs from the built app: gallery dots, stock counts, fulfilment cards, translation hint, reviews teaser and the sticky stepper bar are New; today the page shows one image, price, description and an Add button.
+Built in `mobile/app/(app)/hub/[slug]/p/[productId].tsx`: shared top bar with favourite and cart, swipeable gallery with dots (`product-gallery.tsx`, from the merchant gallery), title, fulfilment and time chips, store chip, description, `PriceTag`, stock line (Only N left under 6), Add to cart or stepper, More from this store, skeleton, vendor-lock dialog. Not built: sticky bottom bar, reviews teaser (no product reviews yet).
 
 ## Code
 `mobile/app/(app)/hub/[slug]/p/*`, `web/components/hub/*`

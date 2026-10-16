@@ -13,7 +13,7 @@ Loaded; first-load skeleton (six tiles) with no cache; a tile hidden by Office (
 No orange billboard: paper canvas with white tiles. Tile order, copy and artwork come from Office, never hardcoded. Icon artwork is a placeholder here (`.ph`). Each tile is one 48px+ tap target. Refer is teal, never a status colour.
 
 ## Upgrade
-Differs from the built app: `HubHero` (gradient billboard) is replaced by the paper canvas and one muted line; the Refer pill and the profile avatar are in the header (Support was removed from Home); desktop gets a greeting and referral plate (New). Tiles, skeleton and Office-driven grid are built.
+Built in `mobile/app/(app)/hub/index.tsx`. Sticky header (logo, Refer, avatar), purpose slider, drawn service tiles, no search. The page fits every screen height with no scrolling: tiles share the space under the banner, artwork flexes, two description lines are always reserved so rows stay equal, and the banner compacts on short screens (checked from 320x568 to 430x932). On wide web screens the tiles sit in one row of four, height capped, and the banner fits the content column.
 
 ## Code
 `mobile/app/(app)/hub/index.tsx`, `mobile/components/tile.tsx`, `web/components/hub/*`

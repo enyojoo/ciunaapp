@@ -23,7 +23,7 @@ Awaiting confirmation, Confirmed (link opens 10 minutes before start), Declined 
 - The meeting link is shown only after confirmation.
 
 ## Upgrade
-Built today: a booking wizard (`web/components/hub/expert-booking-wizard.tsx`, `mobile/app/experts/book/[serviceId].tsx`) with service, slot and pay. Pay step differs from the earlier design (method list removed) and follows the built gateway behaviour. New: payment-frame states, two-zone time line, notes with visibility line, awaiting versus confirmed confirmation, meeting link and calendar add, slot-taken and declined states.
+Built across `mobile/app/experts/book/[serviceId].tsx` and the checkout: shared top bar, a three-step bar (Time, Details, Review), the slot picker, then checkout with the session date and time in the summary.
 
 ## Code
 `web/components/hub/expert-booking-wizard.tsx`, `mobile/app/experts/book/[serviceId].tsx`

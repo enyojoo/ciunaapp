@@ -13,7 +13,7 @@ Default; share sheet; friends list; withdraw; withdraw over balance; empty; prog
 Teal marks the programme, orange is only the one action. Money uses the shared format (`₽3,840`). Say how a reward is earned in one line with a worked example. Reward windows show a date. Over-balance errors give the number to stay under. Nothing implies guaranteed income; the paused state is explained, not hidden.
 
 ## Upgrade
-Differs from the built app (`referrals.tsx`): the code is shown as a copyable code plus link (today only the link); the tier is shown as a progress strip instead of a table of rules; the Share sheet, an explicit empty state and the paused banner are New or restyled; the Refer pill on Home uses the same teal.
+Built in `mobile/app/referrals.tsx`: code on its own copyable row, link, QR, tiers with a progress strip to the next level, balances, friends, withdraw sheet, paused state.
 
 ## Code
 `mobile/app/referrals.tsx`

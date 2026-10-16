@@ -13,7 +13,7 @@ List; first-load skeleton; empty; search with no match; add (default, focused, e
 Fields come from the payout currency; labels say what the bank calls them and hints give the shape ("10 digits"). Errors say what to fix and sit under the field; the form never clears. Row tap edits; the trash icon is a 48px target and opens a confirm that names the person. Deleting a recipient does not remove history. No provider names.
 
 ## Upgrade
-Differs from the built app (`recipients/index.tsx`, `recipients/form.tsx`): pencil and trash pair becomes a tappable row with one trailing delete, to keep every control at 48px; delete uses the in-app dialog instead of the system alert and names the recipient; hints under fields and an explicit locked-currency note are New; the blocked-delete toast says when to retry.
+Built in `mobile/app/recipients/index.tsx`: list, search, empty state, in-app delete dialog naming the recipient, form.
 
 ## Code
 `mobile/app/recipients/index.tsx`, `mobile/app/recipients/form.tsx`, `mobile/components/recipient/recipient-form-fields.tsx`

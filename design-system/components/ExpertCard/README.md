@@ -13,7 +13,7 @@ default, favourite, unavailable (greyscale photo, 'No slots this week', Notify m
 Languages are 2-letter codes, never flags, and are filterable. Next availability is shown in the viewer's time zone with the zone name. New experts show 'New' instead of a rating until the first review. Price always says From and the unit (hr, page, session). Unavailable experts stay listed.
 
 ## Upgrade
-Extends the existing catalog card: adds language codes, next availability, unavailable state, favourite and compact row.
+Built in `mobile/components/expert-catalog.tsx` (`ExpertDirectoryCard`): photo, name with verified mark, rating or New, price hint, favourite. Favourites lists use `ExpertRow`. Not built: from-price.
 
 ## Code
 `web/components/hub/hub-expert-catalog-card.tsx`, `mobile/components/expert-catalog.tsx`

@@ -13,7 +13,7 @@ delivery in progress, pickup ready, cancelled (with refund), refunded after deli
 Stage names match StatusBadge words exactly. Done = success dot with check; current = primary ring; upcoming = empty dot, muted; Cancelled and Refunded = neutral dot. Every stage shows a time and who acted. Bookings show the viewer's time zone. No payment provider names.
 
 ## Upgrade
-Extends the existing transaction timeline; adds pickup, cancelled-with-refund, partial refund and booking variants.
+Built in `mobile/components/order-timeline.tsx` from the real order states (placed, paid, accepted, in progress, fulfilled), with cancelled and refund stops. Preparing and Ready show as one stage until the API returns stage times.
 
 ## Code
 `web/components/transaction-timeline.tsx`

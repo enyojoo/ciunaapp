@@ -20,7 +20,7 @@ First time (submit disabled until a star is picked), Edit (within 48 hours of wr
 - Same flow for expert bookings, with "Rate your session".
 
 ## Upgrade
-New. SQL rules and APIs exist (`api/lib/merchant/reviews.ts`, `api/app/api/hub/orders/[id]/review`, public review lists on vendors and experts); no customer UI yet.
+Built in `mobile/components/review-sheet.tsx` with the shared `RatingInput` (48px stars): rating with words, counter, first-name notice, edit window, locked and error states, experts variant.
 
 ## Code
 To build in `mobile/components/review-sheet.tsx` and `web/components/hub/review-dialog.tsx`.

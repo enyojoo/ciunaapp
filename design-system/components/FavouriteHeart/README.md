@@ -13,7 +13,7 @@ off, on, pressed, focus, disabled (request in flight), sign-in needed. Placed on
 Toggle with aria-pressed; label names the next action ('Save to favourites' / 'Remove from favourites'). Optimistic update with rollback. Signed-out taps open a sign-in sheet and never toggle. Always on a white plate so it reads over any photo.
 
 ## Upgrade
-Extends the `.heart` markup used on tiles; the pressed state and sign-in sheet are new.
+Built in `mobile/components/favourite-heart.tsx`: 34px plate with a 48px tap target on cards; a plain 40px icon inside list rows and the top bar; optimistic with rollback; hidden when favourites are unavailable.
 
 ## Code
 `web/components/hub/favourite-button.tsx`, `mobile/components/favourite-button.tsx`

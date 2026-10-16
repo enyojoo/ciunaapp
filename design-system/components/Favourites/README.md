@@ -13,7 +13,7 @@ Stores, Products, Experts with items; empty tab (heart icon, one sentence, a but
 The heart is both the toggle and the state: filled orange-text colour when saved, outline otherwise. Removal never asks for confirmation; it offers Undo. Unavailable items stay listed, muted, with their status. Favourites follow the account across devices.
 
 ## Upgrade
-Differs from the built app: store, product and expert favourites with tabs and the Undo toast are New; the signed-out prompt is New. Today only a product heart exists on cards.
+Built in `mobile/app/favourites.tsx`: tabs Stores, Products, Experts; stores and experts as rows (`list-rows.tsx`), products as a grid; filled heart removes with an Undo toast; empty, skeleton and error states. Not built: offline read-only list beyond the cached data.
 
 ## Code
 To be built: `mobile/app/(app)/favourites.tsx`, `web/components/favourites/*`

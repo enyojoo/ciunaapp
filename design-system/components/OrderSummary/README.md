@@ -13,7 +13,7 @@ Delivery order, pickup (delivery shown as "Pickup, free"), expert booking (servi
 The total is in the pay currency, whole rubles with true minus rules elsewhere. No FX chrome and no provider names in our copy. We do not draw payment methods; the method appears only after payment, as returned. Customer font.
 
 ## Upgrade
-Matches the totals block in `mobile/components/marketplace-checkout.tsx`; differs from the earlier design (method radio list removed): methods are chosen in the provider's payment frame.
+Built as `SummaryCard` in `mobile/components/marketplace-checkout.tsx`: store, order number, item lines, service fee, Delivery fee or Pickup Free, total, payment state, and the booking date and time (in the expert's zone) for expert orders.
 
 ## Code
 `mobile/components/marketplace-checkout.tsx`

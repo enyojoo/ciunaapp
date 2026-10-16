@@ -16,7 +16,7 @@ At `app.ciuna.com/more/profile` the page keeps the top nav, with the photo plate
 Email cannot be changed; say so and say who to contact. Errors name what to fix ("Enter a 10-digit phone number after +7"). Save is disabled until valid. Destructive actions are in red text only on their own row and dialog; the dialog names the action and states what is deleted and what is retained by law. Language changes immediately and is saved on the device and on the account. Names accept any script.
 
 ## Upgrade
-Differs from the built app (`profile.tsx`): language joins the profile rows (today it is only in Account); the delete dialog states what is retained and the blocked state lists open items (today the confirm calls a not-yet-implemented endpoint and shows "Account deletion is not yet implemented"); the email lock hint is New. The built web page (`web/app/more/profile/page.tsx`) edits in place with Discard and Save in the card header and already shows "Saving" on the button; the left photo plate and section links are New.
+Built in `mobile/app/profile.tsx`: photo sheet, edit mode, base currency, language row, email hint, in-app confirmation dialogs. Account deletion is blocked on a backend endpoint.
 
 ## Code
 `mobile/app/profile.tsx`, `web/app/more/profile/page.tsx`

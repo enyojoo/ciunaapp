@@ -23,7 +23,7 @@ Default, Filtered (count plus Clear filters), No match ("No experts match", Clea
 - Names and headlines accept any script.
 
 ## Upgrade
-Built today: a browse list in `mobile/app/experts/browse.tsx` and `index.tsx`. New: language chips with all six app languages, category chips, from-price, review count, the desktop grid, filtered, empty and loading states.
+Built in `mobile/app/experts/browse.tsx`: search, category chips, language chips, result count, Clear filters, loading skeleton, empty, no-match and retry states.
 
 ## Code
 `mobile/app/experts/index.tsx`, `mobile/app/experts/browse.tsx`, `web/components/hub/expert-*.tsx`

@@ -13,7 +13,7 @@ default, with seller reply, rating only, long text (clamped), Russian and Chines
 First name only. Verified order mark appears only for reviews tied to a completed order or booking. Reviews hidden by moderation are removed from the list, the count and the average for customers, with no placeholder and no reason; the reason is shown to the seller in Seller and to Office. Seller replies are one per review.
 
 ## Upgrade
-New. Follows the ratings and reviews rules and APIs (customer, public, seller, Office).
+Built as `ReviewCard` in `mobile/components/reviews-section.tsx`: first name, date, stars, Verified order mark, body clamped to four lines with Read more, seller reply.
 
 ## Code
 `web/components/hub/review-card.tsx` (new), `mobile/components/review-card.tsx` (new)

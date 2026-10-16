@@ -21,9 +21,7 @@ Loaded; Loading (photo and text skeletons); No availability (warning banner, Boo
 - Never show contact details; all talk goes through the booking.
 
 ## Upgrade
-Built today: profile page in `mobile/app/experts/[slug].tsx` and `web/components/hub/expert-profile-view.tsx` with services. New: verified badge, credentials block, intro video slot, availability hint, no-availability and unpublished states, review summary.
-
-Not built (design proposal only): "Notify me when she opens times" on the no-availability state, and the "Video coming soon" intro video slot. Treat both as New and confirm before building.
+Built in `mobile/app/experts/[slug].tsx`: shared top bar with favourite, avatar, name with verified tier, headline, category, rating, location, languages, years of experience, credentials, bio, services, reviews, retry and not-found states. Not built: sticky Book bar (profiles have several services), next availability.
 
 ## Code
 `mobile/app/experts/[slug].tsx`, `web/components/hub/expert-profile-view.tsx`
