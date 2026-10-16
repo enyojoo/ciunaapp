@@ -1,0 +1,92 @@
+<!-- @dsCard group="Foundations" width=1240 height=2321 subtitle="Which surface uses which shell: customer native, customer web, Seller and Office, with breakpoints, navigation, and what is shared (tokens, ui-web) and what is not" page -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ShellPlatforms</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.cz-page{max-width:1240px;margin:0 auto}
+.hd1{display:grid;gap:6px;margin-bottom:20px}
+.hd1 h1{margin:0;font:700 26px/32px var(--font-web);letter-spacing:-.4px}
+.hd1 p{margin:0;color:var(--muted);max-width:760px}
+.sec{margin-top:28px}
+.sec>h2{margin:0 0 10px;font:600 18px/24px var(--font-web)}
+.sec>p{margin:0 0 14px;color:var(--muted);font-size:14px;max-width:760px}
+.surf{display:grid;grid-template-columns:230px 1fr;gap:20px;padding:18px 20px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);align-items:start}
+.surf+.surf{margin-top:12px}
+.surf h3{margin:0 0 2px;font:600 16px/22px var(--font-web)}
+.surf .path{font:12.5px/18px ui-monospace,Menlo,monospace;color:var(--neutral-text)}
+.surf .who{font-size:13.5px;color:var(--muted);margin-top:6px}
+.wfs{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.wfc{display:grid;gap:8px;justify-items:start}
+.wfc .cap{font:600 11px/14px var(--font-web);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.wfc .nt{font-size:12.5px;line-height:17px;color:var(--muted);max-width:230px}
+.wf{border:1px solid var(--input-edge);border-radius:12px;background:var(--paper);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.wf.p{width:74px;height:132px}
+.wf.t{width:150px;height:110px}
+.wf.d{width:232px;height:132px}
+.wf .row{display:flex;flex:1;min-height:0}
+.wf .sb{width:30%;background:var(--surface);border-right:1px solid var(--hairline);padding:6px 5px;display:grid;gap:4px;align-content:start}
+.wf .sb i,.wf .tb i,.wf .bn i{display:block;height:6px;border-radius:3px;background:var(--hairline)}
+.wf .sb i.on,.wf .bn i.on{background:var(--primary)}
+.wf .sb i.lg{height:9px;width:60%;background:var(--ink);margin-bottom:3px}
+.wf .main{flex:1;padding:6px;display:grid;gap:5px;align-content:start;min-width:0}
+.wf .main b{display:block;height:8px;width:40%;border-radius:3px;background:var(--ink)}
+.wf .main u{display:block;height:20px;border-radius:5px;background:var(--surface);border:1px solid var(--hairline)}
+.wf .main .g2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.wf .main .g2 u{height:26px}
+.wf .tb{height:14px;border-bottom:1px solid var(--hairline);background:var(--surface);display:flex;align-items:center;justify-content:space-between;padding:0 6px;flex-shrink:0}
+.wf .tb i{width:30%}
+.wf .bn{height:16px;border-top:1px solid var(--hairline);background:var(--surface);display:flex;justify-content:space-around;align-items:center;flex-shrink:0}
+.wf .bn i{width:10px;height:8px;border-radius:3px}
+.wf .na{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:8px;font:600 11px/15px var(--font-web);color:var(--neutral-text);background:repeating-linear-gradient(135deg,var(--paper),var(--paper) 6px,var(--neutral-surface) 6px,var(--neutral-surface) 7px)}
+.wf .na span{background:var(--paper);padding:2px 6px;border-radius:6px}
+.wf.dash{border-style:dashed}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.tbl th{text-align:left;font:600 12px/16px var(--font-web);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--hairline);background:var(--paper)}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--hairline);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td:first-child{font-weight:600;white-space:nowrap}
+.ruler{position:relative;height:196px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:16px 20px}
+.rl{position:absolute;left:20px;right:20px;top:14px;height:20px}
+.rl i{position:absolute;top:0;bottom:-170px;width:1px;background:var(--hairline)}
+.rl span{position:absolute;top:0;transform:translateX(-50%);font:600 11px/16px var(--font-web);color:var(--muted);background:var(--surface);padding:0 4px}
+.band{position:absolute;left:20px;right:20px;height:26px;display:flex}
+.band div{height:26px;display:flex;align-items:center;padding:0 10px;font:600 12px/1 var(--font-web);white-space:nowrap;overflow:hidden}
+.band .a{background:var(--neutral-surface);color:var(--neutral-text);border-radius:8px 0 0 8px}
+.band .b{background:var(--primary-tint);color:var(--primary-text);border-radius:0 8px 8px 0}
+.band .c{background:var(--paper);color:var(--muted);border:1px dashed var(--input-edge)}
+.bl{position:absolute;left:20px;font:600 13px/26px var(--font-web)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.col{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:18px 20px}
+.col h3{margin:0 0 10px;font:600 15px/22px var(--font-web)}
+.col ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;font-size:14px}
+.col li{display:flex;gap:10px;align-items:flex-start}
+.col li .ic{--s:16px;margin-top:3px;flex-shrink:0}
+.col li.ok .ic{color:var(--success-text)}
+.col li.no .ic{color:var(--muted)}
+.col li code{font:12.5px/18px ui-monospace,Menlo,monospace;background:var(--neutral-surface);padding:1px 5px;border-radius:5px}
+.tok{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);padding:14px 18px}
+.tok b{font-weight:600}
+.tok .ic{--s:16px;color:var(--muted)}
+.pillx{display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:999px;background:var(--neutral-surface);font:600 12.5px/1 var(--font-web);color:var(--neutral-text)}
+.pillx.pr{background:var(--primary-tint);color:var(--primary-text)}
+</style></head>
+<body><div class="cz-page">
+<div class="hd1"><h1>Shell and platform map</h1><p>Four surfaces, each with its own shell, built from one set of tokens. Pick the surface first; the shell, the density and the navigation follow from it.</p></div>
+<div class="surf"><div><h3>Customer native</h3><div class="path">mobile/ (Expo: iOS, Android)</div><div class="who">Buyers, senders, people booking experts. Phone first.</div></div><div class="wfs"><div class="wfc"><div class="cap">Phone</div><div class="wf p "><div class="tb"><i></i><i style="width:14%"></i></div><div class="row"><div class="main"><b></b><div class="g2"><u></u><u></u><u></u><u></u></div></div></div><div class="bn"><i class="on"></i><i class=""></i><i class=""></i></div></div><div class="nt">Tab bar: Home, Transactions, More. Header with logo and pills. System font.</div></div><div class="wfc"><div class="cap">Tablet</div><div class="wf t dash "><div class="na"><span>Stretches the phone layout today</span></div></div><div class="nt">Design target: sidebar from tablet width. Not built.</div></div><div class="wfc"><div class="cap">Desktop</div><div class="wf d dash "><div class="na"><span>Not shipped. Use customer web</span></div></div><div class="nt">Expo web is not a delivery target; app.ciuna.com is the desktop app.</div></div></div></div><div class="surf"><div><h3>Customer web</h3><div class="path">web/ (Next.js, app.ciuna.com)</div><div class="who">Same customers on laptops and phone browsers.</div></div><div class="wfs"><div class="wfc"><div class="cap">Under 1024</div><div class="wf p "><div class="tb"><i></i><i style="width:14%"></i></div><div class="row"><div class="main"><b></b><div class="g2"><u></u><u></u><u></u><u></u></div></div></div><div class="bn"><i class="on"></i><i class=""></i><i class=""></i></div></div><div class="nt">Bottom nav: Home, Transactions, More. Same on tablets.</div></div><div class="wfc"><div class="cap">Tablet · under 1024</div><div class="wf t "><div class="tb"><i></i><i style="width:14%"></i></div><div class="row"><div class="main"><b></b><div class="g2"><u></u><u></u><u></u><u></u></div></div></div><div class="bn"><i class="on"></i><i class=""></i><i class=""></i></div></div><div class="nt">Content centres at 768 to 896px; the bottom nav stays.</div></div><div class="wfc"><div class="cap">1024 and up</div><div class="wf d "><div class="row"><div class="sb"><i class="lg"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div style="flex:1;display:flex;flex-direction:column;min-width:0"><div class="tb"><i></i><i style="width:14%"></i></div><div class="main"><b></b><div class="g2"><u></u><u></u><u></u><u></u></div></div></div></div></div><div class="nt">Built: 224px sidebar and a 64px top bar. Desktop cards draw a top nav; decide one.</div></div></div></div><div class="surf"><div><h3>Ciuna Seller</h3><div class="path">seller/ (Next.js, installable PWA)</div><div class="who">Store owners, experts and their staff. Phone and desktop equally.</div></div><div class="wfs"><div class="wfc"><div class="cap">Under 768</div><div class="wf p "><div class="tb"><i></i><i style="width:14%"></i></div><div class="row"><div class="main"><b></b><u></u><u></u><u></u></div></div><div class="bn"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div></div><div class="nt">Top bar with business switcher and menu; bottom nav of up to five; the rest in More.</div></div><div class="wfc"><div class="cap">768 to 1023</div><div class="wf t "><div class="row"><div class="sb"><i class="lg"></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="main"><b></b><u></u><u></u><u></u></div></div></div><div class="nt">248px sidebar, no top bar, content up to 1100px.</div></div><div class="wfc"><div class="cap">1024 and up</div><div class="wf d "><div class="row"><div class="sb"><i class="lg"></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="main" style="padding:6px 22px"><b></b><div class="g2"><u></u><u></u></div><u></u></div></div></div><div class="nt">Same sidebar; content centred and capped so rows stay readable.</div></div></div></div><div class="surf"><div><h3>Office</h3><div class="path">office/ (Next.js)</div><div class="who">Ciuna ops, support, finance and compliance. Desktop.</div></div><div class="wfs"><div class="wfc"><div class="cap">Under 1024</div><div class="wf p dash "><div class="na"><span>Drawer. Not designed for</span></div></div><div class="nt">A hamburger opens the sidebar. Works; do not design for it.</div></div><div class="wfc"><div class="cap">Tablet · under 1024</div><div class="wf t dash "><div class="na"><span>Drawer. Not designed for</span></div></div><div class="nt">Same drawer. Use a laptop.</div></div><div class="wfc"><div class="cap">1024 and up</div><div class="wf d "><div class="row"><div class="sb"><i class="lg"></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div style="flex:1;display:flex;flex-direction:column;min-width:0"><div class="tb"><i></i><i style="width:14%"></i></div><div class="main"><b></b><u style="height:14px"></u><u style="height:14px"></u><u style="height:14px"></u><u style="height:14px"></u></div></div></div></div><div class="nt">Fixed sidebar (built 224px, card 232px), header with search and role, dense tables.</div></div></div></div>
+<div class="sec"><h2>At a glance</h2><table class="tbl"><thead><tr><th>Surface</th><th>Shell changes at</th><th>Nav pattern</th><th>Type</th><th>Languages</th><th>Providers named</th><th>Install</th></tr></thead><tbody>
+<tr><td>Customer native</td><td>Phone only today</td><td>Bottom tab bar (3 tabs)</td><td>System font</td><td>en ru fr es zh pt</td><td>Never</td><td>App stores</td></tr>
+<tr><td>Customer web</td><td>1024</td><td>Bottom nav, then sidebar plus top bar</td><td>Geist</td><td>en ru fr es zh pt</td><td>Never</td><td>Browser</td></tr>
+<tr><td>Seller</td><td>768</td><td>Bottom nav (5) plus More, then 248px sidebar</td><td>Geist</td><td>en ru fr es zh pt</td><td>Never</td><td>PWA (manifest)</td></tr>
+<tr><td>Office</td><td>1024</td><td>Drawer, then grouped sidebar</td><td>Geist</td><td>en</td><td>Yes</td><td>Browser</td></tr></tbody></table></div>
+<div class="sec"><h2>Breakpoints</h2><p>Tailwind steps for the web surfaces: sm 640, md 768, lg 1024, xl 1280. Native follows the device class, not a pixel width.</p><div class="ruler" style="height:268px"><div class="rl"><i style="left:50.000%"></i><span style="left:50.000%">640</span><i style="left:60.000%"></i><span style="left:60.000%">768</span><i style="left:80.000%"></i><span style="left:80.000%">1024</span><i style="left:100.000%"></i><span style="left:100.000%">1280</span><span style="left:0%;transform:none">0</span></div><div style="position:absolute;left:20px;right:20px;top:58px"><div style="font:600 12px/14px var(--font-web);color:var(--muted);margin-bottom:3px">Customer native</div><div style="position:relative;height:26px"><div class="band" style="position:absolute;left:0.000%;width:100.000%;top:0;height:26px"><div class="c" style="flex:1;border-radius:8px">Phone tab bar at every width today. Sidebar from tablet is a design target</div></div></div></div><div style="position:absolute;left:20px;right:20px;top:106px"><div style="font:600 12px/14px var(--font-web);color:var(--muted);margin-bottom:3px">Customer web</div><div style="position:relative;height:26px"><div class="band" style="position:absolute;left:0.000%;width:80.000%;top:0;height:26px"><div class="a" style="flex:1;">Bottom nav</div></div><div class="band" style="position:absolute;left:80.000%;width:20.000%;top:0;height:26px"><div class="b" style="flex:1;">Sidebar and top bar</div></div></div></div><div style="position:absolute;left:20px;right:20px;top:154px"><div style="font:600 12px/14px var(--font-web);color:var(--muted);margin-bottom:3px">Seller</div><div style="position:relative;height:26px"><div class="band" style="position:absolute;left:0.000%;width:60.000%;top:0;height:26px"><div class="a" style="flex:1;">Bottom nav and top bar</div></div><div class="band" style="position:absolute;left:60.000%;width:40.000%;top:0;height:26px"><div class="b" style="flex:1;">248px sidebar</div></div></div></div><div style="position:absolute;left:20px;right:20px;top:202px"><div style="font:600 12px/14px var(--font-web);color:var(--muted);margin-bottom:3px">Office</div><div style="position:relative;height:26px"><div class="band" style="position:absolute;left:0.000%;width:80.000%;top:0;height:26px"><div class="c" style="flex:1;">Drawer, not designed for</div></div><div class="band" style="position:absolute;left:80.000%;width:20.000%;top:0;height:26px"><div class="b" style="flex:1;">Sidebar</div></div></div></div></div></div>
+<div class="sec"><h2>What is shared and what is not</h2><div class="two"><div class="col"><h3>Shared</h3><ul>
+<li class="ok"><i data-i="check"></i><span><b>Tokens.</b> <code>tokens.json</code> generates web, Seller and Office CSS, the Expo theme and Tailwind config. <code>npm run design:sync</code> keeps them in step; <code>design:check</code> fails on drift and on text pairs under AA.</span></li>
+<li class="ok"><i data-i="check"></i><span><b>Rules in <code>packages/shared</code>.</b> Money formatting, status vocabulary, locales (six languages), hub service lines.</span></li>
+<li class="ok"><i data-i="check"></i><span><b><code>packages/ui-web</code>.</b> Button, Input, Select, Field, Switch, StatusBadge, Card, PageHeader, Banner, EmptyState, Skeleton, Amount, Sheet, ConfirmDialog, Toast, Tabs, LanguageTabs. Seller uses it today; web and Office still use their own copies.</span></li>
+<li class="ok"><i data-i="check"></i><span><b>Vocabulary.</b> Button labels, status words, errors, the 48px tap target and the light-only rule.</span></li></ul></div><div class="col"><h3>Not shared</h3><ul>
+<li class="no"><i data-i="minus"></i><span><b>The shell.</b> Each app owns its layout, nav list and breakpoints (<code>seller/components/shell</code>, <code>office/components/layout</code>, <code>web/components/layout</code>, <code>mobile/app/(app)/_layout.tsx</code>). Nothing generic renders "an app shell".</span></li>
+<li class="no"><i data-i="minus"></i><span><b>Native components.</b> The Expo app builds its own React Native components; <code>ui-web</code> is web only.</span></li>
+<li class="no"><i data-i="minus"></i><span><b>Type.</b> Geist on web, the system font on native, by design.</span></li>
+<li class="no"><i data-i="minus"></i><span><b>Density.</b> No dense Office tables on customer screens; no big tiles in Office.</span></li>
+<li class="no"><i data-i="minus"></i><span><b>Providers.</b> Only Office names payment providers.</span></li></ul></div></div></div>
+<div class="sec"><div class="tok"><b>Tokens flow:</b><span class="pillx pr">tokens.json</span><i data-i="arrow-right"></i><span class="pillx">packages/shared/src/design</span><i data-i="arrow-right"></i><span class="pillx">web, seller, office globals.css</span><span class="pillx">Expo theme</span><span class="pillx">Tailwind config</span></div></div>
+</div></body></html>

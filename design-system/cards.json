@@ -60,6 +60,15 @@
    "readme": true
   },
   {
+   "name": "ShellPlatforms",
+   "group": "Foundations",
+   "subtitle": "Which surface uses which shell: customer native, customer web, Seller and Office, with breakpoints, navigation, and what is shared (tokens, ui-web) and what is not",
+   "height": 2321,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "Typography",
    "group": "Foundations",
    "subtitle": "Web scale in Geist, native scale in the system font, weights, tabular numerals, line length and long-language strings",
@@ -684,7 +693,7 @@
    "name": "CustomerProfile",
    "group": "Customer app · Screens",
    "subtitle": "Profile and account settings: view, edit with errors, photo and language sheets, delete account confirm and blocked, and a Chinese variant",
-   "height": 2921,
+   "height": 5594,
    "width": 1300,
    "page": true,
    "readme": true
@@ -792,7 +801,7 @@
    "name": "MartHome",
    "group": "Customer app · Screens",
    "subtitle": "The Mart line page like Food: search, category chips, Stores rail, products grid and cart bar, with loading, filter, empty, closed store, offline and error",
-   "height": 2921,
+   "height": 4234,
    "width": 1300,
    "page": true,
    "readme": true
@@ -942,6 +951,15 @@
    "readme": true
   },
   {
+   "name": "SellerMore",
+   "group": "Seller · Screens",
+   "subtitle": "Seller More: grouped list for store, expert and staff roles on phone and tablet, as a page and as a sheet, with language, sign out and a Russian variant",
+   "height": 4479,
+   "width": 1300,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "SellerOnboarding",
    "group": "Seller · Screens",
    "subtitle": "Create a business: choose type, name, section, country and languages, with an invite banner and validation states on phone and desktop",
@@ -1068,6 +1086,15 @@
    "readme": true
   },
   {
+   "name": "OfficeAssistant",
+   "group": "Office · Screens",
+   "subtitle": "Office Assistant: the ops AI assistant (conversation, tool result table, suggested and confirmed actions, errors, unavailable, role-limited) and the built queue of customer requests",
+   "height": 4516,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "OfficeAudit",
    "group": "Office · Screens",
    "subtitle": "Audit log: filters, actor role chips, expandable details JSON, saved views, pagination, no-match state",
@@ -1126,6 +1153,15 @@
    "group": "Office · Screens",
    "subtitle": "Fees and commissions: rules by scope with dates and active toggle, rule dialog, payout fees with waive-above, plans not billed yet, fee calculator, money settings",
    "height": 4670,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
+   "name": "OfficeHubSettings",
+   "group": "Office · Screens",
+   "subtitle": "Office Settings tabs not drawn elsewhere: Hub services order and enable, Payment methods per currency with display name and minimum, and Rates, Fees and Fulfilment as links",
+   "height": 4844,
    "width": 1240,
    "page": true,
    "readme": true
