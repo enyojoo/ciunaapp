@@ -1137,7 +1137,9 @@
     "resumeNative": "请在 Ciuna 应用中继续付款",
     "newPurchase": "再次购买",
     "backToShopping": "返回购物",
-    "orderCancelled": "订单已取消"
+    "orderCancelled": "订单已取消",
+    "progressDetails": "详情",
+    "progressReview": "确认"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

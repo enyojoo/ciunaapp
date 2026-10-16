@@ -201,7 +201,8 @@ export function MarketplaceCheckout({
   const fulfillmentMode = snap?.fulfillmentMode || q?.fulfillmentMode
   const modes = snap?.modes || q?.modes || []
   const title = snap?.title || q?.title || seed?.title || ""
-  const lines = snap?.lines || q?.lines || seed?.lines || []
+  // An empty array is truthy, so pick the first source that actually has lines.
+  const lines = (snap?.lines?.length ? snap.lines : q?.lines?.length ? q.lines : seed?.lines) || []
   const destHeading =
     fulfillmentMode === "delivery"
       ? label("deliveryDetails", "Delivery details")
@@ -410,6 +411,21 @@ export function MarketplaceCheckout({
           keyboardType="decimal-pad"
         />
       )}
+
+      <View style={styles.progress} accessibilityRole="progressbar">
+        <View style={styles.progressStep}>
+          <View style={[styles.progressBar, styles.progressBarOn]} />
+          <Text style={[styles.progressText, styles.progressTextOn]}>
+            {label("progressDetails", "Details")}
+          </Text>
+        </View>
+        <View style={styles.progressStep}>
+          <View style={[styles.progressBar, (paying || doneOrder) && styles.progressBarOn]} />
+          <Text style={[styles.progressText, (paying || doneOrder) && styles.progressTextOn]}>
+            {label("progressReview", "Review")}
+          </Text>
+        </View>
+      </View>
 
       {!q && !c.order && !c.error && !seed ? (
         <View style={styles.boot}>
@@ -940,6 +956,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   errorText: { fontSize: typeSize.meta, color: colors.danger, fontWeight: "600" },
+  progress: { flexDirection: "row", gap: 8, marginBottom: 16 },
+  progressStep: { flex: 1, gap: 6 },
+  progressBar: { height: 4, borderRadius: 2, backgroundColor: colors.border },
+  progressBarOn: { backgroundColor: colors.primary },
+  progressText: { fontSize: 12, fontWeight: "600", color: colors.muted },
+  progressTextOn: { color: colors.text },
   summary: {
     ...ui.card,
     padding: 18,

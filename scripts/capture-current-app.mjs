@@ -68,7 +68,7 @@ async function mock(page) {
     if (m) { const pr = products.find((x) => x.id === m[1]); return pr ? json(route, { product: pr }) : json(route, { error: "Not found" }, 404) }
     if (p === "/api/hub/checkout/preview") {
       const future = new Date(Date.now() + 15 * 60000).toISOString()
-      return json(route, { quote: { id: "q1", expiresAt: future, source: { kind: "cart", cartId: "c1" }, line: "food", title: "Mama T's Kitchen", lines: [], totals: { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, exchangeRate: 1, convertedSubtotal: 1150, corridorFee: 0, total: 1150 }, modes: ["delivery"], fulfillmentMode: "delivery", zones: [], requirePhone: false, methods: [], payCurrencies: ["RUB"], instructions: "", checkoutReady: true, snapshot: null } })
+      return json(route, { quote: { id: "q1", expiresAt: future, source: { kind: "cart", cartId: "c1" }, line: "food", title: "Mama T's Kitchen", lines: [{ id: "ci1", productId: "p1", quantity: 2, title: "Jollof rice with chicken", unitPrice: 450, feePercent: 0, fields: [] }, { id: "ci2", productId: "p3", quantity: 1, title: "Chin chin (200 g)", unitPrice: 250, feePercent: 0, fields: [] }], totals: { productCurrency: "RUB", payCurrency: "RUB", subtotal: 1150, marketplaceFee: 0, deliveryFee: 0, exchangeRate: 1, convertedSubtotal: 1150, corridorFee: 0, total: 1150 }, modes: ["delivery"], fulfillmentMode: "delivery", zones: [], requirePhone: false, methods: [], payCurrencies: ["RUB"], instructions: "", checkoutReady: true, snapshot: null } })
     }
     if (p === "/api/hub/cart") {
       if (!filledCart) return json(route, { cart: null, items: [] })
@@ -91,6 +91,7 @@ const SHOTS = [
   { name: "store-page", path: "/hub/food/v/mama-ts-kitchen", wait: 2500, full: true },
   { name: "cart-empty", path: "/hub/food/cart", wait: 2000, full: true },
   { name: "cart-filled", path: "/hub/food/cart", wait: 2500, full: true, filled: true },
+  { name: "checkout-page", path: "/hub/food/checkout", wait: 3000, full: true, filled: true },
   { name: "more", path: "/more", wait: 2000, full: true },
   { name: "home", path: "/hub", wait: 2500, full: true },
 ]

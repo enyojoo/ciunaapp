@@ -1137,7 +1137,9 @@
     "resumeNative": "Continuar el pago en la app Ciuna",
     "newPurchase": "Hacer otra compra",
     "backToShopping": "Volver a comprar",
-    "orderCancelled": "Pedido cancelado"
+    "orderCancelled": "Pedido cancelado",
+    "progressDetails": "Detalles",
+    "progressReview": "Revisión"
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",

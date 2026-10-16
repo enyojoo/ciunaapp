@@ -1137,7 +1137,9 @@
     "resumeNative": "Continue payment in the Ciuna app",
     "newPurchase": "Make another purchase",
     "backToShopping": "Back to shopping",
-    "orderCancelled": "Order cancelled"
+    "orderCancelled": "Order cancelled",
+    "progressDetails": "Details",
+    "progressReview": "Review"
   },
   "social": {
     "loadFailed": "Couldn't load, try again",
