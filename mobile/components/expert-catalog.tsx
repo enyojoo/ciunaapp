@@ -1,4 +1,3 @@
-import { formatCardPrice } from "@/lib/money"
 import { Highlighted } from "@/components/highlight"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
