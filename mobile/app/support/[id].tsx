@@ -131,7 +131,7 @@ export default function SupportThreadScreen() {
           }}
           multiline
           placeholder={t("support.req.reply", { defaultValue: "Write a reply" })}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.subtle}
           style={[styles.input, over && styles.inputOver]}
         />
         <Pressable
@@ -163,10 +163,10 @@ const styles = StyleSheet.create({
   agent: { fontSize: 12, fontWeight: "700", color: colors.muted },
   bubble: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: 18 },
   bubbleMine: { backgroundColor: colors.primary },
-  bubbleTheirs: { backgroundColor: "#E5E7EB" },
+  bubbleTheirs: { backgroundColor: colors.cardEdge },
   bubbleText: { fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   bubbleTextMine: { color: colors.onPrimary },
-  time: { fontSize: 11, color: colors.muted },
+  time: { fontSize: 12, color: colors.muted },
   error: { marginHorizontal: 16, marginBottom: 6, fontSize: typeSize.meta, fontWeight: "600", color: colors.danger },
   composer: { flexDirection: "row", alignItems: "flex-end", gap: 8, paddingHorizontal: 12, paddingTop: 8, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border, backgroundColor: colors.surface },
   input: { flex: 1, minHeight: 44, maxHeight: 120, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.row, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.paper, fontSize: typeSize.body, color: colors.text },

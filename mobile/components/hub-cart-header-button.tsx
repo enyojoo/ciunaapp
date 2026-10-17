@@ -39,7 +39,7 @@ export function HubCartHeaderButton({
       style={plain ? styles.hitPlain : styles.hit}
     >
       <View style={plain ? styles.chipPlain : styles.chip}>
-        <ShoppingCart size={plain ? 19 : 20} color={plain ? colors.primary : "#FFFFFF"} strokeWidth={2.2} />
+        <ShoppingCart size={plain ? 19 : 20} color={plain ? colors.primary : colors.surface} strokeWidth={2.2} />
         {count > 0 ? (
           <View style={plain ? styles.badgePlain : styles.badge}>
             <Text style={plain ? styles.badgeTextPlain : styles.badgeText}>{count > 9 ? "9+" : count}</Text>
@@ -64,15 +64,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -2,
     right: -2,
-    minWidth: 16,
-    height: 16,
-    borderRadius: 8,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
     paddingHorizontal: 3,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
   },
-  badgeText: { fontSize: 9, fontWeight: "700", color: "#C2410C" },
+  badgeText: { fontSize: 12, fontWeight: "700", color: colors.primaryText },
 
   // "plain" (native white header): smaller overall, badge fully inset with margin on every side
   // instead of overhanging the chip — the native header-right slot has less room than the hero
@@ -83,13 +83,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 1,
     right: -1,
-    minWidth: 13,
-    height: 13,
-    borderRadius: 6.5,
-    paddingHorizontal: 2,
+    minWidth: 17,
+    height: 17,
+    borderRadius: 8.5,
+    paddingHorizontal: 3,
     backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "center",
   },
-  badgeTextPlain: { fontSize: 8, fontWeight: "700", color: "#FFFFFF" },
+  badgeTextPlain: { fontSize: 12, fontWeight: "700", color: colors.onPrimary },
 })

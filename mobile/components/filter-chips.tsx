@@ -33,6 +33,7 @@ export function FilterChips<T extends string>({
             onPress={() => onChange(o.id)}
             accessibilityRole="button"
             accessibilityState={{ selected: on }}
+            hitSlop={{ top: 4, bottom: 4 }}
             style={[styles.chip, on && styles.chipOn]}
           >
             <Text style={[styles.text, on && styles.textOn]} numberOfLines={1}>

@@ -121,8 +121,8 @@ export default function ReceiptScreen() {
             <Text style={styles.date}>{when(r.issuedAt)}</Text>
           </View>
           <View style={[styles.badge, r.status === "refunded" ? styles.badgeNeutral : styles.badgeOk]}>
-            <BadgeCheck size={14} color={r.status === "refunded" ? "#4B5563" : "#047857"} strokeWidth={2.4} />
-            <Text style={[styles.badgeText, { color: r.status === "refunded" ? "#4B5563" : "#047857" }]}>{t(`receipt.status_${r.status}`, { defaultValue: r.status })}</Text>
+            <BadgeCheck size={14} color={r.status === "refunded" ? colors.neutralText : colors.success} strokeWidth={2.4} />
+            <Text style={[styles.badgeText, { color: r.status === "refunded" ? colors.neutralText : colors.successText }]}>{t(`receipt.status_${r.status}`, { defaultValue: r.status })}</Text>
           </View>
         </View>
 
@@ -199,8 +199,8 @@ const styles = StyleSheet.create({
   number: { fontSize: 18, fontWeight: "700", color: colors.text },
   date: { marginTop: 2, fontSize: typeSize.meta, color: colors.muted },
   badge: { flexDirection: "row", alignItems: "center", gap: 5, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 4 },
-  badgeOk: { backgroundColor: "#ECFDF5" },
-  badgeNeutral: { backgroundColor: "#F3F4F6" },
+  badgeOk: { backgroundColor: colors.successSurface },
+  badgeNeutral: { backgroundColor: colors.neutralSurface },
   badgeText: { fontSize: 12, fontWeight: "700" },
   row: { gap: 2 },
   label: { fontSize: 12, fontWeight: "600", color: colors.muted },

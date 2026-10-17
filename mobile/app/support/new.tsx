@@ -90,7 +90,7 @@ export default function NewSupportRequestScreen() {
           setError(null)
         }}
         placeholder={t("support.req.subjectPlaceholder", { defaultValue: "What do you need help with?" })}
-        placeholderTextColor="#9CA3AF"
+        placeholderTextColor={colors.subtle}
         style={styles.input}
       />
 
@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
   multiline: { minHeight: 140, paddingTop: 12, textAlignVertical: "top" },
   counter: { marginTop: 4, marginBottom: 12, textAlign: "right", fontSize: 12, color: colors.muted },
   counterOver: { color: colors.danger, fontWeight: "700" },
-  errorBox: { marginBottom: 12, padding: 12, borderRadius: radius.row, backgroundColor: "#FEF2F2" },
+  errorBox: { marginBottom: 12, padding: 12, borderRadius: radius.row, backgroundColor: colors.dangerSurface },
   errorText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.danger },
 })

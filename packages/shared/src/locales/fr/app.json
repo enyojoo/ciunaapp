@@ -309,7 +309,8 @@
     "badgeReferral": "Parrainage",
     "groupToday": "Aujourd’hui",
     "groupYesterday": "Hier",
-    "chipBookings": "Réservations"
+    "chipBookings": "Réservations",
+    "statusRefunded": "Remboursé"
   },
   "txDetail": {
     "errorNotFound": "Transaction introuvable ou accès refusé",
@@ -1504,5 +1505,11 @@
   "share": {
     "aria": "Partager",
     "copied": "Lien copié"
+  },
+  "a11y": {
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "copy": "Copier le lien",
+    "open": "Ouvrir"
   }
 }

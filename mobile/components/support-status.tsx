@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { radius } from "@/lib/theme"
+import { radius, colors } from "@/lib/theme"
 
 export type SupportStatus = "open" | "awaiting_customer" | "resolved"
 
 const TONE: Record<SupportStatus, { bg: string; fg: string }> = {
-  open: { bg: "#FFFBEB", fg: "#92400E" },
-  awaiting_customer: { bg: "#FFFBEB", fg: "#92400E" },
-  resolved: { bg: "#ECFDF5", fg: "#047857" },
+  open: { bg: colors.warningSurface, fg: colors.warningText },
+  awaiting_customer: { bg: colors.warningSurface, fg: colors.warningText },
+  resolved: { bg: colors.successSurface, fg: colors.success },
 }
 
 /** Request status in the system's words: In review and Awaiting you are warning, Resolved is success. */

@@ -406,7 +406,7 @@ export function OrderChat({ orderId, embedded }: { orderId: string; embedded?: b
               onChangeText={setDraft}
               multiline
               placeholder={t("chat.placeholder", { defaultValue: "Write a message" })}
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.subtle}
               accessibilityLabel={t("chat.placeholder", { defaultValue: "Write a message" })}
               style={[styles.input, over && styles.inputOver]}
               onKeyPress={(e) => {
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
   stripTitle: { marginTop: 2, fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
   list: { flexGrow: 1, paddingHorizontal: 16, paddingVertical: 12, gap: 6 },
   skeletons: { gap: 10, paddingTop: 8 },
-  skel: { height: 40, width: "62%", borderRadius: 16, backgroundColor: "#E5E7EB" },
+  skel: { height: 40, width: "62%", borderRadius: 16, backgroundColor: colors.cardEdge },
   skelIn: { alignSelf: "flex-start" },
   skelOut: { alignSelf: "flex-end", width: "48%" },
   center: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 64, paddingHorizontal: 24 },
@@ -467,14 +467,14 @@ const styles = StyleSheet.create({
   rowOut: { alignItems: "flex-end", marginBottom: 6 },
   dim: { opacity: 0.6 },
   bubble: { maxWidth: "82%", borderRadius: 18, paddingHorizontal: 14, paddingVertical: 10 },
-  bubbleIn: { backgroundColor: "#E5E7EB", borderBottomLeftRadius: 6 },
+  bubbleIn: { backgroundColor: colors.cardEdge, borderBottomLeftRadius: 6 },
   bubbleOut: { backgroundColor: colors.primary, borderBottomRightRadius: 6 },
   textIn: { fontSize: typeSize.body, lineHeight: 21, color: colors.text },
   textOut: { fontSize: typeSize.body, lineHeight: 21, color: colors.onPrimary },
-  time: { marginTop: 3, marginHorizontal: 4, fontSize: 11, color: colors.muted },
+  time: { marginTop: 3, marginHorizontal: 4, fontSize: 12, color: colors.muted },
   failRow: { flexDirection: "row", alignItems: "center", gap: 10, marginTop: 3 },
   failText: { fontSize: 12, fontWeight: "700", color: colors.danger },
-  retryHit: { minHeight: 32, justifyContent: "center" },
+  retryHit: { minHeight: 44, justifyContent: "center" },
   retryText: { fontSize: 12, fontWeight: "700", color: colors.primaryText },
   banner: {
     marginHorizontal: 16,
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
   sendBtn: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center", backgroundColor: colors.primary },
   sendOff: { opacity: 0.4 },
   quickRow: { gap: 8, paddingBottom: 8 },
-  quickChip: { minHeight: 34, justifyContent: "center", paddingHorizontal: 12, borderRadius: 17, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
+  quickChip: { minHeight: 44, justifyContent: "center", paddingHorizontal: 12, borderRadius: 17, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
   quickText: { fontSize: 13, fontWeight: "600", color: colors.text },
   counter: { marginTop: 4, marginBottom: 6, textAlign: "right", fontSize: 12, color: colors.muted },
   counterOver: { color: colors.danger, fontWeight: "700" },

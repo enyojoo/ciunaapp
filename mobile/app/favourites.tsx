@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 4,
     gap: 4,
     borderRadius: radius.pill,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: colors.cardEdge,
   },
   tab: { flex: 1, minHeight: 40, alignItems: "center", justifyContent: "center", borderRadius: radius.pill },
   tabOn: { backgroundColor: colors.surface },

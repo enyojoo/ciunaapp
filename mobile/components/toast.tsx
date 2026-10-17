@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 const USE_NATIVE_DRIVER = Platform.OS !== "web"
-const WARNING = "#D97706"
 
 export type ToastType = "success" | "error" | "info" | "warning"
 
@@ -43,8 +42,9 @@ export function Toast({
     ]).start(() => onClose())
   }
 
+  // Ink toast: light icon and text on a dark plate, so it reads on any screen and never competes with the orange action.
   const accent =
-    type === "success" ? colors.success : type === "error" ? colors.danger : type === "warning" ? WARNING : colors.primary
+    type === "success" ? colors.successBorder : type === "error" ? colors.dangerBorder : type === "warning" ? colors.warningBorder : colors.primaryBorder
   const TypeIcon = type === "success" ? CircleCheck : type === "error" ? CircleX : type === "warning" ? TriangleAlert : Info
 
   return (
@@ -54,7 +54,7 @@ export function Toast({
         { top: insets.top + TOAST_TOP_OFFSET, transform: [{ translateY: slide }], opacity },
       ]}
     >
-      <View style={[styles.toast, { borderLeftColor: accent }]}>
+      <View style={styles.toast} accessibilityRole="alert" accessibilityLiveRegion="polite">
         <TypeIcon size={20} color={accent} strokeWidth={2} />
         <Text style={styles.message}>{message}</Text>
         {action ? (
@@ -68,13 +68,13 @@ export function Toast({
             hitSlop={8}
           >
             <View style={styles.actionHit}>
-              <Text style={[styles.action, { color: accent }]}>{action.label}</Text>
+              <Text style={styles.action}>{action.label}</Text>
             </View>
           </Pressable>
         ) : null}
         <Pressable onPress={dismiss} accessibilityRole="button" accessibilityLabel="Close" hitSlop={8}>
           <View style={styles.closeHit}>
-            <X size={18} color={colors.muted} strokeWidth={2} />
+            <X size={18} color={colors.subtle} strokeWidth={2} />
           </View>
         </Pressable>
       </View>
@@ -95,10 +95,9 @@ const styles = StyleSheet.create({
   toast: {
     flexDirection: "row",
     alignItems: "flex-start",
-    backgroundColor: colors.surface,
+    backgroundColor: colors.text,
     borderRadius: radius.card,
     padding: 16,
-    borderLeftWidth: 4,
     gap: 12,
     boxShadow: "0 8px 16px rgba(17, 24, 39, 0.12)",
     elevation: 8,
@@ -107,9 +106,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typeSize.body,
     lineHeight: 22,
-    color: colors.text,
+    color: colors.surface,
   },
-  actionHit: { paddingHorizontal: 8, paddingVertical: 4, minHeight: 32, justifyContent: "center" },
-  action: { fontSize: typeSize.meta, fontWeight: "600" },
-  closeHit: { width: 32, height: 32, alignItems: "center", justifyContent: "center" },
+  actionHit: { paddingHorizontal: 8, paddingVertical: 4, minHeight: 44, justifyContent: "center" },
+  action: { fontSize: typeSize.meta, fontWeight: "700", color: colors.surface, textDecorationLine: "underline" },
+  closeHit: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
 })

@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.referBg,
   },
   stateCardPending: {
-    borderColor: "#FDE68A",
-    backgroundColor: "#FFFBEB",
+    borderColor: colors.warningBorder,
+    backgroundColor: colors.warningSurface,
   },
   stateIcon: {
     width: 64,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 16,
   },
-  stateIconSuccess: { backgroundColor: "#D1FAE5" },
+  stateIconSuccess: { backgroundColor: colors.successSurface },
   stateIconPending: { backgroundColor: "#FEF3C7" },
   stateTitle: { fontSize: 20, fontWeight: "700", color: colors.text, textAlign: "center" },
   stateBody: { marginTop: 8, fontSize: typeSize.body, lineHeight: 22, color: colors.muted, textAlign: "center" },

@@ -408,7 +408,8 @@
     "badgeReferral": "推荐",
     "groupToday": "今天",
     "groupYesterday": "昨天",
-    "chipBookings": "预约"
+    "chipBookings": "预约",
+    "statusRefunded": "已退款"
   },
   "txDetail": {
     "errorNotFound": "未找到交易或无权访问",
@@ -1504,5 +1505,11 @@
   "share": {
     "aria": "分享",
     "copied": "链接已复制"
+  },
+  "a11y": {
+    "edit": "编辑",
+    "delete": "删除",
+    "copy": "复制链接",
+    "open": "打开"
   }
 }

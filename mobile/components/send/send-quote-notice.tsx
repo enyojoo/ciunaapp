@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.paper,
   },
   boxWarning: {
-    borderColor: "#FECACA",
-    backgroundColor: "#FEF2F2",
+    borderColor: colors.dangerBorder,
+    backgroundColor: colors.dangerSurface,
   },
   text: { flex: 1, fontSize: typeSize.meta, lineHeight: 18 },
   textInfo: { color: colors.muted },
-  textWarning: { color: "#991B1B" },
+  textWarning: { color: colors.dangerText },
 })

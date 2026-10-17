@@ -188,7 +188,7 @@ export default function ReferralsScreen() {
 
         {data?.shareUrl ? (
           <View style={styles.qrWrap}>
-            <QRCode value={data.shareUrl} size={140} color={colors.text} backgroundColor="#ffffff" />
+            <QRCode value={data.shareUrl} size={140} color={colors.text} backgroundColor={colors.surface} />
           </View>
         ) : null}
 
@@ -208,7 +208,7 @@ export default function ReferralsScreen() {
           <Text style={styles.linkText} numberOfLines={1}>
             {data?.shareUrl}
           </Text>
-          <Pressable onPress={() => void copyLink()} hitSlop={8} style={styles.copyBtn}>
+          <Pressable onPress={() => void copyLink()} hitSlop={8} style={styles.copyBtn} accessibilityRole="button" accessibilityLabel={t("a11y.copy", { defaultValue: "Copy link" })}>
             {copied ? (
               <Check size={16} color={colors.success} strokeWidth={2.4} />
             ) : (
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   codeRow: { marginBottom: 8 },
   codeLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
   codeValue: { flex: 1, fontSize: 15, fontWeight: "700", letterSpacing: 0.5, color: colors.text },
-  copyBtn: { width: 32, height: 32, alignItems: "center", justifyContent: "center" },
+  copyBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   tierBlock: { marginTop: 18 },
   progress: { marginTop: 12, gap: 6 },
   progressTrack: { height: 8, borderRadius: 4, backgroundColor: colors.border, overflow: "hidden" },
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   tierRowTextActive: { color: colors.primaryDeep, fontWeight: "600" },
   tierRowPct: { fontSize: 13, fontWeight: "700", color: colors.text },
   bold: { fontWeight: "700" },
-  tierExample: { marginTop: 8, fontSize: 11, color: colors.muted },
+  tierExample: { marginTop: 8, fontSize: 12, color: colors.muted },
   balanceCard: {
     marginBottom: 20,
     flexDirection: "row",

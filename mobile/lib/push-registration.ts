@@ -7,7 +7,8 @@ import { fetchWithAuth } from "./api"
 let registeredToken: string | null = null
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: false, shouldSetBadge: false }),
+  // In the foreground the app shows its own toast (components/push-registration.tsx), not the system banner.
+  handleNotification: async () => ({ shouldShowBanner: false, shouldShowList: true, shouldPlaySound: false, shouldSetBadge: false }),
 })
 
 /** Ask for permission (once) and give the server this device's token. Native phones only; never throws. */

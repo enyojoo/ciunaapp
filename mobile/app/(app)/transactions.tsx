@@ -178,7 +178,7 @@ export default function TransactionsScreen() {
           onFocus={searchFocus.onFocus}
           onBlur={searchFocus.onBlur}
           placeholder={t("orders.searchPlaceholder", { defaultValue: "Search transactions..." })}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.subtle}
           style={styles.searchInput}
         />
       </View>

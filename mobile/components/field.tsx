@@ -28,7 +28,7 @@ export function Field({
             ringBlur()
             onBlur?.(e)
           }}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.subtle}
           style={[styles.input, props.style]}
         />
         {trailing}
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: radius.row,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.inputEdge,
     backgroundColor: colors.surface,
     paddingHorizontal: 14,
   },

@@ -1095,7 +1095,7 @@ const styles = StyleSheet.create({
   boot: { paddingVertical: 48, alignItems: "center", justifyContent: "center" },
   errorBox: {
     borderRadius: radius.row,
-    backgroundColor: "#FEF2F2",
+    backgroundColor: colors.dangerSurface,
     padding: 14,
     marginBottom: 8,
   },
@@ -1178,7 +1178,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   warn: { fontSize: typeSize.meta, color: colors.primaryDeep, lineHeight: 18 },
-  zoneBanner: { gap: 8, padding: 14, borderRadius: radius.row, backgroundColor: "#FEF2F2" },
+  zoneBanner: { gap: 8, padding: 14, borderRadius: radius.row, backgroundColor: colors.dangerSurface },
   zoneTitle: { fontSize: typeSize.body, fontWeight: "700", color: colors.danger },
   zoneBody: { fontSize: typeSize.meta, lineHeight: 18, color: colors.text },
   link: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary, marginVertical: 8 },
@@ -1205,7 +1205,7 @@ const styles = StyleSheet.create({
   },
   choiceActive: {
     borderColor: colors.primary,
-    backgroundColor: "#FFF7ED",
+    backgroundColor: colors.heroBody,
   },
   choiceLabel: { fontSize: typeSize.label, fontWeight: "600", color: colors.text },
   choiceLabelActive: { color: colors.primary },

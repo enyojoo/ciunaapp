@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   tabActive: {
     borderColor: colors.primary,
-    backgroundColor: "#FFF7ED",
+    backgroundColor: colors.heroBody,
   },
   tabLabel: {
     fontSize: typeSize.meta,
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   },
   methodRowActive: {
     borderColor: colors.primary,
-    backgroundColor: "#FFF7ED",
+    backgroundColor: colors.heroBody,
   },
   methodName: { flex: 1, fontSize: typeSize.label, fontWeight: "600", color: colors.text },
   methodNameActive: { color: colors.primary },
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
   },
   instructionLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "600",
     letterSpacing: 0.4,
     textTransform: "uppercase",
@@ -384,8 +384,8 @@ const styles = StyleSheet.create({
   },
   uploadDone: {
     borderStyle: "solid",
-    borderColor: "#A7F3D0",
-    backgroundColor: "#ECFDF5",
+    borderColor: colors.successBorder,
+    backgroundColor: colors.successSurface,
   },
   uploadIcon: {
     width: 40,
@@ -395,13 +395,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: colors.supportBg,
   },
-  uploadIconDone: { backgroundColor: "#D1FAE5" },
+  uploadIconDone: { backgroundColor: colors.successSurface },
   uploadCopy: { flex: 1, minWidth: 0 },
   uploadTitle: { fontSize: typeSize.label, fontWeight: "600", color: colors.text },
   uploadMeta: { marginTop: 2, fontSize: typeSize.meta, color: colors.muted },
   successBox: {
     borderRadius: radius.row,
-    backgroundColor: "#ECFDF5",
+    backgroundColor: colors.successSurface,
     padding: 14,
   },
   successText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.success },

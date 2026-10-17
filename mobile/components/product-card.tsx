@@ -155,7 +155,7 @@ export function ProductCard({
       <View style={styles.stepper}>
         <Pressable
           onPress={() => handleQuantityChange(cartQuantity - 1)}
-          hitSlop={6}
+          hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
           style={styles.stepperBtn}
@@ -165,7 +165,7 @@ export function ProductCard({
         <Text style={styles.stepperValue}>{cartQuantity}</Text>
         <Pressable
           onPress={() => handleQuantityChange(cartQuantity + 1)}
-          hitSlop={6}
+          hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
           style={styles.stepperBtn}
@@ -267,21 +267,21 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: radius.card,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: colors.cardEdge,
     backgroundColor: colors.surface,
     ...shadow({ opacity: 0.08, radius: 10, offsetY: 4, elevation: 2 }),
   },
   skeleton: { borderColor: colors.border, ...shadowNone },
-  imageWrap: { width: "100%", aspectRatio: 4 / 3, backgroundColor: "#F3F4F6" },
+  imageWrap: { width: "100%", aspectRatio: 4 / 3, backgroundColor: colors.neutralSurface },
   image: { width: "100%", height: "100%" },
   imageFallback: {
     width: "100%",
     aspectRatio: 4 / 3,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: colors.neutralSurface,
   },
-  noImage: { fontSize: 11, color: colors.muted, textAlign: "center", paddingHorizontal: 8 },
+  noImage: { fontSize: 12, color: colors.muted, textAlign: "center", paddingHorizontal: 8 },
   catBadge: {
     position: "absolute",
     top: 6,
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
-  catBadgeText: { fontSize: 9, fontWeight: "600", color: "#374151" },
+  catBadgeText: { fontSize: 12, fontWeight: "600", color: colors.neutralText },
   body: { paddingHorizontal: 10, paddingTop: 0, paddingBottom: 10 },
   bodyTop: { paddingHorizontal: 10, paddingTop: 8 },
   title: { fontSize: 13, fontWeight: "600", lineHeight: 17, minHeight: 17, color: colors.text },
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   fulfillmentCue: {
     marginTop: 2,
     minHeight: 14,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "600",
     color: colors.primary,
     textTransform: "capitalize",
@@ -317,8 +317,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  vendorInitial: { fontSize: 9, fontWeight: "700", color: colors.muted },
-  vendorName: { flexShrink: 1, fontSize: 11, fontWeight: "500", color: colors.text },
+  vendorInitial: { fontSize: 12, fontWeight: "700", color: colors.muted },
+  vendorName: { flexShrink: 1, fontSize: 12, fontWeight: "500", color: colors.text },
   priceBlock: { marginTop: 4, gap: 8, minHeight: 40, justifyContent: "flex-end" },
   cta: {
     minHeight: 32,
@@ -338,10 +338,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.primary,
-    backgroundColor: "#FFF7ED",
+    backgroundColor: colors.heroBody,
     paddingHorizontal: 6,
   },
-  stepperBtn: { width: 24, height: 24, alignItems: "center", justifyContent: "center" },
+  stepperBtn: { width: 28, height: 28, alignItems: "center", justifyContent: "center" },
   stepperValue: { flex: 1, textAlign: "center", fontSize: 13, fontWeight: "700", color: colors.primary },
   skelTitle: { height: 14, width: "80%", borderRadius: 4, backgroundColor: colors.paper },
   skelMeta: { marginTop: 8, height: 10, width: "50%", borderRadius: 4, backgroundColor: colors.paper },

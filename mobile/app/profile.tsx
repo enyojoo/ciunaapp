@@ -167,9 +167,9 @@ export default function ProfileScreen() {
             <Avatar name={name} size={72} uri={profile?.avatar_url} />
             <View style={styles.avatarBadge}>
               {avatarUploading || avatarRemoving ? (
-                <ActivityIndicator size="small" color="#fff" />
+                <ActivityIndicator size="small" color={colors.onPrimary} />
               ) : (
-                <Camera size={14} color="#fff" strokeWidth={2.4} />
+                <Camera size={14} color={colors.onPrimary} strokeWidth={2.4} />
               )}
             </View>
           </Pressable>
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
   email: { fontSize: typeSize.meta, color: colors.muted },
   cardHead: { marginBottom: 8, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   cardTitle: { fontSize: 17, fontWeight: "600", color: colors.text },
-  editBtn: { flexDirection: "row", alignItems: "center", gap: 6, minHeight: 32, paddingHorizontal: 4 },
+  editBtn: { flexDirection: "row", alignItems: "center", gap: 6, minHeight: 44, paddingHorizontal: 4 },
   editBtnText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary },
   form: { paddingVertical: 4, gap: 4 },
   fieldWrap: { marginBottom: 14 },

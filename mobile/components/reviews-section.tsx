@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   dist: { flex: 1, gap: 4 },
   distRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   distLabel: { width: 10, fontSize: 12, fontWeight: "600", color: colors.muted, textAlign: "right" },
-  distTrack: { flex: 1, height: 6, borderRadius: 3, backgroundColor: "#E5E7EB", overflow: "hidden" },
+  distTrack: { flex: 1, height: 6, borderRadius: 3, backgroundColor: colors.cardEdge, overflow: "hidden" },
   distFill: { height: 6, borderRadius: 3, backgroundColor: colors.primaryText },
   distCount: { width: 22, fontSize: 12, color: colors.muted },
   list: { marginTop: 12, marginBottom: 12, gap: 10 },

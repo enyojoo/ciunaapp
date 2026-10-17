@@ -211,7 +211,7 @@ export function SendAmountStep({
                 }}
                 keyboardType="decimal-pad"
                 placeholder={amountPlaceholder}
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.subtle}
                 style={styles.amountInput}
                 maxLength={14}
               />
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   },
   lane: { paddingHorizontal: 14, paddingVertical: 14, gap: 10 },
   laneLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "700",
     letterSpacing: 0.6,
     textTransform: "uppercase",
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   currencyCode: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text },
-  currencyCaret: { fontSize: 10, color: colors.muted, marginTop: 1 },
+  currencyCaret: { fontSize: 12, color: colors.muted, marginTop: 1 },
   amountField: {
     flex: 1,
     minWidth: 0,
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.row,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: "#FAFAFA",
+    backgroundColor: colors.paper,
   },
   amountFieldReadonly: { backgroundColor: colors.paper },
   amountSymbol: {

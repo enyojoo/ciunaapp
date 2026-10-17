@@ -331,9 +331,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  stepperBtn: { width: 28, height: 28, alignItems: "center", justifyContent: "center" },
+  stepperBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   stepperValue: { width: 22, textAlign: "center", fontSize: 13, fontWeight: "600", color: colors.text },
-  removeBtn: { width: 28, height: 28, alignItems: "center", justifyContent: "center" },
+  removeBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   subtotalRow: {
     marginTop: 16,
     flexDirection: "row",

@@ -311,7 +311,7 @@ export function BitbankerVerificationForm({ defaultEmail = "", onSubmitted }: Pr
         style={[styles.consentRow, form.consent && styles.consentRowOn]}
       >
         <View style={[styles.checkbox, form.consent && styles.checkboxOn]}>
-          {form.consent ? <Check size={14} color="#FFFFFF" strokeWidth={3} /> : null}
+          {form.consent ? <Check size={14} color={colors.onPrimary} strokeWidth={3} /> : null}
         </View>
         <Text style={styles.consentText}>{t("verification.formConsentShort")}</Text>
       </Pressable>

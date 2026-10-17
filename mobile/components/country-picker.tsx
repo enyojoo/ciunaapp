@@ -54,7 +54,7 @@ export function CountryPicker({
             onFocus={searchFocus.onFocus}
             onBlur={searchFocus.onBlur}
             placeholder={searchPlaceholder}
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.subtle}
             style={styles.searchInput}
           />
         </View>

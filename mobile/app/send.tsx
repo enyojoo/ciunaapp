@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.row,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: "#FDBA74",
-    backgroundColor: "#FFF7ED",
+    backgroundColor: colors.heroBody,
     paddingHorizontal: 10,
     paddingVertical: 8,
     minHeight: 40,

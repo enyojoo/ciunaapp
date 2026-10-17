@@ -242,7 +242,7 @@ function ReviewSheet({
               onChangeText={setText}
               multiline
               placeholder={t("reviews.bodyPlaceholder", { defaultValue: "Tell others what you thought (optional)" })}
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.subtle}
               accessibilityLabel={t("reviews.bodyPlaceholder", { defaultValue: "Tell others what you thought (optional)" })}
               style={[styles.input, over && styles.inputOver]}
             />
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
   },
   cardButtonText: { fontSize: typeSize.meta, fontWeight: "700", color: colors.onPrimary },
-  linkHit: { minHeight: 40, justifyContent: "center" },
+  linkHit: { minHeight: 44, justifyContent: "center" },
   link: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primaryText },
   head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 12 },
   sheetTitle: { fontSize: 18, fontWeight: "600", color: colors.text },

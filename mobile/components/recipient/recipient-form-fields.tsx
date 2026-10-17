@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   selectBoxLocked: { backgroundColor: colors.heroBody },
   currencyValue: { flexDirection: "row", alignItems: "center", gap: 10, flex: 1, minWidth: 0 },
   selectText: { fontSize: typeSize.body, color: colors.text, flexShrink: 1 },
-  autoTag: { fontSize: 11, fontWeight: "600", color: colors.muted },
+  autoTag: { fontSize: 12, fontWeight: "600", color: colors.muted },
   toggleRow: { flexDirection: "row", gap: 12, marginBottom: 14 },
   toggle: {
     flex: 1,

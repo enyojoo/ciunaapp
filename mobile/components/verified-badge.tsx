@@ -20,7 +20,12 @@ export function VerifiedBadge({ size = 14, label, kind = "vendor", tier, explain
       : kind === "expert"
       ? t("hub.expertVerified", { defaultValue: "Verified expert" })
       : t("hub.verifiedVendor", { defaultValue: "Verified vendor" }))
-  const icon = <BadgeCheck size={size} color={colors.success} strokeWidth={2.2} accessibilityLabel={text} />
+  // The label sits on a wrapper: native screen readers ignore labels on the SVG itself.
+  const icon = (
+    <View accessible accessibilityRole="image" accessibilityLabel={text}>
+      <BadgeCheck size={size} color={colors.success} strokeWidth={2.2} />
+    </View>
+  )
   if (!explain) return icon
   const body =
     tier === 2

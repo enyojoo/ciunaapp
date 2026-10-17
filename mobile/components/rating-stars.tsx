@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { Star } from "lucide-react-native"
 import { colors } from "@/lib/theme"
 
-const EMPTY = "#D1D5DB"
+const EMPTY = colors.starEmpty
 
 /** Read-only stars. Filled stars use the orange text colour on white; empty ones are hairline grey outlines. */
 export function RatingStars({ value, size = 14 }: { value: number; size?: number }) {

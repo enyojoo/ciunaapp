@@ -44,12 +44,13 @@ export function matchesSearch(tx: CombinedTransaction, query: string): boolean {
 }
 
 /** Normalizes legacy/adjacent status values onto the 5 canonical ones for UI purposes. */
-export function statusTone(status?: string | null): "pending" | "processing" | "completed" | "failed" | "cancelled" {
+export function statusTone(status?: string | null): "pending" | "processing" | "completed" | "failed" | "cancelled" | "refunded" {
   const s = String(status || "").toLowerCase()
   if (s === "completed" || s === "deposited") return "completed"
   if (s === "processing" || s === "converting" || s === "converted") return "processing"
   if (s === "failed") return "failed"
   if (s === "cancelled") return "cancelled"
+  if (s === "refunded") return "refunded"
   return "pending"
 }
 
@@ -61,6 +62,7 @@ export function statusLabel(t: TFunc, status?: string | null): string {
   if (tone === "processing") return t("txTimeline.processing")
   if (tone === "failed") return t("orders.statusFailed")
   if (tone === "cancelled") return t("orders.statusCancelled")
+  if (tone === "refunded") return t("orders.statusRefunded")
   return t("orders.statusPending")
 }
 

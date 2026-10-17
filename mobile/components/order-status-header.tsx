@@ -11,12 +11,12 @@ type OrderLike = {
 }
 
 const TONE: Record<string, { bg: string; fg: string; Icon: typeof Package }> = {
-  awaiting_payment: { bg: "#FFFBEB", fg: "#92400E", Icon: CreditCard },
-  awaiting_acceptance: { bg: "#FFFBEB", fg: "#92400E", Icon: Clock },
-  accepted: { bg: "#ECFDF5", fg: "#047857", Icon: CheckCircle2 },
-  in_progress: { bg: "#FFFBEB", fg: "#92400E", Icon: Package },
-  fulfilled: { bg: "#ECFDF5", fg: "#047857", Icon: CheckCircle2 },
-  cancelled: { bg: "#F3F4F6", fg: "#4B5563", Icon: XCircle },
+  awaiting_payment: { bg: colors.warningSurface, fg: colors.warningText, Icon: CreditCard },
+  awaiting_acceptance: { bg: colors.warningSurface, fg: colors.warningText, Icon: Clock },
+  accepted: { bg: colors.successSurface, fg: colors.success, Icon: CheckCircle2 },
+  in_progress: { bg: colors.warningSurface, fg: colors.warningText, Icon: Package },
+  fulfilled: { bg: colors.successSurface, fg: colors.success, Icon: CheckCircle2 },
+  cancelled: { bg: colors.neutralSurface, fg: colors.neutralText, Icon: XCircle },
 }
 
 /** One icon, one status badge and a plain sentence: where this order is right now. */

@@ -71,6 +71,12 @@ export const colors = {
   neutralSurface: designColors.neutralSurface,
   refer: designColors.refer,
   referBg: designColors.referSurface,
+  cardEdge: designColors.cardEdge,
+  starEmpty: designColors.starEmpty,
+  scrim: designColors.scrim,
+  dangerBorder: "#FECACA",
+  warningBorder: "#FDE68A",
+  successBorder: "#A7F3D0",
   referBgEnd: "#ECFDF5",
   referBorder: "#99F6E4",
   referText: "#134E4A",
@@ -84,8 +90,12 @@ export const colors = {
 } as const
 
 export const radius = {
+  /** Inputs, buttons, chips with a box. */
+  control: 12,
   card: 16,
   row: 12,
+  /** Bottom sheets and dialogs. */
+  sheet: 24,
   pill: 999,
 } as const
 
@@ -94,6 +104,8 @@ export const type = {
   body: 16,
   label: 15,
   meta: 13,
+  /** Smallest text anywhere: 12px. Nothing is drawn below it. */
+  caption: 12,
 } as const
 
 export const space = {
@@ -102,7 +114,17 @@ export const space = {
 } as const
 
 export const motion = {
+  fastMs: 150,
   sheetMs: 180,
+  normalMs: 220,
+} as const
+
+/** Shadow presets from tokens.json (native-card, native-face, native-heart, native-cart-bar). */
+export const shadows = {
+  card: shadow({ opacity: 0.08, radius: 10, offsetY: 4, elevation: 3 }),
+  face: shadow({ opacity: 0.06, radius: 8, offsetY: 2, elevation: 2 }),
+  heart: shadow({ opacity: 0.12, radius: 4, offsetY: 1, elevation: 2 }),
+  cartBar: shadow({ opacity: 0.3, radius: 16, offsetY: 6, elevation: 8 }),
 } as const
 
 export const ui = StyleSheet.create({

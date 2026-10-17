@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   statusSlot: { height: 22, flexDirection: "row", alignItems: "center" },
   coverChip: { position: "absolute", right: 10, bottom: 10, maxWidth: "70%", borderRadius: radius.pill, backgroundColor: colors.surface, paddingHorizontal: 10, paddingVertical: 4 },
   chipText: { fontSize: 12, fontWeight: "600" },
-  chipTextOn: { color: "#047857" },
-  chipTextOff: { color: "#4B5563" },
+  chipTextOn: { color: colors.successText },
+  chipTextOff: { color: colors.neutralText },
   meta: { flexShrink: 1, fontSize: typeSize.meta, color: colors.muted },
 })

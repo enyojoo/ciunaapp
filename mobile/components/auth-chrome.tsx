@@ -209,8 +209,8 @@ function AppleMark() {
 
 const styles = StyleSheet.create({
   notice: { borderRadius: radius.row, padding: 12, marginBottom: 12 },
-  noticeError: { backgroundColor: "#FEF2F2" },
-  noticeWarn: { backgroundColor: "#FFFBEB" },
+  noticeError: { backgroundColor: colors.dangerSurface },
+  noticeWarn: { backgroundColor: colors.warningSurface },
   noticeText: { fontSize: 14, lineHeight: 20, fontWeight: "600" },
   noticeTextError: { color: colors.danger },
   noticeTextWarn: { color: colors.warningText },

@@ -69,7 +69,7 @@ export default function ExpertsBrowseScreen() {
           value={query}
           onChangeText={setQuery}
           placeholder={t("experts.directory.search", { defaultValue: "Search experts" })}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.subtle}
           accessibilityLabel={t("experts.directory.search", { defaultValue: "Search experts" })}
           style={styles.searchInput}
           returnKeyType="search"

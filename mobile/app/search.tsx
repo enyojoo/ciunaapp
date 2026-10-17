@@ -154,7 +154,7 @@ export default function SearchScreen() {
             value={text}
             onChangeText={setText}
             placeholder={placeholder}
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.subtle}
             accessibilityLabel={placeholder}
             autoFocus
             returnKeyType="search"

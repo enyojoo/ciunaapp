@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   secondary: {
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.inputEdge,
   },
   ghost: { backgroundColor: "transparent" },
   disabled: { opacity: 0.45 },

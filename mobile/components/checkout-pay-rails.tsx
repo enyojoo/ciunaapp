@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  payChoiceActive: { borderColor: colors.primary, backgroundColor: "#FFF7ED" },
+  payChoiceActive: { borderColor: colors.primary, backgroundColor: colors.heroBody },
   payChoiceText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.muted },
   payChoiceTextActive: { color: colors.primary },
   onlineBlock: { gap: 12 },

@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.referBg,
   },
   statusCardPending: {
-    borderColor: "#FDE68A",
-    backgroundColor: "#FFFBEB",
+    borderColor: colors.warningBorder,
+    backgroundColor: colors.warningSurface,
   },
   statusIcon: {
     width: 56,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.heroBody,
     marginBottom: 14,
   },
-  statusIconVerified: { backgroundColor: "#D1FAE5" },
+  statusIconVerified: { backgroundColor: colors.successSurface },
   statusIconPending: { backgroundColor: "#FEF3C7" },
   statusTitle: {
     fontSize: 18,

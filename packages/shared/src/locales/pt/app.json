@@ -408,7 +408,8 @@
     "badgeReferral": "Indicação",
     "groupToday": "Hoje",
     "groupYesterday": "Ontem",
-    "chipBookings": "Reservas"
+    "chipBookings": "Reservas",
+    "statusRefunded": "Reembolsado"
   },
   "txDetail": {
     "errorNotFound": "Transação não encontrada ou acesso negado",
@@ -1504,5 +1505,11 @@
   "share": {
     "aria": "Compartilhar",
     "copied": "Link copiado"
+  },
+  "a11y": {
+    "edit": "Editar",
+    "delete": "Excluir",
+    "copy": "Copiar link",
+    "open": "Abrir"
   }
 }

@@ -262,7 +262,7 @@ function LegacyOrderScreen() {
         ) : (
           <View style={styles.failureBlock}>
             <View style={[styles.failureIcon, tone === "cancelled" && styles.failureIconCancelled]}>
-              <XCircle size={28} color={tone === "cancelled" ? "#4B5563" : "#DC2626"} strokeWidth={2} />
+              <XCircle size={28} color={tone === "cancelled" ? colors.neutralText : "#DC2626"} strokeWidth={2} />
             </View>
             <Text style={styles.failureTitle}>{statusMessage.title}</Text>
             <Text style={styles.failureDesc}>{statusMessage.description}</Text>
@@ -696,7 +696,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FEE2E2",
     marginBottom: 12,
   },
-  failureIconCancelled: { backgroundColor: "#F3F4F6" },
+  failureIconCancelled: { backgroundColor: colors.neutralSurface },
   failureTitle: { fontSize: 17, fontWeight: "700", color: colors.text, textAlign: "center" },
   failureDesc: { marginTop: 6, fontSize: typeSize.body, color: colors.muted, textAlign: "center" },
   failureMeta: { marginTop: 14 },
@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
   fulfillmentHead: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 },
   fulfillmentTitle: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text },
   fulfillmentRow: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
-  fulfillmentText: { flex: 1, fontSize: typeSize.meta, color: "#374151" },
+  fulfillmentText: { flex: 1, fontSize: typeSize.meta, color: colors.neutralText },
   recipientBlock: {
     marginTop: 14,
     paddingTop: 14,

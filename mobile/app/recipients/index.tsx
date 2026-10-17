@@ -70,7 +70,7 @@ export default function RecipientsScreen() {
           onFocus={searchFocus.onFocus}
           onBlur={searchFocus.onBlur}
           placeholder={t("recipients.searchPlaceholder")}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.subtle}
           style={styles.searchInput}
         />
       </View>
@@ -117,6 +117,8 @@ export default function RecipientsScreen() {
                 onPress={() => router.push(`/recipients/form?id=${r.id}`)}
                 style={styles.iconBtn}
                 hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel={t("a11y.edit", { defaultValue: "Edit" })}
               >
                 <Pencil size={16} color={colors.text} strokeWidth={2} />
               </Pressable>
@@ -125,6 +127,8 @@ export default function RecipientsScreen() {
                 style={styles.iconBtn}
                 hitSlop={8}
                 disabled={deletingId === r.id}
+                accessibilityRole="button"
+                accessibilityLabel={t("a11y.delete", { defaultValue: "Delete" })}
               >
                 <Trash2 size={16} color={colors.danger} strokeWidth={2} />
               </Pressable>
@@ -201,5 +205,5 @@ const styles = StyleSheet.create({
   name: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   meta: { fontSize: 12, color: colors.muted },
   cardActions: { flexDirection: "row", gap: 4 },
-  iconBtn: { width: 36, height: 36, alignItems: "center", justifyContent: "center" },
+  iconBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
 })

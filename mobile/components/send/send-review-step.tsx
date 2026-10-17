@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     alignSelf: "flex-start",
     borderRadius: radius.row,
-    backgroundColor: "#FFF7ED",
+    backgroundColor: colors.heroBody,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },

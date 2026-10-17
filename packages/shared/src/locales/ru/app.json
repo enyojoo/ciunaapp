@@ -309,7 +309,8 @@
     "badgeReferral": "Реферал",
     "groupToday": "Сегодня",
     "groupYesterday": "Вчера",
-    "chipBookings": "Записи"
+    "chipBookings": "Записи",
+    "statusRefunded": "Возвращено"
   },
   "txDetail": {
     "errorNotFound": "Операция не найдена или доступ запрещён",
@@ -1506,5 +1507,11 @@
   "share": {
     "aria": "Поделиться",
     "copied": "Ссылка скопирована"
+  },
+  "a11y": {
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "copy": "Скопировать ссылку",
+    "open": "Открыть"
   }
 }

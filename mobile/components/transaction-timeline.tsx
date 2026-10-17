@@ -94,7 +94,7 @@ export function TransactionTimeline({ transaction, locale = "en" }: { transactio
           <View key={stage.id} style={styles.row}>
             <View style={styles.rail}>
               <View style={[styles.dot, stage.completed && styles.dotDone]}>
-                <Icon size={16} color={stage.completed ? "#fff" : colors.muted} strokeWidth={2.4} />
+                <Icon size={16} color={stage.completed ? colors.surface : colors.muted} strokeWidth={2.4} />
               </View>
               {index < stages.length - 1 ? <View style={[styles.line, stage.completed && styles.lineDone]} /> : null}
             </View>
@@ -119,15 +119,15 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E5E7EB",
+    backgroundColor: colors.cardEdge,
   },
   dotDone: { backgroundColor: colors.success },
-  line: { width: 2, flex: 1, minHeight: 32, marginTop: 4, backgroundColor: "#E5E7EB" },
+  line: { width: 2, flex: 1, minHeight: 32, marginTop: 4, backgroundColor: colors.cardEdge },
   lineDone: { backgroundColor: colors.success },
   content: { flex: 1, paddingBottom: 20, paddingTop: 2 },
   title: { fontSize: typeSize.body, fontWeight: "600", color: colors.muted, marginBottom: 2 },
   titleDone: { color: colors.text },
   timestamp: { fontSize: 12, color: colors.muted, marginBottom: 2 },
   description: { fontSize: typeSize.meta, color: colors.muted },
-  descriptionDone: { color: "#374151" },
+  descriptionDone: { color: colors.neutralText },
 })

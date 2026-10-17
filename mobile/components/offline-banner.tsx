@@ -23,6 +23,6 @@ export function OfflineBanner() {
 
 const styles = StyleSheet.create({
   wrap: { position: "absolute", left: 0, right: 0, alignItems: "center", zIndex: 50 },
-  pill: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.pill, backgroundColor: "#FFFBEB", borderWidth: 1, borderColor: "#FDE68A" },
+  pill: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.pill, backgroundColor: colors.warningSurface, borderWidth: 1, borderColor: colors.warningBorder },
   text: { fontSize: 13, fontWeight: "600", color: colors.warningText },
 })

@@ -109,7 +109,7 @@ export default function LimitsScreen() {
 
 const styles = StyleSheet.create({
   skeleton: { margin: 16, height: 240, borderRadius: radius.card, backgroundColor: colors.paper },
-  banner: { marginBottom: 12, padding: 12, borderRadius: radius.row, backgroundColor: "#FFFBEB" },
+  banner: { marginBottom: 12, padding: 12, borderRadius: radius.row, backgroundColor: colors.warningSurface },
   bannerText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.warningText },
   plate: { marginBottom: 16, padding: 16, gap: 8, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
   label: { fontSize: 12, fontWeight: "700", color: colors.muted },

@@ -21,7 +21,7 @@ import { colors, space } from "@/lib/theme"
  * (white on #EA580C is 3.6:1; these stops are 5:1 and up). Each theme has one line of colour for each stop.
  */
 const BANNER: Record<HomeSlideTone, { stops: [string, string, string]; icon: LucideIcon }> = {
-  warm: { stops: ["#9A3412", "#C2410C", "#D97706"], icon: House },
+  warm: { stops: ["#9A3412", "#C2410C", colors.warning], icon: House },
   teal: { stops: ["#134E4A", "#0F766E", "#115E59"], icon: Globe2 },
   blue: { stops: ["#1E3A8A", "#1D4ED8", "#1E40AF"], icon: Heart },
 }
@@ -124,11 +124,11 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
                   </Text>
                   <View style={styles.cta}>
                     <Text style={styles.ctaText}>{t(`home.slide.${item.id}.cta`, { defaultValue: "Open" })}</Text>
-                    <ArrowRight size={15} color="#FFFFFF" strokeWidth={2.4} />
+                    <ArrowRight size={15} color={colors.onPrimary} strokeWidth={2.4} />
                   </View>
                 </View>
                 <View style={styles.iconWell}>
-                  <Icon size={26} color="#FFFFFF" strokeWidth={2} />
+                  <Icon size={26} color={colors.onPrimary} strokeWidth={2} />
                 </View>
               </View>
             </Pressable>
@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
   orbA: { width: 160, height: 160, right: -48, top: -56 },
   orbB: { width: 90, height: 90, right: 70, bottom: -40, backgroundColor: "rgba(255,255,255,0.08)" },
   adLabel: { position: "absolute", left: 14, top: 14, backgroundColor: "rgba(255,255,255,0.92)", borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
-  adText: { fontSize: 11, fontWeight: "600", letterSpacing: 0.6, textTransform: "uppercase", color: colors.text },
+  adText: { fontSize: 12, fontWeight: "600", letterSpacing: 0.6, textTransform: "uppercase", color: colors.text },
   copy: { gap: 2, paddingRight: 64 },
-  kicker: { fontSize: 11, fontWeight: "700", letterSpacing: 0.8, textTransform: "uppercase", color: "rgba(255,255,255,0.85)" },
-  title: { fontSize: 19, lineHeight: 24, fontWeight: "700", color: "#FFFFFF", letterSpacing: -0.3 },
+  kicker: { fontSize: 12, fontWeight: "700", letterSpacing: 0.8, textTransform: "uppercase", color: "rgba(255,255,255,0.85)" },
+  title: { fontSize: 19, lineHeight: 24, fontWeight: "700", color: colors.onPrimary, letterSpacing: -0.3 },
   body: { fontSize: 13, lineHeight: 18, color: "rgba(255,255,255,0.92)" },
   cta: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 6 },
-  ctaText: { fontSize: 14, fontWeight: "700", color: "#FFFFFF" },
+  ctaText: { fontSize: 14, fontWeight: "700", color: colors.onPrimary },
   iconWell: {
     position: "absolute",
     right: 16,

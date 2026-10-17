@@ -40,7 +40,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const showToast = useCallback(
     (message: string, type: ToastType = "info", duration = 3000, action?: ToastData["action"]) => {
       const id = `toast-${Date.now()}-${Math.random()}`
-      setToasts((prev) => [...prev, { id, message, type, duration, action }])
+      // One at a time: a newer message replaces the one on screen instead of stacking under it.
+      setToasts([{ id, message, type, duration, action }])
     },
     [],
   )
