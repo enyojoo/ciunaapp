@@ -31,6 +31,13 @@ with checks as (
       'marketplace_zones.eta_minutes',
       'expert_profiles.languages','expert_profiles.time_zone','expert_profiles.credentials','expert_profiles.years_experience','expert_profiles.is_verified','expert_profiles.verification_tier'
     ]) as c
+  union all
+  -- 6. support-requests.sql
+  select 'support-requests.sql', 'table ' || t, to_regclass('public.' || t) is not null
+    from unnest(array['support_requests','support_messages']) as t
+  union all
+  select 'support-requests.sql', 'function ' || f, exists (select 1 from pg_proc where proname = f)
+    from unnest(array['support_create','support_send','support_resolve','support_mark_read']) as f
 )
 select file, what, ok from checks order by ok, file, what;
 

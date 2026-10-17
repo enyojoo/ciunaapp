@@ -6,21 +6,13 @@ Written 2026-10-18 at the end of a long session, updated after the support API l
 
 - **Customer Expo app (`mobile/`, native and web):** everything that needs no backend is built and committed. Home fits every screen with no scrolling; one shared top bar; checkout has Details and Review steps; desktop web layouts checked at 1280x800. tsc, locales:check, design:check, design:cards all pass.
 - **Store hours, minimum order, delivery time, expert fields:** built end to end (migration, API, seller portal, app). The owner has run `storefront-details.sql` and the files before it.
-- **Support requests, backend done, no UI yet:** migration `supabase/migrations/20261018100000_support_requests.sql` (6 database tests), deploy copy `supabase/deploy/support-requests.sql` with a `RUN-ORDER.md` row, library `api/lib/support.ts`, customer routes under `api/app/api/support/` (`requests` GET and POST, `requests/[id]` GET, `requests/[id]/messages` POST, `requests/[id]/read` POST, `unread` GET), Office routes under `api/app/api/admin/support/` (queue, thread and PATCH assign or resolve, reply), the `support.manage` permission (super_admin, ops, support), and the `support` rate limit (20 a minute). 4 more tests in `api/tests/merchant/support.test.ts`; the merchant suite is 115 passing. **The owner has NOT run `support-requests.sql`.** Run it only once the customer screens exist.
+- **Support requests: done** (see item 1). Run `support-requests.sql` to turn it on.
 - Not started: receipts, limits, push registration.
 
 ## Order of work
 
-### 1. Support requests (finish: screens, Office page, deploy check)
-The API above is the contract. Error codes the screens must handle (in `errors.<CODE>` strings): `SUPPORT_TOO_MANY_OPEN` (409), `SUPPORT_ORDER_NOT_FOUND` (404), `SUPPORT_NOT_FOUND` (404), `SUPPORT_CLOSED` (409, resolved more than 14 days ago), `SUPPORT_TOPIC_INVALID`, `SUPPORT_SUBJECT_INVALID`, `MESSAGE_EMPTY`, `MESSAGE_TOO_LONG`, `RATE_LIMITED` (429). Request shape: `{ id, public_id, topic, subject, status, order_id, customer_unread, last_message_at, last_message_preview, created_at }`; messages: `{ id, sender_kind: customer|agent|system, body, created_at }`; a system message with body `resolved` is rendered as a localized "Marked resolved" line.
-
-**Customer screens (`mobile/`), still to build:** keep `support.tsx` (contact rows, FAQ, hours) and add a "My requests" row with an unread dot (from `GET /api/support/unread`). New routes `mobile/app/support/requests.tsx` (list with filter chips All, Open, Resolved; status words per the card: Awaiting you and In review are warning, Resolved is success), `support/new.tsx` (topic chips, related order picker from the user's orders, subject, message with counter, Send request; no screenshot upload in v1), `support/[id].tsx` (thread: customer bubbles primary with white text, agent bubbles neutral, system line, composer with counter, call `/read` on open, poll like `mobile/app/orders/[id]/chat.tsx`). Register the three in `mobile/app/_layout.tsx` as Stack.Screen entries with titles (the shared stack header draws the bar). Reuse `AppTextInput`, `LoadError`, `EmptyState`, `FilterChips`, `useCachedQuery`. Strings in all six languages in `packages/shared/src/locales/*/app.json`, then `npm run locales:check`.
-
-**Office page, still to build:** `office/app/support/page.tsx` modelled on `office/app/reviews/page.tsx`: queue (filters status, assigned, search) on the left, thread and reply box on the right, Assign to me, Resolve; add it to the Office nav.
-
-**Do not build the AI assistant** (`mobile/app/assistant.tsx` stays as is): it needs an LLM and the card says it must never invent amounts. Ask the owner first.
-
-**Then:** add the support tables and functions to `supabase/deploy/verify-all.sql` (the test `api/tests/merchant/database-verify.test.mjs` applies every migration and expects no false rows, so it catches drift), update `design-system/components/CustomerSupport/README.md` (Upgrade section) and `customer-app-status.md`, and tell the owner to run `support-requests.sql`.
+### 1. Support requests: DONE
+Built end to end: database, customer API, Office API, the three app screens (`mobile/app/support/*`), the Office page (`office/app/support/page.tsx`, in the nav as Support requests), `verify-all.sql` rows, the CustomerSupport card, strings in six languages. **Owner action: run `supabase/deploy/support-requests.sql`** (after the earlier files), then run `verify-all.sql` and check no row shows false. Not built, by decision: screenshot attachments and the AI assistant. Optional follow-ups: an email or push to the customer when staff reply (comes with push, item 4), and a Support unread badge on the More tab.
 
 ### 2. Receipts (card `ReceiptCustomer`)
 Customers get a receipt for a completed Send transfer, marketplace order or booking. Plan: one API route `GET /api/receipts/[kind]/[id]` that returns a structured JSON receipt (number, date, parties, items, fees, total, payment method name only, never a provider name), and a PDF via a server-side generator (check what `api/app/api/admin/receipts` and `api/lib` already do for transfers before adding a library). Customer UI: a Receipt screen opened from the transfer detail and order view, with Share (the transfer screen already has a text Share receipt). Ask the owner before adding a PDF dependency.
@@ -35,7 +27,7 @@ Needs `expo-notifications` (a new dependency; confirm with the owner) and an EAS
 See "Left: can be built now" in `customer-app-status.md`: Delivery or Pickup chip on Activity rows (the transactions list must return the fulfilment mode), chat side panel on desktop, store share button, and redrawing the HTML preview frames in `design-system/components/*/preview.html` for the cards changed (store header, top bar, Home tiles, checkout steps). Account deletion needs the owner's rules for what is blocked and retained.
 
 ## Owner actions pending
-1. Run `supabase/deploy/support-requests.sql` once item 1 is finished (not before).
+1. Run `supabase/deploy/support-requests.sql`, then `verify-all.sql`.
 2. Decisions needed: monthly limits per KYC level; permission to add `expo-notifications`; whether to add a PDF library; whether an AI assistant is wanted.
 3. Confirm tab labels (Home, Orders, Account) and the hero copy.
 

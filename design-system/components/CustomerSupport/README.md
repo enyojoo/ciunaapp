@@ -13,7 +13,7 @@ Support default; FAQ expanded; outside hours; requests list; new request default
 Say what happens and when: hours include the time zone (MSK). Request status words follow the system: Awaiting you and In review are warning, Resolved is success. The assistant never invents amounts: it quotes the order and links to it; "Talk to a person" is always one tap away. An AI answer is labelled and carries a short accuracy note. Bubbles never use orange for incoming messages. No provider names.
 
 ## Upgrade
-Differs from the built app: `support.tsx` has contact rows, FAQ and hours only; in-app chat with a person, requests list, new request form and thread are New. `assistant.tsx` is today a single "run errands" notes box with Submit; the conversational assistant, suggestions, actions and handoff are New. The Support pill in the Home header uses the message-circle-question icon.
+Built: `mobile/app/support.tsx` (contact rows, FAQ, hours, and a My requests row with an unread dot), `mobile/app/support/requests.tsx` (list with filter chips All, Open, Resolved; status words In review, Awaiting you, Resolved), `support/new.tsx` (topic chips, related order from recent orders, subject, message with counter, Send request), `support/[id].tsx` (thread with customer and agent bubbles, a system line when resolved, composer with counter, marks read on open, polls). Backend: `api/app/api/support/*` for customers, `api/app/api/admin/support/*` and the Office page `office/app/support/page.tsx` for staff, `support-requests.sql` for the tables. Not built: the screenshot attachment on a new request and the conversational AI assistant (`assistant.tsx` is still the errands notes box); both need a decision.
 
 ## Code
 `mobile/app/support.tsx`, `mobile/app/assistant.tsx`

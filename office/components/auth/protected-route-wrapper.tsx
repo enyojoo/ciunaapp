@@ -26,6 +26,7 @@ const PROTECTED_PATHS = [
   "/fees",
   "/audit",
   "/reviews",
+  "/support",
   "/catalog-review",
   "/analytics",
   "/rates",

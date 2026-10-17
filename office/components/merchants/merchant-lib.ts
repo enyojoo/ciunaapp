@@ -25,6 +25,10 @@ export const ERROR_TEXT: Record<string, string> = {
   REASON_TEMPLATE_REQUIRED: "Choose a reason.",
   SLA_INVALID: "That target is not valid.",
   UNAUTHORIZED: "Your session expired. Sign in again.",
+  SUPPORT_NOT_FOUND: "This request no longer exists.",
+  SUPPORT_CLOSED: "This request was resolved too long ago to reopen.",
+  MESSAGE_EMPTY: "Write a reply first.",
+  MESSAGE_TOO_LONG: "Replies are limited to 4000 characters.",
 }
 
 export function errorText(code?: string | null): string {

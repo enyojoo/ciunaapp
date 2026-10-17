@@ -1,4 +1,5 @@
 import {
+  MessageSquare,
   Briefcase, Building2, Calendar, Gift, HandHelping, ListChecks, Package, Percent, ScrollText, Settings, Settings2,
   ShieldCheck, ClipboardCheck, Star, Store, TrendingUp, Users, UserCircle, Wallet, CreditCard, ClipboardList, BarChart3,
   type LucideIcon,
@@ -20,6 +21,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { name: "Compliance", href: "/compliance", icon: ClipboardList, permission: "users.read" },
       { name: "Transactions", href: "/transactions", icon: CreditCard, permission: "support.read", queue: "transactions" },
       { name: "Assistant", href: "/assistant", icon: HandHelping, permission: "support.read", queue: "support" },
+      { name: "Support requests", href: "/support", icon: MessageSquare, permission: "support.read" },
     ],
   },
   {
@@ -67,7 +69,7 @@ export const NAV_GROUPS: NavGroup[] = [
 /** Permission a top-level route needs. Longest matching prefix wins; routes not listed need only an admin session. */
 const ROUTE_PERMISSIONS: Array<[string, string]> = [
   ["/users", "users.read"], ["/kyc", "users.read"], ["/compliance", "users.read"],
-  ["/transactions", "support.read"], ["/assistant", "support.read"], ["/orders", "support.read"],
+  ["/transactions", "support.read"], ["/assistant", "support.read"], ["/support", "support.read"], ["/orders", "support.read"],
   ["/marketplace", "orders.manage"], ["/bookings", "support.read"], ["/reviews", "merchants.read"], ["/catalog-review", "listings.review"],
   ["/food", "catalog.manage"], ["/mart", "catalog.manage"], ["/products", "catalog.manage"],
   ["/merchants", "merchants.read"], ["/kyb", "kyb.manage"], ["/experts", "experts.manage"], ["/audit", "audit.read"],
