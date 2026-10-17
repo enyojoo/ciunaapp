@@ -222,6 +222,24 @@
     },
     "chat": {
       "title": "卖家的消息"
+    },
+    "transfer": {
+      "processing": {
+        "title": "已收到付款",
+        "body": "我们已收到 {{sent}}，正在发送 {{received}}{{to}}。"
+      },
+      "completed": {
+        "title": "款项已送达",
+        "body": "{{received}} 已到账{{to}}。"
+      },
+      "failed": {
+        "title": "无法发送你的转账",
+        "body": "你的资金是安全的，正在退回。转账 {{id}}。"
+      },
+      "refunded": {
+        "title": "款项已退回",
+        "body": "{{sent}} 已退回你的账户。转账 {{id}}。"
+      }
     }
   }
 }

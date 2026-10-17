@@ -8,7 +8,7 @@ import { authJson } from "@/lib/social-api"
 import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { colors, type as typeSize, ui } from "@/lib/theme"
 
-const KEYS = ["orders", "messages", "support"] as const
+const KEYS = ["transfers", "orders", "messages", "support"] as const
 type Key = (typeof KEYS)[number]
 
 export default function NotificationsScreen() {
@@ -19,7 +19,7 @@ export default function NotificationsScreen() {
   useEffect(() => {
     void authJson<Record<Key, boolean>>("/api/push/preferences")
       .then(setPrefs)
-      .catch(() => setPrefs({ orders: true, messages: true, support: true }))
+      .catch(() => setPrefs({ transfers: true, orders: true, messages: true, support: true }))
   }, [])
 
   const toggle = async (k: Key, v: boolean) => {

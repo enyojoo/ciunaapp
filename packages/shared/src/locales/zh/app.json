@@ -1532,7 +1532,9 @@
     "messagesHint": "卖家就订单给你发消息时",
     "support": "客服",
     "supportHint": "客服对你的请求的回复",
-    "failed": "保存失败，请重试。"
+    "failed": "保存失败，请重试。",
+    "transfers": "转账",
+    "transfersHint": "已收到付款、已送达、失败或已退款"
   },
   "share": {
     "aria": "分享",

@@ -59,6 +59,12 @@ with checks as (
   -- 10. push-preferences.sql
   select 'push-preferences.sql', 'table push_preferences', to_regclass('public.push_preferences') is not null
   union all
+  select 'transfer-events.sql', 'table transfer_events', to_regclass('public.transfer_events') is not null
+  union all
+  select 'transfer-events.sql', 'trigger transfer_events_log', exists (select 1 from pg_trigger where tgname = 'transfer_events_log')
+  union all
+  select 'transfer-events.sql', 'column push_preferences.transfers', exists (select 1 from information_schema.columns where table_name = 'push_preferences' and column_name = 'transfers')
+  union all
   select 'store-pause.sql', 'column hub_vendors.is_paused', exists (select 1 from information_schema.columns where table_name = 'hub_vendors' and column_name = 'is_paused')
   union all
   select 'push-preferences.sql', 'column marketplace_events.notified_at', exists (select 1 from information_schema.columns where table_name = 'marketplace_events' and column_name = 'notified_at')

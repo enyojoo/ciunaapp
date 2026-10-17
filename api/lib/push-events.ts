@@ -70,3 +70,44 @@ export async function notifyChatMessage(orderId: string, text: string): Promise<
     console.error("chat push failed", (e as Error)?.message)
   }
 }
+
+/** Transfer statuses the customer is told about, and how recent an event must be. */
+export const TRANSFER_PUSH_STATUSES = ["processing", "completed", "deposited", "failed", "refunded"] as const
+const TRANSFER_KEY: Record<string, string> = { processing: "processing", completed: "completed", deposited: "completed", failed: "failed", refunded: "refunded" }
+
+export function transferPushWanted(status: string, createdAt: string, now = Date.now()): boolean {
+  return (TRANSFER_PUSH_STATUSES as readonly string[]).includes(status) && now - new Date(createdAt).getTime() <= ORDER_PUSH_MAX_AGE_MS
+}
+
+/** Claims unprocessed transfer events and notifies the customer: payment received, delivered, failed, refunded (at most four per transfer). */
+export async function sendTransferNotifications(): Promise<{ claimed: number; sent: number }> {
+  const db = createServerClient()
+  const { data, error } = await db.from("transfer_events").update({ notified_at: new Date().toISOString() }).is("notified_at", null).select("id,transaction_id,user_id,status,created_at").limit(200)
+  if (error) {
+    // The table exists only after transfer-events.sql has run; before that there is nothing to send.
+    if (error.code === "42P01" || error.code === "PGRST205") return { claimed: 0, sent: 0 }
+    throw new Error(error.message)
+  }
+  const events = ((data as any[]) || []).filter((e) => transferPushWanted(e.status, e.created_at))
+  let sent = 0
+  for (const ev of events) {
+    try {
+      const { data: tx } = await db.from("transactions").select("transaction_id,transaction_source,send_amount,send_currency,receive_amount,receive_currency,recipient_id").eq("id", ev.transaction_id).maybeSingle()
+      if (!tx || (tx as any).transaction_source === "hub") continue
+      const { data: rec } = (tx as any).recipient_id ? await db.from("recipients").select("full_name").eq("id", (tx as any).recipient_id).maybeSingle() : { data: null }
+      const { data: user } = await db.from("users").select("preferred_language").eq("id", ev.user_id).maybeSingle()
+      const lng = (user as any)?.preferred_language
+      const key = TRANSFER_KEY[ev.status]
+      const money = (n: unknown, c: unknown) => `${Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 })} ${String(c || "")}`.trim()
+      const vars = { id: (tx as any).transaction_id, name: (rec as any)?.full_name || "", to: (rec as any)?.full_name ? ` → ${(rec as any).full_name}` : "", sent: money((tx as any).send_amount, (tx as any).send_currency), received: money((tx as any).receive_amount, (tx as any).receive_currency) }
+      sent += await sendPushToUser(ev.user_id, {
+        title: tEmail(`push.transfer.${key}.title`, vars, lng),
+        body: tEmail(`push.transfer.${key}.body`, vars, lng),
+        data: { type: "transfer", transactionId: (tx as any).transaction_id },
+      }, "transfers")
+    } catch (e) {
+      console.error("transfer push failed", (e as Error)?.message)
+    }
+  }
+  return { claimed: ((data as any[]) || []).length, sent }
+}

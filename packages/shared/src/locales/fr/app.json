@@ -1532,7 +1532,9 @@
     "messagesHint": "Quand un vendeur vous écrit au sujet d'une commande",
     "support": "Assistance",
     "supportHint": "Réponses à vos demandes d'assistance",
-    "failed": "Enregistrement impossible. Réessayez."
+    "failed": "Enregistrement impossible. Réessayez.",
+    "transfers": "Transferts",
+    "transfersHint": "Paiement reçu, livré, échoué ou remboursé"
   },
   "share": {
     "aria": "Partager",

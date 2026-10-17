@@ -5,10 +5,12 @@ import { wants } from "@/lib/push"
 
 export const dynamic = "force-dynamic"
 
-const KEYS = ["orders", "messages", "support"] as const
+const KEYS = ["orders", "messages", "support", "transfers"] as const
 
 export const GET = authedRoute(async (_req, user) => {
-  const { data } = await createServerClient().from("push_preferences").select("orders,messages,support").eq("user_id", user.id).maybeSingle()
+  const db = createServerClient()
+  let { data, error } = await db.from("push_preferences").select("orders,messages,support,transfers").eq("user_id", user.id).maybeSingle()
+  if (error) ({ data } = await db.from("push_preferences").select("orders,messages,support").eq("user_id", user.id).maybeSingle())
   return Object.fromEntries(KEYS.map((k) => [k, wants(data as any, k)]))
 })
 

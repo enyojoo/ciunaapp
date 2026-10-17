@@ -1532,7 +1532,9 @@
     "messagesHint": "When a seller writes to you about an order",
     "support": "Support",
     "supportHint": "Replies to your support requests",
-    "failed": "Could not save. Try again."
+    "failed": "Could not save. Try again.",
+    "transfers": "Transfers",
+    "transfersHint": "Payment received, delivered, failed or refunded"
   },
   "share": {
     "aria": "Share",

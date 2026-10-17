@@ -10,19 +10,23 @@ type Tone = ReturnType<typeof statusTone>
  * The timeline of one transfer, from what the record tells us. Times are shown only where the record has one: created
  * and delivered (completed). The steps in between carry no time until the API records them.
  */
-export function transferSteps(tone: Tone, createdAt?: string | null, completedAt?: string | null): TransferStep[] {
+export function transferSteps(tone: Tone, createdAt?: string | null, completedAt?: string | null, events?: { status: string; created_at: string }[]): TransferStep[] {
+  const at = (...statuses: string[]) => (events || []).find((e) => statuses.includes(e.status))?.created_at ?? null
+  const paidAt = at("processing", "converting", "converted")
+  const doneAt = at("completed", "deposited") || completedAt
+  const refundedAt = at("refunded") || completedAt
   const created: TransferStep = { key: "created", variant: "default", state: "done", time: createdAt }
   switch (tone) {
     case "pending":
       return [created, { key: "payment", variant: "waiting", state: "current" }, { key: "sent", variant: "after", state: "upcoming" }, { key: "delivered", variant: "default", state: "upcoming" }]
     case "processing":
-      return [created, { key: "payment", variant: "received", state: "done" }, { key: "sent", variant: "sending", state: "current" }, { key: "delivered", variant: "default", state: "upcoming" }]
+      return [created, { key: "payment", variant: "received", state: "done", time: paidAt }, { key: "sent", variant: "sending", state: "current" }, { key: "delivered", variant: "default", state: "upcoming" }]
     case "completed":
-      return [created, { key: "payment", variant: "received", state: "done" }, { key: "sent", variant: "sent", state: "done" }, { key: "delivered", variant: "default", state: "done", time: completedAt }]
+      return [created, { key: "payment", variant: "received", state: "done", time: paidAt }, { key: "sent", variant: "sent", state: "done" }, { key: "delivered", variant: "default", state: "done", time: doneAt }]
     case "failed":
-      return [created, { key: "payment", variant: "received", state: "done" }, { key: "sent", variant: "failed", state: "failed" }, { key: "refund", variant: "onItsWay", state: "current" }]
+      return [created, { key: "payment", variant: "received", state: "done", time: paidAt }, { key: "sent", variant: "failed", state: "failed", time: at("failed") }, { key: "refund", variant: "onItsWay", state: "current" }]
     case "refunded":
-      return [created, { key: "payment", variant: "received", state: "done" }, { key: "sent", variant: "failed", state: "failed" }, { key: "refund", variant: "done", state: "done", time: completedAt }]
+      return [created, { key: "payment", variant: "received", state: "done", time: paidAt }, { key: "sent", variant: "failed", state: "failed", time: at("failed") }, { key: "refund", variant: "done", state: "done", time: refundedAt }]
     case "cancelled":
     default:
       return [created, { key: "payment", variant: "notReceived", state: "stopped" }, { key: "sent", variant: "notSent", state: "upcoming" }, { key: "delivered", variant: "notSent", state: "upcoming" }]

@@ -68,3 +68,23 @@ test("every order notification and the chat title exist in all six languages", (
     assert.ok(!tEmail("push.chat.title", {}, lng).startsWith("push."), lng + " chat")
   }
 })
+
+import { transferPushWanted } from "../../lib/push-events"
+
+test("transfers notify only for the four statuses that matter and only when recent", () => {
+  const now = Date.parse("2026-10-19T12:00:00Z")
+  for (const s of ["processing", "completed", "deposited", "failed", "refunded"]) assert.equal(transferPushWanted(s, "2026-10-19T11:59:00Z", now), true, s)
+  for (const s of ["pending", "cancelled", "converting"]) assert.equal(transferPushWanted(s, "2026-10-19T11:59:00Z", now), false, s)
+  assert.equal(transferPushWanted("completed", "2026-10-19T04:00:00Z", now), false)
+})
+
+test("every transfer notification exists in all six languages with the amounts filled in", () => {
+  for (const lng of ["en", "ru", "fr", "es", "zh", "pt"]) {
+    for (const k of ["processing", "completed", "failed", "refunded"]) {
+      const title = tEmail(`push.transfer.${k}.title`, {}, lng)
+      const body = tEmail(`push.transfer.${k}.body`, { sent: "₽100", received: "$1", id: "CIU-1", to: " → Ada" }, lng)
+      assert.ok(title && !title.startsWith("push."), `${lng} ${k} title`)
+      assert.ok(!body.includes("{{") && !body.startsWith("push."), `${lng} ${k} body`)
+    }
+  }
+})

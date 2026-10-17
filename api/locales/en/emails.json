@@ -222,6 +222,24 @@
     },
     "chat": {
       "title": "Message from the seller"
+    },
+    "transfer": {
+      "processing": {
+        "title": "Payment received",
+        "body": "We got your {{sent}} and are sending {{received}}{{to}}."
+      },
+      "completed": {
+        "title": "Money delivered",
+        "body": "{{received}} arrived{{to}}."
+      },
+      "failed": {
+        "title": "We could not send your transfer",
+        "body": "Your money is safe and is being returned. Transfer {{id}}."
+      },
+      "refunded": {
+        "title": "Your money was returned",
+        "body": "{{sent}} is back in your account. Transfer {{id}}."
+      }
     }
   }
 }

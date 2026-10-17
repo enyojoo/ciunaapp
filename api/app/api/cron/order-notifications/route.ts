@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { timingSafeEqual } from "node:crypto"
-import { sendOrderNotifications } from "@/lib/push-events"
+import { sendOrderNotifications, sendTransferNotifications } from "@/lib/push-events"
 
 export const maxDuration = 60
 
@@ -10,7 +10,8 @@ async function handle(request: NextRequest) {
   const actual = Buffer.from(request.headers.get("authorization") || "")
   if (!secret || actual.length !== expected.length || !timingSafeEqual(actual, expected)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   try {
-    return NextResponse.json(await sendOrderNotifications())
+    const [orders, transfers] = await Promise.all([sendOrderNotifications(), sendTransferNotifications()])
+    return NextResponse.json({ orders, transfers })
   } catch (e) {
     console.error("order-notifications cron failed", e instanceof Error ? e.message : e)
     return NextResponse.json({ error: "Job failed; it is safe to retry." }, { status: 503 })

@@ -1532,7 +1532,9 @@
     "messagesHint": "Quando um vendedor escreve sobre um pedido",
     "support": "Suporte",
     "supportHint": "Respostas às suas solicitações de suporte",
-    "failed": "Não foi possível salvar. Tente de novo."
+    "failed": "Não foi possível salvar. Tente de novo.",
+    "transfers": "Transferências",
+    "transfersHint": "Pagamento recebido, entregue, falho ou reembolsado"
   },
   "share": {
     "aria": "Compartilhar",

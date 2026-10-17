@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { transactionStatusService } from "@/lib/transaction-status-service"
 import { requireUser } from "@/lib/auth-utils"
+import { createServerClient } from "@/lib/supabase"
 
 export async function GET(
   request: NextRequest,
@@ -23,7 +24,15 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
     }
 
-    return NextResponse.json({ transaction })
+    // The times each status was reached (transfer-events.sql). Empty before that file has run.
+    let events: { status: string; created_at: string }[] = []
+    try {
+      const { data } = await createServerClient().from("transfer_events").select("status,created_at").eq("transaction_id", (transaction as any).id).order("id", { ascending: true })
+      events = (data as any[]) || []
+    } catch {
+      events = []
+    }
+    return NextResponse.json({ transaction: { ...transaction, events } })
   } catch (error) {
     console.error("Error fetching transaction status:", error)
     return NextResponse.json({ 

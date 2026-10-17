@@ -6,7 +6,7 @@ const TOKEN = /^Expo(?:nent)?PushToken\[[A-Za-z0-9_-]{8,}\]$/
 export type PushPayload = { title: string; body: string; data?: Record<string, unknown> }
 export type PushMessage = { to: string; title: string; body: string; sound: "default"; data: Record<string, unknown> }
 
-export type PushCategory = "orders" | "messages" | "support"
+export type PushCategory = "orders" | "messages" | "support" | "transfers"
 
 /** Everything is on until the customer switches it off. */
 export const wants = (prefs: Partial<Record<PushCategory, boolean>> | null | undefined, category: PushCategory): boolean => prefs?.[category] !== false
@@ -33,7 +33,9 @@ export async function sendPushToUser(userId: string, payload: PushPayload, categ
   try {
     const db = createServerClient()
     if (category) {
-      const { data: prefs } = await db.from("push_preferences").select("orders,messages,support").eq("user_id", userId).maybeSingle()
+      // `transfers` only exists once transfer-events.sql has run; without it the other switches still work.
+      let { data: prefs, error: pErr } = await db.from("push_preferences").select("orders,messages,support,transfers").eq("user_id", userId).maybeSingle()
+      if (pErr) ({ data: prefs } = await db.from("push_preferences").select("orders,messages,support").eq("user_id", userId).maybeSingle())
       if (!wants(prefs as Partial<Record<PushCategory, boolean>> | null, category)) return 0
     }
     const { data, error } = await db.from("push_tokens").select("token").eq("user_id", userId).eq("enabled", true)

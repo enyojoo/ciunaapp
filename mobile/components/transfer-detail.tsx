@@ -28,7 +28,7 @@ export function TransferDetail({ tx, locale, flagSvg, paySlot, receiptSlot }: { 
   const router = useRouter()
   const [copied, setCopied] = useState(false)
   const tone = statusTone(tx.status)
-  const steps = transferSteps(tone, tx.created_at, tx.completed_at)
+  const steps = transferSteps(tone, tx.created_at, tx.completed_at, tx.events)
   const name = tx.recipient?.full_name || ""
   const bank = tx.recipient?.bank_name || ""
   const sendCur = tx.send_currency || ""
