@@ -227,7 +227,13 @@ export function ProductCard({
 }
 
 /** Exported so the product detail screen can show the same vendor treatment (photo, name, verified check) as the catalog card, instead of a plain name. */
-export function VendorChip({ vendor }: { vendor: NonNullable<HubProduct["vendor"]> }) {
+/** The store name, with its rating and city when `detail` is set (product page). */
+export function VendorChip({ vendor, detail }: { vendor: NonNullable<HubProduct["vendor"]>; detail?: boolean }) {
+  const { t } = useTranslation("app")
+  const rated = detail && vendor.rating_avg != null && (vendor.rating_count ?? 0) > 0
+  const extra = detail
+    ? [rated ? `★ ${vendor.rating_avg!.toFixed(1)} (${vendor.rating_count})` : "", vendor.city || ""].filter(Boolean).join(" · ")
+    : ""
   return (
     <View style={styles.vendorRow}>
       {vendor.photo_url ? (
@@ -241,6 +247,11 @@ export function VendorChip({ vendor }: { vendor: NonNullable<HubProduct["vendor"
         {vendor.name}
       </Text>
       {vendor.is_verified ? <VerifiedBadge size={12} /> : null}
+      {extra ? (
+        <Text style={styles.vendorExtra} numberOfLines={1} accessibilityLabel={rated ? t("reviews.count", { count: vendor.rating_count, defaultValue: "{{count}} reviews" }) : undefined}>
+          {extra}
+        </Text>
+      ) : null}
     </View>
   )
 }
@@ -318,6 +329,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   vendorInitial: { fontSize: 12, fontWeight: "700", color: colors.muted },
+  vendorExtra: { flexShrink: 1, fontSize: 12, color: colors.muted },
   vendorName: { flexShrink: 1, fontSize: 12, fontWeight: "500", color: colors.text },
   priceBlock: { marginTop: 4, gap: 8, minHeight: 40, justifyContent: "flex-end" },
   cta: {

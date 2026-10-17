@@ -5,6 +5,7 @@ import { ActivityIndicator, AppState, Linking, Platform, Pressable, StyleSheet, 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import * as Crypto from "expo-crypto"
 import { useRouter } from "expo-router"
+import { Image } from "expo-image"
 import { useTranslation } from "react-i18next"
 import {
   useMarketplaceCheckout,
@@ -89,12 +90,20 @@ function SummaryCard({
   paymentState,
   label,
   slot,
+  images,
+  methodName,
+  refund,
 }: {
+  /** Product photo per line, by product id. */
+  images?: Record<string, string>
+  /** The payment method the customer chose. */
+  methodName?: string | null
+  refund?: MarketplaceOrder["refund"]
   title: string
   publicId?: string
   /** Expert booking: when the session is, shown in its own time zone. */
   slot?: { start: string; end?: string; timezone?: string }
-  lines: { id: string; quantity: number; title: string; unitPrice: number }[]
+  lines: { id: string; productId?: string; quantity: number; title: string; unitPrice: number }[]
   totals: {
     productCurrency: string
     payCurrency: string
@@ -117,6 +126,7 @@ function SummaryCard({
       <View style={styles.summaryLines}>
         {lines.map((l) => (
           <View key={l.id} style={styles.summaryLine}>
+            {l.productId && images?.[l.productId] ? <Image source={{ uri: images[l.productId] }} style={styles.summaryPhoto} contentFit="cover" accessibilityIgnoresInvertColors /> : null}
             <Text style={styles.summaryLineText} numberOfLines={2}>
               {l.quantity} × {l.title}
             </Text>
@@ -174,6 +184,20 @@ function SummaryCard({
         <View style={styles.statusBlock}>
           <Text style={styles.statusText}>
             {label("payment", "Payment")}: {label(paymentState, paymentState)}
+          </Text>
+          {methodName ? (
+            <Text style={styles.statusText}>
+              {label("paidWith", "Payment method")}: {methodName}
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
+      {refund ? (
+        <View style={styles.statusBlock}>
+          <Text style={styles.statusText}>
+            {refund.state === "completed" && refund.completedAt
+              ? label("refundDone", "Refunded") + `: ${formatMoney(refund.amount, refund.currency)} · ${new Date(refund.completedAt).toLocaleDateString(i18n.language)}`
+              : label("refundOnItsWay", "Refund on its way") + `: ${formatMoney(refund.amount, refund.currency)} · ${label("refundRequested", "requested")} ${new Date(refund.createdAt).toLocaleDateString(i18n.language)}`}
           </Text>
         </View>
       ) : null}
@@ -996,6 +1020,9 @@ export function MarketplaceOrderView({
           paymentState={order.payment_state}
           label={label}
           slot={order.snapshot.slotStart ? { start: order.snapshot.slotStart, end: order.snapshot.slotEnd, timezone: order.snapshot.timezone } : undefined}
+          images={order.lineImages}
+          methodName={order.paymentMethodName}
+          refund={order.refund}
         />
         <BookingSessionCard order={order as unknown as Parameters<typeof BookingSessionCard>[0]["order"]} />
         <OrderPlaceCard order={order} />
@@ -1161,7 +1188,8 @@ const styles = StyleSheet.create({
   summaryId: { fontSize: typeSize.meta, color: colors.muted },
   summarySlot: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   summaryLines: { gap: 8 },
-  summaryLine: { flexDirection: "row", justifyContent: "space-between", gap: 12 },
+  summaryLine: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 12 },
+  summaryPhoto: { width: 44, height: 44, borderRadius: 8, backgroundColor: colors.border },
   summaryLineText: { flex: 1, fontSize: typeSize.body, color: colors.text, lineHeight: 22 },
   summaryLineAmount: {
     fontSize: typeSize.body,

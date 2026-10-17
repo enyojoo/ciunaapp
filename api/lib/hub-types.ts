@@ -41,6 +41,11 @@ export interface HubProductVendorSummary {
   photo_url: string | null
   /** When true, show verified badge (requires `is_verified` on `hub_vendors`). */
   is_verified: boolean
+  /** Average and number of customer reviews (reviews migration); absent or zero until the store has any. */
+  rating_avg?: number | null
+  rating_count?: number
+  /** A city the store delivers in (from its delivery zones), for the product page. Absent when it has no zones. */
+  city?: string | null
   /** Store minimum for delivery orders (storefront-details migration); absent until it is applied. */
   min_order_amount?: number | null
   min_order_currency?: string | null

@@ -1170,6 +1170,10 @@
     "loadFailed": "无法加载数据，请重试。"
   },
   "marketplace": {
+    "paidWith": "付款方式",
+    "refundDone": "已退款",
+    "refundOnItsWay": "退款处理中",
+    "refundRequested": "申请于",
     "checkout": "结算",
     "amount": "金额",
     "loading": "正在加载…",
@@ -1577,6 +1581,7 @@
     "actionSend": "发送",
     "actionPlaceholder": "输入消息",
     "actionView": "查看",
+    "actionJoin": "加入",
     "replySent": "回复已发送",
     "replyFailed": "无法发送回复，请打开聊天重试。",
     "quiet": "免打扰时段",

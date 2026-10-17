@@ -1170,6 +1170,10 @@
     "loadFailed": "No se pudieron cargar los datos. Inténtalo de nuevo."
   },
   "marketplace": {
+    "paidWith": "Método de pago",
+    "refundDone": "Reembolsado",
+    "refundOnItsWay": "Reembolso en camino",
+    "refundRequested": "solicitado el",
     "checkout": "Finalizar compra",
     "amount": "Importe",
     "loading": "Cargando…",
@@ -1577,6 +1581,7 @@
     "actionSend": "Enviar",
     "actionPlaceholder": "Escribe un mensaje",
     "actionView": "Ver",
+    "actionJoin": "Unirse",
     "replySent": "Respuesta enviada",
     "replyFailed": "No se pudo enviar tu respuesta. Abre el chat para intentarlo de nuevo.",
     "quiet": "Horas de silencio",

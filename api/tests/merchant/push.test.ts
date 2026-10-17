@@ -119,3 +119,16 @@ test("the expert-times notification exists in all six languages", () => {
     assert.ok(body.includes("Ada") && !body.includes("{{"), lng)
   }
 })
+
+import { joinUrlFromEvents } from "../../lib/push-events"
+
+test("a booking reminder carries the latest https meeting link and nothing else", () => {
+  const events = [
+    { message: "https://old.example.com/a", details: { meetingUrl: "https://old.example.com/a" }, created_at: "2026-10-19T10:00:00Z" },
+    { message: "https://meet.example.com/b\nBring ID", details: { meetingUrl: "https://meet.example.com/b" }, created_at: "2026-10-19T11:00:00Z" },
+  ]
+  assert.equal(joinUrlFromEvents(events), "https://meet.example.com/b")
+  assert.equal(joinUrlFromEvents([{ message: "http://x.com", created_at: "2026-10-19T11:00:00Z" }]), null)
+  assert.equal(joinUrlFromEvents([{ message: "javascript:alert(1)" }]), null)
+  assert.equal(joinUrlFromEvents([]), null)
+})

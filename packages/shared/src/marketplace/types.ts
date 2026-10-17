@@ -135,5 +135,11 @@ export interface MarketplaceOrder {
   attempts: MarketplaceAttempt[]
   events: { id: string; kind: string; created_at: string; message: string }[]
   canCancel: boolean
+  /** Name of the payment method the customer chose (from the quote), when known. */
+  paymentMethodName?: string | null
+  /** Product photo per line, by product id. Lines without a photo are absent. */
+  lineImages?: Record<string, string>
+  /** The refund for this order once one exists. */
+  refund?: { amount: number; currency: string; state: "pending" | "completed"; createdAt: string; completedAt?: string | null } | null
   nextAction: "pay" | "checking" | "review" | "track" | "refund" | "none"
 }

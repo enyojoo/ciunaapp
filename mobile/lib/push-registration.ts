@@ -62,6 +62,25 @@ export async function registerNotificationActions(labels: { reply: string; send:
   }
 }
 
+/** Buttons under a booking reminder: Join (opens the meeting link) and View. */
+export async function registerBookingActions(labels: { join: string; view: string }): Promise<void> {
+  if (Platform.OS === "web") return
+  try {
+    await Notifications.setNotificationCategoryAsync("booking", [
+      { identifier: "join", buttonTitle: labels.join, options: { opensAppToForeground: true } },
+      { identifier: "view", buttonTitle: labels.view, options: { opensAppToForeground: true } },
+    ])
+  } catch {
+    // Buttons are an extra; a tap still opens the booking.
+  }
+}
+
+/** The meeting link in a notification, only if it is a plain https link. */
+export function joinUrlFromNotification(data: unknown): string | null {
+  const v = (data as { joinUrl?: unknown } | null | undefined)?.joinUrl
+  return typeof v === "string" && /^https:\/\/[^\s]{1,500}$/i.test(v) ? v : null
+}
+
 /** Sends a reply typed on the lock screen to the seller. Returns whether it was sent. */
 export async function sendChatReply(orderId: string, text: string): Promise<boolean> {
   const body = text.trim().slice(0, 2000)

@@ -11,6 +11,8 @@ function mapVendorRow(v: Record<string, unknown>): HubProductVendorSummary {
     service_line_slug: String(v.service_line_slug || ""),
     photo_url: v.photo_url != null ? String(v.photo_url) : null,
     is_verified: Boolean(v.is_verified),
+    rating_avg: v.rating_avg != null && Number.isFinite(Number(v.rating_avg)) ? Number(v.rating_avg) : null,
+    rating_count: Number(v.rating_count) || 0,
   }
 }
 
@@ -30,12 +32,17 @@ export async function enrichHubProductsWithVendors(server: HubServer, products: 
     return products
   }
 
+  // The store's city comes from where it delivers. Without zones (or before they exist) none is shown.
+  const cityById = new Map<string, string>()
+  const { data: zones } = await server.from("marketplace_zones").select("vendor_id,city").in("vendor_id", ids).eq("active", true).order("city")
+  for (const z of (zones as { vendor_id: string; city: string }[] | null) || []) if (z.city && !cityById.has(z.vendor_id)) cityById.set(z.vendor_id, z.city)
+
   const byId = new Map<string, HubProductVendorSummary>()
   for (const raw of vendors || []) {
     const v = raw as Record<string, unknown>
     const id = String(v.id || "")
     if (!id) continue
-    byId.set(id, mapVendorRow(v))
+    byId.set(id, { ...mapVendorRow(v), city: cityById.get(id) ?? null })
   }
 
   return products.map((p) => {

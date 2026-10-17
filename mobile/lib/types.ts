@@ -34,6 +34,9 @@ export type HubProduct = {
     service_line_slug?: string
     photo_url?: string | null
     is_verified?: boolean
+    rating_avg?: number | null
+    rating_count?: number
+    city?: string | null
     min_order_amount?: number | null
     min_order_currency?: string | null
     hours_configured?: boolean

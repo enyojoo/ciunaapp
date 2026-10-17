@@ -1170,6 +1170,10 @@
     "loadFailed": "Impossible de charger les données. Réessayez."
   },
   "marketplace": {
+    "paidWith": "Moyen de paiement",
+    "refundDone": "Remboursé",
+    "refundOnItsWay": "Remboursement en cours",
+    "refundRequested": "demandé le",
     "checkout": "Paiement de la commande",
     "amount": "Montant",
     "loading": "Chargement…",
@@ -1577,6 +1581,7 @@
     "actionSend": "Envoyer",
     "actionPlaceholder": "Écrivez un message",
     "actionView": "Voir",
+    "actionJoin": "Rejoindre",
     "replySent": "Réponse envoyée",
     "replyFailed": "Impossible d'envoyer votre réponse. Ouvrez la discussion pour réessayer.",
     "quiet": "Heures calmes",

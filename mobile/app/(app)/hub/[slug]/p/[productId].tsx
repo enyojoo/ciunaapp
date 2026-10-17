@@ -202,11 +202,11 @@ export default function HubProductDetailScreen() {
               accessibilityLabel={product.vendor.name}
               style={styles.vendorHit}
             >
-              <VendorChip vendor={product.vendor} />
+              <VendorChip vendor={product.vendor} detail />
             </Pressable>
           ) : (
             <View style={styles.vendorHit}>
-              <VendorChip vendor={product.vendor} />
+              <VendorChip vendor={product.vendor} detail />
             </View>
           )
         ) : null}

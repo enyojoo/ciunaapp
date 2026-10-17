@@ -1170,6 +1170,10 @@
     "loadFailed": "Не удалось загрузить данные. Попробуйте снова."
   },
   "marketplace": {
+    "paidWith": "Способ оплаты",
+    "refundDone": "Возвращено",
+    "refundOnItsWay": "Возврат в пути",
+    "refundRequested": "запрошен",
     "checkout": "Оформление заказа",
     "amount": "Сумма",
     "loading": "Загрузка…",
@@ -1579,6 +1583,7 @@
     "actionSend": "Отправить",
     "actionPlaceholder": "Напишите сообщение",
     "actionView": "Открыть",
+    "actionJoin": "Присоединиться",
     "replySent": "Ответ отправлен",
     "replyFailed": "Не удалось отправить ответ. Откройте чат и попробуйте ещё раз.",
     "quiet": "Тихие часы",

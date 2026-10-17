@@ -122,6 +122,13 @@ export function reminderWindow(now = Date.now()): { from: string; to: string } {
   return { from: new Date(now).toISOString(), to: new Date(now + BOOKING_REMINDER_WINDOW_MS).toISOString() }
 }
 
+/** The https meeting link the expert added to a booking (latest "meeting_link" event), or null. Only https links reach a phone. */
+export function joinUrlFromEvents(events: { message?: string | null; details?: { meetingUrl?: unknown } | null; created_at?: string }[] | null | undefined): string | null {
+  const latest = [...(events || [])].sort((a, b) => String(b.created_at || "").localeCompare(String(a.created_at || "")))[0]
+  const url = String(latest?.details?.meetingUrl || String(latest?.message || "").split("\n")[0] || "").trim()
+  return /^https:\/\/[^\s]{1,500}$/i.test(url) ? url : null
+}
+
 /** One reminder per confirmed booking, about an hour before it starts. Safe to run every minute. */
 export async function sendBookingReminders(): Promise<{ claimed: number; sent: number }> {
   const db = createServerClient()
@@ -142,10 +149,13 @@ export async function sendBookingReminders(): Promise<{ claimed: number; sent: n
       if (!order) continue
       const lng = (user as any)?.preferred_language
       const vars = { name: (expert as any)?.display_name || "", id: (order as any).public_id }
+      const { data: events } = await db.from("marketplace_events").select("message,details,created_at").eq("order_id", (order as any).id).eq("kind", "meeting_link").eq("customer_visible", true).order("created_at", { ascending: false }).limit(1)
+      const joinUrl = joinUrlFromEvents(events as any[])
       sent += await sendPushToUser(b.user_id, {
         title: tEmail("push.booking.reminder.title", vars, lng),
         body: tEmail("push.booking.reminder.body", vars, lng),
-        data: { type: "order", orderId: (order as any).id },
+        data: { type: "order", orderId: (order as any).id, ...(joinUrl ? { joinUrl } : {}) },
+        ...(joinUrl ? { categoryId: "booking" as const } : {}),
       }, "orders")
     } catch (e) {
       console.error("booking reminder failed", (e as Error)?.message)

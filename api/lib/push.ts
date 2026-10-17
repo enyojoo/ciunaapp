@@ -4,7 +4,7 @@ import { inQuietHours } from "@/lib/quiet-hours"
 const EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send"
 const TOKEN = /^Expo(?:nent)?PushToken\[[A-Za-z0-9_-]{8,}\]$/
 
-export type PushPayload = { title: string; body: string; data?: Record<string, unknown>; /** The buttons the phone shows under it (registered in the app). */ categoryId?: "chat" }
+export type PushPayload = { title: string; body: string; data?: Record<string, unknown>; /** The buttons the phone shows under it (registered in the app). */ categoryId?: "chat" | "booking" }
 export type PushMessage = { to: string; title: string; body: string; sound: "default"; data: Record<string, unknown>; categoryId?: string }
 
 export type PushCategory = "orders" | "messages" | "support" | "transfers"

@@ -594,6 +594,7 @@ export async function getOrder(id: string, userId?: string, admin = false): Prom
   ])
   check(a.error)
   check(e.error)
+  const extras = await orderExtras(order, (a.data || []) as { method_id?: string | null; rail?: string; active?: boolean }[])
   const canCancel = ["awaiting_payment", "awaiting_acceptance"].includes(order.fulfillment_state)
   const nextAction =
     order.fulfillment_state === "cancelled"
@@ -620,5 +621,29 @@ export async function getOrder(id: string, userId?: string, admin = false): Prom
       ),
     canCancel,
     nextAction,
+    ...extras,
   } as MarketplaceOrder
+}
+
+/** Payment method name, product photos and refund for the order screen. Each is optional: a failed lookup only hides it. */
+async function orderExtras(
+  order: { id: string; snapshot?: { methods?: { id: string; rail: string; name: string }[]; lines?: { productId?: string }[] } },
+  attempts: { method_id?: string | null; rail?: string; active?: boolean }[],
+): Promise<Pick<MarketplaceOrder, "paymentMethodName" | "lineImages" | "refund">> {
+  const methods = order.snapshot?.methods || []
+  const att = attempts.find((x) => x.active) || attempts[0]
+  const method = att ? methods.find((m) => m.id === att.method_id) || methods.find((m) => m.rail === att.rail) : undefined
+  const productIds = [...new Set((order.snapshot?.lines || []).map((l) => l.productId).filter((v): v is string => typeof v === "string" && uuid.test(v)))]
+  const [products, refunds] = await Promise.all([
+    productIds.length ? db().from("hub_products").select("id,image_url").in("id", productIds) : Promise.resolve({ data: [] as { id: string; image_url: string | null }[], error: null }),
+    db().from("marketplace_refunds").select("amount,currency,state,created_at,completed_at").eq("order_id", order.id).order("created_at", { ascending: false }).limit(1),
+  ])
+  const lineImages: Record<string, string> = {}
+  for (const p of (products.error ? [] : products.data) || []) if (p.image_url && /^https:\/\//i.test(p.image_url)) lineImages[p.id] = p.image_url
+  const r = refunds.error ? null : (refunds.data as { amount: number | string; currency: string; state: "pending" | "completed"; created_at: string; completed_at: string | null }[] | null)?.[0]
+  return {
+    paymentMethodName: method?.name || null,
+    lineImages,
+    refund: r ? { amount: Number(r.amount), currency: r.currency, state: r.state, createdAt: r.created_at, completedAt: r.completed_at } : null,
+  }
 }
