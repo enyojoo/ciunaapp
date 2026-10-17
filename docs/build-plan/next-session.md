@@ -2,6 +2,8 @@
 
 Written 2026-10-18 at the end of a long session, updated after the support API landed. Read this first, then `customer-app-status.md` (done and left lists) and `design-system/guides/80-decisions.md` (owner decisions). Everything below is committed on `main`; nothing is pushed.
 
+> **The current plan is `customer-completion-plan.md`** (product decisions and build order, 2026-10-18). Where it differs from the list below, it wins.
+
 ## State right now
 
 - **Customer Expo app (`mobile/`, native and web):** everything that needs no backend is built and committed. Home fits every screen with no scrolling; one shared top bar; checkout has Details and Review steps; desktop web layouts checked at 1280x800. tsc, locales:check, design:check, design:cards all pass.
