@@ -3,7 +3,9 @@ import { limitMessage } from "@/lib/limit-message"
 import { checkAmount, limitRange, type CurrentLimit } from "@/lib/limit-check"
 import { authJson } from "@/lib/social-api"
 import { useCachedQuery } from "@/lib/use-cached-query"
-import { formatMoney as formatMoneyText } from "@/lib/money"
+import { formatMoney as formatMoneyText, formatCardPrice } from "@/lib/money"
+import { SendDesktopFrame, SendQuoteAside, SendStepper } from "@/components/send/send-desktop"
+import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter, useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -60,6 +62,8 @@ export default function SendScreen() {
   const { currencies, rates, loading: fxLoading, reload: reloadFx } = useFx()
   useFocusRevalidate(reloadFx)
   const { user, profile } = useAuth()
+  const { isWeb, mode } = useResponsiveLayout()
+  const desktop = isWeb && mode === "desktop"
   const { data: eligibility } = useBitbankerEligibility(user?.id)
   const params = useLocalSearchParams<{ from?: string; to?: string; amount?: string; recipient?: string }>()
   const [step, setStep] = useState<SendFlowStep>("amount")
@@ -303,6 +307,23 @@ export default function SendScreen() {
       backAriaLabel={backAria}
       keyboard
     >
+      <FrameIf
+        desktop={desktop}
+        aside={
+          <SendQuoteAside
+            sendAmount={sendAmount}
+            sendCurrency={sendCurrency}
+            receiveCurrency={receiveCurrency}
+            quote={displayQuote}
+            processingFeeAmount={processingFeeAmount}
+            feePending={bitbankerLiveFees && !feesConfirmed}
+            hidden={Boolean(limitIssue)}
+            limit={limitState?.current && limitState.current.currency === sendCurrency ? limitState.current : null}
+            onSeeLimits={() => router.push("/limits" as never)}
+            locale={i18n.language}
+          />
+        }
+      >
       {bitbankerGateActive ? (
         <Pressable style={styles.verifyBanner} onPress={() => router.push("/verification/bitbanker" as never)}>
           <ShieldAlert size={17} color={colors.primary} strokeWidth={2.2} />
@@ -313,7 +334,7 @@ export default function SendScreen() {
         </Pressable>
       ) : null}
 
-      <SendStepProgress step={step} />
+      {desktop ? <SendStepper step={step} /> : <SendStepProgress step={step} />}
 
       {step === "amount" ? (
         !sendCorridorReady ? (
@@ -337,7 +358,8 @@ export default function SendScreen() {
             quotePreviewLoading={bitbankerLiveFees ? quotePreviewLoading : false}
             bitbankerFeesConfirmed={bitbankerLiveFees ? feesConfirmed : true}
             ratesLoading={fxLoading}
-            limitRange={range && sendCurrency ? { min: range.min != null ? formatMoneyText(range.min, sendCurrency) : null, max: range.max != null ? formatMoneyText(range.max, sendCurrency) : null } : null}
+            limitRange={range && sendCurrency ? { min: range.min != null ? formatCardPrice(range.min, sendCurrency) : null, max: range.max != null ? formatCardPrice(range.max, sendCurrency) : null } : null}
+            hideQuote={desktop}
             limitText={limitText}
             onSeeLimits={() => router.push("/limits" as never)}
           />
@@ -378,6 +400,8 @@ export default function SendScreen() {
             usesBitbanker={usesBitbanker}
             processingFeePending={bitbankerLiveFees && !feesConfirmed}
             qrData={bitbankerPayment?.qrData}
+            desktop={desktop}
+            onChangeRecipient={() => setStep("recipient")}
           />
           <View style={styles.footer}>
             <PrimaryButton
@@ -393,8 +417,13 @@ export default function SendScreen() {
           </View>
         </>
       ) : null}
+      </FrameIf>
     </HubLinePageShell>
   )
+}
+
+function FrameIf({ desktop, aside, children }: { desktop: boolean; aside: React.ReactNode; children: React.ReactNode }) {
+  return desktop ? <SendDesktopFrame aside={aside}>{children}</SendDesktopFrame> : <>{children}</>
 }
 
 const styles = StyleSheet.create({

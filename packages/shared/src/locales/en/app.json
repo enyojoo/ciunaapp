@@ -589,7 +589,8 @@
     "steps": {
       "amount": "Amount",
       "recipient": "Recipient",
-      "review": "Review"
+      "review": "Review",
+      "pay": "Pay"
     },
     "rateUnavailable": "Exchange rate not available for this pair.",
     "mobile": {
@@ -718,7 +719,20 @@
     "limitHintMax": "Max {{max}} per transfer",
     "limitHintMin": "Min {{min}} per transfer",
     "seeLimits": "See limits",
-    "payAmount": "Pay {{amount}}"
+    "payAmount": "Pay {{amount}}",
+    "change": "Change",
+    "aside": {
+      "live": "Live rate",
+      "enter": "Enter an amount within your limit to see the fee and total.",
+      "limitTitle": "Your limit this month",
+      "left": "Left to send",
+      "resets": "Resets {{date}}",
+      "rate": "Exchange rate",
+      "sent": "You send",
+      "fee": "Processing fee",
+      "gets": "Recipient gets",
+      "total": "Total to pay"
+    }
   },
   "recipients": {
     "title": "Recipients",

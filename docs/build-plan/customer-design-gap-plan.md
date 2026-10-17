@@ -95,7 +95,7 @@ Phase A first (it changes every screen), then C (money paths), B, D, E. Phases B
 **Not built (decisions or larger projects, listed so nothing is silently dropped):**
 - Guided KYC capture (camera, quality feedback, multi-file submissions, templated rejection reasons): the app uses the hosted verification flow today. Needs an owner decision on replacing it.
 - Payment-waiting screen for Send with deadline, rate lock and Cancel transfer: needs payment expiry and a cancel endpoint in the payment layer.
-- Desktop Send layout (stepper, persistent quote aside, side panels) and the top navigation: sidebar kept by decision.
+- Desktop Send: the stepper, persistent quote aside and monthly limit plate are built; recipients as a side panel and the SBP QR waiting layout are not. The top navigation stays the sidebar by decision.
 - Experts directory as list rows, cuisine and tag chips, Office-managed Home slides, support attachments: kept as decided.
 - Quiet hours and notification action buttons; "Notify me" when an expert has no slots; delivery fee and time on the store header; vendor rating and city on the product page; payment method name and item photos on orders; Mart "no stores deliver here" state.
 - Guest-style items cut in the plan: Popular near you, translation hint.

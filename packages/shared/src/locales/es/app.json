@@ -490,7 +490,8 @@
     "steps": {
       "amount": "Monto",
       "recipient": "Destinatario",
-      "review": "Revisión"
+      "review": "Revisión",
+      "pay": "Pago"
     },
     "rateUnavailable": "Tipo de cambio no disponible para este par.",
     "quoteDeskRateNotConfigured": "Corredor no listo. Configura el tipo USD → moneda de recepción en Office (desk USDT).",
@@ -619,7 +620,20 @@
     "limitHintMax": "Máx. {{max}} por transferencia",
     "limitHintMin": "Mín. {{min}} por transferencia",
     "seeLimits": "Ver límites",
-    "payAmount": "Pagar {{amount}}"
+    "payAmount": "Pagar {{amount}}",
+    "change": "Cambiar",
+    "aside": {
+      "live": "Tasa en vivo",
+      "enter": "Introduce un importe dentro de tu límite para ver la comisión y el total.",
+      "limitTitle": "Tu límite este mes",
+      "left": "Queda por enviar",
+      "resets": "Se restablece el {{date}}",
+      "rate": "Tipo de cambio",
+      "sent": "Envías",
+      "fee": "Comisión",
+      "gets": "El destinatario recibe",
+      "total": "Total a pagar"
+    }
   },
   "recipients": {
     "title": "Beneficiarios",

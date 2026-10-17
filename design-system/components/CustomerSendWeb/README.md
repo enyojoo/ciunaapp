@@ -17,3 +17,6 @@ Differs from the built app (`web/app/send/page.tsx`, `web/app/send/[id]`, `web/a
 
 ## Code
 `web/app/send/page.tsx`, `web/components/send/*`
+
+## As built (2026-10-19)
+Built in the Expo app (`mobile/app/send.tsx`, `mobile/components/send/send-desktop.tsx`) for desktop web widths: four-step stepper (Amount, Recipient, Review, Pay), the form on the left and a 380px aside with the live quote and the monthly limit (left to send, resets date, See limits) that stays in place through the steps. The review step shows the recipient with a masked account and Change. Not built: recipients as a 460px side panel, the SBP QR waiting layout with the lock countdown (needs payment expiry), and the top navigation (the sidebar stays by decision).

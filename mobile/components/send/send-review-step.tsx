@@ -1,4 +1,5 @@
-import { Image, StyleSheet, Text, View } from "react-native"
+import { Image, Pressable, StyleSheet, Text, View } from "react-native"
+import { maskAccount } from "@/lib/mask-account"
 import { useTranslation } from "react-i18next"
 import { formatExchangeRateDisplay } from "@ciuna/shared"
 import { CurrencyFlag } from "@/components/currency-flag"
@@ -19,6 +20,8 @@ export function SendReviewStep({
   usesBitbanker,
   processingFeePending,
   qrData,
+  desktop,
+  onChangeRecipient,
 }: {
   sendAmount: string
   sendCurrency: string
@@ -30,6 +33,9 @@ export function SendReviewStep({
   usesBitbanker: boolean
   processingFeePending?: boolean
   qrData?: string | null
+  /** Wide screens: the amounts are in the side column, so this card shows the recipient and payment only. */
+  desktop?: boolean
+  onChangeRecipient?: () => void
 }) {
   const { t } = useTranslation("app")
   const sendRow = currencies.find((c) => c.code === sendCurrency)
@@ -42,6 +48,7 @@ export function SendReviewStep({
       <View style={styles.summary}>
         <Text style={styles.sectionTitle}>{t("send.transactionSummary")}</Text>
 
+        {desktop ? null : (<>
         <View style={styles.row}>
           <Text style={styles.label}>{t("send.youSendLabel")}</Text>
           <View style={styles.valueRow}>
@@ -82,15 +89,22 @@ export function SendReviewStep({
           <Text style={styles.totalLabel}>{t("send.totalToPay")}</Text>
           <Text style={styles.totalValue}>{formatMoney(quote.totalAmount, sendCurrency)}</Text>
         </View>
+        </>)}
 
         {recipient ? (
           <>
-            <View style={styles.divider} />
+            {desktop ? null : <View style={styles.divider} />}
             <View style={styles.recipientBlock}>
-              <Text style={styles.label}>{t("send.recipientLabel")}</Text>
+              <View style={styles.row}>
+                <Text style={styles.label}>{t("send.recipientLabel")}</Text>
+                {onChangeRecipient ? (
+                  <Pressable onPress={onChangeRecipient} accessibilityRole="button" hitSlop={8} style={styles.changeHit}>
+                    <Text style={styles.changeText}>{t("send.change", { defaultValue: "Change" })}</Text>
+                  </Pressable>
+                ) : null}
+              </View>
               <Text style={styles.recipientName}>{recipient.full_name}</Text>
-              {recipient.bank_name ? <Text style={styles.recipientMeta}>{recipient.bank_name}</Text> : null}
-              {recipient.account_number ? <Text style={styles.recipientMeta}>{recipient.account_number}</Text> : null}
+              <Text style={styles.recipientMeta}>{[recipient.bank_name, maskAccount(recipient.account_number)].filter(Boolean).join(" · ")}</Text>
             </View>
           </>
         ) : null}
@@ -133,6 +147,8 @@ const styles = StyleSheet.create({
   totalLabel: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
   totalValue: { fontSize: 18, fontWeight: "700", color: colors.primary },
   recipientBlock: { gap: 4 },
+  changeHit: { minHeight: 44, justifyContent: "center" },
+  changeText: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText, textDecorationLine: "underline" },
   recipientName: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   recipientMeta: { fontSize: typeSize.meta, color: colors.muted },
   sbpBadge: {

@@ -490,7 +490,8 @@
     "steps": {
       "amount": "Montant",
       "recipient": "Destinataire",
-      "review": "Vérification"
+      "review": "Vérification",
+      "pay": "Paiement"
     },
     "rateUnavailable": "Taux de change indisponible pour cette paire.",
     "quoteDeskRateNotConfigured": "Corridor indisponible. Définissez le taux USD → devise de réception dans Office (desk USDT).",
@@ -619,7 +620,20 @@
     "limitHintMax": "Max {{max}} par transfert",
     "limitHintMin": "Min {{min}} par transfert",
     "seeLimits": "Voir les limites",
-    "payAmount": "Payer {{amount}}"
+    "payAmount": "Payer {{amount}}",
+    "change": "Modifier",
+    "aside": {
+      "live": "Taux en direct",
+      "enter": "Saisissez un montant dans votre limite pour voir les frais et le total.",
+      "limitTitle": "Votre limite ce mois-ci",
+      "left": "Reste à envoyer",
+      "resets": "Réinitialisée le {{date}}",
+      "rate": "Taux de change",
+      "sent": "Vous envoyez",
+      "fee": "Frais de traitement",
+      "gets": "Le bénéficiaire reçoit",
+      "total": "Total à payer"
+    }
   },
   "recipients": {
     "title": "Bénéficiaires",

@@ -96,6 +96,7 @@ export function SendAmountStep({
   limitRange,
   limitText,
   onSeeLimits,
+  hideQuote,
 }: {
   sendAmount: string
   onChangeAmount: (v: string) => void
@@ -118,6 +119,8 @@ export function SendAmountStep({
   /** Why the amount cannot be sent (a limit), or null. */
   limitText?: string | null
   onSeeLimits?: () => void
+  /** Wide screens show the quote in the side column, so it is not repeated under the lanes. */
+  hideQuote?: boolean
 }) {
   const { t } = useTranslation("app")
   const [openSend, setOpenSend] = useState(false)
@@ -269,7 +272,7 @@ export function SendAmountStep({
         </View>
       ) : null}
 
-      <View style={styles.quote}>
+      {hideQuote ? null : <View style={styles.quote}>
         {rateReady ? (
           <View style={styles.quoteRow}>
             <Text style={styles.quoteLabel}>{t("send.rate")}</Text>
@@ -313,7 +316,7 @@ export function SendAmountStep({
           />
         ) : null}
         {quoteNotice && !quotePreviewLoading ? <SendQuoteNotice notice={quoteNotice} /> : null}
-      </View>
+      </View>}
 
       {sendPickerEnabled ? (
         <SheetPicker

@@ -589,7 +589,8 @@
     "steps": {
       "amount": "Valor",
       "recipient": "Destinatário",
-      "review": "Revisão"
+      "review": "Revisão",
+      "pay": "Pagamento"
     },
     "rateUnavailable": "Taxa de câmbio indisponível para este par.",
     "mobile": {
@@ -718,7 +719,20 @@
     "limitHintMax": "Máx. {{max}} por transferência",
     "limitHintMin": "Mín. {{min}} por transferência",
     "seeLimits": "Ver limites",
-    "payAmount": "Pagar {{amount}}"
+    "payAmount": "Pagar {{amount}}",
+    "change": "Alterar",
+    "aside": {
+      "live": "Taxa ao vivo",
+      "enter": "Informe um valor dentro do seu limite para ver a taxa e o total.",
+      "limitTitle": "Seu limite neste mês",
+      "left": "Resta para enviar",
+      "resets": "Reinicia em {{date}}",
+      "rate": "Taxa de câmbio",
+      "sent": "Você envia",
+      "fee": "Taxa de processamento",
+      "gets": "O destinatário recebe",
+      "total": "Total a pagar"
+    }
   },
   "recipients": {
     "title": "Destinatários",

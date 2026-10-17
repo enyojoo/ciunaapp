@@ -589,7 +589,8 @@
     "steps": {
       "amount": "金额",
       "recipient": "收款人",
-      "review": "核对"
+      "review": "核对",
+      "pay": "支付"
     },
     "rateUnavailable": "该币种组合暂无汇率。",
     "mobile": {
@@ -718,7 +719,20 @@
     "limitHintMax": "单笔最高 {{max}}",
     "limitHintMin": "单笔最低 {{min}}",
     "seeLimits": "查看限额",
-    "payAmount": "支付 {{amount}}"
+    "payAmount": "支付 {{amount}}",
+    "change": "更改",
+    "aside": {
+      "live": "实时汇率",
+      "enter": "请输入限额内的金额以查看手续费和总额。",
+      "limitTitle": "你本月的限额",
+      "left": "剩余可发送",
+      "resets": "{{date}} 重置",
+      "rate": "汇率",
+      "sent": "你发送",
+      "fee": "手续费",
+      "gets": "收款人收到",
+      "total": "应付总额"
+    }
   },
   "recipients": {
     "title": "收款人",
