@@ -34,3 +34,27 @@ export async function tryBiometricUnlock(): Promise<boolean> {
   const result = await LocalAuthentication.authenticateAsync({ promptMessage: "Unlock Ciuna" })
   return result.success
 }
+
+export const MAX_PIN_ATTEMPTS = 5
+
+/** Attempts left after `failures` wrong PINs (never below 0). */
+export function attemptsLeft(failures: number): number {
+  return Math.max(0, MAX_PIN_ATTEMPTS - failures)
+}
+
+const failKey = (userId: string) => `ciuna_pin_fail_${userId}`
+
+/** Count a wrong PIN. Kept on the device so closing the app does not reset it. Returns the new count. */
+export async function recordPinFailure(userId: string): Promise<number> {
+  const n = (Number(await secretGet(failKey(userId))) || 0) + 1
+  await secretSet(failKey(userId), String(n))
+  return n
+}
+
+export async function resetPinFailures(userId: string): Promise<void> {
+  await secretDelete(failKey(userId))
+}
+
+export async function pinFailures(userId: string): Promise<number> {
+  return Number(await secretGet(failKey(userId))) || 0
+}

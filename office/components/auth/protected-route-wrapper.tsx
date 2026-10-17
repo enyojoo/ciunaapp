@@ -30,6 +30,7 @@ const PROTECTED_PATHS = [
   "/catalog-review",
   "/analytics",
   "/rates",
+  "/limits",
 ]
 
 function isProtectedPath(pathname: string | null): boolean {

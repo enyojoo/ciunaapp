@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { PinDots, PinKeypad, PIN_LEN } from "@/components/pin-keypad"
 import { Screen } from "@/components/screen"
 import { useAuth } from "@/lib/auth-context"
-import { tryBiometricUnlock, verifyPin } from "@/lib/pin"
+import { attemptsLeft, pinFailures, recordPinFailure, resetPinFailures, tryBiometricUnlock, verifyPin, MAX_PIN_ATTEMPTS } from "@/lib/pin"
 import { colors, ui } from "@/lib/theme"
 
 export default function PinScreen() {
@@ -14,12 +14,20 @@ export default function PinScreen() {
   const [pin, setPin] = useState("")
   const [busy, setBusy] = useState(false)
   const [wrong, setWrong] = useState(false)
+  const [failures, setFailures] = useState(0)
+
+  useEffect(() => {
+    if (user) void pinFailures(user.id).then(setFailures)
+  }, [user])
 
   useEffect(() => {
     if (!user) return
     void (async () => {
       const ok = await tryBiometricUnlock()
-      if (ok) unlockPin()
+      if (ok) {
+        await resetPinFailures(user.id)
+        unlockPin()
+      }
     })()
   }, [user, unlockPin])
 
@@ -29,13 +37,21 @@ export default function PinScreen() {
       setBusy(true)
       const ok = await verifyPin(user.id, pin)
       setBusy(false)
-      if (ok) unlockPin()
-      else {
-        setWrong(true)
-        setPin("")
+      if (ok) {
+        await resetPinFailures(user.id)
+        unlockPin()
+        return
+      }
+      const n = await recordPinFailure(user.id)
+      setFailures(n)
+      setWrong(true)
+      setPin("")
+      if (n >= MAX_PIN_ATTEMPTS) {
+        await resetPinFailures(user.id)
+        await signOut()
       }
     })()
-  }, [pin, user, unlockPin])
+  }, [pin, user, unlockPin, signOut])
 
   if (loading) {
     return (
@@ -58,6 +74,13 @@ export default function PinScreen() {
         <Text style={styles.wrong} accessibilityRole="alert">
           {wrong ? t("pinLock.incorrectPin", { defaultValue: "Incorrect PIN" }) : " "}
         </Text>
+        <Text style={styles.left}>
+          {failures >= 3 && failures < MAX_PIN_ATTEMPTS
+            ? attemptsLeft(failures) === 1
+              ? t("pinLock.attemptsLeftOne", { defaultValue: "1 attempt left" })
+              : t("pinLock.attemptsLeft", { count: attemptsLeft(failures), defaultValue: "{{count}} attempts left" })
+            : " "}
+        </Text>
       </View>
       <PinKeypad
         disabled={busy}
@@ -79,5 +102,6 @@ const styles = StyleSheet.create({
   head: { alignItems: "center", paddingTop: 32 },
   centerText: { textAlign: "center" },
   wrong: { marginTop: 12, minHeight: 20, fontSize: 14, fontWeight: "600", color: colors.danger, textAlign: "center" },
+  left: { marginTop: 4, minHeight: 20, fontSize: 13, color: colors.muted, textAlign: "center" },
   logout: { minHeight: 48, alignItems: "center", paddingVertical: 12 },
 })

@@ -1,5 +1,5 @@
 import {
-  MessageSquare,
+  MessageSquare, Gauge,
   Briefcase, Building2, Calendar, Gift, HandHelping, ListChecks, Package, Percent, ScrollText, Settings, Settings2,
   ShieldCheck, ClipboardCheck, Star, Store, TrendingUp, Users, UserCircle, Wallet, CreditCard, ClipboardList, BarChart3,
   type LucideIcon,
@@ -61,6 +61,7 @@ export const NAV_GROUPS: NavGroup[] = [
     key: "settings", name: "Settings", icon: Settings,
     items: [
       { name: "Rates", href: "/rates", icon: TrendingUp, permission: "rates.manage" },
+      { name: "Send limits", href: "/limits", icon: Gauge, permission: "settings.manage" },
       { name: "Settings", href: "/settings", icon: Settings, permission: "settings.manage" },
     ],
   },
@@ -74,7 +75,7 @@ const ROUTE_PERMISSIONS: Array<[string, string]> = [
   ["/food", "catalog.manage"], ["/mart", "catalog.manage"], ["/products", "catalog.manage"],
   ["/merchants", "merchants.read"], ["/kyb", "kyb.manage"], ["/experts", "experts.manage"], ["/audit", "audit.read"],
   ["/finance", "finance.manage"], ["/fees", "finance.manage"], ["/referrals", "finance.manage"], ["/analytics", "finance.manage"],
-  ["/rates", "rates.manage"], ["/settings", "settings.manage"],
+  ["/rates", "rates.manage"], ["/settings", "settings.manage"], ["/limits", "settings.manage"],
 ]
 
 export function permissionForPath(pathname: string | null): string | null {
