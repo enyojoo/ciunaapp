@@ -98,7 +98,7 @@ export function StoreHeader({
             <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
               {vendor?.name}
             </Text>
-            {vendor?.is_verified ? <VerifiedBadge size={18} tier={vendor.verification_tier} /> : null}
+            {vendor?.is_verified ? <VerifiedBadge size={18} tier={vendor.verification_tier} explain /> : null}
           </View>
           <View style={styles.locSlot}>
             {location ? (

@@ -214,7 +214,11 @@
       "left": "Restam {{n}}"
     },
     "verifiedBusiness": "Empresa verificada",
-    "verifiedIndividual": "Verificado"
+    "verifiedIndividual": "Verificado",
+    "verifiedInfoBusiness": "A Ciuna verificou esta empresa com os dados oficiais dela.",
+    "verifiedInfoIndividual": "A Ciuna verificou a identidade desta pessoa.",
+    "verifiedInfoHint": "O que isso significa?",
+    "verifiedInfoClose": "Entendi"
   },
   "assistant": {
     "title": "Assistente",
@@ -1430,7 +1434,9 @@
     "support": "Dúvidas? Escreva para {{email}}",
     "share": "Compartilhar recibo",
     "unavailable": "O recibo fica disponível quando o pagamento for concluído.",
-    "shareText": "Recibo Ciuna {{number}}: {{total}} em {{date}}."
+    "shareText": "Recibo Ciuna {{number}}: {{total}} em {{date}}.",
+    "downloadPdf": "Baixar PDF",
+    "pdfFailed": "Não foi possível criar o PDF. Tente de novo."
   },
   "limits": {
     "title": "Limites",
@@ -1494,5 +1500,9 @@
     "support": "Suporte",
     "supportHint": "Respostas às suas solicitações de suporte",
     "failed": "Não foi possível salvar. Tente de novo."
+  },
+  "share": {
+    "aria": "Compartilhar",
+    "copied": "Link copiado"
   }
 }

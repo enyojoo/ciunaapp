@@ -214,7 +214,11 @@
       "left": "{{n}} restants"
     },
     "verifiedBusiness": "Entreprise vérifiée",
-    "verifiedIndividual": "Vérifié"
+    "verifiedIndividual": "Vérifié",
+    "verifiedInfoBusiness": "Ciuna a vérifié cette entreprise à partir de ses informations officielles.",
+    "verifiedInfoIndividual": "Ciuna a vérifié l'identité de cette personne.",
+    "verifiedInfoHint": "Que signifie ceci ?",
+    "verifiedInfoClose": "Compris"
   },
   "assistant": {
     "title": "Assistant",
@@ -1430,7 +1434,9 @@
     "support": "Des questions ? Écrivez à {{email}}",
     "share": "Partager le reçu",
     "unavailable": "Le reçu est disponible une fois le paiement terminé.",
-    "shareText": "Reçu Ciuna {{number}} : {{total}} le {{date}}."
+    "shareText": "Reçu Ciuna {{number}} : {{total}} le {{date}}.",
+    "downloadPdf": "Télécharger le PDF",
+    "pdfFailed": "Impossible de créer le PDF. Réessayez."
   },
   "limits": {
     "title": "Plafonds",
@@ -1494,5 +1500,9 @@
     "support": "Assistance",
     "supportHint": "Réponses à vos demandes d'assistance",
     "failed": "Enregistrement impossible. Réessayez."
+  },
+  "share": {
+    "aria": "Partager",
+    "copied": "Lien copié"
   }
 }

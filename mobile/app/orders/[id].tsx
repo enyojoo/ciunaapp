@@ -1,5 +1,8 @@
 import type { MarketplaceOrder } from "@ciuna/shared"
 import { MarketplaceOrderView } from "@/components/marketplace-checkout"
+import { OrderChat } from "./[id]/chat"
+import { useResponsiveLayout } from "@/lib/responsive-layout"
+import { chatAvailableFor } from "@/lib/chat-panel"
 import { useEffect, useRef, useState } from "react"
 import * as Clipboard from "expo-clipboard"
 import { ActivityIndicator, Image, Linking, Pressable, Share, StyleSheet, Text, View } from "react-native"
@@ -825,6 +828,9 @@ const styles = StyleSheet.create({
   recipientCardBody: { flex: 1, minWidth: 0 },
   recipientName: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
   recipientAccount: { fontSize: 12, fontFamily: "Courier", color: colors.muted },
+  split: { flex: 1, flexDirection: "row", gap: 16 },
+  splitMain: { flex: 1, minWidth: 0 },
+  splitChat: { width: 400, borderLeftWidth: 1, borderLeftColor: colors.border, backgroundColor: colors.surface },
 })
 
 export default function OrderScreen() {
@@ -832,7 +838,8 @@ export default function OrderScreen() {
     [order, setOrder] = useState<MarketplaceOrder | null>(null),
     [legacy, setLegacy] = useState(false),
     [failed, setFailed] = useState(false),
-    { t } = useTranslation("app")
+    { t } = useTranslation("app"),
+    { isWeb, mode } = useResponsiveLayout()
   useEffect(() => {
     void fetchWithAuth(`/api/hub/orders/${id}`)
       .then(async (r) => {
@@ -845,8 +852,20 @@ export default function OrderScreen() {
       })
       .catch(() => setFailed(true))
   }, [id])
+  const sidePanel = Boolean(order) && isWeb && mode === "desktop" && chatAvailableFor(order as MarketplaceOrder)
   return order ? (
-    <MarketplaceOrderView order={order} onChange={setOrder} />
+    sidePanel ? (
+      <View style={styles.split}>
+        <View style={styles.splitMain}>
+          <MarketplaceOrderView order={order} onChange={setOrder} />
+        </View>
+        <View style={styles.splitChat}>
+          <OrderChat orderId={order.id} embedded />
+        </View>
+      </View>
+    ) : (
+      <MarketplaceOrderView order={order} onChange={setOrder} />
+    )
   ) : legacy ? (
     <LegacyOrderScreen />
   ) : (

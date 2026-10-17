@@ -214,7 +214,11 @@
       "left": "剩余 {{n}} 件"
     },
     "verifiedBusiness": "已验证企业",
-    "verifiedIndividual": "已验证"
+    "verifiedIndividual": "已验证",
+    "verifiedInfoBusiness": "Ciuna 已根据官方公司信息核实该商家。",
+    "verifiedInfoIndividual": "Ciuna 已核实此人的身份。",
+    "verifiedInfoHint": "这是什么意思？",
+    "verifiedInfoClose": "知道了"
   },
   "assistant": {
     "title": "助手",
@@ -1430,7 +1434,9 @@
     "support": "有疑问？请联系 {{email}}",
     "share": "分享收据",
     "unavailable": "付款完成后即可查看收据。",
-    "shareText": "Ciuna 收据 {{number}}：{{date}} 支付 {{total}}。"
+    "shareText": "Ciuna 收据 {{number}}：{{date}} 支付 {{total}}。",
+    "downloadPdf": "下载 PDF",
+    "pdfFailed": "无法生成 PDF，请重试。"
   },
   "limits": {
     "title": "额度",
@@ -1494,5 +1500,9 @@
     "support": "客服",
     "supportHint": "客服对你的请求的回复",
     "failed": "保存失败，请重试。"
+  },
+  "share": {
+    "aria": "分享",
+    "copied": "链接已复制"
   }
 }

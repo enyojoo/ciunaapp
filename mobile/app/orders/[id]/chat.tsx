@@ -51,7 +51,11 @@ function dayKey(iso: string) {
 
 export default function OrderChatScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
-  const orderId = String(id || "")
+  return <OrderChat orderId={String(id || "")} />
+}
+
+/** The conversation with the seller. `embedded` places it beside the order on wide web screens instead of as its own screen. */
+export function OrderChat({ orderId, embedded }: { orderId: string; embedded?: boolean }) {
   const { t, i18n } = useTranslation("app")
   const locale = i18n.resolvedLanguage || i18n.language || "en"
   const navigation = useNavigation()
@@ -72,8 +76,9 @@ export default function OrderChatScreen() {
 
   const sellerName = order?.seller?.name
   useEffect(() => {
+    if (embedded) return
     navigation.setOptions({ title: sellerName || t("chat.title", { defaultValue: "Chat with seller" }) })
-  }, [navigation, t, sellerName])
+  }, [embedded, navigation, t, sellerName])
 
   const markRead = useCallback(
     (messages: ChatMessage[]) => {
@@ -330,11 +335,11 @@ export default function OrderChatScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined} keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}>
-      <StatusBar style="dark" />
+      {embedded ? null : <StatusBar style="dark" />}
       {order ? (
         <Pressable
-          onPress={() => (router.canGoBack() ? router.back() : router.replace(`/orders/${order.id}` as never))}
-          accessibilityRole="button"
+          onPress={() => (embedded ? undefined : router.canGoBack() ? router.back() : router.replace(`/orders/${order.id}` as never))}
+          accessibilityRole={embedded ? undefined : "button"}
           style={styles.strip}
         >
           <Text style={styles.stripId}>{t("chat.orderStrip", { id: order.public_id, defaultValue: "Order {{id}}" })}</Text>

@@ -1,5 +1,8 @@
-import { useCallback } from "react"
-import { Share, StyleSheet, Text, View } from "react-native"
+import { useCallback, useState } from "react"
+import { Platform, Share, StyleSheet, Text, View } from "react-native"
+import * as Print from "expo-print"
+import * as Sharing from "expo-sharing"
+import { receiptHtml } from "@/lib/receipt-html"
 import { useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { BRAND } from "@ciuna/shared"
@@ -11,6 +14,7 @@ import { ScreenScroll } from "@/components/screen"
 import { ApiError, authJson } from "@/lib/social-api"
 import { formatMoney } from "@/lib/money"
 import { useCachedQuery } from "@/lib/use-cached-query"
+import { useToast } from "@/components/toast-provider"
 import { NARROW_COLUMN } from "@/lib/layout-metrics"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
@@ -33,6 +37,8 @@ type Receipt = {
 export default function ReceiptScreen() {
   const { kind, id } = useLocalSearchParams<{ kind: string; id: string }>()
   const { t, i18n } = useTranslation("app")
+  const { showError } = useToast()
+  const [pdfBusy, setPdfBusy] = useState(false)
   const locale = i18n.resolvedLanguage || i18n.language || "en"
   const path = `/api/receipts/${encodeURIComponent(String(kind))}/${encodeURIComponent(String(id))}`
   const { data, loading, error, revalidate } = useCachedQuery<Receipt>(`ciuna_receipt_${kind}_${id}`, async () => (await authJson<{ receipt: Receipt }>(path)).receipt, { ttlMs: 60_000 })
@@ -69,6 +75,40 @@ export default function ReceiptScreen() {
     { label: t("receipt.address", { defaultValue: "Delivery address" }), value: r.address || "" },
     { label: t("receipt.paidWith", { defaultValue: "Paid with" }), value: r.payMethod ? t(`receipt.method_${r.payMethod}`, { defaultValue: r.payMethod }) : "" },
   ].filter((x) => x.value)
+
+  const downloadPdf = async () => {
+    setPdfBusy(true)
+    try {
+      const html = receiptHtml({
+        brand: BRAND.name,
+        number: r.number,
+        date: when(r.issuedAt),
+        status: t(`receipt.status_${r.status}`, { defaultValue: r.status }),
+        rows,
+        itemsTitle: r.lines.length ? t("receipt.items", { defaultValue: "Items" }) : undefined,
+        items: r.lines.map((l) => ({ text: `${l.quantity} × ${l.title}`, amount: money(l.amount) })),
+        totals: [
+          ...(r.transfer ? [{ label: t("receipt.rate", { defaultValue: "Rate" }), value: `1 ${r.transfer.sendCurrency} = ${r.transfer.rate} ${r.transfer.receiveCurrency}` }, { label: t("receipt.recipientGets", { defaultValue: "Recipient gets" }), value: formatMoney(r.transfer.receiveAmount, r.transfer.receiveCurrency) }] : []),
+          ...(r.amounts.fee > 0 ? [{ label: r.transfer ? t("receipt.fee", { defaultValue: "Fee" }) : t("receipt.serviceFee", { defaultValue: "Service fee" }), value: money(r.amounts.fee) }] : []),
+          ...(r.amounts.delivery > 0 ? [{ label: t("receipt.deliveryFee", { defaultValue: "Delivery fee" }), value: money(r.amounts.delivery) }] : []),
+          ...(r.amounts.conversion > 0 ? [{ label: t("receipt.conversionFee", { defaultValue: "Conversion fee" }), value: money(r.amounts.conversion) }] : []),
+          { label: t("receipt.total", { defaultValue: "Total paid" }), value: money(r.amounts.total), strong: true },
+          ...(r.amounts.refunded != null ? [{ label: t("receipt.refunded", { defaultValue: "Refunded" }), value: `−${money(r.amounts.refunded)}` }] : []),
+        ],
+        footers: [t("receipt.notTax", { defaultValue: "This is not a tax invoice." }), t("receipt.support", { email: BRAND.email, defaultValue: "Questions? Write to {{email}}" })],
+      })
+      if (Platform.OS === "web") {
+        await Print.printAsync({ html })
+      } else {
+        const { uri } = await Print.printToFileAsync({ html })
+        if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: "application/pdf", dialogTitle: r.number, UTI: "com.adobe.pdf" })
+      }
+    } catch {
+      showError(t("receipt.pdfFailed", { defaultValue: "Could not create the PDF. Try again." }))
+    } finally {
+      setPdfBusy(false)
+    }
+  }
 
   const shareText = t("receipt.shareText", { number: r.number, total: money(r.amounts.total), date: when(r.issuedAt), defaultValue: "Ciuna receipt {{number}}: {{total}} on {{date}}." })
 
@@ -135,6 +175,8 @@ export default function ReceiptScreen() {
         <Text style={styles.foot}>{t("receipt.notTax", { defaultValue: "This is not a tax invoice." })}</Text>
         <Text style={styles.foot}>{t("receipt.support", { email: BRAND.email, defaultValue: "Questions? Write to {{email}}" })}</Text>
       </View>
+      <PrimaryButton label={t("receipt.downloadPdf", { defaultValue: "Download PDF" })} busy={pdfBusy} onPress={() => void downloadPdf()} />
+      <View style={styles.gap} />
       <PrimaryButton label={t("receipt.share", { defaultValue: "Share receipt" })} variant="secondary" onPress={() => void Share.share({ message: shareText })} />
     </ScreenScroll>
   )
@@ -172,4 +214,5 @@ const styles = StyleSheet.create({
   totalLabel: { fontSize: 16, fontWeight: "700", color: colors.text },
   totalValue: { fontSize: 20, fontWeight: "800", color: colors.text, fontVariant: ["tabular-nums"] },
   foot: { fontSize: 12, color: colors.muted },
+  gap: { height: 10 },
 })

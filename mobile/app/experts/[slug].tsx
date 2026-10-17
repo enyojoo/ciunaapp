@@ -101,7 +101,7 @@ function ExpertProfileBody() {
             <Text style={styles.name} numberOfLines={2}>
               {profile.display_name}
             </Text>
-            {profile.is_verified ? <VerifiedBadge size={18} kind="expert" tier={profile.verification_tier} /> : null}
+            {profile.is_verified ? <VerifiedBadge size={18} kind="expert" tier={profile.verification_tier} explain /> : null}
           </View>
           {profile.headline ? (
             <Text style={styles.headline} numberOfLines={2}>

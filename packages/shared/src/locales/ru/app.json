@@ -214,7 +214,11 @@
       "left": "Осталось: {{n}}"
     },
     "verifiedBusiness": "Проверенный бизнес",
-    "verifiedIndividual": "Проверено"
+    "verifiedIndividual": "Проверено",
+    "verifiedInfoBusiness": "Ciuna проверила этот бизнес по официальным данным компании.",
+    "verifiedInfoIndividual": "Ciuna проверила личность этого человека.",
+    "verifiedInfoHint": "Что это значит?",
+    "verifiedInfoClose": "Понятно"
   },
   "assistant": {
     "title": "Ассистент",
@@ -1432,7 +1436,9 @@
     "support": "Вопросы? Напишите на {{email}}",
     "share": "Поделиться квитанцией",
     "unavailable": "Квитанция появится после завершения платежа.",
-    "shareText": "Квитанция Ciuna {{number}}: {{total}}, {{date}}."
+    "shareText": "Квитанция Ciuna {{number}}: {{total}}, {{date}}.",
+    "downloadPdf": "Скачать PDF",
+    "pdfFailed": "Не удалось создать PDF. Попробуйте ещё раз."
   },
   "limits": {
     "title": "Лимиты",
@@ -1496,5 +1502,9 @@
     "support": "Поддержка",
     "supportHint": "Ответы на ваши обращения",
     "failed": "Не удалось сохранить. Попробуйте ещё раз."
+  },
+  "share": {
+    "aria": "Поделиться",
+    "copied": "Ссылка скопирована"
   }
 }

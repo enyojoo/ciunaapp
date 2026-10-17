@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next"
 import { Clock, Info, MapPin, ShoppingBag } from "lucide-react-native"
 import { VerifiedBadge } from "@/components/verified-badge"
 import { FavouriteHeart } from "@/components/favourite-heart"
+import { ShareButton } from "@/components/share-button"
+import { storeLink } from "@/lib/share-link"
 import { RatingLine, ReviewsSection } from "@/components/reviews-section"
 import { useReviews } from "@/lib/use-reviews"
 import { CatalogProducts } from "@/components/catalog-products"
@@ -55,6 +57,7 @@ export default function VendorScreen() {
       backHref={hubLineHomePath(line)}
       trailing={
         <>
+          {vendor ? <ShareButton url={storeLink(line, vendorSlug)} title={vendor.name} /> : null}
           {vendorId ? <FavouriteHeart type="vendor" id={vendorId} style={styles.barHeart} /> : null}
           {cartMode ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
         </>
