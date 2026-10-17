@@ -7,16 +7,37 @@ import { useExpertSlots } from "@/lib/use-expert-slots"
 import { ScreenScroll } from "@/components/screen"
 import { HubTopBar } from "@/components/hub-top-bar"
 import { SlotPicker } from "@/components/slot-picker"
+import { LoadError } from "@/components/load-error"
+import { useToast } from "@/components/toast-provider"
 import { StepBar } from "@/components/step-bar"
 import { MarketplaceCheckout } from "@/components/marketplace-checkout"
 import { colors, type as typeSize } from "@/lib/theme"
 
 function ExpertBookBody() {
   const { serviceId } = useLocalSearchParams<{ serviceId: string }>(),
-    { data, loading } = useExpertSlots(serviceId),
+    { data, loading, error, revalidate } = useExpertSlots(serviceId),
     [slotId, setSlotId] = useState(""),
+    { showError } = useToast(),
     { t } = useTranslation("app")
-  if (slotId) return <MarketplaceCheckout source={{ kind: "expert", expertServiceSlotId: slotId }} />
+  if (slotId) {
+    return (
+      <MarketplaceCheckout
+        source={{ kind: "expert", expertServiceSlotId: slotId }}
+        onSlotUnavailable={() => {
+          setSlotId("")
+          void revalidate()
+          showError(t("marketplace.errors.SLOT_UNAVAILABLE", { defaultValue: "This appointment is no longer available. Choose another time." }))
+        }}
+      />
+    )
+  }
+  if (error && !data) {
+    return (
+      <ScreenScroll contentStyle={NARROW_COLUMN}>
+        <LoadError onRetry={() => void revalidate()} />
+      </ScreenScroll>
+    )
+  }
   return (
     <ScreenScroll contentStyle={NARROW_COLUMN}>
       <StepBar steps={[t("marketplace.progressTime", { defaultValue: "Time" }), t("marketplace.progressDetails", { defaultValue: "Details" }), t("marketplace.progressReview", { defaultValue: "Review" })]} active={0} />

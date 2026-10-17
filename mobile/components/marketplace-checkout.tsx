@@ -184,9 +184,12 @@ export function MarketplaceCheckout({
   source,
   customAmount = false,
   seed,
+  onSlotUnavailable,
 }: {
   source: PurchaseSource
   customAmount?: boolean
+  /** Booking: the chosen time was taken by someone else; the caller returns to the time picker. */
+  onSlotUnavailable?: () => void
   /** Instant paint from cart/product while quote loads. */
   seed?: {
     title: string
@@ -220,6 +223,10 @@ export function MarketplaceCheckout({
       "",
     initialPhone: profile?.phone || "",
   })
+  useEffect(() => {
+    if (c.error === "SLOT_UNAVAILABLE") onSlotUnavailable?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- react to the error code only
+  }, [c.error])
   const label = (key: string, fallback: string) => t(`marketplace.${key}`, { defaultValue: fallback })
   const paying = !!(c.order && isOpenPay(c.order)) || leaving
   /** Review is its own step: after Continue, or whenever a payment is already open. */
@@ -692,9 +699,11 @@ export function MarketplaceCheckout({
                   label={label("note", "Order note")}
                   accessibilityLabel={label("note", "Order note")}
                   value={c.note}
-                  onChangeText={c.setNote}
+                  onChangeText={(v) => c.setNote(v.slice(0, 1000))}
+                  maxLength={1000}
                   multiline
                 />
+                <Text style={styles.meta}>{`${[...c.note].length} / 1000`}</Text>
 
                 {q && !q.checkoutReady && (
                   <Text style={styles.warn}>

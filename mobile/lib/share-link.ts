@@ -10,3 +10,8 @@ export function appOrigin(): string {
 export function storeLink(line: string, slug: string): string {
   return `${appOrigin()}/hub/${encodeURIComponent(line)}/v/${encodeURIComponent(slug)}`
 }
+
+/** Link to an expert's profile. */
+export function expertLink(slug: string): string {
+  return `${appOrigin()}/experts/${encodeURIComponent(slug)}`
+}

@@ -1,4 +1,4 @@
-import { formatMoney } from "@/lib/money"
+import { formatCardPrice } from "@/lib/money"
 import { Highlighted } from "@/components/highlight"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
@@ -90,7 +90,7 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
     fp && "quote" in fp
       ? t("experts.directory.customQuote", { defaultValue: "Custom quote" })
       : fp
-        ? t(fp.per === "hour" ? "experts.directory.fromPerHour" : "experts.directory.from", { price: formatMoney(fp.amount, fp.currency), defaultValue: fp.per === "hour" ? "From {{price}}/hr" : "From {{price}}" })
+        ? t(fp.per === "hour" ? "experts.directory.fromPerHour" : "experts.directory.from", { price: formatCardPrice(fp.amount, fp.currency), defaultValue: fp.per === "hour" ? "From {{price}}/hr" : "From {{price}}" })
         : expert.pricing_hint || null
   const nextLine = expert.next_available_at
     ? t("experts.directory.nextAvailable", { when: new Date(expert.next_available_at).toLocaleString(i18n.language, { weekday: "short", hour: "numeric", minute: "2-digit" }), defaultValue: "Next: {{when}}" })

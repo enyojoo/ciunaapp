@@ -21,6 +21,8 @@ import { EXPERT_NOT_FOUND, useExpertProfile } from "@/lib/use-expert-profile"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { VerifiedBadge } from "@/components/verified-badge"
+import { ShareButton } from "@/components/share-button"
+import { expertLink } from "@/lib/share-link"
 import { languageName } from "@/lib/language-name"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
@@ -58,9 +60,16 @@ function ExpertProfileBody() {
     return (
       <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
         <StatusBar style="dark" />
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
+        <View style={styles.identityRow} accessibilityLabel={t("common.loading", { defaultValue: "Loading" })}>
+          <View style={[styles.avatarWrap, styles.skel]} />
+          <View style={styles.identityBody}>
+            <View style={[styles.skelBar, { width: "60%", height: 22 }]} />
+            <View style={[styles.skelBar, { width: "80%", marginTop: 10 }]} />
+            <View style={[styles.skelBar, { width: "40%", marginTop: 10 }]} />
+          </View>
         </View>
+        <View style={[styles.skelBar, { height: 96, marginTop: 20, borderRadius: 16 }]} />
+        <View style={[styles.skelBar, { height: 96, marginTop: 12, borderRadius: 16 }]} />
       </ScreenScroll>
     )
   }
@@ -94,7 +103,11 @@ function ExpertProfileBody() {
         <View style={styles.avatarWrap}>
           {profile.image_url ? (
             <Image source={{ uri: profile.image_url }} style={styles.avatar} resizeMode="cover" />
-          ) : null}
+          ) : (
+            <View style={styles.initialWrap}>
+              <Text style={styles.initial}>{(profile.display_name.trim().charAt(0) || "?").toUpperCase()}</Text>
+            </View>
+          )}
         </View>
         <View style={styles.identityBody}>
           <View style={styles.nameRow}>
@@ -102,6 +115,7 @@ function ExpertProfileBody() {
               {profile.display_name}
             </Text>
             {profile.is_verified ? <VerifiedBadge size={18} kind="expert" tier={profile.verification_tier} explain /> : null}
+            {profile.slug ? <ShareButton url={expertLink(profile.slug)} title={profile.display_name} /> : null}
           </View>
           {profile.headline ? (
             <Text style={styles.headline} numberOfLines={2}>
@@ -199,6 +213,10 @@ export default function ExpertProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  skel: { backgroundColor: colors.neutralSurface },
+  skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.neutralSurface },
+  initialWrap: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.primaryTint },
+  initial: { fontSize: 28, fontWeight: "700", color: colors.primaryText },
   // A plain 40px icon button in the top bar, the same size as the back chip.
   barHeart: { position: "relative", top: 0, right: 0, width: 40, height: 40, borderRadius: 20, backgroundColor: "transparent", shadowOpacity: 0, elevation: 0 },
   center: { paddingVertical: 60, alignItems: "center" },
