@@ -6,7 +6,7 @@ Goal: finish the customer app (`mobile/`, native and Expo web) and every API it 
 
 | Topic | Decision | Why |
 |---|---|---|
-| PIN lock rules | **Yes.** 5 wrong PINs lock the app for 1 minute, 10 for 15 minutes, 15 sign the user out (full login needed). Show "N attempts left" from the 3rd miss. Counted on the device; a correct PIN resets it. | It guards money. Without a limit a 4-digit PIN is guessable in minutes. |
+| App lock (PIN) | **Optional, never required.** We hold no funds and every transfer needs an explicit action, so there is no forced PIN. Keep the existing opt-in PIN (More > Login PIN). Add Face ID or fingerprint as the quick unlock when a PIN is set. One simple rule: 5 wrong PINs sign the user out (full login needed); show "N attempts left" from the 3rd miss. No timed lockouts. | The app still holds saved recipients, ID verification details and order history, so people who want a lock can have one. It is not a money safeguard. |
 | AI assistant | **Cut.** Remove the `assistant` screen and card from the app and the design system. | Owner decision; support requests cover help. |
 | Send limit amounts | **Office sets them; nothing is seeded.** Build the Office editor now. Compliance enters amounts per level and currency before launch. | Limits are a compliance number, not a product one. Until set, sending is not capped. |
 | PDF receipts | **Yes, with `expo-print` and `expo-sharing`** (Expo-maintained, no third-party PDF library). Receipt renders to a PDF and shares on phone; on web it opens the print dialog. | Users need proof of payment. |
@@ -27,7 +27,7 @@ Goal: finish the customer app (`mobile/`, native and Expo web) and every API it 
 ## Build order
 
 ### Phase 1: money safety and store compliance
-1. PIN lock rules (device logic, screens, six languages, tests).
+1. App lock: biometric unlock and the 5-attempt sign-out on the existing optional PIN (small).
 2. Office editor for send limits (list, edit, empty state).
 3. Account deletion: API (`DELETE /api/account` request, guard checks, 30-day job), app flow, Office view of pending deletions, tests.
 
