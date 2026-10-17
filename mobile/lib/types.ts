@@ -1,4 +1,6 @@
 export type HubProduct = {
+  /** Food meal type or Mart aisle (hub_products.main_category); null until set. */
+  main_category?: string | null
   long_description?: string | null
   fulfillment_mode?: "digital" | "delivery" | "pickup" | null
   require_phone?: boolean | null
@@ -101,6 +103,8 @@ export type HubVendor = {
   is_open?: boolean
   is_paused?: boolean
     delivery_zone_count?: number
+    /** City/district pairs the store delivers to (from its active zones). */
+    delivery_areas?: { city: string; district: string }[]
     delivery_fee_from?: number | null
     delivery_fee_currency?: string | null
     delivery_eta_min?: number | null
@@ -199,6 +203,8 @@ export type ExpertProfile = {
   headline?: string | null
   bio?: string | null
   category?: string | null
+  /** One of the eight needs set in Office (expert_profiles.main_category); null until set. */
+  main_category?: string | null
   image_url?: string | null
   pricing_hint?: string | null
   from_price?: { amount: number; currency: string; per: "hour" | null } | { quote: true } | null
@@ -235,6 +241,7 @@ export type ExpertCatalogService = {
     display_name: string
     image_url?: string | null
     category?: string | null
+    main_category?: string | null
     is_verified?: boolean
   }
 }

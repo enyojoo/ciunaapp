@@ -1,33 +1,42 @@
 import { useEffect, useMemo, useState } from "react"
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { useRouter } from "expo-router"
 import Constants from "expo-constants"
 import { useTranslation } from "react-i18next"
-import {
-  BadgeCheck,
-  FileText,
-  Gift,
-  Heart,
-  Landmark,
-  MessageCircleQuestion,
-  Lock,
-  LogOut,
-  ShieldCheck,
-  Gauge,
-  Bell,
-} from "lucide-react-native"
 import { ScreenScroll } from "@/components/screen"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Avatar } from "@/components/avatar"
-import { GroupCard, Row } from "@/components/row"
 import { LanguagePicker } from "@/components/language-picker"
+import { AppText, Badge, Icon, IconWell, ListGroup, ListRow, PressableScale, type BadgeTone, type IconName } from "@/components/ui"
 import { useAuth } from "@/lib/auth-context"
 import { hasPin } from "@/lib/pin"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useBitbankerEligibility } from "@/lib/use-bitbanker-eligibility"
-import { colors, radius, type as typeSize, ui } from "@/lib/theme"
+import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
-export default function MoreScreen() {
+function RowIcon({ name, tint }: { name: IconName; tint?: string }) {
+  return (
+    <IconWell>
+      <Icon name={name} size={18} color={tint ?? colors.neutralText} />
+    </IconWell>
+  )
+}
+
+/** A square shortcut for the places people open most from Account. */
+function Shortcut({ icon, label, onPress, tint, bg }: { icon: IconName; label: string; onPress: () => void; tint: string; bg: string }) {
+  return (
+    <PressableScale onPress={onPress} haptics accessibilityRole="button" accessibilityLabel={label} style={styles.shortcut}>
+      <View style={[styles.shortcutIcon, { backgroundColor: bg }]}>
+        <Icon name={icon} size={20} color={tint} />
+      </View>
+      <AppText variant="label" numberOfLines={1}>
+        {label}
+      </AppText>
+    </PressableScale>
+  )
+}
+
+export default function AccountScreen() {
   const { t } = useTranslation("common")
   const { t: tApp } = useTranslation("app")
   const { signOut, profile, user } = useAuth()
@@ -45,15 +54,16 @@ export default function MoreScreen() {
   }, [user])
 
   const verified = eligibility?.isVerifiedForSbp ?? false
+  const inReview = eligibility?.status === "checking"
 
-  const kycTone: "ok" | "warn" | "bad" | "neutral" = eligibility?.isVerifiedForSbp ? "ok" : eligibility?.status === "checking" ? "warn" : eligibility?.status === "not_verified" ? "bad" : "neutral"
+  const kycTone: BadgeTone = verified ? "success" : inReview ? "warning" : eligibility?.status === "not_verified" ? "danger" : "neutral"
   const kycLabel = useMemo(() => {
-    if (eligibility?.isVerifiedForSbp) return t("kyc.verified")
-    if (eligibility?.status === "checking") return t("kyc.inReview")
+    if (verified) return t("kyc.verified")
+    if (inReview) return t("kyc.inReview")
     if (eligibility?.status === "not_verified") return t("kyc.rejected")
     if (eligibility?.status === "unavailable") return t("kyc.pending")
     return t("kyc.takeAction")
-  }, [eligibility, t])
+  }, [eligibility, verified, inReview, t])
 
   const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Account"
 
@@ -68,103 +78,100 @@ export default function MoreScreen() {
   }
 
   return (
-    <ScreenScroll>
-      <Text style={styles.title}>{t("more.title", { defaultValue: "More" })}</Text>
+    <ScreenScroll contentStyle={styles.content}>
+      <AppText variant="largeTitle" accessibilityRole="header" style={styles.title}>
+        {t("nav.account", { defaultValue: "Account" })}
+      </AppText>
 
-      <Pressable onPress={() => router.push("/profile")} style={styles.identity}>
-        <Avatar name={name} size={60} uri={profile?.avatar_url} />
-        <View style={styles.identityBody}>
-          <View style={styles.nameRow}>
-            <Text style={[ui.title, styles.name]} numberOfLines={1}>
-              {name}
-            </Text>
-            {verified ? <BadgeCheck size={18} color={colors.success} strokeWidth={2.4} /> : null}
+      {/* Who you are, and whether you can send money yet. Tapping opens Profile. */}
+      <PressableScale onPress={() => router.push("/profile")} scaleTo={0.985} accessibilityRole="button" accessibilityLabel={name} style={styles.identity}>
+        <View style={styles.avatarRing}>
+          <Avatar name={name} size={72} uri={profile?.avatar_url} />
+        </View>
+        <View style={styles.nameRow}>
+          <AppText variant="title" numberOfLines={1} style={styles.name}>
+            {name}
+          </AppText>
+          {verified ? <Icon name="verified" size={20} color={colors.success} /> : null}
+        </View>
+        {profile?.email ? (
+          <AppText variant="meta" tone="muted" numberOfLines={1}>
+            {profile.email}
+          </AppText>
+        ) : null}
+        <View style={styles.editPill}>
+          <AppText variant="label" style={styles.editText}>
+            {tApp("account.editProfile", { defaultValue: "Edit profile" })}
+          </AppText>
+        </View>
+      </PressableScale>
+
+      {!verified && !inReview ? (
+        <PressableScale onPress={() => router.push("/verification")} scaleTo={0.985} accessibilityRole="button" style={styles.verify}>
+          <View style={styles.verifyIcon}>
+            <Icon name="shield" size={20} color={colors.primaryText} />
           </View>
-          {profile?.email ? (
-            <Text style={[ui.subtitle, styles.email]} numberOfLines={1}>
-              {profile.email}
-            </Text>
-          ) : null}
-        </View>
-        <View style={styles.openChip}>
-          <Text style={styles.openChipText}>{t("more.profile", { defaultValue: "Profile" })}</Text>
-        </View>
-      </Pressable>
+          <View style={styles.verifyBody}>
+            <AppText variant="bodyStrong">{tApp("home.banner.verify.title", { defaultValue: "Verify your identity" })}</AppText>
+            <AppText variant="meta" tone="muted">
+              {tApp("home.banner.verify.body", { defaultValue: "One-time check so you can send money." })}
+            </AppText>
+          </View>
+          <Icon name="chevronRight" size={16} color={colors.primaryText} />
+        </PressableScale>
+      ) : null}
 
-      <GroupCard title={t("more.account")}>
-        <Row
-          icon={<ShieldCheck size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={t("more.accountVerification")}
-          onPress={() => router.push("/verification")}
-          trailing={
-            <View style={[styles.badge, kycTone === "ok" && styles.badgeVerified, kycTone === "warn" && styles.badgeWarn, kycTone === "bad" && styles.badgeBad]}>
-              <Text style={[styles.badgeText, kycTone === "ok" && styles.badgeTextVerified, kycTone === "warn" && styles.badgeTextWarn, kycTone === "bad" && styles.badgeTextBad]}>{kycLabel}</Text>
-            </View>
-          }
-        />
-        <Row
-          icon={<Gauge size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={tApp("limits.title", { defaultValue: "Limits" })}
-          onPress={() => router.push("/limits" as never)}
-        />
-        <Row
-          icon={<Gift size={16} color={colors.refer} strokeWidth={2.2} />}
-          label={t("more.affiliatesReferrals")}
-          onPress={() => router.push("/referrals")}
-        />
-        <Row
-          icon={<Lock size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={tApp("more.security", { defaultValue: "Security" })}
+      <View style={styles.shortcuts}>
+        <Shortcut icon="heart" label={tApp("favourites.title", { defaultValue: "Favourites" })} onPress={() => router.push("/favourites" as never)} tint={colors.dangerText} bg={colors.dangerSurface} />
+        <Shortcut icon="bank" label={t("more.recipients")} onPress={() => router.push("/recipients")} tint="#1E40AF" bg="#EFF6FF" />
+        <Shortcut icon="gift" label={tApp("dashboard.referShort", { defaultValue: "Refer" })} onPress={() => router.push("/referrals")} tint={colors.refer} bg={colors.referBg} />
+      </View>
+
+      <ListGroup title={tApp("account.groupSecurity", { defaultValue: "Security and limits" })}>
+        <ListRow leading={<RowIcon name="shield" />} title={t("more.accountVerification")} onPress={() => router.push("/verification")} trailing={<Badge label={kycLabel} tone={kycTone} />} />
+        <ListRow
+          leading={<RowIcon name="lock" />}
+          title={tApp("more.security", { defaultValue: "Security" })}
+          value={pinSet ? tApp("security.on", { defaultValue: "On" }) : tApp("security.off", { defaultValue: "Off" })}
           onPress={() => router.push("/security" as never)}
-          trailing={<View style={[styles.badge, pinSet && styles.badgeVerified]}><Text style={[styles.badgeText, pinSet && styles.badgeTextVerified]}>{pinSet ? tApp("security.on", { defaultValue: "On" }) : tApp("security.off", { defaultValue: "Off" })}</Text></View>}
-          last
         />
-      </GroupCard>
+        <ListRow leading={<RowIcon name="gauge" />} title={tApp("limits.title", { defaultValue: "Limits" })} onPress={() => router.push("/limits" as never)} />
+      </ListGroup>
 
-      <GroupCard title={t("more.app")}>
-        <LanguagePicker />
-        <Row
-          icon={<Bell size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={tApp("more.notifications", { defaultValue: "Notifications" })}
-          onPress={() => router.push("/notifications" as never)}
-        />
-        <Row
-          icon={<Heart size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={tApp("favourites.title", { defaultValue: "Favourites" })}
-          onPress={() => router.push("/favourites" as never)}
-        />
-        <Row
-          icon={<Landmark size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={t("more.recipients")}
-          onPress={() => router.push("/recipients")}
-        />
-        <Row
-          icon={<MessageCircleQuestion size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={t("more.support")}
-          onPress={() => router.push("/support")}
-        />
-        <Row
-          icon={<FileText size={16} color={colors.neutralText} strokeWidth={2.2} />}
-          label={t("more.legal", { defaultValue: "Legal" })}
-          onPress={() => router.push("/legal" as never)}
-          last
-        />
-      </GroupCard>
+      <ListGroup title={tApp("account.groupPreferences", { defaultValue: "Preferences" })}>
+        <LanguagePicker asListRow />
+        <ListRow leading={<RowIcon name="bell" />} title={tApp("more.notifications", { defaultValue: "Notifications" })} onPress={() => router.push("/notifications" as never)} />
+      </ListGroup>
 
-      <Pressable onPress={() => router.push("/delete-account" as never)} style={styles.deleteLink}>
-        <Text style={styles.deleteText}>{tApp("more.deleteAccount", { defaultValue: "Delete account" })}</Text>
-      </Pressable>
+      <ListGroup title={tApp("account.groupHelp", { defaultValue: "Help" })}>
+        <ListRow leading={<RowIcon name="help" />} title={t("more.support")} onPress={() => router.push("/support")} />
+        <ListRow leading={<RowIcon name="document" />} title={t("more.legal", { defaultValue: "Legal" })} onPress={() => router.push("/legal" as never)} />
+      </ListGroup>
 
-      <Pressable onPress={() => setConfirmOut(true)} style={styles.logout}>
-        <LogOut size={16} color={colors.danger} strokeWidth={2.2} />
-        <Text style={styles.logoutText}>{t("more.logout")}</Text>
-      </Pressable>
-      <Text style={styles.version}>{t("more.version", { version: Constants.expoConfig?.version || "1.0.0" })}</Text>
+      {/* Log out stands alone at the end, red, and always asks first. */}
+      <ListGroup>
+        <ListRow
+          leading={
+            <IconWell tone="danger">
+              <Icon name="logout" size={18} color={colors.dangerText} />
+            </IconWell>
+          }
+          title={tApp("account.logOut", { defaultValue: "Log out" })}
+          destructive
+          chevron={false}
+          onPress={() => setConfirmOut(true)}
+        />
+      </ListGroup>
+
+      <AppText variant="meta" tone="subtle" style={styles.version}>
+        {t("more.version", { version: Constants.expoConfig?.version || "1.0.0" })}
+      </AppText>
+
       <ConfirmDialog
         open={confirmOut}
         title={t("more.signOutTitle")}
         description={t("more.signOutDescription")}
-        confirmLabel={t("more.signOut")}
+        confirmLabel={tApp("account.logOut", { defaultValue: "Log out" })}
         cancelLabel={t("more.cancel")}
         destructive
         busy={signingOut}
@@ -176,58 +183,19 @@ export default function MoreScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: { paddingTop: 4, paddingBottom: 4, fontSize: 24, fontWeight: "700", color: colors.text },
-  identity: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    marginBottom: 16,
-    marginTop: 8,
-    borderRadius: radius.card,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    padding: 16,
-  },
-  identityBody: { flex: 1, minWidth: 0 },
-  nameRow: { flexDirection: "row", alignItems: "center", gap: 6 },
-  name: { fontSize: 18, marginBottom: 1 },
-  email: { fontSize: typeSize.meta, marginTop: 0 },
-  openChip: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 2,
-    marginLeft: 8,
-    minHeight: 30,
-    borderRadius: radius.pill,
-    backgroundColor: colors.heroBody,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  openChipText: { fontSize: 13, fontWeight: "700", color: colors.primaryDeep },
-  badge: {
-    borderRadius: radius.pill,
-    backgroundColor: colors.paper,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-  },
-  badgeVerified: { backgroundColor: colors.referBg },
-  badgeText: { fontSize: 12, fontWeight: "600", color: colors.muted },
-  badgeTextVerified: { color: colors.refer },
-  badgeWarn: { backgroundColor: colors.warningSurface },
-  badgeTextWarn: { color: colors.warningText },
-  badgeBad: { backgroundColor: colors.dangerSurface },
-  badgeTextBad: { color: colors.dangerText },
-  logout: {
-    minHeight: 48,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    paddingVertical: 12,
-  },
-  deleteLink: { minHeight: 44, alignItems: "center", justifyContent: "center" },
-  deleteText: { fontSize: 13, color: colors.muted, textDecorationLine: "underline" },
-  logoutText: { fontWeight: "600", color: colors.danger },
-  version: { marginTop: 8, textAlign: "center", fontSize: 13, color: colors.muted },
+  content: { paddingHorizontal: space.gutter },
+  title: { paddingTop: space.xs, paddingBottom: space.md },
+  identity: { alignItems: "center", gap: 4, paddingVertical: space.lg, marginBottom: space.md },
+  avatarRing: { padding: 3, borderRadius: 42, backgroundColor: colors.surface, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.inputEdge, marginBottom: space.sm },
+  nameRow: { flexDirection: "row", alignItems: "center", gap: 6, maxWidth: "100%" },
+  name: { flexShrink: 1 },
+  editPill: { marginTop: space.sm, paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+  editText: { fontSize: typeSize.meta },
+  verify: { flexDirection: "row", alignItems: "center", gap: space.md, padding: space.lg, borderRadius: radius.card, backgroundColor: colors.primaryTint, borderWidth: 1, borderColor: colors.primaryBorder, marginBottom: space.lg },
+  verifyIcon: { width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.surface },
+  verifyBody: { flex: 1, minWidth: 0, gap: 2 },
+  shortcuts: { flexDirection: "row", gap: space.md, marginBottom: space.xl },
+  shortcut: { flex: 1, alignItems: "center", gap: space.sm, paddingVertical: space.lg, borderRadius: radius.card, backgroundColor: colors.surface },
+  shortcutIcon: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center" },
+  version: { textAlign: "center", marginTop: -space.sm },
 })

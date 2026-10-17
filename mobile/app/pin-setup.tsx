@@ -6,7 +6,7 @@ import { PinDots, PinKeypad, PIN_LEN } from "@/components/pin-keypad"
 import { Screen } from "@/components/screen"
 import { useAuth } from "@/lib/auth-context"
 import { setPin, verifyPin } from "@/lib/pin"
-import { colors, ui } from "@/lib/theme"
+import { colors, ui, type as typeSize } from "@/lib/theme"
 
 type Phase = "current" | "create" | "confirm"
 
@@ -87,5 +87,5 @@ export default function PinSetupScreen() {
 const styles = StyleSheet.create({
   head: { alignItems: "center", paddingTop: 32 },
   centerText: { textAlign: "center" },
-  error: { marginTop: 12, minHeight: 20, fontSize: 14, fontWeight: "600", color: colors.dangerText, textAlign: "center" },
+  error: { marginTop: 12, minHeight: 20, fontSize: typeSize.meta, fontWeight: "600", color: colors.dangerText, textAlign: "center" },
 })

@@ -20,5 +20,7 @@ Sizes: body 15 (cents 100%), medium 16 (cents 80%), large 32 (cents 60%), displa
 ## Upgrade
 Port easnerbanking `Amount`; shared `formatMoney` already exists in `packages/shared`. Remove hand-formatted prices in Seller tables.
 
+Expo: `Amount` in `mobile/components/ui/amount.tsx` with sizes display, headline, body, small; drops `.00` on whole amounts unless `precise`; true minus; tabular figures. Replaces direct `formatMoney` text in cart, checkout, order detail and Activities, which show `.00` today.
+
 ## Code
 `packages/ui-web/src/amount.tsx`, `packages/shared/src/format-money.ts`

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { radius, colors } from "@/lib/theme"
+import { radius, colors, type as typeSize } from "@/lib/theme"
 
 export type SupportStatus = "open" | "awaiting_customer" | "resolved"
 
@@ -45,5 +45,5 @@ export function supportErrorText(t: (k: string, o?: Record<string, unknown>) => 
 
 const styles = StyleSheet.create({
   badge: { alignSelf: "flex-start", borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
-  text: { fontSize: 12, fontWeight: "600" },
+  text: { fontSize: typeSize.caption, fontWeight: "600" },
 })

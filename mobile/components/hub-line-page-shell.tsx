@@ -1,8 +1,7 @@
-import { type ReactElement, type ReactNode } from "react"
+import { useState, type ReactElement, type ReactNode } from "react"
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,9 +11,12 @@ import {
 import { Image } from "expo-image"
 import { StatusBar } from "expo-status-bar"
 import { useRouter } from "expo-router"
-import { ArrowLeft, ChevronLeft, MapPin } from "lucide-react-native"
+import { MapPin } from "lucide-react-native"
+import { Icon } from "@/components/ui/icon"
+import { NavBar } from "@/components/ui/nav-bar"
+import { PressableScale } from "@/components/ui/pressable-scale"
 import { VerifiedBadge } from "@/components/verified-badge"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { LocationPill } from "@/components/location-picker"
 import { SearchHeroButton } from "@/components/search-entry"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
@@ -24,15 +26,13 @@ export function goBack(router: ReturnType<typeof useRouter>, backHref: string) {
   else router.replace(backHref as never)
 }
 
+/** Plain back chevron, the same control as `NavBar` (no ring, no chip). */
 export function HeroBack({ label, onPress }: { label: string; onPress: () => void }) {
   const ios = Platform.OS === "ios"
-  const Icon = ios ? ChevronLeft : ArrowLeft
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} hitSlop={8} style={styles.backHit}>
-      <View style={styles.backChip}>
-        <Icon size={ios ? 26 : 22} color={colors.text} strokeWidth={ios ? 2.6 : 2.25} />
-      </View>
-    </Pressable>
+    <PressableScale onPress={onPress} scaleTo={0.9} accessibilityRole="button" accessibilityLabel={label} hitSlop={8} style={styles.backHit}>
+      <Icon name="back" size={ios ? 22 : 24} color={colors.text} strokeWidth={2.2} />
+    </PressableScale>
   )
 }
 
@@ -62,7 +62,6 @@ function LineHero({
   if (heroLoading) {
     return (
       <View style={styles.bar}>
-        <View style={styles.backHit} />
         {photo ? <View style={styles.photoSkeleton} /> : null}
         <View style={styles.copy}>
           <View style={styles.titleSkeleton} />
@@ -73,7 +72,6 @@ function LineHero({
   }
   return (
     <View style={styles.bar}>
-      <HeroBack label={backAriaLabel} onPress={onBack} />
       {photo ? (
         <View style={styles.photoWrap}>
           <Image source={{ uri: photo }} style={styles.photo} contentFit="cover" />
@@ -102,7 +100,6 @@ function LineHero({
           </Text>
         ) : null}
       </View>
-      {trailingAction}
     </View>
   )
 }
@@ -134,7 +131,6 @@ function StorefrontHero({
   if (heroLoading) {
     return (
       <View style={styles.storefront}>
-        <View style={styles.backHit} />
         <View style={styles.storefrontMain}>
           <View style={styles.identityRow}>
             <View style={styles.logoSkeleton} />
@@ -150,7 +146,6 @@ function StorefrontHero({
 
   return (
     <View style={styles.storefront}>
-      <HeroBack label={backAriaLabel} onPress={onBack} />
       <View style={styles.storefrontMain}>
         <View style={styles.identityRow}>
           <View style={styles.logoWrap}>
@@ -174,7 +169,6 @@ function StorefrontHero({
               </View>
             ) : null}
           </View>
-          {trailingAction}
         </View>
         {subtitle ? (
           <Text style={styles.storeBio} numberOfLines={4}>
@@ -206,6 +200,7 @@ export function HubLinePageShell({
   variant = "line",
   trailingAction: trailingProp,
   searchLine,
+  locationPicker,
 }: {
   title: string
   subtitle?: string | null
@@ -224,11 +219,14 @@ export function HubLinePageShell({
   trailingAction?: ReactNode
   /** Adds a search button to the hero that opens Search scoped to this line. */
   searchLine?: "food" | "mart" | "experts"
+  /** Shows the location pill in the bar, before the other actions (Food, Mart and Experts homes). */
+  locationPicker?: boolean
 }) {
   const router = useRouter()
   const trailingAction =
-    searchLine || trailingProp ? (
+    searchLine || trailingProp || locationPicker ? (
       <View style={styles.trailing}>
+        {locationPicker ? <LocationPill /> : null}
         {searchLine ? <SearchHeroButton line={searchLine} /> : null}
         {trailingProp}
       </View>
@@ -237,10 +235,17 @@ export function HubLinePageShell({
   const loc = location?.trim() || ""
   const onBack = () => goBack(router, backHref)
   const storefront = variant === "storefront"
+  const [scrolled, setScrolled] = useState(false)
 
-  const hero = (
+  // Only the bar is pinned; the large title scrolls away with the content, as on a native large-title screen.
+  const bar = (
     <View style={styles.hero}>
-      <SafeAreaView edges={["top"]}>
+      {/* The same 44 pt bar as store, product, cart and checkout, so back and the cart never move between screens. */}
+      <NavBar onBack={onBack} backLabel={backAriaLabel} trailing={trailingAction} hairline={scrolled} />
+    </View>
+  )
+  const hero = (
+      <View>
         {storefront ? (
           <StorefrontHero
             title={title}
@@ -268,8 +273,7 @@ export function HubLinePageShell({
             trailingAction={trailingAction}
           />
         )}
-      </SafeAreaView>
-    </View>
+      </View>
   )
 
   const body = (
@@ -279,7 +283,13 @@ export function HubLinePageShell({
       keyboardShouldPersistTaps="handled"
       refreshControl={refreshControl}
       showsVerticalScrollIndicator={false}
+      scrollEventThrottle={32}
+      onScroll={(e) => {
+        const past = e.nativeEvent.contentOffset.y > 40
+        if (past !== scrolled) setScrolled(past)
+      }}
     >
+      {hero}
       <View style={styles.body}>{children}</View>
     </ScrollView>
   )
@@ -287,7 +297,7 @@ export function HubLinePageShell({
   return (
     <View style={styles.screen}>
       <StatusBar style="dark" />
-      {hero}
+      {bar}
       {keyboard ? (
         <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
           {body}
@@ -302,21 +312,18 @@ export function HubLinePageShell({
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },
   flex: { flex: 1 },
+  // Same canvas as the page, no hairline: the header reads as part of the screen, like a native nav bar.
   hero: {
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    backgroundColor: colors.paper,
     overflow: "hidden",
   },
   bar: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    paddingLeft: 8,
-    paddingRight: space.page,
+    gap: 12,
+    paddingHorizontal: space.page,
     paddingTop: 4,
-    paddingBottom: 16,
-    minHeight: space.tap,
+    paddingBottom: 8,
   },
   backHit: {
     width: space.tap,
@@ -324,23 +331,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  backChip: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  trailing: { flexDirection: "row", alignItems: "center", gap: 4 },
+  trailing: { flexDirection: "row", alignItems: "center", flexShrink: 1, minWidth: 0 },
   copy: { flex: 1, minWidth: 0 },
   titleRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   title: {
     flex: 1,
-    fontSize: 22,
+    fontSize: typeSize.largeTitle,
     fontWeight: "700",
-    letterSpacing: -0.35,
-    lineHeight: 28,
+    letterSpacing: -0.6,
+    lineHeight: 36,
     color: colors.text,
   },
   subtitle: { marginTop: 4, fontSize: typeSize.meta, lineHeight: 18, color: colors.muted },
@@ -362,10 +361,9 @@ const styles = StyleSheet.create({
   storefront: {
     flexDirection: "row",
     alignItems: "flex-start",
-    paddingLeft: 8,
-    paddingRight: space.page,
+    paddingHorizontal: space.page,
     paddingTop: 4,
-    paddingBottom: 16,
+    paddingBottom: 12,
   },
   storefrontMain: { flex: 1, minWidth: 0, paddingTop: 4 },
   identityRow: {
@@ -394,7 +392,7 @@ const styles = StyleSheet.create({
   },
   storeName: {
     flexShrink: 1,
-    fontSize: 18,
+    fontSize: typeSize.headline,
     fontWeight: "700",
     letterSpacing: -0.3,
     lineHeight: 22,
@@ -409,7 +407,7 @@ const styles = StyleSheet.create({
   },
   storeLoc: {
     flexShrink: 1,
-    fontSize: 12,
+    fontSize: typeSize.caption,
     lineHeight: 16,
     color: colors.muted,
   },
@@ -422,8 +420,8 @@ const styles = StyleSheet.create({
   // A little extra clearance vs. a plain screen's 40 — Food/Mart screens under this shell can also
   // show the floating cart bar, and last-row content ending up pressed against it looks cramped.
   // Kept modest (not a big empty void), and harmless for lines that never show that bar.
-  scroll: { paddingBottom: 56 },
-  body: { paddingHorizontal: space.page, paddingTop: 20 },
+  scroll: { paddingBottom: 120 },
+  body: { paddingHorizontal: space.page, paddingTop: 12 },
 })
 
 /** The Food and Mart header bar's own styles, shared so other hub screens use the identical bar. */

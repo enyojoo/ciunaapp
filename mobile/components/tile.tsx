@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
+import { PressableScale } from "@/components/ui/pressable-scale"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { Briefcase, Gift, GraduationCap, Send, ShoppingBasket, Sparkles, Utensils, type LucideIcon } from "lucide-react-native"
@@ -52,7 +53,7 @@ export function Tile({
         {iconUrl ? (
           <Image source={{ uri: iconUrl }} style={styles.artImage} contentFit="contain" />
         ) : (
-          <Icon size={44} color="#FFFFFF" strokeWidth={2} style={{ opacity: 0.9 }} />
+          <Icon size={52} color="#FFFFFF" strokeWidth={2} style={{ opacity: 0.9 }} />
         )}
       </View>
       <View style={styles.caption}>
@@ -69,9 +70,9 @@ export function Tile({
   )
   if (!onPress || disabled) return inner
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.press, pressed && styles.pressed]} accessibilityRole="button">
+    <PressableScale onPress={onPress} haptics style={styles.press} accessibilityRole="button">
       {inner}
-    </Pressable>
+    </PressableScale>
   )
 }
 
@@ -81,7 +82,6 @@ export function TileSkeleton() {
 
 const styles = StyleSheet.create({
   press: { minHeight: 48, flex: 1 },
-  pressed: { opacity: 0.85 },
   card: {
     flex: 1,
     overflow: "hidden",
@@ -90,20 +90,20 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  // The artwork takes whatever height the caption leaves, down to a minimum, so tiles fit any screen.
-  art: { flex: 1, minHeight: 56, alignItems: "center", justifyContent: "center" },
-  artImage: { width: 48, height: 48 },
-  caption: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 12, gap: 2 },
-  skeleton: { minHeight: 120, backgroundColor: colors.surface },
+  // A tall artwork band so Home tiles read as cards, not chips. It still grows if the row is given more room.
+  art: { flex: 1, minHeight: 96, alignItems: "center", justifyContent: "center" },
+  artImage: { width: 56, height: 56 },
+  caption: { paddingHorizontal: 14, paddingTop: 12, paddingBottom: 16, gap: 4 },
+  skeleton: { minHeight: 176, backgroundColor: colors.surface },
   title: {
-    fontSize: 16,
+    fontSize: typeSize.body,
     fontWeight: "600",
     lineHeight: 20,
     color: colors.text,
   },
   // Two lines are always reserved, so tiles in a row keep the same artwork height whatever the copy length.
   desc: {
-    fontSize: 13,
+    fontSize: typeSize.meta,
     lineHeight: 18,
     minHeight: 36,
     color: colors.muted,

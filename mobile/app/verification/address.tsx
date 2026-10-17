@@ -149,7 +149,7 @@ export default function AddressVerificationScreen() {
 const styles = StyleSheet.create({
   center: { paddingVertical: 80, alignItems: "center" },
   lockedBox: { marginTop: 40, alignItems: "center", paddingHorizontal: 24 },
-  lockedText: { fontSize: 17, fontWeight: "600", color: colors.text, textAlign: "center" },
+  lockedText: { fontSize: typeSize.body, fontWeight: "600", color: colors.text, textAlign: "center" },
   rejectBox: {
     marginBottom: 20,
     borderRadius: radius.row,

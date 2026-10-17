@@ -7,6 +7,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { tileArtFor } from "@/components/tile"
 import { useTranslation } from "react-i18next"
 import { storeOpenLine } from "@/lib/store-hours"
+import { formatCardPrice } from "@/lib/money"
 import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import type { HubVendor } from "@/lib/types"
@@ -73,6 +74,26 @@ function StoreFace({
   const avg = Number(vendor.rating_avg ?? 0)
   const rated = count > 0 && Number.isFinite(avg)
   const closed = Boolean(vendor.hours_configured) && vendor.is_open === false
+  const bio = (vendor.short_bio || "").trim()
+  const fee = vendor.delivery_fee_from
+  const eta =
+    vendor.delivery_eta_min && vendor.delivery_eta_max
+      ? t("hub.store.etaRange", { min: vendor.delivery_eta_min, max: vendor.delivery_eta_max, defaultValue: "{{min}}–{{max}} min" })
+      : null
+  // Delivery fee and time when the store delivers, otherwise say it is pickup only.
+  const fulfil =
+    Number(vendor.delivery_zone_count ?? 0) > 0
+      ? [
+          fee != null
+            ? t("hub.store.deliveryFee", { fee: formatCardPrice(fee, vendor.delivery_fee_currency), defaultValue: "Delivery from {{fee}}" })
+            : t("hub.store.delivers", { defaultValue: "Delivery" }),
+          eta,
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      : vendor.pickup_location
+        ? t("hub.store.pickupOnly", { defaultValue: "Pickup only" })
+        : null
   return (
     <View style={[styles.card, compact ? styles.cardRail : styles.cardGrid]}>
       {/* Cover: the line's art, the design's stand-in until stores upload covers. */}
@@ -103,10 +124,12 @@ function StoreFace({
           <Highlighted style={styles.name} numberOfLines={1} ellipsizeMode="tail" text={vendor.name} />
           {vendor.is_verified ? <VerifiedBadge size={14} label={vendor.verification_tier === 2 ? undefined : verifiedLabel} tier={vendor.verification_tier} /> : null}
         </View>
+        {/* What they sell, in the store's own words, so the card answers "is this for me" before the tap. */}
+        <Text style={styles.bio} numberOfLines={2}>
+          {bio || " "}
+        </Text>
         <Text style={styles.rating} numberOfLines={1}>
-          {rated
-            ? `★ ${avg.toFixed(1)} (${count})`
-            : t("hub.store.newStore", { defaultValue: "New store" })}
+          {[rated ? `★ ${avg.toFixed(1)} (${count})` : null, fulfil].filter(Boolean).join(" · ") || " "}
         </Text>
         {showLocation && loc ? (
           <View style={styles.locRow}>
@@ -124,9 +147,9 @@ function StoreFace({
 const styles = StyleSheet.create({
   closedShade: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(17,24,39,0.35)", justifyContent: "flex-end", alignItems: "flex-end", padding: 8 },
   closedChip: { borderRadius: radius.pill, backgroundColor: colors.surface, paddingHorizontal: 10, paddingVertical: 3 },
-  closedText: { fontSize: 12, fontWeight: "700", color: colors.text },
-  stripHit: { width: 200 },
-  stripSkeleton: { height: 180, borderRadius: radius.card, backgroundColor: colors.paper },
+  closedText: { fontSize: typeSize.caption, fontWeight: "700", color: colors.text },
+  stripHit: { width: 220 },
+  stripSkeleton: { height: 210, borderRadius: radius.card, backgroundColor: colors.paper },
   gridHit: { width: "48.5%", marginBottom: 12 },
   gridSkeleton: { aspectRatio: 0.85, borderRadius: radius.card, backgroundColor: colors.paper },
   card: {
@@ -137,7 +160,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     paddingBottom: 12,
   },
-  cardRail: { width: 200 },
+  cardRail: { width: 220 },
   cardGrid: { width: "100%" },
   cover: { width: "100%" },
   coverRail: { height: 96 },
@@ -156,11 +179,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   logo: { width: "100%", height: "100%" },
-  logoInitial: { fontSize: 18, fontWeight: "700", color: colors.primaryText },
+  logoInitial: { fontSize: typeSize.headline, fontWeight: "700", color: colors.primaryText },
   caption: { paddingHorizontal: 12, paddingTop: 6, gap: 2 },
   nameRow: { flexDirection: "row", alignItems: "center", gap: 4, minWidth: 0 },
-  name: { flexShrink: 1, minWidth: 0, fontSize: 15, fontWeight: "700", color: colors.text },
-  rating: { fontSize: 12, lineHeight: 16, fontWeight: "600", color: colors.text },
+  name: { flexShrink: 1, minWidth: 0, fontSize: typeSize.label, fontWeight: "700", color: colors.text },
+  bio: { fontSize: typeSize.meta, lineHeight: 17, minHeight: 34, color: colors.muted },
+  rating: { fontSize: typeSize.caption, lineHeight: 16, fontWeight: "600", color: colors.text, fontVariant: ["tabular-nums"] },
   locRow: { marginTop: 2, flexDirection: "row", alignItems: "center", gap: 4, minWidth: 0 },
-  loc: { flexShrink: 1, minWidth: 0, fontSize: 12, lineHeight: 16, color: colors.muted },
+  loc: { flexShrink: 1, minWidth: 0, fontSize: typeSize.caption, lineHeight: 16, color: colors.muted },
 })

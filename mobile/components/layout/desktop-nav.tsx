@@ -5,7 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SidebarBrandHeader } from "@/components/layout/sidebar-brand-header"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
-import { colors, shadow } from "@/lib/theme"
+import { colors, shadow, type as typeSize } from "@/lib/theme"
 
 const NAV = [
   { id: "home", href: "/(app)/hub" as Href, match: ["/hub", "/food", "/mart", "/experts", "/send"] },
@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     ...shadow({ opacity: 0.06, radius: 4, offsetY: 1, elevation: 1 }),
   },
-  navLabel: { fontSize: 15, color: colors.muted, fontWeight: "500" },
+  navLabel: { fontSize: typeSize.label, color: colors.muted, fontWeight: "500" },
   navLabelActive: { color: colors.text, fontWeight: "600" },
 })

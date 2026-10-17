@@ -7,7 +7,7 @@ import { Screen } from "@/components/screen"
 import { useAuth } from "@/lib/auth-context"
 import { Avatar } from "@/components/avatar"
 import { attemptsLeft, biometricAvailable, biometricEnabled, pinFailures, recordPinFailure, resetPinFailures, tryBiometricUnlock, verifyPin, MAX_PIN_ATTEMPTS } from "@/lib/pin"
-import { colors, ui } from "@/lib/theme"
+import { colors, ui, type as typeSize } from "@/lib/theme"
 
 export default function PinScreen() {
   const { t } = useTranslation("common")
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   head: { alignItems: "center", paddingTop: 32 },
   centerText: { textAlign: "center" },
   welcome: { marginTop: 12 },
-  wrong: { marginTop: 12, minHeight: 20, fontSize: 14, fontWeight: "600", color: colors.danger, textAlign: "center" },
-  left: { marginTop: 4, minHeight: 20, fontSize: 13, color: colors.muted, textAlign: "center" },
+  wrong: { marginTop: 12, minHeight: 20, fontSize: typeSize.meta, fontWeight: "600", color: colors.danger, textAlign: "center" },
+  left: { marginTop: 4, minHeight: 20, fontSize: typeSize.meta, color: colors.muted, textAlign: "center" },
   logout: { minHeight: 48, alignItems: "center", paddingVertical: 12 },
 })

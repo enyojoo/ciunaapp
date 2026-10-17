@@ -14,3 +14,5 @@ Use tokens from `tokens.json` through `bundle.css`; no hardcoded colours or size
 
 ## Upgrade
 Built in the shared UI; this card documents existing behaviour.
+
+Expo: `Skeleton` and `SkeletonText` in `mobile/components/ui/skeleton.tsx` shimmer with a soft band (1.1s), use the `fill` token, and stop under reduced motion. The older `InlineSkeleton` stays for inline amounts until screens migrate. Shapes mirror the content that replaces them.

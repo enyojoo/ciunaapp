@@ -61,6 +61,10 @@ with checks as (
   union all
   select 'quiet-hours.sql', 'column push_preferences.quiet_start', exists (select 1 from information_schema.columns where table_name = 'push_preferences' and column_name = 'quiet_start')
   union all
+  select 'expert-main-category.sql', 'column expert_profiles.main_category', exists (select 1 from information_schema.columns where table_name = 'expert_profiles' and column_name = 'main_category')
+  union all
+  select 'product-main-category.sql', 'column hub_products.main_category', exists (select 1 from information_schema.columns where table_name = 'hub_products' and column_name = 'main_category')
+  union all
   select 'expert-slot-alerts.sql', 'table expert_slot_alerts', to_regclass('public.expert_slot_alerts') is not null
   union all
   select 'payment-expiry.sql', 'column transactions.payment_expires_at', exists (select 1 from information_schema.columns where table_name = 'transactions' and column_name = 'payment_expires_at')

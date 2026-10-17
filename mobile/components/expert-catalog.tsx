@@ -6,6 +6,10 @@ import { VerifiedBadge } from "@/components/verified-badge"
 import { useTranslation } from "react-i18next"
 import { formatCardPrice } from "@/lib/money"
 import { FavouriteHeart } from "@/components/favourite-heart"
+import { Avatar, monogramColors } from "@/components/avatar"
+import { Icon } from "@/components/ui/icon"
+import { PressableScale } from "@/components/ui/pressable-scale"
+import { mainCategory, serviceMainCategory } from "@/lib/expert-category"
 import type { ExpertCatalogService, ExpertProfile, ExpertService } from "@/lib/types"
 import { seedExpertCatalogService } from "@/lib/use-expert-catalog-services"
 import { catalogCardWidth, useCatalogGridColumns } from "@/lib/responsive-layout"
@@ -46,39 +50,67 @@ export function expertServiceToCatalog(s: ExpertService, expert: ExpertProfile):
   }
 }
 
+/**
+ * Featured expert: photo (or a soft monogram), name, what they do, and rating plus starting price, so the card
+ * answers "who is this and can they help me" before the tap.
+ */
 export function ExpertFeaturedChip({ expert }: { expert: ExpertProfile }) {
   const router = useRouter()
+  const { t } = useTranslation("app")
+  const tone = monogramColors(expert.display_name)
+  const what = (expert.headline || expert.category || "").trim()
+  const rated = Number(expert.rating_count) > 0 && Number(expert.rating_avg) > 0
+  const fp = expert.from_price
+  const price =
+    fp && "quote" in fp
+      ? t("experts.directory.customQuote", { defaultValue: "Custom quote" })
+      : fp
+        ? t(fp.per === "hour" ? "experts.directory.fromPerHour" : "experts.directory.from", { price: formatCardPrice(fp.amount, fp.currency), defaultValue: fp.per === "hour" ? "From {{price}}/hr" : "From {{price}}" })
+        : null
   return (
-    <View style={styles.stripHit}>
-    <Pressable
-      onPress={() => router.push(expertProfilePath(expert) as never)}
-      accessibilityRole="button"
-      accessibilityLabel={expert.display_name}
-    >
-      <View style={styles.stripCard}>
-        <View style={styles.stripPhoto}>
+    <View style={styles.featHit}>
+      <PressableScale
+        onPress={() => router.push(expertProfilePath(expert) as never)}
+        scaleTo={0.97}
+        accessibilityRole="button"
+        accessibilityLabel={[expert.display_name, what, price].filter(Boolean).join(". ")}
+        style={styles.featCard}
+      >
+        <View style={[styles.featPhoto, { backgroundColor: expert.image_url ? colors.fill : tone.bg }]}>
           {expert.image_url ? (
-            <Image source={{ uri: expert.image_url }} style={styles.photoImg} contentFit="cover" />
+            <Image source={{ uri: expert.image_url }} style={styles.photoImg} contentFit="cover" transition={150} />
           ) : (
-            <View style={styles.photoFallback}>
-              <Text style={styles.initial}>{(expert.display_name.trim().charAt(0) || "?").toUpperCase()}</Text>
-            </View>
+            <Text style={[styles.featInitials, { color: tone.fg }]}>{initialsOf(expert.display_name)}</Text>
           )}
         </View>
-        <View style={styles.stripCaption}>
-          <Text style={styles.stripName} numberOfLines={1} ellipsizeMode="tail">
-            {expert.display_name}
+        <View style={styles.featBody}>
+          <View style={styles.dirNameRow}>
+            <Text style={styles.featName} numberOfLines={1}>
+              {expert.display_name}
+            </Text>
+            {expert.is_verified ? <VerifiedBadge size={13} kind="expert" tier={expert.verification_tier} /> : null}
+          </View>
+          <Text style={styles.featWhat} numberOfLines={2}>
+            {what || " "}
+          </Text>
+          <Text style={styles.featMeta} numberOfLines={1}>
+            {[rated ? `★ ${Number(expert.rating_avg).toFixed(1)}` : null, price].filter(Boolean).join(" · ") || " "}
           </Text>
         </View>
-      </View>
-    </Pressable>
-    <FavouriteHeart type="expert" id={expert.id} />
+      </PressableScale>
+      <FavouriteHeart type="expert" id={expert.id} />
     </View>
   )
 }
 
+function initialsOf(name: string): string {
+  const parts = name.replace(/^(dr|mr|mrs|ms)\.?\s+/i, "").trim().split(/\s+/).filter(Boolean)
+  if (parts.length === 0) return "?"
+  return ((parts[0]![0] || "") + (parts.length > 1 ? parts[parts.length - 1]![0] : "")).toUpperCase()
+}
+
 export function ExpertFeaturedSkeleton() {
-  return <View style={[styles.stripHit, styles.stripSkeleton]} />
+  return <View style={[styles.featHit, styles.featSkeleton]} />
 }
 
 export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: ExpertProfile; onBeforeNavigate?: () => void }) {
@@ -120,7 +152,7 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
           <Text style={styles.rating} numberOfLines={1}>
             {Number(expert.rating_count) > 0 && Number(expert.rating_avg) > 0
               ? `★ ${Number(expert.rating_avg).toFixed(1)} (${expert.rating_count})`
-              : t("experts.directory.isNew", { defaultValue: "New" })}
+              : " "}
           </Text>
           {/* Both lines are always drawn so every expert card has the same height. */}
           <Text style={styles.hint} numberOfLines={1}>
@@ -137,94 +169,93 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
   )
 }
 
+/**
+ * A bookable service, laid out like a Mart product card: a picture block (the need's colour and glyph, with duration
+ * and online or in person on it), then the title, who gives it, and the price with a small Book button. The whole
+ * card opens the service; Book goes straight to picking a time.
+ */
 export function ExpertServiceCard({
   service,
   showExpert = true,
-  showTypicalSession = false,
 }: {
   service: ExpertCatalogService
   showExpert?: boolean
+  /** @deprecated Duration now always shows on the picture. */
   showTypicalSession?: boolean
 }) {
   const { t } = useTranslation("app")
   const router = useRouter()
   const columns = useCatalogGridColumns()
   const expert = service.expert
-  const minutes = service.default_duration_minutes
-  const profileHref = expertProfilePath(expert)
-  const detailHref = expertServicePath(service.id)
-  const bookHref = expertBookPath(service.id)
-  const bookLabel = t("experts.profile.bookSession", { defaultValue: "Book a session" })
+  const cat = mainCategory(serviceMainCategory(service))
+  const minutes = Number(service.default_duration_minutes) || 0
+  const where =
+    service.fulfillment_type === "in_person"
+      ? t("experts.profile.fulfillmentInPerson", { defaultValue: "In person" })
+      : service.fulfillment_type === "both"
+        ? t("experts.profile.fulfillmentBoth", { defaultValue: "Online or in person" })
+        : t("experts.profile.fulfillmentOnline", { defaultValue: "Online" })
+  const quote = service.pricing_type === "quote"
 
   const openDetail = () => {
     seedExpertCatalogService(service)
-    router.push(detailHref as never)
+    router.push(expertServicePath(service.id) as never)
   }
 
   return (
     <View style={[styles.svcHit, { width: catalogCardWidth(columns) }]}>
-      <Pressable
-        onPress={openDetail}
-        accessibilityRole="button"
-        accessibilityLabel={service.title}
-        style={styles.svcCard}
-      >
-        <View style={styles.svcTop}>
-          <Text style={styles.svcTitle} numberOfLines={1} ellipsizeMode="tail">
+      <PressableScale onPress={openDetail} scaleTo={0.97} accessibilityRole="button" accessibilityLabel={`${service.title}. ${expert.display_name}`} style={styles.svcCard}>
+        <View style={[styles.svcMedia, { backgroundColor: cat.bg }]}>
+          <View style={styles.svcGlyph} pointerEvents="none">
+            <Icon name={cat.icon} size={64} color={cat.fg} strokeWidth={1.5} />
+          </View>
+          <View style={styles.svcTags}>
+            {minutes > 0 ? (
+              <View style={styles.svcTag}>
+                <Icon name="clock" size={11} color={colors.text} />
+                <Text style={styles.svcTagText}>{t("experts.card.minutes", { count: minutes, defaultValue: "{{count}} min" })}</Text>
+              </View>
+            ) : null}
+            <View style={styles.svcTag}>
+              <Text style={styles.svcTagText} numberOfLines={1}>
+                {where}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.svcBody}>
+          <Text style={styles.svcTitle} numberOfLines={2}>
             {service.title}
           </Text>
-          {showTypicalSession && minutes != null && Number(minutes) > 0 ? (
-            <Text style={styles.svcMeta}>
-              {t("experts.profile.typicalSession", {
-                defaultValue: "Typical session: {{minutes}} min",
-                minutes: String(minutes),
-              })}
-            </Text>
-          ) : null}
           {showExpert ? (
-            <Pressable
-              onPress={() => router.push(profileHref as never)}
-              style={styles.expertRow}
-              accessibilityRole="button"
-              accessibilityLabel={expert.display_name}
-            >
-              {expert.image_url ? (
-                <Image source={{ uri: expert.image_url }} style={styles.expertPhoto} contentFit="cover" />
-              ) : (
-                <View style={styles.expertFallback}>
-                  <Text style={styles.expertInitial}>{(expert.display_name.trim().charAt(0) || "?").toUpperCase()}</Text>
-                </View>
-              )}
+            <View style={styles.expertRow}>
+              <Avatar name={expert.display_name} uri={expert.image_url} size={20} />
               <Text style={styles.expertName} numberOfLines={1}>
                 {expert.display_name}
               </Text>
-              {expert.is_verified ? (
-                <VerifiedBadge size={14} kind="expert" />
-              ) : null}
-            </Pressable>
-          ) : null}
-        </View>
-        <View style={styles.svcBottom}>
-          <ServicePriceRow service={service} />
-          {service.pricing_type === "quote" ? (
-            <View style={[styles.cta, styles.ctaDisabled]}>
-              <Text style={[styles.ctaText, styles.ctaTextDisabled]}>
-                {t("experts.profile.notBookableOnline", { defaultValue: "Not bookable online" })}
-              </Text>
+              {expert.is_verified ? <VerifiedBadge size={13} kind="expert" /> : null}
             </View>
-          ) : (
-            <Pressable
-              onPress={() => router.push(bookHref as never)}
-              accessibilityRole="button"
-              accessibilityLabel={bookLabel}
-            >
-              <View style={styles.cta}>
-                <Text style={styles.ctaText}>{bookLabel}</Text>
-              </View>
-            </Pressable>
-          )}
+          ) : null}
+          <View style={styles.svcFoot}>
+            <View style={styles.svcPrice}>
+              <ServicePriceRow service={service} />
+            </View>
+            {quote ? null : (
+              <PressableScale
+                onPress={() => router.push(expertBookPath(service.id) as never)}
+                haptics
+                scaleTo={0.92}
+                accessibilityRole="button"
+                accessibilityLabel={t("experts.profile.bookSession", { defaultValue: "Book a session" })}
+                hitSlop={6}
+                style={styles.book}
+              >
+                <Text style={styles.bookText}>{t("experts.card.book", { defaultValue: "Book" })}</Text>
+              </PressableScale>
+            )}
+          </View>
         </View>
-      </Pressable>
+      </PressableScale>
     </View>
   )
 }
@@ -248,9 +279,8 @@ export function ServicePriceRow({ service: s }: { service: ExpertCatalogService 
   if (s.pricing_type === "hourly" && s.hourly_rate != null) {
     return (
       <View style={styles.priceRow}>
-        <Text style={styles.pricePrefix}>{t("experts.profile.priceFrom", { defaultValue: "From" })}</Text>
         <Text style={styles.price}>{formatCardPrice(s.hourly_rate, s.hourly_currency)}</Text>
-        <Text style={styles.priceSuffix}>/ hr</Text>
+        <Text style={styles.priceSuffix}>{t("experts.card.perHour", { defaultValue: "/hr" })}</Text>
       </View>
     )
   }
@@ -270,6 +300,15 @@ export function ServicePriceRow({ service: s }: { service: ExpertCatalogService 
 }
 
 const styles = StyleSheet.create({
+  featHit: { width: 168 },
+  featSkeleton: { height: 236, borderRadius: radius.card, backgroundColor: colors.fill },
+  featCard: { borderRadius: radius.card, backgroundColor: colors.surface, overflow: "hidden", borderWidth: StyleSheet.hairlineWidth, borderColor: colors.border },
+  featPhoto: { width: "100%", aspectRatio: 1.15, alignItems: "center", justifyContent: "center" },
+  featInitials: { fontSize: typeSize.largeTitle, fontWeight: "700", letterSpacing: -0.5 },
+  featBody: { padding: 10, gap: 3 },
+  featName: { flexShrink: 1, fontSize: typeSize.label, fontWeight: "700", color: colors.text },
+  featWhat: { fontSize: typeSize.meta, lineHeight: 17, minHeight: 34, color: colors.muted },
+  featMeta: { fontSize: typeSize.caption, fontWeight: "600", color: colors.text, fontVariant: ["tabular-nums"] },
   stripHit: { width: 120 },
   stripSkeleton: { aspectRatio: 0.82, borderRadius: radius.card, backgroundColor: colors.neutralSurface },
   stripCard: {
@@ -287,59 +326,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: colors.primary,
   },
-  initial: { fontSize: 22, fontWeight: "700", color: colors.onPrimary },
-  initialLg: { fontSize: 28, fontWeight: "700", color: colors.onPrimary },
+  initial: { fontSize: typeSize.title, fontWeight: "700", color: colors.onPrimary },
+  initialLg: { fontSize: typeSize.largeTitle, fontWeight: "700", color: colors.onPrimary },
   stripCaption: { paddingHorizontal: 8, paddingVertical: 8, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  stripName: { fontSize: 12, fontWeight: "600", color: colors.text },
+  stripName: { fontSize: typeSize.caption, fontWeight: "600", color: colors.text },
   gridHit: { width: "48.5%", marginBottom: 12 },
   dirCaption: { paddingHorizontal: 10, paddingVertical: 10, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   dirNameRow: { flexDirection: "row", alignItems: "center", gap: 4 },
   dirName: { flexShrink: 1, fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
-  rating: { marginTop: 2, fontSize: 12, fontWeight: "600", color: colors.muted },
-  hint: { marginTop: 4, fontSize: 12, fontWeight: "500", color: colors.primary },
+  rating: { marginTop: 2, fontSize: typeSize.caption, fontWeight: "600", color: colors.muted },
+  hint: { marginTop: 4, fontSize: typeSize.caption, fontWeight: "500", color: colors.primary },
   svcHit: { width: "48.5%" },
-  svcSkeleton: { minHeight: 176, borderRadius: radius.card, backgroundColor: colors.neutralSurface },
-  svcCard: {
-    minHeight: 176,
-    borderRadius: radius.card,
-    borderWidth: 1,
-    borderColor: colors.cardEdge,
-    backgroundColor: colors.surface,
-    padding: 12,
-    ...shadow({ opacity: 0.08, radius: 10, offsetY: 4, elevation: 2 }),
-  },
-  svcTop: { gap: 6, flexGrow: 1, marginBottom: 10 },
-  svcTitle: { fontSize: 15, fontWeight: "700", lineHeight: 20, letterSpacing: -0.2, color: colors.text },
-  svcMeta: { fontSize: 12, color: colors.muted },
+  svcSkeleton: { height: 236, borderRadius: radius.card, backgroundColor: colors.fill },
+  svcCard: { flex: 1, borderRadius: radius.card, overflow: "hidden", backgroundColor: colors.surface, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.border },
+  svcMedia: { width: "100%", aspectRatio: 4 / 3, justifyContent: "space-between", overflow: "hidden" },
+  svcGlyph: { position: "absolute", right: -6, bottom: -8, opacity: 0.35 },
+  svcTags: { flexDirection: "row", flexWrap: "wrap", gap: 4, padding: 8 },
+  svcTag: { flexDirection: "row", alignItems: "center", gap: 3, backgroundColor: "rgba(255,255,255,0.94)", borderRadius: 999, paddingHorizontal: 7, paddingVertical: 3 },
+  svcTagText: { fontSize: typeSize.caption, fontWeight: "700", color: colors.text },
+  svcBody: { flex: 1, padding: 10, gap: 6 },
+  svcTitle: { fontSize: typeSize.label, fontWeight: "700", lineHeight: 19, letterSpacing: -0.2, color: colors.text, minHeight: 38 },
+  svcFoot: { marginTop: "auto", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 6 },
+  svcPrice: { flexShrink: 1, minWidth: 0 },
+  book: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, backgroundColor: colors.selected },
+  bookText: { fontSize: typeSize.meta, fontWeight: "700", color: colors.onSelected },
   expertRow: { marginTop: 2, flexDirection: "row", alignItems: "center", gap: 6, minWidth: 0 },
-  expertPhoto: { width: 20, height: 20, borderRadius: 10, backgroundColor: colors.paper },
-  expertFallback: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: colors.paper,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  expertInitial: { fontSize: 12, fontWeight: "700", color: colors.muted },
-  expertName: { flexShrink: 1, minWidth: 0, fontSize: 12, fontWeight: "500", color: colors.text },
-  svcBottom: { gap: 8 },
+  expertName: { flexShrink: 1, minWidth: 0, fontSize: typeSize.caption, fontWeight: "500", color: colors.text },
   priceRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 4 },
-  pricePrefix: { fontSize: 12, fontWeight: "500", color: colors.muted },
-  price: { fontSize: 15, fontWeight: "700", color: colors.text },
-  priceSuffix: { fontSize: 12, fontWeight: "500", color: colors.muted },
-  cta: {
-    minHeight: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    backgroundColor: colors.primary,
-  },
-  ctaDisabled: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  ctaText: { fontSize: 12, fontWeight: "600", color: colors.onPrimary },
-  ctaTextDisabled: { color: colors.muted },
+  pricePrefix: { fontSize: typeSize.caption, fontWeight: "500", color: colors.muted },
+  price: { fontSize: typeSize.label, fontWeight: "700", color: colors.text },
+  priceSuffix: { fontSize: typeSize.caption, fontWeight: "500", color: colors.muted },
 })

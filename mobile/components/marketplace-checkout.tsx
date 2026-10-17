@@ -1215,7 +1215,7 @@ const styles = StyleSheet.create({
   },
   totalLabel: { fontSize: typeSize.label, fontWeight: "700", color: colors.text },
   totalValue: {
-    fontSize: 22,
+    fontSize: typeSize.title,
     fontWeight: "700",
     color: colors.text,
     letterSpacing: -0.4,

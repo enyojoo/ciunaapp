@@ -166,5 +166,22 @@
   "catalog.fulfilment.pause": "Приостановить магазин",
   "catalog.fulfilment.pauseHint": "Пока магазин на паузе, покупатели не могут оформить заказ. Подходит для короткого перерыва; после возобновления действуют часы работы.",
   "catalog.fulfilment.pausedOn": "На паузе: заказы недоступны",
-  "catalog.fulfilment.pausedOff": "Принимаем заказы"
+  "catalog.fulfilment.pausedOff": "Принимаем заказы",
+  "catalog.field.appCategory": "Раздел в приложении",
+  "catalog.field.appCategoryHint": "Где покупатели найдут товар в разделах Еда и Маркет.",
+  "catalog.appCat.choose": "Выберите…",
+  "catalog.appCat.food.mains": "Основные блюда",
+  "catalog.appCat.food.soups": "Супы и рагу",
+  "catalog.appCat.food.grill": "Гриль",
+  "catalog.appCat.food.snacks": "Закуски и выпечка",
+  "catalog.appCat.food.breakfast": "Завтрак",
+  "catalog.appCat.food.drinks": "Напитки",
+  "catalog.appCat.mart.staples": "Бакалея",
+  "catalog.appCat.mart.sauces": "Соусы и специи",
+  "catalog.appCat.mart.snacks": "Снеки и сладости",
+  "catalog.appCat.mart.drinks": "Напитки",
+  "catalog.appCat.mart.fresh": "Свежее и заморозка",
+  "catalog.appCat.mart.digital": "Цифровые услуги",
+  "catalog.appCat.mart.other": "Другое",
+  "errors.MAIN_CATEGORY_OUTSIDE_LINE": "Это не категория вашего магазина."
 }

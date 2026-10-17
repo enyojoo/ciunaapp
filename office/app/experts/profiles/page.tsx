@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { normalizePublicSlug } from "@ciuna/shared"
+import { normalizePublicSlug, EXPERT_MAIN_CATEGORIES } from "@ciuna/shared"
 import { OfficeDashboardLayout } from "@/components/layout/office-dashboard-layout"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -40,9 +40,12 @@ type ExpertProfile = {
   display_name: string
   headline: string | null
   category: string
+  main_category?: string | null
   is_published: boolean
   updated_at: string
 }
+
+const MAIN_LABEL = new Map<string, string>(EXPERT_MAIN_CATEGORIES.map((c) => [c.id, c.label]))
 
 export default function OfficeExpertProfilesPage() {
   const [rows, setRows] = useState<ExpertProfile[]>([])
@@ -352,7 +355,7 @@ export default function OfficeExpertProfilesPage() {
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Slug</TableHead>
-                    <TableHead>Category</TableHead>
+                    <TableHead>Main category</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -362,7 +365,10 @@ export default function OfficeExpertProfilesPage() {
                     <TableRow key={r.id}>
                       <TableCell className="font-medium">{r.display_name}</TableCell>
                       <TableCell className="font-mono text-xs text-muted-foreground">{r.slug || "—"}</TableCell>
-                      <TableCell className="text-sm">{r.category}</TableCell>
+                      <TableCell className="text-sm">
+                        {r.main_category ? MAIN_LABEL.get(r.main_category) ?? r.main_category : <span className="text-muted-foreground">Not set</span>}
+                        <div className="text-xs text-muted-foreground">{r.category}</div>
+                      </TableCell>
                       <TableCell>
                         {r.is_published ? (
                           <Badge>Published</Badge>

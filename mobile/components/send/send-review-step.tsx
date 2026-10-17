@@ -127,7 +127,7 @@ export function SendReviewStep({
 
 const styles = StyleSheet.create({
   root: { gap: 16 },
-  headline: { fontSize: 22, fontWeight: "700", color: colors.text, letterSpacing: -0.3 },
+  headline: { fontSize: typeSize.title, fontWeight: "700", color: colors.text, letterSpacing: -0.3 },
   summary: {
     borderRadius: radius.card,
     borderWidth: 1,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   valueStrong: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: 4 },
   totalLabel: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
-  totalValue: { fontSize: 18, fontWeight: "700", color: colors.primary },
+  totalValue: { fontSize: typeSize.headline, fontWeight: "700", color: colors.primary },
   recipientBlock: { gap: 4 },
   changeHit: { minHeight: 44, justifyContent: "center" },
   changeText: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText, textDecorationLine: "underline" },

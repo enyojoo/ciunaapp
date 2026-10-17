@@ -1,0 +1,33 @@
+<!-- @dsCard group="Data display" height=760 width=900 subtitle="Grouped rows for the customer app: icon well, title, subtitle, value, badge, chevron and a destructive row" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ListRow</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.n{font-family:var(--font-native)}
+.gt{font:600 12px/16px var(--font-native);letter-spacing:.06em;color:var(--muted);margin:0 4px 8px}
+.grp{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-card);overflow:hidden}
+.r{display:flex;align-items:center;gap:12px;min-height:56px;padding:12px 16px;font:400 16px/22px var(--font-native)}
+.r + .r{border-top:1px solid var(--hairline)}
+.w{width:36px;height:36px;border-radius:11px;background:var(--neutral-surface);color:var(--neutral-text);display:grid;place-items:center;flex-shrink:0}
+.w .ic{--s:18px}
+.w.p{background:var(--primary-tint);color:var(--primary-text)}
+.w.s{background:var(--success-surface);color:var(--success-text)}
+.tx{flex:1;min-width:0}
+.tx small{display:block;font:400 13px/18px var(--font-native);color:var(--muted)}
+.v{font:400 13px/18px var(--font-native);color:var(--muted)}
+.chev{--s:16px;color:var(--subtle)}
+.d{color:var(--destructive-text)}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+  <div class="cz-col n" style="width:390px"><p class="gt">ACCOUNT</p><div class="grp">
+    <div class="r"><span class="w"><i data-i="shield-check"></i></span><span class="tx">Account verification</span><span class="badge badge-neutral">Take action</span><i class="chev" data-i="chevron-right"></i></div>
+    <div class="r"><span class="w p"><i data-i="percent"></i></span><span class="tx">Limits<small>No sending limit for your level</small></span><i class="chev" data-i="chevron-right"></i></div>
+    <div class="r"><span class="w"><i data-i="globe"></i></span><span class="tx">Language</span><span class="v">English</span><i class="chev" data-i="chevron-right"></i></div>
+    <div class="r"><span class="w s"><i data-i="lock"></i></span><span class="tx">Security</span><span class="badge badge-success">On</span><i class="chev" data-i="chevron-right"></i></div>
+    <div class="r d"><span class="tx">Delete account</span><i class="chev" data-i="chevron-right"></i></div>
+  </div><p class="cz-cap">Default, subtitle, value, badge, destructive. No chevron on a row that does nothing.</p></div>
+  <div class="cz-col n" style="width:390px"><p class="gt">DELIVERY AREA</p><div class="grp">
+    <div class="r"><span class="tx">Moscow · Tverskoy</span><span class="v">₽150</span></div>
+    <div class="r"><span class="tx">Moscow · Arbat</span><span class="v">₽150</span></div>
+    <div class="r"><span class="tx">Moscow · Khamovniki</span><span class="v">₽200</span></div>
+  </div><p class="cz-cap">Rows without a leading icon keep the same height and padding.</p></div>
+</div></div></body></html>

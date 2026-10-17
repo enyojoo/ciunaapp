@@ -10,6 +10,7 @@ import { useSeller } from "@/lib/session"
 import { useErrorText, useT } from "@/lib/i18n"
 import { ImageUpload } from "@/components/image-upload"
 import { CURRENCIES } from "./csv"
+import { HUB_PRODUCT_MAIN_CATEGORIES } from "@ciuna/shared"
 import { categoriesFor, num, PRODUCTS_KEY, type FulfillmentData, type Product } from "./shared"
 
 type Tr = { title: string; short: string; long: string }
@@ -18,6 +19,8 @@ interface FormState {
   short: string
   long: string
   category: string
+  /** Where the product shows in the customer app (meal type or aisle). Empty until chosen. */
+  appCategory: string
   image: string | null
   gallery: string[]
   list: string
@@ -44,6 +47,7 @@ function initial(p: Product | null, currency: string, category: string, canPubli
     short: p?.short_description ?? "",
     long: p?.long_description ?? "",
     category: p?.category ?? category,
+    appCategory: p?.main_category ?? "",
     image: p?.image_url ?? null,
     gallery: p?.gallery ?? [],
     list: priceText(p?.list_price),
@@ -70,6 +74,7 @@ export function ProductForm({ product }: { product: Product | null }) {
     return list.includes(defaultLang) ? [defaultLang, ...list.filter((l) => l !== defaultLang)] : [defaultLang, ...list]
   }, [merchant?.languages, defaultLang])
   const categories = categoriesFor(merchant?.service_line)
+  const appCategories = merchant?.service_line ? HUB_PRODUCT_MAIN_CATEGORIES[merchant.service_line] : []
   const currency = merchant?.default_currency ?? "USD"
 
   const [form, setForm] = React.useState<FormState>(() => initial(product, currency, categories[0] ?? "", merchant?.status === "live"))
@@ -153,6 +158,7 @@ export function ProductForm({ product }: { product: Product | null }) {
       short_description: form.short.trim(),
       long_description: form.long.trim(),
       ...(form.category ? { category: form.category } : {}),
+      ...(form.appCategory || current?.main_category ? { main_category: form.appCategory || null } : {}),
       list_price: num(form.list),
       sale_price: form.sale.trim() ? num(form.sale) : null,
       fixed_currency: form.currency,
@@ -235,6 +241,14 @@ export function ProductForm({ product }: { product: Product | null }) {
             <Field label={t("catalog.field.category")}>
               <Select className={ctl} value={form.category} onChange={(e) => set("category", e.target.value)}>
                 {categories.map((c) => <option key={c} value={c}>{t(`catalog.cat.${c}`)}</option>)}
+              </Select>
+            </Field>
+          ) : null}
+          {isDefault && appCategories.length ? (
+            <Field label={t("catalog.field.appCategory")} hint={t("catalog.field.appCategoryHint")}>
+              <Select className={ctl} value={form.appCategory} onChange={(e) => set("appCategory", e.target.value)}>
+                <option value="">{t("catalog.appCat.choose")}</option>
+                {appCategories.map((c) => <option key={c.id} value={c.id}>{t(`catalog.appCat.${merchant!.service_line}.${c.id}`)}</option>)}
               </Select>
             </Field>
           ) : null}

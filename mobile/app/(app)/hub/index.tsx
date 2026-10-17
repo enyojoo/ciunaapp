@@ -6,6 +6,7 @@ import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
 import { LoadError } from "@/components/load-error"
 import { HomeSlider } from "@/components/home-slider"
+import { HOME_SLIDES } from "@/lib/home-slides"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
 import { useExternalLink } from "@/lib/external-link"
@@ -50,13 +51,13 @@ export default function HomeScreen() {
       <ScrollView
         style={styles.flex}
         contentContainerStyle={[styles.scroll, { paddingBottom: tabContentPadding }]}
-        // The tiles share whatever height is left under the banner, so Home fits without scrolling.
-        // Scrolling stays only as a fallback on a screen too small for the minimum tile sizes.
+        // Tiles keep their own height and sit right under the slider. Stretching rows to fill the screen left
+        // a dead gap between rows when Office has only four lines switched on.
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
       >
-        <HomeSlider />
+        <HomeSlider slides={HOME_SLIDES} />
         {loading ? (
           <View style={styles.grid}>
             {[0, 1, 2].map((r) => (
@@ -100,10 +101,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  scroll: { flexGrow: 1, paddingTop: 16, paddingBottom: 40 },
-  // Fills the rest of the screen; each row takes an equal share and each tile stretches to its row.
-  grid: { flex: 1, paddingHorizontal: space.page, gap: 10, paddingBottom: 10 },
-  row: { flex: 1, flexDirection: "row", gap: 10 },
+  scroll: { paddingTop: 16, paddingBottom: 40 },
+  grid: { paddingHorizontal: space.page, gap: 12, paddingBottom: 10 },
+  row: { flexDirection: "row", gap: 12 },
   rowWide: { flexGrow: 0, flexShrink: 0, flexBasis: 320, height: 320 },
   cell: { flex: 1 },
 })

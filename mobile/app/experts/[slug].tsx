@@ -208,7 +208,7 @@ export default function ExpertProfileScreen() {
     <View style={{ flex: 1 }}>
       <HubTopBar
         backHref="/experts"
-        trailing={profileId ? <FavouriteHeart type="expert" id={profileId} style={styles.barHeart} /> : null}
+        trailing={profileId ? <FavouriteHeart type="expert" id={profileId} placement="bar" /> : null}
       />
       <ExpertProfileBody />
     </View>
@@ -219,9 +219,8 @@ const styles = StyleSheet.create({
   skel: { backgroundColor: colors.neutralSurface },
   skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.neutralSurface },
   initialWrap: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.primaryTint },
-  initial: { fontSize: 28, fontWeight: "700", color: colors.primaryText },
+  initial: { fontSize: typeSize.largeTitle, fontWeight: "700", color: colors.primaryText },
   // A plain 40px icon button in the top bar, the same size as the back chip.
-  barHeart: { position: "relative", top: 0, right: 0, width: 40, height: 40, borderRadius: 20, backgroundColor: "transparent", shadowOpacity: 0, elevation: 0 },
   center: { paddingVertical: 60, alignItems: "center" },
   identityRow: { flexDirection: "row", gap: 14, marginBottom: 20 },
   avatarWrap: {
@@ -238,9 +237,9 @@ const styles = StyleSheet.create({
   nameRow: { flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" },
   detailsFrame: { marginBottom: 16, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, padding: 16, gap: 12 },
   detailRow: { gap: 2 },
-  detailLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
+  detailLabel: { fontSize: typeSize.caption, fontWeight: "600", color: colors.muted },
   detailValue: { fontSize: typeSize.body, lineHeight: 22, color: colors.text },
-  name: { flexShrink: 1, fontSize: 20, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
+  name: { flexShrink: 1, fontSize: typeSize.headline, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
   headline: { fontSize: typeSize.body, color: colors.text },
   category: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary },
   locRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 2 },
@@ -257,6 +256,6 @@ const styles = StyleSheet.create({
   bio: { fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   meeting: { fontSize: typeSize.body, lineHeight: 22, color: colors.muted },
   meetingRule: { marginTop: 16, paddingTop: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  heading: { marginBottom: 16, fontSize: 18, fontWeight: "600", color: colors.text },
+  heading: { marginBottom: 16, fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", rowGap: 12 },
 })

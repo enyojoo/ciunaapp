@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   stateIconSuccess: { backgroundColor: colors.successSurface },
   stateIconPending: { backgroundColor: "#FEF3C7" },
-  stateTitle: { fontSize: 20, fontWeight: "700", color: colors.text, textAlign: "center" },
+  stateTitle: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text, textAlign: "center" },
   stateBody: { marginTop: 8, fontSize: typeSize.body, lineHeight: 22, color: colors.muted, textAlign: "center" },
   stateAction: { marginTop: 24 },
 })

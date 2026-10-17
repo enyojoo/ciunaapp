@@ -20,12 +20,20 @@ import { useOfficeData } from "@/hooks/use-office-data"
 import { uploadHubProductImage } from "@/lib/upload-hub-assets"
 import { OFFICE_UI_CACHE_TTL_MS } from "@/lib/office-ui-cache"
 import { OFFICE_HUB_PRODUCTS_CACHE_KEY, OFFICE_HUB_VENDORS_CACHE_KEY } from "@/lib/hub-office-client-cache"
+import { HUB_PRODUCT_MAIN_CATEGORIES } from "@ciuna/shared"
+
+const MAIN_LABEL = {
+  food: new Map<string, string>(HUB_PRODUCT_MAIN_CATEGORIES.food.map((c) => [c.id, c.label])),
+  mart: new Map<string, string>(HUB_PRODUCT_MAIN_CATEGORIES.mart.map((c) => [c.id, c.label])),
+}
 
 type HubProduct = {
   id: string
   title: string
   image_url?: string | null
   category: string
+  /** Meal type (Food) or aisle (Mart) the apps browse by; undefined before product-main-category.sql. */
+  main_category?: string | null
   vendor_id?: string | null
   status: string
   pricing_type: string
@@ -196,6 +204,7 @@ export function OfficeHubProductsView({
     fulfillment_mode: "digital",
     require_phone: false,
     category: "Other",
+    main_category: "",
     vendor_id: "",
     status: "draft",
     pricing_type: "fixed",
@@ -274,6 +283,7 @@ export function OfficeHubProductsView({
       fulfillment_mode: "digital",
       require_phone: false,
       category: "Other",
+    main_category: "",
       vendor_id: "",
       status: "draft",
       pricing_type: "fixed",
@@ -347,6 +357,7 @@ export function OfficeHubProductsView({
         fulfillment_mode: product.fulfillment_mode || "",
         require_phone: product.require_phone ?? product.fulfillment_mode !== "digital",
         category: product.category || "Other",
+        main_category: product.main_category || "",
         vendor_id: product.vendor_id ? String(product.vendor_id) : "",
         status: product.status || "draft",
         pricing_type: product.pricing_type || "fixed",
@@ -413,6 +424,7 @@ export function OfficeHubProductsView({
         title: form.title,
         short_description: form.short_description || null,
         category: form.category,
+        ...(form.main_category ? { main_category: form.main_category } : {}),
         service_line_slug: fixedLineSlug,
         long_description: form.long_description || null,
         form_schema: JSON.parse(form.form_schema_text),
@@ -558,6 +570,24 @@ export function OfficeHubProductsView({
                       )}
                     </div>
                   </div>
+                </div>
+                <div>
+                  <Label>Shows in the app under</Label>
+                  <Select value={form.main_category || ""} onValueChange={(v) => setForm({ ...form, main_category: v })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={fixedLineSlug === "food" ? "Choose a meal type" : "Choose an aisle"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {HUB_PRODUCT_MAIN_CATEGORIES[fixedLineSlug].map((c) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Where customers find it when they browse {lineTitle}. Category below is the store&apos;s own menu section.
+                  </p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -979,7 +1009,10 @@ export function OfficeHubProductsView({
                         </div>
                       </TableCell>
                       <TableCell className="font-medium">{p.title}</TableCell>
-                      <TableCell>{p.category}</TableCell>
+                      <TableCell>
+                        {p.main_category ? MAIN_LABEL[fixedLineSlug].get(p.main_category) ?? p.main_category : <span className="text-muted-foreground">Not set</span>}
+                        <div className="text-xs text-muted-foreground">{p.category}</div>
+                      </TableCell>
                       <TableCell>
                         <Badge variant="outline">
                           {p.pricing_type === "user_input" ? "User input" : "Fixed"}

@@ -34,6 +34,8 @@ export const NEW_COLUMNS = [
   "years_experience",
   // 20261019120000_store_pause.sql
   "is_paused",
+  // 20261019180000_expert_main_category.sql
+  "main_category",
 ] as const
 
 const MISSING_CODES = new Set(["42703", "42P01", "PGRST204", "PGRST205"])

@@ -166,5 +166,22 @@
   "catalog.fulfilment.pause": "Pausar la tienda",
   "catalog.fulfilment.pauseHint": "Los clientes no pueden pagar mientras la tienda esté en pausa. Úsalo para un descanso corto; al reanudar se aplican tus horarios.",
   "catalog.fulfilment.pausedOn": "En pausa: no se puede pedir",
-  "catalog.fulfilment.pausedOff": "Aceptando pedidos"
+  "catalog.fulfilment.pausedOff": "Aceptando pedidos",
+  "catalog.field.appCategory": "Aparece en la app en",
+  "catalog.field.appCategoryHint": "Dónde lo encuentran los clientes al explorar Comida o Mart.",
+  "catalog.appCat.choose": "Elegir…",
+  "catalog.appCat.food.mains": "Platos principales",
+  "catalog.appCat.food.soups": "Sopas y guisos",
+  "catalog.appCat.food.grill": "Parrilla",
+  "catalog.appCat.food.snacks": "Snacks y repostería",
+  "catalog.appCat.food.breakfast": "Desayuno",
+  "catalog.appCat.food.drinks": "Bebidas",
+  "catalog.appCat.mart.staples": "Despensa",
+  "catalog.appCat.mart.sauces": "Salsas y especias",
+  "catalog.appCat.mart.snacks": "Snacks y dulces",
+  "catalog.appCat.mart.drinks": "Bebidas",
+  "catalog.appCat.mart.fresh": "Frescos y congelados",
+  "catalog.appCat.mart.digital": "Servicios digitales",
+  "catalog.appCat.mart.other": "Otros",
+  "errors.MAIN_CATEGORY_OUTSIDE_LINE": "Esa no es una de las categorías de tu tienda."
 }

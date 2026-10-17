@@ -7,7 +7,7 @@ import { Avatar } from "@/components/avatar"
 import { useAuth } from "@/lib/auth-context"
 import { HEADER_HEIGHT } from "@/lib/layout-metrics"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
-import { colors, radius } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export function DesktopHeader() {
   const router = useRouter()
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.referBorder,
   },
-  referLabel: { fontSize: 12, fontWeight: "600", color: colors.referText },
+  referLabel: { fontSize: typeSize.caption, fontWeight: "600", color: colors.referText },
   avatarButton: {
     width: 40,
     height: 40,

@@ -82,7 +82,29 @@
     "marketplaceProductsHeading": "商品",
     "marketplaceStoresHeading": "店铺",
     "storesDirectorySubtitle": "选择一家店铺查看其商品。",
-    "marketplaceSeeAllStores": "查看全部",
+    "marketplaceSeeAllStores": "全部商店",
+    "marketplaceSeeAllProducts": "全部商品",
+    "locationTitle": "选择你的地区",
+    "locationAll": "所有地区",
+    "locationLabel": "位置",
+    "locationHint": "我们会显示可配送到所选城市的商店，以及仅限自取的商店和数字商品。",
+    "locationEmpty": "尚未设置配送区域。",
+    "locationDelivering": "可配送",
+    "locationPopular": "热门",
+    "locationAllCities": "所有城市",
+    "locationSearch": "搜索城市",
+    "searchStores": "搜索商店",
+    "searchProducts": "搜索商品",
+    "searchServices": "搜索服务",
+    "filterAll": "全部",
+    "filterOpenNow": "营业中",
+    "filterDelivers": "可配送",
+    "filterOnline": "线上",
+    "filterInPerson": "线下",
+    "resultsCount": "结果：{{count}}",
+    "clearFilters": "清除筛选",
+    "noMatch": "没有匹配项",
+    "noMatchBody": "试试其他名称或筛选条件。",
     "marketplaceNoVendors": "暂无店铺，请稍后再来。",
     "verifiedVendor": "已认证商家",
     "backToLine": "返回上一级",
@@ -103,7 +125,7 @@
     "expertsTitle": "专家",
     "expertsSubtitle": "为您的家居和美容需求提供值得信赖的专业人士。",
     "expertsFeaturedHeading": "精选",
-    "expertsSeeAll": "查看全部",
+    "expertsSeeAll": "全部专家",
     "expertsServicesHeading": "服务",
     "expertsFeaturedEmpty": "暂无专家，请稍后再来。",
     "expertsDirectoryTitle": "全部专家",
@@ -196,7 +218,8 @@
       "deliveryFrom": "配送费 {{fee}} 起",
       "delivers": "支持配送",
       "etaRange": "{{min}}–{{max}} 分钟",
-      "eta": "{{min}} 分钟"
+      "eta": "{{min}} 分钟",
+      "deliveryFee": "配送费 {{fee}} 起"
     },
     "cart": {
       "emptyBody": "从店铺添加商品，开始下单。",
@@ -216,7 +239,11 @@
       "storePausedNote": "该店铺暂停营业，暂时无法结账。",
       "removedItem": "已从购物车移除",
       "undo": "撤销",
-      "addToCartPrice": "加入购物车 · {{price}}"
+      "addToCartPrice": "加入购物车 · {{price}}",
+      "removeShort": "删除",
+      "storeClosedShort": "店铺目前已打烊。",
+      "itemCount_one": "{{count}} 件商品",
+      "itemCount_other": "{{count}} 件商品"
     },
     "stock": {
       "onlyLeft": "仅剩 {{n}} 件",
@@ -229,7 +256,34 @@
     "verifiedInfoHint": "这是什么意思？",
     "verifiedInfoClose": "知道了",
     "noDeliveryTitle": "暂无支持配送的店铺",
-    "noDeliveryBody": "这些店铺提供自取。店铺开通配送后会显示在这里。"
+    "noDeliveryBody": "这些店铺提供自取。店铺开通配送后会显示在这里。",
+    "cat": {
+      "food": {
+        "mains": "主菜",
+        "soups": "汤与炖菜",
+        "grill": "烧烤",
+        "snacks": "小吃与点心",
+        "breakfast": "早餐",
+        "drinks": "饮品"
+      },
+      "mart": {
+        "staples": "主食杂货",
+        "sauces": "酱料与香料",
+        "snacks": "零食与甜品",
+        "drinks": "饮品",
+        "fresh": "生鲜与冷冻",
+        "digital": "数字服务",
+        "other": "其他"
+      },
+      "foodHeading": "想吃点什么？",
+      "martHeading": "你需要什么？",
+      "allProducts": "全部商品",
+      "empty": "这里暂时还没有商品。",
+      "emptyBody": "商家正在上新，请稍后再来。",
+      "productCount_one": "{{count}} 件商品",
+      "productCount_other": "{{count}} 件商品",
+      "allStores": "全部店铺"
+    }
   },
   "assistant": {
     "title": "助手",
@@ -369,7 +423,10 @@
       "timezone": "时间按您的时区显示（{{zone}}）",
       "book": "预订 {{time}}",
       "pickTime": "选择时间",
-      "expertZone": "专家所在地 {{place}}（{{zone}}）"
+      "expertZone": "专家所在地 {{place}}（{{zone}}）",
+      "dayFull": "已满",
+      "noneLeft": "当天已无可预约时间。",
+      "jumpNext": "最近可约：{{day}}"
     },
     "directory": {
       "search": "搜索专家",
@@ -384,6 +441,61 @@
       "fromPerHour": "{{price}}/小时起",
       "customQuote": "按需报价",
       "nextAvailable": "最近：{{when}}"
+    },
+    "discover": {
+      "needHeading": "你需要什么？",
+      "serviceCount_one": "{{count}} 项服务",
+      "serviceCount_other": "{{count}} 项服务",
+      "all": "全部",
+      "servicesHeading": "服务",
+      "allServices": "全部服务"
+    },
+    "cat": {
+      "documents": {
+        "title": "证件与签证",
+        "blurb": "签证、居留许可、登记和法律帮助。"
+      },
+      "translation": {
+        "title": "翻译",
+        "blurb": "公证翻译、公证与海牙认证。"
+      },
+      "education": {
+        "title": "教育",
+        "blurb": "俄语课、备考和大学申请。"
+      },
+      "work": {
+        "title": "工作与商业",
+        "blurb": "求职、简历、注册公司、税务和IT。"
+      },
+      "housing": {
+        "title": "住房",
+        "blurb": "找房、安全租房和搬家。"
+      },
+      "health": {
+        "title": "健康",
+        "blurb": "会说你语言的医生和心理咨询师。"
+      },
+      "beauty": {
+        "title": "美发与美容",
+        "blurb": "理发、编发、美甲和化妆。"
+      },
+      "errands": {
+        "title": "跑腿",
+        "blurb": "快递、代购、清洁和日常事务。"
+      },
+      "expertCount_one": "{{count}} 位专家",
+      "expertCount_other": "{{count}} 位专家",
+      "whoCanHelp": "谁能帮你",
+      "whatToBook": "可预约的服务",
+      "empty": "这里暂时没有可预约的服务。",
+      "emptyBody": "我们正在添加专家。请稍后再来或联系客服。",
+      "soon": "即将推出"
+    },
+    "card": {
+      "minutes_one": "{{count}} 分钟",
+      "minutes_other": "{{count}} 分钟",
+      "book": "预约",
+      "perHour": "/小时"
     }
   },
   "transactions": {
@@ -434,7 +546,8 @@
     "groupToday": "今天",
     "groupYesterday": "昨天",
     "chipBookings": "预约",
-    "statusRefunded": "已退款"
+    "statusRefunded": "已退款",
+    "rowItemsMore": "{{title}} +{{count}}"
   },
   "txDetail": {
     "errorNotFound": "未找到交易或无权访问",
@@ -1302,7 +1415,8 @@
       "accepted": "卖家已接受您的订单。",
       "in_progress": "您的订单正在准备中。",
       "fulfilled": "您的订单已完成。",
-      "cancelled": "此订单已取消。"
+      "cancelled": "此订单已取消。",
+      "expired": "付款时间已过，订单未提交。请重新添加商品下单。"
     },
     "zoneNotServedTitle": "暂不支持配送到此处",
     "pickupInstead": "改为自取",
@@ -1460,23 +1574,40 @@
     "slide": {
       "adLabel": "广告",
       "position": "第 {{n}} 张，共 {{total}} 张",
-      "belong": {
-        "kicker": "Ciuna",
-        "title": "家在您身边",
-        "body": "金钱与家乡的人，一处搞定。",
-        "cta": "去看看"
+      "sorted": {
+        "title": "海外生活，一站搞定。",
+        "body": "汇款、美食和家乡帮助，尽在一个应用。"
       },
-      "language": {
-        "kicker": "为海外的您",
-        "title": "无论在哪都能被理解",
-        "body": "说您语言的店铺和专家。",
-        "cta": "找同乡"
+      "community": {
+        "title": "你的社群，就在身边。",
+        "body": "由和你一样的人开设的店铺和专家。"
       },
-      "family": {
-        "kicker": "常伴家人",
-        "title": "家人近在指尖",
-        "body": "几分钟把钱寄回家。",
-        "cta": "寄钱回家"
+      "pay": {
+        "title": "用熟悉的方式付款。",
+        "body": "银行转账、二维码或银行卡，以你的货币支付。"
+      }
+    },
+    "now": {
+      "title": "进行中"
+    },
+    "sendAgain": {
+      "title": "再次汇款"
+    },
+    "rate": {
+      "aria": "汇率 {{from}} 兑 {{to}}。打开汇款。"
+    },
+    "banner": {
+      "verify": {
+        "title": "验证您的身份",
+        "body": "一次性验证，之后即可汇款。"
+      },
+      "review": {
+        "title": "验证审核中",
+        "body": "完成后我们会通知您。"
+      },
+      "refer": {
+        "title": "邀请好友赚取佣金",
+        "body": "分享您的邀请码，从好友的汇款中获得佣金。"
       }
     }
   },
@@ -1697,5 +1828,12 @@
     "keep": "保持开启",
     "on": "已开启",
     "off": "已关闭"
+  },
+  "account": {
+    "editProfile": "编辑资料",
+    "groupSecurity": "安全与限额",
+    "groupPreferences": "偏好设置",
+    "groupHelp": "帮助",
+    "logOut": "退出登录"
   }
 }

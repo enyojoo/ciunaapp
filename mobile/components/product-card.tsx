@@ -12,7 +12,8 @@ import {
 } from "@/lib/money"
 import type { HubProduct } from "@/lib/types"
 import { catalogCardWidth, useCatalogGridColumns } from "@/lib/responsive-layout"
-import { colors, radius, shadow, shadowNone } from "@/lib/theme"
+import { Icon } from "@/components/ui/icon"
+import { colors, radius, shadow, shadowNone, type as typeSize } from "@/lib/theme"
 import { updateHubCartItemQuantity, useHubCart } from "@/lib/hub-cart"
 import { useGuardedAdd } from "@/lib/use-guarded-add"
 import { useToast } from "@/components/toast-provider"
@@ -82,8 +83,8 @@ export function ProductCard({
       {product.image_url ? (
         <Image source={{ uri: product.image_url }} style={styles.image} contentFit="contain" />
       ) : (
-        <View style={styles.imageFallback}>
-          <Text style={styles.noImage}>{t("hub.noImage", { defaultValue: "No image" })}</Text>
+        <View style={styles.imageFallback} accessibilityLabel={t("hub.noImage", { defaultValue: "No image" })}>
+          <Icon name={cartLineSlug === "food" ? "food" : "mart"} size={28} color={colors.subtle} />
         </View>
       )}
       {showCategory ? (
@@ -283,16 +284,15 @@ const styles = StyleSheet.create({
     ...shadow({ opacity: 0.08, radius: 10, offsetY: 4, elevation: 2 }),
   },
   skeleton: { borderColor: colors.border, ...shadowNone },
-  imageWrap: { width: "100%", aspectRatio: 4 / 3, backgroundColor: colors.neutralSurface },
+  imageWrap: { width: "100%", aspectRatio: 4 / 3, backgroundColor: colors.fill },
   image: { width: "100%", height: "100%" },
   imageFallback: {
     width: "100%",
     aspectRatio: 4 / 3,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.neutralSurface,
+    backgroundColor: colors.fill,
   },
-  noImage: { fontSize: 12, color: colors.muted, textAlign: "center", paddingHorizontal: 8 },
   catBadge: {
     position: "absolute",
     top: 6,
@@ -303,16 +303,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
-  catBadgeText: { fontSize: 12, fontWeight: "600", color: colors.neutralText },
+  catBadgeText: { fontSize: typeSize.caption, fontWeight: "600", color: colors.neutralText },
   body: { paddingHorizontal: 10, paddingTop: 0, paddingBottom: 10 },
   bodyTop: { paddingHorizontal: 10, paddingTop: 8 },
-  title: { fontSize: 13, fontWeight: "600", lineHeight: 17, minHeight: 17, color: colors.text },
+  title: { fontSize: typeSize.meta, fontWeight: "600", lineHeight: 17, minHeight: 17, color: colors.text },
   vendorSlot: { minHeight: 22, justifyContent: "center" },
   lowStock: { color: colors.warningText, fontWeight: "600" },
   fulfillmentCue: {
     marginTop: 2,
     minHeight: 14,
-    fontSize: 12,
+    fontSize: typeSize.caption,
     fontWeight: "600",
     color: colors.primary,
     textTransform: "capitalize",
@@ -328,9 +328,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  vendorInitial: { fontSize: 12, fontWeight: "700", color: colors.muted },
-  vendorExtra: { flexShrink: 1, fontSize: 12, color: colors.muted },
-  vendorName: { flexShrink: 1, fontSize: 12, fontWeight: "500", color: colors.text },
+  vendorInitial: { fontSize: typeSize.caption, fontWeight: "700", color: colors.muted },
+  vendorExtra: { flexShrink: 1, fontSize: typeSize.caption, color: colors.muted },
+  vendorName: { flexShrink: 1, fontSize: typeSize.caption, fontWeight: "500", color: colors.text },
   priceBlock: { marginTop: 4, gap: 8, minHeight: 40, justifyContent: "flex-end" },
   cta: {
     minHeight: 32,
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   ctaDisabled: { opacity: 0.5 },
-  ctaText: { fontSize: 12, fontWeight: "600", color: colors.onPrimary },
+  ctaText: { fontSize: typeSize.caption, fontWeight: "600", color: colors.onPrimary },
   ctaWithIcon: { flexDirection: "row", alignItems: "center", gap: 5 },
   stepper: {
     minHeight: 32,
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
   },
   stepperBtn: { width: 28, height: 28, alignItems: "center", justifyContent: "center" },
-  stepperValue: { flex: 1, textAlign: "center", fontSize: 13, fontWeight: "700", color: colors.primary },
+  stepperValue: { flex: 1, textAlign: "center", fontSize: typeSize.meta, fontWeight: "700", color: colors.primary },
   skelTitle: { height: 14, width: "80%", borderRadius: 4, backgroundColor: colors.paper },
   skelMeta: { marginTop: 8, height: 10, width: "50%", borderRadius: 4, backgroundColor: colors.paper },
 })

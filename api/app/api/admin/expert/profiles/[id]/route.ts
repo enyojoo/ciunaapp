@@ -2,9 +2,19 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { allocateExpertSlug } from "@/lib/expert-slug-server"
+import { isMissingSchemaError } from "@/lib/safe-select"
 
-const PROFILE_SELECT =
+const PROFILE_SELECT_BASE =
   "id, slug, display_name, headline, bio, is_published, category, image_url, capabilities, fulfillment_type, service_area, meeting_hint, created_at, updated_at"
+const PROFILE_SELECT = `${PROFILE_SELECT_BASE}, main_category`
+
+/** The eight fixed needs the apps group experts by. Must match the check on expert_profiles.main_category. */
+const MAIN_CATEGORIES = new Set(["documents", "translation", "education", "work", "housing", "health", "beauty", "errands"])
+
+function mainCategoryInput(v: unknown): string | null {
+  const s = String(v ?? "").trim().toLowerCase()
+  return MAIN_CATEGORIES.has(s) ? s : null
+}
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -12,11 +22,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { id } = await params
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 })
     const server = createServerClient()
-    const { data, error } = await server
-      .from("expert_profiles")
-      .select(PROFILE_SELECT)
-      .eq("id", id)
-      .maybeSingle()
+    let { data, error } = await server.from("expert_profiles").select(PROFILE_SELECT).eq("id", id).maybeSingle()
+    // Before expert-main-category.sql runs, load without the column (Office then shows the field as unavailable).
+    if (error && isMissingSchemaError(error)) ({ data, error } = await server.from("expert_profiles").select(PROFILE_SELECT_BASE).eq("id", id).maybeSingle())
     if (error) throw error
     if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 })
     return NextResponse.json({ profile: data })
@@ -42,6 +50,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (body.bio !== undefined) patch.bio = body.bio != null ? String(body.bio).trim() || null : null
     if (body.is_published !== undefined) patch.is_published = Boolean(body.is_published)
     if (body.category != null) patch.category = String(body.category).trim() || "Other"
+    if (body.main_category !== undefined) {
+      const main = mainCategoryInput(body.main_category)
+      if (body.main_category !== null && body.main_category !== "" && !main) return NextResponse.json({ error: "Unknown main category" }, { status: 400 })
+      patch.main_category = main
+    }
     if (body.image_url !== undefined)
       patch.image_url = body.image_url != null ? String(body.image_url).trim() || null : null
     if (body.capabilities !== undefined)
@@ -72,12 +85,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       }
     }
 
-    const { data, error } = await server
-      .from("expert_profiles")
-      .update(patch)
-      .eq("id", id)
-      .select(PROFILE_SELECT)
-      .single()
+    let { data, error } = await server.from("expert_profiles").update(patch).eq("id", id).select(PROFILE_SELECT).single()
+    if (error && isMissingSchemaError(error)) {
+      // The column does not exist yet: save everything else.
+      delete patch.main_category
+      ;({ data, error } = await server.from("expert_profiles").update(patch).eq("id", id).select(PROFILE_SELECT_BASE).single())
+    }
     if (error) throw error
     return NextResponse.json({ profile: data })
   } catch (e) {

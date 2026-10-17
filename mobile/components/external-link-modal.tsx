@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   externalTitle: {
-    fontSize: 18,
+    fontSize: typeSize.headline,
     fontWeight: "700",
     color: colors.text,
     textAlign: "center",

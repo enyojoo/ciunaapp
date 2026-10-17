@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   },
   cardBody: { flex: 1, minWidth: 0, gap: 2 },
   name: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  meta: { fontSize: 12, color: colors.muted },
+  meta: { fontSize: typeSize.caption, color: colors.muted },
   cardActions: { flexDirection: "row", gap: 4 },
   iconBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
 })

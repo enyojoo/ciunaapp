@@ -119,10 +119,10 @@ export default function NewSupportRequestScreen() {
 }
 
 const styles = StyleSheet.create({
-  label: { marginTop: 16, marginBottom: 8, fontSize: 13, fontWeight: "700", color: colors.text },
+  label: { marginTop: 16, marginBottom: 8, fontSize: typeSize.meta, fontWeight: "700", color: colors.text },
   input: { minHeight: 48, paddingHorizontal: 14, borderRadius: radius.row, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, fontSize: typeSize.body, color: colors.text },
   multiline: { minHeight: 140, paddingTop: 12, textAlignVertical: "top" },
-  counter: { marginTop: 4, marginBottom: 12, textAlign: "right", fontSize: 12, color: colors.muted },
+  counter: { marginTop: 4, marginBottom: 12, textAlign: "right", fontSize: typeSize.caption, color: colors.muted },
   counterOver: { color: colors.danger, fontWeight: "700" },
   errorBox: { marginBottom: 12, padding: 12, borderRadius: radius.row, backgroundColor: colors.dangerSurface },
   errorText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.danger },

@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   notice: { borderRadius: radius.row, padding: 12, marginBottom: 12 },
   noticeError: { backgroundColor: colors.dangerSurface },
   noticeWarn: { backgroundColor: colors.warningSurface },
-  noticeText: { fontSize: 14, lineHeight: 20, fontWeight: "600" },
+  noticeText: { fontSize: typeSize.meta, lineHeight: 20, fontWeight: "600" },
   noticeTextError: { color: colors.danger },
   noticeTextWarn: { color: colors.warningText },
   topBar: {
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   titleCompact: {
-    fontSize: 20,
+    fontSize: typeSize.headline,
     fontWeight: "700",
     color: colors.text,
     letterSpacing: -0.3,

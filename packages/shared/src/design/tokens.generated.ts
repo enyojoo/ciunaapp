@@ -7,6 +7,8 @@ export const designColors = {
   "primaryText": "#C2410C",
   "primaryTint": "#FFF3E8",
   "primaryBorder": "#FDBA74",
+  "selected": "#111827",
+  "onSelected": "#FFFFFF",
   "ink": "#111827",
   "paper": "#FAFAF8",
   "surface": "#FFFFFF",
@@ -25,6 +27,7 @@ export const designColors = {
   "destructiveText": "#991B1B",
   "neutralSurface": "#F3F4F6",
   "neutralText": "#374151",
+  "fill": "#F1EFEA",
   "refer": "#0F766E",
   "referSurface": "#F0FDFA",
   "scrim": "#111827",
@@ -39,7 +42,7 @@ export const designColors = {
   "referIcon": "#115E59",
 } as const
 
-export const designRadius = {"control":12,"card":16,"sheet":24,"pill":999} as const
-export const designSpace = {"tap":48,"page":20} as const
+export const designRadius = {"control":12,"card":16,"sheet":24,"pill":999,"hero":20} as const
+export const designSpace = {"tap":48,"page":20,"xs":4,"sm":8,"md":12,"lg":16,"xl":24,"xxl":32,"gutter":16} as const
 export const designMotion = {"fast":150,"sheet":180,"normal":220} as const
-export const designType = {"title":24,"body":16,"label":15,"meta":13} as const
+export const designType = {"largeTitle":32,"display":44,"title":24,"headline":20,"listTitle":16,"body":16,"label":15,"meta":13,"caption":12} as const

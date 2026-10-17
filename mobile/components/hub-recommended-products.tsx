@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { ProductCard } from "@/components/product-card"
 import type { HubProduct } from "@/lib/types"
-import { colors } from "@/lib/theme"
+import { colors, type as typeSize } from "@/lib/theme"
 
 const CARD_WIDTH = 152
 /** Matches `ScreenScroll`'s content `paddingHorizontal` (screen.tsx) — cancelled below so the rail itself can run edge-to-edge, then re-applied inside the rail's own scroll content so cards still line up with the rest of the page. */
@@ -49,7 +49,7 @@ export function HubRecommendedProducts({
 
 const styles = StyleSheet.create({
   wrap: { marginTop: 32, marginHorizontal: -PAGE_INSET },
-  heading: { fontSize: 18, fontWeight: "600", color: colors.text, marginBottom: 16, paddingHorizontal: PAGE_INSET },
+  heading: { fontSize: typeSize.headline, fontWeight: "600", color: colors.text, marginBottom: 16, paddingHorizontal: PAGE_INSET },
   row: { gap: 12, paddingHorizontal: PAGE_INSET },
   card: { width: CARD_WIDTH },
 })

@@ -15,8 +15,9 @@ import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { SearchEntryField } from "@/components/search-entry"
 import { StoreChip, StoreChipSkeleton } from "@/components/store-item"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
-import { attachVendorsToProducts } from "@/lib/hub-catalog"
+import { attachVendorsToProducts, sortHubCatalogProducts } from "@/lib/hub-catalog"
 import {
+  hubMarketplaceProductsPath,
   hubMarketplaceStoresPath,
   hubMarketplaceVendorPath,
   hubProductDetailPath,
@@ -25,13 +26,14 @@ import {
   isHubSendSlug,
 } from "@/lib/hub"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
+import { useLocationFilter } from "@/lib/location"
 import { useHubCatalog } from "@/lib/use-hub-catalog"
-import { catalogCategories } from "@/lib/hub-catalog"
-import { FilterChips } from "@/components/filter-chips"
+import { HubCategoryGrid, useHubCategoryCounts } from "@/components/hub-categories"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
-import { colors } from "@/lib/theme"
+import { colors, textStyles, type as typeSize } from "@/lib/theme"
 
 const STORES_PREVIEW = 8
+const PRODUCTS_PREVIEW = 8
 
 export default function HubLineCatalog() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
@@ -52,30 +54,33 @@ export default function HubLineCatalog() {
     engineRedirect ? "" : line,
     marketplace,
   )
-  const products = data?.products || []
-  const vendors = data?.vendors || []
+  const allProducts = data?.products || []
+  const allVendors = data?.vendors || []
+  const { vendors, products } = useLocationFilter(allVendors, allProducts)
 
   useFocusRevalidate(revalidate)
   useRevalidateOnForeground(revalidate)
 
   const catalogProducts = useMemo(() => attachVendorsToProducts(products, vendors, line), [products, vendors, line])
+  const previewProducts = useMemo(
+    () => (marketplace ? sortHubCatalogProducts(catalogProducts).slice(0, PRODUCTS_PREVIEW) : catalogProducts),
+    [catalogProducts, marketplace],
+  )
   const previewVendors = vendors.slice(0, STORES_PREVIEW)
-  // Category chips sit at the top, above Stores, and filter the product list below.
+  const categoryCounts = useHubCategoryCounts(catalogProducts, line === "mart" ? "mart" : "food")
   const [category, setCategory] = useState("")
-  const categoryOptions = useMemo(() => catalogCategories(catalogProducts, category), [catalogProducts, category])
   const storesLoading = loading && vendors.length === 0
 
   const catalog = (
     <>
       {marketplace ? <SearchEntryField line={line as "food" | "mart"} embedded /> : null}
-      {marketplace && categoryOptions.length > 0 ? (
-        <View style={styles.catChips}>
-          <FilterChips
-            options={[{ id: "__all__", label: t("hub.allCategories", { defaultValue: "All categories" }) }, ...categoryOptions.map((c) => ({ id: c, label: c }))]}
-            value={category || "__all__"}
-            onChange={(id) => setCategory(id === "__all__" ? "" : id)}
-            ariaLabel={t("hub.categoryFilterAria", { defaultValue: "Filter by category" })}
-          />
+      {/* Meal types (Food) or categories (Mart), all visible at once, then stores. */}
+      {marketplace && catalogProducts.length > 0 ? (
+        <View style={styles.catBlock}>
+          <Text style={styles.storesTitle}>
+            {line === "food" ? t("hub.cat.foodHeading", { defaultValue: "What are you craving?" }) : t("hub.cat.martHeading", { defaultValue: "What do you need?" })}
+          </Text>
+          <HubCategoryGrid line={line === "mart" ? "mart" : "food"} counts={categoryCounts} />
         </View>
       ) : null}
       {marketplace && noStoreDelivers(vendors) ? (
@@ -94,9 +99,9 @@ export default function HubLineCatalog() {
                 hitSlop={8}
                 style={styles.seeAllHit}
                 accessibilityRole="button"
-                accessibilityLabel={t("hub.marketplaceSeeAllStores", { defaultValue: "See all" })}
+                accessibilityLabel={t("hub.marketplaceSeeAllStores", { defaultValue: "All Stores" })}
               >
-                <Text style={styles.seeAll}>{t("hub.marketplaceSeeAllStores", { defaultValue: "See all" })}</Text>
+                <Text style={styles.seeAll}>{t("hub.marketplaceSeeAllStores", { defaultValue: "All Stores" })}</Text>
                 <ChevronRight size={16} color={colors.primary} strokeWidth={2.2} />
               </Pressable>
             ) : null}
@@ -127,8 +132,24 @@ export default function HubLineCatalog() {
         </View>
       ) : null}
 
+      {marketplace && catalogProducts.length > 0 ? (
+        <View style={styles.storesHead}>
+          <Text style={styles.storesTitle}>{t("hub.marketplaceProductsHeading", { defaultValue: "Products" })}</Text>
+          <Pressable
+            onPress={() => router.push(hubMarketplaceProductsPath(line) as never)}
+            hitSlop={8}
+            style={styles.seeAllHit}
+            accessibilityRole="button"
+            accessibilityLabel={t("hub.marketplaceSeeAllProducts", { defaultValue: "All Products" })}
+          >
+            <Text style={styles.seeAll}>{t("hub.marketplaceSeeAllProducts", { defaultValue: "All Products" })}</Text>
+            <ChevronRight size={16} color={colors.primary} strokeWidth={2.2} />
+          </Pressable>
+        </View>
+      ) : null}
       <CatalogProducts
-        products={catalogProducts}
+        products={previewProducts}
+        hideHeading={marketplace}
         loading={loading}
         category={category}
         onCategoryChange={setCategory}
@@ -166,7 +187,8 @@ export default function HubLineCatalog() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
-        trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : undefined}
+        locationPicker={marketplace}
+        trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} /> : undefined}
       >
         {catalog}
       </HubLinePageShell>
@@ -176,22 +198,22 @@ export default function HubLineCatalog() {
 }
 
 const styles = StyleSheet.create({
-  catChips: { marginBottom: 16 },
+  catBlock: { gap: 12, marginBottom: 24 },
   noDelivery: { marginBottom: 16, padding: 14, gap: 4, borderRadius: 16, borderWidth: 1, borderColor: colors.warningBorder, backgroundColor: colors.warningSurface },
-  noDeliveryTitle: { fontSize: 15, fontWeight: "700", color: colors.warningText },
-  noDeliveryBody: { fontSize: 13, lineHeight: 18, color: colors.warningText },
+  noDeliveryTitle: { fontSize: typeSize.label, fontWeight: "700", color: colors.warningText },
+  noDeliveryBody: { fontSize: typeSize.meta, lineHeight: 18, color: colors.warningText },
   flex: { flex: 1 },
   storesBlock: { marginBottom: 32 },
-  storesHead: { marginBottom: 12, flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" },
-  storesTitle: { fontSize: 18, fontWeight: "600", color: colors.text },
+  storesHead: { marginBottom: 12, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  storesTitle: { ...textStyles.headline, color: colors.text },
   seeAllHit: {
-    minHeight: 44,
+    minHeight: 32,
     flexDirection: "row",
     alignItems: "center",
     gap: 2,
     paddingLeft: 12,
   },
-  seeAll: { fontSize: 14, fontWeight: "600", color: colors.primary },
+  seeAll: { ...textStyles.listTitle, color: colors.primary },
   storesRow: { gap: 12, paddingRight: 8, paddingVertical: 2 },
-  storesEmpty: { paddingVertical: 8, fontSize: 14, color: colors.muted },
+  storesEmpty: { paddingVertical: 8, fontSize: typeSize.meta, color: colors.muted },
 })

@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { normalizePublicSlug } from "@ciuna/shared"
+import { EXPERT_MAIN_CATEGORIES, normalizePublicSlug } from "@ciuna/shared"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { OfficeDashboardLayout } from "@/components/layout/office-dashboard-layout"
@@ -29,6 +29,8 @@ type Profile = {
   bio: string | null
   is_published: boolean
   category: string
+  /** One of EXPERT_MAIN_CATEGORIES; undefined when the column does not exist yet. */
+  main_category?: string | null
   image_url: string | null
   service_area: string | null
   meeting_hint: string | null
@@ -183,6 +185,7 @@ export default function OfficeExpertProfileDetailPage() {
           headline: form.headline,
           bio: form.bio,
           category: form.category,
+          ...("main_category" in profile ? { main_category: form.main_category || null } : {}),
           image_url: form.image_url,
           service_area: form.service_area,
           meeting_hint: form.meeting_hint,
@@ -519,8 +522,29 @@ export default function OfficeExpertProfileDetailPage() {
                   <Textarea value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} rows={4} />
                 </div>
                 <div className="space-y-2">
-                  <Label>Category</Label>
+                  <Label>Main category</Label>
+                  {"main_category" in profile ? (
+                    <Select value={form.main_category || ""} onValueChange={(v) => setForm((f) => ({ ...f, main_category: v }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose where this expert appears" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {EXPERT_MAIN_CATEGORIES.map((c) => (
+                          <SelectItem key={c.id} value={c.id}>
+                            {c.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Run expert-main-category.sql to turn this on.</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">Where the expert appears in the apps (Experts → What do you need?).</p>
+                </div>
+                <div className="space-y-2">
+                  <Label>Specialty</Label>
                   <Input value={form.category ?? ""} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} />
+                  <p className="text-xs text-muted-foreground">Free text, for example &quot;Immigration consulting&quot;. Used in search; not a category.</p>
                 </div>
                 <div className="space-y-2">
                   <Label>Image URL</Label>

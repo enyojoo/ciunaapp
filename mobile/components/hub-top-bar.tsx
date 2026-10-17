@@ -1,53 +1,43 @@
 import { type ReactNode } from "react"
-import { StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { goBack, HeroBack, heroBarStyle } from "@/components/hub-line-page-shell"
-import { colors, type as typeSize } from "@/lib/theme"
+import { goBack } from "@/components/hub-line-page-shell"
+import { View } from "react-native"
+import { NavBar } from "@/components/ui/nav-bar"
+import { colors, space } from "@/lib/theme"
 
 /**
- * The top bar of the hub detail screens (store, product). It is the Food and Mart header bar itself:
- * same white bar and hairline, same bordered back chip, same height, same right-hand action
- * position. A title is optional; the content under it carries the page's own heading.
+ * The top bar of the hub detail screens (store, product, cart, checkout, expert). It is the shared `NavBar`: 44 pt,
+ * plain back chevron, optional centred title, actions on the right. `overlay` floats it over a cover photo.
  */
 export function HubTopBar({
   title,
   trailing,
   backHref = "/(app)/hub",
+  variant = "default",
 }: {
   title?: string
   trailing?: ReactNode
   backHref?: string
+  variant?: "default" | "overlay"
 }) {
   const router = useRouter()
   const { t } = useTranslation("app")
+  const bar = (
+    <NavBar
+      title={title}
+      trailing={trailing}
+      variant={variant}
+      floating={variant === "overlay"}
+      backLabel={t("common.back", { defaultValue: "Back" })}
+      onBack={() => goBack(router, backHref)}
+    />
+  )
+  if (variant === "overlay") return bar
+  // A little canvas under the bar so screens need no top padding of their own.
   return (
-    <View style={styles.wrap}>
-    <View style={heroBarStyle.hero}>
-      <SafeAreaView edges={["top"]}>
-        <View style={[heroBarStyle.bar, styles.barHeight]}>
-          <HeroBack label={t("common.back", { defaultValue: "Back" })} onPress={() => goBack(router, backHref)} />
-          <View style={styles.middle}>
-            {title ? (
-              <Text style={styles.title} numberOfLines={1}>
-                {title}
-              </Text>
-            ) : null}
-          </View>
-          {trailing ? <View style={heroBarStyle.trailing}>{trailing}</View> : null}
-        </View>
-      </SafeAreaView>
-    </View>
+    <View style={{ backgroundColor: colors.paper, paddingBottom: space.sm }}>
+      {bar}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  // 16px of page background under the bar, so no screen needs its own top padding.
-  wrap: { paddingBottom: 16, backgroundColor: colors.paper },
-  // Food and Mart's bar is this tall (its title block is a touch taller than the back chip), so the chip, cart and hairline line up across screens.
-  barHeight: { minHeight: 70 },
-  middle: { flex: 1, minWidth: 0 },
-  title: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
-})

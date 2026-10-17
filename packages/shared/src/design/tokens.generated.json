@@ -7,6 +7,8 @@
     "primary-text": "#C2410C",
     "primary-tint": "#FFF3E8",
     "primary-border": "#FDBA74",
+    "selected": "#111827",
+    "on-selected": "#FFFFFF",
     "ink": "#111827",
     "paper": "#FAFAF8",
     "surface": "#FFFFFF",
@@ -25,6 +27,7 @@
     "destructive-text": "#991B1B",
     "neutral-surface": "#F3F4F6",
     "neutral-text": "#374151",
+    "fill": "#F1EFEA",
     "refer": "#0F766E",
     "refer-surface": "#F0FDFA",
     "scrim": "#111827",
@@ -42,11 +45,19 @@
     "control": 12,
     "card": 16,
     "sheet": 24,
-    "pill": 999
+    "pill": 999,
+    "hero": 20
   },
   "space": {
     "tap": 48,
-    "page": 20
+    "page": 20,
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "xxl": 32,
+    "gutter": 16
   },
   "motion": {
     "fast": 150,
@@ -54,9 +65,14 @@
     "normal": 220
   },
   "type": {
+    "largeTitle": 32,
+    "display": 44,
     "title": 24,
+    "headline": 20,
+    "listTitle": 16,
     "body": 16,
     "label": 15,
-    "meta": 13
+    "meta": 13,
+    "caption": 12
   }
 }

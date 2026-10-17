@@ -14,3 +14,5 @@ Use tokens from `tokens.json` through `bundle.css`; no hardcoded colours or size
 
 ## Upgrade
 Built in the shared UI; this card documents existing behaviour.
+
+Expo: `Banner` in `mobile/components/ui/banner.tsx` (info, success, warning, danger, title with optional body and action, announced as an alert).

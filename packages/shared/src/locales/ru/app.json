@@ -82,7 +82,29 @@
     "marketplaceProductsHeading": "Товары",
     "marketplaceStoresHeading": "Магазины",
     "storesDirectorySubtitle": "Выберите магазин, чтобы посмотреть товары.",
-    "marketplaceSeeAllStores": "Все",
+    "marketplaceSeeAllStores": "Все магазины",
+    "marketplaceSeeAllProducts": "Все товары",
+    "locationTitle": "Выберите район",
+    "locationAll": "Все районы",
+    "locationLabel": "Место",
+    "locationHint": "Показываем магазины с доставкой в выбранный город, а также магазины только с самовывозом и цифровые товары.",
+    "locationEmpty": "Зоны доставки пока не настроены.",
+    "locationDelivering": "Есть доставка",
+    "locationPopular": "Популярные",
+    "locationAllCities": "Все города",
+    "locationSearch": "Поиск городов",
+    "searchStores": "Поиск магазинов",
+    "searchProducts": "Поиск товаров",
+    "searchServices": "Поиск услуг",
+    "filterAll": "Все",
+    "filterOpenNow": "Открыто сейчас",
+    "filterDelivers": "С доставкой",
+    "filterOnline": "Онлайн",
+    "filterInPerson": "Лично",
+    "resultsCount": "Результатов: {{count}}",
+    "clearFilters": "Сбросить фильтры",
+    "noMatch": "Ничего не найдено",
+    "noMatchBody": "Попробуйте другое название или фильтр.",
     "marketplaceNoVendors": "Магазинов пока нет — загляните позже.",
     "verifiedVendor": "Проверенный продавец",
     "backToLine": "Назад к разделу",
@@ -103,7 +125,7 @@
     "expertsTitle": "Эксперты",
     "expertsSubtitle": "Проверенные специалисты для дома и красоты.",
     "expertsFeaturedHeading": "Избранное",
-    "expertsSeeAll": "Все",
+    "expertsSeeAll": "Все эксперты",
     "expertsServicesHeading": "Услуги",
     "expertsFeaturedEmpty": "Экспертов пока нет — загляните позже.",
     "expertsDirectoryTitle": "Все эксперты",
@@ -196,7 +218,8 @@
       "deliveryFrom": "Доставка от {{fee}}",
       "delivers": "Доставляет",
       "etaRange": "{{min}}–{{max}} мин",
-      "eta": "{{min}} мин"
+      "eta": "{{min}} мин",
+      "deliveryFee": "Доставка от {{fee}}"
     },
     "cart": {
       "emptyBody": "Добавьте что-нибудь из магазина, чтобы начать заказ.",
@@ -216,7 +239,13 @@
       "storePausedNote": "Магазин взял паузу, оформление заказа пока недоступно.",
       "removedItem": "Удалено из корзины",
       "undo": "Отменить",
-      "addToCartPrice": "В корзину · {{price}}"
+      "addToCartPrice": "В корзину · {{price}}",
+      "removeShort": "Удалить",
+      "storeClosedShort": "Магазин сейчас закрыт.",
+      "itemCount_one": "{{count}} товар",
+      "itemCount_few": "{{count}} товара",
+      "itemCount_many": "{{count}} товаров",
+      "itemCount_other": "{{count}} товара"
     },
     "stock": {
       "onlyLeft": "Осталось всего {{n}}",
@@ -229,7 +258,36 @@
     "verifiedInfoHint": "Что это значит?",
     "verifiedInfoClose": "Понятно",
     "noDeliveryTitle": "Пока никто не доставляет",
-    "noDeliveryBody": "Эти магазины работают на самовывоз. Доставка появится здесь, когда магазины её откроют."
+    "noDeliveryBody": "Эти магазины работают на самовывоз. Доставка появится здесь, когда магазины её откроют.",
+    "cat": {
+      "food": {
+        "mains": "Основные блюда",
+        "soups": "Супы и рагу",
+        "grill": "Гриль",
+        "snacks": "Закуски и выпечка",
+        "breakfast": "Завтрак",
+        "drinks": "Напитки"
+      },
+      "mart": {
+        "staples": "Бакалея",
+        "sauces": "Соусы и специи",
+        "snacks": "Снеки и сладости",
+        "drinks": "Напитки",
+        "fresh": "Свежее и заморозка",
+        "digital": "Цифровые услуги",
+        "other": "Другое"
+      },
+      "foodHeading": "Чего хочется?",
+      "martHeading": "Что вам нужно?",
+      "allProducts": "Все товары",
+      "empty": "Здесь пока пусто.",
+      "emptyBody": "Магазины добавляют товары. Загляните позже.",
+      "productCount_one": "{{count}} товар",
+      "productCount_few": "{{count}} товара",
+      "productCount_many": "{{count}} товаров",
+      "productCount_other": "{{count}} товара",
+      "allStores": "Все магазины"
+    }
   },
   "assistant": {
     "title": "Ассистент",
@@ -328,7 +386,8 @@
     "groupToday": "Сегодня",
     "groupYesterday": "Вчера",
     "chipBookings": "Записи",
-    "statusRefunded": "Возвращено"
+    "statusRefunded": "Возвращено",
+    "rowItemsMore": "{{title}} +{{count}}"
   },
   "txDetail": {
     "errorNotFound": "Операция не найдена или доступ запрещён",
@@ -1137,7 +1196,10 @@
       "timezone": "Время указано в вашем часовом поясе ({{zone}})",
       "book": "Записаться на {{time}}",
       "pickTime": "Выберите время",
-      "expertZone": "Эксперт: {{place}} ({{zone}})"
+      "expertZone": "Эксперт: {{place}} ({{zone}})",
+      "dayFull": "Занято",
+      "noneLeft": "На этот день свободного времени нет.",
+      "jumpNext": "Ближайшее: {{day}}"
     },
     "directory": {
       "search": "Поиск экспертов",
@@ -1152,6 +1214,67 @@
       "fromPerHour": "От {{price}}/ч",
       "customQuote": "Цена по запросу",
       "nextAvailable": "Ближайшее: {{when}}"
+    },
+    "discover": {
+      "needHeading": "Что вам нужно?",
+      "serviceCount_one": "{{count}} услуга",
+      "serviceCount_few": "{{count}} услуги",
+      "serviceCount_many": "{{count}} услуг",
+      "serviceCount_other": "{{count}} услуги",
+      "all": "Все",
+      "servicesHeading": "Услуги",
+      "allServices": "Все услуги"
+    },
+    "cat": {
+      "documents": {
+        "title": "Документы и визы",
+        "blurb": "Визы, ВНЖ, РВП, регистрация и юридическая помощь."
+      },
+      "translation": {
+        "title": "Переводы",
+        "blurb": "Заверенные переводы, нотариус и апостиль."
+      },
+      "education": {
+        "title": "Образование",
+        "blurb": "Уроки русского, подготовка к экзаменам и поступление в вуз."
+      },
+      "work": {
+        "title": "Работа и бизнес",
+        "blurb": "Работа, резюме, открытие компании, налоги и IT."
+      },
+      "housing": {
+        "title": "Жильё",
+        "blurb": "Найти квартиру, безопасно снять и переехать."
+      },
+      "health": {
+        "title": "Здоровье",
+        "blurb": "Врачи и психологи, говорящие на вашем языке."
+      },
+      "beauty": {
+        "title": "Волосы и красота",
+        "blurb": "Барберы, косички, маникюр и макияж."
+      },
+      "errands": {
+        "title": "Поручения",
+        "blurb": "Курьеры, помощь с покупками, уборка и бытовые дела."
+      },
+      "expertCount_one": "{{count}} эксперт",
+      "expertCount_few": "{{count}} эксперта",
+      "expertCount_many": "{{count}} экспертов",
+      "expertCount_other": "{{count}} эксперта",
+      "whoCanHelp": "Кто поможет",
+      "whatToBook": "Что можно забронировать",
+      "empty": "Здесь пока нечего забронировать.",
+      "emptyBody": "Мы добавляем экспертов. Загляните позже или спросите поддержку.",
+      "soon": "Скоро"
+    },
+    "card": {
+      "minutes_one": "{{count}} мин",
+      "minutes_few": "{{count}} мин",
+      "minutes_many": "{{count}} мин",
+      "minutes_other": "{{count}} мин",
+      "book": "Записаться",
+      "perHour": "/ч"
     }
   },
   "referralLanding": {
@@ -1302,7 +1425,8 @@
       "accepted": "Продавец принял ваш заказ.",
       "in_progress": "Ваш заказ готовится.",
       "fulfilled": "Ваш заказ выполнен.",
-      "cancelled": "Этот заказ отменён."
+      "cancelled": "Этот заказ отменён.",
+      "expired": "Время на оплату истекло, поэтому заказ не оформлен. Добавьте товары снова, чтобы заказать."
     },
     "zoneNotServedTitle": "Сюда пока нельзя доставить",
     "pickupInstead": "Заберу сам",
@@ -1462,23 +1586,40 @@
     "slide": {
       "adLabel": "Реклама",
       "position": "Слайд {{n}} из {{total}}",
-      "belong": {
-        "kicker": "Ciuna",
-        "title": "Дом там, где вы",
-        "body": "Деньги и близкие из дома.",
-        "cta": "Открыть"
+      "sorted": {
+        "title": "Жизнь за границей — проще.",
+        "body": "Деньги, еда и помощь из дома в одном приложении."
       },
-      "language": {
-        "kicker": "Для тех, кто за границей",
-        "title": "Вас поймут везде",
-        "body": "Магазины и эксперты на вашем языке.",
-        "cta": "Найти своих"
+      "community": {
+        "title": "Ваше сообщество рядом.",
+        "body": "Магазины и эксперты — люди, как вы."
       },
-      "family": {
-        "kicker": "Будьте рядом",
-        "title": "Семья в паре касаний",
-        "body": "Деньги домой за минуты.",
-        "cta": "Отправить"
+      "pay": {
+        "title": "Платите как привыкли.",
+        "body": "Перевод, QR или карта — в вашей валюте."
+      }
+    },
+    "now": {
+      "title": "В процессе"
+    },
+    "sendAgain": {
+      "title": "Отправить снова"
+    },
+    "rate": {
+      "aria": "Курс {{from}} к {{to}}. Открыть перевод."
+    },
+    "banner": {
+      "verify": {
+        "title": "Подтвердите личность",
+        "body": "Однократная проверка, чтобы вы могли отправлять деньги."
+      },
+      "review": {
+        "title": "Проверка идёт",
+        "body": "Мы сообщим, когда она завершится."
+      },
+      "refer": {
+        "title": "Приглашайте друзей и зарабатывайте",
+        "body": "Поделитесь кодом и получайте комиссию с их переводов."
       }
     }
   },
@@ -1699,5 +1840,12 @@
     "keep": "Оставить",
     "on": "Вкл.",
     "off": "Выкл."
+  },
+  "account": {
+    "editProfile": "Изменить профиль",
+    "groupSecurity": "Безопасность и лимиты",
+    "groupPreferences": "Настройки",
+    "groupHelp": "Помощь",
+    "logOut": "Выйти"
   }
 }

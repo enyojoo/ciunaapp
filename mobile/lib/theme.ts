@@ -1,5 +1,5 @@
-import { Platform, StyleSheet, type ViewStyle } from "react-native"
-import { designColors } from "@ciuna/shared/design"
+import { Platform, StyleSheet, type TextStyle, type ViewStyle } from "react-native"
+import { designColors, designRadius, designSpace, designType } from "@ciuna/shared/design"
 
 function hexToRgba(hex: string, opacity: number): string {
   const h = hex.replace("#", "")
@@ -51,6 +51,9 @@ export const colors = {
   primaryDeep: designColors.primaryText,
   primaryTint: designColors.primaryTint,
   primaryBorder: designColors.primaryBorder,
+  /** Fill for the selected chip, segment or filter (ink). Orange is kept for the one primary action. */
+  selected: designColors.selected,
+  onSelected: designColors.onSelected,
   paper: designColors.paper,
   surface: designColors.surface,
   text: designColors.ink,
@@ -81,6 +84,8 @@ export const colors = {
   referBorder: "#99F6E4",
   referText: "#134E4A",
   referIcon: "#115E59",
+  /** Image placeholders, skeleton tracks, pressed rows. */
+  fill: designColors.fill,
   supportBg: "#F3F4F6",
   supportIcon: "#4B5563",
   heroOrange: "#EA580C",
@@ -97,26 +102,46 @@ export const radius = {
   /** Bottom sheets and dialogs. */
   sheet: 24,
   pill: 999,
+  /** Hero media (store cover, gallery, banners). */
+  hero: designRadius.hero,
 } as const
 
 export const type = {
-  title: 24,
-  body: 16,
-  label: 15,
-  meta: 13,
-  /** Smallest text anywhere: 12px. Nothing is drawn below it. */
-  caption: 12,
+  /** Root-screen large title (Activities, Account). */
+  largeTitle: designType.largeTitle,
+  /** Money and hero numerals (amounts on Send, totals). */
+  display: designType.display,
+  title: designType.title,
+  /** Section titles and sheet titles. */
+  headline: designType.headline,
+  /** Title line of a list row or object card. */
+  listTitle: designType.listTitle,
+  body: designType.body,
+  label: designType.label,
+  meta: designType.meta,
+  /** Smallest text anywhere: 12px. Badges and timestamps only. */
+  caption: designType.caption,
 } as const
 
 export const space = {
-  page: 20,
-  tap: 48,
+  page: designSpace.page,
+  /** Phone page gutter for redesigned screens. */
+  gutter: designSpace.gutter,
+  tap: designSpace.tap,
+  xs: designSpace.xs,
+  sm: designSpace.sm,
+  md: designSpace.md,
+  lg: designSpace.lg,
+  xl: designSpace.xl,
+  xxl: designSpace.xxl,
 } as const
 
 export const motion = {
   fastMs: 150,
   sheetMs: 180,
   normalMs: 220,
+  /** Scale a pressable settles to while held. */
+  pressScale: 0.97,
 } as const
 
 /** Shadow presets from tokens.json (native-card, native-face, native-heart, native-cart-bar). */
@@ -126,6 +151,33 @@ export const shadows = {
   heart: shadow({ opacity: 0.12, radius: 4, offsetY: 1, elevation: 2 }),
   cartBar: shadow({ opacity: 0.3, radius: 16, offsetY: 6, elevation: 8 }),
 } as const
+
+/** Three elevation levels only: flat (hairline edge), raised (cards), floating (cart bar, sheets). */
+export const elevation = {
+  flat: shadowNone,
+  raised: shadows.card,
+  floating: shadows.cartBar,
+} as const
+
+type TextStyleSpec = { fontSize: number; lineHeight: number; fontWeight: "400" | "500" | "600" | "700"; letterSpacing?: number }
+
+/** Text styles. Money and quantities add `numeric` for tabular figures. */
+export const textStyles = {
+  largeTitle: { fontSize: type.largeTitle, lineHeight: 38, fontWeight: "700", letterSpacing: -0.6 },
+  display: { fontSize: type.display, lineHeight: 52, fontWeight: "700", letterSpacing: -1.2 },
+  title: { fontSize: type.title, lineHeight: 30, fontWeight: "700", letterSpacing: -0.4 },
+  headline: { fontSize: type.headline, lineHeight: 26, fontWeight: "600", letterSpacing: -0.2 },
+  listTitle: { fontSize: type.listTitle, lineHeight: 21, fontWeight: "600" },
+  body: { fontSize: type.body, lineHeight: 22, fontWeight: "400" },
+  bodyStrong: { fontSize: type.body, lineHeight: 22, fontWeight: "600" },
+  label: { fontSize: type.label, lineHeight: 20, fontWeight: "600" },
+  meta: { fontSize: type.meta, lineHeight: 18, fontWeight: "400" },
+  caption: { fontSize: type.caption, lineHeight: 16, fontWeight: "600", letterSpacing: 0.2 },
+} as const satisfies Record<string, TextStyleSpec>
+
+export type TextVariant = keyof typeof textStyles
+
+export const numeric: TextStyle = { fontVariant: ["tabular-nums"] }
 
 export const ui = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },

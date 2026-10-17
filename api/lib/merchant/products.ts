@@ -6,6 +6,7 @@ import { MarketplaceError } from "@/lib/marketplace/service"
 import { resolveAdminHubFixedPricing } from "@/lib/hub-product-pricing-server"
 import { hubProductImageUrlPaymentQrBucketError } from "@/lib/hub-product-image-url"
 import type { MerchantRow } from "./auth"
+import { readProductMainCategory } from "@/lib/product-main-category"
 
 const MODE_TO_TYPE = { delivery: "in_person", pickup: "vendor", digital: "online" } as const
 const str = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max)
@@ -56,6 +57,10 @@ export function buildSellerProduct(body: Record<string, any>, merchant: Merchant
   const status = String(pick("status", "draft"))
   assert(["draft", "live", "archived"].includes(status), "STATUS_INVALID")
 
+  // Where the product appears in the apps (meal type or aisle). Kept as is when the body leaves it out.
+  const mainCategory = readProductMainCategory(line, body)
+  assert(mainCategory !== "invalid", "MAIN_CATEGORY_OUTSIDE_LINE")
+
   return {
     title,
     short_description: str(pick("short_description", ""), 300) || null,
@@ -83,6 +88,7 @@ export function buildSellerProduct(body: Record<string, any>, merchant: Merchant
     vendor_id: vendor.id,
     merchant_id: merchant.id,
     service_line_slug: line,
+    ...(mainCategory !== undefined ? { main_category: mainCategory } : {}),
     updated_at: new Date().toISOString(),
   }
 }

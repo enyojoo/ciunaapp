@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   contactBody: { flex: 1 },
   dot: { position: "absolute", top: 2, right: 2, width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary, borderWidth: 2, borderColor: colors.surface },
   contactTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  contactSub: { marginTop: 2, fontSize: 12, color: colors.muted },
+  contactSub: { marginTop: 2, fontSize: typeSize.caption, color: colors.muted },
   faqItem: { paddingVertical: 12 },
   faqHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", minHeight: 32 },
   faqQ: { flex: 1, marginRight: 12, fontSize: typeSize.body, fontWeight: "600", color: colors.text },

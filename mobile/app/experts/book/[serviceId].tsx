@@ -60,6 +60,6 @@ export default function ExpertBookScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: { fontSize: 22, fontWeight: "700", letterSpacing: -0.3, color: colors.text, marginBottom: 4 },
+  title: { fontSize: typeSize.title, fontWeight: "700", letterSpacing: -0.3, color: colors.text, marginBottom: 4 },
   sub: { fontSize: typeSize.body, color: colors.muted, marginBottom: 16 },
 })

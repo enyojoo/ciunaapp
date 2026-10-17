@@ -22,6 +22,7 @@ export function CatalogProducts({
   category: categoryProp,
   onCategoryChange,
   hideChips,
+  hideHeading,
 }: {
   products: HubProduct[]
   loading?: boolean
@@ -38,6 +39,8 @@ export function CatalogProducts({
   onCategoryChange?: (category: string) => void
   /** The parent shows the category chips elsewhere, so this list only shows the heading and products. */
   hideChips?: boolean
+  /** The parent renders its own heading row (e.g. with a See all link). */
+  hideHeading?: boolean
 }) {
   const { t } = useTranslation("app")
   const [innerCategory, setInnerCategory] = useState("")
@@ -57,9 +60,11 @@ export function CatalogProducts({
   const chips = [{ id: ALL_VALUE, label: allLabel }, ...options.map((c) => ({ id: c, label: c }))]
   const toolbar = (
     <View style={styles.toolbar}>
-      <Text style={styles.heading} numberOfLines={1}>
-        {heading}
-      </Text>
+      {hideHeading ? null : (
+        <Text style={styles.heading} numberOfLines={1}>
+          {heading}
+        </Text>
+      )}
       {options.length > 0 && !hideChips ? (
         <FilterChips
           options={chips}
@@ -121,7 +126,7 @@ export function CatalogProducts({
 }
 
 const styles = StyleSheet.create({
-  heading: { fontSize: 20, fontWeight: "700", color: colors.text, letterSpacing: -0.2 },
+  heading: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text, letterSpacing: -0.2 },
   toolbar: {
     gap: 12,
     marginBottom: 16,

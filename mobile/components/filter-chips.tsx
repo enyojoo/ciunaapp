@@ -1,10 +1,9 @@
-import { Pressable, ScrollView, StyleSheet, Text } from "react-native"
-import { colors } from "@/lib/theme"
+import { ChipRow, type ChipOption } from "@/components/ui/chip"
 
-export type FilterChipOption<T extends string> = { id: T; label: string; count?: number }
+export type FilterChipOption<T extends string> = ChipOption<T>
 
 /**
- * One horizontal row of single-choice chips. The selected chip is the only filled one (primary
+ * One horizontal row of single-choice chips. The selected chip is the only filled one (ink
  * fill, white label). Use it for categories, result groups and any other short filter list.
  */
 export function FilterChips<T extends string>({
@@ -18,46 +17,5 @@ export function FilterChips<T extends string>({
   onChange: (id: T) => void
   ariaLabel?: string
 }) {
-  return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.row}
-      accessibilityLabel={ariaLabel}
-    >
-      {options.map((o) => {
-        const on = o.id === value
-        return (
-          <Pressable
-            key={o.id}
-            onPress={() => onChange(o.id)}
-            accessibilityRole="button"
-            accessibilityState={{ selected: on }}
-            hitSlop={{ top: 4, bottom: 4 }}
-            style={[styles.chip, on && styles.chipOn]}
-          >
-            <Text style={[styles.text, on && styles.textOn]} numberOfLines={1}>
-              {o.count != null ? `${o.label} · ${o.count}` : o.label}
-            </Text>
-          </Pressable>
-        )
-      })}
-    </ScrollView>
-  )
+  return <ChipRow options={options} value={value} onChange={onChange} inset={0} accessibilityLabel={ariaLabel} />
 }
-
-const styles = StyleSheet.create({
-  row: { gap: 8, paddingBottom: 4 },
-  chip: {
-    height: 36,
-    paddingHorizontal: 14,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.inputEdge,
-    backgroundColor: colors.surface,
-    justifyContent: "center",
-  },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  text: { fontSize: 14, fontWeight: "600", color: colors.text },
-  textOn: { color: colors.onPrimary },
-})

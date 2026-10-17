@@ -4,6 +4,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { assertHubProductCategoryAllowed } from "@/lib/hub-product-category-validation"
+import { readProductMainCategory, withProductMainCategoryFallback } from "@/lib/product-main-category"
 import { hubMarketplaceLineFromCategory } from "@/lib/hub-slug"
 import { hubProductImageUrlPaymentQrBucketError } from "@/lib/hub-product-image-url"
 import { resolveAdminHubFixedPricing } from "@/lib/hub-product-pricing-server"
@@ -135,6 +136,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     row.service_line_slug = ["food", "mart"].includes(body.service_line_slug)
       ? body.service_line_slug
       : hubMarketplaceLineFromCategory(row.category as string)
+    const mainCategory = readProductMainCategory(row.service_line_slug as string | null, body)
+    if (mainCategory === "invalid") return NextResponse.json({ error: "Unknown main category for this line" }, { status: 400 })
+    if (mainCategory !== undefined) row.main_category = mainCategory
 
     if (row.fulfillment_type === "vendor") {
       let vid: string | null = vendorId !== undefined ? vendorId : null
@@ -177,12 +181,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     // Office "new product" should POST, but tolerate accidental PATCH /products/new.
     if (id === "new") {
-      const { data, error } = await server.from("hub_products").insert(row).select().single()
+      const { data, error } = await withProductMainCategoryFallback(row, (r) => server.from("hub_products").insert(r).select().single())
       if (error) throw error
       return NextResponse.json({ product: data }, { status: 201 })
     }
 
-    const { data, error } = await server.from("hub_products").update(row).eq("id", id).select().maybeSingle()
+    const { data, error } = await withProductMainCategoryFallback(row, (r) => server.from("hub_products").update(r).eq("id", id).select().maybeSingle())
     if (error) throw error
     if (!data) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 })

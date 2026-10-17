@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/empty-state"
 import { ExpertDirectoryCard } from "@/components/expert-catalog"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { LoadError } from "@/components/load-error"
+import { useExpertAreaFilter } from "@/lib/location"
 import { useExpertProfiles } from "@/lib/use-expert-profiles"
 import { languageName } from "@/lib/language-name"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
@@ -17,7 +18,7 @@ import { colors, radius, type as typeSize } from "@/lib/theme"
 export default function ExpertsBrowseScreen() {
   const { t, i18n } = useTranslation("app")
   const { data, loading, error, revalidate } = useExpertProfiles()
-  const profiles = data || []
+  const profiles = useExpertAreaFilter(data || [], []).profiles
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState<string | null>(null)
   const [language, setLanguage] = useState("")

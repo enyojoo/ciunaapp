@@ -166,5 +166,22 @@
   "catalog.fulfilment.pause": "Pausar a loja",
   "catalog.fulfilment.pauseHint": "Os clientes não podem finalizar a compra enquanto a loja está pausada. Use para uma pausa curta; ao retomar, os horários continuam valendo.",
   "catalog.fulfilment.pausedOn": "Pausada: não é possível pedir",
-  "catalog.fulfilment.pausedOff": "Aceitando pedidos"
+  "catalog.fulfilment.pausedOff": "Aceitando pedidos",
+  "catalog.field.appCategory": "Aparece no app em",
+  "catalog.field.appCategoryHint": "Onde os clientes encontram ao navegar em Food ou Mart.",
+  "catalog.appCat.choose": "Escolher…",
+  "catalog.appCat.food.mains": "Pratos principais",
+  "catalog.appCat.food.soups": "Sopas e ensopados",
+  "catalog.appCat.food.grill": "Grelhados",
+  "catalog.appCat.food.snacks": "Lanches e salgados",
+  "catalog.appCat.food.breakfast": "Café da manhã",
+  "catalog.appCat.food.drinks": "Bebidas",
+  "catalog.appCat.mart.staples": "Mercearia",
+  "catalog.appCat.mart.sauces": "Molhos e temperos",
+  "catalog.appCat.mart.snacks": "Lanches e doces",
+  "catalog.appCat.mart.drinks": "Bebidas",
+  "catalog.appCat.mart.fresh": "Frescos e congelados",
+  "catalog.appCat.mart.digital": "Serviços digitais",
+  "catalog.appCat.mart.other": "Outros",
+  "errors.MAIN_CATEGORY_OUTSIDE_LINE": "Essa não é uma das categorias da sua loja."
 }

@@ -44,4 +44,21 @@ config.resolver.extraNodeModules = {
   "@ciuna/shared": path.join(workspaceRoot, "packages/shared"),
 }
 
+// Packages hoisted to the repo root (gesture-handler, flash-list) would otherwise pick up the root's React 18 (web) and
+// crash with two Reacts. These always resolve from mobile/node_modules, whoever imports them.
+const SINGLETONS = ["react", "react-dom", "react-native", "react-native-reanimated", "react-native-worklets", "react-native-screens", "react-native-safe-area-context"]
+const previousResolve = config.resolver.resolveRequest
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  const resolve = previousResolve || context.resolveRequest
+  const pinned = SINGLETONS.find((n) => moduleName === n || moduleName.startsWith(`${n}/`))
+  // Only redirect imports that come from outside mobile/ (hoisted packages); mobile's own imports already resolve here.
+  if (pinned && !context.originModulePath.startsWith(projectRoot + path.sep)) {
+    const local = path.join(projectRoot, "node_modules", pinned)
+    if (fs.existsSync(local)) {
+      return resolve({ ...context, originModulePath: path.join(local, "package.json") }, moduleName, platform)
+    }
+  }
+  return resolve(context, moduleName, platform)
+}
+
 module.exports = withNativeWind(config, { input: "./global.css" })

@@ -1,4 +1,5 @@
-import { Image, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
+import { Image } from "expo-image"
 import { colors } from "@/lib/theme"
 
 function initials(name: string): string {
@@ -8,30 +9,41 @@ function initials(name: string): string {
   return `${parts[0]![0]}${parts[parts.length - 1]![0]}`.toUpperCase()
 }
 
+/** Soft grounds for monograms. The name picks one, so a person keeps the same colour everywhere. */
+const MONOGRAM = [
+  { bg: "#FFF3E8", fg: "#9A3412" },
+  { bg: "#ECFDF5", fg: "#065F46" },
+  { bg: "#EFF6FF", fg: "#1E40AF" },
+  { bg: "#F5F3FF", fg: "#5B21B6" },
+  { bg: "#FDF2F8", fg: "#9D174D" },
+  { bg: "#F0FDFA", fg: "#115E59" },
+  { bg: "#FEFCE8", fg: "#854D0E" },
+] as const
+
+export function monogramColors(name: string) {
+  let h = 0
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0
+  return MONOGRAM[h % MONOGRAM.length]!
+}
+
+/** Round photo, or initials on a soft per-name colour when there is none. */
 export function Avatar({ name, size = 56, uri }: { name: string; size?: number; uri?: string | null }) {
+  const tone = monogramColors(name)
+  const round = { width: size, height: size, borderRadius: size / 2 }
   return (
-    <View
-      style={[
-        styles.wrap,
-        { width: size, height: size, borderRadius: size / 2 },
-      ]}
-    >
+    <View style={[styles.wrap, round, { backgroundColor: uri ? colors.fill : tone.bg }]} accessibilityLabel={name}>
       {uri ? (
-        <Image source={{ uri }} style={{ width: size, height: size, borderRadius: size / 2 }} />
+        <Image source={{ uri }} style={round} contentFit="cover" transition={150} />
       ) : (
-        <Text style={[styles.text, { fontSize: size * 0.38 }]}>{initials(name)}</Text>
+        <Text style={[styles.text, { fontSize: size * 0.38, color: tone.fg }]} maxFontSizeMultiplier={1}>
+          {initials(name)}
+        </Text>
       )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  wrap: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.heroBody,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  text: { fontWeight: "700", color: colors.primaryDeep },
+  wrap: { alignItems: "center", justifyContent: "center", overflow: "hidden" },
+  text: { fontWeight: "700" },
 })

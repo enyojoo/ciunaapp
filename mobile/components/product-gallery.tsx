@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { FlatList, StyleSheet, Text, View, type LayoutChangeEvent } from "react-native"
+import { FlatList, StyleSheet, View, type LayoutChangeEvent } from "react-native"
 import { Image } from "expo-image"
 import { useTranslation } from "react-i18next"
-import { colors, radius, type as typeSize } from "@/lib/theme"
+import { Icon } from "@/components/ui/icon"
+import { colors, radius } from "@/lib/theme"
 
 /** Image urls for a product: the main image first, then the gallery (strings or { url } objects), without repeats. */
 export function productImages(product: { image_url?: string | null; gallery?: unknown }): string[] {
@@ -16,16 +17,16 @@ export function productImages(product: { image_url?: string | null; gallery?: un
   return out
 }
 
-/** One photo, or a swipeable set with dots. Falls back to a "No image" plate. */
-export function ProductGallery({ images }: { images: string[] }) {
+/** One photo, or a swipeable set with dots. Falls back to a neutral plate with a glyph. */
+export function ProductGallery({ images, line }: { images: string[]; /** Picks the placeholder glyph when there is no photo. */ line?: string | null }) {
   const { t } = useTranslation("app")
   const [width, setWidth] = useState(0)
   const [index, setIndex] = useState(0)
 
   if (images.length === 0) {
     return (
-      <View style={[styles.frame, styles.fallback]}>
-        <Text style={styles.noImage}>{t("hub.noImage", { defaultValue: "No image" })}</Text>
+      <View style={[styles.frame, styles.fallback]} accessibilityLabel={t("hub.noImage", { defaultValue: "No image" })}>
+        <Icon name={line === "food" ? "food" : "mart"} size={40} color={colors.subtle} />
       </View>
     )
   }
@@ -69,8 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.paper,
   },
   img: { width: "100%", height: "100%" },
-  fallback: { alignItems: "center", justifyContent: "center", backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
-  noImage: { fontSize: typeSize.meta, color: colors.muted },
+  fallback: { alignItems: "center", justifyContent: "center", backgroundColor: colors.fill },
   dots: { position: "absolute", bottom: 10, left: 0, right: 0, flexDirection: "row", justifyContent: "center", gap: 6 },
   dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: "rgba(255,255,255,0.6)" },
   dotOn: { backgroundColor: colors.surface, width: 18 },

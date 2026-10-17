@@ -166,5 +166,22 @@
   "catalog.fulfilment.pause": "Pause store",
   "catalog.fulfilment.pauseHint": "Customers cannot check out while the store is paused. Use it for a short break; opening hours still apply when you resume.",
   "catalog.fulfilment.pausedOn": "Paused: customers cannot order",
-  "catalog.fulfilment.pausedOff": "Taking orders"
+  "catalog.fulfilment.pausedOff": "Taking orders",
+  "catalog.field.appCategory": "Shows in the app under",
+  "catalog.field.appCategoryHint": "Where customers find it when they browse Food or Mart.",
+  "catalog.appCat.choose": "Choose…",
+  "catalog.appCat.food.mains": "Mains",
+  "catalog.appCat.food.soups": "Soups and stews",
+  "catalog.appCat.food.grill": "Grill",
+  "catalog.appCat.food.snacks": "Snacks and pastries",
+  "catalog.appCat.food.breakfast": "Breakfast",
+  "catalog.appCat.food.drinks": "Drinks",
+  "catalog.appCat.mart.staples": "Pantry staples",
+  "catalog.appCat.mart.sauces": "Sauces and spices",
+  "catalog.appCat.mart.snacks": "Snacks and sweets",
+  "catalog.appCat.mart.drinks": "Drinks",
+  "catalog.appCat.mart.fresh": "Fresh and frozen",
+  "catalog.appCat.mart.digital": "Digital services",
+  "catalog.appCat.mart.other": "Other",
+  "errors.MAIN_CATEGORY_OUTSIDE_LINE": "That isn't one of the categories for your store."
 }

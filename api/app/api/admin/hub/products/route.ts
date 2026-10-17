@@ -4,6 +4,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { assertHubProductCategoryAllowed } from "@/lib/hub-product-category-validation"
+import { readProductMainCategory, withProductMainCategoryFallback } from "@/lib/product-main-category"
 import { hubMarketplaceLineFromCategory } from "@/lib/hub-slug"
 import { sortHubProductRows } from "@/lib/hub-products-sort"
 import { hubProductImageUrlPaymentQrBucketError } from "@/lib/hub-product-image-url"
@@ -98,6 +99,9 @@ export async function POST(request: NextRequest) {
       ? body.service_line_slug
       : hubMarketplaceLineFromCategory(row.category)
     ;(row as Record<string, unknown>).service_line_slug = serviceLineSlug
+    const mainCategory = readProductMainCategory(serviceLineSlug, body)
+    if (mainCategory === "invalid") return NextResponse.json({ error: "Unknown main category for this line" }, { status: 400 })
+    if (mainCategory !== undefined) (row as Record<string, unknown>).main_category = mainCategory
 
     if (vendorId) {
       const { data: v, error: vErr } = await server
@@ -120,7 +124,7 @@ export async function POST(request: NextRequest) {
     }
 
     await validateProduct(row)
-    const { data, error } = await server.from("hub_products").insert(row).select().single()
+    const { data, error } = await withProductMainCategoryFallback(row, (r) => server.from("hub_products").insert(r).select().single())
     if (error) throw error
     return NextResponse.json({ product: data })
   } catch (e) {

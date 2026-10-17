@@ -7,7 +7,7 @@ import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { EXPERT_CATALOG_JSON_CACHE_CONTROL } from "@/lib/expert-http-cache"
 
 const PROFILE_FIELDS =
-  "id, slug, display_name, headline, bio, is_published, category, image_url, capabilities, service_area, meeting_hint, rating_avg, rating_count, created_at, languages, time_zone, credentials, years_experience, is_verified, verification_tier"
+  "id, slug, display_name, headline, bio, is_published, category, main_category, image_url, capabilities, service_area, meeting_hint, rating_avg, rating_count, created_at, languages, time_zone, credentials, years_experience, is_verified, verification_tier"
 
 const SERVICE_FIELDS_BASE =
   "id, title, short_description, sort_order, is_published, pricing_type, hourly_rate, hourly_currency, fixed_amount, fixed_currency, package_label, default_duration_minutes, min_session_minutes, max_session_minutes"

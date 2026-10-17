@@ -267,6 +267,15 @@
    "readme": true
   },
   {
+   "name": "ListRow",
+   "group": "Data display",
+   "subtitle": "Grouped rows for the customer app: icon well, title, subtitle, value, badge, chevron and a destructive row",
+   "height": 760,
+   "width": 900,
+   "page": false,
+   "readme": true
+  },
+  {
    "name": "Pagination",
    "group": "Data display",
    "subtitle": "Numbered pagination for tables and a load-more button for phone lists, with first, middle, last and loading states",
@@ -281,6 +290,24 @@
    "subtitle": "Linear progress with label, stepped progress and the profile-completion checklist progress",
    "height": 1027,
    "width": null,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "SectionHeader",
+   "group": "Navigation",
+   "subtitle": "Block title with an optional text action: title only, with See all, and a long title that truncates",
+   "height": 300,
+   "width": 900,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "StickyActionBar",
+   "group": "Navigation",
+   "subtitle": "Bottom action bar: product page, cart with summary, disabled with a reason, and busy",
+   "height": 520,
+   "width": 900,
    "page": false,
    "readme": true
   },
@@ -663,6 +690,15 @@
    "readme": true
   },
   {
+   "name": "CustomerActivityWeb",
+   "group": "Customer app · Screens",
+   "subtitle": "Desktop web Activities: table of transfers, orders and bookings grouped by day, search, filters and a totals aside, plus first use, no match and error",
+   "height": 2900,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "CustomerAuth",
    "group": "Customer app · Screens",
    "subtitle": "Sign in, register and PIN screens with wrong-password, locked, duplicate-email and wrong-PIN errors, plus Russian and Chinese with the language row",
@@ -773,18 +809,9 @@
   {
    "name": "CustomerTransactions",
    "group": "Customer app · Screens",
-   "subtitle": "Orders tab activity list: transfers, marketplace orders and expert bookings with filters, empty, no match, loading, error, offline and Russian",
+   "subtitle": "Activities tab list: transfers, marketplace orders and expert bookings with filters, empty, no match, loading, error, offline and Russian",
    "height": 2948,
    "width": 1300,
-   "page": true,
-   "readme": true
-  },
-  {
-   "name": "CustomerActivityWeb",
-   "group": "Customer app · Screens",
-   "subtitle": "Desktop web Activities: table of transfers, orders and bookings grouped by day, search, filters and a totals aside, plus first use, no match and error",
-   "height": 2900,
-   "width": 1240,
    "page": true,
    "readme": true
   },

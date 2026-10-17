@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native"
 import { Ban, CircleCheck, CircleX, Clock, RefreshCw, Undo2 } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { statusLabel, statusTone } from "@/lib/transactions"
-import { radius, colors } from "@/lib/theme"
+import { radius, colors, type as typeSize } from "@/lib/theme"
 
 type Tone = ReturnType<typeof statusTone>
 
@@ -29,5 +29,5 @@ export function StatusChip({ status }: { status?: string | null }) {
 
 const styles = StyleSheet.create({
   chip: { flexDirection: "row", alignItems: "center", gap: 4, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
-  text: { fontSize: 12, fontWeight: "600" },
+  text: { fontSize: typeSize.caption, fontWeight: "600" },
 })

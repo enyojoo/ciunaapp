@@ -43,8 +43,7 @@ export function StoreRow({ vendor, onPress }: { vendor: HubVendor; onPress: () =
             {vendor.is_verified ? <VerifiedBadge size={15} tier={vendor.verification_tier} /> : null}
           </View>
           <Text style={styles.meta} numberOfLines={1}>
-            {rated ? `★ ${avg.toFixed(1)} (${count})` : t("hub.store.newStore", { defaultValue: "New store" })}
-            {closed ? ` · ${open.text}` : ""}
+            {[rated ? `★ ${avg.toFixed(1)} (${count})` : null, closed ? open.text : null].filter(Boolean).join(" · ") || " "}
           </Text>
           {location ? (
             <View style={styles.locRow}>
@@ -86,7 +85,7 @@ export function ExpertRow({ expert, onPress }: { expert: ExpertProfile; onPress:
             </Text>
           ) : null}
           <Text style={styles.loc} numberOfLines={1}>
-            {[rated ? `★ ${avg.toFixed(1)} (${count})` : t("experts.directory.isNew", { defaultValue: "New" }), languages].filter(Boolean).join(" · ")}
+            {[rated ? `★ ${avg.toFixed(1)} (${count})` : null, languages].filter(Boolean).join(" · ") || " "}
           </Text>
         </View>
       </Pressable>
@@ -116,10 +115,10 @@ const styles = StyleSheet.create({
   press: { flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 12 },
   thumb: { width: 48, height: 48, borderRadius: 24, overflow: "hidden", backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.border, alignItems: "center", justifyContent: "center" },
   thumbImg: { width: "100%", height: "100%" },
-  initial: { fontSize: 18, fontWeight: "700", color: colors.primaryText },
+  initial: { fontSize: typeSize.headline, fontWeight: "700", color: colors.primaryText },
   body: { flex: 1, minWidth: 0, gap: 2 },
   nameRow: { flexDirection: "row", alignItems: "center", gap: 5 },
-  name: { flexShrink: 1, fontSize: 15, fontWeight: "700", color: colors.text },
+  name: { flexShrink: 1, fontSize: typeSize.label, fontWeight: "700", color: colors.text },
   meta: { fontSize: typeSize.meta, color: colors.muted },
   locRow: { flexDirection: "row", alignItems: "center", gap: 4 },
   loc: { flexShrink: 1, fontSize: typeSize.meta, color: colors.muted },

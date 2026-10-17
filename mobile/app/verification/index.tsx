@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   statusIconVerified: { backgroundColor: colors.successSurface },
   statusIconPending: { backgroundColor: colors.warningSurface },
   statusTitle: {
-    fontSize: 18,
+    fontSize: typeSize.headline,
     fontWeight: "700",
     color: colors.text,
     textAlign: "center",
@@ -203,10 +203,10 @@ const styles = StyleSheet.create({
   limitSub: { marginTop: 2, fontSize: typeSize.meta, color: colors.muted },
   limitLink: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText },
   badge: { borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
-  badgeText: { fontSize: 12, fontWeight: "600" },
+  badgeText: { fontSize: typeSize.caption, fontWeight: "600" },
   sectionLabel: {
     marginBottom: 8,
-    fontSize: 12,
+    fontSize: typeSize.caption,
     fontWeight: "600",
     letterSpacing: 0.35,
     textTransform: "uppercase",

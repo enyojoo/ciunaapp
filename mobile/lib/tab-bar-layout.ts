@@ -5,6 +5,15 @@ const TAB_BAR_PADDING_TOP = 8
 
 const MAIN_TAB_SEGMENTS = new Set(["hub", "activities", "more"])
 
+/**
+ * True on the three tab roots (Home, Activities, Account). The tab bar shows only there: Food, Mart, store, product,
+ * cart and checkout push over it so their own bottom action owns the bottom of the screen.
+ */
+export function isTabRootPath(pathname: string): boolean {
+  const p = pathname.replace(/\/+$/, "") || "/"
+  return p === "/" || p === "/hub" || p === "/activities" || p === "/more"
+}
+
 export function isMainTabSegment(segment: string | undefined): boolean {
   return segment != null && MAIN_TAB_SEGMENTS.has(segment)
 }

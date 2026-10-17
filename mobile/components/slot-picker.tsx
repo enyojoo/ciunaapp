@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { PrimaryButton } from "@/components/primary-button"
 import type { ExpertSlot } from "@/lib/types"
+import { haptic } from "@/lib/haptics"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 type Day = { key: string; date: Date; slots: ExpertSlot[] }
@@ -53,13 +54,19 @@ export function SlotPicker({
     return [...map.values()]
   }, [slots])
 
+  const open = (s: ExpertSlot) => !s.status || s.status === "open"
+  const hasOpen = (d: Day) => d.slots.some(open)
+
   const [dayPick, setDayPick] = useState<string | null>(null)
   const [slotId, setSlotId] = useState<string | null>(null)
-  const activeDay = days.find((d) => d.key === dayPick) || days[0]
+  // Land on the first day that still has a free time, not on a fully booked one.
+  const firstOpenDay = days.find(hasOpen) || days[0]
+  const activeDay = days.find((d) => d.key === dayPick) || firstOpenDay
   const chosen = activeDay?.slots.find((s) => s.id === slotId) || null
+  const nextOpenDay = activeDay && !hasOpen(activeDay) ? days.find((d) => d.date > activeDay.date && hasOpen(d)) : undefined
+  const openSlots = activeDay ? activeDay.slots.filter(open) : []
 
   const time = (iso: string) => new Date(iso).toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" })
-  const open = (s: ExpertSlot) => !s.status || s.status === "open"
 
   if (loading) {
     return (
@@ -79,21 +86,31 @@ export function SlotPicker({
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.strip}>
         {days.map((d) => {
           const on = d.key === activeDay.key
+          const full = !hasOpen(d)
           return (
             <Pressable
               key={d.key}
               accessibilityRole="button"
               accessibilityState={{ selected: on }}
+              accessibilityHint={full ? t("experts.slots.dayFull", { defaultValue: "Full" }) : undefined}
               onPress={() => {
+                haptic.selection()
                 setDayPick(d.key)
                 setSlotId(null)
               }}
-              style={[styles.day, on && styles.dayOn]}
+              style={[styles.day, full && styles.dayFull, on && styles.dayOn]}
             >
               <Text style={[styles.dayWeek, on && styles.dayTextOn]}>
                 {d.date.toLocaleDateString(locale, { weekday: "short" })}
               </Text>
-              <Text style={[styles.dayNum, on && styles.dayTextOn]}>{d.date.getDate()}</Text>
+              <Text style={[styles.dayNum, full && styles.dayNumFull, on && styles.dayTextOn]}>{d.date.getDate()}</Text>
+              {full ? (
+                <Text style={[styles.dayTag, on && styles.dayTextOn]} numberOfLines={1}>
+                  {t("experts.slots.dayFull", { defaultValue: "Full" })}
+                </Text>
+              ) : (
+                <View style={[styles.dot, on && styles.dotOn]} />
+              )}
             </Pressable>
           )
         })}
@@ -102,26 +119,49 @@ export function SlotPicker({
       <Text style={styles.dayLabel}>
         {activeDay.date.toLocaleDateString(locale, { weekday: "long", month: "long", day: "numeric" })}
       </Text>
-      <View style={styles.grid}>
-        {activeDay.slots.map((s) => {
-          const on = s.id === slotId
-          const isOpen = open(s)
-          return (
+      {openSlots.length > 0 ? (
+        // Taken times are left out: a grid of struck-through buttons reads as broken, not as booked.
+        <View style={styles.grid}>
+          {openSlots.map((s) => {
+            const on = s.id === slotId
+            return (
+              <Pressable
+                key={s.id}
+                accessibilityRole="button"
+                accessibilityState={{ selected: on }}
+                onPress={() => {
+                  haptic.selection()
+                  setSlotId(s.id)
+                }}
+                style={[styles.slot, on && styles.slotOn]}
+              >
+                <Text style={[styles.slotText, on && styles.slotTextOn]}>{time(s.slot_start)}</Text>
+              </Pressable>
+            )
+          })}
+        </View>
+      ) : (
+        <View style={styles.noneLeft}>
+          <Text style={styles.empty}>{t("experts.slots.noneLeft", { defaultValue: "No times left on this day." })}</Text>
+          {nextOpenDay ? (
             <Pressable
-              key={s.id}
               accessibilityRole="button"
-              accessibilityState={{ selected: on, disabled: !isOpen }}
-              disabled={!isOpen}
-              onPress={() => setSlotId(s.id)}
-              style={[styles.slot, on && styles.slotOn, !isOpen && styles.slotOff]}
+              hitSlop={8}
+              onPress={() => {
+                setDayPick(nextOpenDay.key)
+                setSlotId(null)
+              }}
             >
-              <Text style={[styles.slotText, on && styles.slotTextOn, !isOpen && styles.slotTextOff]}>
-                {time(s.slot_start)}
+              <Text style={styles.jump}>
+                {t("experts.slots.jumpNext", {
+                  day: nextOpenDay.date.toLocaleDateString(locale, { weekday: "short", month: "short", day: "numeric" }),
+                  defaultValue: "Next available: {{day}}",
+                })}
               </Text>
             </Pressable>
-          )
-        })}
-      </View>
+          ) : null}
+        </View>
+      )}
 
       <Text style={styles.zone}>
         {t("experts.slots.timezone", { zone: zoneName(locale, new Date(activeDay.date)), defaultValue: "Times shown in your time zone ({{zone}})" })}
@@ -153,7 +193,7 @@ const styles = StyleSheet.create({
   strip: { gap: 8 },
   day: {
     width: 56,
-    minHeight: 64,
+    minHeight: 72,
     borderRadius: radius.row,
     borderWidth: 1,
     borderColor: colors.border,
@@ -162,10 +202,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 2,
   },
-  dayOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  dayWeek: { fontSize: 12, fontWeight: "600", color: colors.muted },
-  dayNum: { fontSize: 18, fontWeight: "700", color: colors.text },
-  dayTextOn: { color: colors.onPrimary },
+  dayOn: { backgroundColor: colors.selected, borderColor: colors.selected },
+  dayFull: { backgroundColor: colors.paper },
+  dayNumFull: { color: colors.subtle },
+  dayTag: { fontSize: typeSize.caption, fontWeight: "600", color: colors.muted },
+  dot: { width: 5, height: 5, borderRadius: 3, backgroundColor: colors.success, marginTop: 2 },
+  dotOn: { backgroundColor: colors.onSelected },
+  dayWeek: { fontSize: typeSize.caption, fontWeight: "600", color: colors.muted },
+  dayNum: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text },
+  dayTextOn: { color: colors.onSelected },
   dayLabel: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   grid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   slot: {
@@ -178,12 +223,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  slotOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  slotOff: { backgroundColor: colors.paper },
-  slotText: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  slotTextOn: { color: colors.onPrimary },
-  slotTextOff: { color: colors.muted, textDecorationLine: "line-through" },
+  slotOn: { backgroundColor: colors.selected, borderColor: colors.selected },
+  slotText: { fontSize: typeSize.body, fontWeight: "600", color: colors.text, fontVariant: ["tabular-nums"] },
+  slotTextOn: { color: colors.onSelected },
   skeleton: { backgroundColor: colors.paper, borderColor: colors.paper },
   zone: { fontSize: typeSize.meta, color: colors.muted },
   empty: { fontSize: typeSize.body, color: colors.muted },
+  noneLeft: { gap: 8, paddingVertical: 8 },
+  jump: { fontSize: typeSize.body, fontWeight: "600", color: colors.primaryText },
 })

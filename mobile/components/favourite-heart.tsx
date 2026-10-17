@@ -2,6 +2,8 @@ import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from "react-nat
 import { Heart } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { useFavourites, type FavouriteType } from "@/lib/favourites"
+import { Icon } from "@/components/ui/icon"
+import { NAV_ICON, NavAction } from "@/components/ui/nav-bar"
 import { colors, shadow } from "@/lib/theme"
 
 /**
@@ -12,10 +14,13 @@ export function FavouriteHeart({
   type,
   id,
   style,
+  placement = "card",
 }: {
   type: FavouriteType
   id: string
   style?: StyleProp<ViewStyle>
+  /** `bar` is the nav-bar action (44 pt slot, ink outline); `card` is the white disc on a photo. */
+  placement?: "card" | "bar"
 }) {
   const { t } = useTranslation("app")
   const { isFav, toggle, unavailable } = useFavourites()
@@ -24,6 +29,13 @@ export function FavouriteHeart({
   const label = on
     ? t("favourites.removeAria", { defaultValue: "Remove from favourites" })
     : t("favourites.addAria", { defaultValue: "Add to favourites" })
+  if (placement === "bar") {
+    return (
+      <NavAction label={label} onPress={() => void toggle(type, id)} selected={on}>
+        <Icon name="heart" size={NAV_ICON} color={on ? colors.primaryText : colors.text} filled={on} />
+      </NavAction>
+    )
+  }
   return (
     <Pressable
       onPress={() => void toggle(type, id)}

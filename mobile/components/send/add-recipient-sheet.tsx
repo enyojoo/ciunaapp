@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
-  title: { flex: 1, fontSize: 18, fontWeight: "700", color: colors.text },
+  title: { flex: 1, fontSize: typeSize.headline, fontWeight: "700", color: colors.text },
   close: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   scroll: { maxHeight: 520 },
   scrollContent: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 28, gap: 8 },

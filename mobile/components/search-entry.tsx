@@ -2,6 +2,8 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
 import { Search } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
+import { Icon } from "@/components/ui/icon"
+import { NAV_ICON, NavAction } from "@/components/ui/nav-bar"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
 export function searchHref(line?: "food" | "mart" | "experts") {
@@ -27,22 +29,14 @@ export function SearchEntryField({ line, embedded }: { line?: "food" | "mart" | 
   )
 }
 
-/** Round icon button for the orange hero on Food, Mart and Experts. */
+/** Search as a nav-bar action on Food, Mart and Experts. */
 export function SearchHeroButton({ line }: { line: "food" | "mart" | "experts" }) {
   const { t } = useTranslation("app")
   const router = useRouter()
   return (
-    <Pressable
-      onPress={() => router.push(searchHref(line))}
-      accessibilityRole="button"
-      accessibilityLabel={t("search.openAria", { defaultValue: "Search" })}
-      hitSlop={8}
-      style={styles.heroHit}
-    >
-      <View style={styles.heroChip}>
-        <Search size={20} color={colors.text} strokeWidth={2.2} />
-      </View>
-    </Pressable>
+    <NavAction label={t("search.openAria", { defaultValue: "Search" })} onPress={() => router.push(searchHref(line))}>
+      <Icon name="search" size={NAV_ICON} color={colors.text} />
+    </NavAction>
   )
 }
 
@@ -61,15 +55,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   text: { flex: 1, fontSize: typeSize.body, color: colors.muted },
-  heroHit: { width: 40, height: 40, alignItems: "center", justifyContent: "center" },
-  heroChip: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "center",
-  },
 })

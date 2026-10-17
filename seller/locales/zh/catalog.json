@@ -166,5 +166,22 @@
   "catalog.fulfilment.pause": "暂停店铺",
   "catalog.fulfilment.pauseHint": "店铺暂停期间，顾客无法下单。适合短暂休息；恢复后营业时间仍然生效。",
   "catalog.fulfilment.pausedOn": "已暂停：顾客无法下单",
-  "catalog.fulfilment.pausedOff": "正在接单"
+  "catalog.fulfilment.pausedOff": "正在接单",
+  "catalog.field.appCategory": "在应用中显示于",
+  "catalog.field.appCategoryHint": "顾客浏览美食或超市时在哪里找到它。",
+  "catalog.appCat.choose": "请选择…",
+  "catalog.appCat.food.mains": "主菜",
+  "catalog.appCat.food.soups": "汤与炖菜",
+  "catalog.appCat.food.grill": "烧烤",
+  "catalog.appCat.food.snacks": "小吃与点心",
+  "catalog.appCat.food.breakfast": "早餐",
+  "catalog.appCat.food.drinks": "饮品",
+  "catalog.appCat.mart.staples": "主食杂货",
+  "catalog.appCat.mart.sauces": "酱料与香料",
+  "catalog.appCat.mart.snacks": "零食与甜品",
+  "catalog.appCat.mart.drinks": "饮品",
+  "catalog.appCat.mart.fresh": "生鲜与冷冻",
+  "catalog.appCat.mart.digital": "数字服务",
+  "catalog.appCat.mart.other": "其他",
+  "errors.MAIN_CATEGORY_OUTSIDE_LINE": "这不是你店铺可用的类别。"
 }

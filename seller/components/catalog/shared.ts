@@ -6,6 +6,8 @@ export interface Product {
   short_description: string | null
   long_description: string | null
   category: string
+  /** Meal type (Food) or aisle (Mart) the customer app shows the product under. */
+  main_category?: string | null
   status: "draft" | "live" | "archived"
   list_price: number | string | null
   sale_price: number | string | null

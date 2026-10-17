@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   tallSheet: { height: "80%", maxHeight: "80%" },
   sheetInner: { flex: 1, minHeight: 0 },
   head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 16 },
-  title: { fontSize: 18, fontWeight: "600", color: colors.text },
+  title: { fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   close: { height: 44, width: 44, alignItems: "center", justifyContent: "center" },
   searchBox: {
     marginHorizontal: 20,

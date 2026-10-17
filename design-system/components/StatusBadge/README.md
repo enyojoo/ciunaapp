@@ -24,5 +24,7 @@ Areas: order, booking, payout, seller/merchant application, review, payment each
 ## Upgrade
 Replaces the ad-hoc status colours in web and mobile `status-chip` and Office tables. Unknown words fall back to neutral and log a warning.
 
+Expo: `Badge` in `mobile/components/ui/badge.tsx` (success, warning, danger, neutral, primary) with an optional leading icon. `StatusChip` keeps the transaction status mapping and should move onto `Badge`.
+
 ## Code
 `packages/ui-web/src/status-badge.tsx`

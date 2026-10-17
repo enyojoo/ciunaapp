@@ -63,8 +63,8 @@ export default function HubProductDetailScreen() {
       backHref={hubLineHomePath(line)}
       trailing={
         <>
-          {productId ? <FavouriteHeart type="product" id={String(productId)} style={styles.barHeart} /> : null}
-          {marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
+          {productId ? <FavouriteHeart type="product" id={String(productId)} placement="bar" /> : null}
+          {marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} /> : null}
         </>
       }
     />
@@ -147,7 +147,7 @@ export default function HubProductDetailScreen() {
         edges={["left", "right"]}
         contentStyle={marketplace ? { ...NARROW_COLUMN, ...styles.contentWithCartBar } : NARROW_COLUMN}
       >
-        <ProductGallery images={productImages(product)} />
+        <ProductGallery images={productImages(product)} line={line} />
         <Text style={styles.title}>{product.title}</Text>
         <View style={styles.priceRow}>
           <PriceTag
@@ -282,7 +282,6 @@ export default function HubProductDetailScreen() {
 
 const styles = StyleSheet.create({
   // A plain 40px icon button in the top bar, the same size as the back chip and the cart button.
-  barHeart: { position: "relative", top: 0, right: 0, width: 40, height: 40, borderRadius: 20, backgroundColor: "transparent", shadowOpacity: 0, elevation: 0 },
   skelImage: { width: "100%", aspectRatio: 4 / 3, borderRadius: radius.card, backgroundColor: colors.paper, marginBottom: 12 },
   skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.paper, marginBottom: 8 },
   stock: { marginTop: 4, fontSize: typeSize.meta, fontWeight: "600", color: colors.muted },
@@ -290,7 +289,7 @@ const styles = StyleSheet.create({
   // A small gap so the last content (the recommendations rail) doesn't end up pressed right up
   // against the floating cart bar — not a big empty void at the end of the scroll.
   contentWithCartBar: { paddingBottom: 56 },
-  title: { fontSize: 20, fontWeight: "600", color: colors.text },
+  title: { fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   cueRow: { marginTop: 8, flexDirection: "row", flexWrap: "wrap", gap: 6 },
   cueChip: {
     borderRadius: 999,
@@ -300,7 +299,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     backgroundColor: colors.surface,
   },
-  cueText: { fontSize: 12, fontWeight: "600", color: colors.text },
+  cueText: { fontSize: typeSize.caption, fontWeight: "600", color: colors.text },
   vendorHit: { marginTop: 6, alignSelf: "flex-start", maxWidth: "100%" },
   desc: { marginTop: 10, fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   priceRow: { marginTop: 20 },
@@ -317,5 +316,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   stepperBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
-  stepperValue: { fontSize: 18, fontWeight: "700", color: colors.primary },
+  stepperValue: { fontSize: typeSize.headline, fontWeight: "700", color: colors.primary },
 })

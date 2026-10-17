@@ -1,19 +1,15 @@
 /**
- * Home banner content: what Ciuna is for, not what the services do (the tiles already show those).
- * Ciuna is a home for people living abroad: money, groceries and people from home, in one place.
- * Banners are data; Office will supply paid ads later (`ad: true`). Copy: `home.slide.<id>.*`.
+ * Home hero: Ciuna's promise in three short statements, never a repeat of the service grid under it. Statements, not
+ * calls to action, so the slides carry no buttons. Copy: `home.slide.<id>.title|body`. Office will supply paid
+ * slides later (`ad: true`, with an `href`).
  */
-export type HomeSlideTone = "warm" | "teal" | "blue"
+export type HomeSlideId = "sorted" | "community" | "pay"
 
 export interface HomeSlide {
-  id: string
-  tone: HomeSlideTone
-  href: string
+  id: HomeSlideId
+  /** Only paid or linked slides open something; the promise slides do not. */
+  href?: string
   ad?: boolean
 }
 
-export const HOME_SLIDES: HomeSlide[] = [
-  { id: "belong", tone: "warm", href: "/hub" },
-  { id: "language", tone: "teal", href: "/experts" },
-  { id: "family", tone: "blue", href: "/send" },
-]
+export const HOME_SLIDES: HomeSlide[] = [{ id: "sorted" }, { id: "community" }, { id: "pay" }]

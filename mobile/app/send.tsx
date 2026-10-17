@@ -41,7 +41,7 @@ import { seedTransactionCache } from "@/lib/use-transaction"
 import { useSendPaymentMethods } from "@/lib/use-send-payment-methods"
 import { isSendVerificationGateEnabled } from "@/lib/send-verification-gate"
 import type { CombinedTransaction } from "@/lib/types"
-import { colors, radius } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 type BitbankerPayment = {
   amount: number
@@ -458,12 +458,12 @@ function FrameIf({ desktop, aside, children }: { desktop: boolean; aside: React.
 const styles = StyleSheet.create({
   sendLoading: { paddingVertical: 48, alignItems: "center" },
   recipientPick: { gap: 12 },
-  recipientPickTitle: { fontSize: 22, fontWeight: "700", color: colors.text, letterSpacing: -0.3 },
+  recipientPickTitle: { fontSize: typeSize.title, fontWeight: "700", color: colors.text, letterSpacing: -0.3 },
   recipientPickCard: { gap: 16, padding: 16, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
   recipientPickBody: { gap: 2 },
-  recipientPickLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
-  recipientPickName: { fontSize: 18, fontWeight: "700", color: colors.text },
-  recipientPickMeta: { fontSize: 13, color: colors.muted },
+  recipientPickLabel: { fontSize: typeSize.caption, fontWeight: "600", color: colors.muted },
+  recipientPickName: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text },
+  recipientPickMeta: { fontSize: typeSize.meta, color: colors.muted },
   verifyBanner: {
     flexDirection: "row",
     alignItems: "center",
@@ -480,11 +480,11 @@ const styles = StyleSheet.create({
   verifyBannerTitle: {
     flex: 1,
     minWidth: 0,
-    fontSize: 12,
+    fontSize: typeSize.caption,
     lineHeight: 16,
     fontWeight: "600",
     color: colors.text,
   },
-  verifyBannerAction: { fontSize: 12, fontWeight: "700", color: colors.primary },
+  verifyBannerAction: { fontSize: typeSize.caption, fontWeight: "700", color: colors.primary },
   footer: { marginTop: 20, gap: 10 },
 })

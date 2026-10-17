@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   webTitle: {
-    fontSize: 18,
+    fontSize: typeSize.headline,
     fontWeight: "700",
     color: colors.text,
     textAlign: "center",

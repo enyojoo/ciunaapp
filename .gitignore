@@ -132,3 +132,6 @@ design-system/.audit/
 test-results/
 playwright-report/
 .audit/
+
+# The Next.js customer site (web/) was removed: the customer app is Expo (native + web) in mobile/. Its history stays in git.
+/web/

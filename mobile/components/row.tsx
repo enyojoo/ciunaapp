@@ -75,5 +75,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     paddingHorizontal: 16,
   },
-  heading: { paddingTop: 16, fontSize: 17, fontWeight: "600", color: colors.text },
+  heading: { paddingTop: 16, fontSize: typeSize.body, fontWeight: "600", color: colors.text },
 })

@@ -141,7 +141,7 @@ export default function ExpertServiceDetailScreen() {
 
 const styles = StyleSheet.create({
   center: { paddingVertical: 60, alignItems: "center" },
-  title: { fontSize: 20, fontWeight: "600", color: colors.text },
+  title: { fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   expertHit: { marginTop: 10, flexDirection: "row", alignItems: "center", gap: 8, alignSelf: "flex-start", maxWidth: "100%" },
   expertPhoto: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.paper },
   expertFallback: {
@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  expertInitial: { fontSize: 12, fontWeight: "700", color: colors.muted },
+  expertInitial: { fontSize: typeSize.caption, fontWeight: "700", color: colors.muted },
   expertName: { flexShrink: 1, fontSize: typeSize.body, fontWeight: "500", color: colors.text },
   desc: { marginTop: 14, fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   meta: { marginTop: 10, fontSize: typeSize.meta, color: colors.muted },
   priceBlock: { marginTop: 20, marginBottom: 16 },
   more: { marginTop: 32 },
-  moreHeading: { marginBottom: 14, fontSize: 18, fontWeight: "600", color: colors.text },
+  moreHeading: { marginBottom: 14, fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   grid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", rowGap: 12 },
 })

@@ -18,7 +18,6 @@ import {
   ShoppingBag,
   Sparkles,
   UtensilsCrossed,
-  Wallet,
 } from "lucide-react-native"
 import { resolveTransactionListLine, transactionListLineIconKind } from "@ciuna/shared"
 import { EmptyState } from "@/components/empty-state"
@@ -35,28 +34,18 @@ import {
   isReferralPayout,
   matchesFilterChip,
   matchesSearch,
+  transactionTitle as counterparty,
 } from "@/lib/transactions"
 import { useCachedQuery } from "@/lib/use-cached-query"
 import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
-import { seedTransactionCache } from "@/lib/use-transaction"
+import { TX_TTL_MS, useTransactions } from "@/lib/use-transactions"
 import { useChatUnread } from "@/lib/order-chat"
 import { OrdersDesktop } from "@/components/activity-desktop"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
-import { colors, radius, type as typeSize } from "@/lib/theme"
+import { colors, radius, space, textStyles, type as typeSize } from "@/lib/theme"
 import type { CombinedTransaction } from "@/lib/types"
-
-const TX_TTL_MS = 2 * 60_000
-
-async function fetchTransactions(): Promise<CombinedTransaction[]> {
-  const res = await fetchWithAuth("/api/transactions?type=all&limit=100")
-  if (!res.ok) throw new Error("Failed to load transactions")
-  const data = (await res.json()) as { transactions?: CombinedTransaction[] }
-  const rows = data.transactions || []
-  seedTransactionCache(rows)
-  return rows
-}
 
 type Volume = { amount: number; currency: string }
 
@@ -66,23 +55,6 @@ async function fetchVolume(): Promise<Volume | null> {
   const data = (await res.json()) as { volume?: number; baseCurrency?: string }
   if (data.volume == null || !data.baseCurrency) return null
   return { amount: data.volume, currency: data.baseCurrency }
-}
-
-function counterparty(
-  tx: CombinedTransaction,
-  t: (key: string, options?: Record<string, unknown>) => string,
-): string {
-  if (isReferralPayout(tx)) return t("transactions.referralPayout")
-  const snap = tx.hub_snapshot
-  if (snap && typeof snap.productTitle === "string" && snap.productTitle.trim()) return snap.productTitle
-  if (tx.recipient?.full_name?.trim()) {
-    return t("orders.rowSentTo", {
-      name: tx.recipient.full_name,
-      defaultValue: `Sent to ${tx.recipient.full_name}`,
-    })
-  }
-  if (tx.delivery_address_line?.trim()) return tx.delivery_address_line
-  return t("orders.rowHubOrder", { defaultValue: "Hub order" })
 }
 
 function RowIcon({ tx }: { tx: CombinedTransaction }) {
@@ -120,9 +92,10 @@ export default function TransactionsScreen() {
   const searchFocus = useInputFocusRing()
   const tabContentPadding = useTabContentPadding()
 
-  const txKey = user ? `ciuna_transactions_${user.id}` : null
-  const volKey = user ? `ciuna_completed_volume_${user.id}` : null
-  const tx = useCachedQuery<CombinedTransaction[]>(txKey, fetchTransactions, { ttlMs: TX_TTL_MS })
+  // The spend total only shows on the desktop web table. On the phone it summed every currency into one figure, so
+  // the list leads instead (the per-currency spending view comes later).
+  const volKey = user && desktop ? `ciuna_completed_volume_${user.id}` : null
+  const tx = useTransactions(user?.id)
   const vol = useCachedQuery<Volume | null>(volKey, fetchVolume, { ttlMs: TX_TTL_MS })
 
   const rows = tx.data || []
@@ -193,25 +166,6 @@ export default function TransactionsScreen() {
   return (
     <Screen>
       <Text style={styles.title}>{t("transactions.title", { defaultValue: "Activities" })}</Text>
-
-      <View style={styles.summaryRow}>
-        <View style={styles.summaryCard}>
-          <View style={styles.summaryIcon}>
-            <Wallet size={16} color={colors.primaryDeep} strokeWidth={2.2} />
-          </View>
-          <Text style={styles.summaryLabel}>{t("orders.totalVolume")}</Text>
-          <Text style={styles.summaryValue} numberOfLines={1}>
-            {volume ? formatMoney(volume.amount, volume.currency) : "—"}
-          </Text>
-        </View>
-        <View style={styles.summaryCard}>
-          <View style={styles.summaryIcon}>
-            <ArrowUpRight size={16} color={colors.primaryDeep} strokeWidth={2.2} />
-          </View>
-          <Text style={styles.summaryLabel}>{t("orders.totalTransactions")}</Text>
-          <Text style={styles.summaryValue}>{completedCount}</Text>
-        </View>
-      </View>
 
       <View style={[styles.searchBox, searchFocus.boxStyle]}>
         <Search size={16} color={colors.muted} />
@@ -330,34 +284,12 @@ const styles = StyleSheet.create({
   orderTrail: { flexDirection: "row", alignItems: "center", gap: 6 },
   unreadDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.primary },
   title: {
-    paddingHorizontal: 20,
-    paddingTop: 4,
+    ...textStyles.largeTitle,
+    paddingHorizontal: space.gutter,
+    paddingTop: 8,
     paddingBottom: 12,
-    fontSize: 24,
-    fontWeight: "700",
     color: colors.text,
   },
-  summaryRow: { flexDirection: "row", gap: 12, paddingHorizontal: 20, marginBottom: 12 },
-  summaryCard: {
-    flex: 1,
-    borderRadius: radius.card,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    padding: 14,
-    gap: 4,
-  },
-  summaryIcon: {
-    width: 28,
-    height: 28,
-    marginBottom: 2,
-    borderRadius: 9,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.heroBody,
-  },
-  summaryLabel: { fontSize: 12, color: colors.muted },
-  summaryValue: { fontSize: 17, fontWeight: "700", color: colors.text },
   searchBox: {
     marginHorizontal: 20,
     marginBottom: 12,
@@ -384,17 +316,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: "600", color: colors.muted },
+  chipText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.muted },
   chipTextActive: { color: colors.onPrimary },
   list: { flex: 1 },
   listContent: { paddingHorizontal: 20, paddingBottom: 40 },
   skeletonRow: { height: 64, backgroundColor: colors.paper, borderColor: colors.paper },
-  offline: { fontSize: 12, color: colors.muted, textAlign: "center", marginBottom: 8 },
+  offline: { fontSize: typeSize.caption, color: colors.muted, textAlign: "center", marginBottom: 8 },
   group: { marginBottom: 8 },
   groupHeading: {
     marginTop: 12,
     marginBottom: 4,
-    fontSize: 12,
+    fontSize: typeSize.caption,
     fontWeight: "700",
     color: colors.muted,
     textTransform: "uppercase",
@@ -420,7 +352,7 @@ const styles = StyleSheet.create({
   },
   rowBody: { flex: 1, minWidth: 0, gap: 2 },
   rowTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  rowMeta: { fontSize: 12, color: colors.muted },
+  rowMeta: { fontSize: typeSize.caption, color: colors.muted },
   rowTrail: { alignItems: "flex-end", gap: 4 },
   rowAmount: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
 })

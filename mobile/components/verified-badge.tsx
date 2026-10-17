@@ -3,7 +3,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from "react-native"
 import { BadgeCheck } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { PrimaryButton } from "./primary-button"
-import { colors, radius } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /**
  * Compact verified mark shown after a seller or expert name. Success colour with an icon (never
@@ -55,7 +55,7 @@ export function VerifiedBadge({ size = 14, label, kind = "vendor", tier, explain
 const styles = StyleSheet.create({
   scrim: { flex: 1, backgroundColor: "rgba(17,24,39,0.55)", justifyContent: "center", padding: 24 },
   card: { backgroundColor: colors.surface, borderRadius: radius.card + 4, padding: 20, gap: 8 },
-  title: { fontSize: 18, fontWeight: "700", color: colors.text },
-  body: { fontSize: 15, lineHeight: 22, color: colors.muted },
+  title: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text },
+  body: { fontSize: typeSize.label, lineHeight: 22, color: colors.muted },
   actions: { marginTop: 12 },
 })

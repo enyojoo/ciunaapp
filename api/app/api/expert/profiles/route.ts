@@ -8,7 +8,7 @@ import { formatCurrencySymbolOnly } from "@/utils/currency"
 import { fromPrice, nextAvailable } from "@/lib/expert-availability"
 
 const LIST_SELECT =
-  "id, slug, display_name, headline, bio, is_published, category, image_url, service_area, rating_avg, rating_count, created_at, languages, time_zone, credentials, years_experience, is_verified, verification_tier"
+  "id, slug, display_name, headline, bio, is_published, category, main_category, image_url, service_area, rating_avg, rating_count, created_at, languages, time_zone, credentials, years_experience, is_verified, verification_tier"
 
 export const GET = withErrorHandling(async (request: NextRequest) => {
   const { searchParams } = new URL(request.url)

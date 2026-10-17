@@ -115,3 +115,40 @@ export function groupByDay(rows: CombinedTransaction[], t: TFunc, locale = "en")
   }
   return groups
 }
+
+/** What the row is about: the product, the recipient, the delivery address or a generic order. */
+export function transactionTitle(tx: CombinedTransaction, t: TFunc): string {
+  if (isReferralPayout(tx)) return t("transactions.referralPayout")
+  const snap = tx.hub_snapshot as
+    | { productTitle?: unknown; vendorName?: unknown; items?: { title?: unknown; quantity?: unknown }[] }
+    | null
+    | undefined
+  // Cart orders store "Vendor · count" as productTitle, which reads as noise in a list. Name what was bought instead:
+  // the item for a one-item order, the vendor (or first item + count) for several.
+  const items = Array.isArray(snap?.items) ? snap.items.filter((i) => typeof i?.title === "string" && i.title.trim()) : []
+  if (items.length === 1) return String(items[0]!.title)
+  if (items.length > 1) {
+    const vendor = typeof snap?.vendorName === "string" ? snap.vendorName.trim() : ""
+    return vendor || t("orders.rowItemsMore", { title: String(items[0]!.title), count: items.length - 1, defaultValue: `${String(items[0]!.title)} +${items.length - 1}` })
+  }
+  if (snap && typeof snap.productTitle === "string" && snap.productTitle.trim()) return snap.productTitle
+  if (tx.recipient?.full_name?.trim()) {
+    return t("orders.rowSentTo", {
+      name: tx.recipient.full_name,
+      defaultValue: `Sent to ${tx.recipient.full_name}`,
+    })
+  }
+  if (tx.delivery_address_line?.trim()) return tx.delivery_address_line
+  return t("orders.rowHubOrder", { defaultValue: "Hub order" })
+}
+
+const ACTIVE_WINDOW_MS = 14 * 24 * 60 * 60 * 1000
+
+/** Still moving: pending or processing, started in the last 14 days (older ones are stale, not "now"). */
+export function isActiveTransaction(tx: CombinedTransaction, now = Date.now()): boolean {
+  if (isReferralPayout(tx)) return false
+  const tone = statusTone(tx.status)
+  if (tone !== "pending" && tone !== "processing") return false
+  const created = tx.created_at ? new Date(tx.created_at).getTime() : NaN
+  return Number.isFinite(created) && now - created <= ACTIVE_WINDOW_MS
+}

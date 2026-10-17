@@ -58,9 +58,9 @@ export default function VendorScreen() {
       backHref={hubLineHomePath(line)}
       trailing={
         <>
-          {vendor ? <ShareButton url={storeLink(line, vendorSlug)} title={vendor.name} /> : null}
-          {vendorId ? <FavouriteHeart type="vendor" id={vendorId} style={styles.barHeart} /> : null}
-          {cartMode ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} variant="plain" /> : null}
+          {vendor ? <ShareButton url={storeLink(line, vendorSlug)} title={vendor.name} placement="bar" /> : null}
+          {vendorId ? <FavouriteHeart type="vendor" id={vendorId} placement="bar" /> : null}
+          {cartMode ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} /> : null}
         </>
       }
     />
@@ -193,11 +193,10 @@ const styles = StyleSheet.create({
   infoRow: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
   infoIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: "center", justifyContent: "center" },
   infoBody: { flex: 1, minWidth: 0, gap: 2 },
-  infoLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
-  infoValue: { fontSize: 15, lineHeight: 21, color: colors.text },
+  infoLabel: { fontSize: typeSize.caption, fontWeight: "600", color: colors.muted },
+  infoValue: { fontSize: typeSize.label, lineHeight: 21, color: colors.text },
   cover: { height: 128, borderRadius: 20, overflow: "hidden", backgroundColor: colors.paper },
   // A plain 40px icon button in the top bar, the same size as the back chip and the cart button.
-  barHeart: { position: "relative", top: 0, right: 0, width: 40, height: 40, borderRadius: 20, backgroundColor: "transparent", shadowOpacity: 0, elevation: 0 },
   skelFill: { backgroundColor: colors.paper, borderColor: colors.paper },
   skelBar: { height: 14, borderRadius: 7, backgroundColor: colors.paper },
   contentWithCartBar: { paddingBottom: 56 },
@@ -221,6 +220,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     gap: 6,
   },
-  notesLabel: { fontSize: 12, fontWeight: "700", color: colors.text },
+  notesLabel: { fontSize: typeSize.caption, fontWeight: "700", color: colors.text },
   notesBody: { fontSize: typeSize.meta, lineHeight: 18, color: colors.text },
 })

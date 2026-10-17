@@ -17,13 +17,17 @@ const TONE: Record<string, { bg: string; fg: string; Icon: typeof Package }> = {
   in_progress: { bg: colors.warningSurface, fg: colors.warningText, Icon: Package },
   fulfilled: { bg: colors.successSurface, fg: colors.success, Icon: CheckCircle2 },
   cancelled: { bg: colors.neutralSurface, fg: colors.neutralText, Icon: XCircle },
+  expired: { bg: colors.neutralSurface, fg: colors.neutralText, Icon: Clock },
 }
 
 /** One icon, one status badge and a plain sentence: where this order is right now. */
 export function OrderStatusHeader({ order, reason }: { order: OrderLike; /** Why it was cancelled, when known. */ reason?: string }) {
   const { t } = useTranslation("app")
-  const state = order.fulfillment_state in TONE ? order.fulfillment_state : "awaiting_payment"
-  const tone = TONE[state]
+  // An unpaid order whose payment window closed stays `awaiting_payment` on fulfilment; show it as expired so the
+  // header and the payment line below never disagree.
+  const paymentExpired = order.payment_state === "expired" && order.fulfillment_state === "awaiting_payment"
+  const state = paymentExpired ? "expired" : order.fulfillment_state in TONE ? order.fulfillment_state : "awaiting_payment"
+  const tone = TONE[state]!
   const Icon = tone.Icon
   return (
     <View style={styles.card}>
@@ -91,13 +95,13 @@ const styles = StyleSheet.create({
   icon: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center" },
   body: { flex: 1, minWidth: 0, gap: 6, alignItems: "flex-start" },
   badge: { borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3 },
-  badgeText: { fontSize: 12, fontWeight: "600" },
+  badgeText: { fontSize: typeSize.caption, fontWeight: "600" },
   line: { fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   reason: { fontSize: typeSize.meta, lineHeight: 18, color: colors.muted },
   place: { gap: 14, padding: 14, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
   row: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
   rowIcon: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: "center", justifyContent: "center" },
   rowBody: { flex: 1, minWidth: 0, gap: 2 },
-  rowLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
-  rowValue: { fontSize: 15, lineHeight: 21, color: colors.text },
+  rowLabel: { fontSize: typeSize.caption, fontWeight: "600", color: colors.muted },
+  rowValue: { fontSize: typeSize.label, lineHeight: 21, color: colors.text },
 })

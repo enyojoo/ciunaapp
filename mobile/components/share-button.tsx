@@ -3,10 +3,23 @@ import { Share2 } from "lucide-react-native"
 import * as Clipboard from "expo-clipboard"
 import { useTranslation } from "react-i18next"
 import { useToast } from "@/components/toast-provider"
+import { Icon } from "@/components/ui/icon"
+import { NAV_ICON, NavAction } from "@/components/ui/nav-bar"
 import { colors } from "@/lib/theme"
 
 /** Shares a link: the system share sheet on phones, the browser's share or a copied link on the web. */
-export function ShareButton({ url, title, style }: { url: string; title: string; style?: StyleProp<ViewStyle> }) {
+export function ShareButton({
+  url,
+  title,
+  style,
+  placement = "inline",
+}: {
+  url: string
+  title: string
+  style?: StyleProp<ViewStyle>
+  /** `bar` is the nav-bar action (44 pt slot, ink glyph). */
+  placement?: "inline" | "bar"
+}) {
   const { t } = useTranslation("app")
   const { showSuccess } = useToast()
   const onPress = async () => {
@@ -22,6 +35,13 @@ export function ShareButton({ url, title, style }: { url: string; title: string;
     } catch {
       /* the person closed the share sheet */
     }
+  }
+  if (placement === "bar") {
+    return (
+      <NavAction label={t("share.aria", { defaultValue: "Share" })} onPress={() => void onPress()}>
+        <Icon name="share" size={NAV_ICON} color={colors.text} />
+      </NavAction>
+    )
   }
   return (
     <Pressable onPress={() => void onPress()} hitSlop={7} accessibilityRole="button" accessibilityLabel={t("share.aria", { defaultValue: "Share" })} style={[styles.chip, style]}>

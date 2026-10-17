@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   lead: { marginTop: 6, marginBottom: 16 },
   card: { marginBottom: 14, padding: 14, gap: 8, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
   warn: { backgroundColor: colors.dangerSurface, borderColor: colors.dangerBorder },
-  cardTitle: { fontSize: 14, fontWeight: "700", color: colors.text },
+  cardTitle: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text },
   line: { fontSize: typeSize.meta, color: colors.text, lineHeight: 20 },
   err: { marginBottom: 12, fontSize: typeSize.meta, fontWeight: "600", color: colors.danger },
 })

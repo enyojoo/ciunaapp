@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "expo-router"
 import * as ImagePicker from "expo-image-picker"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
@@ -8,24 +8,20 @@ import { Avatar } from "@/components/avatar"
 import { Field } from "@/components/field"
 import { GroupCard } from "@/components/row"
 import { ConfirmDialog } from "@/components/confirm-dialog"
-import { LanguagePicker } from "@/components/language-picker"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
-import { CurrencyFlag } from "@/components/currency-flag"
 import { SheetPicker } from "@/components/sheet-picker"
 import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
 import { removeProfileAvatar, uploadProfileAvatar } from "@/lib/profile-avatar-upload"
-import { useFx } from "@/lib/use-fx"
 import { supabase } from "@/lib/supabase"
+import { Button } from "@/components/ui"
 import { colors, radius, type as typeSize, ui } from "@/lib/theme"
-import type { CurrencyRow } from "@/lib/types"
 
 export default function ProfileScreen() {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { profile, refreshProfile } = useAuth()
-  const { currencies } = useFx()
   const { showError, showSuccess } = useToast()
 
   const [editing, setEditing] = useState(false)
@@ -33,8 +29,6 @@ export default function ProfileScreen() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [phone, setPhone] = useState("")
-  const [baseCurrency, setBaseCurrency] = useState("USD")
-  const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false)
   const [avatarUploading, setAvatarUploading] = useState(false)
   const [avatarRemoving, setAvatarRemoving] = useState(false)
   const [photoSheetOpen, setPhotoSheetOpen] = useState(false)
@@ -44,20 +38,14 @@ export default function ProfileScreen() {
     setFirstName(profile?.first_name || "")
     setLastName(profile?.last_name || "")
     setPhone(profile?.phone || "")
-    setBaseCurrency(profile?.base_currency || "USD")
   }, [profile])
 
   const name = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || t("profile.notSet")
-  const selectedCurrency = useMemo(
-    () => currencies.find((c) => c.code === baseCurrency),
-    [currencies, baseCurrency],
-  )
 
   const cancelEdit = () => {
     setFirstName(profile?.first_name || "")
     setLastName(profile?.last_name || "")
     setPhone(profile?.phone || "")
-    setBaseCurrency(profile?.base_currency || "USD")
     setEditing(false)
   }
 
@@ -71,7 +59,6 @@ export default function ProfileScreen() {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         phone: phone.trim(),
-        base_currency: baseCurrency,
       })
       .eq("id", profile.id)
     setSaving(false)
@@ -155,7 +142,6 @@ export default function ProfileScreen() {
 
   const [confirm, setConfirm] = useState<"photo" | "delete" | null>(null)
   const confirmRemoveAvatar = () => setConfirm("photo")
-  const confirmDelete = () => router.push("/delete-account" as never)
 
   return (
     <ScreenScroll edges={["left", "right"]}>
@@ -204,22 +190,6 @@ export default function ProfileScreen() {
               keyboardType="phone-pad"
               error={phoneOk ? undefined : t("profile.phoneInvalid", { defaultValue: "Enter a phone number with the country code, for example +7 900 000 00 00." })}
             />
-            <View style={styles.fieldWrap}>
-              <Text style={styles.fieldLabel}>{t("profile.baseCurrency")}</Text>
-              <Pressable
-                onPress={() => setCurrencyPickerOpen(true)}
-                style={styles.currencyBox}
-                disabled={saving}
-              >
-                <CurrencyFlag
-                  code={selectedCurrency?.code || baseCurrency}
-                  flagSvg={selectedCurrency?.flag_svg}
-                  size={20}
-                />
-                <Text style={styles.currencyText}>{selectedCurrency?.code || baseCurrency}</Text>
-              </Pressable>
-              <Text style={styles.hint}>{t("profile.baseCurrencyHint")}</Text>
-            </View>
           </View>
         ) : (
           <View style={styles.form}>
@@ -228,18 +198,6 @@ export default function ProfileScreen() {
             <InfoRow label={t("profile.email")} value={profile?.email || ""} />
             <Text style={styles.hint}>{t("profile.emailHint", { defaultValue: "To change your email, contact support." })}</Text>
             <InfoRow label={t("profile.phone")} value={profile?.phone || t("profile.notSet")} />
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>{t("profile.baseCurrency")}</Text>
-              <View style={styles.currencyDisplay}>
-                <CurrencyFlag
-                  code={selectedCurrency?.code || baseCurrency}
-                  flagSvg={selectedCurrency?.flag_svg}
-                  size={20}
-                />
-                <Text style={styles.infoValue}>{selectedCurrency?.code || baseCurrency}</Text>
-              </View>
-            </View>
-            <LanguagePicker />
           </View>
         )}
       </GroupCard>
@@ -254,22 +212,15 @@ export default function ProfileScreen() {
           </View>
         </View>
       ) : (
-        <Pressable onPress={confirmDelete} style={styles.deleteRow}>
-          <Text style={styles.deleteText}>{t("profile.deleteAccount")}</Text>
-        </Pressable>
+        // Deleting the account is about this person's data, so it lives here, last and apart from everything else.
+        <View style={styles.dangerZone}>
+          <Button
+            label={t("profile.deleteAccount")}
+            variant="dangerGhost"
+            onPress={() => router.push("/delete-account" as never)}
+          />
+        </View>
       )}
-
-      <SheetPicker<CurrencyRow>
-        open={currencyPickerOpen}
-        title={t("profile.selectBaseCurrency")}
-        items={currencies}
-        keyExtractor={(c) => c.code}
-        labelExtractor={(c) => `${c.code}${c.name ? ` — ${c.name}` : ""}`}
-        leadingExtractor={(c) => <CurrencyFlag code={c.code} flagSvg={c.flag_svg} size={20} />}
-        selectedId={baseCurrency}
-        onSelect={(c) => setBaseCurrency(c.code)}
-        onClose={() => setCurrencyPickerOpen(false)}
-      />
 
       <SheetPicker<PhotoAction>
         open={photoSheetOpen}
@@ -313,6 +264,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
+  dangerZone: { marginTop: 24 },
   identity: { alignItems: "center", gap: 8, paddingTop: 8, marginBottom: 24 },
   avatarWrap: { position: "relative" },
   avatarBadge: {
@@ -328,28 +280,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.paper,
   },
-  name: { fontSize: 19, fontWeight: "700", color: colors.text },
+  name: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text },
   email: { fontSize: typeSize.meta, color: colors.muted },
   cardHead: { marginBottom: 8, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-  cardTitle: { fontSize: 17, fontWeight: "600", color: colors.text },
+  cardTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   editBtn: { flexDirection: "row", alignItems: "center", gap: 6, minHeight: 44, paddingHorizontal: 4 },
   editBtnText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primary },
   form: { paddingVertical: 4, gap: 4 },
-  fieldWrap: { marginBottom: 14 },
-  fieldLabel: { marginBottom: 8, fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
-  currencyBox: {
-    minHeight: 48,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    borderRadius: radius.row,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    paddingHorizontal: 14,
-  },
-  currencyText: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  hint: { marginTop: 6, fontSize: 12, color: colors.muted },
+  hint: { marginTop: 6, fontSize: typeSize.caption, color: colors.muted },
   infoRow: {
     minHeight: 52,
     flexDirection: "row",
@@ -361,9 +299,6 @@ const styles = StyleSheet.create({
   },
   infoLabel: { fontSize: typeSize.meta, color: colors.muted },
   infoValue: { flexShrink: 1, marginLeft: 12, fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  currencyDisplay: { flexDirection: "row", alignItems: "center", gap: 8 },
   actions: { flexDirection: "row", gap: 12, marginTop: 20 },
   actionHalf: { flex: 1 },
-  deleteRow: { marginTop: 28, alignItems: "center", minHeight: 44, justifyContent: "center" },
-  deleteText: { fontSize: typeSize.body, fontWeight: "600", color: colors.danger },
 })

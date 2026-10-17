@@ -7,6 +7,8 @@ import { supabase } from "@/lib/supabase"
 import { useAuth } from "@/lib/auth-context"
 import { FlagIcon } from "@/components/flag-icon"
 import { SheetPicker } from "@/components/sheet-picker"
+import { Icon } from "@/components/ui/icon"
+import { IconWell, ListRow } from "@/components/ui/list-row"
 import { colors, type as typeSize } from "@/lib/theme"
 
 const LANG_LABEL: Record<AppLocale, string> = {
@@ -28,7 +30,7 @@ const LANG_FLAG_COUNTRY: Record<AppLocale, string> = {
   pt: "BR",
 }
 
-export function LanguagePicker({ last }: { last?: boolean }) {
+export function LanguagePicker({ last, asListRow }: { last?: boolean; /** Render as a `ListRow` for use inside a `ListGroup`. */ asListRow?: boolean }) {
   const { t } = useTranslation("common")
   const { profile } = useAuth()
   const [open, setOpen] = useState(false)
@@ -43,6 +45,15 @@ export function LanguagePicker({ last }: { last?: boolean }) {
 
   return (
     <>
+      {asListRow ? (
+        <ListRow
+          leading={<IconWell><Icon name="globe" size={18} color={colors.neutralText} /></IconWell>}
+          title={t("app.language", { defaultValue: "Language" })}
+          value={LANG_LABEL[current]}
+          trailing={<FlagIcon code={LANG_FLAG_COUNTRY[current]} size={16} />}
+          onPress={() => setOpen(true)}
+        />
+      ) : (
       <Pressable onPress={() => setOpen(true)} style={[styles.row, !last && styles.border]}>
         <View style={styles.icon}>
           <Globe size={16} color={colors.neutralText} strokeWidth={2.2} />
@@ -54,6 +65,7 @@ export function LanguagePicker({ last }: { last?: boolean }) {
           <ChevronDown size={16} color={colors.muted} strokeWidth={2.2} />
         </View>
       </Pressable>
+      )}
       <SheetPicker
         open={open}
         title={t("app.language", { defaultValue: "Language" })}
@@ -104,7 +116,7 @@ export function LanguageChip() {
 
 const styles = StyleSheet.create({
   chip: { minHeight: 36, flexDirection: "row", alignItems: "center", gap: 6, borderRadius: 18, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, paddingHorizontal: 12 },
-  chipText: { fontSize: 13, fontWeight: "700", color: colors.text },
+  chipText: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text },
   row: { minHeight: 52, flexDirection: "row", alignItems: "center", paddingVertical: 14 },
   border: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   icon: {

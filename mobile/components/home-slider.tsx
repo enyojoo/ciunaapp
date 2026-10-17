@@ -1,49 +1,73 @@
-import { useEffect, useRef, useState } from "react"
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  useWindowDimensions,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-} from "react-native"
-import { LinearGradient } from "expo-linear-gradient"
+import { useEffect, useRef, useState, type ReactNode } from "react"
+import { FlatList, Pressable, StyleSheet, Text, View, useWindowDimensions, type NativeScrollEvent, type NativeSyntheticEvent } from "react-native"
 import { useRouter } from "expo-router"
-import { ArrowRight, Globe2, Heart, House, type LucideIcon } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
-import { HOME_SLIDES, type HomeSlide, type HomeSlideTone } from "@/lib/home-slides"
-import { colors, space } from "@/lib/theme"
+import { Icon } from "@/components/ui/icon"
+import { PressableScale } from "@/components/ui/pressable-scale"
+import type { HomeSlide, HomeSlideId } from "@/lib/home-slides"
+import { colors, radius, space, type as typeSize } from "@/lib/theme"
 
-/**
- * Banner gradients. Built from the old hero's warm orange, deepened so white text passes contrast
- * (white on #EA580C is 3.6:1; these stops are 5:1 and up). Each theme has one line of colour for each stop.
- */
-const BANNER: Record<HomeSlideTone, { stops: [string, string, string]; icon: LucideIcon }> = {
-  warm: { stops: ["#9A3412", "#C2410C", colors.warning], icon: House },
-  teal: { stops: ["#134E4A", "#0F766E", "#115E59"], icon: Globe2 },
-  blue: { stops: ["#1E3A8A", "#1D4ED8", "#1E40AF"], icon: Heart },
+/** One flat colour per slide. White text on each is 6:1 or better. */
+const BG: Record<HomeSlideId, string> = {
+  sorted: "#1F2937",
+  community: "#115E59",
+  pay: "#1E3A8A",
 }
 
-const AUTO_MS = 5000
+const AUTO_MS = 6000
 const RESUME_MS = 8000
-const GAP = 12
-/** Banner height follows the screen, clamped so small phones keep room for the tiles and large phones do not stretch. */
+
+/** Hero height follows the screen, clamped so small phones keep room for the tiles. */
 export function bannerHeight(windowHeight: number): number {
-  return Math.min(176, Math.max(104, Math.round(windowHeight * 0.19)))
+  return Math.min(152, Math.max(124, Math.round(windowHeight * 0.16)))
 }
 
-/** Below this the banner drops its small "CIUNA" label and tightens its padding so the text still fits. */
-const COMPACT_BANNER = 124
+/** The small picture on the right of each slide: one quiet sign of the idea, not decoration. */
+function Motif({ id }: { id: HomeSlideId }): ReactNode {
+  switch (id) {
+    case "sorted":
+      // The Ciuna mark: four dots, one lit.
+      return (
+        <View style={styles.mark}>
+          {[0, 1, 2, 3].map((i) => (
+            <View key={i} style={[styles.markDot, i === 0 && styles.markDotOn]} />
+          ))}
+        </View>
+      )
+    case "community":
+      return (
+        <View style={styles.people}>
+          {["#FDE68A", "#A7F3D0", "#BFDBFE", "#FBCFE8"].map((c, i) => (
+            <View key={c} style={[styles.person, { backgroundColor: c, marginLeft: i === 0 ? 0 : -12 }]}>
+              <Icon name="account" size={18} color="#1F2937" filled />
+            </View>
+          ))}
+        </View>
+      )
+    case "pay":
+      return (
+        <View style={styles.methods}>
+          {[
+            { icon: "bank" as const, label: "Bank" },
+            { icon: "document" as const, label: "QR" },
+            { icon: "lock" as const, label: "Card" },
+          ].map((m) => (
+            <View key={m.label} style={styles.method}>
+              <Icon name={m.icon} size={13} color="#FFFFFF" />
+            </View>
+          ))}
+        </View>
+      )
+  }
+}
 
-export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
+export function HomeSlider({ slides }: { slides: HomeSlide[] }) {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { width, height } = useWindowDimensions()
-  // Measured from the container, not the window: on web the content column is narrower than the window.
-  const [boxWidth, setBoxWidth] = useState(0)
-  const itemWidth = (boxWidth || width) - space.page * 2
+  // The page is the frame's own width, so each swipe or auto-advance lands one whole slide in view.
+  const [frameWidth, setFrameWidth] = useState(0)
+  const page = frameWidth || width - space.page * 2
   const h = bannerHeight(height)
   const [index, setIndex] = useState(0)
   const listRef = useRef<FlatList<HomeSlide>>(null)
@@ -56,15 +80,19 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
       if (touching.current || Date.now() < pausedUntil.current) return
       setIndex((cur) => {
         const next = (cur + 1) % slides.length
-        listRef.current?.scrollToIndex({ index: next, animated: true })
+        listRef.current?.scrollToOffset({ offset: next * page, animated: true })
         return next
       })
     }, AUTO_MS)
     return () => clearInterval(timer)
-  }, [slides.length])
+  }, [slides.length, page])
+
+  useEffect(() => {
+    if (index >= slides.length) setIndex(0)
+  }, [index, slides.length])
 
   const onMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const i = Math.round(e.nativeEvent.contentOffset.x / (itemWidth + GAP))
+    const i = Math.round(e.nativeEvent.contentOffset.x / page)
     setIndex(Math.max(0, Math.min(slides.length - 1, i)))
   }
   const pause = () => {
@@ -77,72 +105,69 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
   if (slides.length === 0) return null
 
   return (
-    <View style={styles.wrap} onLayout={(e) => setBoxWidth(e.nativeEvent.layout.width)}>
-      <FlatList
-        ref={listRef}
-        data={slides}
-        keyExtractor={(s) => s.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={itemWidth + GAP}
-        decelerationRate="fast"
-        ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
-        onScrollBeginDrag={pause}
-        onScrollEndDrag={resume}
-        onTouchStart={pause}
-        onTouchEnd={resume}
-        onMomentumScrollEnd={onMomentumEnd}
-        getItemLayout={(_, i) => ({ length: itemWidth + GAP, offset: (itemWidth + GAP) * i, index: i })}
-        renderItem={({ item }) => {
-          const b = BANNER[item.tone]
-          const Icon = b.icon
-          const kicker = t(`home.slide.${item.id}.kicker`, { defaultValue: "" })
-          return (
-            <Pressable
-              onPress={() => router.push(item.href as never)}
-              accessibilityRole="button"
-              accessibilityLabel={t(`home.slide.${item.id}.title`, { defaultValue: item.id })}
-              style={({ pressed }) => [{ width: itemWidth, height: h }, pressed && styles.pressed]}
-            >
-              <View style={[styles.banner, h < COMPACT_BANNER && styles.bannerCompact]}>
-                <LinearGradient colors={b.stops} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
-                {/* Decorative: large soft circles tie the banner to the brand's dot mark. */}
-                <View style={[styles.orb, styles.orbA]} />
-                <View style={[styles.orb, styles.orbB]} />
-                {item.ad ? (
-                  <View style={styles.adLabel}>
-                    <Text style={styles.adText}>{t("home.slide.adLabel", { defaultValue: "Ad" })}</Text>
+    <View style={styles.wrap}>
+      <View style={[styles.frame, { height: h }]} onLayout={(e) => setFrameWidth(Math.round(e.nativeEvent.layout.width))}>
+        {frameWidth > 0 ? (
+          <FlatList
+            ref={listRef}
+            data={slides}
+            keyExtractor={(s) => s.id}
+            horizontal
+            pagingEnabled
+            disableIntervalMomentum
+            decelerationRate="fast"
+            bounces={false}
+            showsHorizontalScrollIndicator={false}
+            onScrollBeginDrag={pause}
+            onScrollEndDrag={resume}
+            onMomentumScrollEnd={onMomentumEnd}
+            getItemLayout={(_, i) => ({ length: page, offset: page * i, index: i })}
+            renderItem={({ item }) => {
+              const title = t(`home.slide.${item.id}.title`)
+              const body = t(`home.slide.${item.id}.body`)
+              const href = item.href
+              return (
+                <PressableScale
+                  onPress={href ? () => router.push(href as never) : undefined}
+                  disabled={!href}
+                  scaleTo={href ? 0.985 : 1}
+                  accessibilityRole={href ? "button" : "text"}
+                  accessibilityLabel={`${title}. ${body}`}
+                  style={[styles.slide, { width: page, height: h, backgroundColor: BG[item.id] }]}
+                >
+                  <View style={styles.top}>
+                    <View style={styles.copy}>
+                      <Text style={styles.title} numberOfLines={2}>
+                        {title}
+                      </Text>
+                      <Text style={styles.body} numberOfLines={2}>
+                        {body}
+                      </Text>
+                    </View>
+                    <View style={styles.motif}>
+                      <Motif id={item.id} />
+                    </View>
                   </View>
-                ) : null}
-                <View style={styles.copy}>
-                  {kicker && h >= COMPACT_BANNER ? <Text style={styles.kicker}>{kicker}</Text> : null}
-                  <Text style={styles.title} numberOfLines={1}>
-                    {t(`home.slide.${item.id}.title`, { defaultValue: item.id })}
-                  </Text>
-                  <Text style={styles.body} numberOfLines={1}>
-                    {t(`home.slide.${item.id}.body`, { defaultValue: "" })}
-                  </Text>
-                  <View style={styles.cta}>
-                    <Text style={styles.ctaText}>{t(`home.slide.${item.id}.cta`, { defaultValue: "Open" })}</Text>
-                    <ArrowRight size={15} color={colors.onPrimary} strokeWidth={2.4} />
-                  </View>
-                </View>
-                <View style={styles.iconWell}>
-                  <Icon size={26} color={colors.onPrimary} strokeWidth={2} />
-                </View>
-              </View>
-            </Pressable>
-          )
-        }}
-      />
+                  {item.ad ? (
+                    <View style={styles.adLabel}>
+                      <Text style={styles.adText}>{t("home.slide.adLabel", { defaultValue: "Ad" })}</Text>
+                    </View>
+                  ) : null}
+                </PressableScale>
+              )
+            }}
+          />
+        ) : null}
+      </View>
       {slides.length > 1 ? (
         <View style={styles.dots}>
           {slides.map((s, i) => (
             <Pressable
               key={s.id}
               onPress={() => {
-                listRef.current?.scrollToIndex({ index: i, animated: true })
+                listRef.current?.scrollToOffset({ offset: i * page, animated: true })
                 setIndex(i)
+                pausedUntil.current = Date.now() + RESUME_MS
               }}
               hitSlop={8}
               accessibilityLabel={t("home.slide.position", { defaultValue: "Slide {{n}} of {{total}}", n: i + 1, total: slides.length })}
@@ -158,32 +183,24 @@ export function HomeSlider({ slides = HOME_SLIDES }: { slides?: HomeSlide[] }) {
 
 const styles = StyleSheet.create({
   wrap: { paddingHorizontal: space.page, marginBottom: 12 },
-  pressed: { opacity: 0.92 },
-  banner: { flex: 1, borderRadius: 20, overflow: "hidden", padding: 18, justifyContent: "flex-end" },
-  bannerCompact: { padding: 12 },
-  orb: { position: "absolute", borderRadius: 999, backgroundColor: "rgba(255,255,255,0.12)" },
-  orbA: { width: 160, height: 160, right: -48, top: -56 },
-  orbB: { width: 90, height: 90, right: 70, bottom: -40, backgroundColor: "rgba(255,255,255,0.08)" },
-  adLabel: { position: "absolute", left: 14, top: 14, backgroundColor: "rgba(255,255,255,0.92)", borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
-  adText: { fontSize: 12, fontWeight: "600", letterSpacing: 0.6, textTransform: "uppercase", color: colors.text },
-  copy: { gap: 2, paddingRight: 64 },
-  kicker: { fontSize: 12, fontWeight: "700", letterSpacing: 0.8, textTransform: "uppercase", color: "rgba(255,255,255,0.85)" },
-  title: { fontSize: 19, lineHeight: 24, fontWeight: "700", color: colors.onPrimary, letterSpacing: -0.3 },
-  body: { fontSize: 13, lineHeight: 18, color: "rgba(255,255,255,0.92)" },
-  cta: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 6 },
-  ctaText: { fontSize: 14, fontWeight: "700", color: colors.onPrimary },
-  iconWell: {
-    position: "absolute",
-    right: 16,
-    top: 16,
-    width: 48,
-    height: 48,
-    borderRadius: 16,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  dots: { flexDirection: "row", justifyContent: "center", gap: 6, marginTop: 8 },
+  frame: { borderRadius: radius.hero, overflow: "hidden", backgroundColor: colors.fill },
+  // Words sit at the bottom-left, the motif top-right: a calm, poster-like slide.
+  slide: { padding: 18, justifyContent: "flex-end" },
+  top: { flex: 1, flexDirection: "row", alignItems: "flex-end", gap: 12 },
+  copy: { flex: 1, minWidth: 0, gap: 4 },
+  title: { fontSize: typeSize.title, lineHeight: 27, fontWeight: "700", color: "#FFFFFF", letterSpacing: -0.4 },
+  body: { fontSize: typeSize.meta, lineHeight: 19, color: "rgba(255,255,255,0.82)" },
+  motif: { position: "absolute", top: 0, right: 0 },
+  adLabel: { position: "absolute", right: 14, bottom: 14, backgroundColor: "rgba(255,255,255,0.92)", borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
+  adText: { fontSize: typeSize.caption, fontWeight: "600", letterSpacing: 0.6, textTransform: "uppercase", color: colors.text },
+  mark: { width: 34, flexDirection: "row", flexWrap: "wrap", gap: 4 },
+  markDot: { width: 15, height: 15, borderRadius: 8, backgroundColor: "rgba(255,255,255,0.22)" },
+  markDotOn: { backgroundColor: "#F97316" },
+  people: { flexDirection: "row", alignItems: "center" },
+  person: { width: 30, height: 30, borderRadius: 15, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#115E59" },
+  methods: { flexDirection: "row", gap: 6 },
+  method: { width: 28, height: 28, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(255,255,255,0.16)" },
+  dots: { flexDirection: "row", justifyContent: "center", gap: 6, marginTop: 10 },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.border },
-  dotOn: { width: 18, backgroundColor: colors.primary },
+  dotOn: { width: 18, backgroundColor: colors.text },
 })

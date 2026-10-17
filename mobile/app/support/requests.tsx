@@ -121,5 +121,5 @@ const styles = StyleSheet.create({
   dot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary },
   preview: { fontSize: typeSize.meta, color: colors.muted },
   foot: { flexDirection: "row", alignItems: "center", gap: 10 },
-  date: { fontSize: 12, color: colors.muted },
+  date: { fontSize: typeSize.caption, color: colors.muted },
 })

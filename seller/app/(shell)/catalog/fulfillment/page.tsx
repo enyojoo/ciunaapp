@@ -3,6 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { ArrowLeft, Check, Circle, Plus, Trash2 } from "lucide-react"
 import { Banner, Button, Card, CardBody, CardHeader, Chip, Field, Input, PageHeader, Select, Skeleton, Switch, Textarea, useToast } from "@ciuna/ui-web"
+import { RU_CITIES } from "@ciuna/shared"
 import { api, ApiError } from "@/lib/api"
 import { invalidate, useQuery } from "@/lib/query"
 import { useSeller } from "@/lib/session"
@@ -205,11 +206,12 @@ export default function FulfillmentPage() {
           <Card>
             <CardHeader title={t("catalog.fulfilment.zones")} description={t("catalog.fulfilment.zonesHint")} />
             <CardBody className="space-y-4">
+              <datalist id="ru-cities">{RU_CITIES.map((c) => <option key={c.en} value={c.en} label={c.ru} />)}</datalist>
               {zones.length === 0 ? <p className="text-sm text-muted">{t("catalog.fulfilment.noZones")}</p> : null}
               {zones.map((z, i) => (
                 <div key={i} className="space-y-3 rounded-2xl border border-hairline p-3">
                   <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1.2fr_1.2fr_0.8fr_0.7fr]">
-                    <Field label={t("catalog.fulfilment.city")}><Input className={ctl} value={z.city} maxLength={80} onChange={(e) => upd(i, { city: e.target.value })} /></Field>
+                    <Field label={t("catalog.fulfilment.city")}><Input className={ctl} list="ru-cities" value={z.city} maxLength={80} onChange={(e) => upd(i, { city: e.target.value })} /></Field>
                     <Field label={t("catalog.fulfilment.district")}><Input className={ctl} value={z.district} maxLength={80} onChange={(e) => upd(i, { district: e.target.value })} /></Field>
                     <Field label={t("catalog.fulfilment.fee")}><Input className={ctl} inputMode="decimal" value={z.fee} onChange={(e) => upd(i, { fee: e.target.value })} /></Field>
                     <Field label={t("catalog.field.currency")}>

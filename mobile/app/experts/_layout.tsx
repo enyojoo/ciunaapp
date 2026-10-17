@@ -18,6 +18,8 @@ export default function ExpertsLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen name="browse" />
+      <Stack.Screen name="services" />
+      <Stack.Screen name="c/[category]" />
       {/* These screens draw the shared hub top bar themselves, so the native header stays off. */}
       <Stack.Screen name="[slug]" />
       <Stack.Screen name="s/[serviceId]" />

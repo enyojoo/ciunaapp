@@ -14,3 +14,5 @@ Use tokens from `tokens.json` through `bundle.css`; no hardcoded colours or size
 
 ## Upgrade
 Built in the shared UI; this card documents existing behaviour.
+
+Expo: `Sheet` in `mobile/components/ui/sheet.tsx` adds a grabber, title with a 36 close button, scrolling body, pinned footer, keyboard avoidance and sizes `auto` (up to 75%) and `tall` (92%). Centres as a dialog on wide web.

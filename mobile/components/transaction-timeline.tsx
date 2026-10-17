@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   content: { flex: 1, paddingBottom: 20, paddingTop: 2 },
   title: { fontSize: typeSize.body, fontWeight: "600", color: colors.muted, marginBottom: 2 },
   titleDone: { color: colors.text },
-  timestamp: { fontSize: 12, color: colors.muted, marginBottom: 2 },
+  timestamp: { fontSize: typeSize.caption, color: colors.muted, marginBottom: 2 },
   description: { fontSize: typeSize.meta, color: colors.muted },
   descriptionDone: { color: colors.neutralText },
 })

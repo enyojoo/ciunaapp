@@ -1,0 +1,15 @@
+<!-- @dsCard group="Navigation" height=300 width=900 subtitle="Block title with an optional text action: title only, with See all, and a long title that truncates" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SectionHeader</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.sh{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;font-family:var(--font-native)}
+.sh h3{margin:0;font:600 20px/26px var(--font-native);letter-spacing:-.2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh a{font:600 15px/20px var(--font-native);color:var(--primary-text);flex-shrink:0}
+.blk{height:44px;border-radius:var(--radius-card);background:var(--fill);margin-bottom:20px}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+  <div class="cz-col" style="width:390px"><div class="sh"><h3>Stores</h3></div><div class="blk"></div>
+    <div class="sh"><h3>Stores</h3><a>See all</a></div><div class="blk"></div>
+    <div class="sh"><h3>Popular near Tverskaya, Moscow this week</h3><a>See all</a></div><div class="blk"></div>
+    <p class="cz-cap">Title only, with action, long title (action never wraps or disappears).</p></div>
+</div></div></body></html>

@@ -20,5 +20,7 @@ Colour states: default `ink`, secondary `muted`, link and active `primary-text`,
 ## Upgrade
 Web scale is built in `tokens.json` `type` and the Tailwind config. Native scale lives in the Expo theme. Seller and Office still use some ad-hoc sizes to migrate.
 
+Native scale adds `display` 40/46 bold tabular (money and hero numerals), `headline` 20/26 semibold (section and sheet titles) and `caption` 12/16 semibold (badges and timestamps only). Body is 16/22, label 15/20, meta 13/18, title 24/30. Tokens in `tokens.json` `type`; text styles in `mobile/lib/theme.ts` (`textStyles`) and the `AppText` component. Phone page gutter is 16 (`space.gutter`); spacing scale 4, 8, 12, 16, 24, 32.
+
 ## Code
 `design-system/tokens.json` (`type`, `font`), `packages/shared/src/design/`

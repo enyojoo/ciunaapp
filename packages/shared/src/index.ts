@@ -9,6 +9,7 @@ export {
   resolveSellerUrl,
   joinApiPath,
 } from "./constants/urls"
+export { RU_CITIES, RU_POPULAR_CITIES, normalizeRuCity, ruCityLabel, sameCity, searchRuCities, type RuCity } from "./geo/ru-cities"
 export { roundMoney } from "./money/round"
 export { formatMoneyDisplay, currencySymbol, type FormatMoneyOptions } from "./money/format-money"
 export { formatExchangeRateDisplay } from "./money/format-exchange-rate"
@@ -59,6 +60,8 @@ export {
   type HubServiceLineGridKind,
   type HubServiceLineCopyInput,
 } from "./hub/service-lines"
+export { EXPERT_MAIN_CATEGORIES, isExpertMainCategoryId, type ExpertMainCategoryId } from "./hub/expert-main-categories"
+export { HUB_PRODUCT_MAIN_CATEGORIES, isHubProductMainCategory, type HubProductLine, type HubProductMainCategoryId } from "./hub/product-main-categories"
 export * from "./types"
 export * from "./marketplace/types"
 export { marketplaceTotals, marketplaceDeadline } from "./marketplace/pricing"

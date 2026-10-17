@@ -15,3 +15,4 @@ Use tokens from `tokens.json` through `bundle.css`; no hardcoded colours or size
 ## Upgrade
 Built as `mobile/components/filter-chips.tsx`: one horizontal row of single-choice chips, selected chip filled. Used for categories (Food, Mart home), search groups, expert categories and languages.
 
+Expo: `Chip` and `ChipRow` in `mobile/components/ui/chip.tsx` (36 min height, selection haptic, `inset` so the row lines up with the page gutter). `FilterChips` wraps `ChipRow`.

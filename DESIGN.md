@@ -97,7 +97,7 @@ Show the **same fee numbers as web**. Do not invent a “free” story that cont
 | Platform, URLs, APIs, office | **hub** | No |
 | A tile | **Service line** title from office + i18n | Yes |
 | Activity list | **Transactions** | Yes (money spine) |
-| Account | **More** | Yes |
+| Account | **Account** | Yes |
 
 Do not rename `/hub` or `hub_*` APIs. Keep “Hub” in office where it means non-send orders (`type: hub`).
 
@@ -110,7 +110,7 @@ Do not rename `/hub` or `hub_*` APIs. Keep “Hub” in office where it means no
 ```
 Home  →  office grid  →  Food / Mart / Send / Experts
 Transactions  →  combined list  →  order detail
-More  →  identity, KYC, referrals, PIN, recipients, support, legal
+Account  →  identity, KYC, referrals, PIN, recipients, support, legal
 ```
 
 Home owns every service line. Auth and PIN sit outside the tab bar.
@@ -154,7 +154,7 @@ Sheets for currency, recipient, filters — not desktop dialogs.
 | Experts | Directory → profile → book → same checkout shell (no cart) |
 | Send | Amount → FX / who receives / arrival → recipient → pay. Same numbers as web |
 | Transactions | Amount, counterparty, status, line |
-| More | Identity first, then Account / App groups, KYC badge |
+| Account | Identity first, then Account / App groups, KYC badge |
 | Auth | Centered title, Apple + Google outline then Or then fields, forgot under password, orange CTA, one-line footer, help to support. Splash and Home carry the logo — do not repeat it on sign-in |
 
 ---

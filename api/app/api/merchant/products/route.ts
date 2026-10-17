@@ -1,5 +1,6 @@
 import { merchantRoute, readJson } from "@/lib/merchant/http"
 import { createServerClient } from "@/lib/supabase"
+import { withProductMainCategoryFallback } from "@/lib/product-main-category"
 import { assert, check } from "@/lib/merchant/errors"
 import { buildSellerProduct, validateLive, vendorOf } from "@/lib/merchant/products"
 import { audit } from "@/lib/merchant/audit"
@@ -27,7 +28,7 @@ export const POST = merchantRoute("catalog", async (req, { user, merchant }) => 
     assert(merchant.status === "live", "MERCHANT_NOT_LIVE", 409)
     await validateLive(row)
   }
-  const { data, error } = await createServerClient().from("hub_products").insert(row).select("*").single()
+  const { data, error } = await withProductMainCategoryFallback(row, (r) => createServerClient().from("hub_products").insert(r).select("*").single())
   check(error)
   await audit({ actorKind: "merchant", actorId: user.id, merchantId: merchant.id, action: "product.created", entityType: "hub_product", entityId: data!.id, details: { status: row.status } })
   return { product: data }

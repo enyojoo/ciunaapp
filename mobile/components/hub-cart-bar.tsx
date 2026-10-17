@@ -1,12 +1,13 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useTranslation } from "react-i18next"
 import { ShoppingCart } from "lucide-react-native"
 import { hubCartItemCount, useHubCart, useHubCartByLine } from "@/lib/hub-cart"
 import { hubProductEffectivePrice } from "@/lib/money"
 import { hubCartPath } from "@/lib/hub"
 import { formatMoney } from "@/lib/money"
-import { colors, radius, shadows } from "@/lib/theme"
+import { colors, radius, shadows, type as typeSize } from "@/lib/theme"
 
 /**
  * Floating bar shown on Food/Mart screens once the cart has items. Pass `vendorId` on a vendor
@@ -16,6 +17,7 @@ import { colors, radius, shadows } from "@/lib/theme"
 export function HubCartBar({ lineSlug, vendorId }: { lineSlug: "food" | "mart"; vendorId?: string | null }) {
   const { t } = useTranslation("app")
   const router = useRouter()
+  const insets = useSafeAreaInsets()
   const byVendor = useHubCart(vendorId ?? null)
   const byLine = useHubCartByLine(lineSlug)
   const cart = vendorId ? byVendor.cart : byLine.cart
@@ -30,7 +32,7 @@ export function HubCartBar({ lineSlug, vendorId }: { lineSlug: "food" | "mart"; 
   }, 0)
 
   return (
-    <View style={styles.wrap} pointerEvents="box-none">
+    <View style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) }]} pointerEvents="box-none">
       <Pressable
         onPress={() => router.push(hubCartPath(lineSlug) as never)}
         style={styles.bar}
@@ -50,7 +52,8 @@ export function HubCartBar({ lineSlug, vendorId }: { lineSlug: "food" | "mart"; 
 }
 
 const styles = StyleSheet.create({
-  wrap: { position: "absolute", left: 12, right: 12, bottom: 6, zIndex: 50 },
+  // Floats above the home indicator; screens under it have no tab bar.
+  wrap: { position: "absolute", left: 16, right: 16, zIndex: 50 },
   bar: {
     flexDirection: "row",
     alignItems: "center",
@@ -63,6 +66,6 @@ const styles = StyleSheet.create({
     ...shadows.cartBar,
   },
   left: { flexDirection: "row", alignItems: "center", gap: 8, flexShrink: 1 },
-  label: { fontSize: 15, fontWeight: "600", color: colors.onPrimary },
-  amount: { fontSize: 15, fontWeight: "700", color: colors.onPrimary, fontVariant: ["tabular-nums"] },
+  label: { fontSize: typeSize.label, fontWeight: "600", color: colors.onPrimary },
+  amount: { fontSize: typeSize.label, fontWeight: "700", color: colors.onPrimary, fontVariant: ["tabular-nums"] },
 })

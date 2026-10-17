@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Delete, ScanFace } from "lucide-react-native"
-import { colors, radius } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 export const PIN_LEN = 4
 
@@ -98,5 +98,5 @@ const styles = StyleSheet.create({
   keyWrap: { flex: 1, alignItems: "center" },
   key: { height: 72, width: 72, borderRadius: 36, alignItems: "center", justifyContent: "center" },
   keyFill: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
-  keyText: { fontSize: 24, fontWeight: "600", color: colors.text },
+  keyText: { fontSize: typeSize.title, fontWeight: "600", color: colors.text },
 })

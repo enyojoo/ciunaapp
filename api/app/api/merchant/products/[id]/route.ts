@@ -1,5 +1,6 @@
 import { merchantRoute, readJson } from "@/lib/merchant/http"
 import { createServerClient } from "@/lib/supabase"
+import { withProductMainCategoryFallback } from "@/lib/product-main-category"
 import { assert, check } from "@/lib/merchant/errors"
 import { buildSellerProduct, validateLive, vendorOf, CONTENT_FIELDS } from "@/lib/merchant/products"
 import { audit } from "@/lib/merchant/audit"
@@ -26,7 +27,7 @@ export const PATCH = merchantRoute("catalog", async (req, { user, merchant }, pa
     assert(existing.review_status !== "rejected" || contentChanged, "LISTING_REJECTED", 409)
     await validateLive(row)
   }
-  const { data, error } = await createServerClient().from("hub_products").update(row).eq("id", existing.id).select("*").single()
+  const { data, error } = await withProductMainCategoryFallback(row, (r) => createServerClient().from("hub_products").update(r).eq("id", existing.id).select("*").single())
   check(error)
   await audit({ actorKind: "merchant", actorId: user.id, merchantId: merchant.id, action: "product.updated", entityType: "hub_product", entityId: existing.id, details: { status: row.status, contentChanged } })
   return { product: data }

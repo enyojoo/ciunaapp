@@ -23,6 +23,8 @@ import { hubCartCheckoutPath, hubLineHomePath, hubMarketplaceVendorPath } from "
 import { addToHubCart, refreshHubCartByLine, removeHubCartItem, updateHubCartItemQuantity, useHubCartByLine } from "@/lib/hub-cart"
 import { hubProductEffectivePrice, formatMoney } from "@/lib/money"
 import { HubTopBar } from "@/components/hub-top-bar"
+import { StickyActionBar } from "@/components/ui/sticky-action-bar"
+import { SwipeRow } from "@/components/ui/swipe-row"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 
 function HubCartScreen() {
@@ -196,7 +198,8 @@ function HubCartScreen() {
           const product = item.product!
           const unitPrice = hubProductEffectivePrice(product)
           return (
-            <View key={item.id} style={styles.row}>
+            <SwipeRow key={item.id} rounded={radius.card} actions={[{ label: t("hub.cart.removeShort", { defaultValue: "Delete" }), icon: "trash", onPress: () => onRemove(item.id) }]}>
+            <View style={styles.row}>
               <View style={styles.thumbWrap}>
                 {product.image_url ? (
                   <Image source={{ uri: product.image_url }} style={styles.thumb} resizeMode="cover" />
@@ -240,21 +243,18 @@ function HubCartScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={t("hub.cart.remove", { defaultValue: "Remove item" })}
                   >
-                    <Trash2 size={18} color={colors.dangerText} strokeWidth={2} />
+                    <Trash2 size={18} color={colors.muted} strokeWidth={2} />
                   </Pressable>
                 </View>
               </View>
             </View>
+            </SwipeRow>
           )
         })}
       </View>
 
       {/* Summary plate: subtotal and total. Delivery is added at checkout, once the address is known. */}
       <View style={styles.summary}>
-        <View style={styles.subtotalRow}>
-          <Text style={styles.subtotalLabel}>{t("hub.cart.subtotal", { defaultValue: "Subtotal" })}</Text>
-          <Text style={styles.subtotalValue}>{formatMoney(subtotal, currency)}</Text>
-        </View>
         <View style={styles.totalRow}>
           <Text style={styles.totalLabel}>{t("hub.cart.total", { defaultValue: "Total" })}</Text>
           <Text style={styles.totalValue}>{formatMoney(subtotal, currency)}</Text>
@@ -279,11 +279,16 @@ function HubCartScreen() {
           {opensAt ? " " + t("marketplace.storeOpensAt", { day: shortDay(opensAt.day, i18n.language), time: opensAt.time, defaultValue: "It opens {{day}} {{time}}." }) : ""}
         </Text>
       ) : null}
-      {unavailableItems.length > 0 ? (
-        <Text style={styles.blockedNote}>{t("hub.cart.unavailableNote", { defaultValue: "Remove unavailable items to check out." })}</Text>
-      ) : null}
     </ScreenScroll>
-    <View style={styles.stickyBar}>
+    <StickyActionBar
+      hint={
+        unavailableItems.length > 0
+          ? t("hub.cart.unavailableNote", { defaultValue: "Remove unavailable items to check out." })
+          : storeClosed
+            ? t("hub.cart.storeClosedShort", { defaultValue: "The store is closed right now." })
+            : null
+      }
+    >
       <View style={styles.stickyInner}>
         <PrimaryButton
           label={t("hub.cart.checkoutWithTotal", {
@@ -294,7 +299,7 @@ function HubCartScreen() {
           disabled={availableItems.length === 0 || unavailableItems.length > 0 || storeClosed}
         />
       </View>
-    </View>
+    </StickyActionBar>
     </View>
   )
 }
@@ -316,21 +321,21 @@ const styles = StyleSheet.create({
   storePlate: { flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 12, marginBottom: 12 },
   storeLogo: { width: 40, height: 40, borderRadius: 20, overflow: "hidden", backgroundColor: colors.paper, alignItems: "center", justifyContent: "center" },
   storeLogoImg: { width: "100%", height: "100%" },
-  storeLogoInitial: { fontSize: 16, fontWeight: "700", color: colors.primaryText },
-  storeName: { flex: 1, minWidth: 0, fontSize: 15, fontWeight: "700", color: colors.text },
-  addMore: { fontSize: 14, fontWeight: "600", color: colors.primaryText },
+  storeLogoInitial: { fontSize: typeSize.body, fontWeight: "700", color: colors.primaryText },
+  storeName: { flex: 1, minWidth: 0, fontSize: typeSize.label, fontWeight: "700", color: colors.text },
+  addMore: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primaryText },
   skeletonRow: { height: 84, backgroundColor: colors.paper, borderColor: colors.paper },
   rowOff: { opacity: 0.7 },
-  rowTitleOff: { fontSize: 15, fontWeight: "600", color: colors.muted, textDecorationLine: "line-through" },
-  minNote: { marginTop: 12, fontSize: 13, color: colors.primaryDeep, textAlign: "center" },
-  blockedNote: { marginTop: 12, fontSize: 13, color: colors.warningText, textAlign: "center" },
-  lineTotal: { fontSize: 15, fontWeight: "700", color: colors.text, fontVariant: ["tabular-nums"] },
+  rowTitleOff: { fontSize: typeSize.label, fontWeight: "600", color: colors.muted, textDecorationLine: "line-through" },
+  minNote: { marginTop: 12, fontSize: typeSize.meta, color: colors.primaryDeep, textAlign: "center" },
+  blockedNote: { marginTop: 12, fontSize: typeSize.meta, color: colors.warningText, textAlign: "center" },
+  lineTotal: { flexShrink: 0, fontSize: typeSize.label, fontWeight: "700", color: colors.text, fontVariant: ["tabular-nums"] },
   summary: { marginTop: 16, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },
-  totalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 },
-  totalLabel: { fontSize: 16, fontWeight: "700", color: colors.text },
-  totalValue: { fontSize: 18, fontWeight: "700", color: colors.text },
-  deliveryNote: { fontSize: 12, color: colors.muted },
-  vendorName: { fontSize: 13, fontWeight: "600", color: colors.muted, marginBottom: 8 },
+  totalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  totalLabel: { fontSize: typeSize.body, fontWeight: "700", color: colors.text },
+  totalValue: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text },
+  deliveryNote: { fontSize: typeSize.caption, color: colors.muted },
+  vendorName: { fontSize: typeSize.meta, fontWeight: "600", color: colors.muted, marginBottom: 8 },
   list: { gap: 10 },
   row: {
     flexDirection: "row",
@@ -355,9 +360,8 @@ const styles = StyleSheet.create({
   rowBottom: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 4 },
   addMoreHit: { minHeight: 44, justifyContent: "center" },
   stepperOff: { opacity: 0.35 },
-  stickyBar: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
   stickyInner: { width: "100%", maxWidth: 720, alignSelf: "center" },
-  rowTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
+  rowTitle: { flex: 1, minWidth: 0, fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   rowPrice: { fontSize: typeSize.meta, color: colors.muted },
   stepper: {
     flexDirection: "row",
@@ -367,15 +371,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   stepperBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
-  stepperValue: { width: 22, textAlign: "center", fontSize: 13, fontWeight: "600", color: colors.text },
+  stepperValue: { width: 22, textAlign: "center", fontSize: typeSize.meta, fontWeight: "600", color: colors.text },
   removeBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
-  subtotalRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 4,
-  },
-  subtotalLabel: { fontSize: typeSize.body, fontWeight: "500", color: colors.text },
-  subtotalValue: { fontSize: 18, fontWeight: "700", color: colors.text },
   checkoutBtn: { marginTop: 16 },
 })

@@ -67,7 +67,7 @@ export function SheetPicker<T>({
 
 const styles = StyleSheet.create({
   head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 16 },
-  title: { fontSize: 18, fontWeight: "600", color: colors.text },
+  title: { fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   close: { height: 44, width: 44, alignItems: "center", justifyContent: "center" },
   list: { paddingHorizontal: 20, paddingBottom: 32 },
   item: {

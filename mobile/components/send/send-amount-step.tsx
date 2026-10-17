@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
   },
   lane: { paddingHorizontal: 14, paddingVertical: 14, gap: 10 },
   laneLabel: {
-    fontSize: 12,
+    fontSize: typeSize.caption,
     fontWeight: "700",
     letterSpacing: 0.6,
     textTransform: "uppercase",
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   currencyCode: { fontSize: typeSize.meta, fontWeight: "700", color: colors.text },
-  currencyCaret: { fontSize: 12, color: colors.muted, marginTop: 1 },
+  currencyCaret: { fontSize: typeSize.caption, color: colors.muted, marginTop: 1 },
   amountField: {
     flex: 1,
     minWidth: 0,
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
   },
   amountFieldReadonly: { backgroundColor: colors.paper },
   amountSymbol: {
-    fontSize: 28,
+    fontSize: typeSize.largeTitle,
     fontWeight: "700",
     color: colors.muted,
     lineHeight: 32,
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
   amountInput: {
     flex: 1,
     minWidth: 0,
-    fontSize: 28,
+    fontSize: typeSize.largeTitle,
     fontWeight: "700",
     color: colors.text,
     paddingVertical: 0,
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
   receiveAmount: {
     flex: 1,
     minWidth: 0,
-    fontSize: 28,
+    fontSize: typeSize.largeTitle,
     fontWeight: "700",
     color: colors.text,
     letterSpacing: -0.5,

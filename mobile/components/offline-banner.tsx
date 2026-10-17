@@ -3,7 +3,7 @@ import { WifiOff } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useOffline } from "@/lib/network-status"
-import { colors, radius } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
 
 /** A small pill above the tab bar while the app cannot reach the network. It never blocks or shifts the layout. */
 export function OfflineBanner() {
@@ -24,5 +24,5 @@ export function OfflineBanner() {
 const styles = StyleSheet.create({
   wrap: { position: "absolute", left: 0, right: 0, alignItems: "center", zIndex: 50 },
   pill: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.pill, backgroundColor: colors.warningSurface, borderWidth: 1, borderColor: colors.warningBorder },
-  text: { fontSize: 13, fontWeight: "600", color: colors.warningText },
+  text: { fontSize: typeSize.meta, fontWeight: "600", color: colors.warningText },
 })

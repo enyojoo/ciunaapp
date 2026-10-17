@@ -82,7 +82,29 @@
     "marketplaceProductsHeading": "Products",
     "marketplaceStoresHeading": "Stores",
     "storesDirectorySubtitle": "Choose a store to see its products.",
-    "marketplaceSeeAllStores": "See all",
+    "marketplaceSeeAllStores": "All Stores",
+    "marketplaceSeeAllProducts": "All Products",
+    "locationTitle": "Choose your area",
+    "locationAll": "All areas",
+    "locationLabel": "Location",
+    "locationHint": "We show stores that deliver to the city you pick, plus pickup-only stores and digital items.",
+    "locationEmpty": "No delivery areas are set up yet.",
+    "locationDelivering": "Delivery available",
+    "locationPopular": "Popular",
+    "locationAllCities": "All cities",
+    "locationSearch": "Search cities",
+    "searchStores": "Search stores",
+    "searchProducts": "Search products",
+    "searchServices": "Search services",
+    "filterAll": "All",
+    "filterOpenNow": "Open now",
+    "filterDelivers": "Delivers",
+    "filterOnline": "Online",
+    "filterInPerson": "In person",
+    "resultsCount": "Results: {{count}}",
+    "clearFilters": "Clear filters",
+    "noMatch": "No matches",
+    "noMatchBody": "Try another name or filter.",
     "marketplaceNoVendors": "No stores yet — check back soon.",
     "verifiedVendor": "Verified vendor",
     "backToLine": "Back to line",
@@ -103,7 +125,7 @@
     "expertsTitle": "Experts",
     "expertsSubtitle": "Trusted professionals for all your home and beauty needs.",
     "expertsFeaturedHeading": "Featured",
-    "expertsSeeAll": "See all",
+    "expertsSeeAll": "All experts",
     "expertsServicesHeading": "Services",
     "expertsFeaturedEmpty": "No experts yet — check back soon.",
     "expertsDirectoryTitle": "All experts",
@@ -196,7 +218,8 @@
       "deliveryFrom": "Delivery from {{fee}}",
       "delivers": "Delivers",
       "etaRange": "{{min}}–{{max}} min",
-      "eta": "{{min}} min"
+      "eta": "{{min}} min",
+      "deliveryFee": "Delivery from {{fee}}"
     },
     "cart": {
       "emptyBody": "Add something from a store to start your order.",
@@ -216,7 +239,11 @@
       "storePausedNote": "This store is taking a break, so checkout is unavailable for now.",
       "removedItem": "Removed from cart",
       "undo": "Undo",
-      "addToCartPrice": "Add to cart · {{price}}"
+      "addToCartPrice": "Add to cart · {{price}}",
+      "removeShort": "Delete",
+      "storeClosedShort": "The store is closed right now.",
+      "itemCount_one": "{{count}} item",
+      "itemCount_other": "{{count}} items"
     },
     "stock": {
       "onlyLeft": "Only {{n}} left",
@@ -229,7 +256,34 @@
     "verifiedInfoHint": "What does this mean?",
     "verifiedInfoClose": "Got it",
     "noDeliveryTitle": "No stores deliver yet",
-    "noDeliveryBody": "These stores offer pickup. Delivery will appear here as stores open it."
+    "noDeliveryBody": "These stores offer pickup. Delivery will appear here as stores open it.",
+    "cat": {
+      "food": {
+        "mains": "Mains",
+        "soups": "Soups and stews",
+        "grill": "Grill",
+        "snacks": "Snacks and pastries",
+        "breakfast": "Breakfast",
+        "drinks": "Drinks"
+      },
+      "mart": {
+        "staples": "Pantry staples",
+        "sauces": "Sauces and spices",
+        "snacks": "Snacks and sweets",
+        "drinks": "Drinks",
+        "fresh": "Fresh and frozen",
+        "digital": "Digital services",
+        "other": "Other"
+      },
+      "foodHeading": "What are you craving?",
+      "martHeading": "What do you need?",
+      "allProducts": "All products",
+      "empty": "Nothing here yet.",
+      "emptyBody": "Stores are adding products. Check back soon.",
+      "productCount_one": "{{count}} product",
+      "productCount_other": "{{count}} products",
+      "allStores": "All stores"
+    }
   },
   "assistant": {
     "title": "Assistant",
@@ -369,7 +423,10 @@
       "timezone": "Times shown in your time zone ({{zone}})",
       "book": "Book {{time}}",
       "pickTime": "Choose a time",
-      "expertZone": "Expert in {{place}} ({{zone}})"
+      "expertZone": "Expert in {{place}} ({{zone}})",
+      "dayFull": "Full",
+      "noneLeft": "No times left on this day.",
+      "jumpNext": "Next available: {{day}}"
     },
     "directory": {
       "search": "Search experts",
@@ -384,6 +441,61 @@
       "fromPerHour": "From {{price}}/hr",
       "customQuote": "Custom quote",
       "nextAvailable": "Next: {{when}}"
+    },
+    "discover": {
+      "needHeading": "What do you need?",
+      "serviceCount_one": "{{count}} service",
+      "serviceCount_other": "{{count}} services",
+      "all": "All",
+      "servicesHeading": "Services",
+      "allServices": "All services"
+    },
+    "cat": {
+      "documents": {
+        "title": "Documents and visas",
+        "blurb": "Visas, residence permits, registration and legal help."
+      },
+      "translation": {
+        "title": "Translation",
+        "blurb": "Certified translations, notary and apostille."
+      },
+      "education": {
+        "title": "Education",
+        "blurb": "Russian lessons, exam prep and university admission."
+      },
+      "work": {
+        "title": "Work and business",
+        "blurb": "Jobs, CVs, company setup, taxes and IT."
+      },
+      "housing": {
+        "title": "Housing",
+        "blurb": "Find a flat, rent safely and move in."
+      },
+      "health": {
+        "title": "Health",
+        "blurb": "Doctors and therapists who speak your language."
+      },
+      "beauty": {
+        "title": "Hair and beauty",
+        "blurb": "Barbers, braids, nails and makeup."
+      },
+      "errands": {
+        "title": "Errands",
+        "blurb": "Couriers, shopping help, cleaning and everyday tasks."
+      },
+      "expertCount_one": "{{count}} expert",
+      "expertCount_other": "{{count}} experts",
+      "whoCanHelp": "Who can help",
+      "whatToBook": "What you can book",
+      "empty": "Nothing to book here yet.",
+      "emptyBody": "We're adding experts. Check back soon or ask support for help.",
+      "soon": "Coming soon"
+    },
+    "card": {
+      "minutes_one": "{{count}} min",
+      "minutes_other": "{{count}} min",
+      "book": "Book",
+      "perHour": "/hr"
     }
   },
   "transactions": {
@@ -434,7 +546,8 @@
     "groupToday": "Today",
     "groupYesterday": "Yesterday",
     "chipBookings": "Bookings",
-    "statusRefunded": "Refunded"
+    "statusRefunded": "Refunded",
+    "rowItemsMore": "{{title}} +{{count}}"
   },
   "txDetail": {
     "errorNotFound": "Transaction not found or access denied",
@@ -1302,7 +1415,8 @@
       "accepted": "The seller accepted your order.",
       "in_progress": "Your order is being prepared.",
       "fulfilled": "Your order is complete.",
-      "cancelled": "This order was cancelled."
+      "cancelled": "This order was cancelled.",
+      "expired": "The time to pay ran out, so this order was not placed. Add the items again to order."
     },
     "zoneNotServedTitle": "We can’t deliver here yet",
     "pickupInstead": "Pick up instead",
@@ -1460,23 +1574,40 @@
     "slide": {
       "adLabel": "Ad",
       "position": "Slide {{n}} of {{total}}",
-      "belong": {
-        "kicker": "Ciuna",
-        "title": "Home is wherever you are",
-        "body": "Money, groceries, people from home.",
-        "cta": "Explore"
+      "sorted": {
+        "title": "Life abroad, sorted.",
+        "body": "Money, meals and help from home, in one app."
       },
-      "language": {
-        "kicker": "For people abroad",
-        "title": "Be understood anywhere",
-        "body": "Stores and experts in your language.",
-        "cta": "Find your people"
+      "community": {
+        "title": "Your community, close by.",
+        "body": "Stores and experts run by people like you."
       },
-      "family": {
-        "kicker": "Stay close",
-        "title": "Family, a few taps away",
-        "body": "Send money home in minutes.",
-        "cta": "Send home"
+      "pay": {
+        "title": "Pay the way you know.",
+        "body": "Bank transfer, QR or card, in your currency."
+      }
+    },
+    "now": {
+      "title": "In progress"
+    },
+    "sendAgain": {
+      "title": "Send again"
+    },
+    "rate": {
+      "aria": "Exchange rate {{from}} to {{to}}. Open Send."
+    },
+    "banner": {
+      "verify": {
+        "title": "Verify your identity",
+        "body": "One-time check so you can send money."
+      },
+      "review": {
+        "title": "Verification in review",
+        "body": "We'll let you know when it's done."
+      },
+      "refer": {
+        "title": "Invite friends, earn commission",
+        "body": "Share your code and earn on their transfers."
       }
     }
   },
@@ -1697,5 +1828,12 @@
     "keep": "Keep it on",
     "on": "On",
     "off": "Off"
+  },
+  "account": {
+    "editProfile": "Edit profile",
+    "groupSecurity": "Security and limits",
+    "groupPreferences": "Preferences",
+    "groupHelp": "Help",
+    "logOut": "Log out"
   }
 }

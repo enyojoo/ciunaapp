@@ -117,9 +117,12 @@ export function StoreHeader({
           </View>
           <View style={styles.statusSlot}>
             <Text style={styles.meta} numberOfLines={1}>
-              {rated ? `★ ${(summary!.avg as number).toFixed(1)} (${summary!.count})` : t("hub.store.newStore", { defaultValue: "New store" })}
-              {" · "}
-              {t("hub.vendorProductCount", { defaultValue: "{{count}} products", count: productCount })}
+              {[
+                rated ? `★ ${(summary!.avg as number).toFixed(1)} (${summary!.count})` : null,
+                t("hub.vendorProductCount", { defaultValue: "{{count}} products", count: productCount }),
+              ]
+                .filter(Boolean)
+                .join(" · ")}
             </Text>
           </View>
           <View style={styles.statusSlot}>
@@ -148,16 +151,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: { width: "100%", height: "100%" },
-  logoInitial: { fontSize: 22, fontWeight: "700", color: colors.primaryText, textAlign: "center" },
+  logoInitial: { fontSize: typeSize.title, fontWeight: "700", color: colors.primaryText, textAlign: "center" },
   // Starts below the cover edge: only the logo overlaps the cover.
   body: { flex: 1, minWidth: 0, marginTop: OVERLAP + 4 },
   nameSlot: { height: 28, flexDirection: "row", alignItems: "center", gap: 6 },
-  name: { flexShrink: 1, fontSize: 20, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
+  name: { flexShrink: 1, fontSize: typeSize.headline, fontWeight: "700", letterSpacing: -0.3, color: colors.text },
   locSlot: { height: 20, flexDirection: "row", alignItems: "center", gap: 5 },
   loc: { flexShrink: 1, fontSize: typeSize.meta, color: colors.muted },
   statusSlot: { height: 22, flexDirection: "row", alignItems: "center" },
   coverChip: { position: "absolute", right: 10, bottom: 10, maxWidth: "70%", borderRadius: radius.pill, backgroundColor: colors.surface, paddingHorizontal: 10, paddingVertical: 4 },
-  chipText: { fontSize: 12, fontWeight: "600" },
+  chipText: { fontSize: typeSize.caption, fontWeight: "600" },
   chipTextOn: { color: colors.successText },
   chipTextOff: { color: colors.neutralText },
   meta: { flexShrink: 1, fontSize: typeSize.meta, color: colors.muted },

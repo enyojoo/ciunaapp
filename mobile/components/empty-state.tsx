@@ -37,8 +37,8 @@ export function ComingSoon({ title }: { title: string }) {
 
 const styles = StyleSheet.create({
   wrap: { alignItems: "center", paddingHorizontal: 24, paddingVertical: 64 },
-  iconWell: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.primaryTint, alignItems: "center", justifyContent: "center", marginBottom: 16 },
-  title: { textAlign: "center", fontSize: 18, fontWeight: "600", color: colors.text },
-  body: { marginTop: 8, textAlign: "center", fontSize: typeSize.body, color: colors.muted },
+  iconWell: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.fill, alignItems: "center", justifyContent: "center", marginBottom: 16 },
+  title: { textAlign: "center", fontSize: typeSize.headline, lineHeight: 26, fontWeight: "700", color: colors.text },
+  body: { marginTop: 8, textAlign: "center", fontSize: typeSize.body, lineHeight: 22, color: colors.muted, maxWidth: 300 },
   action: { marginTop: 24, width: "100%", maxWidth: 280 },
 })

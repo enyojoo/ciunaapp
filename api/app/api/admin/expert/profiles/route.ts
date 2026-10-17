@@ -2,19 +2,27 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
 import { allocateExpertSlug } from "@/lib/expert-slug-server"
+import { isMissingSchemaError } from "@/lib/safe-select"
 
-const PROFILE_SELECT =
+const PROFILE_SELECT_BASE =
   "id, slug, display_name, headline, bio, is_published, category, image_url, capabilities, fulfillment_type, service_area, meeting_hint, created_at, updated_at"
+const PROFILE_SELECT = `${PROFILE_SELECT_BASE}, main_category`
+
+/** The eight fixed needs the apps group experts by. Must match the check on expert_profiles.main_category. */
+const MAIN_CATEGORIES = new Set(["documents", "translation", "education", "work", "housing", "health", "beauty", "errands"])
+
+function mainCategoryInput(v: unknown): string | null {
+  const s = String(v ?? "").trim().toLowerCase()
+  return MAIN_CATEGORIES.has(s) ? s : null
+}
 
 export async function GET(request: NextRequest) {
   try {
     await requireAdmin(request)
     const server = createServerClient()
-    const { data, error } = await server
-      .from("expert_profiles")
-      .select(PROFILE_SELECT)
-      .order("updated_at", { ascending: false })
-      .limit(500)
+    const list = (cols: string) => server.from("expert_profiles").select(cols).order("updated_at", { ascending: false }).limit(500)
+    let { data, error } = await list(PROFILE_SELECT)
+    if (error && isMissingSchemaError(error)) ({ data, error } = await list(PROFILE_SELECT_BASE))
     if (error) throw error
     return NextResponse.json({ profiles: data || [] })
   } catch (e) {
@@ -49,6 +57,7 @@ export async function POST(request: NextRequest) {
       bio: body.bio != null ? String(body.bio).trim() || null : null,
       is_published: Boolean(body.is_published),
       category: String(body.category || "Other").trim() || "Other",
+      main_category: mainCategoryInput(body.main_category),
       image_url: body.image_url != null ? String(body.image_url).trim() || null : null,
       capabilities: typeof body.capabilities === "object" && body.capabilities !== null ? body.capabilities : {},
       fulfillment_type: "online",
@@ -56,7 +65,11 @@ export async function POST(request: NextRequest) {
       meeting_hint: body.meeting_hint != null ? String(body.meeting_hint).trim() || null : null,
       updated_at: new Date().toISOString(),
     }
-    const { data, error } = await server.from("expert_profiles").insert(row).select(PROFILE_SELECT).single()
+    let { data, error } = await server.from("expert_profiles").insert(row).select(PROFILE_SELECT).single()
+    if (error && isMissingSchemaError(error)) {
+      const { main_category: _unused, ...rest } = row
+      ;({ data, error } = await server.from("expert_profiles").insert(rest).select(PROFILE_SELECT_BASE).single())
+    }
     if (error) throw error
     return NextResponse.json({ profile: data })
   } catch (e) {

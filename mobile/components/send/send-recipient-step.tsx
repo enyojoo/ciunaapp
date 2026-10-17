@@ -145,7 +145,7 @@ export function SendRecipientStep({
 
 const styles = StyleSheet.create({
   root: { gap: 14 },
-  headline: { fontSize: 22, fontWeight: "700", color: colors.text, letterSpacing: -0.3 },
+  headline: { fontSize: typeSize.title, fontWeight: "700", color: colors.text, letterSpacing: -0.3 },
   searchBox: {
     flexDirection: "row",
     alignItems: "center",
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   cardBody: { flex: 1, minWidth: 0, gap: 2 },
   name: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
-  meta: { fontSize: 12, color: colors.muted },
+  meta: { fontSize: typeSize.caption, color: colors.muted },
   check: {
     width: 28,
     height: 28,

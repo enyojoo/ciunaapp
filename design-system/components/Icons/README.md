@@ -19,5 +19,7 @@ Sizes 16 (inline, badges, chips), 20 (buttons, rows, nav), 24 (tab bar, headers)
 ## Upgrade
 Built. Add icons by editing the list in `scripts/build-icons.mjs`, then run it; the check fails on a name not in the set.
 
+Expo: `Icon` in `mobile/components/ui/icon.tsx` is the only icon entry point: SF Symbols on iOS (filled variant when active), Lucide on Android and web, one name map. Add a name there rather than importing a glyph in a screen.
+
 ## Code
 `design-system/components/icons.js`, `design-system/scripts/build-icons.mjs`

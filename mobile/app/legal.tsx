@@ -3,7 +3,7 @@ import { FileText } from "lucide-react-native"
 import { ScreenScroll } from "@/components/screen"
 import { GroupCard, Row } from "@/components/row"
 import { useExternalLink } from "@/lib/external-link"
-import { colors } from "@/lib/theme"
+import { colors, type as typeSize } from "@/lib/theme"
 import { Text } from "react-native"
 
 /** Legal documents in one place (was two rows on More). Opens the public pages in-app. */
@@ -12,7 +12,7 @@ export default function LegalScreen() {
   const { openLink } = useExternalLink()
   return (
     <ScreenScroll>
-      <Text style={{ fontSize: 24, fontWeight: "700", color: colors.text, marginBottom: 12 }}>
+      <Text style={{ fontSize: typeSize.title, fontWeight: "700", color: colors.text, marginBottom: 12 }}>
         {t("more.legal", { defaultValue: "Legal" })}
       </Text>
       <GroupCard>

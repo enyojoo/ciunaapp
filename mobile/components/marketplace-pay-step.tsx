@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
   },
   instructionLabel: {
-    fontSize: 12,
+    fontSize: typeSize.caption,
     fontWeight: "600",
     letterSpacing: 0.4,
     textTransform: "uppercase",

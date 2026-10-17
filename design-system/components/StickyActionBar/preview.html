@@ -1,0 +1,22 @@
+<!-- @dsCard group="Navigation" height=520 width=900 subtitle="Bottom action bar: product page, cart with summary, disabled with a reason, and busy" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>StickyActionBar</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.fr{position:relative;height:380px;border:1px solid var(--hairline);border-radius:var(--radius-card);background:var(--paper);overflow:hidden;font-family:var(--font-native)}
+.ct{padding:16px}
+.ln{height:14px;border-radius:7px;background:var(--fill);margin-bottom:10px}
+.bar{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--hairline);box-shadow:0 -4px 16px rgba(17,24,39,.08);padding:12px 16px 24px;display:grid;gap:8px}
+.bar .s{font:400 13px/18px var(--font-native);color:var(--muted);display:flex;justify-content:space-between}
+.bar .s b{font:600 13px/18px var(--font-native);color:var(--ink)}
+.bar .btn{height:48px;justify-content:center}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+  <div class="cz-col" style="width:330px"><div class="fr"><div class="ct"><div class="ln" style="width:70%"></div><div class="ln"></div><div class="ln" style="width:85%"></div></div>
+    <div class="bar"><a class="btn btn-block">Add to cart · ₽330</a></div></div><p class="cz-cap">Product page.</p></div>
+  <div class="cz-col" style="width:330px"><div class="fr"><div class="ct"><div class="ln"></div><div class="ln" style="width:60%"></div></div>
+    <div class="bar"><div class="s"><span>2 items</span><b>₽6,550</b></div><a class="btn btn-block">Checkout · ₽6,550</a></div></div><p class="cz-cap">Cart, with a summary line.</p></div>
+  <div class="cz-col" style="width:330px"><div class="fr"><div class="ct"><div class="ln" style="width:75%"></div></div>
+    <div class="bar"><div class="s"><span>Choose a delivery area</span></div><a class="btn btn-block is-disabled">Continue</a></div></div><p class="cz-cap">Disabled, with the reason.</p></div>
+  <div class="cz-col" style="width:330px"><div class="fr"><div class="ct"><div class="ln" style="width:80%"></div></div>
+    <div class="bar"><a class="btn btn-block is-busy"><span class="spinner"></span>Paying</a></div></div><p class="cz-cap">Busy keeps full colour and width.</p></div>
+</div></div></body></html>

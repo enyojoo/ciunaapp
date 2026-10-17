@@ -82,7 +82,29 @@
     "marketplaceProductsHeading": "Productos",
     "marketplaceStoresHeading": "Tiendas",
     "storesDirectorySubtitle": "Elige una tienda para ver sus productos.",
-    "marketplaceSeeAllStores": "Ver todo",
+    "marketplaceSeeAllStores": "Todas las tiendas",
+    "marketplaceSeeAllProducts": "Todos los productos",
+    "locationTitle": "Elige tu zona",
+    "locationAll": "Todas las zonas",
+    "locationLabel": "Ubicación",
+    "locationHint": "Mostramos tiendas que entregan en la ciudad elegida, además de tiendas solo con recogida y artículos digitales.",
+    "locationEmpty": "Aún no hay zonas de entrega configuradas.",
+    "locationDelivering": "Con entrega disponible",
+    "locationPopular": "Populares",
+    "locationAllCities": "Todas las ciudades",
+    "locationSearch": "Buscar ciudades",
+    "searchStores": "Buscar tiendas",
+    "searchProducts": "Buscar productos",
+    "searchServices": "Buscar servicios",
+    "filterAll": "Todos",
+    "filterOpenNow": "Abierto ahora",
+    "filterDelivers": "Con entrega",
+    "filterOnline": "En línea",
+    "filterInPerson": "Presencial",
+    "resultsCount": "Resultados: {{count}}",
+    "clearFilters": "Quitar filtros",
+    "noMatch": "Sin resultados",
+    "noMatchBody": "Prueba otro nombre o filtro.",
     "marketplaceNoVendors": "Aún no hay tiendas — vuelve pronto.",
     "verifiedVendor": "Vendedor verificado",
     "backToLine": "Volver al servicio",
@@ -103,7 +125,7 @@
     "expertsTitle": "Expertos",
     "expertsSubtitle": "Profesionales de confianza para el hogar y la belleza.",
     "expertsFeaturedHeading": "Destacados",
-    "expertsSeeAll": "Ver todo",
+    "expertsSeeAll": "Todos los expertos",
     "expertsServicesHeading": "Servicios",
     "expertsFeaturedEmpty": "Aún no hay expertos — vuelve pronto.",
     "expertsDirectoryTitle": "Todos los expertos",
@@ -196,7 +218,8 @@
       "deliveryFrom": "Envío desde {{fee}}",
       "delivers": "Envía",
       "etaRange": "{{min}}–{{max}} min",
-      "eta": "{{min}} min"
+      "eta": "{{min}} min",
+      "deliveryFee": "Envío desde {{fee}}"
     },
     "cart": {
       "emptyBody": "Añade algo de una tienda para empezar tu pedido.",
@@ -216,7 +239,11 @@
       "storePausedNote": "Esta tienda está en pausa, así que no puedes pagar por ahora.",
       "removedItem": "Quitado del carrito",
       "undo": "Deshacer",
-      "addToCartPrice": "Añadir al carrito · {{price}}"
+      "addToCartPrice": "Añadir al carrito · {{price}}",
+      "removeShort": "Eliminar",
+      "storeClosedShort": "La tienda está cerrada ahora.",
+      "itemCount_one": "{{count}} artículo",
+      "itemCount_other": "{{count}} artículos"
     },
     "stock": {
       "onlyLeft": "Solo quedan {{n}}",
@@ -229,7 +256,34 @@
     "verifiedInfoHint": "¿Qué significa?",
     "verifiedInfoClose": "Entendido",
     "noDeliveryTitle": "Aún no hay tiendas con envío",
-    "noDeliveryBody": "Estas tiendas ofrecen recogida. El envío aparecerá aquí cuando lo abran."
+    "noDeliveryBody": "Estas tiendas ofrecen recogida. El envío aparecerá aquí cuando lo abran.",
+    "cat": {
+      "food": {
+        "mains": "Platos principales",
+        "soups": "Sopas y guisos",
+        "grill": "Parrilla",
+        "snacks": "Snacks y repostería",
+        "breakfast": "Desayuno",
+        "drinks": "Bebidas"
+      },
+      "mart": {
+        "staples": "Despensa",
+        "sauces": "Salsas y especias",
+        "snacks": "Snacks y dulces",
+        "drinks": "Bebidas",
+        "fresh": "Frescos y congelados",
+        "digital": "Servicios digitales",
+        "other": "Otros"
+      },
+      "foodHeading": "¿Qué se te antoja?",
+      "martHeading": "¿Qué necesitas?",
+      "allProducts": "Todos los productos",
+      "empty": "Aún no hay nada aquí.",
+      "emptyBody": "Las tiendas están añadiendo productos. Vuelve pronto.",
+      "productCount_one": "{{count}} producto",
+      "productCount_other": "{{count}} productos",
+      "allStores": "Todas las tiendas"
+    }
   },
   "assistant": {
     "title": "Asistente",
@@ -328,7 +382,8 @@
     "groupToday": "Hoy",
     "groupYesterday": "Ayer",
     "chipBookings": "Reservas",
-    "statusRefunded": "Reembolsado"
+    "statusRefunded": "Reembolsado",
+    "rowItemsMore": "{{title}} +{{count}}"
   },
   "txDetail": {
     "errorNotFound": "Transacción no encontrada o acceso denegado",
@@ -1137,7 +1192,10 @@
       "timezone": "Horas mostradas en tu zona horaria ({{zone}})",
       "book": "Reservar {{time}}",
       "pickTime": "Elige una hora",
-      "expertZone": "Experto en {{place}} ({{zone}})"
+      "expertZone": "Experto en {{place}} ({{zone}})",
+      "dayFull": "Completo",
+      "noneLeft": "No quedan horarios este día.",
+      "jumpNext": "Próximo disponible: {{day}}"
     },
     "directory": {
       "search": "Buscar expertos",
@@ -1152,6 +1210,61 @@
       "fromPerHour": "Desde {{price}}/h",
       "customQuote": "A cotizar",
       "nextAvailable": "Próximo: {{when}}"
+    },
+    "discover": {
+      "needHeading": "¿Qué necesitas?",
+      "serviceCount_one": "{{count}} servicio",
+      "serviceCount_other": "{{count}} servicios",
+      "all": "Todos",
+      "servicesHeading": "Servicios",
+      "allServices": "Todos los servicios"
+    },
+    "cat": {
+      "documents": {
+        "title": "Documentos y visados",
+        "blurb": "Visados, permisos de residencia, registro y ayuda legal."
+      },
+      "translation": {
+        "title": "Traducción",
+        "blurb": "Traducciones certificadas, notaría y apostilla."
+      },
+      "education": {
+        "title": "Educación",
+        "blurb": "Clases de ruso, preparación de exámenes y admisión universitaria."
+      },
+      "work": {
+        "title": "Trabajo y negocios",
+        "blurb": "Empleo, CV, empresas, impuestos e informática."
+      },
+      "housing": {
+        "title": "Vivienda",
+        "blurb": "Encuentra piso, alquila seguro y múdate."
+      },
+      "health": {
+        "title": "Salud",
+        "blurb": "Médicos y terapeutas que hablan tu idioma."
+      },
+      "beauty": {
+        "title": "Pelo y belleza",
+        "blurb": "Barberos, trenzas, uñas y maquillaje."
+      },
+      "errands": {
+        "title": "Recados",
+        "blurb": "Mensajería, compras, limpieza y tareas del día a día."
+      },
+      "expertCount_one": "{{count}} experto",
+      "expertCount_other": "{{count}} expertos",
+      "whoCanHelp": "Quién puede ayudarte",
+      "whatToBook": "Qué puedes reservar",
+      "empty": "Aún no hay nada para reservar.",
+      "emptyBody": "Estamos sumando expertos. Vuelve pronto o pide ayuda a soporte.",
+      "soon": "Muy pronto"
+    },
+    "card": {
+      "minutes_one": "{{count}} min",
+      "minutes_other": "{{count}} min",
+      "book": "Reservar",
+      "perHour": "/h"
     }
   },
   "referralLanding": {
@@ -1302,7 +1415,8 @@
       "accepted": "El vendedor aceptó tu pedido.",
       "in_progress": "Tu pedido se está preparando.",
       "fulfilled": "Tu pedido está completo.",
-      "cancelled": "Este pedido fue cancelado."
+      "cancelled": "Este pedido fue cancelado.",
+      "expired": "Se acabó el tiempo para pagar, así que el pedido no se realizó. Vuelve a añadir los productos para pedir."
     },
     "zoneNotServedTitle": "Aún no entregamos aquí",
     "pickupInstead": "Recoger en tienda",
@@ -1460,23 +1574,40 @@
     "slide": {
       "adLabel": "Anuncio",
       "position": "Diapositiva {{n}} de {{total}}",
-      "belong": {
-        "kicker": "Ciuna",
-        "title": "Hogar es donde estés",
-        "body": "Dinero y gente de casa.",
-        "cta": "Explorar"
+      "sorted": {
+        "title": "La vida fuera, resuelta.",
+        "body": "Dinero, comida y ayuda de casa, en una sola app."
       },
-      "language": {
-        "kicker": "Para quien vive fuera",
-        "title": "Te entienden en todas partes",
-        "body": "Tiendas y expertos en tu idioma.",
-        "cta": "Encuentra a los tuyos"
+      "community": {
+        "title": "Tu comunidad, cerca.",
+        "body": "Tiendas y expertos de gente como tú."
       },
-      "family": {
-        "kicker": "Mantente cerca",
-        "title": "Tu familia, a un toque",
-        "body": "Envía dinero a casa en minutos.",
-        "cta": "Enviar"
+      "pay": {
+        "title": "Paga como sabes.",
+        "body": "Transferencia, QR o tarjeta, en tu moneda."
+      }
+    },
+    "now": {
+      "title": "En curso"
+    },
+    "sendAgain": {
+      "title": "Enviar de nuevo"
+    },
+    "rate": {
+      "aria": "Tipo de cambio {{from}} a {{to}}. Abrir envío."
+    },
+    "banner": {
+      "verify": {
+        "title": "Verifica tu identidad",
+        "body": "Una comprobación única para poder enviar dinero."
+      },
+      "review": {
+        "title": "Verificación en revisión",
+        "body": "Te avisaremos cuando termine."
+      },
+      "refer": {
+        "title": "Invita a tus amigos y gana",
+        "body": "Comparte tu código y gana una comisión por sus envíos."
       }
     }
   },
@@ -1697,5 +1828,12 @@
     "keep": "Mantener",
     "on": "Activado",
     "off": "Desactivado"
+  },
+  "account": {
+    "editProfile": "Editar perfil",
+    "groupSecurity": "Seguridad y límites",
+    "groupPreferences": "Preferencias",
+    "groupHelp": "Ayuda",
+    "logOut": "Cerrar sesión"
   }
 }

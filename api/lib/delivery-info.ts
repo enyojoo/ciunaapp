@@ -1,11 +1,11 @@
-export type ZoneRow = { vendor_id: string; fee: number | string | null; currency: string | null; active?: boolean | null; eta_minutes?: number | null }
-export type DeliveryInfo = { delivery_zone_count: number; delivery_fee_from: number | null; delivery_fee_currency: string | null; delivery_eta_min: number | null; delivery_eta_max: number | null }
+export type ZoneRow = { vendor_id: string; city?: string | null; district?: string | null; fee: number | string | null; currency: string | null; active?: boolean | null; eta_minutes?: number | null }
+export type DeliveryInfo = { delivery_zone_count: number; delivery_fee_from: number | null; delivery_fee_currency: string | null; delivery_eta_min: number | null; delivery_eta_max: number | null; delivery_areas: { city: string; district: string }[] }
 
-const NONE: DeliveryInfo = { delivery_zone_count: 0, delivery_fee_from: null, delivery_fee_currency: null, delivery_eta_min: null, delivery_eta_max: null }
+const NONE: DeliveryInfo = { delivery_zone_count: 0, delivery_fee_from: null, delivery_fee_currency: null, delivery_eta_min: null, delivery_eta_max: null, delivery_areas: [] }
 
 /**
  * What a store shows about delivery: the cheapest fee ("from") in the currency most of its zones use, and the range of
- * delivery times across its active zones. A store with no active zones delivers nowhere (pickup only).
+ * delivery times across its active zones. A store with no active zones delivers nowhere (pickup only). `delivery_areas` lists the city/district pairs it serves.
  */
 export function summarizeZones(rows: ZoneRow[]): Map<string, DeliveryInfo> {
   const byVendor = new Map<string, ZoneRow[]>()
@@ -28,6 +28,9 @@ export function summarizeZones(rows: ZoneRow[]): Map<string, DeliveryInfo> {
       delivery_fee_currency: fees.length ? currency : null,
       delivery_eta_min: etas.length ? Math.min(...etas) : null,
       delivery_eta_max: etas.length ? Math.max(...etas) : null,
+      delivery_areas: zones
+        .filter((z) => String(z.city || "").trim())
+        .map((z) => ({ city: String(z.city).trim(), district: String(z.district || "").trim() })),
     })
   }
   return out
@@ -38,7 +41,7 @@ export const noDelivery = (): DeliveryInfo => ({ ...NONE })
 /** Loads the zones of the given stores. A database without the zones table gives no delivery info rather than an error. */
 export async function loadDeliveryInfo(server: { from: (t: string) => any }, vendorIds: string[]): Promise<Map<string, DeliveryInfo>> {
   if (!vendorIds.length) return new Map()
-  const { data, error } = await server.from("marketplace_zones").select("vendor_id,fee,currency,active,eta_minutes").in("vendor_id", vendorIds).eq("active", true)
+  const { data, error } = await server.from("marketplace_zones").select("vendor_id,city,district,fee,currency,active,eta_minutes").in("vendor_id", vendorIds).eq("active", true)
   if (error) return new Map()
   return summarizeZones((data as ZoneRow[]) || [])
 }

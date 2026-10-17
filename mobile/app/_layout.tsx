@@ -1,6 +1,5 @@
 import "@/lib/nativewind-flags"
 import { OfflineBanner } from "@/components/offline-banner"
-import { AppStackHeader } from "@/components/app-stack-header"
 import "../global.css"
 import "@/lib/web-crypto"
 import { Stack } from "expo-router"
@@ -9,6 +8,7 @@ import { useEffect, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { Platform, StyleSheet, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { ResponsiveAppShell } from "@/components/layout/responsive-app-shell"
 import { SessionRestoreCanvas } from "@/components/layout/session-restore-canvas"
 import { ShellAwareSafeArea } from "@/components/layout/shell-aware-safe-area"
@@ -20,7 +20,7 @@ import { PushRegistration } from "@/components/push-registration"
 import { ExternalLinkProvider } from "@/lib/external-link"
 import { hydrateLocale } from "@/lib/i18n"
 import { ResponsiveLayoutProvider } from "@/lib/responsive-layout"
-import { colors } from "@/lib/theme"
+import { colors, type as typeSize } from "@/lib/theme"
 
 export default function RootLayout() {
   const { t } = useTranslation("app")
@@ -49,6 +49,7 @@ export default function RootLayout() {
   }, [])
 
   return (
+    <GestureHandlerRootView style={styles.gestureRoot}>
     <SafeAreaProvider>
       <AuthProvider>
         <ResponsiveLayoutProvider>
@@ -68,9 +69,11 @@ export default function RootLayout() {
                         headerShadowVisible: false,
                         headerTintColor: colors.text,
                         headerBackButtonDisplayMode: "minimal",
+                        headerTitleStyle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
+                        headerTitleAlign: "center",
                         animationDuration: 180,
-                        // Every screen that shows a header gets the shared top bar.
-                        header: (props: unknown) => <AppStackHeader {...(props as Parameters<typeof AppStackHeader>[0])} />,
+                        // Screens that show a header get the native one (system back, swipe, iOS glass). Screens with a
+                        // cover photo or custom actions draw `NavBar` themselves and keep headerShown off.
                       }}
                     >
                       <Stack.Screen name="index" />
@@ -99,6 +102,7 @@ export default function RootLayout() {
                       <Stack.Screen name="limits" options={{ headerShown: true, title: t("limits.title") }} />
                       <Stack.Screen name="referrals" options={{ headerShown: true, title: t("referrals.pageTitle") }} />
                       <Stack.Screen name="search" options={{ gestureEnabled: true }} />
+                      <Stack.Screen name="dev/gallery" options={{ headerShown: true, title: "UI gallery" }} />
                       <Stack.Screen name="favourites" options={{ headerShown: true, title: t("favourites.title", { defaultValue: "Favourites" }) }} />
                       <Stack.Screen name="orders/[id]/chat" options={{ headerShown: true, title: t("chat.title", { defaultValue: "Chat with seller" }) }} />
                       <Stack.Screen name="orders/[id]" options={{ headerShown: true, title: "Order" }} />
@@ -112,6 +116,7 @@ export default function RootLayout() {
         </ResponsiveLayoutProvider>
       </AuthProvider>
     </SafeAreaProvider>
+    </GestureHandlerRootView>
   )
 }
 
@@ -134,6 +139,7 @@ function RootChrome({ children }: { children: ReactNode }) {
 }
 
 const styles = StyleSheet.create({
+  gestureRoot: { flex: 1 },
   chrome: { flex: 1, width: "100%", minHeight: 0, height: Platform.OS === "web" ? "100%" : undefined },
   navRoot: {
     flex: 1,

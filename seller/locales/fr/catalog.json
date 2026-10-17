@@ -166,5 +166,22 @@
   "catalog.fulfilment.pause": "Mettre la boutique en pause",
   "catalog.fulfilment.pauseHint": "Les clients ne peuvent pas commander tant que la boutique est en pause. Utile pour une courte pause ; les horaires s'appliquent à la reprise.",
   "catalog.fulfilment.pausedOn": "En pause : commandes impossibles",
-  "catalog.fulfilment.pausedOff": "Commandes ouvertes"
+  "catalog.fulfilment.pausedOff": "Commandes ouvertes",
+  "catalog.field.appCategory": "Apparaît dans l'app sous",
+  "catalog.field.appCategoryHint": "Là où les clients le trouvent en parcourant Food ou Mart.",
+  "catalog.appCat.choose": "Choisir…",
+  "catalog.appCat.food.mains": "Plats",
+  "catalog.appCat.food.soups": "Soupes et ragoûts",
+  "catalog.appCat.food.grill": "Grillades",
+  "catalog.appCat.food.snacks": "Snacks et pâtisseries",
+  "catalog.appCat.food.breakfast": "Petit-déjeuner",
+  "catalog.appCat.food.drinks": "Boissons",
+  "catalog.appCat.mart.staples": "Épicerie",
+  "catalog.appCat.mart.sauces": "Sauces et épices",
+  "catalog.appCat.mart.snacks": "Snacks et douceurs",
+  "catalog.appCat.mart.drinks": "Boissons",
+  "catalog.appCat.mart.fresh": "Frais et surgelés",
+  "catalog.appCat.mart.digital": "Services numériques",
+  "catalog.appCat.mart.other": "Autres",
+  "errors.MAIN_CATEGORY_OUTSIDE_LINE": "Ce n'est pas une catégorie disponible pour votre boutique."
 }

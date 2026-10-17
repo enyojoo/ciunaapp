@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
   hintMuted: { paddingVertical: 32, textAlign: "center", fontSize: typeSize.body, color: colors.muted },
   section: { marginTop: 4 },
   sectionHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 4 },
-  sectionTitle: { marginBottom: 12, fontSize: 18, fontWeight: "600", color: colors.text },
+  sectionTitle: { marginBottom: 12, fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   link: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primaryText },
   recentRow: {
     minHeight: 48,
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
   notice: { borderRadius: radius.row, backgroundColor: colors.warningSurface, padding: 16 },
   noticeText: { fontSize: typeSize.body, color: colors.warningText, textAlign: "center" },
   none: { alignItems: "center", paddingVertical: 40 },
-  noneTitle: { textAlign: "center", fontSize: 18, fontWeight: "600", color: colors.text },
+  noneTitle: { textAlign: "center", fontSize: typeSize.headline, fontWeight: "600", color: colors.text },
   noneBody: { marginTop: 8, textAlign: "center", fontSize: typeSize.body, color: colors.muted },
   suggest: { marginTop: 20, flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 8 },
 })

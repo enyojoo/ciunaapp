@@ -27,6 +27,10 @@ export function hubMarketplaceStoresPath(lineSlug: string): string {
   return `${hubLineHomePath(lineSlug)}/stores`
 }
 
+export function hubMarketplaceProductsPath(lineSlug: string): string {
+  return `${hubLineHomePath(lineSlug)}/products`
+}
+
 export function hubMarketplaceVendorPath(lineSlug: string, vendorSlug: string): string {
   return `${hubLineHomePath(lineSlug)}/v/${encodeURIComponent(vendorSlug)}`
 }
