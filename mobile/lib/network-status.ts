@@ -24,14 +24,31 @@ if (Platform.OS === "web" && typeof window !== "undefined") {
   if (typeof navigator !== "undefined" && navigator.onLine === false) offline = true
 }
 
-/** Wraps a request: a thrown network error marks the app offline, a response marks it online. */
+let failures = 0
+
+/** Offline only when the evidence says so: the browser itself reports offline, or (phones) two requests in a row fail at the network level. */
+export function shouldMarkOffline(isWeb: boolean, browserOnline: boolean | null, consecutiveFailures: number): boolean {
+  if (isWeb) return browserOnline === false
+  return consecutiveFailures >= 2
+}
+
+/**
+ * Wraps a request: a response marks the app online. A thrown network error only counts when shouldMarkOffline agrees,
+ * because on the web a cancelled request, a blocked cross-origin call or one failing endpoint throws the same error
+ * while the person is online.
+ */
 export async function tracked(request: Promise<Response>): Promise<Response> {
   try {
     const res = await request
+    failures = 0
     markOnline()
     return res
   } catch (e) {
-    if (e instanceof TypeError) markOffline()
+    if (e instanceof TypeError) {
+      failures += 1
+      const browserOnline = Platform.OS === "web" && typeof navigator !== "undefined" ? navigator.onLine : null
+      if (shouldMarkOffline(Platform.OS === "web", browserOnline, failures)) markOffline()
+    }
     throw e
   }
 }
