@@ -1616,7 +1616,28 @@
     "reportSubject": "Problem with transfer {{id}}",
     "share": "Share receipt",
     "repeat": "Repeat transfer",
-    "view": "View receipt"
+    "view": "View receipt",
+    "cancel": {
+      "cta": "Cancel transfer",
+      "title": "Cancel this transfer?",
+      "body": "You have not been charged. You can start again with a new rate.",
+      "confirm": "Cancel transfer",
+      "keep": "Keep it",
+      "failed": "We could not cancel it. Try again.",
+      "paid": "Your payment already arrived, so the transfer can no longer be cancelled."
+    },
+    "timedOut": {
+      "headline": "The payment time ran out",
+      "sub": "You were not charged. Repeat the transfer to see today's rate."
+    },
+    "sbp": {
+      "title": "Pay with SBP",
+      "exact": "Pay exactly",
+      "deadline": "Pay before {{time}}.",
+      "locked": "Rate locked for {{time}}",
+      "scan": "Scan the QR code in your banking app and pay exactly this amount.",
+      "openBank": "Open my bank"
+    }
   },
   "security": {
     "title": "Security",

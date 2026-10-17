@@ -1616,7 +1616,28 @@
     "reportSubject": "转账 {{id}} 的问题",
     "share": "分享收据",
     "repeat": "再次转账",
-    "view": "查看收据"
+    "view": "查看收据",
+    "cancel": {
+      "cta": "取消转账",
+      "title": "取消这笔转账？",
+      "body": "你未被扣款。可以按新汇率重新开始。",
+      "confirm": "取消转账",
+      "keep": "保留",
+      "failed": "无法取消，请重试。",
+      "paid": "你的付款已到账，转账无法再取消。"
+    },
+    "timedOut": {
+      "headline": "付款时间已过",
+      "sub": "你未被扣款。请重新转账以查看今日汇率。"
+    },
+    "sbp": {
+      "title": "通过 SBP 支付",
+      "exact": "请准确支付",
+      "deadline": "请在 {{time}} 前支付。",
+      "locked": "汇率已锁定 {{time}}",
+      "scan": "在银行应用中扫描二维码，并准确支付此金额。",
+      "openBank": "打开我的银行"
+    }
   },
   "security": {
     "title": "安全",

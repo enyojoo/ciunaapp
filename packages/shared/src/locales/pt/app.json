@@ -1616,7 +1616,28 @@
     "reportSubject": "Problema com a transferência {{id}}",
     "share": "Compartilhar recibo",
     "repeat": "Repetir transferência",
-    "view": "Ver recibo"
+    "view": "Ver recibo",
+    "cancel": {
+      "cta": "Cancelar transferência",
+      "title": "Cancelar esta transferência?",
+      "body": "Você não foi cobrado. Pode começar de novo com uma nova taxa.",
+      "confirm": "Cancelar transferência",
+      "keep": "Manter",
+      "failed": "Não foi possível cancelar. Tente de novo.",
+      "paid": "Seu pagamento já chegou, então a transferência não pode mais ser cancelada."
+    },
+    "timedOut": {
+      "headline": "O tempo de pagamento acabou",
+      "sub": "Você não foi cobrado. Repita a transferência para ver a taxa de hoje."
+    },
+    "sbp": {
+      "title": "Pagar com SBP",
+      "exact": "Pague exatamente",
+      "deadline": "Pague antes de {{time}}.",
+      "locked": "Taxa travada por {{time}}",
+      "scan": "Escaneie o QR code no app do seu banco e pague exatamente este valor.",
+      "openBank": "Abrir meu banco"
+    }
   },
   "security": {
     "title": "Segurança",

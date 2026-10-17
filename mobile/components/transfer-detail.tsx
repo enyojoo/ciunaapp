@@ -6,6 +6,9 @@ import { useTranslation } from "react-i18next"
 import { Ban, Check, ChevronRight, Circle, CircleAlert, Copy, Flag, Undo2 } from "lucide-react-native"
 import { SvgXml } from "react-native-svg"
 import { Avatar } from "@/components/avatar"
+import { ConfirmDialog } from "@/components/confirm-dialog"
+import { useToast } from "@/components/toast-provider"
+import { ApiError, authJson } from "@/lib/social-api"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { StatusChip } from "@/components/status-chip"
@@ -23,11 +26,17 @@ import { colors, radius, shadows, type as typeSize } from "@/lib/theme"
  * amounts, the recipient, the payment, Report a problem, and pinned Share receipt and Repeat transfer.
  * `paySlot` holds the pay-now controls shown while the transfer waits for payment.
  */
-export function TransferDetail({ tx, locale, flagSvg, paySlot, receiptSlot }: { tx: CombinedTransaction; locale: string; flagSvg?: string | null; paySlot?: ReactNode; receiptSlot?: ReactNode }) {
+export function TransferDetail({ tx, locale, flagSvg, paySlot, receiptSlot, onChanged }: { tx: CombinedTransaction; locale: string; flagSvg?: string | null; paySlot?: ReactNode; receiptSlot?: ReactNode; /** Called after the transfer changed (cancelled) so the screen reloads it. */ onChanged?: () => void }) {
   const { t } = useTranslation("app")
   const router = useRouter()
+  const { showError } = useToast()
   const [copied, setCopied] = useState(false)
+  const [confirmCancel, setConfirmCancel] = useState(false)
+  const [cancelling, setCancelling] = useState(false)
   const tone = statusTone(tx.status)
+  // Cancelled because the payment window closed (not by the customer): its own wording.
+  const cancelledAt = (tx.events || []).find((e) => e.status === "cancelled")?.created_at
+  const timedOut = tone === "cancelled" && Boolean(tx.payment_expires_at) && (!cancelledAt || new Date(cancelledAt).getTime() >= new Date(tx.payment_expires_at as string).getTime() - 5000)
   const steps = transferSteps(tone, tx.created_at, tx.completed_at, tx.events)
   const name = tx.recipient?.full_name || ""
   const bank = tx.recipient?.bank_name || ""
@@ -42,7 +51,9 @@ export function TransferDetail({ tx, locale, flagSvg, paySlot, receiptSlot }: { 
   const heroAmount = tone === "pending" ? formatMoney(total, sendCur) : tone === "failed" || tone === "cancelled" || refundedLike ? formatMoney(total, sendCur) : formatMoney(tx.receive_amount, recvCur)
   const when = formatWhenZone(tx.completed_at && tone === "completed" ? tx.completed_at : tx.created_at, locale)
   const sub =
-    tone === "completed"
+    timedOut
+      ? t("transferDetail.timedOut.sub")
+      : tone === "completed"
       ? t("transferDetail.sub.completed", { when, defaultValue: "Delivered {{when}}" })
       : tone === "pending"
         ? t("transferDetail.sub.pending", { amount: formatMoney(total, sendCur), defaultValue: "Pay {{amount}} to start your transfer." })
@@ -75,6 +86,21 @@ export function TransferDetail({ tx, locale, flagSvg, paySlot, receiptSlot }: { 
   const share = () =>
     void Share.share({ message: t("txDetail.shareText", { id: tx.transaction_id, send: formatMoney(tx.send_amount, tx.send_currency), name, date: tx.created_at ? new Date(tx.created_at).toLocaleDateString(locale, { dateStyle: "medium" }) : "", defaultValue: "Ciuna transfer {{id}}: {{send}} sent to {{name}} on {{date}}." }) })
 
+  const cancelTransfer = async () => {
+    setCancelling(true)
+    try {
+      await authJson(`/api/transactions/${encodeURIComponent(tx.transaction_id)}/cancel`, { method: "POST", body: {} })
+      setConfirmCancel(false)
+      onChanged?.()
+    } catch (e) {
+      setConfirmCancel(false)
+      showError(e instanceof ApiError && e.code === "TRANSFER_NOT_CANCELLABLE" ? t("transferDetail.cancel.paid") : t("transferDetail.cancel.failed"))
+      onChanged?.()
+    } finally {
+      setCancelling(false)
+    }
+  }
+
   const canShare = tone === "completed"
   const showQuoteTotals = tone !== "cancelled"
 
@@ -86,13 +112,19 @@ export function TransferDetail({ tx, locale, flagSvg, paySlot, receiptSlot }: { 
             <HeroIcon size={24} color={tint[1]} strokeWidth={2.4} />
           </View>
           <StatusChip status={tx.status} />
-          <Text style={styles.headline}>{t(`transferDetail.headline.${tone}`, { name: name || t("txDetail.recipient") })}</Text>
-          <Text style={styles.heroAmount}>{heroAmount}</Text>
+          <Text style={styles.headline}>{timedOut ? t("transferDetail.timedOut.headline") : t(`transferDetail.headline.${tone}`, { name: name || t("txDetail.recipient") })}</Text>
+          {tone === "pending" && paySlot ? null : <Text style={styles.heroAmount}>{heroAmount}</Text>}
           <Text style={styles.heroSub}>{sub}</Text>
           {tone === "failed" ? <Text style={styles.safe}>{t("transferDetail.safe")}</Text> : null}
         </View>
 
         {paySlot}
+
+        {tone === "pending" ? (
+          <View style={styles.cancelRow}>
+            <PrimaryButton label={t("transferDetail.cancel.cta")} variant="secondary" onPress={() => setConfirmCancel(true)} />
+          </View>
+        ) : null}
 
         <View style={styles.card}>
           {steps.map((s, i) => (
@@ -188,6 +220,17 @@ export function TransferDetail({ tx, locale, flagSvg, paySlot, receiptSlot }: { 
           <PrimaryButton label={t("transferDetail.repeat")} variant={canShare ? "primary" : "secondary"} onPress={repeat} />
         </View>
       </View>
+      <ConfirmDialog
+        open={confirmCancel}
+        title={t("transferDetail.cancel.title")}
+        description={t("transferDetail.cancel.body")}
+        confirmLabel={t("transferDetail.cancel.confirm")}
+        cancelLabel={t("transferDetail.cancel.keep")}
+        destructive
+        busy={cancelling}
+        onCancel={() => setConfirmCancel(false)}
+        onConfirm={() => void cancelTransfer()}
+      />
     </View>
   )
 }
@@ -243,6 +286,7 @@ const styles = StyleSheet.create({
   copied: { fontSize: 12, color: colors.successText },
   reportRow: { flexDirection: "row", alignItems: "center", gap: 12, minHeight: 56, padding: 14, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
   reportTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
+  cancelRow: { marginBottom: 14 },
   actionBar: { flexDirection: "row", gap: 10, padding: 16, paddingBottom: 20, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
   half: { flex: 1 },
 })

@@ -151,3 +151,14 @@ export async function sendBookingReminders(): Promise<{ claimed: number; sent: n
   }
   return { claimed: ((data as any[]) || []).length, sent }
 }
+
+/** Cancels online transfers whose payment window closed unpaid (the customer sees "payment time ran out"). */
+export async function expireStaleTransfers(): Promise<{ expired: number }> {
+  const { data, error } = await createServerClient().rpc("expire_stale_transfers", { p_limit: 100 })
+  if (error) {
+    // Before payment-expiry.sql has run there is nothing to expire.
+    if (error.code === "42883" || error.code === "PGRST202") return { expired: 0 }
+    throw new Error(error.message)
+  }
+  return { expired: ((data as unknown[]) || []).length }
+}

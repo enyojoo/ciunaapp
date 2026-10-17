@@ -59,6 +59,12 @@ with checks as (
   -- 10. push-preferences.sql
   select 'push-preferences.sql', 'table push_preferences', to_regclass('public.push_preferences') is not null
   union all
+  select 'payment-expiry.sql', 'column transactions.payment_expires_at', exists (select 1 from information_schema.columns where table_name = 'transactions' and column_name = 'payment_expires_at')
+  union all
+  select 'payment-expiry.sql', 'function cancel_transfer', exists (select 1 from pg_proc where proname = 'cancel_transfer')
+  union all
+  select 'payment-expiry.sql', 'function expire_stale_transfers', exists (select 1 from pg_proc where proname = 'expire_stale_transfers')
+  union all
   select 'booking-reminders.sql', 'column expert_bookings.reminder_sent_at', exists (select 1 from information_schema.columns where table_name = 'expert_bookings' and column_name = 'reminder_sent_at')
   union all
   select 'transfer-events.sql', 'table transfer_events', to_regclass('public.transfer_events') is not null

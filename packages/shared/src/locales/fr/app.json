@@ -1616,7 +1616,28 @@
     "reportSubject": "Problème avec le transfert {{id}}",
     "share": "Partager le reçu",
     "repeat": "Répéter le transfert",
-    "view": "Voir le reçu"
+    "view": "Voir le reçu",
+    "cancel": {
+      "cta": "Annuler le transfert",
+      "title": "Annuler ce transfert ?",
+      "body": "Vous n'avez pas été débité. Vous pouvez recommencer avec un nouveau taux.",
+      "confirm": "Annuler le transfert",
+      "keep": "Le garder",
+      "failed": "Impossible d'annuler. Réessayez.",
+      "paid": "Votre paiement est déjà arrivé, le transfert ne peut plus être annulé."
+    },
+    "timedOut": {
+      "headline": "Le délai de paiement est écoulé",
+      "sub": "Vous n'avez pas été débité. Répétez le transfert pour voir le taux du jour."
+    },
+    "sbp": {
+      "title": "Payer avec SBP",
+      "exact": "Payez exactement",
+      "deadline": "Payez avant {{time}}.",
+      "locked": "Taux verrouillé pendant {{time}}",
+      "scan": "Scannez le QR code dans votre application bancaire et payez exactement ce montant.",
+      "openBank": "Ouvrir ma banque"
+    }
   },
   "security": {
     "title": "Sécurité",

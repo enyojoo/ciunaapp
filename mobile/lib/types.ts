@@ -139,6 +139,8 @@ export type CombinedTransaction = {
   receipt_url?: string | null
   receipt_filename?: string | null
   recipient_id?: string | null
+  /** Deadline to pay an online transfer (null for manual transfers and before payment-expiry.sql has run). */
+  payment_expires_at?: string | null
   /** When each status was reached (empty until transfer-events.sql has run). */
   events?: { status: string; created_at: string }[]
   recipient?: {

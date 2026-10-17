@@ -2,6 +2,7 @@ import type { MarketplaceOrder } from "@ciuna/shared"
 import { MarketplaceOrderView } from "@/components/marketplace-checkout"
 import { OrderChat } from "./[id]/chat"
 import { TransferDetail } from "@/components/transfer-detail"
+import { SbpPaymentPanel } from "@/components/sbp-payment-panel"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { chatAvailableFor } from "@/lib/chat-panel"
 import { useEffect, useRef, useState } from "react"
@@ -79,6 +80,7 @@ function LegacyOrderScreen() {
   const router = useRouter()
   const { showError } = useToast()
   const { currencies } = useFx()
+  const { isWeb, mode } = useResponsiveLayout()
   const flagFor = (code?: string | null) => currencies.find((c) => c.code === code)?.flag_svg
   const { data: tx, loading, refreshing, error, revalidate } = useTransaction(id)
   const retriedRef = useRef(false)
@@ -243,11 +245,12 @@ function LegacyOrderScreen() {
           tx={tx}
           locale={locale}
           flagSvg={flagFor(tx.receive_currency)}
+          onChanged={() => void revalidate()}
           paySlot={
             canPayNow || showBitbankerPay ? (
               <View style={styles.payNowWrap}>
                 {canPayNow ? <PrimaryButton label={t("hub.checkout.paidOnline", { defaultValue: "Complete payment" })} busy={payBusy} onPress={() => void payNow()} /> : null}
-                {showBitbankerPay ? <MobileBitbankerPayCard transactionId={tx.transaction_id} totalRub={Number(tx.total_amount || 0)} /> : null}
+                {showBitbankerPay ? <SbpPaymentPanel transactionId={tx.transaction_id} totalRub={Number(tx.total_amount || 0)} expiresAt={tx.payment_expires_at} locale={locale} wide={isWeb && mode === "desktop"} /> : null}
               </View>
             ) : null
           }
