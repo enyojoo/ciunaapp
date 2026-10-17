@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { timingSafeEqual } from "node:crypto"
-import { expireStaleTransfers, sendBookingReminders, sendOrderNotifications, sendTransferNotifications } from "@/lib/push-events"
+import { expireStaleTransfers, sendBookingReminders, sendOrderNotifications, sendSlotAlerts, sendTransferNotifications } from "@/lib/push-events"
 
 export const maxDuration = 60
 
@@ -12,8 +12,8 @@ async function handle(request: NextRequest) {
   try {
     // Expire first so a transfer that just timed out is cancelled before anything else looks at it.
     const expired = await expireStaleTransfers()
-    const [orders, transfers, reminders] = await Promise.all([sendOrderNotifications(), sendTransferNotifications(), sendBookingReminders()])
-    return NextResponse.json({ expired, orders, transfers, reminders })
+    const [orders, transfers, reminders, slots] = await Promise.all([sendOrderNotifications(), sendTransferNotifications(), sendBookingReminders(), sendSlotAlerts()])
+    return NextResponse.json({ expired, orders, transfers, reminders, slots })
   } catch (e) {
     console.error("order-notifications cron failed", e instanceof Error ? e.message : e)
     return NextResponse.json({ error: "Job failed; it is safe to retry." }, { status: 503 })

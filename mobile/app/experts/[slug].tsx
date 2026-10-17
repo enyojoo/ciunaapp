@@ -22,6 +22,7 @@ import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { VerifiedBadge } from "@/components/verified-badge"
 import { ShareButton } from "@/components/share-button"
+import { ExpertAvailabilityCard } from "@/components/expert-availability-card"
 import { expertLink } from "@/lib/share-link"
 import { languageName } from "@/lib/language-name"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -134,6 +135,8 @@ function ExpertProfileBody() {
           ) : null}
         </View>
       </View>
+
+      {profile.slug ? <ExpertAvailabilityCard slug={profile.slug} /> : null}
 
       {languages.length > 0 || credentials.length > 0 || profile.years_experience ? (
         <View style={styles.detailsFrame}>

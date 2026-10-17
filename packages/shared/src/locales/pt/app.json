@@ -295,7 +295,14 @@
       "priceFrom": "A partir de",
       "languages": "Idiomas",
       "credentials": "Credenciais",
-      "yearsExp": "{{n}} anos de experiência"
+      "yearsExp": "{{n}} anos de experiência",
+      "nextAvailable": "Próximo horário: {{when}}",
+      "noTimes": "Sem horários no momento",
+      "notifyHint": "Receba uma notificação quando este especialista abrir novos horários.",
+      "notifyOn": "Avisaremos assim que houver horários.",
+      "notifyMe": "Avise-me",
+      "notifyCancel": "Parar de avisar",
+      "notifyFailed": "Não foi possível salvar. Tente de novo."
     },
     "booking": {
       "title": "Reservar um especialista",
@@ -1565,7 +1572,19 @@
     "supportHint": "Respostas às suas solicitações de suporte",
     "failed": "Não foi possível salvar. Tente de novo.",
     "transfers": "Transferências",
-    "transfersHint": "Pagamento recebido, entregue, falho ou reembolsado"
+    "transfersHint": "Pagamento recebido, entregue, falho ou reembolsado",
+    "actionReply": "Responder",
+    "actionSend": "Enviar",
+    "actionPlaceholder": "Escreva uma mensagem",
+    "actionView": "Ver",
+    "replySent": "Resposta enviada",
+    "replyFailed": "Não foi possível enviar sua resposta. Abra o chat para tentar de novo.",
+    "quiet": "Horário silencioso",
+    "quietHint": "Pausar as notificações à noite. Tudo continua visível no app.",
+    "quietFrom": "De",
+    "quietUntil": "Até",
+    "earlier": "Mais cedo",
+    "later": "Mais tarde"
   },
   "share": {
     "aria": "Compartilhar",

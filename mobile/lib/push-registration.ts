@@ -49,6 +49,31 @@ export async function unregisterPush(): Promise<void> {
   }
 }
 
+/** Buttons under a chat notification: Reply (typed on the lock screen, sent without opening the app) and View. */
+export async function registerNotificationActions(labels: { reply: string; send: string; placeholder: string; view: string }): Promise<void> {
+  if (Platform.OS === "web") return
+  try {
+    await Notifications.setNotificationCategoryAsync("chat", [
+      { identifier: "reply", buttonTitle: labels.reply, textInput: { submitButtonTitle: labels.send, placeholder: labels.placeholder }, options: { opensAppToForeground: false } },
+      { identifier: "view", buttonTitle: labels.view, options: { opensAppToForeground: true } },
+    ])
+  } catch {
+    // Buttons are an extra; a tap still opens the chat.
+  }
+}
+
+/** Sends a reply typed on the lock screen to the seller. Returns whether it was sent. */
+export async function sendChatReply(orderId: string, text: string): Promise<boolean> {
+  const body = text.trim().slice(0, 2000)
+  if (!body || !/^[0-9a-f-]{36}$/i.test(orderId)) return false
+  try {
+    const res = await fetchWithAuth(`/api/hub/orders/${orderId}/messages`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ body }) })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 /** Where a tapped notification should go, or null to just open the app. */
 export function routeForNotification(data: unknown): string | null {
   const d = (data ?? {}) as { type?: unknown; requestId?: unknown; orderId?: unknown; transactionId?: unknown }
@@ -56,6 +81,7 @@ export function routeForNotification(data: unknown): string | null {
   if (d.type === "support" && uuid(d.requestId)) return `/support/${d.requestId}`
   if (d.type === "order" && uuid(d.orderId)) return `/orders/${d.orderId}`
   if (d.type === "chat" && uuid(d.orderId)) return `/orders/${d.orderId}/chat`
+  if (d.type === "expert" && typeof (d as { slug?: unknown }).slug === "string" && /^[a-z0-9-]{1,80}$/i.test((d as { slug: string }).slug)) return `/experts/${(d as { slug: string }).slug}`
   if (d.type === "transfer" && typeof d.transactionId === "string" && /^[A-Za-z0-9-]{4,40}$/.test(d.transactionId)) return `/orders/${d.transactionId.toLowerCase()}`
   return null
 }

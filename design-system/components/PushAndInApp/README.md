@@ -23,3 +23,6 @@ Built today: seller push alert copy is generated with the email copy (`api/lib/m
 
 ## Code
 `api/lib/merchant/notify-messages.ts`, Seller shell, customer app tab bar
+
+## As built (2026-10-19)
+Order, chat, support, transfer, booking-reminder and expert-times pushes with per-category switches; quiet hours in the customer's time zone; a Reply button on chat notifications (typed on the lock screen, sent without opening the app); tapping opens the right screen; unread badges on the Orders and Account tabs; foreground pushes appear as the in-app ink toast. Not built: more action buttons (for example Join).

@@ -1056,7 +1056,14 @@
       "priceFrom": "Dès",
       "languages": "Langues parlées",
       "credentials": "Qualifications",
-      "yearsExp": "{{n}} ans d’expérience"
+      "yearsExp": "{{n}} ans d’expérience",
+      "nextAvailable": "Prochain créneau : {{when}}",
+      "noTimes": "Aucun créneau pour le moment",
+      "notifyHint": "Recevez une notification quand cet expert ouvre de nouveaux créneaux.",
+      "notifyOn": "Nous vous préviendrons dès que des créneaux s'ouvriront.",
+      "notifyMe": "Me prévenir",
+      "notifyCancel": "Ne plus me prévenir",
+      "notifyFailed": "Enregistrement impossible. Réessayez."
     },
     "booking": {
       "title": "Réserver un expert",
@@ -1565,7 +1572,19 @@
     "supportHint": "Réponses à vos demandes d'assistance",
     "failed": "Enregistrement impossible. Réessayez.",
     "transfers": "Transferts",
-    "transfersHint": "Paiement reçu, livré, échoué ou remboursé"
+    "transfersHint": "Paiement reçu, livré, échoué ou remboursé",
+    "actionReply": "Répondre",
+    "actionSend": "Envoyer",
+    "actionPlaceholder": "Écrivez un message",
+    "actionView": "Voir",
+    "replySent": "Réponse envoyée",
+    "replyFailed": "Impossible d'envoyer votre réponse. Ouvrez la discussion pour réessayer.",
+    "quiet": "Heures calmes",
+    "quietHint": "Suspendre les notifications la nuit. Tout reste visible dans l'application.",
+    "quietFrom": "De",
+    "quietUntil": "Jusqu'à",
+    "earlier": "Plus tôt",
+    "later": "Plus tard"
   },
   "share": {
     "aria": "Partager",

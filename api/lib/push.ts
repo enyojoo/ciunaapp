@@ -1,10 +1,11 @@
 import { createServerClient } from "@/lib/supabase"
+import { inQuietHours } from "@/lib/quiet-hours"
 
 const EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send"
 const TOKEN = /^Expo(?:nent)?PushToken\[[A-Za-z0-9_-]{8,}\]$/
 
-export type PushPayload = { title: string; body: string; data?: Record<string, unknown> }
-export type PushMessage = { to: string; title: string; body: string; sound: "default"; data: Record<string, unknown> }
+export type PushPayload = { title: string; body: string; data?: Record<string, unknown>; /** The buttons the phone shows under it (registered in the app). */ categoryId?: "chat" }
+export type PushMessage = { to: string; title: string; body: string; sound: "default"; data: Record<string, unknown>; categoryId?: string }
 
 export type PushCategory = "orders" | "messages" | "support" | "transfers"
 
@@ -15,7 +16,7 @@ export const isExpoPushToken = (t: unknown): t is string => typeof t === "string
 
 /** One message per device. Title and body are trimmed to what a lock screen shows. */
 export function buildMessages(tokens: string[], payload: PushPayload): PushMessage[] {
-  return tokens.map((to) => ({ to, title: payload.title.slice(0, 80), body: payload.body.slice(0, 240), sound: "default", data: payload.data ?? {} }))
+  return tokens.map((to) => ({ to, title: payload.title.slice(0, 80), body: payload.body.slice(0, 240), sound: "default", data: payload.data ?? {}, ...(payload.categoryId ? { categoryId: payload.categoryId } : {}) }))
 }
 
 /** Expo answers with one ticket per message, in order. Tokens it says are no longer registered should be deleted. */
@@ -34,9 +35,12 @@ export async function sendPushToUser(userId: string, payload: PushPayload, categ
     const db = createServerClient()
     if (category) {
       // `transfers` only exists once transfer-events.sql has run; without it the other switches still work.
-      let { data: prefs, error: pErr } = await db.from("push_preferences").select("orders,messages,support,transfers").eq("user_id", userId).maybeSingle()
+      let { data: prefs, error: pErr } = await db.from("push_preferences").select("orders,messages,support,transfers,quiet_start,quiet_end,quiet_tz").eq("user_id", userId).maybeSingle()
       if (pErr) ({ data: prefs } = await db.from("push_preferences").select("orders,messages,support").eq("user_id", userId).maybeSingle())
       if (!wants(prefs as Partial<Record<PushCategory, boolean>> | null, category)) return 0
+      // Quiet hours hold the push; the news is still in the app.
+      const q = prefs as { quiet_start?: number | null; quiet_end?: number | null; quiet_tz?: string | null } | null
+      if (inQuietHours(new Date(), { start: q?.quiet_start ?? null, end: q?.quiet_end ?? null, tz: q?.quiet_tz ?? null })) return 0
     }
     const { data, error } = await db.from("push_tokens").select("token").eq("user_id", userId).eq("enabled", true)
     if (error || !data?.length) return 0

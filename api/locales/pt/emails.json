@@ -246,6 +246,12 @@
         "title": "Sua sessão começa em breve",
         "body": "Sua sessão com {{name}} começa em cerca de uma hora."
       }
+    },
+    "expert": {
+      "slots": {
+        "title": "Novos horários disponíveis",
+        "body": "{{name}} tem horários livres. Reserve agora."
+      }
     }
   }
 }

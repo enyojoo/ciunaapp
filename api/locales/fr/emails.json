@@ -246,6 +246,12 @@
         "title": "Votre séance commence bientôt",
         "body": "Votre séance avec {{name}} commence dans environ une heure."
       }
+    },
+    "expert": {
+      "slots": {
+        "title": "De nouveaux créneaux",
+        "body": "{{name}} a des créneaux disponibles. Réservez maintenant."
+      }
     }
   }
 }

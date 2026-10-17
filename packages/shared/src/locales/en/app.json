@@ -295,7 +295,14 @@
       "priceFrom": "From",
       "languages": "Speaks",
       "credentials": "Credentials",
-      "yearsExp": "{{n}} years of experience"
+      "yearsExp": "{{n}} years of experience",
+      "nextAvailable": "Next available: {{when}}",
+      "noTimes": "No open times right now",
+      "notifyHint": "Get a notification when this expert opens new times.",
+      "notifyOn": "We will tell you as soon as times open.",
+      "notifyMe": "Notify me",
+      "notifyCancel": "Stop notifying me",
+      "notifyFailed": "Could not save that. Try again."
     },
     "booking": {
       "title": "Book an expert",
@@ -1565,7 +1572,19 @@
     "supportHint": "Replies to your support requests",
     "failed": "Could not save. Try again.",
     "transfers": "Transfers",
-    "transfersHint": "Payment received, delivered, failed or refunded"
+    "transfersHint": "Payment received, delivered, failed or refunded",
+    "actionReply": "Reply",
+    "actionSend": "Send",
+    "actionPlaceholder": "Write a message",
+    "actionView": "View",
+    "replySent": "Reply sent",
+    "replyFailed": "Could not send your reply. Open the chat to try again.",
+    "quiet": "Quiet hours",
+    "quietHint": "Hold notifications overnight. You still see everything in the app.",
+    "quietFrom": "From",
+    "quietUntil": "Until",
+    "earlier": "Earlier",
+    "later": "Later"
   },
   "share": {
     "aria": "Share",

@@ -59,6 +59,10 @@ with checks as (
   -- 10. push-preferences.sql
   select 'push-preferences.sql', 'table push_preferences', to_regclass('public.push_preferences') is not null
   union all
+  select 'quiet-hours.sql', 'column push_preferences.quiet_start', exists (select 1 from information_schema.columns where table_name = 'push_preferences' and column_name = 'quiet_start')
+  union all
+  select 'expert-slot-alerts.sql', 'table expert_slot_alerts', to_regclass('public.expert_slot_alerts') is not null
+  union all
   select 'payment-expiry.sql', 'column transactions.payment_expires_at', exists (select 1 from information_schema.columns where table_name = 'transactions' and column_name = 'payment_expires_at')
   union all
   select 'payment-expiry.sql', 'function cancel_transfer', exists (select 1 from pg_proc where proname = 'cancel_transfer')

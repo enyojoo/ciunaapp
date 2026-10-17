@@ -105,3 +105,17 @@ test("the booking reminder exists in all six languages with the expert's name", 
     assert.ok(!tEmail("push.booking.reminder.title", {}, lng).startsWith("push."), lng + " title")
   }
 })
+
+test("a chat push carries its button set; other pushes do not", () => {
+  const [chat] = buildMessages(["ExponentPushToken[abcdef123456]"], { title: "t", body: "b", categoryId: "chat" })
+  assert.equal(chat.categoryId, "chat")
+  const [plain] = buildMessages(["ExponentPushToken[abcdef123456]"], { title: "t", body: "b" })
+  assert.equal("categoryId" in plain, false)
+})
+
+test("the expert-times notification exists in all six languages", () => {
+  for (const lng of ["en", "ru", "fr", "es", "zh", "pt"]) {
+    const body = tEmail("push.expert.slots.body", { name: "Ada" }, lng)
+    assert.ok(body.includes("Ada") && !body.includes("{{"), lng)
+  }
+})

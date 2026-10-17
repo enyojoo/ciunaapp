@@ -147,3 +147,8 @@ The customer app (Expo `mobile/` and `web/`) is to match `design-system/` and is
 - **Booking reminder (2026-10-19):** one push about an hour before each confirmed booking. The meeting link the expert adds shows on the order with a Join button.
 - **Security (2026-10-19):** the PIN is switched on or off in More > Security; the app asks for it again after 60 seconds in the background; biometric unlock is a switch next to it.
 - **Passwords (2026-10-19):** at least 8 characters on sign-up, with the rule shown live.
+- **KYC (2026-10-19):** the hosted verification flow stays; guided in-app document capture is not being built.
+- **Payment window (2026-10-19):** an online transfer must be paid within 15 minutes of creation; unpaid ones are cancelled automatically and the customer sees "The payment time ran out. You were not charged." The customer can cancel a transfer that is still waiting for payment.
+- **Expert times (2026-10-19):** with no open times the profile offers Notify me; the customer gets one push when times appear.
+- **Quiet hours (2026-10-19):** optional window (default 22:00 to 07:00) in the customer's own time zone during which pushes are held.
+- **Store delivery line (2026-10-19):** the store header shows the cheapest delivery fee and the delivery time range, or "Pickup only".

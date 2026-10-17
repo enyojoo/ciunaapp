@@ -48,7 +48,7 @@ export default function SecurityScreen() {
             <Text style={styles.label}>{t("security.pin")}</Text>
             <Text style={styles.hint}>{t("security.pinHint")}</Text>
           </View>
-          <Switch value={pinOn} onValueChange={togglePin} trackColor={{ true: colors.primary, false: colors.inputEdge }} thumbColor="#FFFFFF" accessibilityLabel={t("security.pin")} />
+          <Switch value={pinOn} onValueChange={togglePin} trackColor={{ true: colors.primary, false: colors.inputEdge }} thumbColor="#FFFFFF" {...({ activeThumbColor: "#FFFFFF" } as object)} accessibilityLabel={t("security.pin")} />
         </View>
         {pinOn ? (
           <View style={[styles.row, bioAvail && styles.rowLine]}>
@@ -69,7 +69,7 @@ export default function SecurityScreen() {
                 if (user) void setBiometricEnabled(user.id, v)
               }}
               trackColor={{ true: colors.primary, false: colors.inputEdge }}
-              thumbColor="#FFFFFF"
+              thumbColor="#FFFFFF" {...({ activeThumbColor: "#FFFFFF" } as object)}
               accessibilityLabel={t("security.biometric")}
             />
           </View>

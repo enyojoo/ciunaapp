@@ -1,6 +1,7 @@
 import { createServerClient } from "@/lib/supabase"
 import { tEmail } from "@/lib/i18n/server"
 import { sendPushToUser } from "@/lib/push"
+import { nextAvailableFor } from "@/lib/expert-alerts"
 
 /** Tell the customer that support replied, in their language. Never throws. */
 export async function notifySupportReply(requestId: string): Promise<void> {
@@ -65,6 +66,7 @@ export async function notifyChatMessage(orderId: string, text: string): Promise<
       title: tEmail("push.chat.title", {}, (user as any)?.preferred_language),
       body: text,
       data: { type: "chat", orderId },
+      categoryId: "chat",
     }, "messages")
   } catch (e) {
     console.error("chat push failed", (e as Error)?.message)
@@ -161,4 +163,40 @@ export async function expireStaleTransfers(): Promise<{ expired: number }> {
     throw new Error(error.message)
   }
   return { expired: ((data as unknown[]) || []).length }
+}
+
+/** Tells customers who asked to be notified that an expert now has open times, once, then removes the request. */
+export async function sendSlotAlerts(): Promise<{ checked: number; sent: number }> {
+  const db = createServerClient()
+  const { data, error } = await db.from("expert_slot_alerts").select("user_id,expert_profile_id").limit(500)
+  if (error) {
+    if (error.code === "42P01" || error.code === "PGRST205") return { checked: 0, sent: 0 }
+    throw new Error(error.message)
+  }
+  const alerts = (data as { user_id: string; expert_profile_id: string }[]) || []
+  if (!alerts.length) return { checked: 0, sent: 0 }
+  const available = await nextAvailableFor([...new Set(alerts.map((a) => a.expert_profile_id))])
+  let sent = 0
+  for (const a of alerts) {
+    if (!available.has(a.expert_profile_id)) continue
+    try {
+      // Remove first: a failed push costs one missed notification, never repeated ones.
+      const { error: delErr } = await db.from("expert_slot_alerts").delete().eq("user_id", a.user_id).eq("expert_profile_id", a.expert_profile_id)
+      if (delErr) continue
+      const [{ data: expert }, { data: user }] = await Promise.all([
+        db.from("expert_profiles").select("display_name,slug").eq("id", a.expert_profile_id).maybeSingle(),
+        db.from("users").select("preferred_language").eq("id", a.user_id).maybeSingle(),
+      ])
+      const lng = (user as any)?.preferred_language
+      const vars = { name: (expert as any)?.display_name || "" }
+      sent += await sendPushToUser(a.user_id, {
+        title: tEmail("push.expert.slots.title", vars, lng),
+        body: tEmail("push.expert.slots.body", vars, lng),
+        data: { type: "expert", slug: (expert as any)?.slug || "" },
+      }, "orders")
+    } catch (e) {
+      console.error("slot alert failed", (e as Error)?.message)
+    }
+  }
+  return { checked: alerts.length, sent }
 }

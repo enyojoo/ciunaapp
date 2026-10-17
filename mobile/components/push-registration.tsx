@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import * as Notifications from "expo-notifications"
 import { useAuth } from "@/lib/auth-context"
 import { useToast } from "@/components/toast-provider"
-import { registerForPush, routeForNotification } from "@/lib/push-registration"
+import { registerForPush, registerNotificationActions, routeForNotification, sendChatReply } from "@/lib/push-registration"
 
 /** Registers this phone for notifications once signed in, and opens the right screen when one is tapped. Renders nothing. */
 export function PushRegistration() {
@@ -19,6 +19,15 @@ export function PushRegistration() {
   }, [user?.id])
 
   useEffect(() => {
+    void registerNotificationActions({
+      reply: t("notifications.actionReply", { defaultValue: "Reply" }),
+      send: t("notifications.actionSend", { defaultValue: "Send" }),
+      placeholder: t("notifications.actionPlaceholder", { defaultValue: "Write a message" }),
+      view: t("notifications.actionView", { defaultValue: "View" }),
+    })
+  }, [t])
+
+  useEffect(() => {
     if (Platform.OS === "web") return
     const open = (data: unknown) => {
       const path = routeForNotification(data)
@@ -27,7 +36,16 @@ export function PushRegistration() {
     void Notifications.getLastNotificationResponseAsync().then((r) => {
       if (r) open(r.notification.request.content.data)
     })
-    const sub = Notifications.addNotificationResponseReceivedListener((r) => open(r.notification.request.content.data))
+    const sub = Notifications.addNotificationResponseReceivedListener((r) => {
+      const data = r.notification.request.content.data as { orderId?: string } | undefined
+      if (r.actionIdentifier === "reply" && "userText" in r && typeof (r as { userText?: string }).userText === "string") {
+        void sendChatReply(String(data?.orderId || ""), (r as { userText: string }).userText).then((ok) => {
+          showToast(ok ? t("notifications.replySent", { defaultValue: "Reply sent" }) : t("notifications.replyFailed", { defaultValue: "Could not send your reply. Open the chat to try again." }), ok ? "success" : "error", 4000)
+        })
+        return
+      }
+      open(r.notification.request.content.data)
+    })
     const inApp = Notifications.addNotificationReceivedListener((n) => {
       const c = n.request.content
       const path = routeForNotification(c.data)

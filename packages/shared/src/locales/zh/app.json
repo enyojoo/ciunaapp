@@ -295,7 +295,14 @@
       "priceFrom": "起价",
       "languages": "使用语言",
       "credentials": "资质",
-      "yearsExp": "{{n}} 年经验"
+      "yearsExp": "{{n}} 年经验",
+      "nextAvailable": "最近可约：{{when}}",
+      "noTimes": "目前没有空闲时间",
+      "notifyHint": "该专家开放新时间时通知你。",
+      "notifyOn": "一有空闲时间我们就会通知你。",
+      "notifyMe": "通知我",
+      "notifyCancel": "不再通知我",
+      "notifyFailed": "无法保存，请重试。"
     },
     "booking": {
       "title": "预约专家",
@@ -1565,7 +1572,19 @@
     "supportHint": "客服对你的请求的回复",
     "failed": "保存失败，请重试。",
     "transfers": "转账",
-    "transfersHint": "已收到付款、已送达、失败或已退款"
+    "transfersHint": "已收到付款、已送达、失败或已退款",
+    "actionReply": "回复",
+    "actionSend": "发送",
+    "actionPlaceholder": "输入消息",
+    "actionView": "查看",
+    "replySent": "回复已发送",
+    "replyFailed": "无法发送回复，请打开聊天重试。",
+    "quiet": "免打扰时段",
+    "quietHint": "夜间不推送通知，所有内容仍可在应用中查看。",
+    "quietFrom": "从",
+    "quietUntil": "到",
+    "earlier": "提前",
+    "later": "推后"
   },
   "share": {
     "aria": "分享",
