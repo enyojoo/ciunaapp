@@ -39,6 +39,11 @@ export type HubProduct = {
     hours_configured?: boolean
     is_open?: boolean
     is_paused?: boolean
+    delivery_zone_count?: number
+    delivery_fee_from?: number | null
+    delivery_fee_currency?: string | null
+    delivery_eta_min?: number | null
+    delivery_eta_max?: number | null
     opens_at?: { day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"; time: string } | null
     closes_at?: string | null
   } | null
@@ -92,6 +97,11 @@ export type HubVendor = {
   hours_configured?: boolean
   is_open?: boolean
   is_paused?: boolean
+    delivery_zone_count?: number
+    delivery_fee_from?: number | null
+    delivery_fee_currency?: string | null
+    delivery_eta_min?: number | null
+    delivery_eta_max?: number | null
   opens_at?: { day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"; time: string } | null
   closes_at?: string | null
   min_order_amount?: number | null

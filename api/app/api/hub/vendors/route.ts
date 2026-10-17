@@ -3,6 +3,7 @@ import { createServerClient } from "@/lib/supabase"
 import { safeSelect } from "@/lib/safe-select"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { storefrontFields } from "@/lib/merchant/storefront"
+import { loadDeliveryInfo, noDelivery } from "@/lib/delivery-info"
 
 const ALLOWED_LINES = new Set(["food", "mart"])
 
@@ -31,7 +32,8 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
     return createErrorResponse("Failed to load vendors", 500)
   }
 
-  const res = NextResponse.json({ vendors: (data || []).map((v: any) => ({ rating_avg: null, rating_count: 0, ...v, ...storefrontFields(v) })) })
+  const delivery = await loadDeliveryInfo(server, (data || []).map((v: any) => String(v.id)))
+  const res = NextResponse.json({ vendors: (data || []).map((v: any) => ({ rating_avg: null, rating_count: 0, ...v, ...storefrontFields(v), ...(delivery.get(String(v.id)) ?? noDelivery()) })) })
   res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate")
   return res
 })

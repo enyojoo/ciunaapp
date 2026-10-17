@@ -190,7 +190,13 @@
       "closed": "Closed",
       "closedOpens": "Closed · opens {{day}} {{time}}",
       "minOrder": "Minimum order for delivery: {{min}}",
-      "paused": "Temporarily unavailable"
+      "paused": "Temporarily unavailable",
+      "pickupOnly": "Pickup only",
+      "deliveryFree": "Free delivery",
+      "deliveryFrom": "Delivery from {{fee}}",
+      "delivers": "Delivers",
+      "etaRange": "{{min}}–{{max}} min",
+      "eta": "{{min}} min"
     },
     "cart": {
       "emptyBody": "Add something from a store to start your order.",
@@ -221,7 +227,9 @@
     "verifiedInfoBusiness": "Ciuna checked this business against its official company details.",
     "verifiedInfoIndividual": "Ciuna checked this person's identity.",
     "verifiedInfoHint": "What does this mean?",
-    "verifiedInfoClose": "Got it"
+    "verifiedInfoClose": "Got it",
+    "noDeliveryTitle": "No stores deliver yet",
+    "noDeliveryBody": "These stores offer pickup. Delivery will appear here as stores open it."
   },
   "assistant": {
     "title": "Assistant",

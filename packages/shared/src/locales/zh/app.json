@@ -190,7 +190,13 @@
       "closed": "已打烊",
       "closedOpens": "已打烊 · {{day}} {{time}} 开门",
       "minOrder": "配送起送金额：{{min}}",
-      "paused": "暂时不可用"
+      "paused": "暂时不可用",
+      "pickupOnly": "仅限自取",
+      "deliveryFree": "免费配送",
+      "deliveryFrom": "配送费 {{fee}} 起",
+      "delivers": "支持配送",
+      "etaRange": "{{min}}–{{max}} 分钟",
+      "eta": "{{min}} 分钟"
     },
     "cart": {
       "emptyBody": "从店铺添加商品，开始下单。",
@@ -221,7 +227,9 @@
     "verifiedInfoBusiness": "Ciuna 已根据官方公司信息核实该商家。",
     "verifiedInfoIndividual": "Ciuna 已核实此人的身份。",
     "verifiedInfoHint": "这是什么意思？",
-    "verifiedInfoClose": "知道了"
+    "verifiedInfoClose": "知道了",
+    "noDeliveryTitle": "暂无支持配送的店铺",
+    "noDeliveryBody": "这些店铺提供自取。店铺开通配送后会显示在这里。"
   },
   "assistant": {
     "title": "助手",

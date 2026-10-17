@@ -190,7 +190,13 @@
       "closed": "Закрыто",
       "closedOpens": "Закрыто · откроется {{day}} {{time}}",
       "minOrder": "Минимальный заказ для доставки: {{min}}",
-      "paused": "Временно недоступен"
+      "paused": "Временно недоступен",
+      "pickupOnly": "Только самовывоз",
+      "deliveryFree": "Бесплатная доставка",
+      "deliveryFrom": "Доставка от {{fee}}",
+      "delivers": "Доставляет",
+      "etaRange": "{{min}}–{{max}} мин",
+      "eta": "{{min}} мин"
     },
     "cart": {
       "emptyBody": "Добавьте что-нибудь из магазина, чтобы начать заказ.",
@@ -221,7 +227,9 @@
     "verifiedInfoBusiness": "Ciuna проверила этот бизнес по официальным данным компании.",
     "verifiedInfoIndividual": "Ciuna проверила личность этого человека.",
     "verifiedInfoHint": "Что это значит?",
-    "verifiedInfoClose": "Понятно"
+    "verifiedInfoClose": "Понятно",
+    "noDeliveryTitle": "Пока никто не доставляет",
+    "noDeliveryBody": "Эти магазины работают на самовывоз. Доставка появится здесь, когда магазины её откроют."
   },
   "assistant": {
     "title": "Ассистент",

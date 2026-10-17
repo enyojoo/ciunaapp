@@ -3,6 +3,7 @@ import { createServerClient } from "@/lib/supabase"
 import { withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { getPublishedHubVendorForLine } from "@/lib/hub-vendor-resolve"
 import { storefrontFields } from "@/lib/merchant/storefront"
+import { loadDeliveryInfo, noDelivery } from "@/lib/delivery-info"
 
 const ALLOWED_LINES = new Set(["food", "mart"])
 
@@ -34,6 +35,7 @@ export const GET = withErrorHandling(async (request: NextRequest, context?: { pa
     return createErrorResponse("Vendor not found", 404)
   }
 
+  const delivery = await loadDeliveryInfo(server, [String(vendor.id)])
   const res = NextResponse.json({
     vendor: {
       id: String(vendor.id),
@@ -53,6 +55,7 @@ export const GET = withErrorHandling(async (request: NextRequest, context?: { pa
       created_at: String(vendor.created_at || ""),
       updated_at: String(vendor.updated_at || ""),
       ...storefrontFields(vendor),
+      ...(delivery.get(String(vendor.id)) ?? noDelivery()),
     },
   })
   res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate")

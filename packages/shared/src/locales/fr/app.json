@@ -190,7 +190,13 @@
       "closed": "Fermé",
       "closedOpens": "Fermé · ouvre {{day}} {{time}}",
       "minOrder": "Commande minimale pour la livraison : {{min}}",
-      "paused": "Temporairement indisponible"
+      "paused": "Temporairement indisponible",
+      "pickupOnly": "Retrait uniquement",
+      "deliveryFree": "Livraison gratuite",
+      "deliveryFrom": "Livraison dès {{fee}}",
+      "delivers": "Livre",
+      "etaRange": "{{min}}–{{max}} min",
+      "eta": "{{min}} min"
     },
     "cart": {
       "emptyBody": "Ajoutez un article d'une boutique pour commencer votre commande.",
@@ -221,7 +227,9 @@
     "verifiedInfoBusiness": "Ciuna a vérifié cette entreprise à partir de ses informations officielles.",
     "verifiedInfoIndividual": "Ciuna a vérifié l'identité de cette personne.",
     "verifiedInfoHint": "Que signifie ceci ?",
-    "verifiedInfoClose": "Compris"
+    "verifiedInfoClose": "Compris",
+    "noDeliveryTitle": "Aucune boutique ne livre encore",
+    "noDeliveryBody": "Ces boutiques proposent le retrait. La livraison apparaîtra ici dès qu'elles l'ouvriront."
   },
   "assistant": {
     "title": "Assistant",

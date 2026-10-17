@@ -8,6 +8,7 @@ import { useHubServiceLine } from "@/lib/use-hub-service-line"
 import { CatalogProducts } from "@/components/catalog-products"
 import { EmptyState } from "@/components/empty-state"
 import { LoadError } from "@/components/load-error"
+import { noStoreDelivers } from "@/lib/delivery-line"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
@@ -75,6 +76,12 @@ export default function HubLineCatalog() {
             onChange={(id) => setCategory(id === "__all__" ? "" : id)}
             ariaLabel={t("hub.categoryFilterAria", { defaultValue: "Filter by category" })}
           />
+        </View>
+      ) : null}
+      {marketplace && noStoreDelivers(vendors) ? (
+        <View style={styles.noDelivery} accessibilityRole="alert">
+          <Text style={styles.noDeliveryTitle}>{t("hub.noDeliveryTitle", { defaultValue: "No stores deliver yet" })}</Text>
+          <Text style={styles.noDeliveryBody}>{t("hub.noDeliveryBody", { defaultValue: "These stores offer pickup. Delivery will appear here as stores open it." })}</Text>
         </View>
       ) : null}
       {marketplace ? (
@@ -170,6 +177,9 @@ export default function HubLineCatalog() {
 
 const styles = StyleSheet.create({
   catChips: { marginBottom: 16 },
+  noDelivery: { marginBottom: 16, padding: 14, gap: 4, borderRadius: 16, borderWidth: 1, borderColor: colors.warningBorder, backgroundColor: colors.warningSurface },
+  noDeliveryTitle: { fontSize: 15, fontWeight: "700", color: colors.warningText },
+  noDeliveryBody: { fontSize: 13, lineHeight: 18, color: colors.warningText },
   flex: { flex: 1 },
   storesBlock: { marginBottom: 32 },
   storesHead: { marginBottom: 12, flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" },

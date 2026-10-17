@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { tileArtFor } from "@/components/tile"
 import { VerifiedBadge } from "@/components/verified-badge"
 import { storeOpenLine } from "@/lib/store-hours"
+import { deliveryLine } from "@/lib/delivery-line"
 import type { ReviewSummary } from "@/lib/use-reviews"
 import type { HubVendor } from "@/lib/types"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -40,6 +41,7 @@ export function StoreHeader({
   const { width } = useWindowDimensions()
   const open = vendor ? storeOpenLine(vendor, t, i18n.language) : null
   const location = (vendor?.location || "").trim()
+  const delivery = vendor ? deliveryLine(vendor, t) : null
   const rated = Boolean(summary && summary.count && summary.avg != null)
 
   if (skeleton) {
@@ -57,6 +59,9 @@ export function StoreHeader({
             </View>
             <View style={styles.statusSlot}>
               <View style={[styles.skelBar, { width: "50%" }]} />
+            </View>
+            <View style={styles.statusSlot}>
+              <View style={[styles.skelBar, { width: "35%" }]} />
             </View>
           </View>
         </View>
@@ -116,6 +121,9 @@ export function StoreHeader({
               {" · "}
               {t("hub.vendorProductCount", { defaultValue: "{{count}} products", count: productCount })}
             </Text>
+          </View>
+          <View style={styles.statusSlot}>
+            <Text style={styles.meta} numberOfLines={1}>{delivery || " "}</Text>
           </View>
         </View>
       </View>
