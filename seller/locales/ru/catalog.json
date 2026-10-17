@@ -162,5 +162,9 @@
   "errors.MIN_ORDER_INVALID": "Введите корректную сумму минимального заказа.",
   "errors.MIN_ORDER_CURRENCY_INVALID": "Выберите валюту минимального заказа.",
   "errors.ZONE_ETA_INVALID": "Время доставки — целое число минут от 1 до 1440.",
-  "errors.TIME_ZONE_INVALID": "Выберите корректный часовой пояс."
+  "errors.TIME_ZONE_INVALID": "Выберите корректный часовой пояс.",
+  "catalog.fulfilment.pause": "Приостановить магазин",
+  "catalog.fulfilment.pauseHint": "Пока магазин на паузе, покупатели не могут оформить заказ. Подходит для короткого перерыва; после возобновления действуют часы работы.",
+  "catalog.fulfilment.pausedOn": "На паузе: заказы недоступны",
+  "catalog.fulfilment.pausedOff": "Принимаем заказы"
 }

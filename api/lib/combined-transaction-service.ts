@@ -5,7 +5,7 @@ import { createServerClient } from "@/lib/supabase"
 import { adminService } from "./database"
 
 export interface CombinedTransaction {
-  marketplace_order?: { id: string; line: string; payment_state: string; fulfillment_state: string } | null
+  marketplace_order?: { id: string; line: string; payment_state: string; fulfillment_state: string; fulfillment_mode?: string } | null
   id: string
   transaction_id: string
   type: "send" | "hub"
@@ -162,7 +162,7 @@ export const combinedTransactionService = {
     if (ids.length) {
       const { data: orders, error: orderError } = await supabase
         .from("marketplace_orders")
-        .select("id,transaction_id,line,payment_state,fulfillment_state")
+        .select("id,transaction_id,line,payment_state,fulfillment_state,fulfillment_mode")
         .in("transaction_id", ids)
         .eq("user_id", userId)
       if (orderError) throw new Error("Failed to load marketplace progress")

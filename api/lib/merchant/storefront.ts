@@ -5,13 +5,16 @@ export function storefrontFields(row: Record<string, any>, now: Date = new Date(
   const schedule = (row.opening_hours && typeof row.opening_hours === "object" && !Array.isArray(row.opening_hours) ? row.opening_hours : {}) as Schedule
   const timeZone = typeof row.time_zone === "string" && row.time_zone ? row.time_zone : "UTC"
   const state = openState(schedule, timeZone, now)
+  // A paused store is closed to orders whatever its hours say.
+  const paused = row.is_paused === true
   return {
     opening_hours: schedule,
     time_zone: timeZone,
-    hours_configured: state.configured,
-    is_open: state.open,
-    opens_at: state.opensAt ?? null,
-    closes_at: state.closesAt ?? null,
+    is_paused: paused,
+    hours_configured: paused || state.configured,
+    is_open: paused ? false : state.open,
+    opens_at: paused ? null : state.opensAt ?? null,
+    closes_at: paused ? null : state.closesAt ?? null,
     min_order_amount: row.min_order_amount != null ? Number(row.min_order_amount) : null,
     min_order_currency: row.min_order_currency ? String(row.min_order_currency) : null,
     cover_url: row.cover_url ? String(row.cover_url) : null,
@@ -47,9 +50,10 @@ export function expertFields(row: Record<string, any>) {
  * Set when a store has opening hours and is closed right now (orders are blocked until it opens).
  * A store with no hours is never closed. `opensAt` is in the store's own time zone.
  */
-export function storeClosedState(row: Record<string, any> | null | undefined, now: Date = new Date()): { opensAt?: { day: string; time: string } } | undefined {
+export function storeClosedState(row: Record<string, any> | null | undefined, now: Date = new Date()): { opensAt?: { day: string; time: string }; paused?: true } | undefined {
   if (!row) return undefined
   const f = storefrontFields(row, now)
+  if (f.is_paused) return { paused: true }
   if (!f.hours_configured || f.is_open) return undefined
   return f.opens_at ? { opensAt: f.opens_at } : {}
 }

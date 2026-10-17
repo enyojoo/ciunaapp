@@ -55,3 +55,15 @@ test("closed state blocks only stores that set hours and are closed now", () => 
   assert.equal(storeClosedState({ opening_hours: {} }), undefined) // no hours set: never closed
   assert.equal(storeClosedState(null), undefined)
 })
+
+test("a paused store is closed to orders whatever its hours say, even with no hours", () => {
+  const open = { opening_hours: { mon: [{ open: "09:00", close: "18:00" }] }, time_zone: "UTC" }
+  const monday = new Date("2026-10-19T10:00:00Z")
+  assert.equal(storeClosedState(open, monday), undefined)
+  assert.deepEqual(storeClosedState({ ...open, is_paused: true }, monday), { paused: true })
+  assert.deepEqual(storeClosedState({ opening_hours: {}, is_paused: true }), { paused: true })
+  const f = storefrontFields({ ...open, is_paused: true }, monday)
+  assert.equal(f.is_open, false)
+  assert.equal(f.is_paused, true)
+  assert.equal(f.opens_at, null)
+})

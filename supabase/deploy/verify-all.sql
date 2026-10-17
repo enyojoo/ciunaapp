@@ -59,6 +59,8 @@ with checks as (
   -- 10. push-preferences.sql
   select 'push-preferences.sql', 'table push_preferences', to_regclass('public.push_preferences') is not null
   union all
+  select 'store-pause.sql', 'column hub_vendors.is_paused', exists (select 1 from information_schema.columns where table_name = 'hub_vendors' and column_name = 'is_paused')
+  union all
   select 'push-preferences.sql', 'column marketplace_events.notified_at', exists (select 1 from information_schema.columns where table_name = 'marketplace_events' and column_name = 'notified_at')
 )
 select file, what, ok from checks order by ok, file, what;

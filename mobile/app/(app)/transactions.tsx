@@ -254,6 +254,9 @@ export default function TransactionsScreen() {
                     </Text>
                     <Text style={styles.rowMeta} numberOfLines={1}>
                       {formatDateTimeLine(tx.created_at, locale)}
+                      {tx.marketplace_order?.fulfillment_mode === "delivery" || tx.marketplace_order?.fulfillment_mode === "pickup"
+                        ? " · " + t(`marketplace.${tx.marketplace_order.fulfillment_mode}`)
+                        : ""}
                     </Text>
                   </View>
                   <View style={styles.rowTrail}>

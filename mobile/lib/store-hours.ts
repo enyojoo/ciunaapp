@@ -15,7 +15,8 @@ export type StoreOpenLine = { text: string; open: boolean }
  * One line about whether a store is open now, or null when it has not set hours (show nothing then).
  * Times are in the store's own time zone, as the API computes them.
  */
-export function storeOpenLine(vendor: Pick<HubVendor, "hours_configured" | "is_open" | "opens_at" | "closes_at">, t: TFn, locale: string): StoreOpenLine | null {
+export function storeOpenLine(vendor: Pick<HubVendor, "hours_configured" | "is_open" | "opens_at" | "closes_at" | "is_paused">, t: TFn, locale: string): StoreOpenLine | null {
+  if (vendor.is_paused) return { open: false, text: t("hub.store.paused", { defaultValue: "Temporarily unavailable" }) }
   if (!vendor.hours_configured) return null
   if (vendor.is_open) {
     return {

@@ -56,7 +56,7 @@ async function hydrateCart(server: HubServer, cart: Record<string, unknown>): Pr
 
   const hoursFields = (row: Record<string, any>) => {
     const f = storefrontFields(row)
-    return { hours_configured: f.hours_configured, is_open: f.is_open, opens_at: f.opens_at, closes_at: f.closes_at }
+    return { hours_configured: f.hours_configured, is_open: f.is_open, is_paused: f.is_paused, opens_at: f.opens_at, closes_at: f.closes_at }
   }
   let vendor: HubCartRow["vendor"]
   const { data: vendorRow } = await server

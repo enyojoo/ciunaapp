@@ -479,7 +479,7 @@ export function MarketplaceCheckout({
         <View style={styles.stack}>
           {q?.storeClosed ? (
             <View style={styles.zoneBanner} accessibilityRole="alert">
-              <Text style={styles.zoneTitle}>{label("storeClosedTitle", "This store is closed right now")}</Text>
+              <Text style={styles.zoneTitle}>{q.storeClosed.paused ? label("storePausedTitle", "This store is taking a break") : label("storeClosedTitle", "This store is closed right now")}</Text>
               {q.storeClosed.opensAt ? (
                 <Text style={styles.zoneBody}>
                   {t("marketplace.storeOpensAt", {

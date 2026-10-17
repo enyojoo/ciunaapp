@@ -45,6 +45,7 @@ function HubCartScreen() {
   const availableItems = items.filter((i) => !i.unavailable && i.product)
   const storeClosed = Boolean(cart?.vendor?.hours_configured) && cart?.vendor?.is_open === false
   const opensAt = cart?.vendor?.opens_at ?? null
+  const storePaused = cart?.vendor?.is_paused === true
   const minAmount = cart?.vendor?.min_order_amount ?? null
   const minCurrency = cart?.vendor?.min_order_currency ?? null
   const unavailableItems = items.filter((i) => i.unavailable || !i.product)
@@ -247,7 +248,7 @@ function HubCartScreen() {
       ) : null}
       {storeClosed ? (
         <Text style={styles.blockedNote}>
-          {t("hub.cart.storeClosedNote", { defaultValue: "This store is closed, so checkout is unavailable until it opens." })}
+          {storePaused ? t("hub.cart.storePausedNote", { defaultValue: "This store is taking a break, so checkout is unavailable for now." }) : t("hub.cart.storeClosedNote", { defaultValue: "This store is closed, so checkout is unavailable until it opens." })}
           {opensAt ? " " + t("marketplace.storeOpensAt", { day: shortDay(opensAt.day, i18n.language), time: opensAt.time, defaultValue: "It opens {{day}} {{time}}." }) : ""}
         </Text>
       ) : null}

@@ -38,6 +38,7 @@ export type HubProduct = {
     min_order_currency?: string | null
     hours_configured?: boolean
     is_open?: boolean
+    is_paused?: boolean
     opens_at?: { day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"; time: string } | null
     closes_at?: string | null
   } | null
@@ -90,6 +91,7 @@ export type HubVendor = {
   /** Hours state computed by the API in the store's own time zone. Not shown when hours_configured is false. */
   hours_configured?: boolean
   is_open?: boolean
+  is_paused?: boolean
   opens_at?: { day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"; time: string } | null
   closes_at?: string | null
   min_order_amount?: number | null
@@ -100,7 +102,7 @@ export type HubVendor = {
 }
 
 export type CombinedTransaction = {
-  marketplace_order?: { id: string; line: string; payment_state: string; fulfillment_state: string } | null
+  marketplace_order?: { id: string; line: string; payment_state: string; fulfillment_state: string; fulfillment_mode?: string } | null
   id?: string
   transaction_id: string
   user_id?: string

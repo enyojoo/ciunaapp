@@ -189,7 +189,8 @@
       "openUntil": "Open until {{time}}",
       "closed": "Closed",
       "closedOpens": "Closed · opens {{day}} {{time}}",
-      "minOrder": "Minimum order for delivery: {{min}}"
+      "minOrder": "Minimum order for delivery: {{min}}",
+      "paused": "Temporarily unavailable"
     },
     "cart": {
       "emptyBody": "Add something from a store to start your order.",
@@ -205,7 +206,8 @@
       "lockConfirm": "Start new cart",
       "lockCancel": "Keep current cart",
       "minOrderMore": "Add {{more}} more for delivery. Minimum order is {{min}}.",
-      "storeClosedNote": "This store is closed, so checkout is unavailable until it opens."
+      "storeClosedNote": "This store is closed, so checkout is unavailable until it opens.",
+      "storePausedNote": "This store is taking a break, so checkout is unavailable for now."
     },
     "stock": {
       "onlyLeft": "Only {{n}} left",
@@ -1242,7 +1244,8 @@
     "continueToReview": "Continue to review",
     "edit": "Edit",
     "fromFee": "From {{fee}}",
-    "progressTime": "Time"
+    "progressTime": "Time",
+    "storePausedTitle": "This store is taking a break"
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

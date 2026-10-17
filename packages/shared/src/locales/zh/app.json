@@ -189,7 +189,8 @@
       "openUntil": "营业至 {{time}}",
       "closed": "已打烊",
       "closedOpens": "已打烊 · {{day}} {{time}} 开门",
-      "minOrder": "配送起送金额：{{min}}"
+      "minOrder": "配送起送金额：{{min}}",
+      "paused": "暂时不可用"
     },
     "cart": {
       "emptyBody": "从店铺添加商品，开始下单。",
@@ -205,7 +206,8 @@
       "lockConfirm": "新建购物车",
       "lockCancel": "保留当前购物车",
       "minOrderMore": "再加 {{more}} 即可配送。起送金额为 {{min}}。",
-      "storeClosedNote": "该店铺已打烊，营业前无法结账。"
+      "storeClosedNote": "该店铺已打烊，营业前无法结账。",
+      "storePausedNote": "该店铺暂停营业，暂时无法结账。"
     },
     "stock": {
       "onlyLeft": "仅剩 {{n}} 件",
@@ -1242,7 +1244,8 @@
     "continueToReview": "继续确认",
     "edit": "编辑",
     "fromFee": "{{fee}} 起",
-    "progressTime": "时间"
+    "progressTime": "时间",
+    "storePausedTitle": "该店铺暂停营业"
   },
   "social": {
     "loadFailed": "加载失败，请重试",

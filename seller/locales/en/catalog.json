@@ -162,5 +162,9 @@
   "errors.MIN_ORDER_INVALID": "Enter a valid minimum order amount.",
   "errors.MIN_ORDER_CURRENCY_INVALID": "Choose a currency for the minimum order.",
   "errors.ZONE_ETA_INVALID": "Delivery time must be a whole number of minutes between 1 and 1440.",
-  "errors.TIME_ZONE_INVALID": "Choose a valid time zone."
+  "errors.TIME_ZONE_INVALID": "Choose a valid time zone.",
+  "catalog.fulfilment.pause": "Pause store",
+  "catalog.fulfilment.pauseHint": "Customers cannot check out while the store is paused. Use it for a short break; opening hours still apply when you resume.",
+  "catalog.fulfilment.pausedOn": "Paused: customers cannot order",
+  "catalog.fulfilment.pausedOff": "Taking orders"
 }

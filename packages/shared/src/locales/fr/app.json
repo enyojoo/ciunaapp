@@ -189,7 +189,8 @@
       "openUntil": "Ouvert jusqu’à {{time}}",
       "closed": "Fermé",
       "closedOpens": "Fermé · ouvre {{day}} {{time}}",
-      "minOrder": "Commande minimale pour la livraison : {{min}}"
+      "minOrder": "Commande minimale pour la livraison : {{min}}",
+      "paused": "Temporairement indisponible"
     },
     "cart": {
       "emptyBody": "Ajoutez un article d'une boutique pour commencer votre commande.",
@@ -205,7 +206,8 @@
       "lockConfirm": "Nouveau panier",
       "lockCancel": "Garder le panier actuel",
       "minOrderMore": "Ajoutez encore {{more}} pour la livraison. Commande minimale : {{min}}.",
-      "storeClosedNote": "Cette boutique est fermée : la commande n’est pas disponible avant l’ouverture."
+      "storeClosedNote": "Cette boutique est fermée : la commande n’est pas disponible avant l’ouverture.",
+      "storePausedNote": "Cette boutique fait une pause, le paiement est indisponible pour le moment."
     },
     "stock": {
       "onlyLeft": "Plus que {{n}}",
@@ -1242,7 +1244,8 @@
     "continueToReview": "Continuer vers la vérification",
     "edit": "Modifier",
     "fromFee": "À partir de {{fee}}",
-    "progressTime": "Heure"
+    "progressTime": "Heure",
+    "storePausedTitle": "Cette boutique fait une pause"
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

@@ -6,7 +6,7 @@ import { audit } from "@/lib/merchant/audit"
 import { normalizeSchedule } from "@/lib/merchant/hours"
 
 const CURRENCY = /^[A-Z]{3}$/
-const VENDOR_COLUMNS = "id, pickup_location, pickup_hours, fulfillment_notes, opening_hours, min_order_amount, min_order_currency"
+const VENDOR_COLUMNS = "id, pickup_location, pickup_hours, fulfillment_notes, opening_hours, min_order_amount, min_order_currency, is_paused"
 const ZONE_COLUMNS = "id, city, district, fee, currency, active, eta_minutes"
 
 async function vendorFor(merchantId: string) {
@@ -28,6 +28,7 @@ export const GET = merchantRoute("catalog", async (_req, { merchant }) => {
     pickup: { location: vendor.pickup_location, hours: vendor.pickup_hours },
     notes: vendor.fulfillment_notes,
     hours: vendor.opening_hours || {},
+    paused: vendor.is_paused === true,
     timeZone: merchant.time_zone || "UTC",
     minOrder: vendor.min_order_amount != null ? { amount: Number(vendor.min_order_amount), currency: vendor.min_order_currency } : null,
     zones: data || [],
@@ -66,6 +67,7 @@ export const PUT = merchantRoute("catalog", async (req, { user, merchant }) => {
     updated_at: new Date().toISOString(),
   }
   if ("hours" in body) patch.opening_hours = normalizeSchedule(body.hours)
+  if (typeof body.paused === "boolean") patch.is_paused = body.paused
   if ("minOrder" in body) {
     const m = body.minOrder
     if (m == null || m.amount == null || m.amount === "") {
@@ -93,6 +95,6 @@ export const PUT = merchantRoute("catalog", async (req, { user, merchant }) => {
   check(existing.error)
   const stale = (existing.data || []).filter((z: any) => !keep.has(`${z.city}|${z.district}`)).map((z: any) => z.id)
   if (stale.length) check((await db.from("marketplace_zones").update({ active: false }).in("id", stale)).error)
-  await audit({ actorKind: "merchant", actorId: user.id, merchantId: merchant.id, action: "fulfillment.updated", entityType: "hub_vendor", entityId: vendor.id, details: { zones: clean.length } })
+  await audit({ actorKind: "merchant", actorId: user.id, merchantId: merchant.id, action: "fulfillment.updated", entityType: "hub_vendor", entityId: vendor.id, details: { zones: clean.length, ...(typeof body.paused === "boolean" ? { paused: body.paused } : {}) } })
   return { ok: true }
 })

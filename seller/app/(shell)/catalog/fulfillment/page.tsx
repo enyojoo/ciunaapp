@@ -37,6 +37,7 @@ export default function FulfillmentPage() {
   const [zones, setZones] = React.useState<Zone[]>([])
   const [sched, setSched] = React.useState<Sched>(emptySched)
   const [timeZone, setTimeZone] = React.useState("UTC")
+  const [paused, setPaused] = React.useState(false)
   const [minAmount, setMinAmount] = React.useState("")
   const [minCurrency, setMinCurrency] = React.useState("")
   const zoneNames = React.useMemo(() => { const l = zoneList(); return l.includes(timeZone) ? l : [timeZone, ...l] }, [timeZone])
@@ -54,6 +55,7 @@ export default function FulfillmentPage() {
     setNotes(q.data.notes ?? "")
     setSched({ ...emptySched(), ...Object.fromEntries(Object.entries(q.data.hours ?? {}).map(([d, r]) => [d, (r ?? []).map((x) => ({ open: x.open, close: x.close }))])) })
     setTimeZone(q.data.timeZone || "UTC")
+    setPaused(q.data.paused === true)
     setMinAmount(q.data.minOrder ? String(q.data.minOrder.amount) : "")
     setMinCurrency(q.data.minOrder?.currency || currency)
     setZones(q.data.zones.filter((z) => z.active).map((z) => ({ city: z.city, district: z.district, fee: String(Number(z.fee)), currency: z.currency, active: true, eta: z.eta_minutes != null ? String(z.eta_minutes) : "" })).concat(q.data.zones.filter((z) => !z.active).map((z) => ({ city: z.city, district: z.district, fee: String(Number(z.fee)), currency: z.currency, active: false, eta: z.eta_minutes != null ? String(z.eta_minutes) : "" }))))
@@ -95,6 +97,7 @@ export default function FulfillmentPage() {
         json: {
           pickup: { location: location.trim(), hours: hours.trim() },
           notes: notes.trim(),
+          paused,
           hours: Object.fromEntries(DAY_KEYS.filter((d) => sched[d].length).map((d) => [d, sched[d]])),
           minOrder: minAmount.trim() ? { amount: num(minAmount), currency: minCurrency || currency } : null,
           zones: zones.map((z) => ({ city: z.city.trim(), district: z.district.trim(), fee: num(z.fee), currency: z.currency, active: z.active, etaMinutes: z.eta.trim() ? num(z.eta) : null })),
@@ -128,6 +131,16 @@ export default function FulfillmentPage() {
           {!hasZone ? <Banner tone="warning" title={t("catalog.fulfilment.zonesMissing")} /> : null}
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
           <div className="space-y-4">
+          <Card>
+            <CardHeader title={t("catalog.fulfilment.pause")} description={t("catalog.fulfilment.pauseHint")} />
+            <CardBody>
+              <label className="flex min-h-11 items-center gap-3 text-sm font-semibold">
+                <Switch checked={paused} onCheckedChange={(v) => { setPaused(v); touch() }} label={t("catalog.fulfilment.pause")} />
+                {paused ? t("catalog.fulfilment.pausedOn") : t("catalog.fulfilment.pausedOff")}
+              </label>
+            </CardBody>
+          </Card>
+
           <Card>
             <CardHeader title={t("catalog.fulfilment.pickup")} description={t("catalog.fulfilment.pickupHint")} />
             <CardBody className="space-y-4">

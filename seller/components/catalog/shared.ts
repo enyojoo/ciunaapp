@@ -26,6 +26,7 @@ export interface FulfillmentData {
   /** Weekly schedule: a missing day is closed; an empty object means no hours are shown. */
   hours?: Partial<Record<"mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun", Array<{ open: string; close: string }>>>
   timeZone?: string
+  paused?: boolean
   minOrder?: { amount: number; currency: string | null } | null
   zones: Array<{ id?: string; city: string; district: string; fee: number | string; currency: string; active: boolean; eta_minutes?: number | null }>
 }

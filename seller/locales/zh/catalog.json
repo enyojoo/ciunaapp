@@ -162,5 +162,9 @@
   "errors.MIN_ORDER_INVALID": "请输入有效的起送金额。",
   "errors.MIN_ORDER_CURRENCY_INVALID": "请选择起送金额的币种。",
   "errors.ZONE_ETA_INVALID": "配送时间必须是 1 到 1440 之间的整数分钟。",
-  "errors.TIME_ZONE_INVALID": "请选择有效的时区。"
+  "errors.TIME_ZONE_INVALID": "请选择有效的时区。",
+  "catalog.fulfilment.pause": "暂停店铺",
+  "catalog.fulfilment.pauseHint": "店铺暂停期间，顾客无法下单。适合短暂休息；恢复后营业时间仍然生效。",
+  "catalog.fulfilment.pausedOn": "已暂停：顾客无法下单",
+  "catalog.fulfilment.pausedOff": "正在接单"
 }

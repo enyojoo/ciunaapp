@@ -162,5 +162,9 @@
   "errors.MIN_ORDER_INVALID": "Saisissez un montant de commande minimale valide.",
   "errors.MIN_ORDER_CURRENCY_INVALID": "Choisissez une devise pour la commande minimale.",
   "errors.ZONE_ETA_INVALID": "Le délai doit être un nombre entier de minutes entre 1 et 1440.",
-  "errors.TIME_ZONE_INVALID": "Choisissez un fuseau horaire valide."
+  "errors.TIME_ZONE_INVALID": "Choisissez un fuseau horaire valide.",
+  "catalog.fulfilment.pause": "Mettre la boutique en pause",
+  "catalog.fulfilment.pauseHint": "Les clients ne peuvent pas commander tant que la boutique est en pause. Utile pour une courte pause ; les horaires s'appliquent à la reprise.",
+  "catalog.fulfilment.pausedOn": "En pause : commandes impossibles",
+  "catalog.fulfilment.pausedOff": "Commandes ouvertes"
 }

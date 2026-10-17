@@ -162,5 +162,9 @@
   "errors.MIN_ORDER_INVALID": "Informe um valor mínimo de pedido válido.",
   "errors.MIN_ORDER_CURRENCY_INVALID": "Escolha uma moeda para o pedido mínimo.",
   "errors.ZONE_ETA_INVALID": "O tempo de entrega deve ser um número inteiro de minutos entre 1 e 1440.",
-  "errors.TIME_ZONE_INVALID": "Escolha um fuso horário válido."
+  "errors.TIME_ZONE_INVALID": "Escolha um fuso horário válido.",
+  "catalog.fulfilment.pause": "Pausar a loja",
+  "catalog.fulfilment.pauseHint": "Os clientes não podem finalizar a compra enquanto a loja está pausada. Use para uma pausa curta; ao retomar, os horários continuam valendo.",
+  "catalog.fulfilment.pausedOn": "Pausada: não é possível pedir",
+  "catalog.fulfilment.pausedOff": "Aceitando pedidos"
 }
