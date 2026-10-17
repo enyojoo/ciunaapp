@@ -1,7 +1,12 @@
 import { useMemo, useState } from "react"
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { Clock, Mail, MessageCircle, Minus, Plus } from "lucide-react-native"
+import { ChevronRight, Clock, Mail, MessageCircle, MessageSquare, Minus, Plus } from "lucide-react-native"
+import { useRouter } from "expo-router"
+import { useAuth } from "@/lib/auth-context"
+import { authJson } from "@/lib/social-api"
+import { useCachedQuery } from "@/lib/use-cached-query"
+import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { GroupCard } from "@/components/row"
 import { ScreenScroll } from "@/components/screen"
 import { BRAND } from "@ciuna/shared"
@@ -10,6 +15,15 @@ import { colors, radius, type as typeSize } from "@/lib/theme"
 export default function SupportScreen() {
   const { t } = useTranslation("app")
   const [expanded, setExpanded] = useState<number | null>(null)
+  const router = useRouter()
+  const { user } = useAuth()
+  // The dot shows when a reply from support is waiting.
+  const { data: unread, revalidate } = useCachedQuery<number>(
+    user ? `ciuna_support_unread_${user.id}` : null,
+    async () => (await authJson<{ count: number }>("/api/support/unread")).count,
+    { ttlMs: 30_000 },
+  )
+  useFocusRevalidate(revalidate)
 
   const faqItems = useMemo(
     () => [
@@ -22,6 +36,20 @@ export default function SupportScreen() {
 
   return (
     <ScreenScroll edges={["left", "right"]}>
+      <GroupCard>
+        <Pressable style={styles.contactRow} onPress={() => router.push("/support/requests" as never)} accessibilityRole="button">
+          <View style={styles.contactIcon}>
+            <MessageSquare size={18} color={colors.primary} strokeWidth={2} />
+            {unread ? <View style={styles.dot} /> : null}
+          </View>
+          <View style={styles.contactBody}>
+            <Text style={styles.contactTitle}>{t("support.req.myRequests", { defaultValue: "My requests" })}</Text>
+            <Text style={styles.contactSub}>{t("support.req.myRequestsHint", { defaultValue: "Write to us and follow the answers here" })}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.muted} strokeWidth={2.2} />
+        </Pressable>
+      </GroupCard>
+
       <GroupCard title={t("support.getInTouch")}>
         <Pressable
           style={[styles.contactRow, styles.border]}
@@ -88,6 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.heroBody,
   },
   contactBody: { flex: 1 },
+  dot: { position: "absolute", top: 2, right: 2, width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary, borderWidth: 2, borderColor: colors.surface },
   contactTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   contactSub: { marginTop: 2, fontSize: 12, color: colors.muted },
   faqItem: { paddingVertical: 12 },

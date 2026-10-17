@@ -82,6 +82,9 @@ export default function RootLayout() {
                       <Stack.Screen name="experts" />
                       <Stack.Screen name="assistant" options={{ headerShown: true, title: "Assistant" }} />
                       <Stack.Screen name="support" options={{ headerShown: true, title: t("support.title") }} />
+                      <Stack.Screen name="support/requests" options={{ headerShown: true, title: t("support.req.myRequests") }} />
+                      <Stack.Screen name="support/new" options={{ headerShown: true, title: t("support.req.newRequest") }} />
+                      <Stack.Screen name="support/[id]" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="recipients/index" options={{ headerShown: true, title: t("recipients.title") }} />
                       <Stack.Screen name="recipients/form" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="profile" options={{ headerShown: true, title: t("profile.title") }} />
