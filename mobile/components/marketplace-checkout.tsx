@@ -774,9 +774,12 @@ export function MarketplaceCheckout({
 export function MarketplaceOrderView({
   order: initial,
   onChange,
+  chatInline,
 }: {
   order: MarketplaceOrder
   onChange?: (order: MarketplaceOrder) => unknown
+  /** The conversation is already beside the order (wide web), so the Message seller bar is not needed. */
+  chatInline?: boolean
 }) {
   const [order, setOrder] = useState(initial),
     [error, setError] = useState(""),
@@ -1079,7 +1082,7 @@ export function MarketplaceOrderView({
         />
       </View>
     </ScreenScroll>
-    {live ? <StickyMessageSeller orderId={order.id} /> : null}
+    {live && !chatInline ? <StickyMessageSeller orderId={order.id} /> : null}
     </View>
   )
 }

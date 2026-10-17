@@ -17,3 +17,6 @@ Built in `mobile/components/store-item.tsx`: cover (the store's image when set, 
 
 ## Code
 `mobile/components/store-item.tsx`, `web/components/hub/hub-marketplace-vendor-storefront.tsx`
+
+## As built (2026-10-19)
+The HTML preview shows the earlier layout. The running app is the reference: [food-home.png](../../reference/current-app/shots/food-home.png) (captured from the Expo web build with demo data; `node scripts/capture-current-app.mjs food-home`).

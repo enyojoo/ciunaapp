@@ -96,7 +96,7 @@ async function mock(page) {
       const lines = [{ id: "ci1", productId: "p1", quantity: 2, title: "Jollof rice with chicken", unitPrice: 450, feePercent: 0, fields: [] }, { id: "ci2", productId: "p3", quantity: 1, title: "Chin chin (200 g)", unitPrice: 250, feePercent: 0, fields: [] }]
       const snapshot = { id: "q1", expiresAt: new Date(Date.now() + 900000).toISOString(), source: { kind: "cart", cartId: "c1" }, line: "food", title: "Mama T's Kitchen", lines, totals, modes: ["delivery"], fulfillmentMode: "delivery", zones: [], requirePhone: false, methods: [], payCurrencies: ["RUB"], instructions: "", checkoutReady: true, snapshot: null, contactName: "Amara N.", contactPhone: "+7 900 000 00 00", contactEmail: "amara@example.com", deliveryAddressLine: "Tverskaya 1, apt 12", note: "" }
       const attempts = [{ id: "a1", rail: "yookassa", state: "succeeded", confirmation_mode: "embedded", instructions: {} }]
-      return json(route, { order: { id: "o1", transaction_id: "t1", public_id: "CU-1042", line: "food", payment_state: "paid", fulfillment_state: "in_progress", fulfillment_mode: "delivery", payment_deadline: new Date(Date.now() + 900000).toISOString(), snapshot, owner_team: "marketplace", created_at: new Date(Date.now() - 7200000).toISOString(), attempts, events: [], canCancel: false, nextAction: "track", seller: { name: "Mama T's Kitchen" } } })
+      return json(route, { order: { id: "o1", transaction_id: "t1", public_id: "CU-1042", line: "food", payment_state: "paid", fulfillment_state: "in_progress", fulfillment_mode: "delivery", payment_deadline: new Date(Date.now() + 900000).toISOString(), snapshot, owner_team: "marketplace", created_at: new Date(Date.now() - 7200000).toISOString(), attempts, events: [{ id: 3, kind: "start", created_at: new Date(Date.now() - 3600000).toISOString(), message: "Work started." }, { id: 2, kind: "accept", created_at: new Date(Date.now() - 5400000).toISOString(), message: "Accepted." }, { id: 1, kind: "paid", created_at: new Date(Date.now() - 6600000).toISOString(), message: "Paid." }], chat: { available: true, closed: false, closesAt: null }, canCancel: false, nextAction: "track", seller: { name: "Mama T's Kitchen" } } })
     }
     if (p === "/api/expert/profiles/ada-obi") return json(route, { profile: { id: "e1", slug: "ada-obi", display_name: "Ada Obi", headline: "Nutritionist for expats", bio: "I help people abroad eat well on a budget.", category: "Health", image_url: null, service_area: "Moscow and online", rating_avg: 4.8, rating_count: 12, languages: ["en", "ru", "fr"], time_zone: "Africa/Lagos", credentials: [{ title: "MSc Nutrition", issuer: "UCL", year: 2019 }], years_experience: 7, is_verified: true, verification_tier: 2 }, services: [] })
     if (p === "/api/expert/profiles/ada-obi/reviews" || p.startsWith("/api/expert/profiles/ada-obi/reviews")) return json(route, { summary: { avg: 4.8, count: 12, distribution: { "1": 0, "2": 0, "3": 1, "4": 2, "5": 9 } }, reviews: [], hasMore: false })
@@ -110,6 +110,13 @@ async function mock(page) {
       { id: 2, sender_kind: "agent", body: "Hi Amara, thanks for writing. Can you send the transfer reference?", created_at: new Date(Date.now() - 3600000).toISOString() },
     ] })
     if (p === "/api/support/unread") return json(route, { count: 1 })
+    if (p === "/api/hub/messages/unread") return json(route, { count: 0, orders: [] })
+    if (p === "/api/push/preferences") return json(route, { orders: true, messages: false, support: true })
+    if (p === "/api/account/delete") return json(route, { blockers: { orders: process.env.CAPTURE_DELETE_BLOCKED ? 1 : 0, transfers: 0, refunds: 0 }, pending: null, waitDays: 30 })
+    if (p === "/api/expert/profiles") return json(route, { profiles: [
+      { id: "e1", slug: "ada-obi", display_name: "Ada Obi", headline: "Nutritionist for expats", category: "Health", image_url: null, rating_avg: 4.8, rating_count: 12, languages: ["en", "ru"], time_zone: "Africa/Lagos", credentials: [], is_verified: true, verification_tier: 2, from_price: { amount: 3000, currency: "RUB", per: "hour" }, next_available_at: new Date(Date.now() + 26 * 3600000).toISOString() },
+      { id: "e2", slug: "li-wei", display_name: "Li Wei", headline: "Tax advice for freelancers", category: "Finance", image_url: null, rating_avg: null, rating_count: 0, languages: ["zh", "en"], time_zone: "Asia/Shanghai", credentials: [], is_verified: false, verification_tier: 0, from_price: { quote: true }, next_available_at: null },
+    ] })
     if (p === "/api/transactions") return json(route, { transactions: [] })
     if (p === "/api/receipts/order/CU-1042") return json(route, { receipt: { kind: "order", number: "CU-1042", issuedAt: new Date(Date.now() - 7200000).toISOString(), status: "paid", customer: { name: "Amara N." }, counterparty: { role: "store", name: "Mama T's Kitchen", account: null }, payMethod: "online", lines: [{ title: "Jollof rice with chicken", quantity: 2, unitPrice: 450, amount: 900 }, { title: "Chin chin (200 g)", quantity: 1, unitPrice: 250, amount: 250 }], amounts: { currency: "RUB", items: 1150, fee: 0, delivery: 100, conversion: 0, total: 1250, refunded: null }, transfer: null, session: null, address: "Tverskaya 1, apt 12" } })
     if (p === "/api/receipts/transfer/CIU-1042") return json(route, { receipt: { kind: "transfer", number: "CIU-1042", issuedAt: new Date(Date.now() - 86400000).toISOString(), status: "completed", customer: { name: "Amara N." }, counterparty: { role: "recipient", name: "Tunde Bello", account: "···· 6789" }, payMethod: "online", lines: [], amounts: { currency: "USD", items: 100, fee: 3.5, delivery: 0, conversion: 0, total: 103.5, refunded: null }, transfer: { sendAmount: 100, sendCurrency: "USD", receiveAmount: 140000, receiveCurrency: "NGN", rate: 1400 }, session: null, address: null } })
@@ -140,6 +147,9 @@ const SHOTS = [
   { name: "receipt-order", path: "/receipt/order/CU-1042", wait: 2500, full: true },
   { name: "receipt-transfer", path: "/receipt/transfer/CIU-1042", wait: 2500, full: true },
   { name: "limits", path: "/limits", wait: 2500, full: true },
+  { name: "experts-browse", path: "/experts/browse", wait: 2500, full: true },
+  { name: "notifications", path: "/notifications", wait: 2500, full: true },
+  { name: "delete-account", path: "/delete-account", wait: 2500, full: true },
   { name: "order-chat", path: "/orders/o1/chat", wait: 2500, full: true },
   { name: "order-detail", path: "/orders/o1", wait: 2500, full: true },
   { name: "more", path: "/more", wait: 2000, full: true },

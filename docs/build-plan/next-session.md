@@ -2,7 +2,7 @@
 
 Written 2026-10-18 at the end of a long session, updated after the support API landed. Read this first, then `customer-app-status.md` (done and left lists) and `design-system/guides/80-decisions.md` (owner decisions). Everything below is committed on `main`; nothing is pushed.
 
-> **The current plan is `customer-completion-plan.md`** (product decisions and build order, 2026-10-18). Where it differs from the list below, it wins.
+> **Phases 1 to 3 of `customer-completion-plan.md` are built (2026-10-19). Read its Status section; only phase 4 (ship) remains.** Where it differs from the list below, it wins.
 
 ## State right now
 

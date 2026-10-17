@@ -17,3 +17,6 @@ Built in `mobile/app/(app)/hub/[slug]/v/[vendor].tsx` with `StoreHeader` (`mobil
 
 ## Code
 `mobile/app/(app)/hub/[slug]/v/*`, `web/components/hub/*`
+
+## As built (2026-10-19)
+The HTML preview shows the earlier layout. The running app is the reference: [store-page.png](../../reference/current-app/shots/store-page.png) (captured from the Expo web build with demo data; `node scripts/capture-current-app.mjs store-page`).

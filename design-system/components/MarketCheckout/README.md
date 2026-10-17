@@ -17,3 +17,6 @@ Built in `mobile/components/marketplace-checkout.tsx`: two real steps with a ste
 
 ## Code
 `mobile/components/marketplace-checkout.tsx`, `mobile/app/(app)/hub/[slug]/checkout/*`
+
+## As built (2026-10-19)
+The HTML preview shows the earlier layout. The running app is the reference: [checkout-page.png](../../reference/current-app/shots/checkout-page.png), [cart-filled.png](../../reference/current-app/shots/cart-filled.png) (captured from the Expo web build with demo data; `node scripts/capture-current-app.mjs checkout-page cart-filled`).

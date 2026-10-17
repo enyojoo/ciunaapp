@@ -17,3 +17,6 @@ Built in `mobile/app/(app)/hub/index.tsx`. Sticky header (logo, Refer, avatar), 
 
 ## Code
 `mobile/app/(app)/hub/index.tsx`, `mobile/components/tile.tsx`, `web/components/hub/*`
+
+## As built (2026-10-19)
+The HTML preview shows the earlier layout. The running app is the reference: [home.png](../../reference/current-app/shots/home.png) (captured from the Expo web build with demo data; `node scripts/capture-current-app.mjs home`).

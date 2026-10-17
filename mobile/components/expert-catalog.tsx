@@ -122,16 +122,13 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
               ? `★ ${Number(expert.rating_avg).toFixed(1)} (${expert.rating_count})`
               : t("experts.directory.isNew", { defaultValue: "New" })}
           </Text>
-          {priceLine ? (
-            <Text style={styles.hint} numberOfLines={1}>
-              {priceLine}
-            </Text>
-          ) : null}
-          {nextLine ? (
-            <Text style={styles.hint} numberOfLines={1}>
-              {nextLine}
-            </Text>
-          ) : null}
+          {/* Both lines are always drawn so every expert card has the same height. */}
+          <Text style={styles.hint} numberOfLines={1}>
+            {priceLine || " "}
+          </Text>
+          <Text style={styles.hint} numberOfLines={1}>
+            {nextLine || " "}
+          </Text>
         </View>
       </View>
     </Pressable>

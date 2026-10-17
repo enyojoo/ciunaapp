@@ -857,7 +857,7 @@ export default function OrderScreen() {
     sidePanel ? (
       <View style={styles.split}>
         <View style={styles.splitMain}>
-          <MarketplaceOrderView order={order} onChange={setOrder} />
+          <MarketplaceOrderView order={order} onChange={setOrder} chatInline />
         </View>
         <View style={styles.splitChat}>
           <OrderChat orderId={order.id} embedded />

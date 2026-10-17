@@ -1,4 +1,6 @@
-# Customer app: done and left (updated 2026-10-18)
+# Customer app: done and left (updated 2026-10-19)
+
+> **Newest: `customer-completion-plan.md`** lists what was added after this page was written (app lock, send limits editor, account deletion, notifications, paused store, expert fields, PDF receipts, share, chat side panel). The "Left" lists below are mostly done; what remains is phase 4 (ship) in that plan.
 
 > Continuing in a new session? Start with `next-session.md`: the ordered plan for support requests, receipts, limits and push.
 

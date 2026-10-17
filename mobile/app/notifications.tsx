@@ -49,6 +49,7 @@ export default function NotificationsScreen() {
               disabled={!prefs}
               onValueChange={(v) => void toggle(k, v)}
               trackColor={{ true: colors.primary, false: colors.border }}
+              thumbColor="#FFFFFF"
               accessibilityLabel={t(`notifications.${k}`)}
             />
           </View>

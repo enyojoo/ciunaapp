@@ -53,3 +53,18 @@ Goal: finish the customer app (`mobile/`, native and Expo web) and every API it 
 - Enter send limits in Office once the editor exists (compliance numbers).
 - Confirm the deletion retention period and the `web/` decision.
 - Provide the Apple and Google developer accounts for the EAS build.
+
+## Status (2026-10-19): phases 1 to 3 built; phase 4 partly done
+
+Built and committed: optional app lock with biometric and 5-attempt sign-out; Office Send limits editor; account deletion (database, API, app, Office Account deletions page, daily removal job); per-step times in the order timeline (from the existing order events, no new table); order and chat push notifications, Notifications settings, tab badges; paused store; Delivery or Pickup on Activity rows; expert from-price, next available and the seller credentials editor; PDF receipts; store share; verification explainer; chat side panel on wide web; assistant stub removed.
+
+Deviations from the plan above:
+- No order events table: the existing `marketplace_events` already records paid, accept, start, fulfill, cancel and refund with times. A `notified_at` column makes each event notify once.
+- Account deletion asks for a confirmation dialog, not a PIN or password re-entry.
+- The Delivery or Pickup mark is text in the row's date line, not a chip.
+- Design preview HTML frames were not redrawn; the card READMEs point to the app screenshots (As built) instead.
+- Verification tooltip is a plain explanation dialog on the store and expert profile screens.
+
+Still to do (phase 4): crash reporting and analytics, store listing assets and privacy labels, deep links, EAS build and test-track release, end-to-end test on a real phone. These need your Apple, Google and monitoring accounts.
+
+Owner actions: run `account-deletion.sql`, `push-preferences.sql`, `store-pause.sql` (RUN-ORDER #9 to #11), then `verify-all.sql`; make sure `CRON_SECRET` is set on the API (the new jobs account-purge and order-notifications use it); enter send limits in Office.

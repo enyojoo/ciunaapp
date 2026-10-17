@@ -17,3 +17,6 @@ Differs from the built app: search field, category chips and the Stores rail wit
 
 ## Code
 `mobile/app/(app)/hub/[slug]/index.tsx`, `web/components/hub/*`
+
+## As built (2026-10-19)
+The HTML preview shows the earlier layout. The running app is the reference: [food-home.png](../../reference/current-app/shots/food-home.png) (captured from the Expo web build with demo data; `node scripts/capture-current-app.mjs food-home`).
