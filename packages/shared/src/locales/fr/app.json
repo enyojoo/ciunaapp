@@ -507,7 +507,9 @@
       "quoteFeesUnavailable": "Impossible de confirmer les frais. Réessayez.",
       "quoteBelowMinRub": "Envoyez au moins 1 000 RUB.",
       "quoteMinContribution": "Augmentez le montant pour continuer.",
-      "swapCurrencies": "Inverser les devises"
+      "swapCurrencies": "Inverser les devises",
+      "verifyCta": "Vérifier mon identité",
+      "paySbpAmount": "Payer {{amount}} par SBP"
     },
     "fee": "Frais de change",
     "processingFee": "Frais de traitement",
@@ -609,7 +611,12 @@
     "deliveryPhonePlaceholder": "Téléphone pour la livraison",
     "saveDeliveryAddress": "Enregistrer l'adresse",
     "failedAddDelivery": "Impossible d'enregistrer l'adresse. Réessayez.",
-    "cashDeliverySummary": "Livraison en espèces"
+    "cashDeliverySummary": "Livraison en espèces",
+    "limitHint": "Min {{min}} · Max {{max}} par transfert",
+    "limitHintMax": "Max {{max}} par transfert",
+    "limitHintMin": "Min {{min}} par transfert",
+    "seeLimits": "Voir les limites",
+    "payAmount": "Payer {{amount}}"
   },
   "recipients": {
     "title": "Bénéficiaires",
@@ -666,7 +673,8 @@
       "iban": "ex. : FR76 3000 6000 0112 3456 7890 189",
       "swift_bic": "ex. : NWBKGB2L"
     },
-    "confirmDeleteTitleNamed": "Supprimer {{name}} ?"
+    "confirmDeleteTitleNamed": "Supprimer {{name}} ?",
+    "failedDelete": "Suppression impossible. Réessayez."
   },
   "referrals": {
     "pageTitle": "Parrainage",
@@ -910,7 +918,9 @@
       "linkExpires": "Le lien de vérification expire à {{time}} (environ une heure).",
       "reviewPending": "Vérification en cours ou en examen. Nous débloquerons l'envoi dès qu'elle sera confirmée.",
       "successBody": "Vous pouvez envoyer de l'argent par SBP. Retournez à votre transfert pour continuer."
-    }
+    },
+    "yourLimit": "Votre limite mensuelle",
+    "limitLeft": "{{left}} restants sur {{total}}"
   },
   "auth": {
     "welcomeBack": "Bon retour",
@@ -1437,7 +1447,8 @@
     "unavailable": "Le reçu est disponible une fois le paiement terminé.",
     "shareText": "Reçu Ciuna {{number}} : {{total}} le {{date}}.",
     "downloadPdf": "Télécharger le PDF",
-    "pdfFailed": "Impossible de créer le PDF. Réessayez."
+    "pdfFailed": "Impossible de créer le PDF. Réessayez.",
+    "youSent": "Vous avez envoyé"
   },
   "limits": {
     "title": "Plafonds",

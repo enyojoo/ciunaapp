@@ -507,7 +507,9 @@
       "quoteFeesUnavailable": "Не удалось подтвердить комиссию. Попробуйте снова.",
       "quoteBelowMinRub": "Отправьте не менее 1 000 ₽.",
       "quoteMinContribution": "Увеличьте сумму, чтобы продолжить.",
-      "swapCurrencies": "Поменять валюты местами"
+      "swapCurrencies": "Поменять валюты местами",
+      "verifyCta": "Пройти проверку",
+      "paySbpAmount": "Оплатить {{amount}} через СБП"
     },
     "fee": "Комиссия за обмен",
     "processingFee": "Комиссия за обработку",
@@ -609,7 +611,12 @@
     "deliveryPhonePlaceholder": "Телефон для связи при доставке",
     "saveDeliveryAddress": "Сохранить адрес",
     "failedAddDelivery": "Не удалось сохранить адрес. Попробуйте снова.",
-    "cashDeliverySummary": "Доставка наличными"
+    "cashDeliverySummary": "Доставка наличными",
+    "limitHint": "Мин. {{min}} · Макс. {{max}} за перевод",
+    "limitHintMax": "Макс. {{max}} за перевод",
+    "limitHintMin": "Мин. {{min}} за перевод",
+    "seeLimits": "Мои лимиты",
+    "payAmount": "Оплатить {{amount}}"
   },
   "recipients": {
     "title": "Получатели",
@@ -666,7 +673,8 @@
       "iban": "напр. DE89 3704 0044 0532 0130 00",
       "swift_bic": "напр. NWBKGB2L"
     },
-    "confirmDeleteTitleNamed": "Удалить {{name}}?"
+    "confirmDeleteTitleNamed": "Удалить {{name}}?",
+    "failedDelete": "Не удалось удалить. Попробуйте ещё раз."
   },
   "referrals": {
     "pageTitle": "Рефералы",
@@ -910,7 +918,9 @@
       "linkExpires": "Ссылка для проверки действует до {{time}} (около часа).",
       "reviewPending": "Проверка идёт или на рассмотрении. Мы откроем отправку, когда она будет подтверждена.",
       "successBody": "Теперь вы можете отправлять деньги через СБП. Вернитесь к переводу, чтобы продолжить."
-    }
+    },
+    "yourLimit": "Ваш месячный лимит",
+    "limitLeft": "Осталось {{left}} из {{total}}"
   },
   "auth": {
     "welcomeBack": "С возвращением",
@@ -1439,7 +1449,8 @@
     "unavailable": "Квитанция появится после завершения платежа.",
     "shareText": "Квитанция Ciuna {{number}}: {{total}}, {{date}}.",
     "downloadPdf": "Скачать PDF",
-    "pdfFailed": "Не удалось создать PDF. Попробуйте ещё раз."
+    "pdfFailed": "Не удалось создать PDF. Попробуйте ещё раз.",
+    "youSent": "Вы отправили"
   },
   "limits": {
     "title": "Лимиты",

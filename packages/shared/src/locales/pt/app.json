@@ -603,7 +603,9 @@
       "verifyRequired": "Conclua a verificação de identidade para enviar dinheiro.",
       "quoteFeesUnavailable": "Não foi possível confirmar a taxa. Tente novamente.",
       "quoteBelowMinRub": "Envie pelo menos 1.000 RUB.",
-      "quoteMinContribution": "Envie um valor maior para continuar."
+      "quoteMinContribution": "Envie um valor maior para continuar.",
+      "verifyCta": "Verificar identidade",
+      "paySbpAmount": "Pagar {{amount}} por SBP"
     },
     "quoteDeskRateNotConfigured": "Esta rota ainda não está pronta. Defina no Office a taxa de USD para a moeda de recebimento (usada como mesa de pagamento em USDT).",
     "quoteReceiveCappedByUsdt": "O valor do destinatário reflete o que este pagamento consegue cobrir após as taxas.",
@@ -708,7 +710,12 @@
     "deliveryPhonePlaceholder": "Telefone de contato para a entrega",
     "saveDeliveryAddress": "Salvar endereço",
     "failedAddDelivery": "Não foi possível salvar o endereço de entrega. Tente novamente.",
-    "cashDeliverySummary": "Entrega em dinheiro"
+    "cashDeliverySummary": "Entrega em dinheiro",
+    "limitHint": "Mín. {{min}} · Máx. {{max}} por transferência",
+    "limitHintMax": "Máx. {{max}} por transferência",
+    "limitHintMin": "Mín. {{min}} por transferência",
+    "seeLimits": "Ver limites",
+    "payAmount": "Pagar {{amount}}"
   },
   "recipients": {
     "title": "Destinatários",
@@ -765,7 +772,8 @@
       "iban": "ex.: GB82 WEST 1234 5698 7654 32",
       "swift_bic": "ex.: NWBKGB2L"
     },
-    "confirmDeleteTitleNamed": "Excluir {{name}}?"
+    "confirmDeleteTitleNamed": "Excluir {{name}}?",
+    "failedDelete": "Não foi possível excluir. Tente de novo."
   },
   "referrals": {
     "pageTitle": "Afiliados e indicações",
@@ -855,7 +863,7 @@
     "identityCardDesc": "Informações do seu documento de identidade.",
     "addressInformation": "Informações de endereço",
     "addressCardDesc": "Seu endereço residencial e comprovante.",
-    "notStarted": "Não iniciada",
+    "notStarted": "Não iniciado",
     "badgeDone": "Concluída",
     "badgeInReview": "Em análise",
     "badgeRejected": "Recusada",
@@ -1009,7 +1017,9 @@
         "validation_failed": "Corrija os campos destacados.",
         "submit_failed": "Não foi possível enviar a verificação. Tente novamente mais tarde."
       }
-    }
+    },
+    "yourLimit": "Seu limite mensal",
+    "limitLeft": "Restam {{left}} de {{total}}"
   },
   "auth": {
     "welcomeBack": "Bem-vindo de volta",
@@ -1437,7 +1447,8 @@
     "unavailable": "O recibo fica disponível quando o pagamento for concluído.",
     "shareText": "Recibo Ciuna {{number}}: {{total}} em {{date}}.",
     "downloadPdf": "Baixar PDF",
-    "pdfFailed": "Não foi possível criar o PDF. Tente de novo."
+    "pdfFailed": "Não foi possível criar o PDF. Tente de novo.",
+    "youSent": "Você enviou"
   },
   "limits": {
     "title": "Limites",

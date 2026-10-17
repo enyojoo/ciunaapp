@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react"
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { AppTextInput } from "@/components/app-text-input"
 import { useInputFocusRing } from "@/lib/focused-input-box"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { SvgXml } from "react-native-svg"
-import { Pencil, Plus, Search, Trash2 } from "lucide-react-native"
+import { Plus, Search, Trash2 } from "lucide-react-native"
 import { Avatar } from "@/components/avatar"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
+import { maskAccount } from "@/lib/mask-account"
 import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
@@ -24,7 +26,7 @@ export default function RecipientsScreen() {
   const { user } = useAuth()
   const { showError } = useToast()
   const { currencies } = useFx()
-  const { data, loading, revalidate, mutate } = useRecipients(user?.id)
+  const { data, loading, error, revalidate, mutate } = useRecipients(user?.id)
   const rows = data || []
   const [query, setQuery] = useState("")
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -49,7 +51,8 @@ export default function RecipientsScreen() {
     const { error } = await supabase.from("recipients").delete().eq("id", id)
     setDeletingId(null)
     if (error) {
-      showError(t("recipients.failedDeleteLinked"))
+      // 23503: the recipient is used by a transfer, so it cannot be removed. Anything else is a general failure.
+      showError(error.code === "23503" ? t("recipients.failedDeleteLinked") : t("recipients.failedDelete", { defaultValue: "Could not delete. Try again." }))
       return
     }
     mutate((prev) => (prev || []).filter((r) => r.id !== id))
@@ -75,10 +78,14 @@ export default function RecipientsScreen() {
         />
       </View>
 
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
+      {loading && !data ? (
+        <View accessibilityLabel={t("common.loading", { defaultValue: "Loading" })}>
+          {[0, 1, 2].map((i) => (
+            <View key={i} style={[styles.card, styles.skeletonCard]} />
+          ))}
         </View>
+      ) : error && !data ? (
+        <LoadError onRetry={() => void revalidate()} />
       ) : filtered.length === 0 ? (
         <EmptyState
           title={query ? t("recipients.noMatchSearch") : t("recipients.noneFound")}
@@ -87,6 +94,12 @@ export default function RecipientsScreen() {
       ) : (
         filtered.map((r) => (
           <View key={r.id} style={styles.card}>
+            <Pressable
+              onPress={() => router.push(`/recipients/form?id=${r.id}`)}
+              accessibilityRole="button"
+              accessibilityLabel={r.full_name}
+              style={styles.cardTap}
+            >
             <View style={styles.avatarWrap}>
               <Avatar name={r.full_name} size={48} />
               {r.currency && flagFor(r.currency) ? (
@@ -99,29 +112,12 @@ export default function RecipientsScreen() {
               <Text style={styles.name} numberOfLines={1}>
                 {r.full_name}
               </Text>
-              {r.account_number ? (
-                <Text style={styles.meta} numberOfLines={1}>
-                  {r.account_number}
-                </Text>
-              ) : r.iban ? (
-                <Text style={styles.meta} numberOfLines={1}>
-                  {r.iban}
-                </Text>
-              ) : null}
               <Text style={styles.meta} numberOfLines={1}>
-                {r.bank_name}
+                {[r.bank_name, maskAccount(r.account_number || r.iban)].filter(Boolean).join(" · ")}
               </Text>
             </View>
+            </Pressable>
             <View style={styles.cardActions}>
-              <Pressable
-                onPress={() => router.push(`/recipients/form?id=${r.id}`)}
-                style={styles.iconBtn}
-                hitSlop={8}
-                accessibilityRole="button"
-                accessibilityLabel={t("a11y.edit", { defaultValue: "Edit" })}
-              >
-                <Pencil size={16} color={colors.text} strokeWidth={2} />
-              </Pressable>
               <Pressable
                 onPress={() => remove(r.id)}
                 style={styles.iconBtn}
@@ -156,6 +152,8 @@ export default function RecipientsScreen() {
 
 const styles = StyleSheet.create({
   center: { paddingVertical: 60, alignItems: "center" },
+  cardTap: { flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 12 },
+  skeletonCard: { height: 82, backgroundColor: colors.neutralSurface, borderColor: colors.neutralSurface },
   addBtn: {
     marginBottom: 16,
     minHeight: 48,

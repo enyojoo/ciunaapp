@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { limitMessage } from "@/lib/limit-message"
+import { checkAmount, limitRange, type CurrentLimit } from "@/lib/limit-check"
+import { authJson } from "@/lib/social-api"
+import { useCachedQuery } from "@/lib/use-cached-query"
+import { formatMoney as formatMoneyText } from "@/lib/money"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter, useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -69,6 +73,7 @@ export default function SendScreen() {
   const [busy, setBusy] = useState(false)
   const { methods: sendMethods, loading: sendMethodsLoading } = useSendPaymentMethods(sendCurrency)
   const [bitbankerPayment, setBitbankerPayment] = useState<BitbankerPayment | null>(null)
+  const { data: limitState } = useCachedQuery<{ current: CurrentLimit | null }>(user ? `ciuna_limits_${user.id}` : null, () => authJson<{ current: CurrentLimit | null }>("/api/limits"), { ttlMs: 60_000 })
   const prevSendCurrencyRef = useRef("")
 
   useEffect(() => {
@@ -168,8 +173,13 @@ export default function SendScreen() {
       }
     : null
 
+  // The same limit rule the server applies, shown under the amount before the last tap.
+  const limitIssue = checkAmount(limitState?.current, sendCurrency, Number(sendAmount))
+  const limitText = limitIssue ? limitMessage(limitIssue, t, i18n.language) : null
+  const range = limitRange(limitState?.current, sendCurrency)
+
   const canAmount = Boolean(
-    displayQuote && meetsMin && (!bitbankerLiveFees || feesConfirmed),
+    displayQuote && meetsMin && !limitIssue && (!bitbankerLiveFees || feesConfirmed),
   )
 
   useEffect(() => {
@@ -182,8 +192,8 @@ export default function SendScreen() {
 
   const canRecipient = Boolean(recipientId)
 
+  // Verification is a step of the flow, not an error: go straight to it and come back to Send afterwards.
   const requireVerification = () => {
-    showError(t("send.mobile.verifyRequired", { defaultValue: "Complete identity verification to send money." }))
     router.push("/verification/bitbanker?returnTo=send" as never)
   }
 
@@ -327,9 +337,12 @@ export default function SendScreen() {
             quotePreviewLoading={bitbankerLiveFees ? quotePreviewLoading : false}
             bitbankerFeesConfirmed={bitbankerLiveFees ? feesConfirmed : true}
             ratesLoading={fxLoading}
+            limitRange={range && sendCurrency ? { min: range.min != null ? formatMoneyText(range.min, sendCurrency) : null, max: range.max != null ? formatMoneyText(range.max, sendCurrency) : null } : null}
+            limitText={limitText}
+            onSeeLimits={() => router.push("/limits" as never)}
           />
           <View style={styles.footer}>
-            <PrimaryButton label={t("send.continue")} onPress={goRecipient} disabled={!canAmount} />
+            <PrimaryButton label={bitbankerGateActive ? t("send.mobile.verifyCta", { defaultValue: "Verify identity" }) : t("send.continue")} onPress={goRecipient} disabled={!canAmount} />
           </View>
         </>
         )
@@ -370,8 +383,8 @@ export default function SendScreen() {
             <PrimaryButton
               label={
                 usesBitbanker
-                  ? t("send.mobile.createSbpPayment", { defaultValue: "Create SBP payment" })
-                  : t("send.makePayment")
+                  ? t("send.mobile.paySbpAmount", { amount: formatMoneyText(displayQuote.totalAmount, sendCurrency), defaultValue: "Pay {{amount}} by SBP" })
+                  : t("send.payAmount", { amount: formatMoneyText(displayQuote.totalAmount, sendCurrency), defaultValue: "Pay {{amount}}" })
               }
               onPress={() => void submit()}
               busy={busy}

@@ -93,6 +93,9 @@ export function SendAmountStep({
   quotePreviewLoading,
   bitbankerFeesConfirmed,
   ratesLoading,
+  limitRange,
+  limitText,
+  onSeeLimits,
 }: {
   sendAmount: string
   onChangeAmount: (v: string) => void
@@ -110,6 +113,11 @@ export function SendAmountStep({
   bitbankerFeesConfirmed?: boolean
   /** Office FX still loading — suppress false "rate unavailable" warnings. */
   ratesLoading?: boolean
+  /** Per-transfer limits for the customer's level (already formatted), or null when there are none. */
+  limitRange?: { min: string | null; max: string | null } | null
+  /** Why the amount cannot be sent (a limit), or null. */
+  limitText?: string | null
+  onSeeLimits?: () => void
 }) {
   const { t } = useTranslation("app")
   const [openSend, setOpenSend] = useState(false)
@@ -241,6 +249,26 @@ export function SendAmountStep({
         </View>
       </View>
 
+      {limitRange ? (
+        <Text style={styles.limitHint}>
+          {limitRange.min && limitRange.max
+            ? t("send.limitHint", { min: limitRange.min, max: limitRange.max, defaultValue: "Min {{min}} · Max {{max}} per transfer" })
+            : limitRange.max
+              ? t("send.limitHintMax", { max: limitRange.max, defaultValue: "Max {{max}} per transfer" })
+              : t("send.limitHintMin", { min: limitRange.min, defaultValue: "Min {{min}} per transfer" })}
+        </Text>
+      ) : null}
+      {limitText ? (
+        <View style={styles.limitError} accessibilityRole="alert">
+          <Text style={styles.limitErrorText}>{limitText}</Text>
+          {onSeeLimits ? (
+            <Pressable onPress={onSeeLimits} accessibilityRole="link" hitSlop={8} style={styles.limitLinkHit}>
+              <Text style={styles.limitLink}>{t("send.seeLimits", { defaultValue: "See limits" })}</Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
+
       <View style={styles.quote}>
         {rateReady ? (
           <View style={styles.quoteRow}>
@@ -318,6 +346,11 @@ export function SendAmountStep({
 }
 
 const styles = StyleSheet.create({
+  limitHint: { marginTop: 8, fontSize: typeSize.meta, color: colors.muted },
+  limitError: { marginTop: 10, padding: 12, gap: 4, borderRadius: radius.row, borderWidth: 1, borderColor: colors.dangerBorder, backgroundColor: colors.dangerSurface },
+  limitErrorText: { fontSize: typeSize.meta, fontWeight: "600", color: colors.dangerText },
+  limitLinkHit: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start" },
+  limitLink: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText, textDecorationLine: "underline" },
   root: { gap: 14 },
   exchangeCard: {
     borderRadius: radius.card,

@@ -603,7 +603,9 @@
       "verifyRequired": "Complete identity verification to send money.",
       "quoteFeesUnavailable": "Couldn't confirm the fee. Try again.",
       "quoteBelowMinRub": "Send at least 1,000 RUB.",
-      "quoteMinContribution": "Send a higher amount to continue."
+      "quoteMinContribution": "Send a higher amount to continue.",
+      "verifyCta": "Verify identity",
+      "paySbpAmount": "Pay {{amount}} by SBP"
     },
     "quoteDeskRateNotConfigured": "This corridor isn't ready yet. Set the USD → receive currency rate in Office (used as USDT payout desk).",
     "quoteReceiveCappedByUsdt": "Recipient amount reflects what this payment can fund after fees.",
@@ -708,7 +710,12 @@
     "deliveryPhonePlaceholder": "Phone number for delivery contact",
     "saveDeliveryAddress": "Save address",
     "failedAddDelivery": "Could not save delivery address. Try again.",
-    "cashDeliverySummary": "Cash delivery"
+    "cashDeliverySummary": "Cash delivery",
+    "limitHint": "Min {{min}} · Max {{max}} per transfer",
+    "limitHintMax": "Max {{max}} per transfer",
+    "limitHintMin": "Min {{min}} per transfer",
+    "seeLimits": "See limits",
+    "payAmount": "Pay {{amount}}"
   },
   "recipients": {
     "title": "Recipients",
@@ -765,7 +772,8 @@
       "iban": "e.g., GB82 WEST 1234 5698 7654 32",
       "swift_bic": "e.g., NWBKGB2L"
     },
-    "confirmDeleteTitleNamed": "Delete {{name}}?"
+    "confirmDeleteTitleNamed": "Delete {{name}}?",
+    "failedDelete": "Could not delete. Try again."
   },
   "referrals": {
     "pageTitle": "Affiliates & Referrals",
@@ -1009,7 +1017,9 @@
         "validation_failed": "Please fix the highlighted fields.",
         "submit_failed": "Verification could not be submitted. Try again later."
       }
-    }
+    },
+    "yourLimit": "Your monthly limit",
+    "limitLeft": "{{left}} left of {{total}}"
   },
   "auth": {
     "welcomeBack": "Welcome back",
@@ -1437,7 +1447,8 @@
     "unavailable": "A receipt is available once the payment is complete.",
     "shareText": "Ciuna receipt {{number}}: {{total}} on {{date}}.",
     "downloadPdf": "Download PDF",
-    "pdfFailed": "Could not create the PDF. Try again."
+    "pdfFailed": "Could not create the PDF. Try again.",
+    "youSent": "You sent"
   },
   "limits": {
     "title": "Limits",

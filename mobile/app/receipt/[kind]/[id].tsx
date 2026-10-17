@@ -3,6 +3,7 @@ import { Platform, Share, StyleSheet, Text, View } from "react-native"
 import * as Print from "expo-print"
 import * as Sharing from "expo-sharing"
 import { receiptHtml } from "@/lib/receipt-html"
+import { formatWhenZone } from "@/lib/format-date"
 import { useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { BRAND } from "@ciuna/shared"
@@ -45,11 +46,7 @@ export default function ReceiptScreen() {
 
   const when = useCallback(
     (iso: string, zone?: string | null) => {
-      try {
-        return new Date(iso).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short", ...(zone ? { timeZone: zone } : {}) })
-      } catch {
-        return iso
-      }
+      return formatWhenZone(iso, locale, zone) || iso
     },
     [locale],
   )
@@ -84,11 +81,12 @@ export default function ReceiptScreen() {
         number: r.number,
         date: when(r.issuedAt),
         status: t(`receipt.status_${r.status}`, { defaultValue: r.status }),
+        statusTone: r.status === "refunded" ? "neutral" : "ok",
         rows,
         itemsTitle: r.lines.length ? t("receipt.items", { defaultValue: "Items" }) : undefined,
         items: r.lines.map((l) => ({ text: `${l.quantity} × ${l.title}`, amount: money(l.amount) })),
         totals: [
-          ...(r.transfer ? [{ label: t("receipt.rate", { defaultValue: "Rate" }), value: `1 ${r.transfer.sendCurrency} = ${r.transfer.rate} ${r.transfer.receiveCurrency}` }, { label: t("receipt.recipientGets", { defaultValue: "Recipient gets" }), value: formatMoney(r.transfer.receiveAmount, r.transfer.receiveCurrency) }] : []),
+          ...(r.transfer && r.status !== "refunded" ? [{ label: t("receipt.rate", { defaultValue: "Rate" }), value: `1 ${r.transfer.sendCurrency} = ${r.transfer.rate} ${r.transfer.receiveCurrency}` }, { label: t("receipt.recipientGets", { defaultValue: "Recipient gets" }), value: formatMoney(r.transfer.receiveAmount, r.transfer.receiveCurrency) }] : []),
           ...(r.amounts.fee > 0 ? [{ label: r.transfer ? t("receipt.fee", { defaultValue: "Fee" }) : t("receipt.serviceFee", { defaultValue: "Service fee" }), value: money(r.amounts.fee) }] : []),
           ...(r.amounts.delivery > 0 ? [{ label: t("receipt.deliveryFee", { defaultValue: "Delivery fee" }), value: money(r.amounts.delivery) }] : []),
           ...(r.amounts.conversion > 0 ? [{ label: t("receipt.conversionFee", { defaultValue: "Conversion fee" }), value: money(r.amounts.conversion) }] : []),
@@ -147,7 +145,7 @@ export default function ReceiptScreen() {
           </View>
         ) : null}
 
-        {r.transfer ? (
+        {r.transfer && r.status !== "refunded" ? (
           <View style={styles.block}>
             <View style={styles.line}>
               <Text style={styles.lineTitle}>{t("receipt.rate", { defaultValue: "Rate" })}</Text>
@@ -161,7 +159,7 @@ export default function ReceiptScreen() {
         ) : null}
 
         <View style={styles.block}>
-          {r.transfer ? <Money label={t("receipt.items", { defaultValue: "Items" })} value={money(r.amounts.items)} /> : null}
+          {r.transfer || r.amounts.fee > 0 || r.amounts.delivery > 0 ? <Money label={r.transfer ? t("receipt.youSent", { defaultValue: "You sent" }) : t("receipt.items", { defaultValue: "Items" })} value={money(r.amounts.items)} /> : null}
           {r.amounts.fee > 0 ? <Money label={r.transfer ? t("receipt.fee", { defaultValue: "Fee" }) : t("receipt.serviceFee", { defaultValue: "Service fee" })} value={money(r.amounts.fee)} /> : null}
           {r.amounts.delivery > 0 ? <Money label={t("receipt.deliveryFee", { defaultValue: "Delivery fee" })} value={money(r.amounts.delivery)} /> : null}
           {r.amounts.conversion > 0 ? <Money label={t("receipt.conversionFee", { defaultValue: "Conversion fee" })} value={money(r.amounts.conversion)} /> : null}

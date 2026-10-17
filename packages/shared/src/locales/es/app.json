@@ -507,7 +507,9 @@
       "quoteFeesUnavailable": "No pudimos confirmar la comisión. Inténtalo de nuevo.",
       "quoteBelowMinRub": "Envía al menos 1.000 RUB.",
       "quoteMinContribution": "Envía un importe mayor para continuar.",
-      "swapCurrencies": "Intercambiar monedas"
+      "swapCurrencies": "Intercambiar monedas",
+      "verifyCta": "Verificar identidad",
+      "paySbpAmount": "Pagar {{amount}} por SBP"
     },
     "fee": "Comisión de cambio",
     "processingFee": "Comisión de procesamiento",
@@ -609,7 +611,12 @@
     "deliveryPhonePlaceholder": "Teléfono de contacto para la entrega",
     "saveDeliveryAddress": "Guardar dirección",
     "failedAddDelivery": "No se pudo guardar la dirección. Intente de nuevo.",
-    "cashDeliverySummary": "Entrega en efectivo"
+    "cashDeliverySummary": "Entrega en efectivo",
+    "limitHint": "Mín. {{min}} · Máx. {{max}} por transferencia",
+    "limitHintMax": "Máx. {{max}} por transferencia",
+    "limitHintMin": "Mín. {{min}} por transferencia",
+    "seeLimits": "Ver límites",
+    "payAmount": "Pagar {{amount}}"
   },
   "recipients": {
     "title": "Beneficiarios",
@@ -666,7 +673,8 @@
       "iban": "ej. ES91 2100 0418 4502 0005 1332",
       "swift_bic": "ej. NWBKGB2L"
     },
-    "confirmDeleteTitleNamed": "¿Eliminar a {{name}}?"
+    "confirmDeleteTitleNamed": "¿Eliminar a {{name}}?",
+    "failedDelete": "No se pudo eliminar. Inténtalo de nuevo."
   },
   "referrals": {
     "pageTitle": "Referidos",
@@ -756,7 +764,7 @@
     "identityCardDesc": "Datos de tu documento de identidad.",
     "addressInformation": "Domicilio",
     "addressCardDesc": "Tu domicilio y el documento que lo acredita.",
-    "notStarted": "Sin iniciar",
+    "notStarted": "Sin empezar",
     "badgeDone": "Listo",
     "badgeInReview": "En revisión",
     "badgeRejected": "Rechazado",
@@ -910,7 +918,9 @@
       "linkExpires": "El enlace de verificación vence a las {{time}} (aproximadamente una hora).",
       "reviewPending": "Verificación en curso o en revisión. Desbloquearemos el envío cuando se confirme.",
       "successBody": "Ya puedes enviar dinero por SBP. Vuelve a tu transferencia para continuar."
-    }
+    },
+    "yourLimit": "Tu límite mensual",
+    "limitLeft": "Quedan {{left}} de {{total}}"
   },
   "auth": {
     "welcomeBack": "Bienvenido de nuevo",
@@ -1437,7 +1447,8 @@
     "unavailable": "El recibo estará disponible cuando se complete el pago.",
     "shareText": "Recibo de Ciuna {{number}}: {{total}} el {{date}}.",
     "downloadPdf": "Descargar PDF",
-    "pdfFailed": "No se pudo crear el PDF. Inténtalo de nuevo."
+    "pdfFailed": "No se pudo crear el PDF. Inténtalo de nuevo.",
+    "youSent": "Enviaste"
   },
   "limits": {
     "title": "Límites",

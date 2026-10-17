@@ -3,6 +3,8 @@ export type ReceiptDoc = {
   number: string
   date: string
   status: string
+  /** "neutral" (grey) for a refunded receipt, "ok" (green) otherwise. */
+  statusTone?: "ok" | "neutral"
   rows: { label: string; value: string }[]
   itemsTitle?: string
   items: { text: string; amount: string }[]
@@ -29,11 +31,11 @@ body{font-family:-apple-system,Helvetica,Arial,sans-serif;color:#111827;margin:0
 h1{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#6B7280;margin:0 0 20px}
 .head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
 .num{font-size:20px;font-weight:700}.date{font-size:13px;color:#6B7280;margin-top:2px}
-.status{font-size:12px;font-weight:700;color:#047857;background:#ECFDF5;border-radius:99px;padding:4px 10px}
+.status{font-size:12px;font-weight:700;color:#065F46;background:#ECFDF5;border-radius:99px;padding:4px 10px}.status.neutral{color:#374151;background:#F3F4F6}
 .row{margin:10px 0}.k{font-size:12px;font-weight:600;color:#6B7280}.v{font-size:15px}
 .block{border-top:1px solid #E5E7EB;margin-top:14px;padding-top:12px}
 .line{display:flex;justify-content:space-between;gap:16px;font-size:15px;margin:6px 0}
 .total{font-size:18px;font-weight:800;margin-top:10px}
 .foot{font-size:12px;color:#6B7280;margin:6px 0}
-</style></head><body><h1>${e(d.brand)}</h1><div class="head"><div><div class="num">${e(d.number)}</div><div class="date">${e(d.date)}</div></div><div class="status">${e(d.status)}</div></div>${rows}${items}${totals}${foot}</body></html>`
+</style></head><body><h1>${e(d.brand)}</h1><div class="head"><div><div class="num">${e(d.number)}</div><div class="date">${e(d.date)}</div></div><div class="status${d.statusTone === "neutral" ? " neutral" : ""}">${e(d.status)}</div></div>${rows}${items}${totals}${foot}</body></html>`
 }
