@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+import { assertWithinLimits } from "@/lib/limits"
+import { MerchantError } from "@/lib/merchant/errors"
 import { createServerClient } from "@/lib/supabase"
 import { requireUser, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { requireBitbankerEligible } from "@/lib/bitbanker/eligibility-service"
@@ -21,6 +23,17 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   const idempotencyKey = String(body.idempotencyKey || body.idempotency_key || "").trim()
   if (!quoteId || !idempotencyKey) {
     return createErrorResponse("quoteId and idempotencyKey are required", 400)
+  }
+
+  // Limits for the customer's verification level. A retry of an already accepted quote is not counted twice.
+  const { data: quote } = await admin.from("send_quotes").select("send_amount,send_currency,status").eq("id", quoteId).eq("user_id", user.id).maybeSingle()
+  if (quote && (quote as { status: string }).status === "open") {
+    try {
+      await assertWithinLimits(user.id, Number((quote as any).send_amount), String((quote as any).send_currency))
+    } catch (e) {
+      if (e instanceof MerchantError) return NextResponse.json({ error: e.code, errorCode: e.code, details: e.details }, { status: e.status })
+      throw e
+    }
   }
 
   try {

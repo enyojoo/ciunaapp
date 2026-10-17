@@ -38,6 +38,11 @@ with checks as (
   union all
   select 'support-requests.sql', 'function ' || f, exists (select 1 from pg_proc where proname = f)
     from unnest(array['support_create','support_send','support_resolve','support_mark_read']) as f
+  union all
+  -- 7. send-limits.sql
+  select 'send-limits.sql', 'table send_limits', to_regclass('public.send_limits') is not null
+  union all
+  select 'send-limits.sql', 'function send_usage', exists (select 1 from pg_proc where proname = 'send_usage')
 )
 select file, what, ok from checks order by ok, file, what;
 

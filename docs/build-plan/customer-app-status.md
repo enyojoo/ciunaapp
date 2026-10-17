@@ -34,6 +34,7 @@ This replaces the gap tables in `customer-app.md`, which are stale. It covers th
 - `SlotPicker`: date strip, 3-column time grid, customer time zone, expert time zone beside it, "Book {time}" button.
 
 **Account**
+- Receipts (transfers, orders, bookings) and the Limits screen with enforcement in Send (limits need compliance to set amounts; needs `send-limits.sql`).
 - Support requests: My requests list, New request, and the thread in the app; Office queue and reply page; database, API and tests (needs `supabase/deploy/support-requests.sql` run).
 - More: Profile chip, language, Legal, in-app sign-out dialog. Profile: language row, email hint, in-app dialogs. Recipients: in-app delete dialog naming the recipient.
 - Login and register: inline errors (shared `AuthNotice`) and a language chip in the top bar. PIN: inline error and red dots. Referrals: code on its own copyable row and a progress strip to the next level. Activity: skeleton, retry, saved-data note, Bookings filter. Transfer detail: Repeat transfer (same currencies, amount, recipient) and Share receipt. Favourites: stores and experts as rows.
@@ -57,7 +58,7 @@ This replaces the gap tables in `customer-app.md`, which are stale. It covers th
 - Expert next availability and from-price on cards; credentials editor in the seller portal (read-only in the customer app today).
 - Per-stage order timestamps (Preparing and Ready show as one stage); seller rating on the order; chat response-time line.
 - Verification check date and checklist for the tooltip.
-- Account deletion; KYC levels, limits and the Limits screen; push registration and in-app notifications; PDF receipts.
+- Account deletion; push registration and in-app notifications (app side); PDF receipts and the shared receipt image.
 - Popular near you; translation hint with Show original.
 - PIN attempts-left and lock rules (needs a rule decision).
 - A sticky Book bar on expert profiles (profiles have several services, so there is no single one to book).

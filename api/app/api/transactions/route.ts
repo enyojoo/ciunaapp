@@ -1,4 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { assertWithinLimits } from "@/lib/limits"
+import { MerchantError } from "@/lib/merchant/errors"
 import { transactionService, currencyService } from "@/lib/database"
 import { combinedTransactionService } from "@/lib/combined-transaction-service"
 import { requireUser, createErrorResponse, withErrorHandling } from "@/lib/auth-utils"
@@ -46,6 +48,16 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   }
   if (sendAmount <= 0) {
     return createErrorResponse("Send amount must be greater than 0", 400)
+  }
+
+  // Limits for the customer's verification level (set by compliance; none until configured).
+  try {
+    await assertWithinLimits(user.id, sendAmount, sendCurrency)
+  } catch (e) {
+    if (e instanceof MerchantError) {
+      return NextResponse.json({ error: e.code, errorCode: e.code, details: e.details }, { status: e.status })
+    }
+    throw e
   }
 
   const rateData = await currencyService.getRate(sendCurrency, receiveCurrency)

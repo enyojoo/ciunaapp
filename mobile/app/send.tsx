@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
+import { limitMessage } from "@/lib/limit-message"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter, useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
@@ -42,7 +43,7 @@ type BitbankerPayment = {
 }
 
 export default function SendScreen() {
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const router = useRouter()
   const sendLine = useHubServiceLine("send")
   const labels = hubServiceLineShellLabels(
@@ -209,6 +210,8 @@ export default function SendScreen() {
           : err.errorCode === "min_contribution"
             ? "send.quoteMinContribution"
             : null
+      const limitText = limitMessage(quoteBody as { errorCode?: string; details?: Record<string, number | string> }, t, i18n.language)
+      if (limitText) throw new Error(limitText)
       throw new Error(key ? t(key, { defaultValue: err.error }) : err.error || "Failed to create quote")
     }
     const quoteId = (quoteBody as { quote?: { id: string } }).quote?.id
@@ -224,6 +227,8 @@ export default function SendScreen() {
     })
     const transferBody = await transferRes.json().catch(() => ({}))
     if (!transferRes.ok) {
+      const limitText = limitMessage(transferBody as { errorCode?: string; details?: Record<string, number | string> }, t, i18n.language)
+      if (limitText) throw new Error(limitText)
       throw new Error((transferBody as { error?: string }).error || "Failed to create SBP invoice")
     }
     const tx = (transferBody as { transaction?: CombinedTransaction }).transaction

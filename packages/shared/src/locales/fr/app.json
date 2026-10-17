@@ -1424,5 +1424,33 @@
     "share": "Partager le reçu",
     "unavailable": "Le reçu est disponible une fois le paiement terminé.",
     "shareText": "Reçu Ciuna {{number}} : {{total}} le {{date}}."
+  },
+  "limits": {
+    "title": "Plafonds",
+    "moreHint": "Combien vous pouvez envoyer",
+    "thisMonth": "Ce mois-ci",
+    "left": "{{amount}} restants",
+    "usedOf": "{{used}} utilisés sur {{limit}}",
+    "resets": "Réinitialisé le {{date}}",
+    "perTransfer": "Par transfert",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "levels": "Niveaux",
+    "level1": "Niveau 1 · E-mail et téléphone",
+    "level2": "Niveau 2 · Identité",
+    "level3": "Niveau 3 · Identité et adresse",
+    "yourLevel": "Votre niveau",
+    "monthly": "{{amount}} par mois",
+    "verifyIdentity": "Vérifier l’identité",
+    "verifyAddress": "Vérifier l’adresse",
+    "inReview": "Votre vérification est en cours d’examen. Votre plafond actuel s’applique toujours.",
+    "reached": "Vous avez atteint le plafond de ce mois-ci.",
+    "close": "Vous approchez du plafond de ce mois-ci.",
+    "highest": "Vous êtes au niveau le plus élevé. Contactez l’assistance pour modifier votre plafond.",
+    "notSet": "Aucun plafond d’envoi n’est défini pour votre niveau pour le moment.",
+    "currencyNote": "Les plafonds s’appliquent aux transferts envoyés en {{currency}}.",
+    "err_LIMIT_EXCEEDED": "Ce transfert dépasse ce qu’il vous reste ce mois-ci ({{remaining}}). Votre plafond se réinitialise le {{date}}. Voir Plafonds dans Plus.",
+    "err_ABOVE_MAX_TRANSFER": "Le maximum par transfert est de {{max}}.",
+    "err_BELOW_MIN_TRANSFER": "Le minimum par transfert est de {{min}}."
   }
 }

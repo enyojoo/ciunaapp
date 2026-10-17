@@ -12,6 +12,7 @@ import {
   Lock,
   LogOut,
   ShieldCheck,
+  Gauge,
 } from "lucide-react-native"
 import { ScreenScroll } from "@/components/screen"
 import { ConfirmDialog } from "@/components/confirm-dialog"
@@ -97,6 +98,11 @@ export default function MoreScreen() {
               <Text style={[styles.badgeText, verified && styles.badgeTextVerified]}>{kycLabel}</Text>
             </View>
           }
+        />
+        <Row
+          icon={<Gauge size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          label={tApp("limits.title", { defaultValue: "Limits" })}
+          onPress={() => router.push("/limits" as never)}
         />
         <Row
           icon={<Gift size={16} color={colors.refer} strokeWidth={2.2} />}

@@ -92,6 +92,7 @@ export default function RootLayout() {
                       <Stack.Screen name="verification/bitbanker" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="verification/identity" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="verification/address" options={{ headerShown: true, title: "" }} />
+                      <Stack.Screen name="limits" options={{ headerShown: true, title: t("limits.title") }} />
                       <Stack.Screen name="referrals" options={{ headerShown: true, title: t("referrals.pageTitle") }} />
                       <Stack.Screen name="search" options={{ gestureEnabled: true }} />
                       <Stack.Screen name="favourites" options={{ headerShown: true, title: t("favourites.title", { defaultValue: "Favourites" }) }} />

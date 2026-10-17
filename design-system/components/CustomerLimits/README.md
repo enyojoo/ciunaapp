@@ -13,7 +13,6 @@ Within the limit; close to the limit (80% and over, warning pair); limit reached
 All numbers are examples drawn on the card (₽50,000, ₽600,000, ₽2,000,000 per month for levels 1 to 3, ₽1,000 to ₽600,000 per transfer); the real values come from Office compliance settings and must not be hard-coded. The bar is always paired with figures. The remaining amount comes first. The reset date is shown with the limit (assumed calendar month; compliance confirms). The screen never suggests splitting a transfer to avoid a limit. One primary action.
 
 ## Upgrade
-New. The built app has no limits screen: the verification hub names levels only in design, and Send shows a minimum and a generic error. Needs per-level limits, monthly usage and the reset date from the API; reached from More, the verification hub and the Send limit error.
-
+Built: `mobile/app/limits.tsx` (opened from More, and named in the Send error), with the API `GET /api/limits` and limits enforced in `api/app/api/send/quotes` and `send/transfers`. Shows what is left, the usage bar (warning at 80%, danger when reached), used of limit, reset date, per-transfer minimum and maximum, the three levels with the current one tinted and passed ones checked, the in-review banner, and Verify identity or Verify address. Send explains a refused transfer (what is left and when it resets, or the most or least per transfer). Amounts are never hard-coded: compliance sets them per level (`send_limits`, `GET`/`PUT /api/admin/send-limits`); until a level has a row nothing is limited and the screen says so. Limits apply to transfers sent in the limit's own currency. Not built: an Office screen for editing limits (the API exists).
 ## Code
 Proposed: `mobile/app/limits.tsx`, `api` usage endpoint

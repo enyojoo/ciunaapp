@@ -14,11 +14,11 @@ Written 2026-10-18 at the end of a long session, updated after the support API l
 ### 1. Support requests: DONE
 Built end to end: database, customer API, Office API, the three app screens (`mobile/app/support/*`), the Office page (`office/app/support/page.tsx`, in the nav as Support requests), `verify-all.sql` rows, the CustomerSupport card, strings in six languages. **Owner action: run `supabase/deploy/support-requests.sql`** (after the earlier files), then run `verify-all.sql` and check no row shows false. Not built, by decision: screenshot attachments and the AI assistant. Optional follow-ups: an email or push to the customer when staff reply (comes with push, item 4), and a Support unread badge on the More tab.
 
-### 2. Receipts (card `ReceiptCustomer`)
-Customers get a receipt for a completed Send transfer, marketplace order or booking. Plan: one API route `GET /api/receipts/[kind]/[id]` that returns a structured JSON receipt (number, date, parties, items, fees, total, payment method name only, never a provider name), and a PDF via a server-side generator (check what `api/app/api/admin/receipts` and `api/lib` already do for transfers before adding a library). Customer UI: a Receipt screen opened from the transfer detail and order view, with Share (the transfer screen already has a text Share receipt). Ask the owner before adding a PDF dependency.
+### 2. Receipts: DONE (without a PDF)
+`api/lib/receipts.ts`, route `api/app/api/receipts/[kind]/[id]` (kinds transfer, order, booking), screen `mobile/app/receipt/[kind]/[id].tsx`, View receipt links on the transfer and order screens, six languages, tests. Text Share works. **Still open: PDF download and the shared image** (needs a library decision: ask the owner).
 
-### 3. Limits and KYC levels (cards `CustomerLimits`, `CustomerKyc`)
-Needs an owner decision first: the monthly limit per KYC level (amounts and currency) and when usage resets. Ask via AskUserQuestion before building. Then: a `kyc_levels` settings table (or `marketplace_settings` style keys), an API `GET /api/limits` returning level, limit, used this month, resets on, and the Send quote enforcing it with a clear error; mobile screen `mobile/app/limits.tsx` linked from verification and from the Send limit error.
+### 3. Limits: DONE except an Office editor
+Table and usage function in `send-limits.sql` (not yet run: owner action), logic `api/lib/limits.ts`, `GET /api/limits`, admin `GET` and `PUT /api/admin/send-limits` (needs `settings.manage`), enforcement in `send/quotes` and `send/transfers`, screen `mobile/app/limits.tsx`, More row, Send messages. **No amounts exist until compliance sets them**; example: `PUT /api/admin/send-limits` with `{ "level": 1, "currency": "RUB", "monthlyAmount": 50000, "minPerTransfer": 1000, "maxPerTransfer": 50000 }`. Still to do: an Office settings screen to edit them. Open question for the owner: limits are compared only for transfers sent in the limit's own currency (multi-currency conversion is not done).
 
 ### 4. Push registration and in-app notifications (card `PushAndInApp`)
 Needs `expo-notifications` (a new dependency; confirm with the owner) and an EAS or FCM/APNs decision. Plan: table `push_tokens (user_id, token, platform, created_at)`, `POST /api/push/register`, a sender used by support replies, order status changes and chat messages, in-app unread counts on the tabs. Web push is separate; leave it out of v1.
@@ -27,8 +27,8 @@ Needs `expo-notifications` (a new dependency; confirm with the owner) and an EAS
 See "Left: can be built now" in `customer-app-status.md`: Delivery or Pickup chip on Activity rows (the transactions list must return the fulfilment mode), chat side panel on desktop, store share button, and redrawing the HTML preview frames in `design-system/components/*/preview.html` for the cards changed (store header, top bar, Home tiles, checkout steps). Account deletion needs the owner's rules for what is blocked and retained.
 
 ## Owner actions pending
-1. Run `supabase/deploy/support-requests.sql`, then `verify-all.sql`.
-2. Decisions needed: monthly limits per KYC level; permission to add `expo-notifications`; whether to add a PDF library; whether an AI assistant is wanted.
+1. Run `supabase/deploy/support-requests.sql` and `supabase/deploy/send-limits.sql`, then `verify-all.sql` (no row may show false).
+2. Decisions needed: the monthly limit per level and how to treat other currencies (set via the admin API); permission to add `expo-notifications`; whether to add a PDF library; whether an AI assistant is wanted.
 3. Confirm tab labels (Home, Orders, Account) and the hero copy.
 
 ## How to work (practical notes)

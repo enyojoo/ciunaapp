@@ -1424,5 +1424,33 @@
     "share": "Compartilhar recibo",
     "unavailable": "O recibo fica disponível quando o pagamento for concluído.",
     "shareText": "Recibo Ciuna {{number}}: {{total}} em {{date}}."
+  },
+  "limits": {
+    "title": "Limites",
+    "moreHint": "Quanto você pode enviar",
+    "thisMonth": "Este mês",
+    "left": "Restam {{amount}}",
+    "usedOf": "{{used}} usados de {{limit}}",
+    "resets": "Reinicia em {{date}}",
+    "perTransfer": "Por transferência",
+    "minimum": "Mínimo",
+    "maximum": "Máximo",
+    "levels": "Níveis",
+    "level1": "Nível 1 · E-mail e telefone",
+    "level2": "Nível 2 · Identidade",
+    "level3": "Nível 3 · Identidade e endereço",
+    "yourLevel": "Seu nível",
+    "monthly": "{{amount}} por mês",
+    "verifyIdentity": "Verificar identidade",
+    "verifyAddress": "Verificar endereço",
+    "inReview": "Sua verificação está em análise. Seu limite atual continua valendo.",
+    "reached": "Você atingiu o limite deste mês.",
+    "close": "Você está perto do limite deste mês.",
+    "highest": "Você está no nível mais alto. Fale com o suporte para alterar seu limite.",
+    "notSet": "No momento, não há limite de envio para o seu nível.",
+    "currencyNote": "Os limites valem para transferências enviadas em {{currency}}.",
+    "err_LIMIT_EXCEEDED": "Esta transferência é maior do que o que resta neste mês ({{remaining}}). Seu limite reinicia em {{date}}. Veja Limites em Mais.",
+    "err_ABOVE_MAX_TRANSFER": "O máximo por transferência é {{max}}.",
+    "err_BELOW_MIN_TRANSFER": "O mínimo por transferência é {{min}}."
   }
 }

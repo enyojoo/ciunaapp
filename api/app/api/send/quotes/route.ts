@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+import { assertWithinLimits } from "@/lib/limits"
+import { MerchantError } from "@/lib/merchant/errors"
 import { createServerClient } from "@/lib/supabase"
 import { requireUser, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { requireBitbankerEligible } from "@/lib/bitbanker/eligibility-service"
@@ -17,6 +19,14 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   }
 
   const body = await request.json()
+  if (body.sendAmount != null && Number(body.sendAmount) > 0) {
+    try {
+      await assertWithinLimits(user.id, Number(body.sendAmount), String(body.sendCurrency || ""))
+    } catch (e) {
+      if (e instanceof MerchantError) return NextResponse.json({ error: e.code, errorCode: e.code, details: e.details }, { status: e.status })
+      throw e
+    }
+  }
   try {
     const quote = await createSendQuote(admin, {
       userId: user.id,
