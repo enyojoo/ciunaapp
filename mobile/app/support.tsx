@@ -63,7 +63,7 @@ export default function SupportScreen() {
             <Text style={styles.contactSub}>{BRAND.email}</Text>
           </View>
         </Pressable>
-        <Pressable style={styles.contactRow} onPress={() => void Linking.openURL("https://t.me/enyosamm")}>
+        <Pressable style={styles.contactRow} onPress={() => void Linking.openURL(BRAND.supportTelegram)}>
           <View style={styles.contactIcon}>
             <MessageCircle size={18} color={colors.primary} strokeWidth={2} />
           </View>

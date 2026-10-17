@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "expo-router"
 import * as ImagePicker from "expo-image-picker"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
@@ -22,6 +23,7 @@ import type { CurrencyRow } from "@/lib/types"
 
 export default function ProfileScreen() {
   const { t } = useTranslation("app")
+  const router = useRouter()
   const { profile, refreshProfile } = useAuth()
   const { currencies } = useFx()
   const { showError, showSuccess } = useToast()
@@ -59,8 +61,9 @@ export default function ProfileScreen() {
     setEditing(false)
   }
 
+  const phoneOk = !phone.trim() || /^\+?[0-9 ()\-]{7,20}$/.test(phone.trim())
   const save = async () => {
-    if (!profile?.id) return
+    if (!profile?.id || !phoneOk) return
     setSaving(true)
     const { error } = await supabase
       .from("users")
@@ -152,7 +155,7 @@ export default function ProfileScreen() {
 
   const [confirm, setConfirm] = useState<"photo" | "delete" | null>(null)
   const confirmRemoveAvatar = () => setConfirm("photo")
-  const confirmDelete = () => setConfirm("delete")
+  const confirmDelete = () => router.push("/delete-account" as never)
 
   return (
     <ScreenScroll edges={["left", "right"]}>
@@ -199,6 +202,7 @@ export default function ProfileScreen() {
               onChangeText={setPhone}
               editable={!saving}
               keyboardType="phone-pad"
+              error={phoneOk ? undefined : t("profile.phoneInvalid", { defaultValue: "Enter a phone number with the country code, for example +7 900 000 00 00." })}
             />
             <View style={styles.fieldWrap}>
               <Text style={styles.fieldLabel}>{t("profile.baseCurrency")}</Text>
@@ -291,19 +295,6 @@ export default function ProfileScreen() {
         onConfirm={() => {
           setConfirm(null)
           void removeAvatar()
-        }}
-      />
-      <ConfirmDialog
-        open={confirm === "delete"}
-        title={t("profile.deleteTitle")}
-        description={t("profile.deleteDescription")}
-        confirmLabel={t("profile.deleteAccount")}
-        cancelLabel={t("profile.cancel")}
-        destructive
-        onCancel={() => setConfirm(null)}
-        onConfirm={() => {
-          setConfirm(null)
-          showError(t("profile.deleteNotImplemented"))
         }}
       />
     </ScreenScroll>

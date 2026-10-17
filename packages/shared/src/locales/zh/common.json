@@ -96,6 +96,7 @@
     "tooManyAttemptsOne": "尝试次数过多，请在 1 分钟后重试。",
     "notYourAccount": "不是您的账户？",
     "logOut": "退出登录",
-    "backspaceAria": "删除"
+    "backspaceAria": "删除",
+    "welcomeName": "欢迎回来，{{name}}"
   }
 }

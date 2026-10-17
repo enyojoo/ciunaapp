@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter } from "expo-router"
+import Constants from "expo-constants"
 import { useTranslation } from "react-i18next"
 import {
   BadgeCheck,
@@ -45,6 +46,7 @@ export default function MoreScreen() {
 
   const verified = eligibility?.isVerifiedForSbp ?? false
 
+  const kycTone: "ok" | "warn" | "bad" | "neutral" = eligibility?.isVerifiedForSbp ? "ok" : eligibility?.status === "checking" ? "warn" : eligibility?.status === "not_verified" ? "bad" : "neutral"
   const kycLabel = useMemo(() => {
     if (eligibility?.isVerifiedForSbp) return t("kyc.verified")
     if (eligibility?.status === "checking") return t("kyc.inReview")
@@ -91,17 +93,17 @@ export default function MoreScreen() {
 
       <GroupCard title={t("more.account")}>
         <Row
-          icon={<ShieldCheck size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<ShieldCheck size={16} color={colors.neutralText} strokeWidth={2.2} />}
           label={t("more.accountVerification")}
           onPress={() => router.push("/verification")}
           trailing={
-            <View style={[styles.badge, verified && styles.badgeVerified]}>
-              <Text style={[styles.badgeText, verified && styles.badgeTextVerified]}>{kycLabel}</Text>
+            <View style={[styles.badge, kycTone === "ok" && styles.badgeVerified, kycTone === "warn" && styles.badgeWarn, kycTone === "bad" && styles.badgeBad]}>
+              <Text style={[styles.badgeText, kycTone === "ok" && styles.badgeTextVerified, kycTone === "warn" && styles.badgeTextWarn, kycTone === "bad" && styles.badgeTextBad]}>{kycLabel}</Text>
             </View>
           }
         />
         <Row
-          icon={<Gauge size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<Gauge size={16} color={colors.neutralText} strokeWidth={2.2} />}
           label={tApp("limits.title", { defaultValue: "Limits" })}
           onPress={() => router.push("/limits" as never)}
         />
@@ -111,9 +113,10 @@ export default function MoreScreen() {
           onPress={() => router.push("/referrals")}
         />
         <Row
-          icon={<Lock size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
-          label={t("more.loginPin")}
-          onPress={() => router.push(pinSet ? "/pin-setup?mode=change" : "/pin-setup?mode=create")}
+          icon={<Lock size={16} color={colors.neutralText} strokeWidth={2.2} />}
+          label={tApp("more.security", { defaultValue: "Security" })}
+          onPress={() => router.push("/security" as never)}
+          trailing={<View style={[styles.badge, pinSet && styles.badgeVerified]}><Text style={[styles.badgeText, pinSet && styles.badgeTextVerified]}>{pinSet ? tApp("security.on", { defaultValue: "On" }) : tApp("security.off", { defaultValue: "Off" })}</Text></View>}
           last
         />
       </GroupCard>
@@ -121,27 +124,27 @@ export default function MoreScreen() {
       <GroupCard title={t("more.app")}>
         <LanguagePicker />
         <Row
-          icon={<Bell size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<Bell size={16} color={colors.neutralText} strokeWidth={2.2} />}
           label={tApp("more.notifications", { defaultValue: "Notifications" })}
           onPress={() => router.push("/notifications" as never)}
         />
         <Row
-          icon={<Heart size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<Heart size={16} color={colors.neutralText} strokeWidth={2.2} />}
           label={tApp("favourites.title", { defaultValue: "Favourites" })}
           onPress={() => router.push("/favourites" as never)}
         />
         <Row
-          icon={<Landmark size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<Landmark size={16} color={colors.neutralText} strokeWidth={2.2} />}
           label={t("more.recipients")}
           onPress={() => router.push("/recipients")}
         />
         <Row
-          icon={<MessageCircleQuestion size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<MessageCircleQuestion size={16} color={colors.neutralText} strokeWidth={2.2} />}
           label={t("more.support")}
           onPress={() => router.push("/support")}
         />
         <Row
-          icon={<FileText size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          icon={<FileText size={16} color={colors.neutralText} strokeWidth={2.2} />}
           label={t("more.legal", { defaultValue: "Legal" })}
           onPress={() => router.push("/legal" as never)}
           last
@@ -156,7 +159,7 @@ export default function MoreScreen() {
         <LogOut size={16} color={colors.danger} strokeWidth={2.2} />
         <Text style={styles.logoutText}>{t("more.logout")}</Text>
       </Pressable>
-      <Text style={styles.version}>{t("more.version", { version: "1.0.0" })}</Text>
+      <Text style={styles.version}>{t("more.version", { version: Constants.expoConfig?.version || "1.0.0" })}</Text>
       <ConfirmDialog
         open={confirmOut}
         title={t("more.signOutTitle")}
@@ -211,6 +214,10 @@ const styles = StyleSheet.create({
   badgeVerified: { backgroundColor: colors.referBg },
   badgeText: { fontSize: 12, fontWeight: "600", color: colors.muted },
   badgeTextVerified: { color: colors.refer },
+  badgeWarn: { backgroundColor: colors.warningSurface },
+  badgeTextWarn: { color: colors.warningText },
+  badgeBad: { backgroundColor: colors.dangerSurface },
+  badgeTextBad: { color: colors.dangerText },
   logout: {
     minHeight: 48,
     flexDirection: "row",

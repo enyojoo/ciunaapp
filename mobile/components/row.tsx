@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.heroBody,
+    backgroundColor: colors.neutralSurface,
   },
   label: { flex: 1, fontSize: typeSize.body, color: colors.text },
   labelDanger: { color: colors.danger },

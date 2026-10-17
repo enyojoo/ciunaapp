@@ -726,7 +726,8 @@
     "unnamedReferee": "Utilisateur",
     "yourCode": "Votre code",
     "progress": "{{n}} sur {{next}} amis ce trimestre pour le niveau suivant",
-    "topTier": "Vous êtes au niveau maximum ce trimestre."
+    "topTier": "Vous êtes au niveau maximum ce trimestre.",
+    "rewardsUntil": "Récompenses jusqu'au {{date}}"
   },
   "profile": {
     "title": "Votre profil",
@@ -756,7 +757,8 @@
     "deleteDescription": "Supprimer définitivement votre compte ? Cette action est irréversible. Toutes vos données et transactions seront effacées.",
     "cancel": "Annuler",
     "deleting": "Suppression…",
-    "emailHint": "Pour changer votre e-mail, contactez le support."
+    "emailHint": "Pour changer votre e-mail, contactez le support.",
+    "phoneInvalid": "Saisissez un numéro avec l'indicatif du pays, par exemple +33 6 12 34 56 78."
   },
   "verification": {
     "hubTitle": "Vérification du compte",
@@ -1008,8 +1010,11 @@
     "callbackFailedSignIn": "Impossible de terminer la connexion",
     "callbackRedirectLogin": "Redirection vers la connexion…",
     "fillAllFields": "Veuillez remplir tous les champs",
-    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
-    "helpToast": "Besoin d’aide ? Contactez {{email}}"
+    "passwordMinLength": "Le mot de passe doit contenir au moins {{count}} caractères",
+    "helpToast": "Besoin d’aide ? Contactez {{email}}",
+    "passwordRuleLength": "Au moins {{count}} caractères",
+    "termsAnd": "et la",
+    "privacyLink": "Politique de confidentialité"
   },
   "experts": {
     "profile": {
@@ -1515,7 +1520,8 @@
   },
   "more": {
     "deleteAccount": "Supprimer le compte",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "security": "Sécurité"
   },
   "notifications": {
     "title": "Notifications",
@@ -1589,5 +1595,21 @@
     "share": "Partager le reçu",
     "repeat": "Répéter le transfert",
     "view": "Voir le reçu"
+  },
+  "security": {
+    "title": "Sécurité",
+    "lead": "Choisissez comment Ciuna se verrouille sur ce téléphone.",
+    "pin": "Verrouillage par PIN",
+    "pinHint": "Demander un PIN à 4 chiffres à l'ouverture de l'application.",
+    "changePin": "Changer le PIN",
+    "change": "Changer",
+    "biometric": "Face ID ou empreinte",
+    "biometricHint": "Déverrouiller avec votre visage ou votre doigt au lieu du PIN.",
+    "offTitle": "Désactiver le verrouillage par PIN ?",
+    "offBody": "Toute personne qui ouvre ce téléphone pourra ouvrir Ciuna.",
+    "turnOff": "Désactiver",
+    "keep": "Le garder",
+    "on": "Activé",
+    "off": "Désactivé"
   }
 }

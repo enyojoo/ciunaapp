@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
-import { Platform } from "react-native"
+import { AppState, Platform } from "react-native"
 import * as Linking from "expo-linking"
 import * as WebBrowser from "expo-web-browser"
 import * as AppleAuthentication from "expo-apple-authentication"
@@ -20,7 +20,7 @@ import {
 } from "./oauth-callback"
 import { getOAuthRedirectUri, getWebsiteOAuthBounceUri } from "./oauth-redirect"
 import { isExpoGo } from "./expo-go"
-import { hasPin } from "./pin"
+import { hasPin, RELOCK_AFTER_MS } from "./pin"
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -66,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [pinUnlocked, setPinUnlocked] = useState(false)
   const oauthErrorRef = useRef<string | null>(null)
+  const backgroundedAt = useRef<number | null>(null)
   const oauthInFlightRef = useRef(false)
 
   const applySessionUser = useCallback(async (sessionUser: User | null) => {
@@ -332,6 +333,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const unlockPin = useCallback(() => setPinUnlocked(true), [])
+
+  // An app lock that stays open for hours is no lock: ask for the PIN again after a minute in the background.
+  useEffect(() => {
+    if (!user) return
+    const sub = AppState.addEventListener("change", (state) => {
+      if (state === "background" || state === "inactive") {
+        if (backgroundedAt.current == null) backgroundedAt.current = Date.now()
+        return
+      }
+      const left = backgroundedAt.current
+      backgroundedAt.current = null
+      if (left != null && Date.now() - left > RELOCK_AFTER_MS) {
+        void hasPin(user.id).then((locked) => {
+          if (locked) setPinUnlocked(false)
+        })
+      }
+    })
+    return () => sub.remove()
+  }, [user])
 
   const refreshProfile = useCallback(async () => {
     if (!user) return

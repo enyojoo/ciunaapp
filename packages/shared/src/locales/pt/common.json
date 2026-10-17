@@ -96,6 +96,7 @@
     "tooManyAttemptsOne": "Muitas tentativas. Tente novamente em 1 minuto.",
     "notYourAccount": "Não é a sua conta?",
     "logOut": "Sair",
-    "backspaceAria": "Apagar"
+    "backspaceAria": "Apagar",
+    "welcomeName": "Bem-vindo de volta, {{name}}"
   }
 }

@@ -106,7 +106,7 @@ export default function LoginScreen() {
           onGoogle={() => void onSocial(signInWithGoogle)}
           disabled={busy}
         />
-        {notice ? <AuthNotice tone={notice.tone} text={notice.text} /> : null}
+        {notice && notice.tone === "warn" ? <AuthNotice tone="warn" text={notice.text} /> : null}
         <Field
           label={t("auth.email", { defaultValue: "Email" })}
           autoCapitalize="none"
@@ -137,6 +137,7 @@ export default function LoginScreen() {
           }}
           returnKeyType="done"
           onSubmitEditing={() => void onSubmit()}
+          error={notice && notice.tone === "error" ? notice.text : undefined}
           trailing={<PasswordEye show={show} onToggle={() => setShow((s) => !s)} />}
         />
         <Link href="/auth/forgot-password" asChild>
@@ -148,6 +149,7 @@ export default function LoginScreen() {
           label={busy ? t("auth.signingIn", { defaultValue: "Signing in…" }) : t("auth.signIn", { defaultValue: "Sign in" })}
           onPress={() => void onSubmit()}
           busy={busy}
+          disabled={notice?.tone === "warn"}
         />
         <AuthFooter
           prompt={t("auth.noAccount", { defaultValue: "Don't have an account?" })}

@@ -96,6 +96,7 @@
     "tooManyAttemptsOne": "Demasiados intentos. Vuelve a intentarlo en 1 minuto.",
     "notYourAccount": "¿No es tu cuenta?",
     "logOut": "Cerrar sesión",
-    "backspaceAria": "Borrar"
+    "backspaceAria": "Borrar",
+    "welcomeName": "Hola de nuevo, {{name}}"
   }
 }

@@ -96,6 +96,7 @@
     "tooManyAttemptsOne": "Слишком много попыток. Повторите через 1 минуту.",
     "notYourAccount": "Не ваш аккаунт?",
     "logOut": "Выйти",
-    "backspaceAria": "Удалить"
+    "backspaceAria": "Удалить",
+    "welcomeName": "С возвращением, {{name}}"
   }
 }

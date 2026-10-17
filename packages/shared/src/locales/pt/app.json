@@ -825,7 +825,8 @@
     "unnamedReferee": "Usuário",
     "yourCode": "Seu código",
     "progress": "{{n}} de {{next}} amigos neste trimestre para o próximo nível",
-    "topTier": "Você está no nível mais alto neste trimestre."
+    "topTier": "Você está no nível mais alto neste trimestre.",
+    "rewardsUntil": "Recompensas até {{date}}"
   },
   "profile": {
     "title": "Seu perfil",
@@ -855,7 +856,8 @@
     "deleteDescription": "Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita. Todos os seus dados, transações e informações da conta serão excluídos permanentemente.",
     "cancel": "Cancelar",
     "deleting": "Excluindo...",
-    "emailHint": "Para alterar seu e-mail, fale com o suporte."
+    "emailHint": "Para alterar seu e-mail, fale com o suporte.",
+    "phoneInvalid": "Informe um telefone com o código do país, por exemplo +55 11 91234-5678."
   },
   "verification": {
     "hubTitle": "Verificação",
@@ -1107,8 +1109,11 @@
     "callbackFailedSignIn": "Falha ao concluir o login",
     "callbackRedirectLogin": "Redirecionando para o login...",
     "fillAllFields": "Preencha todos os campos",
-    "passwordMinLength": "A senha deve ter pelo menos 6 caracteres",
-    "helpToast": "Precisa de ajuda? Fale com o suporte em {{email}}"
+    "passwordMinLength": "A senha deve ter pelo menos {{count}} caracteres",
+    "helpToast": "Precisa de ajuda? Fale com o suporte em {{email}}",
+    "passwordRuleLength": "Pelo menos {{count}} caracteres",
+    "termsAnd": "e a",
+    "privacyLink": "Política de Privacidade"
   },
   "referralLanding": {
     "redirecting": "Redirecionando…",
@@ -1515,7 +1520,8 @@
   },
   "more": {
     "deleteAccount": "Excluir conta",
-    "notifications": "Notificações"
+    "notifications": "Notificações",
+    "security": "Segurança"
   },
   "notifications": {
     "title": "Notificações",
@@ -1589,5 +1595,21 @@
     "share": "Compartilhar recibo",
     "repeat": "Repetir transferência",
     "view": "Ver recibo"
+  },
+  "security": {
+    "title": "Segurança",
+    "lead": "Escolha como o Ciuna bloqueia neste telefone.",
+    "pin": "Bloqueio por PIN",
+    "pinHint": "Pedir um PIN de 4 dígitos ao abrir o app.",
+    "changePin": "Alterar PIN",
+    "change": "Alterar",
+    "biometric": "Face ID ou digital",
+    "biometricHint": "Desbloqueie com o rosto ou o dedo em vez de digitar o PIN.",
+    "offTitle": "Desativar o bloqueio por PIN?",
+    "offBody": "Qualquer pessoa que abrir este telefone poderá abrir o Ciuna.",
+    "turnOff": "Desativar",
+    "keep": "Manter",
+    "on": "Ativado",
+    "off": "Desativado"
   }
 }

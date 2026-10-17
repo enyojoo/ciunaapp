@@ -7,6 +7,7 @@ import QRCode from "react-native-qrcode-svg"
 import { Check, Copy, Share2, Users, Wallet } from "lucide-react-native"
 import { Field } from "@/components/field"
 import { PrimaryButton } from "@/components/primary-button"
+import { LoadError } from "@/components/load-error"
 import { ScreenScroll } from "@/components/screen"
 import { SheetPicker } from "@/components/sheet-picker"
 import { WebAwareModal } from "@/components/web-aware-modal"
@@ -72,7 +73,7 @@ export default function ReferralsScreen() {
   const { currencies } = useFx()
 
   const meKey = user ? `ciuna_referrals_me_${user.id}` : null
-  const { data, loading, revalidate } = useCachedQuery<MeResponse>(meKey, fetchReferralsMe, {
+  const { data, loading, error, revalidate } = useCachedQuery<MeResponse>(meKey, fetchReferralsMe, {
     ttlMs: REFERRALS_TTL_MS,
   })
   useFocusRevalidate(revalidate)
@@ -84,10 +85,12 @@ export default function ReferralsScreen() {
   const [recipientPickerOpen, setRecipientPickerOpen] = useState(false)
   const [recipientId, setRecipientId] = useState<string | null>(null)
   const [amount, setAmount] = useState("")
+  const [withdrawError, setWithdrawError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const dialog = useWebCenteredModal()
 
   const openWithdraw = () => {
+    setWithdrawError(null)
     setWithdrawOpen(true)
     revalidateRecipients()
   }
@@ -137,18 +140,19 @@ export default function ReferralsScreen() {
   }, [currencies, recipients, recipientId])
 
   const submitWithdraw = async () => {
+    setWithdrawError(null)
     if (!recipientId || !amount) {
-      showError(t("referrals.errRecipientAmount"))
+      setWithdrawError(t("referrals.errRecipientAmount"))
       return
     }
     const amt = Number.parseFloat(amount)
     if (!(amt > 0)) {
-      showError(t("referrals.errAmountPositive"))
+      setWithdrawError(t("referrals.errAmountPositive"))
       return
     }
     const max = data?.balances.availableAmountBase
     if (max !== undefined && amt > max + 1e-6) {
-      showError(t("referrals.errAmountExceeds", { balance: data?.balances.availableDisplay ?? "" }))
+      setWithdrawError(t("referrals.errAmountExceeds", { balance: data?.balances.availableDisplay ?? "" }))
       return
     }
     setSubmitting(true)
@@ -160,7 +164,7 @@ export default function ReferralsScreen() {
     const body = await res.json().catch(() => ({}))
     setSubmitting(false)
     if (!res.ok) {
-      showError((body as { error?: string }).error || t("referrals.requestFailed"))
+      setWithdrawError((body as { error?: string }).error || t("referrals.requestFailed"))
       return
     }
     setWithdrawOpen(false)
@@ -179,6 +183,16 @@ export default function ReferralsScreen() {
       </ScreenScroll>
     )
   }
+
+  if (!data && error) {
+    return (
+      <ScreenScroll edges={["left", "right"]}>
+        <LoadError onRetry={() => void revalidate()} />
+      </ScreenScroll>
+    )
+  }
+
+  const paused = data?.program ? !data.program.program_active : false
 
   return (
     <ScreenScroll edges={["left", "right"]}>
@@ -289,6 +303,9 @@ export default function ReferralsScreen() {
               <View style={styles.refBody}>
                 <Text style={styles.refName}>{(r.name || "").trim() || t("referrals.unnamedReferee")}</Text>
                 <Text style={styles.refMeta}>{t("referrals.completedTxCount", { count: r.transactionCount || 0 })}</Text>
+                {r.percentWindowEndsAt && !Number.isNaN(new Date(r.percentWindowEndsAt).getTime()) ? (
+                  <Text style={styles.refMeta}>{t("referrals.rewardsUntil", { date: new Date(r.percentWindowEndsAt).toLocaleDateString(undefined, { dateStyle: "medium" }), defaultValue: "Rewards until {{date}}" })}</Text>
+                ) : null}
               </View>
               <Text style={styles.refEarnings}>{r.earningsDisplay}</Text>
             </View>
@@ -298,10 +315,10 @@ export default function ReferralsScreen() {
 
       <View style={styles.actions}>
         <View style={styles.actionHalf}>
-          <PrimaryButton label={t("referrals.shareLink")} onPress={() => void shareLink()} />
+          <PrimaryButton label={t("referrals.shareLink")} onPress={() => void shareLink()} disabled={paused} />
         </View>
         <View style={styles.actionHalf}>
-          <PrimaryButton label={t("referrals.withdraw")} variant="secondary" onPress={openWithdraw} />
+          <PrimaryButton label={t("referrals.withdraw")} variant="secondary" onPress={openWithdraw} disabled={paused} />
         </View>
       </View>
 
@@ -334,6 +351,7 @@ export default function ReferralsScreen() {
             onChangeText={setAmount}
             keyboardType="decimal-pad"
             placeholder="0.00"
+            error={withdrawError || undefined}
           />
           <View style={styles.actions}>
             <View style={styles.actionHalf}>

@@ -96,6 +96,7 @@
     "tooManyAttemptsOne": "Trop de tentatives. Réessayez dans 1 minute.",
     "notYourAccount": "Ce n'est pas votre compte ?",
     "logOut": "Se déconnecter",
-    "backspaceAria": "Supprimer"
+    "backspaceAria": "Supprimer",
+    "welcomeName": "Bon retour, {{name}}"
   }
 }

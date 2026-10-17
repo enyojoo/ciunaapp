@@ -825,7 +825,8 @@
     "unnamedReferee": "User",
     "yourCode": "Your code",
     "progress": "{{n}} of {{next}} friends this quarter for your next level",
-    "topTier": "You are on the top level this quarter."
+    "topTier": "You are on the top level this quarter.",
+    "rewardsUntil": "Rewards until {{date}}"
   },
   "profile": {
     "title": "Your profile",
@@ -855,7 +856,8 @@
     "deleteDescription": "Are you sure you want to delete your account? This action cannot be undone. All your data, transactions, and account information will be permanently deleted.",
     "cancel": "Cancel",
     "deleting": "Deleting...",
-    "emailHint": "To change your email, contact support."
+    "emailHint": "To change your email, contact support.",
+    "phoneInvalid": "Enter a phone number with the country code, for example +7 900 000 00 00."
   },
   "verification": {
     "hubTitle": "Verification",
@@ -1107,8 +1109,11 @@
     "callbackFailedSignIn": "Failed to complete sign in",
     "callbackRedirectLogin": "Redirecting to login...",
     "fillAllFields": "Please fill in all fields",
-    "passwordMinLength": "Password must be at least 6 characters long",
-    "helpToast": "Need assistance? Contact support at {{email}}"
+    "passwordMinLength": "Password must be at least {{count}} characters long",
+    "helpToast": "Need assistance? Contact support at {{email}}",
+    "passwordRuleLength": "At least {{count}} characters",
+    "termsAnd": "and",
+    "privacyLink": "Privacy Policy"
   },
   "referralLanding": {
     "redirecting": "Redirecting…",
@@ -1515,7 +1520,8 @@
   },
   "more": {
     "deleteAccount": "Delete account",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "security": "Security"
   },
   "notifications": {
     "title": "Notifications",
@@ -1589,5 +1595,21 @@
     "share": "Share receipt",
     "repeat": "Repeat transfer",
     "view": "View receipt"
+  },
+  "security": {
+    "title": "Security",
+    "lead": "Choose how Ciuna locks on this phone.",
+    "pin": "PIN lock",
+    "pinHint": "Ask for a 4-digit PIN when you open the app.",
+    "changePin": "Change PIN",
+    "change": "Change",
+    "biometric": "Face ID or fingerprint",
+    "biometricHint": "Unlock with your face or finger instead of typing the PIN.",
+    "offTitle": "Turn off PIN lock?",
+    "offBody": "Anyone who opens this phone will be able to open Ciuna.",
+    "turnOff": "Turn off",
+    "keep": "Keep it on",
+    "on": "On",
+    "off": "Off"
   }
 }

@@ -825,7 +825,8 @@
     "unnamedReferee": "用户",
     "yourCode": "您的邀请码",
     "progress": "本季度已邀请 {{n}}/{{next}} 位好友，即可升级",
-    "topTier": "本季度您已达到最高等级。"
+    "topTier": "本季度您已达到最高等级。",
+    "rewardsUntil": "奖励有效期至 {{date}}"
   },
   "profile": {
     "title": "个人资料",
@@ -855,7 +856,8 @@
     "deleteDescription": "您确定要删除账户吗？此操作无法撤销。您的所有数据、交易和账户信息将被永久删除。",
     "cancel": "取消",
     "deleting": "正在删除…",
-    "emailHint": "如需更改邮箱，请联系客服。"
+    "emailHint": "如需更改邮箱，请联系客服。",
+    "phoneInvalid": "请输入带国家区号的电话号码，例如 +86 138 0000 0000。"
   },
   "verification": {
     "hubTitle": "身份验证",
@@ -1107,8 +1109,11 @@
     "callbackFailedSignIn": "无法完成登录",
     "callbackRedirectLogin": "正在跳转到登录页…",
     "fillAllFields": "请填写所有字段",
-    "passwordMinLength": "密码至少需要 6 个字符",
-    "helpToast": "需要帮助？请联系客服：{{email}}"
+    "passwordMinLength": "密码至少需要 {{count}} 个字符",
+    "helpToast": "需要帮助？请联系客服：{{email}}",
+    "passwordRuleLength": "至少 {{count}} 个字符",
+    "termsAnd": "和",
+    "privacyLink": "隐私政策"
   },
   "referralLanding": {
     "redirecting": "正在跳转…",
@@ -1515,7 +1520,8 @@
   },
   "more": {
     "deleteAccount": "删除账户",
-    "notifications": "通知"
+    "notifications": "通知",
+    "security": "安全"
   },
   "notifications": {
     "title": "通知",
@@ -1589,5 +1595,21 @@
     "share": "分享收据",
     "repeat": "再次转账",
     "view": "查看收据"
+  },
+  "security": {
+    "title": "安全",
+    "lead": "选择 Ciuna 在这部手机上的锁定方式。",
+    "pin": "PIN 锁",
+    "pinHint": "打开应用时要求输入 4 位 PIN。",
+    "changePin": "更改 PIN",
+    "change": "更改",
+    "biometric": "面容 ID 或指纹",
+    "biometricHint": "用面部或指纹解锁，无需输入 PIN。",
+    "offTitle": "关闭 PIN 锁？",
+    "offBody": "任何拿到这部手机的人都能打开 Ciuna。",
+    "turnOff": "关闭",
+    "keep": "保持开启",
+    "on": "已开启",
+    "off": "已关闭"
   }
 }

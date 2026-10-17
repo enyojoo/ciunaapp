@@ -14,4 +14,6 @@ export const BRAND = {
     linkedin: "https://linkedin.com/company/ciuna",
     instagram: "https://instagram.com/ciunaapp",
   },
+  /** Support chat on Telegram. One place to change it; the support screen reads this. */
+  supportTelegram: "https://t.me/enyosamm",
 } as const

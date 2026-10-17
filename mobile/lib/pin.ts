@@ -26,6 +26,27 @@ export async function verifyPin(userId: string, pin: string): Promise<boolean> {
   return stored === digest
 }
 
+const bioKey = (userId: string) => `ciuna_pin_bio_${userId}`
+
+/** Face ID or fingerprint unlock is on unless the person turned it off in Security. */
+export async function biometricEnabled(userId: string): Promise<boolean> {
+  return (await secretGet(bioKey(userId))) !== "off"
+}
+
+export async function setBiometricEnabled(userId: string, on: boolean): Promise<void> {
+  if (on) await secretDelete(bioKey(userId))
+  else await secretSet(bioKey(userId), "off")
+}
+
+/** Whether this phone can do biometric unlock at all (hardware and an enrolled face or finger). */
+export async function biometricAvailable(): Promise<boolean> {
+  if (Platform.OS === "web") return false
+  return (await LocalAuthentication.hasHardwareAsync()) && (await LocalAuthentication.isEnrolledAsync())
+}
+
+/** The app asks for the PIN again after it has been in the background this long. */
+export const RELOCK_AFTER_MS = 60_000
+
 export async function tryBiometricUnlock(): Promise<boolean> {
   if (Platform.OS === "web") return false
   const has = await LocalAuthentication.hasHardwareAsync()

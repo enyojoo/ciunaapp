@@ -5,12 +5,14 @@ import { useTranslation } from "react-i18next"
 import { PinDots, PinKeypad, PIN_LEN } from "@/components/pin-keypad"
 import { Screen } from "@/components/screen"
 import { useAuth } from "@/lib/auth-context"
-import { attemptsLeft, pinFailures, recordPinFailure, resetPinFailures, tryBiometricUnlock, verifyPin, MAX_PIN_ATTEMPTS } from "@/lib/pin"
+import { Avatar } from "@/components/avatar"
+import { attemptsLeft, biometricAvailable, biometricEnabled, pinFailures, recordPinFailure, resetPinFailures, tryBiometricUnlock, verifyPin, MAX_PIN_ATTEMPTS } from "@/lib/pin"
 import { colors, ui } from "@/lib/theme"
 
 export default function PinScreen() {
   const { t } = useTranslation("common")
-  const { user, loading, pinUnlocked, unlockPin, signOut } = useAuth()
+  const { user, profile, loading, pinUnlocked, unlockPin, signOut } = useAuth()
+  const [bioKey, setBioKey] = useState(false)
   const [pin, setPin] = useState("")
   const [busy, setBusy] = useState(false)
   const [wrong, setWrong] = useState(false)
@@ -23,6 +25,9 @@ export default function PinScreen() {
   useEffect(() => {
     if (!user) return
     void (async () => {
+      const on = (await biometricEnabled(user.id)) && (await biometricAvailable())
+      setBioKey(on)
+      if (!on) return
       const ok = await tryBiometricUnlock()
       if (ok) {
         await resetPinFailures(user.id)
@@ -66,7 +71,10 @@ export default function PinScreen() {
   return (
     <Screen padded edges={["top", "bottom", "left", "right"]}>
       <View style={styles.head}>
-        <Text style={[ui.title, styles.centerText]}>{t("pinLock.welcomeBack", { defaultValue: "Welcome back" })}</Text>
+        <Avatar name={[profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "?"} size={64} uri={profile?.avatar_url} />
+        <Text style={[ui.title, styles.centerText, styles.welcome]}>
+          {profile?.first_name ? t("pinLock.welcomeName", { name: profile.first_name, defaultValue: "Welcome back, {{name}}" }) : t("pinLock.welcomeBack", { defaultValue: "Welcome back" })}
+        </Text>
         <Text style={[ui.subtitle, styles.centerText]}>
           {t("pinLock.enterPin", { defaultValue: "Enter your 4-digit PIN" })}
         </Text>
@@ -84,6 +92,12 @@ export default function PinScreen() {
       </View>
       <PinKeypad
         disabled={busy}
+        onBiometric={bioKey ? () => void (async () => {
+          if (await tryBiometricUnlock()) {
+            if (user) await resetPinFailures(user.id)
+            unlockPin()
+          }
+        })() : undefined}
         onDigit={(d) => {
           setWrong(false)
           setPin((p) => (p.length >= PIN_LEN ? p : p + d))
@@ -101,6 +115,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.paper },
   head: { alignItems: "center", paddingTop: 32 },
   centerText: { textAlign: "center" },
+  welcome: { marginTop: 12 },
   wrong: { marginTop: 12, minHeight: 20, fontSize: 14, fontWeight: "600", color: colors.danger, textAlign: "center" },
   left: { marginTop: 4, minHeight: 20, fontSize: 13, color: colors.muted, textAlign: "center" },
   logout: { minHeight: 48, alignItems: "center", paddingVertical: 12 },

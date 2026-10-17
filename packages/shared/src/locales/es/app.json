@@ -726,7 +726,8 @@
     "unnamedReferee": "Usuario",
     "yourCode": "Tu código",
     "progress": "{{n}} de {{next}} amigos este trimestre para tu siguiente nivel",
-    "topTier": "Estás en el nivel más alto este trimestre."
+    "topTier": "Estás en el nivel más alto este trimestre.",
+    "rewardsUntil": "Recompensas hasta el {{date}}"
   },
   "profile": {
     "title": "Tu perfil",
@@ -756,7 +757,8 @@
     "deleteDescription": "¿Eliminar tu cuenta de forma permanente? No se puede deshacer. Se borrarán tus datos y transacciones.",
     "cancel": "Cancelar",
     "deleting": "Eliminando…",
-    "emailHint": "Para cambiar tu correo, contacta con soporte."
+    "emailHint": "Para cambiar tu correo, contacta con soporte.",
+    "phoneInvalid": "Introduce un teléfono con el prefijo del país, por ejemplo +34 612 345 678."
   },
   "verification": {
     "hubTitle": "Verificación de cuenta",
@@ -1008,8 +1010,11 @@
     "callbackFailedSignIn": "No se pudo completar el inicio de sesión",
     "callbackRedirectLogin": "Redirigiendo al inicio de sesión…",
     "fillAllFields": "Completa todos los campos",
-    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-    "helpToast": "¿Necesitas ayuda? Contacta a {{email}}"
+    "passwordMinLength": "La contraseña debe tener al menos {{count}} caracteres",
+    "helpToast": "¿Necesitas ayuda? Contacta a {{email}}",
+    "passwordRuleLength": "Al menos {{count}} caracteres",
+    "termsAnd": "y la",
+    "privacyLink": "Política de privacidad"
   },
   "experts": {
     "profile": {
@@ -1515,7 +1520,8 @@
   },
   "more": {
     "deleteAccount": "Eliminar cuenta",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "security": "Seguridad"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -1589,5 +1595,21 @@
     "share": "Compartir recibo",
     "repeat": "Repetir transferencia",
     "view": "Ver recibo"
+  },
+  "security": {
+    "title": "Seguridad",
+    "lead": "Elige cómo se bloquea Ciuna en este teléfono.",
+    "pin": "Bloqueo con PIN",
+    "pinHint": "Pedir un PIN de 4 dígitos al abrir la app.",
+    "changePin": "Cambiar PIN",
+    "change": "Cambiar",
+    "biometric": "Face ID o huella",
+    "biometricHint": "Desbloquea con tu cara o tu dedo en lugar de escribir el PIN.",
+    "offTitle": "¿Desactivar el bloqueo con PIN?",
+    "offBody": "Cualquiera que abra este teléfono podrá abrir Ciuna.",
+    "turnOff": "Desactivar",
+    "keep": "Mantener",
+    "on": "Activado",
+    "off": "Desactivado"
   }
 }

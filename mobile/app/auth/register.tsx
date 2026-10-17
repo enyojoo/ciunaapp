@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router"
 import { useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
+import { Check, Circle } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth, useAuthBack, AuthNotice } from "@/components/auth-chrome"
 import { Field } from "@/components/field"
@@ -12,6 +13,7 @@ import { useExternalLink } from "@/lib/external-link"
 import { supabase } from "@/lib/supabase"
 import { colors, type as typeSize } from "@/lib/theme"
 
+const MIN_PASSWORD = 8
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function RegisterScreen() {
@@ -27,6 +29,7 @@ export default function RegisterScreen() {
   const [show, setShow] = useState(false)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
 
   const onSubmit = async () => {
     const trimmedEmail = email.trim()
@@ -34,8 +37,8 @@ export default function RegisterScreen() {
       setNotice(t("auth.fillAllFields", { defaultValue: "Please fill in all fields" }))
       return
     }
-    if (password.length < 6) {
-      setNotice(t("auth.passwordMinLength", { defaultValue: "Password must be at least 6 characters long" }))
+    if (password.length < MIN_PASSWORD) {
+      setPasswordError(t("auth.passwordMinLength", { count: MIN_PASSWORD, defaultValue: "Password must be at least {{count}} characters long" }))
       return
     }
     if (!EMAIL_RE.test(trimmedEmail)) {
@@ -73,6 +76,13 @@ export default function RegisterScreen() {
           onPress={() => void openLink("https://www.ciuna.com/terms", t("auth.termsLink", { defaultValue: "Terms" }))}
         >
           {t("auth.termsLink", { defaultValue: "Terms" })}
+        </Text>{" "}
+        {t("auth.termsAnd", { defaultValue: "and" })}{" "}
+        <Text
+          style={styles.termsLink}
+          onPress={() => void openLink("https://www.ciuna.com/privacy", t("auth.privacyLink", { defaultValue: "Privacy Policy" }))}
+        >
+          {t("auth.privacyLink", { defaultValue: "Privacy Policy" })}
         </Text>
         .
       </Text>
@@ -126,11 +136,19 @@ export default function RegisterScreen() {
           onChangeText={(v) => {
             setPassword(v)
             setNotice(null)
+            setPasswordError(null)
           }}
           returnKeyType="go"
           onSubmitEditing={() => void onSubmit()}
+          error={passwordError || undefined}
           trailing={<PasswordEye show={show} onToggle={() => setShow((s) => !s)} />}
         />
+        <View style={styles.rule} accessibilityLiveRegion="polite">
+          {password.length >= MIN_PASSWORD ? <Check size={14} color={colors.successText} strokeWidth={2.6} /> : <Circle size={14} color={colors.subtle} strokeWidth={2} />}
+          <Text style={[styles.ruleText, password.length >= MIN_PASSWORD && styles.ruleOk]}>
+            {t("auth.passwordRuleLength", { count: MIN_PASSWORD, defaultValue: "At least {{count}} characters" })}
+          </Text>
+        </View>
         <PrimaryButton
           label={
             busy
@@ -160,5 +178,8 @@ const styles = StyleSheet.create({
     color: colors.muted,
     textAlign: "center",
   },
-  termsLink: { fontWeight: "600", color: colors.primary },
+  termsLink: { fontWeight: "600", color: colors.primaryText },
+  rule: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: -6, marginBottom: 14 },
+  ruleText: { fontSize: typeSize.meta, color: colors.muted },
+  ruleOk: { color: colors.successText },
 })

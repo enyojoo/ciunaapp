@@ -96,6 +96,7 @@
     "tooManyAttemptsOne": "Too many attempts. Try again in 1 minute.",
     "notYourAccount": "Not your account?",
     "logOut": "Log out",
-    "backspaceAria": "Delete"
+    "backspaceAria": "Delete",
+    "welcomeName": "Welcome back, {{name}}"
   }
 }

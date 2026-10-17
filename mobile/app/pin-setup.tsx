@@ -4,10 +4,9 @@ import { StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { PinDots, PinKeypad, PIN_LEN } from "@/components/pin-keypad"
 import { Screen } from "@/components/screen"
-import { useToast } from "@/components/toast-provider"
 import { useAuth } from "@/lib/auth-context"
 import { setPin, verifyPin } from "@/lib/pin"
-import { ui } from "@/lib/theme"
+import { colors, ui } from "@/lib/theme"
 
 type Phase = "current" | "create" | "confirm"
 
@@ -18,7 +17,7 @@ export default function PinSetupScreen() {
   const { user, loading } = useAuth()
   const router = useRouter()
   const [phase, setPhase] = useState<Phase>(change ? "current" : "create")
-  const { showError } = useToast()
+  const [error, setError] = useState<string | null>(null)
   const [digits, setDigits] = useState("")
   const [first, setFirst] = useState("")
 
@@ -36,10 +35,11 @@ export default function PinSetupScreen() {
 
   const onFilled = async (value: string) => {
     if (!user) return
+    setError(null)
     if (phase === "current") {
       const ok = await verifyPin(user.id, value)
       if (!ok) {
-        showError(t("pinDialog.errorWrongCurrent"))
+        setError(t("pinDialog.errorWrongCurrent"))
         setDigits("")
         return
       }
@@ -54,7 +54,7 @@ export default function PinSetupScreen() {
       return
     }
     if (value !== first) {
-      showError(t("pinSetup.mismatch"))
+      setError(t("pinSetup.mismatch"))
       setDigits("")
       setPhase("create")
       setFirst("")
@@ -69,7 +69,8 @@ export default function PinSetupScreen() {
       <View style={styles.head}>
         <Text style={[ui.title, styles.centerText]}>{title}</Text>
         <Text style={[ui.subtitle, styles.centerText]}>{subtitle}</Text>
-        <PinDots digits={digits} />
+        <PinDots digits={digits} error={Boolean(error)} />
+        <Text style={styles.error} accessibilityRole="alert">{error || " "}</Text>
       </View>
       <PinKeypad
         onDigit={(d) => {
@@ -86,4 +87,5 @@ export default function PinSetupScreen() {
 const styles = StyleSheet.create({
   head: { alignItems: "center", paddingTop: 32 },
   centerText: { textAlign: "center" },
+  error: { marginTop: 12, minHeight: 20, fontSize: 14, fontWeight: "600", color: colors.dangerText, textAlign: "center" },
 })
