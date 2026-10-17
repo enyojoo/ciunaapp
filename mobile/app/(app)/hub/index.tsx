@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 import { hubServiceLineTileCopy, type HubServiceLineRow } from "@ciuna/shared"
 import { AppHeader } from "@/components/app-header"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { HomeSlider } from "@/components/home-slider"
 import { Screen } from "@/components/screen"
 import { Tile, TileSkeleton } from "@/components/tile"
@@ -21,7 +22,7 @@ export default function HomeScreen() {
   const tabContentPadding = useTabContentPadding()
   const router = useRouter()
   const { openLink } = useExternalLink()
-  const { data, loading, refreshing, refresh, revalidate } = useHubServiceLines()
+  const { data, loading, error, refreshing, refresh, revalidate } = useHubServiceLines()
   const lines = data || []
   // Phones show two tiles per row and fill the screen. Wide web screens show them all in one row,
   // with a height cap so the tiles stay a sensible size instead of stretching across a big window.
@@ -58,7 +59,7 @@ export default function HomeScreen() {
         <HomeSlider />
         {loading ? (
           <View style={styles.grid}>
-            {[0, 1].map((r) => (
+            {[0, 1, 2].map((r) => (
               <View key={r} style={styles.row}>
                 <View style={styles.cell}>
                   <TileSkeleton />
@@ -69,6 +70,8 @@ export default function HomeScreen() {
               </View>
             ))}
           </View>
+        ) : lines.length === 0 && error ? (
+          <LoadError onRetry={() => void revalidate()} />
         ) : lines.length === 0 ? (
           <EmptyState
             title={t("hub.unavailableTitle", { defaultValue: "Unavailable" })}

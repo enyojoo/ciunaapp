@@ -207,7 +207,10 @@
       "lockCancel": "Manter carrinho atual",
       "minOrderMore": "Adicione mais {{more}} para entrega. O pedido mínimo é {{min}}.",
       "storeClosedNote": "Esta loja está fechada, então o checkout fica indisponível até abrir.",
-      "storePausedNote": "Esta loja está em pausa, então o checkout está indisponível por enquanto."
+      "storePausedNote": "Esta loja está em pausa, então o checkout está indisponível por enquanto.",
+      "removedItem": "Removido do carrinho",
+      "undo": "Desfazer",
+      "addToCartPrice": "Adicionar ao carrinho · {{price}}"
     },
     "stock": {
       "onlyLeft": "Restam só {{n}}",
@@ -1264,7 +1267,18 @@
     "edit": "Editar",
     "fromFee": "A partir de {{fee}}",
     "progressTime": "Horário",
-    "storePausedTitle": "Esta loja está em pausa"
+    "storePausedTitle": "Esta loja está em pausa",
+    "addressRequired": "Informe a rua e o apartamento para o entregador encontrar você.",
+    "contactName": "Seu nome",
+    "contactNameRequired": "Informe o nome para este pedido.",
+    "contactPhone": "Telefone",
+    "contactPhoneRequired": "É necessário um telefone para este pedido.",
+    "subtotal": "Subtotal",
+    "orderProgress": "Andamento do pedido",
+    "checkingTitle": "Estamos conferindo seu pagamento",
+    "checkingBody": "Não pague de novo. Isso costuma levar um minuto.",
+    "completePaymentTitle": "Conclua seu pagamento",
+    "completePaymentBody": "Pague {{total}} abaixo para fazer este pedido."
   },
   "social": {
     "loadFailed": "Não foi possível carregar, tente novamente",
@@ -1342,7 +1356,8 @@
       "changeTime": "Mudar o horário de entrega",
       "allergy": "Pergunta sobre alergia"
     },
-    "openUntil": "O chat com o vendedor fica aberto até {{date}}."
+    "openUntil": "O chat com o vendedor fica aberto até {{date}}.",
+    "unreadDot": "Nova mensagem do vendedor"
   },
   "reviews": {
     "promptTitle": "Avalie o seu pedido",

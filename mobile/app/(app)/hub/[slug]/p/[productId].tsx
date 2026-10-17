@@ -5,6 +5,7 @@ import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { Minus, Plus } from "lucide-react-native"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { HubRecommendedProducts } from "@/components/hub-recommended-products"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
@@ -30,6 +31,7 @@ import { useHubProduct } from "@/lib/use-hub-product"
 import { useHubVendorProducts } from "@/lib/use-hub-vendor"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import {
+  formatMoney,
   hubProductEffectivePrice,
   hubProductListPrice,
   hubProductShowListStrike,
@@ -130,7 +132,7 @@ export default function HubProductDetailScreen() {
         <StatusBar style="dark" />
         {topBar}
         <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
-          <EmptyState title={t("hub.productNotFound", { defaultValue: "Product not found." })} />
+          {error ? <LoadError onRetry={() => void revalidate()} /> : <EmptyState title={t("hub.productNotFound", { defaultValue: "Product not found." })} />}
         </ScreenScroll>
       </View>
     )
@@ -147,6 +149,22 @@ export default function HubProductDetailScreen() {
       >
         <ProductGallery images={productImages(product)} />
         <Text style={styles.title}>{product.title}</Text>
+        <View style={styles.priceRow}>
+          <PriceTag
+            size="lg"
+            prefix={
+              product.pricing_type === "user_input"
+                ? product.funded_min
+                  ? t("hub.payFrom", { defaultValue: "Pay from" })
+                  : t("hub.setAmount", { defaultValue: "Set amount" })
+                : undefined
+            }
+            strike={product.pricing_type !== "user_input" && strike && list != null ? list : null}
+            amount={product.pricing_type === "user_input" ? (product.funded_min ? product.funded_min : null) : price}
+            currency={currency}
+          />
+        </View>
+
         {stockLine ? <Text style={[styles.stock, product.stock_quantity != null && Number(product.stock_quantity) <= 5 && styles.stockLow]}>{stockLine}</Text> : null}
         {(product.fulfillment_mode === "delivery" ||
           product.fulfillment_mode === "pickup" ||
@@ -164,10 +182,12 @@ export default function HubProductDetailScreen() {
             {product.sla_text ? (
               <View style={styles.cueChip}>
                 <Text style={styles.cueText}>
-                  {t("marketplace.usuallyWithin", {
-                    defaultValue: "Usually within {{duration}}",
-                    duration: String(product.sla_text).replace(/^(\d+):(\d{2}):\d{2}$/, "$1h $2m"),
-                  })}
+                  {/^\d+:\d{2}(:\d{2})?$/.test(String(product.sla_text))
+                    ? t("marketplace.usuallyWithin", {
+                        defaultValue: "Usually within {{duration}}",
+                        duration: String(product.sla_text).replace(/^(\d+):(\d{2}):\d{2}$/, "$1h $2m"),
+                      })
+                    : String(product.sla_text)}
                 </Text>
               </View>
             ) : null}
@@ -193,22 +213,6 @@ export default function HubProductDetailScreen() {
         {product.long_description || product.short_description ? (
           <Text style={styles.desc}>{product.long_description || product.short_description}</Text>
         ) : null}
-
-        <View style={styles.priceRow}>
-          <PriceTag
-            size="lg"
-            prefix={
-              product.pricing_type === "user_input"
-                ? product.funded_min
-                  ? t("hub.payFrom", { defaultValue: "Pay from" })
-                  : t("hub.setAmount", { defaultValue: "Set amount" })
-                : t("hub.sellPrice", { defaultValue: "Sell price" })
-            }
-            strike={product.pricing_type !== "user_input" && strike && list != null ? list : null}
-            amount={product.pricing_type === "user_input" ? (product.funded_min ? product.funded_min : null) : price}
-            currency={currency}
-          />
-        </View>
 
         <View style={styles.ctaBlock}>
           {product.pricing_type === "user_input" ? (
@@ -244,7 +248,7 @@ export default function HubProductDetailScreen() {
                 label={
                   soldOut
                     ? t("hub.soldOut", { defaultValue: "Sold out" })
-                    : t("hub.cart.addToCart", { defaultValue: "Add to cart" })
+                    : t("hub.cart.addToCartPrice", { price: formatMoney(price, currency), defaultValue: "Add to cart · {{price}}" })
                 }
                 onPress={() => handleAddToCart()}
                 disabled={soldOut}
@@ -296,7 +300,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     backgroundColor: colors.surface,
   },
-  cueText: { fontSize: 12, fontWeight: "600", color: colors.text, textTransform: "capitalize" },
+  cueText: { fontSize: 12, fontWeight: "600", color: colors.text },
   vendorHit: { marginTop: 6, alignSelf: "flex-start", maxWidth: "100%" },
   desc: { marginTop: 10, fontSize: typeSize.body, lineHeight: 22, color: colors.text },
   priceRow: { marginTop: 20 },

@@ -6,6 +6,7 @@ import { VerifiedBadge } from "@/components/verified-badge"
 import { LinearGradient } from "expo-linear-gradient"
 import { tileArtFor } from "@/components/tile"
 import { useTranslation } from "react-i18next"
+import { storeOpenLine } from "@/lib/store-hours"
 import { colors, radius, shadow, type as typeSize } from "@/lib/theme"
 import { FavouriteHeart } from "@/components/favourite-heart"
 import type { HubVendor } from "@/lib/types"
@@ -65,7 +66,7 @@ function StoreFace({
   compact?: boolean
   showLocation?: boolean
 }) {
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const art = tileArtFor(vendor.service_line_slug || "food")
   const loc = (vendor.location || "").trim()
   const count = Number(vendor.rating_count ?? 0)
@@ -84,7 +85,7 @@ function StoreFace({
         {closed ? (
           <View style={styles.closedShade}>
             <View style={styles.closedChip}>
-              <Text style={styles.closedText}>{t("hub.store.closed", { defaultValue: "Closed" })}</Text>
+              <Text style={styles.closedText} numberOfLines={1}>{(storeOpenLine(vendor, t, i18n.language)?.text) || t("hub.store.closed", { defaultValue: "Closed" })}</Text>
             </View>
           </View>
         ) : null}

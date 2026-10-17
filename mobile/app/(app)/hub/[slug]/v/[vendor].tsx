@@ -13,6 +13,7 @@ import { RatingLine, ReviewsSection } from "@/components/reviews-section"
 import { useReviews } from "@/lib/use-reviews"
 import { CatalogProducts } from "@/components/catalog-products"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { ScreenScroll } from "@/components/screen"
@@ -83,12 +84,16 @@ export default function VendorScreen() {
         <StatusBar style="dark" />
         {topBar}
         <ScreenScroll edges={["left", "right"]}>
+          {error && !vendor ? (
+            <LoadError onRetry={() => void revalidate()} />
+          ) : (
           <EmptyState
             title={t("hub.vendorStoreNotFound", { defaultValue: "Store not found" })}
             body={t("hub.vendorStoreNotFoundBody", {
               defaultValue: "This store is unavailable or the link may be incorrect.",
             })}
           />
+          )}
         </ScreenScroll>
       </View>
     )

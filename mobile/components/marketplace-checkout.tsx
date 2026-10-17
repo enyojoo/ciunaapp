@@ -126,19 +126,29 @@ function SummaryCard({
         ))}
       </View>
       <View style={styles.feeBlock}>
-        <View style={styles.feeRow}>
-          <Text style={styles.feeLabel}>{label("serviceFee", "Service fee")}</Text>
-          <Text style={styles.feeValue}>
-            {formatMoney(totals.marketplaceFee, totals.productCurrency)}
-          </Text>
-        </View>
+        {totals.marketplaceFee > 0 || totals.deliveryFee > 0 || !!totals.corridorFee ? (
+          <View style={styles.feeRow}>
+            <Text style={styles.feeLabel}>{label("subtotal", "Subtotal")}</Text>
+            <Text style={styles.feeValue}>
+              {formatMoney(lines.reduce((n, l) => n + l.unitPrice * l.quantity, 0), totals.productCurrency)}
+            </Text>
+          </View>
+        ) : null}
+        {totals.marketplaceFee > 0 ? (
+          <View style={styles.feeRow}>
+            <Text style={styles.feeLabel}>{label("serviceFee", "Service fee")}</Text>
+            <Text style={styles.feeValue}>
+              {formatMoney(totals.marketplaceFee, totals.productCurrency)}
+            </Text>
+          </View>
+        ) : null}
         {fulfillmentMode === "pickup" ? (
           <View style={styles.feeRow}>
             <Text style={styles.feeLabel}>{label("pickup", "Pickup")}</Text>
             <Text style={styles.feeValue}>{label("free", "Free")}</Text>
           </View>
         ) : null}
-        {fulfillmentMode === "delivery" ? (
+        {fulfillmentMode === "delivery" && totals.deliveryFee > 0 ? (
           <View style={styles.feeRow}>
             <Text style={styles.feeLabel}>{label("deliveryFee", "Delivery fee")}</Text>
             <Text style={styles.feeValue}>
@@ -594,12 +604,15 @@ export function MarketplaceCheckout({
                       <Text style={styles.meta}>{label("chooseZone", "Choose a delivery area")}</Text>
                     )}
                     {q.zones.length > 0 ? (
-                      <Field
-                        label={label("address", "Delivery address")}
-                        accessibilityLabel={label("address", "Delivery address")}
-                        value={c.address}
-                        onChangeText={c.setAddress}
-                      />
+                      <>
+                        <Field
+                          label={label("address", "Delivery address")}
+                          accessibilityLabel={label("address", "Delivery address")}
+                          value={c.address}
+                          onChangeText={c.setAddress}
+                          error={c.deliveryZoneId && !c.address.trim() ? label("addressRequired", "Enter the street and apartment so the courier can find you.") : undefined}
+                        />
+                      </>
                     ) : null}
                   </View>
                 )}
@@ -612,6 +625,24 @@ export function MarketplaceCheckout({
                     )}
                   </Text>
                 )}
+
+                <Field
+                  label={label("contactName", "Your name")}
+                  accessibilityLabel={label("contactName", "Your name")}
+                  value={c.contactName}
+                  onChangeText={c.setContactName}
+                  autoComplete="name"
+                  error={!c.contactName.trim() ? label("contactNameRequired", "Enter the name for this order.") : undefined}
+                />
+                <Field
+                  label={`${label("contactPhone", "Phone")}${q?.requirePhone ? " *" : ""}`}
+                  accessibilityLabel={label("contactPhone", "Phone")}
+                  value={c.contactPhone}
+                  onChangeText={c.setContactPhone}
+                  keyboardType="phone-pad"
+                  autoComplete="tel"
+                  error={q?.requirePhone && !c.contactPhone.trim() ? label("contactPhoneRequired", "A phone number is needed for this order.") : undefined}
+                />
 
                 {q
                   ? q.lines.map((l) =>
@@ -927,6 +958,17 @@ export function MarketplaceOrderView({
     <View style={{ flex: 1 }}>
     <ScreenScroll keyboard edges={["left", "right", "bottom"]} contentStyle={live ? { ...styles.scroll, paddingBottom: 96 } : styles.scroll}>
       <View style={styles.stack}>
+        {order.nextAction === "checking" ? (
+          <View style={styles.zoneBanner} accessibilityRole="alert">
+            <Text style={styles.zoneTitle}>{t("marketplace.checkingTitle", { defaultValue: "We are checking your payment" })}</Text>
+            <Text style={styles.zoneBody}>{t("marketplace.checkingBody", { defaultValue: "Please do not pay again. This usually takes a minute." })}</Text>
+          </View>
+        ) : pay && methods.length > 0 ? (
+          <View style={styles.zoneBanner} accessibilityRole="alert">
+            <Text style={styles.zoneTitle}>{t("marketplace.completePaymentTitle", { defaultValue: "Complete your payment" })}</Text>
+            <Text style={styles.zoneBody}>{t("marketplace.completePaymentBody", { total: formatMoney(order.snapshot.totals.total, order.snapshot.totals.payCurrency), defaultValue: "Pay {{total}} below to place this order." })}</Text>
+          </View>
+        ) : null}
         <OrderStatusHeader
           order={order}
           reason={
@@ -947,7 +989,7 @@ export function MarketplaceOrderView({
         />
         <OrderPlaceCard order={order} />
         <View style={styles.timelineCard}>
-          <Text style={styles.sectionTitle}>{label("fulfillment", "Fulfillment")}</Text>
+          <Text style={styles.sectionTitle}>{t("marketplace.orderProgress", { defaultValue: "Order progress" })}</Text>
           <OrderTimeline order={order} />
         </View>
         <OrderReviewCard orderId={order.id} fulfilled={order.fulfillment_state === "fulfilled"} line={order.line} />
@@ -1049,15 +1091,6 @@ export function MarketplaceOrderView({
           </View>
         )}
 
-        {order.events.map((e) => (
-          <View key={e.id} style={styles.eventRow}>
-            <Text style={styles.eventTitle}>
-              {t(`marketplace.events.${e.kind}`, { defaultValue: label("updated", "Order updated") })}
-            </Text>
-            <Text style={styles.meta}>{new Date(e.created_at).toLocaleString()}</Text>
-          </View>
-        ))}
-
         {order.canCancel && (
           <PrimaryButton
             label={label("cancel", "Cancel order")}
@@ -1077,7 +1110,7 @@ export function MarketplaceOrderView({
           label={label("support", "Contact support")}
           variant="ghost"
           onPress={() =>
-            void Linking.openURL(`mailto:support@ciuna.com?subject=${encodeURIComponent(order.public_id)}`)
+            router.push({ pathname: "/support/new", params: { topic: "order", subject: order.public_id, orderId: order.id } } as never)
           }
         />
       </View>

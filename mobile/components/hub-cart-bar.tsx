@@ -6,7 +6,7 @@ import { hubCartItemCount, useHubCart, useHubCartByLine } from "@/lib/hub-cart"
 import { hubProductEffectivePrice } from "@/lib/money"
 import { hubCartPath } from "@/lib/hub"
 import { formatMoney } from "@/lib/money"
-import { colors, radius, shadow } from "@/lib/theme"
+import { colors, radius, shadows } from "@/lib/theme"
 
 /**
  * Floating bar shown on Food/Mart screens once the cart has items. Pass `vendorId` on a vendor
@@ -38,7 +38,7 @@ export function HubCartBar({ lineSlug, vendorId }: { lineSlug: "food" | "mart"; 
         accessibilityLabel={t("hub.cart.viewCart", { defaultValue: "View cart" })}
       >
         <View style={styles.left}>
-          <ShoppingCart size={16} color={colors.onPrimary} strokeWidth={2.2} />
+          <ShoppingCart size={20} color={colors.onPrimary} strokeWidth={2.2} />
           <Text style={styles.label}>
             {t("hub.cart.viewCart", { defaultValue: "View cart" })} · {t("hub.cart.itemCount", { defaultValue: "{{count}} item", count })}
           </Text>
@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
-    borderRadius: radius.pill,
-    backgroundColor: "#111827",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    ...shadow({ opacity: 0.3, radius: 16, offsetY: 6, elevation: 6 }),
+    minHeight: 56,
+    borderRadius: radius.card,
+    backgroundColor: colors.primary,
+    paddingHorizontal: 18,
+    ...shadows.cartBar,
   },
   left: { flexDirection: "row", alignItems: "center", gap: 8, flexShrink: 1 },
-  label: { fontSize: 13, fontWeight: "600", color: colors.onPrimary },
-  amount: { fontSize: 13, fontWeight: "700", color: colors.onPrimary },
+  label: { fontSize: 15, fontWeight: "600", color: colors.onPrimary },
+  amount: { fontSize: 15, fontWeight: "700", color: colors.onPrimary, fontVariant: ["tabular-nums"] },
 })

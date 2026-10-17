@@ -7,6 +7,7 @@ import { hubServiceLineShellLabels } from "@ciuna/shared"
 import { useHubServiceLine } from "@/lib/use-hub-service-line"
 import { CatalogProducts } from "@/components/catalog-products"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
@@ -46,7 +47,7 @@ export default function HubLineCatalog() {
     if (marketplace) prefetchYooKassaWidgetScript()
   }, [marketplace])
 
-  const { data, loading, refreshing, refresh, revalidate } = useHubCatalog(
+  const { data, loading, error, refreshing, refresh, revalidate } = useHubCatalog(
     engineRedirect ? "" : line,
     marketplace,
   )
@@ -99,6 +100,8 @@ export default function HubLineCatalog() {
                 <StoreChipSkeleton key={i} />
               ))}
             </ScrollView>
+          ) : vendors.length === 0 && error ? (
+            <LoadError onRetry={() => void revalidate()} />
           ) : vendors.length === 0 ? (
             <Text style={styles.storesEmpty}>
               {t("hub.marketplaceNoVendors", { defaultValue: "No stores yet — check back soon." })}
@@ -136,7 +139,7 @@ export default function HubLineCatalog() {
 
   if (engineRedirect) return <Redirect href={engineRedirect as never} />
 
-  if (!marketplace && !loading && products.length === 0) {
+  if (!marketplace && !loading && products.length === 0 && !error) {
     return (
       <HubLinePageShell title={labels.title} subtitle={labels.subtitle} backAriaLabel={backAria}>
         <EmptyState

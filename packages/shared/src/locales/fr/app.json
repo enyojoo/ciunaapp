@@ -207,7 +207,10 @@
       "lockCancel": "Garder le panier actuel",
       "minOrderMore": "Ajoutez encore {{more}} pour la livraison. Commande minimale : {{min}}.",
       "storeClosedNote": "Cette boutique est fermée : la commande n’est pas disponible avant l’ouverture.",
-      "storePausedNote": "Cette boutique fait une pause, le paiement est indisponible pour le moment."
+      "storePausedNote": "Cette boutique fait une pause, le paiement est indisponible pour le moment.",
+      "removedItem": "Retiré du panier",
+      "undo": "Annuler",
+      "addToCartPrice": "Ajouter au panier · {{price}}"
     },
     "stock": {
       "onlyLeft": "Plus que {{n}}",
@@ -1264,7 +1267,18 @@
     "edit": "Modifier",
     "fromFee": "À partir de {{fee}}",
     "progressTime": "Heure",
-    "storePausedTitle": "Cette boutique fait une pause"
+    "storePausedTitle": "Cette boutique fait une pause",
+    "addressRequired": "Indiquez la rue et l'appartement pour que le livreur vous trouve.",
+    "contactName": "Votre nom",
+    "contactNameRequired": "Indiquez le nom pour cette commande.",
+    "contactPhone": "Téléphone",
+    "contactPhoneRequired": "Un numéro de téléphone est nécessaire pour cette commande.",
+    "subtotal": "Sous-total",
+    "orderProgress": "Suivi de la commande",
+    "checkingTitle": "Nous vérifions votre paiement",
+    "checkingBody": "Ne payez pas à nouveau. Cela prend généralement une minute.",
+    "completePaymentTitle": "Finalisez votre paiement",
+    "completePaymentBody": "Payez {{total}} ci-dessous pour passer cette commande."
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",
@@ -1342,7 +1356,8 @@
       "changeTime": "Changer l’heure de livraison",
       "allergy": "Question sur les allergies"
     },
-    "openUntil": "Le chat avec le vendeur reste ouvert jusqu’au {{date}}."
+    "openUntil": "Le chat avec le vendeur reste ouvert jusqu’au {{date}}.",
+    "unreadDot": "Nouveau message du vendeur"
   },
   "reviews": {
     "promptTitle": "Évaluez votre commande",

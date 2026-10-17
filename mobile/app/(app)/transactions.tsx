@@ -41,6 +41,7 @@ import { useFocusRevalidate } from "@/lib/use-focus-revalidate"
 import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { seedTransactionCache } from "@/lib/use-transaction"
+import { useChatUnread } from "@/lib/order-chat"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 import type { CombinedTransaction } from "@/lib/types"
 
@@ -109,6 +110,7 @@ export default function TransactionsScreen() {
   const locale = i18n.resolvedLanguage || i18n.language || "en"
   const router = useRouter()
   const { user } = useAuth()
+  const chat = useChatUnread(null, Boolean(user))
   const [chip, setChip] = useState<FilterChip>("all")
   const [query, setQuery] = useState("")
   const searchFocus = useInputFocusRing()
@@ -261,13 +263,14 @@ export default function TransactionsScreen() {
                   </View>
                   <View style={styles.rowTrail}>
                     <Text style={styles.rowAmount} numberOfLines={1}>
+                      {isReferralPayout(tx) ? "+" : "−"}
                       {formatMoney(amount, tx.send_currency)}
                     </Text>
                     {tx.marketplace_order ? (
-                      <Text>
-                        {t(`marketplace.${tx.marketplace_order.payment_state}`)} ·{" "}
-                        {t(`marketplace.${tx.marketplace_order.fulfillment_state}`)}
-                      </Text>
+                      <View style={styles.orderTrail}>
+                        {chat.byOrder[tx.marketplace_order.id] > 0 ? <View style={styles.unreadDot} accessibilityLabel={t("chat.unreadDot", { defaultValue: "New message from the seller" })} /> : null}
+                        <StatusChip status={tx.status} />
+                      </View>
                     ) : (
                       <StatusChip status={tx.status} />
                     )}
@@ -283,6 +286,8 @@ export default function TransactionsScreen() {
 }
 
 const styles = StyleSheet.create({
+  orderTrail: { flexDirection: "row", alignItems: "center", gap: 6 },
+  unreadDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.primary },
   title: {
     paddingHorizontal: 20,
     paddingTop: 4,

@@ -12,14 +12,15 @@ import {
   warmCartCheckout,
 } from "@ciuna/shared/marketplace/checkout-warm"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { useToast } from "@/components/toast-provider"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { fetchWithAuth } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
-import { hubCartCheckoutPath, hubLineHomePath } from "@/lib/hub"
-import { removeHubCartItem, updateHubCartItemQuantity, useHubCartByLine } from "@/lib/hub-cart"
+import { hubCartCheckoutPath, hubLineHomePath, hubMarketplaceVendorPath } from "@/lib/hub"
+import { addToHubCart, refreshHubCartByLine, removeHubCartItem, updateHubCartItemQuantity, useHubCartByLine } from "@/lib/hub-cart"
 import { hubProductEffectivePrice, formatMoney } from "@/lib/money"
 import { HubTopBar } from "@/components/hub-top-bar"
 import { colors, radius, type as typeSize } from "@/lib/theme"
@@ -31,7 +32,8 @@ function HubCartScreen() {
   const { t, i18n } = useTranslation("app")
   const { showError } = useToast()
   const { profile } = useAuth()
-  const { cart, loading } = useHubCartByLine(line)
+  const { cart, loading, error: cartError } = useHubCartByLine(line)
+  const { showToast } = useToast()
 
   const fingerprint = useMemo(() => {
     if (!cart) return ""
@@ -78,9 +80,21 @@ function HubCartScreen() {
 
   const onRemove = (itemId: string) => {
     if (!cart) return
-    void removeHubCartItem(cart.vendor_id, itemId).catch((e) => {
-      showError(e instanceof Error ? e.message : t("errors.generic", { defaultValue: "Something went wrong." }))
-    })
+    const gone = cart.items.find((i) => i.id === itemId)
+    void removeHubCartItem(cart.vendor_id, itemId)
+      .then(() => {
+        if (!gone?.product) return
+        // The remove is never silent: an Undo puts the same product and quantity back.
+        showToast(t("hub.cart.removedItem", { defaultValue: "Removed from cart" }), "info", 5000, {
+          label: t("hub.cart.undo", { defaultValue: "Undo" }),
+          onPress: () => {
+            void addToHubCart({ vendorId: cart.vendor_id, serviceLineSlug: line, hubProductId: gone.hub_product_id, quantity: gone.quantity, product: gone.product }).catch(() => undefined)
+          },
+        })
+      })
+      .catch((e) => {
+        showError(e instanceof Error ? e.message : t("errors.generic", { defaultValue: "Something went wrong." }))
+      })
   }
 
   const goCheckout = () => {
@@ -114,6 +128,15 @@ function HubCartScreen() {
     )
   }
 
+  if (!cart && cartError) {
+    return (
+      <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
+        <StatusBar style="dark" />
+        <LoadError onRetry={() => void refreshHubCartByLine(line)} />
+      </ScreenScroll>
+    )
+  }
+
   if (!cart || items.length === 0) {
     return (
       <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
@@ -130,7 +153,8 @@ function HubCartScreen() {
   }
 
   return (
-    <ScreenScroll edges={["left", "right"]} contentStyle={NARROW_COLUMN}>
+    <View style={{ flex: 1 }}>
+    <ScreenScroll edges={["left", "right"]} contentStyle={{ ...NARROW_COLUMN, paddingBottom: 16 }}>
       <StatusBar style="dark" />
       {/* Store plate: who the cart is from, and a way back to add more. */}
       <View style={styles.storePlate}>
@@ -144,7 +168,7 @@ function HubCartScreen() {
         <Text style={styles.storeName} numberOfLines={1}>
           {cart.vendor?.name || ""}
         </Text>
-        <Pressable onPress={() => router.back()} accessibilityRole="button" hitSlop={8}>
+        <Pressable onPress={() => (cart.vendor?.slug ? router.replace(hubMarketplaceVendorPath(line, cart.vendor.slug) as never) : router.back())} accessibilityRole="button" hitSlop={8} style={styles.addMoreHit}>
           <Text style={styles.addMore}>{t("hub.cart.addMore", { defaultValue: "Add more" })}</Text>
         </Pressable>
       </View>
@@ -175,47 +199,50 @@ function HubCartScreen() {
             <View key={item.id} style={styles.row}>
               <View style={styles.thumbWrap}>
                 {product.image_url ? (
-                  <Image source={{ uri: product.image_url }} style={styles.thumb} resizeMode="contain" />
+                  <Image source={{ uri: product.image_url }} style={styles.thumb} resizeMode="cover" />
                 ) : null}
               </View>
               <View style={styles.rowBody}>
-                <Text style={styles.rowTitle} numberOfLines={2}>
-                  {product.title}
-                </Text>
+                <View style={styles.rowTop}>
+                  <Text style={styles.rowTitle} numberOfLines={2}>
+                    {product.title}
+                  </Text>
+                  <Text style={styles.lineTotal}>{formatMoney(unitPrice * item.quantity, product.fixed_currency)}</Text>
+                </View>
                 <Text style={styles.rowPrice}>{formatMoney(unitPrice, product.fixed_currency)}</Text>
-              </View>
-              <View style={styles.rowActions}>
-                <Text style={styles.lineTotal}>{formatMoney(unitPrice * item.quantity, product.fixed_currency)}</Text>
-                <View style={styles.stepper}>
+                <View style={styles.rowBottom}>
+                  <View style={styles.stepper}>
+                    <Pressable
+                      onPress={() => onQuantityChange(item.id, item.quantity - 1)}
+                      disabled={item.quantity <= 1}
+                      hitSlop={4}
+                      style={[styles.stepperBtn, item.quantity <= 1 && styles.stepperOff]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
+                    >
+                      <Minus size={16} color={colors.text} strokeWidth={2.2} />
+                    </Pressable>
+                    <Text style={styles.stepperValue}>{item.quantity}</Text>
+                    <Pressable
+                      onPress={() => onQuantityChange(item.id, item.quantity + 1)}
+                      hitSlop={4}
+                      style={styles.stepperBtn}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
+                    >
+                      <Plus size={16} color={colors.text} strokeWidth={2.2} />
+                    </Pressable>
+                  </View>
                   <Pressable
-                    onPress={() => onQuantityChange(item.id, item.quantity - 1)}
-                    hitSlop={8}
-                    style={styles.stepperBtn}
+                    onPress={() => onRemove(item.id)}
+                    hitSlop={4}
+                    style={styles.removeBtn}
                     accessibilityRole="button"
-                    accessibilityLabel={t("hub.cart.decrease", { defaultValue: "Decrease quantity" })}
+                    accessibilityLabel={t("hub.cart.remove", { defaultValue: "Remove item" })}
                   >
-                    <Minus size={14} color={colors.text} strokeWidth={2.2} />
-                  </Pressable>
-                  <Text style={styles.stepperValue}>{item.quantity}</Text>
-                  <Pressable
-                    onPress={() => onQuantityChange(item.id, item.quantity + 1)}
-                    hitSlop={8}
-                    style={styles.stepperBtn}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("hub.cart.increase", { defaultValue: "Increase quantity" })}
-                  >
-                    <Plus size={14} color={colors.text} strokeWidth={2.2} />
+                    <Trash2 size={18} color={colors.dangerText} strokeWidth={2} />
                   </Pressable>
                 </View>
-                <Pressable
-                  onPress={() => onRemove(item.id)}
-                  hitSlop={8}
-                  style={styles.removeBtn}
-                  accessibilityRole="button"
-                  accessibilityLabel={t("hub.cart.remove", { defaultValue: "Remove item" })}
-                >
-                  <Trash2 size={16} color={colors.danger} strokeWidth={2} />
-                </Pressable>
               </View>
             </View>
           )
@@ -255,7 +282,9 @@ function HubCartScreen() {
       {unavailableItems.length > 0 ? (
         <Text style={styles.blockedNote}>{t("hub.cart.unavailableNote", { defaultValue: "Remove unavailable items to check out." })}</Text>
       ) : null}
-      <View style={styles.checkoutBtn}>
+    </ScreenScroll>
+    <View style={styles.stickyBar}>
+      <View style={styles.stickyInner}>
         <PrimaryButton
           label={t("hub.cart.checkoutWithTotal", {
             defaultValue: "Checkout · {{total}}",
@@ -265,7 +294,8 @@ function HubCartScreen() {
           disabled={availableItems.length === 0 || unavailableItems.length > 0 || storeClosed}
         />
       </View>
-    </ScreenScroll>
+    </View>
+    </View>
   )
 }
 
@@ -294,7 +324,7 @@ const styles = StyleSheet.create({
   rowTitleOff: { fontSize: 15, fontWeight: "600", color: colors.muted, textDecorationLine: "line-through" },
   minNote: { marginTop: 12, fontSize: 13, color: colors.primaryDeep, textAlign: "center" },
   blockedNote: { marginTop: 12, fontSize: 13, color: colors.warningText, textAlign: "center" },
-  lineTotal: { fontSize: 15, fontWeight: "700", color: colors.text, marginBottom: 6 },
+  lineTotal: { fontSize: 15, fontWeight: "700", color: colors.text, fontVariant: ["tabular-nums"] },
   summary: { marginTop: 16, backgroundColor: colors.surface, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, padding: 16, gap: 8 },
   totalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 },
   totalLabel: { fontSize: 16, fontWeight: "700", color: colors.text },
@@ -313,21 +343,26 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   thumbWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: 10,
+    width: 80,
+    height: 80,
+    borderRadius: radius.control,
     backgroundColor: colors.paper,
     overflow: "hidden",
   },
   thumb: { width: "100%", height: "100%" },
-  rowBody: { flex: 1, minWidth: 0, gap: 2 },
+  rowBody: { flex: 1, minWidth: 0, gap: 4 },
+  rowTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 8 },
+  rowBottom: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 4 },
+  addMoreHit: { minHeight: 44, justifyContent: "center" },
+  stepperOff: { opacity: 0.35 },
+  stickyBar: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
+  stickyInner: { width: "100%", maxWidth: 720, alignSelf: "center" },
   rowTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },
   rowPrice: { fontSize: typeSize.meta, color: colors.muted },
-  rowActions: { alignItems: "flex-end", gap: 8 },
   stepper: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 10,
+    borderRadius: radius.control,
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -335,13 +370,10 @@ const styles = StyleSheet.create({
   stepperValue: { width: 22, textAlign: "center", fontSize: 13, fontWeight: "600", color: colors.text },
   removeBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   subtotalRow: {
-    marginTop: 16,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
+    paddingVertical: 4,
   },
   subtotalLabel: { fontSize: typeSize.body, fontWeight: "500", color: colors.text },
   subtotalValue: { fontSize: 18, fontWeight: "700", color: colors.text },

@@ -207,7 +207,10 @@
       "lockCancel": "保留当前购物车",
       "minOrderMore": "再加 {{more}} 即可配送。起送金额为 {{min}}。",
       "storeClosedNote": "该店铺已打烊，营业前无法结账。",
-      "storePausedNote": "该店铺暂停营业，暂时无法结账。"
+      "storePausedNote": "该店铺暂停营业，暂时无法结账。",
+      "removedItem": "已从购物车移除",
+      "undo": "撤销",
+      "addToCartPrice": "加入购物车 · {{price}}"
     },
     "stock": {
       "onlyLeft": "仅剩 {{n}} 件",
@@ -1264,7 +1267,18 @@
     "edit": "编辑",
     "fromFee": "{{fee}} 起",
     "progressTime": "时间",
-    "storePausedTitle": "该店铺暂停营业"
+    "storePausedTitle": "该店铺暂停营业",
+    "addressRequired": "请填写街道和门牌号，方便配送员找到你。",
+    "contactName": "你的姓名",
+    "contactNameRequired": "请填写此订单的姓名。",
+    "contactPhone": "电话",
+    "contactPhoneRequired": "此订单需要电话号码。",
+    "subtotal": "小计",
+    "orderProgress": "订单进度",
+    "checkingTitle": "正在确认你的付款",
+    "checkingBody": "请勿重复付款，通常需要一分钟。",
+    "completePaymentTitle": "请完成付款",
+    "completePaymentBody": "请在下方支付 {{total}} 以提交订单。"
   },
   "social": {
     "loadFailed": "加载失败，请重试",
@@ -1342,7 +1356,8 @@
       "changeTime": "更改配送时间",
       "allergy": "过敏问题"
     },
-    "openUntil": "与卖家的聊天将开放至 {{date}}。"
+    "openUntil": "与卖家的聊天将开放至 {{date}}。",
+    "unreadDot": "卖家的新消息"
   },
   "reviews": {
     "promptTitle": "为您的订单评分",

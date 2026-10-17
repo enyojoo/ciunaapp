@@ -24,6 +24,7 @@ import {
 import { SvgXml } from "react-native-svg"
 import { Avatar } from "@/components/avatar"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
 import { TransactionTimeline } from "@/components/transaction-timeline"
@@ -876,9 +877,11 @@ export default function OrderScreen() {
     [order, setOrder] = useState<MarketplaceOrder | null>(null),
     [legacy, setLegacy] = useState(false),
     [failed, setFailed] = useState(false),
+    [attempt, setAttempt] = useState(0),
     { t } = useTranslation("app"),
     { isWeb, mode } = useResponsiveLayout()
   useEffect(() => {
+    setFailed(false)
     void fetchWithAuth(`/api/hub/orders/${id}`)
       .then(async (r) => {
         if (r.status === 404) {
@@ -889,7 +892,7 @@ export default function OrderScreen() {
         setOrder((await r.json()).order)
       })
       .catch(() => setFailed(true))
-  }, [id])
+  }, [id, attempt])
   const sidePanel = Boolean(order) && isWeb && mode === "desktop" && chatAvailableFor(order as MarketplaceOrder)
   return order ? (
     sidePanel ? (
@@ -907,8 +910,14 @@ export default function OrderScreen() {
   ) : legacy ? (
     <LegacyOrderScreen />
   ) : (
-    <ScreenScroll>
-      <Text>{t(failed ? "marketplace.retryError" : "marketplace.loading")}</Text>
+    <ScreenScroll edges={["left", "right"]}>
+      {failed ? (
+        <LoadError onRetry={() => setAttempt((n) => n + 1)} />
+      ) : (
+        <View style={styles.center}>
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      )}
     </ScreenScroll>
   )
 }

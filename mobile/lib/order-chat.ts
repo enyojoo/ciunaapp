@@ -47,5 +47,5 @@ export function useChatUnread(orderId?: string | null, enabled = true) {
     }
   }, [enabled, load])
 
-  return { count, unavailable, unread: orderId ? orders[orderId] || 0 : 0, reload: load }
+  return { count, unavailable, unread: orderId ? orders[orderId] || 0 : 0, byOrder: orders, reload: load }
 }

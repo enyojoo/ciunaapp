@@ -207,7 +207,10 @@
       "lockCancel": "Keep current cart",
       "minOrderMore": "Add {{more}} more for delivery. Minimum order is {{min}}.",
       "storeClosedNote": "This store is closed, so checkout is unavailable until it opens.",
-      "storePausedNote": "This store is taking a break, so checkout is unavailable for now."
+      "storePausedNote": "This store is taking a break, so checkout is unavailable for now.",
+      "removedItem": "Removed from cart",
+      "undo": "Undo",
+      "addToCartPrice": "Add to cart · {{price}}"
     },
     "stock": {
       "onlyLeft": "Only {{n}} left",
@@ -1264,7 +1267,18 @@
     "edit": "Edit",
     "fromFee": "From {{fee}}",
     "progressTime": "Time",
-    "storePausedTitle": "This store is taking a break"
+    "storePausedTitle": "This store is taking a break",
+    "addressRequired": "Enter the street and apartment so the courier can find you.",
+    "contactName": "Your name",
+    "contactNameRequired": "Enter the name for this order.",
+    "contactPhone": "Phone",
+    "contactPhoneRequired": "A phone number is needed for this order.",
+    "subtotal": "Subtotal",
+    "orderProgress": "Order progress",
+    "checkingTitle": "We are checking your payment",
+    "checkingBody": "Please do not pay again. This usually takes a minute.",
+    "completePaymentTitle": "Complete your payment",
+    "completePaymentBody": "Pay {{total}} below to place this order."
   },
   "social": {
     "loadFailed": "Couldn't load, try again",
@@ -1342,7 +1356,8 @@
       "changeTime": "Change delivery time",
       "allergy": "Allergy question"
     },
-    "openUntil": "Chat with the seller stays open until {{date}}."
+    "openUntil": "Chat with the seller stays open until {{date}}.",
+    "unreadDot": "New message from the seller"
   },
   "reviews": {
     "promptTitle": "Rate your order",

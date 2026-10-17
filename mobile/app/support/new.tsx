@@ -21,10 +21,10 @@ export default function NewSupportRequestScreen() {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { user } = useAuth()
-  const params = useLocalSearchParams<{ topic?: string; subject?: string }>()
+  const params = useLocalSearchParams<{ topic?: string; subject?: string; orderId?: string }>()
   const startTopic = (TOPICS as readonly string[]).includes(String(params.topic)) ? (params.topic as (typeof TOPICS)[number]) : "order"
   const [topic, setTopic] = useState<(typeof TOPICS)[number]>(startTopic)
-  const [orderId, setOrderId] = useState("")
+  const [orderId, setOrderId] = useState(/^[0-9a-f-]{36}$/i.test(String(params.orderId || "")) ? String(params.orderId) : "")
   const [subject, setSubject] = useState(String(params.subject || "").slice(0, 120))
   const [body, setBody] = useState("")
   const [error, setError] = useState<string | null>(null)

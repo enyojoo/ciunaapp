@@ -207,7 +207,10 @@
       "lockCancel": "Mantener el carrito actual",
       "minOrderMore": "Añade {{more}} más para la entrega. El pedido mínimo es {{min}}.",
       "storeClosedNote": "Esta tienda está cerrada, así que no puedes pagar hasta que abra.",
-      "storePausedNote": "Esta tienda está en pausa, así que no puedes pagar por ahora."
+      "storePausedNote": "Esta tienda está en pausa, así que no puedes pagar por ahora.",
+      "removedItem": "Quitado del carrito",
+      "undo": "Deshacer",
+      "addToCartPrice": "Añadir al carrito · {{price}}"
     },
     "stock": {
       "onlyLeft": "Solo quedan {{n}}",
@@ -1264,7 +1267,18 @@
     "edit": "Editar",
     "fromFee": "Desde {{fee}}",
     "progressTime": "Hora",
-    "storePausedTitle": "Esta tienda está en pausa"
+    "storePausedTitle": "Esta tienda está en pausa",
+    "addressRequired": "Indica la calle y el piso para que el repartidor te encuentre.",
+    "contactName": "Tu nombre",
+    "contactNameRequired": "Indica el nombre para este pedido.",
+    "contactPhone": "Teléfono",
+    "contactPhoneRequired": "Se necesita un teléfono para este pedido.",
+    "subtotal": "Subtotal",
+    "orderProgress": "Progreso del pedido",
+    "checkingTitle": "Estamos comprobando tu pago",
+    "checkingBody": "Por favor, no pagues de nuevo. Suele tardar un minuto.",
+    "completePaymentTitle": "Completa tu pago",
+    "completePaymentBody": "Paga {{total}} abajo para hacer este pedido."
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",
@@ -1342,7 +1356,8 @@
       "changeTime": "Cambiar la hora de entrega",
       "allergy": "Pregunta sobre alergias"
     },
-    "openUntil": "El chat con el vendedor sigue abierto hasta el {{date}}."
+    "openUntil": "El chat con el vendedor sigue abierto hasta el {{date}}.",
+    "unreadDot": "Mensaje nuevo del vendedor"
   },
   "reviews": {
     "promptTitle": "Valora tu pedido",
