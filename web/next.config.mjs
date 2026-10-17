@@ -88,8 +88,6 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: "/orders", destination: "/transactions", permanent: true },
-      { source: "/orders/", destination: "/transactions", permanent: true },
       /** Legacy transaction detail URL; detail UI lives under `/hub/orders/[id]` only. */
       { source: "/send/:id", destination: "/hub/orders/:id", permanent: true },
       /** Food/Mart moved off `/hub/{slug}` to `/{slug}`. */

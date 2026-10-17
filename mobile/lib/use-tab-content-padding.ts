@@ -4,8 +4,7 @@ function pathnameShowsTabBar(pathname: string): boolean {
   return (
     pathname === "/hub" ||
     pathname.startsWith("/hub/") ||
-    pathname === "/transactions" ||
-    pathname.startsWith("/transactions/") ||
+    pathname === "/activities" ||
     pathname === "/more" ||
     pathname.startsWith("/more/")
   )

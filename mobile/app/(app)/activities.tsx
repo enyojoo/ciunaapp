@@ -42,6 +42,8 @@ import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 import { seedTransactionCache } from "@/lib/use-transaction"
 import { useChatUnread } from "@/lib/order-chat"
+import { OrdersDesktop } from "@/components/activity-desktop"
+import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { colors, radius, type as typeSize } from "@/lib/theme"
 import type { CombinedTransaction } from "@/lib/types"
 
@@ -109,6 +111,8 @@ export default function TransactionsScreen() {
   const { t, i18n } = useTranslation("app")
   const locale = i18n.resolvedLanguage || i18n.language || "en"
   const router = useRouter()
+  const { isWeb, mode } = useResponsiveLayout()
+  const desktop = isWeb && mode === "desktop"
   const { user } = useAuth()
   const chat = useChatUnread(null, Boolean(user))
   const [chip, setChip] = useState<FilterChip>("all")
@@ -149,6 +153,43 @@ export default function TransactionsScreen() {
   )
   const groups = useMemo(() => groupByDay(filtered, t, locale), [filtered, t, locale])
 
+  if (desktop) {
+    const kindLabel = (x: CombinedTransaction) => {
+      const k = transactionListLineIconKind(resolveTransactionListLine({ type: x.type, transaction_source: x.transaction_source, reference: x.reference }, x.hub_product_category, x.hub_snapshot))
+      return t(k === "referral" ? "orders.chipPayout" : k === "experts" ? "orders.chipBookings" : k === "hub_food" || k === "hub_mart" ? "orders.chipHub" : "orders.chipSend")
+    }
+    return (
+      <Screen>
+        <OrdersDesktop
+          chips={CHIPS}
+          chip={chip}
+          onChip={setChip}
+          query={query}
+          onQuery={setQuery}
+          groups={groups}
+          total={rows.length}
+          loading={loading}
+          error={Boolean(tx.error)}
+          offline={Boolean(tx.error) && rows.length > 0}
+          volume={volume ? formatMoney(volume.amount, volume.currency) : "—"}
+          completed={completedCount}
+          locale={locale}
+          onRetry={revalidateAll}
+          onOpen={(x) => router.push(`/orders/${String(x.transaction_id).toLowerCase()}` as never)}
+          onSupport={() => router.push("/support" as never)}
+          onClear={() => {
+            setQuery("")
+            setChip("all")
+          }}
+          nameOf={(x) => counterparty(x, t)}
+          lineOf={kindLabel}
+          icon={(x) => <RowIcon tx={x} />}
+          unread={(x) => Boolean(x.marketplace_order && chat.byOrder[x.marketplace_order.id] > 0)}
+        />
+      </Screen>
+    )
+  }
+
   return (
     <Screen>
       <Text style={styles.title}>{t("transactions.title", { defaultValue: "Activities" })}</Text>
@@ -179,7 +220,7 @@ export default function TransactionsScreen() {
           onChangeText={setQuery}
           onFocus={searchFocus.onFocus}
           onBlur={searchFocus.onBlur}
-          placeholder={t("orders.searchPlaceholder", { defaultValue: "Search transactions..." })}
+          placeholder={t("orders.searchPlaceholder", { defaultValue: "Search orders..." })}
           placeholderTextColor={colors.subtle}
           style={styles.searchInput}
         />
@@ -224,14 +265,14 @@ export default function TransactionsScreen() {
 
         {!loading && !tx.error && rows.length === 0 ? (
           <EmptyState
-            title={t("transactions.empty", { defaultValue: "No transactions found" })}
+            title={t("transactions.empty", { defaultValue: "No orders found" })}
             body={t("transactions.emptyHint", { defaultValue: "Start by sending your first transfer" })}
           />
         ) : null}
 
         {!loading && rows.length > 0 && filtered.length === 0 ? (
           <EmptyState
-            title={t("transactions.noSearchResults", { defaultValue: "No transactions match your search" })}
+            title={t("transactions.noSearchResults", { defaultValue: "No orders match your search" })}
             body={t("transactions.adjustSearch", { defaultValue: "Try adjusting your search terms" })}
           />
         ) : null}

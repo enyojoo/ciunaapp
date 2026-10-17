@@ -92,9 +92,9 @@ export default function AppTabs() {
         }}
       />
       <Tabs.Screen
-        name="transactions"
+        name="activities"
         options={{
-          title: t("nav.orders", { defaultValue: "Orders" }),
+          title: t("nav.activities", { defaultValue: "Activities" }),
           tabBarBadge: chatUnread.count > 0 ? (chatUnread.count > 9 ? "9+" : chatUnread.count) : undefined,
           tabBarIcon: ({ color }) => <History size={TAB_BAR_ICON_SIZE} color={color} strokeWidth={2} />,
         }}

@@ -780,6 +780,15 @@
    "readme": true
   },
   {
+   "name": "CustomerActivityWeb",
+   "group": "Customer app · Screens",
+   "subtitle": "Desktop web Activities: table of transfers, orders and bookings grouped by day, search, filters and a totals aside, plus first use, no match and error",
+   "height": 2900,
+   "width": 1240,
+   "page": true,
+   "readme": true
+  },
+  {
    "name": "CustomerTransferDetail",
    "group": "Customer app · Screens",
    "subtitle": "One transfer in full: awaiting payment, sending, delivered with amounts, recipient, method and reference, failed with refund, refunded, cancelled and Russian",

@@ -36,7 +36,7 @@ export function UserDashboardLayout({ children }: UserDashboardLayoutProps) {
   const baseNavigation = useMemo(
     () => [
       { name: t("nav.hub"), href: "/hub", icon: Home },
-      { name: t("nav.transactions"), href: "/transactions", icon: History },
+      { name: t("nav.activities"), href: "/activities", icon: History },
       { name: t("nav.more"), href: "/more", icon: LayoutDashboard },
     ],
     [t],
@@ -45,7 +45,7 @@ export function UserDashboardLayout({ children }: UserDashboardLayoutProps) {
   const bottomNavItems = useMemo(
     () => [
       { name: t("nav.hub"), href: "/hub", icon: Home },
-      { name: t("nav.transactions"), href: "/transactions", icon: History },
+      { name: t("nav.activities"), href: "/activities", icon: History },
       { name: t("nav.more"), href: "/more", icon: LayoutDashboard },
     ],
     [t],
@@ -92,8 +92,8 @@ export function UserDashboardLayout({ children }: UserDashboardLayoutProps) {
                     Boolean(pathname?.startsWith("/mart/")) ||
                     pathname === "/experts" ||
                     Boolean(pathname?.startsWith("/experts/"))
-                  : item.href === "/transactions"
-                    ? pathname === "/transactions" || Boolean(pathname?.startsWith("/transactions/"))
+                  : item.href === "/activities"
+                    ? pathname === "/activities" || Boolean(pathname?.startsWith("/activities/"))
                     : pathname === item.href
               return (
                 <Link
@@ -171,8 +171,8 @@ export function UserDashboardLayout({ children }: UserDashboardLayoutProps) {
                     Boolean(pathname?.startsWith("/mart/")) ||
                     pathname === "/experts" ||
                     Boolean(pathname?.startsWith("/experts/"))
-                  : item.href === "/transactions"
-                    ? pathname === "/transactions" || Boolean(pathname?.startsWith("/transactions/"))
+                  : item.href === "/activities"
+                    ? pathname === "/activities" || Boolean(pathname?.startsWith("/activities/"))
                     : item.href === "/more"
                       ? pathname === "/more" || Boolean(pathname?.startsWith("/more/"))
                       : pathname === item.href

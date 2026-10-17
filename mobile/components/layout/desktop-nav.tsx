@@ -9,7 +9,7 @@ import { colors, shadow } from "@/lib/theme"
 
 const NAV = [
   { id: "home", href: "/(app)/hub" as Href, match: ["/hub", "/food", "/mart", "/experts", "/send"] },
-  { id: "transactions", href: "/transactions" as Href, match: ["/transactions", "/orders"] },
+  { id: "activities", href: "/activities" as Href, match: ["/activities", "/orders"] },
   { id: "more", href: "/more" as Href, match: ["/more", "/profile", "/verification", "/referrals", "/support", "/recipients"] },
 ] as const
 
@@ -26,7 +26,7 @@ export function DesktopNav() {
 
   const items = [
     { ...NAV[0], label: t("nav.home", { defaultValue: "Home" }), icon: Home },
-    { ...NAV[1], label: t("nav.transactions", { defaultValue: "Activities" }), icon: History },
+    { ...NAV[1], label: t("nav.activities", { defaultValue: "Activities" }), icon: History },
     { ...NAV[2], label: t("nav.more", { defaultValue: "More" }), icon: Grip },
   ]
 

@@ -3,7 +3,7 @@ import { TAB_BAR_CONTENT_HEIGHT } from "@/lib/layout-metrics"
 
 const TAB_BAR_PADDING_TOP = 8
 
-const MAIN_TAB_SEGMENTS = new Set(["hub", "transactions", "more"])
+const MAIN_TAB_SEGMENTS = new Set(["hub", "activities", "more"])
 
 export function isMainTabSegment(segment: string | undefined): boolean {
   return segment != null && MAIN_TAB_SEGMENTS.has(segment)

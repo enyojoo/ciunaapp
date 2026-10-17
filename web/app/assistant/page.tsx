@@ -139,7 +139,7 @@ export default function AssistantPage() {
         }),
       })
       if (!res.ok) throw new Error("submit")
-      router.replace("/transactions")
+      router.replace("/activities")
     } catch {
       window.alert(t("assistant.submitFailed"))
     } finally {

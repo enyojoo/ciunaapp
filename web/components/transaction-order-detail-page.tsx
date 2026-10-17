@@ -669,7 +669,7 @@ function TransactionOrderDetailPage() {
   if (hasAttemptedLoad && (error || !transaction)) {
     return (
       <div className="min-w-0 space-y-0">
-        <AppPageHeader title={t("txDetail.transaction")} backHref="/transactions" />
+        <AppPageHeader title={t("txDetail.transaction")} backHref="/activities" />
         <div className="min-w-0 px-4 py-5 sm:p-6">
           <div className="mx-auto max-w-6xl">
             <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
@@ -697,7 +697,7 @@ function TransactionOrderDetailPage() {
   if (!transaction && (authLoading || !hasAttemptedLoad)) {
     return (
       <div className="min-w-0 space-y-0">
-        <AppPageHeader title={t("txDetail.transaction")} backHref="/transactions" />
+        <AppPageHeader title={t("txDetail.transaction")} backHref="/activities" />
         <div className="min-w-0 px-4 py-5 sm:p-6">
           <TransactionDetailsSkeleton />
         </div>
@@ -726,7 +726,7 @@ function TransactionOrderDetailPage() {
               ? t("hub.checkout.orderSummary", { defaultValue: "Order summary" })
               : t("txDetail.transfer")
         }
-        backHref={isReferralPayout ? "/more/referrals" : "/transactions"}
+        backHref={isReferralPayout ? "/more/referrals" : "/activities"}
       />
     <div className="min-w-0 px-4 py-5 sm:p-6">
         <div className="mx-auto max-w-6xl">

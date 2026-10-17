@@ -152,3 +152,4 @@ The customer app (Expo `mobile/` and `web/`) is to match `design-system/` and is
 - **Expert times (2026-10-19):** with no open times the profile offers Notify me; the customer gets one push when times appear.
 - **Quiet hours (2026-10-19):** optional window (default 22:00 to 07:00) in the customer's own time zone during which pushes are held.
 - **Store delivery line (2026-10-19):** the store header shows the cheapest delivery fee and the delivery time range, or "Pickup only".
+- **Activities (decided 2026-10-19):** the customer list of transfers, orders, bookings and payouts is called Activities everywhere (tab, page title, `/activities`; desktop card CustomerActivityWeb). "Orders" stays as a filter chip and for single orders (`/orders/[id]`). No redirects from `/orders` or `/transactions`. "Hub" is not shown to customers.

@@ -29,7 +29,7 @@ function AdminAccessDeniedScreen() {
   )
 }
 
-const PROTECTED_PATHS = ["/hub", "/send", "/transactions", "/assistant", "/recipients", "/more", "/support"]
+const PROTECTED_PATHS = ["/hub", "/send", "/activities", "/assistant", "/recipients", "/more", "/support"]
 
 /** Published expert profile at `/experts/[slug]` (browse without login; UUID in the path still works). */
 function isPublicExpertProfilePathname(pathname: string): boolean {
