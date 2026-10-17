@@ -188,5 +188,11 @@
       "body": "Hola {{firstName}}, tu solicitud de pago de referidos de {{amount}} {{currency}} para {{recipientName}} ha sido cancelada. Esos fondos siguen en tu saldo de referidos disponible. Si no lo esperabas, contacta con soporte.",
       "cta": "Abrir referidos"
     }
+  },
+  "push": {
+    "supportReply": {
+      "title": "Soporte respondió",
+      "body": "Nueva respuesta en «{{subject}}»."
+    }
   }
 }

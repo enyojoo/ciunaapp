@@ -188,5 +188,11 @@
       "body": "Bonjour {{firstName}}, votre demande de paiement de parrainage de {{amount}} {{currency}} vers {{recipientName}} a été annulée. Ces fonds restent disponibles dans votre solde de parrainage. Si cela n'est pas attendu, contactez le support.",
       "cta": "Ouvrir les parrainages"
     }
+  },
+  "push": {
+    "supportReply": {
+      "title": "L’assistance a répondu",
+      "body": "Nouvelle réponse à « {{subject}} »."
+    }
   }
 }

@@ -188,5 +188,11 @@
       "body": "Olá, {{firstName}}! Sua solicitação de repasse de {{amount}} {{currency}} para {{recipientName}} foi cancelada. Esses valores continuam no seu saldo de indicações disponível. Se você não esperava isso, fale com o suporte.",
       "cta": "Abrir indicações"
     }
+  },
+  "push": {
+    "supportReply": {
+      "title": "O suporte respondeu",
+      "body": "Nova resposta em “{{subject}}”."
+    }
   }
 }

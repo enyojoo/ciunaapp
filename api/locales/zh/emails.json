@@ -188,5 +188,11 @@
       "body": "您好，{{firstName}}，您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请已取消。这些资金仍保留在您可用的推荐余额中。如果您并未预期此结果，请联系客服。",
       "cta": "打开推荐"
     }
+  },
+  "push": {
+    "supportReply": {
+      "title": "客服已回复",
+      "body": "“{{subject}}”有新回复。"
+    }
   }
 }

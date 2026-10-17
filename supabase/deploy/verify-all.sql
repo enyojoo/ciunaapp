@@ -43,6 +43,9 @@ with checks as (
   select 'send-limits.sql', 'table send_limits', to_regclass('public.send_limits') is not null
   union all
   select 'send-limits.sql', 'function send_usage', exists (select 1 from pg_proc where proname = 'send_usage')
+  union all
+  -- 8. push-tokens.sql
+  select 'push-tokens.sql', 'table push_tokens', to_regclass('public.push_tokens') is not null
 )
 select file, what, ok from checks order by ok, file, what;
 

@@ -188,5 +188,11 @@
       "body": "Hi {{firstName}}, your referral payout request for {{amount}} {{currency}} to {{recipientName}} has been cancelled. Those funds remain in your available referral balance. If you did not expect this, contact support.",
       "cta": "Open referrals"
     }
+  },
+  "push": {
+    "supportReply": {
+      "title": "Support replied",
+      "body": "New reply on “{{subject}}”."
+    }
   }
 }
