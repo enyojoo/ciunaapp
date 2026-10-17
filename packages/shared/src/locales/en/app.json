@@ -409,7 +409,7 @@
   },
   "orders": {
     "title": "Transfer",
-    "totalVolume": "Total volume",
+    "totalVolume": "Total spent",
     "totalTransactions": "Completed",
     "rowSentTo": "Sent to {{name}}",
     "rowHubOrder": "Hub order",
