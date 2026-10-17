@@ -1,7 +1,7 @@
-import type { ReactNode } from "react"
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { useEffect, type ReactNode } from "react"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useTranslation } from "react-i18next"
-import { Check } from "lucide-react-native"
+import { Check, X } from "lucide-react-native"
 import { formatExchangeRateDisplay } from "@ciuna/shared"
 import { InlineSkeleton } from "@/components/inline-skeleton"
 import { formatMoney } from "@/lib/money"
@@ -161,4 +161,42 @@ const styles = StyleSheet.create({
   barFull: { backgroundColor: colors.danger },
   linkHit: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start" },
   link: { fontSize: typeSize.meta, fontWeight: "700", color: colors.primaryText, textDecorationLine: "underline" },
+})
+
+/** A 460px panel over a scrim (desktop web). Escape and the close button close it; the step keeps its data. */
+export function SidePanel({ open, title, closeLabel, onClose, children }: { open: boolean; title: string; closeLabel: string; onClose: () => void; children: ReactNode }) {
+  useEffect(() => {
+    if (!open || typeof window === "undefined") return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [open, onClose])
+  if (!open) return null
+  return (
+    <View style={panelStyles.root} pointerEvents="box-none">
+      <Pressable style={panelStyles.scrim} onPress={onClose} accessibilityLabel={closeLabel} />
+      <View style={panelStyles.panel} accessibilityViewIsModal>
+        <View style={panelStyles.head}>
+          <Text style={panelStyles.title} accessibilityRole="header">{title}</Text>
+          <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel={closeLabel} hitSlop={8} style={panelStyles.close}>
+            <X size={20} color={colors.text} />
+          </Pressable>
+        </View>
+        <ScrollView contentContainerStyle={panelStyles.body}>{children}</ScrollView>
+      </View>
+    </View>
+  )
+}
+
+const panelStyles = StyleSheet.create({
+  // Desktop web only: fixed to the window so the panel covers the whole page, not just the content column.
+  root: { position: "fixed" as unknown as "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, flexDirection: "row", justifyContent: "flex-end" },
+  scrim: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(17,24,39,0.45)" },
+  panel: { width: 460, maxWidth: "100%", height: "100%", backgroundColor: colors.paper, borderLeftWidth: 1, borderLeftColor: colors.border },
+  head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 16, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.surface },
+  title: { fontSize: 18, fontWeight: "700", color: colors.text },
+  close: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
+  body: { padding: 16, gap: 12 },
 })

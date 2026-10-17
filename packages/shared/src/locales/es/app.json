@@ -632,7 +632,10 @@
       "sent": "Envías",
       "fee": "Comisión",
       "gets": "El destinatario recibe",
-      "total": "Total a pagar"
+      "total": "Total a pagar",
+      "noRecipient": "Aún no has elegido destinatario.",
+      "choose": "Elegir destinatario",
+      "use": "Usar a {{name}}"
     }
   },
   "recipients": {
@@ -1564,7 +1567,8 @@
     "edit": "Editar",
     "delete": "Eliminar",
     "copy": "Copiar enlace",
-    "open": "Abrir"
+    "open": "Abrir",
+    "close": "Cerrar"
   },
   "transferDetail": {
     "headline": {

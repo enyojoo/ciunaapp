@@ -731,7 +731,10 @@
       "sent": "你发送",
       "fee": "手续费",
       "gets": "收款人收到",
-      "total": "应付总额"
+      "total": "应付总额",
+      "noRecipient": "尚未选择收款人。",
+      "choose": "选择收款人",
+      "use": "使用 {{name}}"
     }
   },
   "recipients": {
@@ -1564,7 +1567,8 @@
     "edit": "编辑",
     "delete": "删除",
     "copy": "复制链接",
-    "open": "打开"
+    "open": "打开",
+    "close": "关闭"
   },
   "transferDetail": {
     "headline": {

@@ -632,7 +632,10 @@
       "sent": "Vous envoyez",
       "fee": "Frais de traitement",
       "gets": "Le bénéficiaire reçoit",
-      "total": "Total à payer"
+      "total": "Total à payer",
+      "noRecipient": "Aucun bénéficiaire choisi.",
+      "choose": "Choisir un bénéficiaire",
+      "use": "Utiliser {{name}}"
     }
   },
   "recipients": {
@@ -1564,7 +1567,8 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "copy": "Copier le lien",
-    "open": "Ouvrir"
+    "open": "Ouvrir",
+    "close": "Fermer"
   },
   "transferDetail": {
     "headline": {

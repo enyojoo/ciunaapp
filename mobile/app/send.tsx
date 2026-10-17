@@ -4,7 +4,8 @@ import { checkAmount, limitRange, type CurrentLimit } from "@/lib/limit-check"
 import { authJson } from "@/lib/social-api"
 import { useCachedQuery } from "@/lib/use-cached-query"
 import { formatMoney as formatMoneyText, formatCardPrice } from "@/lib/money"
-import { SendDesktopFrame, SendQuoteAside, SendStepper } from "@/components/send/send-desktop"
+import { SendDesktopFrame, SendQuoteAside, SendStepper, SidePanel } from "@/components/send/send-desktop"
+import { maskAccount } from "@/lib/mask-account"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native"
 import { useRouter, useLocalSearchParams } from "expo-router"
@@ -64,6 +65,7 @@ export default function SendScreen() {
   const { user, profile } = useAuth()
   const { isWeb, mode } = useResponsiveLayout()
   const desktop = isWeb && mode === "desktop"
+  const [panelOpen, setPanelOpen] = useState(false)
   const { data: eligibility } = useBitbankerEligibility(user?.id)
   const params = useLocalSearchParams<{ from?: string; to?: string; amount?: string; recipient?: string }>()
   const [step, setStep] = useState<SendFlowStep>("amount")
@@ -372,6 +374,32 @@ export default function SendScreen() {
 
       {step === "recipient" ? (
         <>
+          {desktop ? (
+            <View style={styles.recipientPick}>
+              <Text style={styles.recipientPickTitle}>{t("send.mobile.recipientHeadline", { defaultValue: "Who receives it?" })}</Text>
+              <View style={styles.recipientPickCard}>
+                <View style={styles.recipientPickBody}>
+                  <Text style={styles.recipientPickLabel}>{t("send.recipientLabel", { defaultValue: "Recipient" })}</Text>
+                  <Text style={styles.recipientPickName}>{selected ? selected.full_name : t("send.aside.noRecipient", { defaultValue: "No recipient chosen yet." })}</Text>
+                  {selected ? <Text style={styles.recipientPickMeta}>{[selected.bank_name, maskAccount(selected.account_number)].filter(Boolean).join(" · ")}</Text> : null}
+                </View>
+                <PrimaryButton label={selected ? t("send.change", { defaultValue: "Change" }) : t("send.aside.choose", { defaultValue: "Choose recipient" })} variant="secondary" onPress={() => setPanelOpen(true)} />
+              </View>
+            </View>
+          ) : null}
+          {desktop ? (
+            <SidePanel open={panelOpen} title={t("send.aside.choose", { defaultValue: "Choose recipient" })} closeLabel={t("a11y.close", { defaultValue: "Close" })} onClose={() => setPanelOpen(false)}>
+              <SendRecipientStep
+                receiveCurrency={receiveCurrency}
+                currencies={currencies}
+                recipients={recipients}
+                recipientId={recipientId}
+                onSelectRecipient={setRecipientId}
+                onRecipientCreated={(rec) => mutateRecipients((prev) => [rec, ...(prev || [])])}
+              />
+              <PrimaryButton label={selected ? t("send.aside.use", { name: selected.full_name, defaultValue: "Use {{name}}" }) : t("send.aside.choose", { defaultValue: "Choose recipient" })} disabled={!recipientId} onPress={() => setPanelOpen(false)} />
+            </SidePanel>
+          ) : (
           <SendRecipientStep
             receiveCurrency={receiveCurrency}
             currencies={currencies}
@@ -380,6 +408,7 @@ export default function SendScreen() {
             onSelectRecipient={setRecipientId}
             onRecipientCreated={(rec) => mutateRecipients((prev) => [rec, ...(prev || [])])}
           />
+          )}
           <View style={styles.footer}>
             <PrimaryButton label={t("send.continue")} onPress={() => setStep("pay")} disabled={!canRecipient} />
             <PrimaryButton label={t("send.back")} variant="ghost" onPress={() => setStep("amount")} />
@@ -428,6 +457,13 @@ function FrameIf({ desktop, aside, children }: { desktop: boolean; aside: React.
 
 const styles = StyleSheet.create({
   sendLoading: { paddingVertical: 48, alignItems: "center" },
+  recipientPick: { gap: 12 },
+  recipientPickTitle: { fontSize: 22, fontWeight: "700", color: colors.text, letterSpacing: -0.3 },
+  recipientPickCard: { gap: 16, padding: 16, borderRadius: radius.card, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
+  recipientPickBody: { gap: 2 },
+  recipientPickLabel: { fontSize: 12, fontWeight: "600", color: colors.muted },
+  recipientPickName: { fontSize: 18, fontWeight: "700", color: colors.text },
+  recipientPickMeta: { fontSize: 13, color: colors.muted },
   verifyBanner: {
     flexDirection: "row",
     alignItems: "center",

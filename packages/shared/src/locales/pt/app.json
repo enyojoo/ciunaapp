@@ -731,7 +731,10 @@
       "sent": "Você envia",
       "fee": "Taxa de processamento",
       "gets": "O destinatário recebe",
-      "total": "Total a pagar"
+      "total": "Total a pagar",
+      "noRecipient": "Nenhum destinatário escolhido.",
+      "choose": "Escolher destinatário",
+      "use": "Usar {{name}}"
     }
   },
   "recipients": {
@@ -1564,7 +1567,8 @@
     "edit": "Editar",
     "delete": "Excluir",
     "copy": "Copiar link",
-    "open": "Abrir"
+    "open": "Abrir",
+    "close": "Fechar"
   },
   "transferDetail": {
     "headline": {

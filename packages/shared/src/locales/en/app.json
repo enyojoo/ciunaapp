@@ -731,7 +731,10 @@
       "sent": "You send",
       "fee": "Processing fee",
       "gets": "Recipient gets",
-      "total": "Total to pay"
+      "total": "Total to pay",
+      "noRecipient": "No recipient chosen yet.",
+      "choose": "Choose recipient",
+      "use": "Use {{name}}"
     }
   },
   "recipients": {
@@ -1564,7 +1567,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "copy": "Copy link",
-    "open": "Open"
+    "open": "Open",
+    "close": "Close"
   },
   "transferDetail": {
     "headline": {
