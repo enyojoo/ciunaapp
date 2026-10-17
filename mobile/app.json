@@ -89,7 +89,7 @@
     },
     "extra": {
       "router": {
-        "origin": "https://m.ciuna.com"
+        "origin": "https://app.ciuna.com"
       },
       "eas": {
         "projectId": "e69a5841-a05d-4c20-a572-3b1c0c8f3a2d"
