@@ -32,3 +32,6 @@ Still to do: the status header (icon, badge, next time), a delivery or pickup ca
 
 ## Code
 `mobile/app/orders/[id].tsx`, `web/components/hub/marketplace-order.tsx`
+
+## As built (2026-10-19)
+Status header, place card, per-step times from the order events, the desktop chat panel beside the order, payment banners (Complete your payment, Checking your payment), the session card with the meeting link for bookings, and Contact support opening a pre-filled request are built. The raw event list was removed.

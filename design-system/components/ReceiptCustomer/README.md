@@ -23,3 +23,6 @@ Built as a receipt screen: `mobile/app/receipt/[kind]/[id].tsx` for a paid order
 
 ## Code
 To be built with the customer order detail (`app/` order screens) and a PDF route in `api/`.
+
+## As built (2026-10-19)
+The PDF is built (expo-print and expo-sharing; the web opens the print dialog). Dates carry their time zone; a refunded receipt is grey and drops the rate rows.

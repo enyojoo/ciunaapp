@@ -87,3 +87,17 @@ Phase A first (it changes every screen), then C (money paths), B, D, E. Phases B
 ## Housekeeping found by the audits
 - Stale READMEs: StorePage (Share built), OrderTracking (status header, place card, times, desktop chat panel built), receipts (PDF built); the reconciliation note saying search highlighting is not built.
 - `As built` screenshots exist for five cards; the HTML previews of those cards remain the earlier layout.
+
+## Status (2026-10-19, end of the build session)
+
+**Built and committed:** Phase A (tokens replace 127 hard-coded colours; ink toast one at a time with foreground push in the app; form edges on `input-edge`; web focus ring and reduced motion; status chip with icons and a refunded state; 12px text minimum; 44px targets; labels on icon buttons; shared load-error states on Home, Food, Mart, store, product, cart, order, recipients, referrals, slots). Phase C (transfer detail rebuilt from its card with a four-step timeline, time zones, fee percent, masked recipient, payment reference, Report a problem, pinned actions; limit range and inline limit errors in Send, verification as a step, "Pay ₽X" button; receipts with time zones and refunded handling; recipients tappable and masked; verification hub with document status and monthly limit; transfer events table and trigger giving real times; transfer notifications). Phase B (cart rebuilt with undo and sticky checkout; product page fixes; checkout contact fields, address error, clean fee rows; order payment banners and support link; orange cart bar; Activity signs, status chip and unread dot). Phase D (password rules and inline errors; PIN keypad with round keys, biometric key and name on unlock; Security screen with PIN on or off and biometric switch; idle re-lock after 60 seconds; neutral More tiles and KYC states; Profile delete link and phone check; Referrals retry, paused state, inline errors and reward date; expert profile skeleton, share and initial; booking returns to the time picker when a slot is taken, notes counter; session card with meeting link and Join). Phase E (transfer pushes, booking reminder push, Transfers switch).
+
+**Not built (decisions or larger projects, listed so nothing is silently dropped):**
+- Guided KYC capture (camera, quality feedback, multi-file submissions, templated rejection reasons): the app uses the hosted verification flow today. Needs an owner decision on replacing it.
+- Payment-waiting screen for Send with deadline, rate lock and Cancel transfer: needs payment expiry and a cancel endpoint in the payment layer.
+- Desktop Send layout (stepper, persistent quote aside, side panels) and the top navigation: sidebar kept by decision.
+- Experts directory as list rows, cuisine and tag chips, Office-managed Home slides, support attachments: kept as decided.
+- Quiet hours and notification action buttons; "Notify me" when an expert has no slots; delivery fee and time on the store header; vendor rating and city on the product page; payment method name and item photos on orders; Mart "no stores deliver here" state.
+- Guest-style items cut in the plan: Popular near you, translation hint.
+
+**Owner actions after this session:** run `account-deletion.sql`, `push-preferences.sql`, `store-pause.sql`, `transfer-events.sql`, `booking-reminders.sql` (RUN-ORDER #9 to #13), then `verify-all.sql`; check `CRON_SECRET` is set (account-purge and order-notifications jobs); make a new EAS build.

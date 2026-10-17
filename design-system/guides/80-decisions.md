@@ -142,3 +142,8 @@ The customer app (Expo `mobile/` and `web/`) is to match `design-system/` and is
 - **Receipts (2026-10-18):** PDF through `expo-print` and `expo-sharing` (Expo-maintained); no third-party PDF library.
 - **Cut for v1 (2026-10-18):** seller rating on the order, chat response-time line, Popular near you, translation hint, delivery fee and minimum per area (minimum stays per store).
 - **Customer web (2026-10-18):** the customer web is Expo web. The Next `web/` app is not ported to the customer redesign.
+
+- **Transfer history (2026-10-19):** every transfer status change is recorded with its time (`transfer_events`); the transfer screen shows those times with their time zone, and the customer is notified on payment received, delivered, failed and refunded (at most four per transfer), switchable under Notifications.
+- **Booking reminder (2026-10-19):** one push about an hour before each confirmed booking. The meeting link the expert adds shows on the order with a Join button.
+- **Security (2026-10-19):** the PIN is switched on or off in More > Security; the app asks for it again after 60 seconds in the background; biometric unlock is a switch next to it.
+- **Passwords (2026-10-19):** at least 8 characters on sign-up, with the rule shown live.

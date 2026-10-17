@@ -45,7 +45,7 @@ export function LanguagePicker({ last }: { last?: boolean }) {
     <>
       <Pressable onPress={() => setOpen(true)} style={[styles.row, !last && styles.border]}>
         <View style={styles.icon}>
-          <Globe size={16} color={colors.primaryDeep} strokeWidth={2.2} />
+          <Globe size={16} color={colors.neutralText} strokeWidth={2.2} />
         </View>
         <Text style={styles.label}>{t("app.language", { defaultValue: "Language" })}</Text>
         <View style={styles.trail}>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.heroBody,
+    backgroundColor: colors.neutralSurface,
   },
   label: { flex: 1, fontSize: typeSize.body, color: colors.text },
   trail: {

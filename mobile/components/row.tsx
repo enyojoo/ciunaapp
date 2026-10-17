@@ -25,7 +25,7 @@ export function Row({
       style={[styles.row, !last && styles.border]}
     >
       {icon ? <View style={styles.icon}>{icon}</View> : null}
-      <Text style={[styles.label, danger && styles.labelDanger]} numberOfLines={1}>
+      <Text style={[styles.label, danger && styles.labelDanger]} numberOfLines={2}>
         {label}
       </Text>
       <View style={styles.trail}>

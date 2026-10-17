@@ -17,3 +17,6 @@ Built in `mobile/app/orders/[id].tsx`: status, timeline, recipient, amounts, Rep
 
 ## Code
 `mobile/app/orders/[id].tsx`, `mobile/components/transaction-timeline.tsx`
+
+## As built (2026-10-19)
+Built in `mobile/components/transfer-detail.tsx`: status icon and badge, headline for what happened to the money, four-step timeline with times and zones (from transfer events), amounts with fee percent, masked recipient, payment reference that copies on tap, Report a problem (opens a support request with the transfer in the subject), pinned Share receipt and Repeat transfer, and the failed, refunded and cancelled states. Not built: Cancel transfer and Show QR code while waiting (need payment expiry and a cancel endpoint).

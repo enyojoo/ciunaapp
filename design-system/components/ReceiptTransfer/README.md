@@ -17,3 +17,6 @@ Built as the same receipt screen for a completed or refunded transfer, opened fr
 
 ## Code
 `api/app/api/receipts/documents/route.ts` (proof files only today); generated receipts are new
+
+## As built (2026-10-19)
+The PDF is built (expo-print and expo-sharing; the web opens the print dialog). Dates carry their time zone; a refunded receipt is grey and drops the rate rows.
