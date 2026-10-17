@@ -357,7 +357,11 @@
       "noMatchBody": "Try another name or category.",
       "all": "All",
       "isNew": "New",
-      "allLanguages": "All languages"
+      "allLanguages": "All languages",
+      "from": "From {{price}}",
+      "fromPerHour": "From {{price}}/hr",
+      "customQuote": "Custom quote",
+      "nextAvailable": "Next: {{when}}"
     }
   },
   "transactions": {

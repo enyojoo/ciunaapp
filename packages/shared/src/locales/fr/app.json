@@ -1085,7 +1085,11 @@
       "noMatchBody": "Essayez un autre nom ou une autre catégorie.",
       "all": "Tous",
       "isNew": "Nouveau",
-      "allLanguages": "Toutes les langues"
+      "allLanguages": "Toutes les langues",
+      "from": "À partir de {{price}}",
+      "fromPerHour": "À partir de {{price}}/h",
+      "customQuote": "Sur devis",
+      "nextAvailable": "Prochain : {{when}}"
     }
   },
   "referralLanding": {

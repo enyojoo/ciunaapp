@@ -7,6 +7,7 @@ import { useSeller } from "@/lib/session"
 import { useErrorText, useT } from "@/lib/i18n"
 import { ImageUpload } from "@/components/image-upload"
 import { countryOptions } from "@/lib/countries"
+import { CredentialsCard } from "@/components/expert/credentials-card"
 
 const CURRENCIES = ["RUB", "USD", "EUR", "CNY", "NGN", "GHS", "KES", "BRL"]
 
@@ -80,6 +81,7 @@ function ProfilePageContent() {
             <Field label={t("onb.operating")}><Select disabled={!editable} value={f.operating_country} onChange={(e) => set({ operating_country: e.target.value })}>{countries.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}</Select></Field>
           </CardBody>
         </Card>
+        {merchant.type === "expert" ? <CredentialsCard editable={editable} /> : null}
       </div>
       {editable ? (
         <div className="fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 border-t border-hairline bg-white/95 p-3 backdrop-blur md:static md:mt-4 md:border-0 md:bg-transparent md:p-0">

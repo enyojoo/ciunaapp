@@ -217,5 +217,19 @@
   "errors.MEETING_URL_INVALID": "Saisissez un lien commençant par https://",
   "errors.MEETING_EMPTY": "Ajoutez un lien de réunion ou des instructions.",
   "errors.BOOKING_CLOSED": "Cette réservation est clôturée ; les détails ne peuvent plus être modifiés.",
-  "errors.BOOKING_NOT_PAID": "Cette réservation n'est pas encore payée."
+  "errors.BOOKING_NOT_PAID": "Cette réservation n'est pas encore payée.",
+  "expert.cred.title": "Diplômes et certifications",
+  "expert.cred.hint": "Affichés sur votre profil public pour inspirer confiance.",
+  "expert.cred.years": "Années d'expérience",
+  "expert.cred.name": "Diplôme ou certification",
+  "expert.cred.issuer": "Délivré par",
+  "expert.cred.year": "Année",
+  "expert.cred.add": "Ajouter",
+  "expert.cred.empty": "Aucun diplôme pour l'instant.",
+  "errors.CREDENTIALS_TOO_MANY": "10 entrées au maximum.",
+  "errors.CREDENTIAL_TITLE_INVALID": "Chaque entrée doit avoir un nom de 120 caractères maximum.",
+  "errors.CREDENTIAL_ISSUER_INVALID": "L'organisme peut faire 120 caractères maximum.",
+  "errors.CREDENTIAL_YEAR_INVALID": "L'année doit être comprise entre 1950 et cette année.",
+  "errors.YEARS_INVALID": "Les années d'expérience doivent être un entier de 0 à 80.",
+  "errors.CREDENTIALS_INVALID": "Cette liste n'est pas valide."
 }

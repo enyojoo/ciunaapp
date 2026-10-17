@@ -217,5 +217,19 @@
   "errors.MEETING_URL_INVALID": "Enter a link that starts with https://",
   "errors.MEETING_EMPTY": "Add a meeting link or instructions.",
   "errors.BOOKING_CLOSED": "This booking is closed, so meeting details can't be changed.",
-  "errors.BOOKING_NOT_PAID": "This booking isn't paid yet."
+  "errors.BOOKING_NOT_PAID": "This booking isn't paid yet.",
+  "expert.cred.title": "Credentials",
+  "expert.cred.hint": "Shown on your public profile so customers can trust your experience.",
+  "expert.cred.years": "Years of experience",
+  "expert.cred.name": "Credential or degree",
+  "expert.cred.issuer": "Issued by",
+  "expert.cred.year": "Year",
+  "expert.cred.add": "Add credential",
+  "expert.cred.empty": "No credentials yet.",
+  "errors.CREDENTIALS_TOO_MANY": "Add at most 10 credentials.",
+  "errors.CREDENTIAL_TITLE_INVALID": "Each credential needs a name of up to 120 characters.",
+  "errors.CREDENTIAL_ISSUER_INVALID": "The issuer can be up to 120 characters.",
+  "errors.CREDENTIAL_YEAR_INVALID": "The year must be between 1950 and this year.",
+  "errors.YEARS_INVALID": "Years of experience must be a whole number from 0 to 80.",
+  "errors.CREDENTIALS_INVALID": "That credentials list is not valid."
 }

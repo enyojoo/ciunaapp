@@ -1,3 +1,4 @@
+import { formatMoney } from "@/lib/money"
 import { Highlighted } from "@/components/highlight"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
@@ -83,7 +84,17 @@ export function ExpertFeaturedSkeleton() {
 
 export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: ExpertProfile; onBeforeNavigate?: () => void }) {
   const router = useRouter()
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
+  const fp = expert.from_price
+  const priceLine =
+    fp && "quote" in fp
+      ? t("experts.directory.customQuote", { defaultValue: "Custom quote" })
+      : fp
+        ? t(fp.per === "hour" ? "experts.directory.fromPerHour" : "experts.directory.from", { price: formatMoney(fp.amount, fp.currency), defaultValue: fp.per === "hour" ? "From {{price}}/hr" : "From {{price}}" })
+        : expert.pricing_hint || null
+  const nextLine = expert.next_available_at
+    ? t("experts.directory.nextAvailable", { when: new Date(expert.next_available_at).toLocaleString(i18n.language, { weekday: "short", hour: "numeric", minute: "2-digit" }), defaultValue: "Next: {{when}}" })
+    : null
   return (
     <View style={styles.gridHit}>
     <Pressable
@@ -111,9 +122,14 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
               ? `★ ${Number(expert.rating_avg).toFixed(1)} (${expert.rating_count})`
               : t("experts.directory.isNew", { defaultValue: "New" })}
           </Text>
-          {expert.pricing_hint ? (
+          {priceLine ? (
             <Text style={styles.hint} numberOfLines={1}>
-              {expert.pricing_hint}
+              {priceLine}
+            </Text>
+          ) : null}
+          {nextLine ? (
+            <Text style={styles.hint} numberOfLines={1}>
+              {nextLine}
             </Text>
           ) : null}
         </View>

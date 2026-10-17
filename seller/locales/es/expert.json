@@ -217,5 +217,19 @@
   "errors.MEETING_URL_INVALID": "Introduce un enlace que empiece por https://",
   "errors.MEETING_EMPTY": "Añade un enlace de reunión o instrucciones.",
   "errors.BOOKING_CLOSED": "Esta reserva está cerrada y no se pueden cambiar los datos de la reunión.",
-  "errors.BOOKING_NOT_PAID": "Esta reserva aún no está pagada."
+  "errors.BOOKING_NOT_PAID": "Esta reserva aún no está pagada.",
+  "expert.cred.title": "Credenciales",
+  "expert.cred.hint": "Se muestran en tu perfil público para generar confianza.",
+  "expert.cred.years": "Años de experiencia",
+  "expert.cred.name": "Título o certificación",
+  "expert.cred.issuer": "Emitido por",
+  "expert.cred.year": "Año",
+  "expert.cred.add": "Añadir",
+  "expert.cred.empty": "Aún no hay credenciales.",
+  "errors.CREDENTIALS_TOO_MANY": "Máximo 10 credenciales.",
+  "errors.CREDENTIAL_TITLE_INVALID": "Cada credencial necesita un nombre de hasta 120 caracteres.",
+  "errors.CREDENTIAL_ISSUER_INVALID": "El emisor puede tener hasta 120 caracteres.",
+  "errors.CREDENTIAL_YEAR_INVALID": "El año debe estar entre 1950 y este año.",
+  "errors.YEARS_INVALID": "Los años de experiencia deben ser un número entero de 0 a 80.",
+  "errors.CREDENTIALS_INVALID": "Esa lista no es válida."
 }

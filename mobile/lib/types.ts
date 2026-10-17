@@ -184,6 +184,9 @@ export type ExpertProfile = {
   category?: string | null
   image_url?: string | null
   pricing_hint?: string | null
+  from_price?: { amount: number; currency: string; per: "hour" | null } | { quote: true } | null
+  /** Earliest bookable time (ISO). Shown in the viewer's own time zone. */
+  next_available_at?: string | null
   service_area?: string | null
   meeting_hint?: string | null
   rating_avg?: number | string | null

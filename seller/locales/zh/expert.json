@@ -217,5 +217,19 @@
   "errors.MEETING_URL_INVALID": "请输入以 https:// 开头的链接",
   "errors.MEETING_EMPTY": "请填写会议链接或说明。",
   "errors.BOOKING_CLOSED": "此预约已关闭，无法再更改会议信息。",
-  "errors.BOOKING_NOT_PAID": "此预约尚未付款。"
+  "errors.BOOKING_NOT_PAID": "此预约尚未付款。",
+  "expert.cred.title": "资质证书",
+  "expert.cred.hint": "显示在你的公开主页上，帮助客户建立信任。",
+  "expert.cred.years": "从业年限",
+  "expert.cred.name": "证书或学位",
+  "expert.cred.issuer": "颁发机构",
+  "expert.cred.year": "年份",
+  "expert.cred.add": "添加",
+  "expert.cred.empty": "暂无资质。",
+  "errors.CREDENTIALS_TOO_MANY": "最多 10 项。",
+  "errors.CREDENTIAL_TITLE_INVALID": "每项需要不超过 120 个字符的名称。",
+  "errors.CREDENTIAL_ISSUER_INVALID": "颁发机构最多 120 个字符。",
+  "errors.CREDENTIAL_YEAR_INVALID": "年份须在 1950 年至今年之间。",
+  "errors.YEARS_INVALID": "从业年限须为 0 到 80 的整数。",
+  "errors.CREDENTIALS_INVALID": "该列表无效。"
 }

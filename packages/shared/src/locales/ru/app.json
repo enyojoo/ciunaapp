@@ -1085,7 +1085,11 @@
       "noMatchBody": "Попробуйте другое имя или категорию.",
       "all": "Все",
       "isNew": "Новый",
-      "allLanguages": "Все языки"
+      "allLanguages": "Все языки",
+      "from": "От {{price}}",
+      "fromPerHour": "От {{price}}/ч",
+      "customQuote": "Цена по запросу",
+      "nextAvailable": "Ближайшее: {{when}}"
     }
   },
   "referralLanding": {

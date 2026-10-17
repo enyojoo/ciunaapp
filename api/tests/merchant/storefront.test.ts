@@ -67,3 +67,27 @@ test("a paused store is closed to orders whatever its hours say, even with no ho
   assert.equal(f.is_paused, true)
   assert.equal(f.opens_at, null)
 })
+
+import { fromPrice, nextAvailable } from "../../lib/expert-availability"
+
+test("an expert's from-price is the cheapest hourly rate, then fixed, then a custom quote", () => {
+  assert.deepEqual(fromPrice([{ pricing_type: "hourly", hourly_rate: 50, hourly_currency: "usd" }, { pricing_type: "hourly", hourly_rate: 30, hourly_currency: "USD" }, { pricing_type: "fixed", fixed_amount: 5, fixed_currency: "USD" }]), { amount: 30, currency: "USD", per: "hour" })
+  assert.deepEqual(fromPrice([{ pricing_type: "fixed", fixed_amount: 90, fixed_currency: "RUB" }, { pricing_type: "fixed", fixed_amount: 70, fixed_currency: "RUB" }]), { amount: 70, currency: "RUB", per: null })
+  assert.deepEqual(fromPrice([{ pricing_type: "quote" }]), { quote: true })
+  assert.equal(fromPrice([]), null)
+})
+
+test("next available skips slots inside the booking lead time and picks the earliest per expert", () => {
+  const now = Date.parse("2026-10-19T10:00:00Z")
+  const services = [{ id: "s1", expert_profile_id: "e1", booking_lead_minutes: 120 }, { id: "s2", expert_profile_id: "e1", booking_lead_minutes: 60 }, { id: "s3", expert_profile_id: "e2" }]
+  const slots = [
+    { expert_service_id: "s1", slot_start: "2026-10-19T11:00:00Z" }, // inside 2h lead
+    { expert_service_id: "s1", slot_start: "2026-10-19T14:00:00Z" },
+    { expert_service_id: "s2", slot_start: "2026-10-19T11:30:00Z" }, // ok (1h lead)
+    { expert_service_id: "s3", slot_start: "2026-10-19T11:59:00Z" }, // inside default 2h lead
+    { expert_service_id: "nope", slot_start: "2026-10-19T15:00:00Z" },
+  ]
+  const r = nextAvailable(slots, services, now)
+  assert.equal(r.get("e1"), "2026-10-19T11:30:00.000Z")
+  assert.equal(r.has("e2"), false)
+})

@@ -217,5 +217,19 @@
   "errors.MEETING_URL_INVALID": "Введите ссылку, начинающуюся с https://",
   "errors.MEETING_EMPTY": "Добавьте ссылку на встречу или инструкции.",
   "errors.BOOKING_CLOSED": "Запись закрыта, данные встречи изменить нельзя.",
-  "errors.BOOKING_NOT_PAID": "Эта запись ещё не оплачена."
+  "errors.BOOKING_NOT_PAID": "Эта запись ещё не оплачена.",
+  "expert.cred.title": "Квалификация",
+  "expert.cred.hint": "Отображается в публичном профиле, чтобы клиенты вам доверяли.",
+  "expert.cred.years": "Стаж, лет",
+  "expert.cred.name": "Диплом или сертификат",
+  "expert.cred.issuer": "Кем выдан",
+  "expert.cred.year": "Год",
+  "expert.cred.add": "Добавить",
+  "expert.cred.empty": "Пока ничего не добавлено.",
+  "errors.CREDENTIALS_TOO_MANY": "Не более 10 записей.",
+  "errors.CREDENTIAL_TITLE_INVALID": "У каждой записи должно быть название до 120 символов.",
+  "errors.CREDENTIAL_ISSUER_INVALID": "Организация — до 120 символов.",
+  "errors.CREDENTIAL_YEAR_INVALID": "Год должен быть от 1950 до текущего.",
+  "errors.YEARS_INVALID": "Стаж — целое число от 0 до 80.",
+  "errors.CREDENTIALS_INVALID": "Список указан неверно."
 }
