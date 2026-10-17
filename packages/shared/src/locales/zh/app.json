@@ -1452,5 +1452,28 @@
     "err_LIMIT_EXCEEDED": "此笔转账超过本月剩余额度（{{remaining}}）。额度将于 {{date}} 重置。请在“更多”中查看额度。",
     "err_ABOVE_MAX_TRANSFER": "单笔最高可汇出 {{max}}。",
     "err_BELOW_MIN_TRANSFER": "单笔最低需汇出 {{min}}。"
+  },
+  "deleteAccount": {
+    "title": "删除账户",
+    "lead": "你可以删除 Ciuna 账户。个人数据将在 {{days}} 天后删除。",
+    "whatHappens": "会发生什么",
+    "now": "账户立即关闭，并在所有设备上退出登录。",
+    "later": "{{days}} 天后，你的姓名、邮箱、电话、已保存收款人和收藏将被删除。",
+    "kept": "依法我们会保留过往转账和订单记录，但不含你的个人信息。",
+    "restore": "改变主意？请在 {{days}} 天内联系客服，我们可以恢复账户。",
+    "blockedTitle": "暂时不能删除。请先完成：",
+    "blockOrders": "你有一个订单仍在进行中。",
+    "blockTransfers": "你有一笔转账仍在处理中。",
+    "blockRefunds": "一笔退款仍在支付中。",
+    "cta": "删除我的账户",
+    "confirmTitle": "删除账户？",
+    "confirmBody": "账户将立即关闭，个人数据将在 {{days}} 天后删除。",
+    "confirm": "删除账户",
+    "cancel": "保留账户",
+    "failed": "操作失败，请重试。",
+    "offline": "没有网络。联网后再试。"
+  },
+  "more": {
+    "deleteAccount": "删除账户"
   }
 }

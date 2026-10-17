@@ -11,6 +11,10 @@
     {
       "path": "/api/cron/seller-notifications",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/account-purge",
+      "schedule": "0 3 * * *"
     }
   ]
 }

@@ -1452,5 +1452,28 @@
     "err_LIMIT_EXCEEDED": "This transfer is more than you have left this month ({{remaining}}). Your limit resets {{date}}. See Limits in More.",
     "err_ABOVE_MAX_TRANSFER": "The most you can send at once is {{max}}.",
     "err_BELOW_MIN_TRANSFER": "The least you can send at once is {{min}}."
+  },
+  "deleteAccount": {
+    "title": "Delete account",
+    "lead": "You can delete your Ciuna account. It takes {{days}} days to remove your personal data.",
+    "whatHappens": "What happens",
+    "now": "Your account is closed straight away and you are signed out everywhere.",
+    "later": "After {{days}} days your name, email, phone, saved recipients and favourites are removed.",
+    "kept": "We keep a record of past transfers and orders, without your personal details, because the law requires it.",
+    "restore": "Changed your mind? Contact support within {{days}} days and we can restore it.",
+    "blockedTitle": "Not yet. Finish these first:",
+    "blockOrders": "You have an order that is still in progress.",
+    "blockTransfers": "You have a transfer that is still being processed.",
+    "blockRefunds": "A refund to you is still being paid out.",
+    "cta": "Delete my account",
+    "confirmTitle": "Delete your account?",
+    "confirmBody": "Your account closes now and your personal data is removed after {{days}} days.",
+    "confirm": "Delete account",
+    "cancel": "Keep account",
+    "failed": "We could not do that. Try again.",
+    "offline": "No connection. Try again when you are online."
+  },
+  "more": {
+    "deleteAccount": "Delete account"
   }
 }

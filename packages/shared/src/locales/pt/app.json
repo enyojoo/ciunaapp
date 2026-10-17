@@ -1452,5 +1452,28 @@
     "err_LIMIT_EXCEEDED": "Esta transferência é maior do que o que resta neste mês ({{remaining}}). Seu limite reinicia em {{date}}. Veja Limites em Mais.",
     "err_ABOVE_MAX_TRANSFER": "O máximo por transferência é {{max}}.",
     "err_BELOW_MIN_TRANSFER": "O mínimo por transferência é {{min}}."
+  },
+  "deleteAccount": {
+    "title": "Excluir conta",
+    "lead": "Você pode excluir sua conta Ciuna. Seus dados pessoais são apagados após {{days}} dias.",
+    "whatHappens": "O que acontece",
+    "now": "Sua conta é encerrada na hora e você sai de todos os dispositivos.",
+    "later": "Após {{days}} dias, nome, e-mail, telefone, destinatários salvos e favoritos são removidos.",
+    "kept": "Guardamos um registro de transferências e pedidos passados, sem seus dados pessoais, porque a lei exige.",
+    "restore": "Mudou de ideia? Fale com o suporte em até {{days}} dias e podemos restaurar.",
+    "blockedTitle": "Ainda não. Conclua antes:",
+    "blockOrders": "Você tem um pedido em andamento.",
+    "blockTransfers": "Você tem uma transferência em processamento.",
+    "blockRefunds": "Um reembolso para você ainda está sendo pago.",
+    "cta": "Excluir minha conta",
+    "confirmTitle": "Excluir sua conta?",
+    "confirmBody": "Sua conta fecha agora e seus dados pessoais são removidos após {{days}} dias.",
+    "confirm": "Excluir conta",
+    "cancel": "Manter conta",
+    "failed": "Não foi possível. Tente de novo.",
+    "offline": "Sem conexão. Tente quando estiver online."
+  },
+  "more": {
+    "deleteAccount": "Excluir conta"
   }
 }

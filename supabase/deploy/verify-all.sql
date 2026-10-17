@@ -46,6 +46,15 @@ with checks as (
   union all
   -- 8. push-tokens.sql
   select 'push-tokens.sql', 'table push_tokens', to_regclass('public.push_tokens') is not null
+  union all
+  -- 9. account-deletion.sql
+  select 'account-deletion.sql', 'table account_deletions', to_regclass('public.account_deletions') is not null
+  union all
+  select 'account-deletion.sql', 'column users.deleted_at', exists (select 1 from information_schema.columns where table_name = 'users' and column_name = 'deleted_at')
+  union all
+  select 'account-deletion.sql', 'function account_request_deletion', exists (select 1 from pg_proc where proname = 'account_request_deletion')
+  union all
+  select 'account-deletion.sql', 'function account_purge_due', exists (select 1 from pg_proc where proname = 'account_purge_due')
 )
 select file, what, ok from checks order by ok, file, what;
 

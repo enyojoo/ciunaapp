@@ -1452,5 +1452,28 @@
     "err_LIMIT_EXCEEDED": "Ce transfert dépasse ce qu’il vous reste ce mois-ci ({{remaining}}). Votre plafond se réinitialise le {{date}}. Voir Plafonds dans Plus.",
     "err_ABOVE_MAX_TRANSFER": "Le maximum par transfert est de {{max}}.",
     "err_BELOW_MIN_TRANSFER": "Le minimum par transfert est de {{min}}."
+  },
+  "deleteAccount": {
+    "title": "Supprimer le compte",
+    "lead": "Vous pouvez supprimer votre compte Ciuna. Vos données personnelles sont effacées après {{days}} jours.",
+    "whatHappens": "Ce qui se passe",
+    "now": "Votre compte est fermé immédiatement et vous êtes déconnecté partout.",
+    "later": "Après {{days}} jours, votre nom, e-mail, téléphone, bénéficiaires et favoris sont supprimés.",
+    "kept": "Nous conservons un historique des transferts et commandes, sans vos données personnelles, car la loi l'exige.",
+    "restore": "Vous changez d'avis ? Contactez le support sous {{days}} jours et nous pourrons le rétablir.",
+    "blockedTitle": "Pas encore. Terminez d'abord :",
+    "blockOrders": "Une commande est encore en cours.",
+    "blockTransfers": "Un transfert est encore en traitement.",
+    "blockRefunds": "Un remboursement est encore en cours de versement.",
+    "cta": "Supprimer mon compte",
+    "confirmTitle": "Supprimer votre compte ?",
+    "confirmBody": "Votre compte se ferme maintenant et vos données sont supprimées après {{days}} jours.",
+    "confirm": "Supprimer le compte",
+    "cancel": "Garder le compte",
+    "failed": "Impossible de le faire. Réessayez.",
+    "offline": "Pas de connexion. Réessayez en ligne."
+  },
+  "more": {
+    "deleteAccount": "Supprimer le compte"
   }
 }

@@ -142,6 +142,10 @@ export default function MoreScreen() {
         />
       </GroupCard>
 
+      <Pressable onPress={() => router.push("/delete-account" as never)} style={styles.deleteLink}>
+        <Text style={styles.deleteText}>{tApp("more.deleteAccount", { defaultValue: "Delete account" })}</Text>
+      </Pressable>
+
       <Pressable onPress={() => setConfirmOut(true)} style={styles.logout}>
         <LogOut size={16} color={colors.danger} strokeWidth={2.2} />
         <Text style={styles.logoutText}>{t("more.logout")}</Text>
@@ -209,6 +213,8 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 12,
   },
+  deleteLink: { minHeight: 44, alignItems: "center", justifyContent: "center" },
+  deleteText: { fontSize: 13, color: colors.muted, textDecorationLine: "underline" },
   logoutText: { fontWeight: "600", color: colors.danger },
   version: { marginTop: 8, textAlign: "center", fontSize: 13, color: colors.muted },
 })

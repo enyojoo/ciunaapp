@@ -29,6 +29,7 @@ export const ERROR_TEXT: Record<string, string> = {
   SUPPORT_CLOSED: "This request was resolved too long ago to reopen.",
   MESSAGE_EMPTY: "Write a reply first.",
   MESSAGE_TOO_LONG: "Replies are limited to 4000 characters.",
+  DELETION_NOT_PENDING: "This account is not waiting to be deleted.",
   LIMIT_LEVEL_INVALID: "Choose level 1, 2 or 3.",
   LIMIT_CURRENCY_INVALID: "Use a three-letter currency code, for example RUB.",
   LIMIT_AMOUNT_INVALID: "Amounts must be positive numbers, and the maximum cannot be below the minimum.",

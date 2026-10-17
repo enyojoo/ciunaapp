@@ -83,6 +83,7 @@ export default function RootLayout() {
                       <Stack.Screen name="mart" />
                       <Stack.Screen name="experts" />
                       <Stack.Screen name="assistant" options={{ headerShown: true, title: "Assistant" }} />
+                      <Stack.Screen name="delete-account" options={{ headerShown: true, title: "" }} />
                       <Stack.Screen name="support" options={{ headerShown: true, title: t("support.title") }} />
                       <Stack.Screen name="support/requests" options={{ headerShown: true, title: t("support.req.myRequests") }} />
                       <Stack.Screen name="support/new" options={{ headerShown: true, title: t("support.req.newRequest") }} />

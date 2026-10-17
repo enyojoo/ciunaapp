@@ -1452,5 +1452,28 @@
     "err_LIMIT_EXCEEDED": "Esta transferencia supera lo que te queda este mes ({{remaining}}). Tu límite se restablece el {{date}}. Mira Límites en Más.",
     "err_ABOVE_MAX_TRANSFER": "Lo máximo que puedes enviar de una vez es {{max}}.",
     "err_BELOW_MIN_TRANSFER": "Lo mínimo que puedes enviar de una vez es {{min}}."
+  },
+  "deleteAccount": {
+    "title": "Eliminar cuenta",
+    "lead": "Puedes eliminar tu cuenta de Ciuna. Tus datos personales se borran tras {{days}} días.",
+    "whatHappens": "Qué ocurre",
+    "now": "Tu cuenta se cierra de inmediato y se cierra tu sesión en todos los dispositivos.",
+    "later": "Tras {{days}} días se eliminan tu nombre, correo, teléfono, destinatarios guardados y favoritos.",
+    "kept": "Conservamos un registro de transferencias y pedidos pasados, sin tus datos personales, porque la ley lo exige.",
+    "restore": "¿Cambiaste de opinión? Contacta con soporte en {{days}} días y podemos restaurarla.",
+    "blockedTitle": "Aún no. Termina antes esto:",
+    "blockOrders": "Tienes un pedido en curso.",
+    "blockTransfers": "Tienes una transferencia en proceso.",
+    "blockRefunds": "Aún se te está pagando un reembolso.",
+    "cta": "Eliminar mi cuenta",
+    "confirmTitle": "¿Eliminar tu cuenta?",
+    "confirmBody": "Tu cuenta se cierra ahora y tus datos personales se eliminan tras {{days}} días.",
+    "confirm": "Eliminar cuenta",
+    "cancel": "Conservar cuenta",
+    "failed": "No pudimos hacerlo. Inténtalo de nuevo.",
+    "offline": "Sin conexión. Inténtalo cuando estés en línea."
+  },
+  "more": {
+    "deleteAccount": "Eliminar cuenta"
   }
 }

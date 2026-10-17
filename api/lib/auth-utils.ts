@@ -105,6 +105,9 @@ export async function getAuthenticatedUser(
       return null
     }
 
+    // An account waiting to be deleted is signed out everywhere at once, even with a token that has not expired.
+    if ((userProfile as { deleted_at?: string | null }).deleted_at) return null
+
     console.log("User verified:", userProfile.email)
 
     return {
