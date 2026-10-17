@@ -1283,7 +1283,13 @@
     "checkingTitle": "Estamos comprobando tu pago",
     "checkingBody": "Por favor, no pagues de nuevo. Suele tardar un minuto.",
     "completePaymentTitle": "Completa tu pago",
-    "completePaymentBody": "Paga {{total}} abajo para hacer este pedido."
+    "completePaymentBody": "Paga {{total}} abajo para hacer este pedido.",
+    "session": {
+      "title": "Tu sesión",
+      "expertTime": "Hora del experto: {{time}}",
+      "join": "Unirse a la sesión",
+      "noLink": "El experto añadirá aquí el enlace de la reunión antes de tu sesión."
+    }
   },
   "social": {
     "loadFailed": "No se pudo cargar, inténtalo de nuevo",

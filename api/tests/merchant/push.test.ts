@@ -88,3 +88,20 @@ test("every transfer notification exists in all six languages with the amounts f
     }
   }
 })
+
+import { reminderWindow, BOOKING_REMINDER_WINDOW_MS } from "../../lib/push-events"
+
+test("the reminder window is the next 75 minutes", () => {
+  const now = Date.parse("2026-10-19T12:00:00Z")
+  const w = reminderWindow(now)
+  assert.equal(w.from, "2026-10-19T12:00:00.000Z")
+  assert.equal(Date.parse(w.to) - now, BOOKING_REMINDER_WINDOW_MS)
+})
+
+test("the booking reminder exists in all six languages with the expert's name", () => {
+  for (const lng of ["en", "ru", "fr", "es", "zh", "pt"]) {
+    const body = tEmail("push.booking.reminder.body", { name: "Ada" }, lng)
+    assert.ok(body.includes("Ada") && !body.includes("{{"), lng)
+    assert.ok(!tEmail("push.booking.reminder.title", {}, lng).startsWith("push."), lng + " title")
+  }
+})

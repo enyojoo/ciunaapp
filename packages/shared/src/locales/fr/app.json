@@ -1283,7 +1283,13 @@
     "checkingTitle": "Nous vérifions votre paiement",
     "checkingBody": "Ne payez pas à nouveau. Cela prend généralement une minute.",
     "completePaymentTitle": "Finalisez votre paiement",
-    "completePaymentBody": "Payez {{total}} ci-dessous pour passer cette commande."
+    "completePaymentBody": "Payez {{total}} ci-dessous pour passer cette commande.",
+    "session": {
+      "title": "Votre séance",
+      "expertTime": "Heure de l'expert : {{time}}",
+      "join": "Rejoindre la séance",
+      "noLink": "L'expert ajoutera ici le lien de la réunion avant votre séance."
+    }
   },
   "social": {
     "loadFailed": "Chargement impossible, réessayez",

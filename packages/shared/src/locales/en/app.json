@@ -1283,7 +1283,13 @@
     "checkingTitle": "We are checking your payment",
     "checkingBody": "Please do not pay again. This usually takes a minute.",
     "completePaymentTitle": "Complete your payment",
-    "completePaymentBody": "Pay {{total}} below to place this order."
+    "completePaymentBody": "Pay {{total}} below to place this order.",
+    "session": {
+      "title": "Your session",
+      "expertTime": "Expert's time: {{time}}",
+      "join": "Join session",
+      "noLink": "The expert will add the meeting link here before your session."
+    }
   },
   "social": {
     "loadFailed": "Couldn't load, try again",

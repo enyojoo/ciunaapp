@@ -111,3 +111,43 @@ export async function sendTransferNotifications(): Promise<{ claimed: number; se
   }
   return { claimed: ((data as any[]) || []).length, sent }
 }
+
+export const BOOKING_REMINDER_LEAD_MS = 60 * 60_000
+export const BOOKING_REMINDER_WINDOW_MS = 75 * 60_000
+
+/** Bookings starting within the next 75 minutes are due a reminder (the job runs every minute, so each is caught well before it starts). */
+export function reminderWindow(now = Date.now()): { from: string; to: string } {
+  return { from: new Date(now).toISOString(), to: new Date(now + BOOKING_REMINDER_WINDOW_MS).toISOString() }
+}
+
+/** One reminder per confirmed booking, about an hour before it starts. Safe to run every minute. */
+export async function sendBookingReminders(): Promise<{ claimed: number; sent: number }> {
+  const db = createServerClient()
+  const { from, to } = reminderWindow()
+  const { data, error } = await db.from("expert_bookings").update({ reminder_sent_at: new Date().toISOString() }).eq("status", "confirmed").is("reminder_sent_at", null).gt("slot_start", from).lte("slot_start", to).select("user_id,expert_profile_id,transaction_id,slot_start").limit(100)
+  if (error) {
+    if (error.code === "42703" || error.code === "42P01" || error.code === "PGRST204") return { claimed: 0, sent: 0 }
+    throw new Error(error.message)
+  }
+  let sent = 0
+  for (const b of (data as any[]) || []) {
+    try {
+      const [{ data: order }, { data: expert }, { data: user }] = await Promise.all([
+        db.from("marketplace_orders").select("id,public_id").eq("public_id", b.transaction_id).maybeSingle(),
+        db.from("expert_profiles").select("display_name").eq("id", b.expert_profile_id).maybeSingle(),
+        db.from("users").select("preferred_language").eq("id", b.user_id).maybeSingle(),
+      ])
+      if (!order) continue
+      const lng = (user as any)?.preferred_language
+      const vars = { name: (expert as any)?.display_name || "", id: (order as any).public_id }
+      sent += await sendPushToUser(b.user_id, {
+        title: tEmail("push.booking.reminder.title", vars, lng),
+        body: tEmail("push.booking.reminder.body", vars, lng),
+        data: { type: "order", orderId: (order as any).id },
+      }, "orders")
+    } catch (e) {
+      console.error("booking reminder failed", (e as Error)?.message)
+    }
+  }
+  return { claimed: ((data as any[]) || []).length, sent }
+}

@@ -240,6 +240,12 @@
         "title": "Votre argent vous a été rendu",
         "body": "{{sent}} est de retour sur votre compte. Transfert {{id}}."
       }
+    },
+    "booking": {
+      "reminder": {
+        "title": "Votre séance commence bientôt",
+        "body": "Votre séance avec {{name}} commence dans environ une heure."
+      }
     }
   }
 }

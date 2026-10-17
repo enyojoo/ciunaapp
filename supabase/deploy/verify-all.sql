@@ -59,6 +59,8 @@ with checks as (
   -- 10. push-preferences.sql
   select 'push-preferences.sql', 'table push_preferences', to_regclass('public.push_preferences') is not null
   union all
+  select 'booking-reminders.sql', 'column expert_bookings.reminder_sent_at', exists (select 1 from information_schema.columns where table_name = 'expert_bookings' and column_name = 'reminder_sent_at')
+  union all
   select 'transfer-events.sql', 'table transfer_events', to_regclass('public.transfer_events') is not null
   union all
   select 'transfer-events.sql', 'trigger transfer_events_log', exists (select 1 from pg_trigger where tgname = 'transfer_events_log')

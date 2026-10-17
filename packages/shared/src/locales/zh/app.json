@@ -1283,7 +1283,13 @@
     "checkingTitle": "正在确认你的付款",
     "checkingBody": "请勿重复付款，通常需要一分钟。",
     "completePaymentTitle": "请完成付款",
-    "completePaymentBody": "请在下方支付 {{total}} 以提交订单。"
+    "completePaymentBody": "请在下方支付 {{total}} 以提交订单。",
+    "session": {
+      "title": "你的预约",
+      "expertTime": "专家当地时间：{{time}}",
+      "join": "加入会话",
+      "noLink": "专家会在预约开始前在此添加会议链接。"
+    }
   },
   "social": {
     "loadFailed": "加载失败，请重试",

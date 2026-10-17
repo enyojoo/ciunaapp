@@ -23,6 +23,7 @@ import { OrderReviewCard } from "@/components/review-sheet"
 import { OrderTimeline } from "@/components/order-timeline"
 import { StepBar } from "@/components/step-bar"
 import { OrderPlaceCard, OrderStatusHeader } from "@/components/order-status-header"
+import { BookingSessionCard } from "@/components/booking-session-card"
 import { SellerChatCard, StickyMessageSeller } from "@/components/seller-chat-card"
 import { prefetchYooKassaWidgetScript } from "@/components/yookassa-checkout-widget"
 import { startYooKassaPayment, resumeYooKassaPayment, isYooKassaNativeAvailable } from "@/lib/yookassa-native"
@@ -996,6 +997,7 @@ export function MarketplaceOrderView({
           label={label}
           slot={order.snapshot.slotStart ? { start: order.snapshot.slotStart, end: order.snapshot.slotEnd, timezone: order.snapshot.timezone } : undefined}
         />
+        <BookingSessionCard order={order as unknown as Parameters<typeof BookingSessionCard>[0]["order"]} />
         <OrderPlaceCard order={order} />
         <View style={styles.timelineCard}>
           <Text style={styles.sectionTitle}>{t("marketplace.orderProgress", { defaultValue: "Order progress" })}</Text>

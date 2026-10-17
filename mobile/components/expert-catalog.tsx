@@ -84,6 +84,7 @@ export function ExpertFeaturedSkeleton() {
 export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: ExpertProfile; onBeforeNavigate?: () => void }) {
   const router = useRouter()
   const { t, i18n } = useTranslation("app")
+  const directoryColumns = useCatalogGridColumns()
   const fp = expert.from_price
   const priceLine =
     fp && "quote" in fp
@@ -95,7 +96,7 @@ export function ExpertDirectoryCard({ expert, onBeforeNavigate }: { expert: Expe
     ? t("experts.directory.nextAvailable", { when: new Date(expert.next_available_at).toLocaleString(i18n.language, { weekday: "short", hour: "numeric", minute: "2-digit" }), defaultValue: "Next: {{when}}" })
     : null
   return (
-    <View style={styles.gridHit}>
+    <View style={[styles.gridHit, { width: catalogCardWidth(directoryColumns) }]}>
     <Pressable
       onPress={() => { onBeforeNavigate?.(); router.push(expertProfilePath(expert) as never) }}
       accessibilityRole="button"
