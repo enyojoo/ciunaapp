@@ -329,6 +329,15 @@ function LegacyOrderScreen() {
         {!referral && !isHub && tone === "completed" ? (
           <View style={styles.actionHalf}>
             <PrimaryButton
+              label={t("receipt.view", { defaultValue: "View receipt" })}
+              variant="secondary"
+              onPress={() => router.push(`/receipt/transfer/${encodeURIComponent(tx.transaction_id)}` as never)}
+            />
+          </View>
+        ) : null}
+        {!referral && !isHub && tone === "completed" ? (
+          <View style={styles.actionHalf}>
+            <PrimaryButton
               label={t("txDetail.shareReceipt", { defaultValue: "Share receipt" })}
               variant="secondary"
               onPress={() =>

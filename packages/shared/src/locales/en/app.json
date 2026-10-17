@@ -1391,5 +1391,38 @@
   },
   "offline": {
     "banner": "You are offline. Showing saved data."
+  },
+  "receipt": {
+    "title": "Receipt",
+    "view": "View receipt",
+    "number": "Receipt number",
+    "date": "Date",
+    "status_completed": "Completed",
+    "status_paid": "Paid",
+    "status_refunded": "Refunded",
+    "customer": "Customer",
+    "recipient": "Recipient",
+    "store": "Store",
+    "expert": "Expert",
+    "account": "Account",
+    "paidWith": "Paid with",
+    "method_online": "Online payment",
+    "method_bank": "Bank transfer",
+    "items": "Items",
+    "fee": "Fee",
+    "serviceFee": "Service fee",
+    "deliveryFee": "Delivery fee",
+    "conversionFee": "Conversion fee",
+    "total": "Total paid",
+    "rate": "Rate",
+    "recipientGets": "Recipient gets",
+    "session": "Session",
+    "address": "Delivery address",
+    "refunded": "Refunded",
+    "notTax": "This is not a tax invoice.",
+    "support": "Questions? Write to {{email}}",
+    "share": "Share receipt",
+    "unavailable": "A receipt is available once the payment is complete.",
+    "shareText": "Ciuna receipt {{number}}: {{total}} on {{date}}."
   }
 }

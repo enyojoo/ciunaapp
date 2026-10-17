@@ -785,6 +785,7 @@ export function MarketplaceOrderView({
     [methodId, setMethodId] = useState(""),
     [receiptFile, setReceiptFile] = useState<ReceiptAsset | null>(null),
     { t, i18n } = useTranslation("app")
+  const router = useRouter()
   const label = (key: string, fallback: string) => t(`marketplace.${key}`, { defaultValue: fallback })
   const methods = order.snapshot.methods
   const attempt = order.attempts[0]
@@ -1062,6 +1063,13 @@ export function MarketplaceOrderView({
             onPress={() => void action("cancel")}
           />
         )}
+        {["paid", "refund_pending", "refunded"].includes(order.payment_state) ? (
+          <PrimaryButton
+            label={t("receipt.view", { defaultValue: "View receipt" })}
+            variant="secondary"
+            onPress={() => router.push(`/receipt/${order.line === "experts" ? "booking" : "order"}/${encodeURIComponent(order.public_id)}` as never)}
+          />
+        ) : null}
         <PrimaryButton
           label={label("support", "Contact support")}
           variant="ghost"

@@ -1391,5 +1391,38 @@
   },
   "offline": {
     "banner": "Vous êtes hors ligne. Affichage des données enregistrées."
+  },
+  "receipt": {
+    "title": "Reçu",
+    "view": "Voir le reçu",
+    "number": "Numéro du reçu",
+    "date": "Date",
+    "status_completed": "Terminé",
+    "status_paid": "Payé",
+    "status_refunded": "Remboursé",
+    "customer": "Client",
+    "recipient": "Destinataire",
+    "store": "Boutique",
+    "expert": "Expert",
+    "account": "Compte",
+    "paidWith": "Payé avec",
+    "method_online": "Paiement en ligne",
+    "method_bank": "Virement bancaire",
+    "items": "Articles",
+    "fee": "Frais",
+    "serviceFee": "Frais de service",
+    "deliveryFee": "Frais de livraison",
+    "conversionFee": "Frais de conversion",
+    "total": "Total payé",
+    "rate": "Taux",
+    "recipientGets": "Le destinataire reçoit",
+    "session": "Séance",
+    "address": "Adresse de livraison",
+    "refunded": "Remboursé",
+    "notTax": "Ceci n’est pas une facture fiscale.",
+    "support": "Des questions ? Écrivez à {{email}}",
+    "share": "Partager le reçu",
+    "unavailable": "Le reçu est disponible une fois le paiement terminé.",
+    "shareText": "Reçu Ciuna {{number}} : {{total}} le {{date}}."
   }
 }

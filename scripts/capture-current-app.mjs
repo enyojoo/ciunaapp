@@ -111,6 +111,8 @@ async function mock(page) {
     ] })
     if (p === "/api/support/unread") return json(route, { count: 1 })
     if (p === "/api/transactions") return json(route, { transactions: [] })
+    if (p === "/api/receipts/order/CU-1042") return json(route, { receipt: { kind: "order", number: "CU-1042", issuedAt: new Date(Date.now() - 7200000).toISOString(), status: "paid", customer: { name: "Amara N." }, counterparty: { role: "store", name: "Mama T's Kitchen", account: null }, payMethod: "online", lines: [{ title: "Jollof rice with chicken", quantity: 2, unitPrice: 450, amount: 900 }, { title: "Chin chin (200 g)", quantity: 1, unitPrice: 250, amount: 250 }], amounts: { currency: "RUB", items: 1150, fee: 0, delivery: 100, conversion: 0, total: 1250, refunded: null }, transfer: null, session: null, address: "Tverskaya 1, apt 12" } })
+    if (p === "/api/receipts/transfer/CIU-1042") return json(route, { receipt: { kind: "transfer", number: "CIU-1042", issuedAt: new Date(Date.now() - 86400000).toISOString(), status: "completed", customer: { name: "Amara N." }, counterparty: { role: "recipient", name: "Tunde Bello", account: "···· 6789" }, payMethod: "online", lines: [], amounts: { currency: "USD", items: 100, fee: 3.5, delivery: 0, conversion: 0, total: 103.5, refunded: null }, transfer: { sendAmount: 100, sendCurrency: "USD", receiveAmount: 140000, receiveCurrency: "NGN", rate: 1400 }, session: null, address: null } })
     if (p === "/api/hub/favorites") return process.env.CAPTURE_FAVS ? json(route, { keys: ["vendor:v1", "expert:e1"], vendors: [vendor], experts: [{ id: "e1", slug: "ada-obi", display_name: "Ada Obi", headline: "Nutritionist for expats", category: "Health", image_url: null, rating_avg: 4.8, rating_count: 12, languages: ["en", "ru"], is_verified: true, verification_tier: 2 }], products: [] }) : json(route, { keys: [], vendors: [], experts: [], products: [] })
     if (p.startsWith("/api/referrals")) return json(route, { slug: "amara", balance: 0 })
     return route.continue()
@@ -130,6 +132,8 @@ const SHOTS = [
   { name: "support-requests", path: "/support/requests", wait: 2500, full: true },
   { name: "support-thread", path: "/support/s1", wait: 2500, full: true },
   { name: "support-new", path: "/support/new", wait: 2500, full: true },
+  { name: "receipt-order", path: "/receipt/order/CU-1042", wait: 2500, full: true },
+  { name: "receipt-transfer", path: "/receipt/transfer/CIU-1042", wait: 2500, full: true },
   { name: "order-chat", path: "/orders/o1/chat", wait: 2500, full: true },
   { name: "order-detail", path: "/orders/o1", wait: 2500, full: true },
   { name: "more", path: "/more", wait: 2000, full: true },

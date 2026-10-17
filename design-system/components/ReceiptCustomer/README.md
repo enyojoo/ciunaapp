@@ -19,7 +19,7 @@ Logo top-left, receipt number and date with time zone top-right, title with stat
 - Printed pages are white with no shadows; screen receipts sit on a white plate.
 
 ## Upgrade
-New as a designed document. Today the customer sees an order detail screen and no downloadable receipt.
+Built as a receipt screen: `mobile/app/receipt/[kind]/[id].tsx` for a paid order or booking, opened from the order view (View receipt). The receipt is built on the server (`api/lib/receipts.ts`, route `api/app/api/receipts/[kind]/[id]`): store or expert, customer, delivery address or session in its own zone, items, fees, total paid, refunded variant, plain method name, not-a-tax-invoice line and the support address. Share sends a text summary. Not built: PDF download and print layout (needs a PDF library decision).
 
 ## Code
 To be built with the customer order detail (`app/` order screens) and a PDF route in `api/`.

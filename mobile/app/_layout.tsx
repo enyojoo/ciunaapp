@@ -97,6 +97,7 @@ export default function RootLayout() {
                       <Stack.Screen name="favourites" options={{ headerShown: true, title: t("favourites.title", { defaultValue: "Favourites" }) }} />
                       <Stack.Screen name="orders/[id]/chat" options={{ headerShown: true, title: t("chat.title", { defaultValue: "Chat with seller" }) }} />
                       <Stack.Screen name="orders/[id]" options={{ headerShown: true, title: "Order" }} />
+                      <Stack.Screen name="receipt/[kind]/[id]" options={{ headerShown: true, title: t("receipt.title") }} />
                     </Stack>
                     </View>
                 </RootChrome>

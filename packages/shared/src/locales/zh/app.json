@@ -1391,5 +1391,38 @@
   },
   "offline": {
     "banner": "您已离线，正在显示已保存的数据。"
+  },
+  "receipt": {
+    "title": "收据",
+    "view": "查看收据",
+    "number": "收据编号",
+    "date": "日期",
+    "status_completed": "已完成",
+    "status_paid": "已付款",
+    "status_refunded": "已退款",
+    "customer": "客户",
+    "recipient": "收款人",
+    "store": "店铺",
+    "expert": "专家",
+    "account": "账户",
+    "paidWith": "付款方式",
+    "method_online": "在线支付",
+    "method_bank": "银行转账",
+    "items": "商品",
+    "fee": "手续费",
+    "serviceFee": "服务费",
+    "deliveryFee": "配送费",
+    "conversionFee": "兑换费",
+    "total": "实付总额",
+    "rate": "汇率",
+    "recipientGets": "收款人收到",
+    "session": "咨询时间",
+    "address": "配送地址",
+    "refunded": "已退款",
+    "notTax": "此收据不是税务发票。",
+    "support": "有疑问？请联系 {{email}}",
+    "share": "分享收据",
+    "unavailable": "付款完成后即可查看收据。",
+    "shareText": "Ciuna 收据 {{number}}：{{date}} 支付 {{total}}。"
   }
 }

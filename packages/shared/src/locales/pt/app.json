@@ -1391,5 +1391,38 @@
   },
   "offline": {
     "banner": "Você está offline. Mostrando dados salvos."
+  },
+  "receipt": {
+    "title": "Recibo",
+    "view": "Ver recibo",
+    "number": "Número do recibo",
+    "date": "Data",
+    "status_completed": "Concluído",
+    "status_paid": "Pago",
+    "status_refunded": "Reembolsado",
+    "customer": "Cliente",
+    "recipient": "Destinatário",
+    "store": "Loja",
+    "expert": "Especialista",
+    "account": "Conta",
+    "paidWith": "Pago com",
+    "method_online": "Pagamento online",
+    "method_bank": "Transferência bancária",
+    "items": "Itens",
+    "fee": "Taxa",
+    "serviceFee": "Taxa de serviço",
+    "deliveryFee": "Taxa de entrega",
+    "conversionFee": "Taxa de conversão",
+    "total": "Total pago",
+    "rate": "Taxa de câmbio",
+    "recipientGets": "O destinatário recebe",
+    "session": "Sessão",
+    "address": "Endereço de entrega",
+    "refunded": "Reembolsado",
+    "notTax": "Este não é um documento fiscal.",
+    "support": "Dúvidas? Escreva para {{email}}",
+    "share": "Compartilhar recibo",
+    "unavailable": "O recibo fica disponível quando o pagamento for concluído.",
+    "shareText": "Recibo Ciuna {{number}}: {{total}} em {{date}}."
   }
 }

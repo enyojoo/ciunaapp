@@ -1391,5 +1391,38 @@
   },
   "offline": {
     "banner": "Sin conexión. Mostrando datos guardados."
+  },
+  "receipt": {
+    "title": "Recibo",
+    "view": "Ver recibo",
+    "number": "Número de recibo",
+    "date": "Fecha",
+    "status_completed": "Completado",
+    "status_paid": "Pagado",
+    "status_refunded": "Reembolsado",
+    "customer": "Cliente",
+    "recipient": "Destinatario",
+    "store": "Tienda",
+    "expert": "Experto",
+    "account": "Cuenta",
+    "paidWith": "Pagado con",
+    "method_online": "Pago en línea",
+    "method_bank": "Transferencia bancaria",
+    "items": "Artículos",
+    "fee": "Comisión",
+    "serviceFee": "Tarifa de servicio",
+    "deliveryFee": "Costo de envío",
+    "conversionFee": "Comisión de conversión",
+    "total": "Total pagado",
+    "rate": "Tasa",
+    "recipientGets": "El destinatario recibe",
+    "session": "Sesión",
+    "address": "Dirección de entrega",
+    "refunded": "Reembolsado",
+    "notTax": "Esto no es una factura fiscal.",
+    "support": "¿Preguntas? Escribe a {{email}}",
+    "share": "Compartir recibo",
+    "unavailable": "El recibo estará disponible cuando se complete el pago.",
+    "shareText": "Recibo de Ciuna {{number}}: {{total}} el {{date}}."
   }
 }

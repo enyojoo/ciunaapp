@@ -13,7 +13,7 @@ Completed (screen, A4, image); refunded (screen with Refunded badge and a refund
 Pay-currency amounts first, then rate and recipient amount, with cents. Dates carry a time zone. The recipient account is masked to the last four digits everywhere; the shared image also omits the sender's email and shows the recipient's name only. One status badge with word and icon. Payment method is a plain name. "This is not a tax invoice" stays on every page until tax documents exist. White page with a hairline on screen, no fill in print, 48px margins on A4.
 
 ## Upgrade
-Differs from the built app: today only an uploaded payment proof can be opened from the transfer (`/api/receipts/documents`); a generated receipt, PDF download, shared image and the refunded variant are New.
+Built as the same receipt screen for a completed or refunded transfer, opened from the transfer detail (View receipt): reference and date, sender, recipient with the account masked to the last four digits, rate and recipient amount, fee, total paid, refunded variant. Cancelled and failed transfers have no receipt. Share sends a text summary. Not built: PDF download and the shared image (needs a PDF or image library decision).
 
 ## Code
 `api/app/api/receipts/documents/route.ts` (proof files only today); generated receipts are new
