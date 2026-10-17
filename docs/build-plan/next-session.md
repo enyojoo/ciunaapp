@@ -7,7 +7,7 @@ Written 2026-10-18 at the end of a long session, updated after the support API l
 - **Customer Expo app (`mobile/`, native and web):** everything that needs no backend is built and committed. Home fits every screen with no scrolling; one shared top bar; checkout has Details and Review steps; desktop web layouts checked at 1280x800. tsc, locales:check, design:check, design:cards all pass.
 - **Store hours, minimum order, delivery time, expert fields:** built end to end (migration, API, seller portal, app). The owner has run `storefront-details.sql` and the files before it.
 - **Support requests: done** (see item 1). Run `support-requests.sql` to turn it on.
-- Receipts and limits: done. Push registration: server side done, app side waiting on a decision (item 4).
+- Receipts and limits: done. Push registration: server and registration done (item 4); in-app unread counts left.
 
 ## Order of work
 
@@ -20,16 +20,15 @@ Built end to end: database, customer API, Office API, the three app screens (`mo
 ### 3. Limits: DONE except an Office editor
 Table and usage function in `send-limits.sql` (not yet run: owner action), logic `api/lib/limits.ts`, `GET /api/limits`, admin `GET` and `PUT /api/admin/send-limits` (needs `settings.manage`), enforcement in `send/quotes` and `send/transfers`, screen `mobile/app/limits.tsx`, More row, Send messages. **No amounts exist until compliance sets them**; example: `PUT /api/admin/send-limits` with `{ "level": 1, "currency": "RUB", "monthlyAmount": 50000, "minPerTransfer": 1000, "maxPerTransfer": 50000 }`. Still to do: an Office settings screen to edit them. Open question for the owner: limits are compared only for transfers sent in the limit's own currency (multi-currency conversion is not done).
 
-### 4. Push registration and in-app notifications (card `PushAndInApp`): server DONE, app side waiting
-Done: `push_tokens` table (`push-tokens.sql`, RUN-ORDER #8, not yet run: owner action), `api/lib/push.ts` sender (Expo push service, never throws, drops dead devices), `POST/DELETE /api/push/register`, `api/lib/push-events.ts` with `notifySupportReply` (called when Office staff reply), six languages, tests. Set `EXPO_ACCESS_TOKEN` on the API only if enhanced push security is turned on in Expo.
-Waiting on the owner: permission to add `expo-notifications`. Then: a hook in the app that asks permission, gets the Expo token and calls `/api/push/register` after sign-in (and DELETE on sign-out), tapping a notification opens the request, and unread counts on the tabs. Order status and chat message notifications reuse `sendPushToUser`. Web push is left out of v1.
+### 4. Push registration: DONE (except in-app unread counts)
+Server: `push_tokens` table (`push-tokens.sql`, RUN-ORDER #8, owner action to run), `api/lib/push.ts` sender, `POST/DELETE /api/push/register`, `notifySupportReply` when Office replies, six languages, tests. App: `expo-notifications` and `expo-device` added (owner approved); `mobile/lib/push-registration.ts` asks permission and registers the Expo token after sign-in (physical phones only; web skipped), unregisters on sign-out, and a tapped support notification opens that request (`components/push-registration.tsx`, mounted in `_layout.tsx`). `app.config.js` now sets NODE_PATH so config plugins of root-hoisted packages find `expo`. **Needs a new native build (EAS) to take effect; Expo Go cannot receive remote push.** Still to do: unread counts on the tabs, order status and chat message notifications (reuse `sendPushToUser`). Set `EXPO_ACCESS_TOKEN` on the API only if enhanced push security is on in Expo.
 
 ### 5. Left on the customer app (small)
 See "Left: can be built now" in `customer-app-status.md`: Delivery or Pickup chip on Activity rows (the transactions list must return the fulfilment mode), chat side panel on desktop, store share button, and redrawing the HTML preview frames in `design-system/components/*/preview.html` for the cards changed (store header, top bar, Home tiles, checkout steps). Account deletion needs the owner's rules for what is blocked and retained.
 
 ## Owner actions pending
 1. Run `supabase/deploy/support-requests.sql`, `send-limits.sql` and `push-tokens.sql`, then `verify-all.sql` (no row may show false).
-2. Decisions needed: the monthly limit per level and how to treat other currencies (set via the admin API); permission to add `expo-notifications`; whether to add a PDF library; whether an AI assistant is wanted.
+2. Decisions needed: the monthly limit per level and how to treat other currencies (set via the admin API); whether to add a PDF library; whether an AI assistant is wanted.
 3. Confirm tab labels (Home, Orders, Account) and the hero copy.
 
 ## How to work (practical notes)

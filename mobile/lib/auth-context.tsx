@@ -7,6 +7,7 @@ import type { User } from "@supabase/supabase-js"
 import { supabase, clearInvalidPersistedAuthSession } from "./supabase"
 import i18n, { setAppLocale, type AppLocale, SUPPORTED_LOCALES } from "./i18n"
 import { apiFetch } from "./api"
+import { unregisterPush } from "./push-registration"
 import { isAppleWebSignInCanceled, signInWithAppleWeb } from "./apple-sign-in-web"
 import { openInAppBrowser } from "./in-app-browser"
 import {
@@ -326,6 +327,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signOut = useCallback(async () => {
+    await unregisterPush()
     await supabase.auth.signOut()
   }, [])
 

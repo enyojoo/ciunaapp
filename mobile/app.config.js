@@ -1,4 +1,8 @@
 /** @type {import('expo/config').ExpoConfig} */
+// Config plugins of packages hoisted to the repo root (expo-notifications) need `expo`, which stays in mobile/node_modules.
+process.env.NODE_PATH = [require("path").join(__dirname, "node_modules"), process.env.NODE_PATH].filter(Boolean).join(require("path").delimiter)
+require("module").Module._initPaths()
+
 const appJson = require("./app.json")
 const os = require("os")
 

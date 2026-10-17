@@ -16,6 +16,7 @@ import { WebViewportFrame } from "@/components/layout/web-viewport-frame"
 import { OfficeConfigLiveSync } from "@/components/office-config-live-sync"
 import { ToastProvider } from "@/components/toast-provider"
 import { AuthProvider, useAuth } from "@/lib/auth-context"
+import { PushRegistration } from "@/components/push-registration"
 import { ExternalLinkProvider } from "@/lib/external-link"
 import { hydrateLocale } from "@/lib/i18n"
 import { ResponsiveLayoutProvider } from "@/lib/responsive-layout"
@@ -55,6 +56,7 @@ export default function RootLayout() {
             <ToastProvider>
               <ExternalLinkProvider>
                 <OfficeConfigLiveSync />
+                <PushRegistration />
                 <StatusBar style="dark" />
                 <RootChrome>
                     <View style={styles.navRoot}>
