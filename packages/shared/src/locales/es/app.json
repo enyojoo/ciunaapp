@@ -1511,5 +1511,57 @@
     "delete": "Eliminar",
     "copy": "Copiar enlace",
     "open": "Abrir"
+  },
+  "transferDetail": {
+    "headline": {
+      "pending": "Esperando tu pago",
+      "processing": "Estamos enviando tu dinero",
+      "completed": "{{name}} recibió el dinero",
+      "failed": "No pudimos enviar el dinero",
+      "refunded": "Tu dinero fue devuelto",
+      "cancelled": "Transferencia cancelada"
+    },
+    "sub": {
+      "pending": "Paga {{amount}} para iniciar tu transferencia.",
+      "processing": "Puedes cerrar esta pantalla. Te avisaremos cuando llegue el dinero.",
+      "completed": "Entregado {{when}}",
+      "failed": "Tu pago se está devolviendo a tu cuenta bancaria.",
+      "refunded": "Tu pago fue devuelto.",
+      "cancelled": "No se te cobró nada."
+    },
+    "safe": "Tu dinero está seguro. Revisa los datos del destinatario y repite la transferencia o cuéntanos qué pasó.",
+    "step": {
+      "created": "Transferencia creada",
+      "pWaiting": "Esperando tu pago",
+      "pReceived": "Pago recibido",
+      "pNot": "Pago no recibido",
+      "sAfter": "Se enviará a {{bank}} tras el pago",
+      "sSending": "Enviando a {{bank}}",
+      "sSent": "Enviado a {{bank}}",
+      "sFailed": "Falló el envío",
+      "notSent": "No enviado",
+      "delivered": "Entregado a {{name}}",
+      "rWay": "Reembolso en camino",
+      "rDone": "Reembolsado"
+    },
+    "amounts": "Importes",
+    "sent": "Enviaste",
+    "fee": "Comisión",
+    "feePct": "Comisión ({{pct}})",
+    "rate": "Tipo de cambio",
+    "gets": "El destinatario recibe",
+    "total": "Total pagado",
+    "refunded": "Reembolsado",
+    "recipient": "Destinatario",
+    "payment": "Pago",
+    "paidWith": "Pagado con",
+    "reference": "Referencia",
+    "copied": "Copiado",
+    "report": "Informar de un problema",
+    "reportHint": "Abre una solicitud de soporte con esta transferencia adjunta.",
+    "reportSubject": "Problema con la transferencia {{id}}",
+    "share": "Compartir recibo",
+    "repeat": "Repetir transferencia",
+    "view": "Ver recibo"
   }
 }

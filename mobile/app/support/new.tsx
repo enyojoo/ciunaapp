@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
-import { useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { AppTextInput } from "@/components/app-text-input"
 import { FilterChips } from "@/components/filter-chips"
@@ -21,9 +21,11 @@ export default function NewSupportRequestScreen() {
   const { t } = useTranslation("app")
   const router = useRouter()
   const { user } = useAuth()
-  const [topic, setTopic] = useState<(typeof TOPICS)[number]>("order")
+  const params = useLocalSearchParams<{ topic?: string; subject?: string }>()
+  const startTopic = (TOPICS as readonly string[]).includes(String(params.topic)) ? (params.topic as (typeof TOPICS)[number]) : "order"
+  const [topic, setTopic] = useState<(typeof TOPICS)[number]>(startTopic)
   const [orderId, setOrderId] = useState("")
-  const [subject, setSubject] = useState("")
+  const [subject, setSubject] = useState(String(params.subject || "").slice(0, 120))
   const [body, setBody] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)

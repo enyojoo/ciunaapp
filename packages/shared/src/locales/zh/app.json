@@ -1511,5 +1511,57 @@
     "delete": "删除",
     "copy": "复制链接",
     "open": "打开"
+  },
+  "transferDetail": {
+    "headline": {
+      "pending": "等待你付款",
+      "processing": "正在发送你的款项",
+      "completed": "{{name}} 已收到款项",
+      "failed": "无法发送款项",
+      "refunded": "款项已退回",
+      "cancelled": "转账已取消"
+    },
+    "sub": {
+      "pending": "请支付 {{amount}} 以开始转账。",
+      "processing": "你可以关闭此页面，款项到账时我们会通知你。",
+      "completed": "已于 {{when}} 送达",
+      "failed": "你的付款正在退回到银行账户。",
+      "refunded": "你的付款已退回。",
+      "cancelled": "你未被扣款。"
+    },
+    "safe": "你的资金是安全的。请核对收款人信息，然后重新转账，或告诉我们发生了什么。",
+    "step": {
+      "created": "转账已创建",
+      "pWaiting": "等待你付款",
+      "pReceived": "已收到付款",
+      "pNot": "未收到付款",
+      "sAfter": "付款后发送至 {{bank}}",
+      "sSending": "正在发送至 {{bank}}",
+      "sSent": "已发送至 {{bank}}",
+      "sFailed": "发送失败",
+      "notSent": "未发送",
+      "delivered": "已送达 {{name}}",
+      "rWay": "退款处理中",
+      "rDone": "已退款"
+    },
+    "amounts": "金额",
+    "sent": "你发送",
+    "fee": "手续费",
+    "feePct": "手续费（{{pct}}）",
+    "rate": "汇率",
+    "gets": "收款人收到",
+    "total": "合计支付",
+    "refunded": "已退款",
+    "recipient": "收款人",
+    "payment": "付款",
+    "paidWith": "支付方式",
+    "reference": "参考号",
+    "copied": "已复制",
+    "report": "报告问题",
+    "reportHint": "将创建附带此转账的客服请求。",
+    "reportSubject": "转账 {{id}} 的问题",
+    "share": "分享收据",
+    "repeat": "再次转账",
+    "view": "查看收据"
   }
 }

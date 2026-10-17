@@ -1511,5 +1511,57 @@
     "delete": "Delete",
     "copy": "Copy link",
     "open": "Open"
+  },
+  "transferDetail": {
+    "headline": {
+      "pending": "Waiting for your payment",
+      "processing": "We are sending your money",
+      "completed": "{{name}} received the money",
+      "failed": "We could not send the money",
+      "refunded": "Your money was returned",
+      "cancelled": "Transfer cancelled"
+    },
+    "sub": {
+      "pending": "Pay {{amount}} to start your transfer.",
+      "processing": "You can close this screen. We will notify you when the money arrives.",
+      "completed": "Delivered {{when}}",
+      "failed": "Your payment is being returned to your bank account.",
+      "refunded": "Your payment was returned to you.",
+      "cancelled": "You were not charged."
+    },
+    "safe": "Your money is safe. Check the recipient details, then repeat the transfer or tell us what happened.",
+    "step": {
+      "created": "Transfer created",
+      "pWaiting": "Waiting for your payment",
+      "pReceived": "Payment received",
+      "pNot": "Payment not received",
+      "sAfter": "Sent to {{bank}} after payment",
+      "sSending": "Sending to {{bank}}",
+      "sSent": "Sent to {{bank}}",
+      "sFailed": "Sending failed",
+      "notSent": "Not sent",
+      "delivered": "Delivered to {{name}}",
+      "rWay": "Refund on its way",
+      "rDone": "Refunded"
+    },
+    "amounts": "Amounts",
+    "sent": "You sent",
+    "fee": "Fee",
+    "feePct": "Fee ({{pct}})",
+    "rate": "Exchange rate",
+    "gets": "Recipient gets",
+    "total": "Total paid",
+    "refunded": "Refunded",
+    "recipient": "Recipient",
+    "payment": "Payment",
+    "paidWith": "Paid with",
+    "reference": "Reference",
+    "copied": "Copied",
+    "report": "Report a problem",
+    "reportHint": "Opens a support request with this transfer attached.",
+    "reportSubject": "Problem with transfer {{id}}",
+    "share": "Share receipt",
+    "repeat": "Repeat transfer",
+    "view": "View receipt"
   }
 }

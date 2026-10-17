@@ -1,6 +1,7 @@
 import type { MarketplaceOrder } from "@ciuna/shared"
 import { MarketplaceOrderView } from "@/components/marketplace-checkout"
 import { OrderChat } from "./[id]/chat"
+import { TransferDetail } from "@/components/transfer-detail"
 import { useResponsiveLayout } from "@/lib/responsive-layout"
 import { chatAvailableFor } from "@/lib/chat-panel"
 import { useEffect, useRef, useState } from "react"
@@ -232,6 +233,43 @@ function LegacyOrderScreen() {
   const inPerson = snap?.fulfillmentType === "in_person"
   const commentText =
     typeof snap?.formAnswers?.comment === "string" ? String(snap.formAnswers.comment).trim() : ""
+
+  if (!referral && !isHub) {
+    return (
+      <>
+        <StatusBar style="dark" />
+        <TransferDetail
+          tx={tx}
+          locale={locale}
+          flagSvg={flagFor(tx.receive_currency)}
+          paySlot={
+            canPayNow || showBitbankerPay ? (
+              <View style={styles.payNowWrap}>
+                {canPayNow ? <PrimaryButton label={t("hub.checkout.paidOnline", { defaultValue: "Complete payment" })} busy={payBusy} onPress={() => void payNow()} /> : null}
+                {showBitbankerPay ? <MobileBitbankerPayCard transactionId={tx.transaction_id} totalRub={Number(tx.total_amount || 0)} /> : null}
+              </View>
+            ) : null
+          }
+          receiptSlot={
+            tx.receipt_url ? (
+              <Pressable onPress={() => void viewReceipt()} disabled={receiptBusy} style={styles.receiptCard}>
+                <View style={styles.receiptIcon}>{receiptBusy ? <ActivityIndicator size="small" color={colors.success} /> : <FileCheck size={18} color={colors.success} />}</View>
+                <View style={styles.receiptBody}>
+                  <Text style={styles.receiptTitle}>{t("txDetail.receiptUploaded")}</Text>
+                  <Text style={styles.receiptSub}>{tx.receipt_filename || t("txDetail.receiptFile")}</Text>
+                </View>
+              </Pressable>
+            ) : tone === "completed" || tone === "refunded" ? (
+              <Pressable onPress={() => router.push(`/receipt/transfer/${encodeURIComponent(tx.transaction_id)}` as never)} accessibilityRole="button" style={styles.receiptCard}>
+                <View style={styles.receiptIcon}><FileCheck size={18} color={colors.success} /></View>
+                <View style={styles.receiptBody}><Text style={styles.receiptTitle}>{t("transferDetail.view")}</Text></View>
+              </Pressable>
+            ) : null
+          }
+        />
+      </>
+    )
+  }
 
   return (
     <ScreenScroll edges={["left", "right"]}>

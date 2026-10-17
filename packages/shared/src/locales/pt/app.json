@@ -1511,5 +1511,57 @@
     "delete": "Excluir",
     "copy": "Copiar link",
     "open": "Abrir"
+  },
+  "transferDetail": {
+    "headline": {
+      "pending": "Aguardando seu pagamento",
+      "processing": "Estamos enviando seu dinheiro",
+      "completed": "{{name}} recebeu o dinheiro",
+      "failed": "Não conseguimos enviar o dinheiro",
+      "refunded": "Seu dinheiro foi devolvido",
+      "cancelled": "Transferência cancelada"
+    },
+    "sub": {
+      "pending": "Pague {{amount}} para iniciar sua transferência.",
+      "processing": "Você pode fechar esta tela. Avisaremos quando o dinheiro chegar.",
+      "completed": "Entregue {{when}}",
+      "failed": "Seu pagamento está sendo devolvido à sua conta bancária.",
+      "refunded": "Seu pagamento foi devolvido.",
+      "cancelled": "Você não foi cobrado."
+    },
+    "safe": "Seu dinheiro está seguro. Confira os dados do destinatário e repita a transferência ou conte-nos o que aconteceu.",
+    "step": {
+      "created": "Transferência criada",
+      "pWaiting": "Aguardando seu pagamento",
+      "pReceived": "Pagamento recebido",
+      "pNot": "Pagamento não recebido",
+      "sAfter": "Enviado para {{bank}} após o pagamento",
+      "sSending": "Enviando para {{bank}}",
+      "sSent": "Enviado para {{bank}}",
+      "sFailed": "Falha no envio",
+      "notSent": "Não enviado",
+      "delivered": "Entregue a {{name}}",
+      "rWay": "Reembolso a caminho",
+      "rDone": "Reembolsado"
+    },
+    "amounts": "Valores",
+    "sent": "Você enviou",
+    "fee": "Taxa",
+    "feePct": "Taxa ({{pct}})",
+    "rate": "Taxa de câmbio",
+    "gets": "O destinatário recebe",
+    "total": "Total pago",
+    "refunded": "Reembolsado",
+    "recipient": "Destinatário",
+    "payment": "Pagamento",
+    "paidWith": "Pago com",
+    "reference": "Referência",
+    "copied": "Copiado",
+    "report": "Relatar um problema",
+    "reportHint": "Abre uma solicitação de suporte com esta transferência anexada.",
+    "reportSubject": "Problema com a transferência {{id}}",
+    "share": "Compartilhar recibo",
+    "repeat": "Repetir transferência",
+    "view": "Ver recibo"
   }
 }

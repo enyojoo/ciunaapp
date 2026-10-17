@@ -1511,5 +1511,57 @@
     "delete": "Supprimer",
     "copy": "Copier le lien",
     "open": "Ouvrir"
+  },
+  "transferDetail": {
+    "headline": {
+      "pending": "En attente de votre paiement",
+      "processing": "Nous envoyons votre argent",
+      "completed": "{{name}} a reçu l'argent",
+      "failed": "Nous n'avons pas pu envoyer l'argent",
+      "refunded": "Votre argent vous a été rendu",
+      "cancelled": "Transfert annulé"
+    },
+    "sub": {
+      "pending": "Payez {{amount}} pour lancer votre transfert.",
+      "processing": "Vous pouvez fermer cet écran. Nous vous préviendrons à l'arrivée de l'argent.",
+      "completed": "Livré {{when}}",
+      "failed": "Votre paiement est en cours de retour sur votre compte bancaire.",
+      "refunded": "Votre paiement vous a été rendu.",
+      "cancelled": "Vous n'avez pas été débité."
+    },
+    "safe": "Votre argent est en sécurité. Vérifiez les coordonnées du bénéficiaire, puis répétez le transfert ou dites-nous ce qui s'est passé.",
+    "step": {
+      "created": "Transfert créé",
+      "pWaiting": "En attente de votre paiement",
+      "pReceived": "Paiement reçu",
+      "pNot": "Paiement non reçu",
+      "sAfter": "Envoyé à {{bank}} après paiement",
+      "sSending": "Envoi à {{bank}}",
+      "sSent": "Envoyé à {{bank}}",
+      "sFailed": "Échec de l'envoi",
+      "notSent": "Non envoyé",
+      "delivered": "Livré à {{name}}",
+      "rWay": "Remboursement en cours",
+      "rDone": "Remboursé"
+    },
+    "amounts": "Montants",
+    "sent": "Vous avez envoyé",
+    "fee": "Frais",
+    "feePct": "Frais ({{pct}})",
+    "rate": "Taux de change",
+    "gets": "Le bénéficiaire reçoit",
+    "total": "Total payé",
+    "refunded": "Remboursé",
+    "recipient": "Bénéficiaire",
+    "payment": "Paiement",
+    "paidWith": "Payé avec",
+    "reference": "Référence",
+    "copied": "Copié",
+    "report": "Signaler un problème",
+    "reportHint": "Ouvre une demande d'assistance avec ce transfert joint.",
+    "reportSubject": "Problème avec le transfert {{id}}",
+    "share": "Partager le reçu",
+    "repeat": "Répéter le transfert",
+    "view": "Voir le reçu"
   }
 }

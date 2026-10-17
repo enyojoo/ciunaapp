@@ -111,6 +111,12 @@ async function mock(page) {
     ] })
     if (p === "/api/support/unread") return json(route, { count: 1 })
     if (p === "/api/hub/messages/unread") return json(route, { count: 0, orders: [] })
+    if (/^\/api\/hub\/orders\/CIU-/i.test(p)) return route.fulfill({ status: 404, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ error: "ORDER_NOT_FOUND" }) })
+    const txm = p.match(/^\/api\/transactions\/(CIU-[A-Z0-9]+)\/status$/i)
+    if (txm) {
+      const st = process.env.CAPTURE_TX_STATUS || "completed"
+      return json(route, { transaction: { transaction_id: txm[1].toUpperCase(), status: st, type: "send", created_at: new Date(Date.now() - 3600000).toISOString(), completed_at: st === "completed" ? new Date(Date.now() - 1800000).toISOString() : null, send_amount: 45000, send_currency: "RUB", receive_amount: 756000, receive_currency: "NGN", total_amount: 45450, fee_amount: 450, exchange_rate: 16.8, payment_provider: "yookassa", recipient_id: "r1", recipient: { full_name: "Chidi Okafor", bank_name: "GTBank", account_number: "0123454821" } } })
+    }
     if (p === "/api/push/preferences") return json(route, { orders: true, messages: false, support: true })
     if (p === "/api/account/delete") return json(route, { blockers: { orders: process.env.CAPTURE_DELETE_BLOCKED ? 1 : 0, transfers: 0, refunds: 0 }, pending: null, waitDays: 30 })
     if (p === "/api/expert/profiles") return json(route, { profiles: [
@@ -147,6 +153,7 @@ const SHOTS = [
   { name: "receipt-order", path: "/receipt/order/CU-1042", wait: 2500, full: true },
   { name: "receipt-transfer", path: "/receipt/transfer/CIU-1042", wait: 2500, full: true },
   { name: "limits", path: "/limits", wait: 2500, full: true },
+  { name: "transfer-detail", path: "/orders/CIU-1042", wait: 3000, full: true },
   { name: "experts-browse", path: "/experts/browse", wait: 2500, full: true },
   { name: "notifications", path: "/notifications", wait: 2500, full: true },
   { name: "delete-account", path: "/delete-account", wait: 2500, full: true },
