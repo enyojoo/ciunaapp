@@ -55,6 +55,11 @@ with checks as (
   select 'account-deletion.sql', 'function account_request_deletion', exists (select 1 from pg_proc where proname = 'account_request_deletion')
   union all
   select 'account-deletion.sql', 'function account_purge_due', exists (select 1 from pg_proc where proname = 'account_purge_due')
+  union all
+  -- 10. push-preferences.sql
+  select 'push-preferences.sql', 'table push_preferences', to_regclass('public.push_preferences') is not null
+  union all
+  select 'push-preferences.sql', 'column marketplace_events.notified_at', exists (select 1 from information_schema.columns where table_name = 'marketplace_events' and column_name = 'notified_at')
 )
 select file, what, ok from checks order by ok, file, what;
 

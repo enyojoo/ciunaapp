@@ -193,6 +193,35 @@
     "supportReply": {
       "title": "O suporte respondeu",
       "body": "Nova resposta em “{{subject}}”."
+    },
+    "order": {
+      "paid": {
+        "title": "Pagamento recebido",
+        "body": "O pedido {{id}} está pago. O vendedor vai confirmá-lo em breve."
+      },
+      "accept": {
+        "title": "Pedido aceito",
+        "body": "O pedido {{id}} foi aceito."
+      },
+      "start": {
+        "title": "Trabalho iniciado",
+        "body": "O pedido {{id}} está sendo preparado."
+      },
+      "fulfill": {
+        "title": "Pedido concluído",
+        "body": "O pedido {{id}} está concluído. Conte como foi."
+      },
+      "cancel": {
+        "title": "Pedido cancelado",
+        "body": "O pedido {{id}} foi cancelado."
+      },
+      "refund": {
+        "title": "Reembolso enviado",
+        "body": "O reembolso do pedido {{id}} foi enviado."
+      }
+    },
+    "chat": {
+      "title": "Mensagem do vendedor"
     }
   }
 }

@@ -8,6 +8,7 @@ type Props = {
     created_at: string
     payment_state: string
     fulfillment_state: string
+    events?: { kind: string; created_at: string }[]
   }
 }
 
@@ -16,7 +17,7 @@ type Step = { key: string; label: string; state: "done" | "current" | "upcoming"
 /**
  * Customer view of one marketplace order. The API exposes three active fulfilment states
  * (accepted, in_progress, fulfilled), so the seller stages "preparing" and "ready" both show as
- * In progress until the API returns stage timestamps (customer-app plan, WP4).
+ * In progress. Each step shows when it happened, taken from the order's own events (paid, accept, start, fulfill, cancel, refund).
  */
 export function OrderTimeline({ order }: Props) {
   const { t, i18n } = useTranslation("app")
@@ -60,11 +61,21 @@ export function OrderTimeline({ order }: Props) {
     steps.push({ key: p, label: label(p, p), state: p === "refunded" ? "done" : "current" })
   }
 
-  const placedAt = order.created_at ? new Date(order.created_at) : null
-  const placedText =
-    placedAt && !Number.isNaN(placedAt.getTime())
-      ? placedAt.toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" })
-      : ""
+  const fmt = (iso?: string | null) => {
+    const d = iso ? new Date(iso) : null
+    return d && !Number.isNaN(d.getTime()) ? d.toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" }) : ""
+  }
+  // The first time each thing happened (events arrive newest first).
+  const at = (...kinds: string[]) => [...(order.events || [])].reverse().find((e) => kinds.includes(e.kind))?.created_at
+  const times: Record<string, string> = {
+    placed: fmt(order.created_at),
+    paid: fmt(at("paid")),
+    accepted: fmt(at("accept")),
+    in_progress: fmt(at("start")),
+    fulfilled: fmt(at("fulfill")),
+    cancelled: fmt(at("cancel")),
+    refunded: fmt(at("refund")),
+  }
 
   return (
     <View accessibilityRole="list" style={styles.list}>
@@ -80,7 +91,7 @@ export function OrderTimeline({ order }: Props) {
             <Text style={[styles.label, s.state === "upcoming" && styles.labelMuted, s.state === "stopped" && styles.labelStop]}>
               {s.label}
             </Text>
-            {s.key === "placed" && placedText ? <Text style={styles.time}>{placedText}</Text> : null}
+            {s.state !== "upcoming" && times[s.key] ? <Text style={styles.time}>{times[s.key]}</Text> : null}
           </View>
         </View>
       ))}

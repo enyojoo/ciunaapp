@@ -3,6 +3,8 @@ import { Home, History, LayoutDashboard } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useAuth } from "@/lib/auth-context"
+import { useChatUnread } from "@/lib/order-chat"
+import { useSupportUnread } from "@/lib/support-unread"
 import {
   TAB_BAR_ICON_SIZE,
   TAB_BAR_LABEL_LINE_HEIGHT,
@@ -21,6 +23,8 @@ export default function AppTabs() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const pathname = usePathname()
+  const chatUnread = useChatUnread(null, Boolean(user))
+  const supportUnread = useSupportUnread(Boolean(user))
   if (!loading && !user) return <Redirect href="/auth/login" />
   if (!loading && user && !pinUnlocked) return <Redirect href="/pin" />
 
@@ -91,6 +95,7 @@ export default function AppTabs() {
         name="transactions"
         options={{
           title: t("nav.orders", { defaultValue: "Orders" }),
+          tabBarBadge: chatUnread.count > 0 ? (chatUnread.count > 9 ? "9+" : chatUnread.count) : undefined,
           tabBarIcon: ({ color }) => <History size={TAB_BAR_ICON_SIZE} color={color} strokeWidth={2} />,
         }}
       />
@@ -98,6 +103,7 @@ export default function AppTabs() {
         name="more"
         options={{
           title: t("nav.account", { defaultValue: "Account" }),
+          tabBarBadge: supportUnread.count > 0 ? (supportUnread.count > 9 ? "9+" : supportUnread.count) : undefined,
           tabBarIcon: ({ color }) => (
             <LayoutDashboard size={TAB_BAR_ICON_SIZE} color={color} strokeWidth={2} />
           ),

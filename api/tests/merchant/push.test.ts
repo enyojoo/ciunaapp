@@ -39,3 +39,32 @@ test("the support reply notification exists in all six languages with the subjec
   }
   assert.notEqual(tEmail("push.supportReply.title", {}, "ru"), tEmail("push.supportReply.title", {}, "en"))
 })
+
+import { wants } from "../../lib/push"
+import { orderPushWanted, ORDER_PUSH_KINDS } from "../../lib/push-events"
+
+test("everything is on until the customer switches it off", () => {
+  assert.equal(wants(null, "orders"), true)
+  assert.equal(wants({}, "messages"), true)
+  assert.equal(wants({ orders: false }, "orders"), false)
+  assert.equal(wants({ orders: false }, "messages"), true)
+})
+
+test("only real order changes that are recent get a notification", () => {
+  const now = Date.parse("2026-10-19T12:00:00Z")
+  assert.equal(orderPushWanted("fulfill", "2026-10-19T11:59:00Z", now), true)
+  assert.equal(orderPushWanted("payment_method", "2026-10-19T11:59:00Z", now), false)
+  assert.equal(orderPushWanted("paid", "2026-10-19T04:00:00Z", now), false)
+})
+
+test("every order notification and the chat title exist in all six languages", () => {
+  for (const lng of ["en", "ru", "fr", "es", "zh", "pt"]) {
+    for (const kind of ORDER_PUSH_KINDS) {
+      const title = tEmail(`push.order.${kind}.title`, {}, lng)
+      const body = tEmail(`push.order.${kind}.body`, { id: "CI-1234" }, lng)
+      assert.ok(title && !title.startsWith("push."), `${lng} ${kind} title`)
+      assert.ok(body.includes("CI-1234") && !body.includes("{{"), `${lng} ${kind} body`)
+    }
+    assert.ok(!tEmail("push.chat.title", {}, lng).startsWith("push."), lng + " chat")
+  }
+})

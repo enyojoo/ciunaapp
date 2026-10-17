@@ -1474,6 +1474,18 @@
     "offline": "Sin conexión. Inténtalo cuando estés en línea."
   },
   "more": {
-    "deleteAccount": "Eliminar cuenta"
+    "deleteAccount": "Eliminar cuenta",
+    "notifications": "Notificaciones"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "lead": "Elige qué enviamos a este teléfono.",
+    "orders": "Pedidos",
+    "ordersHint": "Pago recibido, aceptado, completado, cancelado, reembolsado",
+    "messages": "Mensajes",
+    "messagesHint": "Cuando un vendedor te escribe sobre un pedido",
+    "support": "Soporte",
+    "supportHint": "Respuestas a tus solicitudes de soporte",
+    "failed": "No se pudo guardar. Inténtalo de nuevo."
   }
 }

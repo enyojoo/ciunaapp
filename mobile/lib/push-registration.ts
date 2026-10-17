@@ -50,7 +50,10 @@ export async function unregisterPush(): Promise<void> {
 
 /** Where a tapped notification should go, or null to just open the app. */
 export function routeForNotification(data: unknown): string | null {
-  const d = (data ?? {}) as { type?: unknown; requestId?: unknown }
-  if (d.type === "support" && typeof d.requestId === "string" && /^[0-9a-f-]{36}$/i.test(d.requestId)) return `/support/${d.requestId}`
+  const d = (data ?? {}) as { type?: unknown; requestId?: unknown; orderId?: unknown }
+  const uuid = (v: unknown): v is string => typeof v === "string" && /^[0-9a-f-]{36}$/i.test(v)
+  if (d.type === "support" && uuid(d.requestId)) return `/support/${d.requestId}`
+  if (d.type === "order" && uuid(d.orderId)) return `/orders/${d.orderId}`
+  if (d.type === "chat" && uuid(d.orderId)) return `/orders/${d.orderId}/chat`
   return null
 }

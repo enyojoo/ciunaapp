@@ -6,6 +6,11 @@ const TOKEN = /^Expo(?:nent)?PushToken\[[A-Za-z0-9_-]{8,}\]$/
 export type PushPayload = { title: string; body: string; data?: Record<string, unknown> }
 export type PushMessage = { to: string; title: string; body: string; sound: "default"; data: Record<string, unknown> }
 
+export type PushCategory = "orders" | "messages" | "support"
+
+/** Everything is on until the customer switches it off. */
+export const wants = (prefs: Partial<Record<PushCategory, boolean>> | null | undefined, category: PushCategory): boolean => prefs?.[category] !== false
+
 export const isExpoPushToken = (t: unknown): t is string => typeof t === "string" && TOKEN.test(t)
 
 /** One message per device. Title and body are trimmed to what a lock screen shows. */
@@ -24,9 +29,13 @@ export const chunk = <T,>(items: T[], size: number): T[][] => Array.from({ lengt
  * Sends a notification to every enabled device of a user. Best effort: it never throws, so an action such as a support
  * reply is not undone by a push failure.
  */
-export async function sendPushToUser(userId: string, payload: PushPayload): Promise<number> {
+export async function sendPushToUser(userId: string, payload: PushPayload, category?: PushCategory): Promise<number> {
   try {
     const db = createServerClient()
+    if (category) {
+      const { data: prefs } = await db.from("push_preferences").select("orders,messages,support").eq("user_id", userId).maybeSingle()
+      if (!wants(prefs as Partial<Record<PushCategory, boolean>> | null, category)) return 0
+    }
     const { data, error } = await db.from("push_tokens").select("token").eq("user_id", userId).eq("enabled", true)
     if (error || !data?.length) return 0
     const tokens = (data as { token: string }[]).map((r) => r.token)

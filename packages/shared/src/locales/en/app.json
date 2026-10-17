@@ -1474,6 +1474,18 @@
     "offline": "No connection. Try again when you are online."
   },
   "more": {
-    "deleteAccount": "Delete account"
+    "deleteAccount": "Delete account",
+    "notifications": "Notifications"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "lead": "Choose what we send to this phone.",
+    "orders": "Orders",
+    "ordersHint": "Payment received, accepted, completed, cancelled, refunded",
+    "messages": "Messages",
+    "messagesHint": "When a seller writes to you about an order",
+    "support": "Support",
+    "supportHint": "Replies to your support requests",
+    "failed": "Could not save. Try again."
   }
 }

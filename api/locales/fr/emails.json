@@ -193,6 +193,35 @@
     "supportReply": {
       "title": "L’assistance a répondu",
       "body": "Nouvelle réponse à « {{subject}} »."
+    },
+    "order": {
+      "paid": {
+        "title": "Paiement reçu",
+        "body": "La commande {{id}} est payée. Le vendeur va bientôt la confirmer."
+      },
+      "accept": {
+        "title": "Commande acceptée",
+        "body": "La commande {{id}} a été acceptée."
+      },
+      "start": {
+        "title": "Préparation en cours",
+        "body": "La commande {{id}} est en préparation."
+      },
+      "fulfill": {
+        "title": "Commande terminée",
+        "body": "La commande {{id}} est terminée. Dites-nous comment ça s'est passé."
+      },
+      "cancel": {
+        "title": "Commande annulée",
+        "body": "La commande {{id}} a été annulée."
+      },
+      "refund": {
+        "title": "Remboursement envoyé",
+        "body": "Le remboursement de la commande {{id}} a été envoyé."
+      }
+    },
+    "chat": {
+      "title": "Message du vendeur"
     }
   }
 }

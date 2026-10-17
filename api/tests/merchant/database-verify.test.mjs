@@ -34,7 +34,7 @@ test("verify-all.sql flags a database where the newest files were not run", asyn
   for (const m of MIGRATIONS.filter((f) => f < "20261017140000")) await db.exec(fs.readFileSync(root + "supabase/migrations/" + m, "utf8"))
   const missing = (await db.query(catalogQuery)).rows.filter((r) => !r.ok)
   assert.ok(missing.length > 0)
-  const unrun = new Set(["storefront-details.sql", "support-requests.sql", "send-limits.sql", "push-tokens.sql", "account-deletion.sql"])
+  const unrun = new Set(["storefront-details.sql", "support-requests.sql", "send-limits.sql", "push-tokens.sql", "account-deletion.sql", "push-preferences.sql"])
   assert.ok(missing.every((r) => unrun.has(r.file)), "only the unrun files should be flagged: " + JSON.stringify([...new Set(missing.map((r) => r.file))]))
   assert.ok(missing.some((r) => r.file === "support-requests.sql") && missing.some((r) => r.file === "storefront-details.sql"))
 })

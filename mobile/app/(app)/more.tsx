@@ -13,6 +13,7 @@ import {
   LogOut,
   ShieldCheck,
   Gauge,
+  Bell,
 } from "lucide-react-native"
 import { ScreenScroll } from "@/components/screen"
 import { ConfirmDialog } from "@/components/confirm-dialog"
@@ -119,6 +120,11 @@ export default function MoreScreen() {
 
       <GroupCard title={t("more.app")}>
         <LanguagePicker />
+        <Row
+          icon={<Bell size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
+          label={tApp("more.notifications", { defaultValue: "Notifications" })}
+          onPress={() => router.push("/notifications" as never)}
+        />
         <Row
           icon={<Heart size={16} color={colors.primaryDeep} strokeWidth={2.2} />}
           label={tApp("favourites.title", { defaultValue: "Favourites" })}

@@ -193,6 +193,35 @@
     "supportReply": {
       "title": "Support replied",
       "body": "New reply on “{{subject}}”."
+    },
+    "order": {
+      "paid": {
+        "title": "Payment received",
+        "body": "Order {{id}} is paid. The seller will confirm it soon."
+      },
+      "accept": {
+        "title": "Order accepted",
+        "body": "Order {{id}} was accepted."
+      },
+      "start": {
+        "title": "Work has started",
+        "body": "Order {{id}} is being prepared."
+      },
+      "fulfill": {
+        "title": "Order complete",
+        "body": "Order {{id}} is complete. Tell us how it went."
+      },
+      "cancel": {
+        "title": "Order cancelled",
+        "body": "Order {{id}} was cancelled."
+      },
+      "refund": {
+        "title": "Refund sent",
+        "body": "Your refund for order {{id}} has been sent."
+      }
+    },
+    "chat": {
+      "title": "Message from the seller"
     }
   }
 }

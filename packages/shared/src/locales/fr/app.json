@@ -1474,6 +1474,18 @@
     "offline": "Pas de connexion. Réessayez en ligne."
   },
   "more": {
-    "deleteAccount": "Supprimer le compte"
+    "deleteAccount": "Supprimer le compte",
+    "notifications": "Notifications"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "lead": "Choisissez ce que nous envoyons à ce téléphone.",
+    "orders": "Commandes",
+    "ordersHint": "Paiement reçu, acceptée, terminée, annulée, remboursée",
+    "messages": "Messages",
+    "messagesHint": "Quand un vendeur vous écrit au sujet d'une commande",
+    "support": "Assistance",
+    "supportHint": "Réponses à vos demandes d'assistance",
+    "failed": "Enregistrement impossible. Réessayez."
   }
 }

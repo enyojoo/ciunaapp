@@ -193,6 +193,35 @@
     "supportReply": {
       "title": "客服已回复",
       "body": "“{{subject}}”有新回复。"
+    },
+    "order": {
+      "paid": {
+        "title": "已收到付款",
+        "body": "订单 {{id}} 已付款，卖家将很快确认。"
+      },
+      "accept": {
+        "title": "订单已接受",
+        "body": "订单 {{id}} 已被接受。"
+      },
+      "start": {
+        "title": "已开始处理",
+        "body": "订单 {{id}} 正在准备中。"
+      },
+      "fulfill": {
+        "title": "订单已完成",
+        "body": "订单 {{id}} 已完成。欢迎评价。"
+      },
+      "cancel": {
+        "title": "订单已取消",
+        "body": "订单 {{id}} 已取消。"
+      },
+      "refund": {
+        "title": "退款已发出",
+        "body": "订单 {{id}} 的退款已发出。"
+      }
+    },
+    "chat": {
+      "title": "卖家的消息"
     }
   }
 }

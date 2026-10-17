@@ -1474,6 +1474,18 @@
     "offline": "没有网络。联网后再试。"
   },
   "more": {
-    "deleteAccount": "删除账户"
+    "deleteAccount": "删除账户",
+    "notifications": "通知"
+  },
+  "notifications": {
+    "title": "通知",
+    "lead": "选择向这部手机发送哪些通知。",
+    "orders": "订单",
+    "ordersHint": "已付款、已接受、已完成、已取消、已退款",
+    "messages": "消息",
+    "messagesHint": "卖家就订单给你发消息时",
+    "support": "客服",
+    "supportHint": "客服对你的请求的回复",
+    "failed": "保存失败，请重试。"
   }
 }
