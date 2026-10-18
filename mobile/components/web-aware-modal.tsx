@@ -17,11 +17,12 @@ export function WebAwareModal({
   sheetStyle?: StyleProp<ViewStyle>
 }) {
   const centered = useWebCenteredModal()
-  if (!visible) return null
+  // Stay mounted and let `Modal` own `visible`: returning null here removed the sheet before its slide-down / fade-out
+  // could play, so every sheet vanished instantly on close.
 
   if (centered) {
     return (
-      <Modal visible transparent animationType="fade" onRequestClose={onRequestClose}>
+      <Modal visible={visible} transparent animationType="fade" onRequestClose={onRequestClose}>
         <View style={webCenteredModalStyles.overlay}>
           <Pressable
             style={StyleSheet.absoluteFill}
@@ -38,7 +39,7 @@ export function WebAwareModal({
   }
 
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onRequestClose}>
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onRequestClose}>
       <View style={styles.sheetOverlay}>
         <Pressable style={StyleSheet.absoluteFill} onPress={onRequestClose} accessibilityRole="button" accessibilityLabel="Close" />
         <View style={[styles.sheet, sheetStyle]}>{children}</View>
