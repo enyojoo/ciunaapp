@@ -40,7 +40,7 @@ export function HubCartBar({ lineSlug, vendorId }: { lineSlug: "food" | "mart"; 
         accessibilityLabel={t("hub.cart.viewCart", { defaultValue: "View cart" })}
       >
         <View style={styles.left}>
-          <ShoppingCart size={20} color={colors.onPrimary} strokeWidth={2.2} />
+          <ShoppingCart size={18} color={colors.onPrimary} strokeWidth={2.2} />
           <Text style={styles.label}>
             {t("hub.cart.viewCart", { defaultValue: "View cart" })} · {t("hub.cart.itemCount", { defaultValue: "{{count}} item", count })}
           </Text>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
-    minHeight: 56,
+    minHeight: 44,
     borderRadius: radius.card,
     backgroundColor: colors.primary,
     paddingHorizontal: 18,
