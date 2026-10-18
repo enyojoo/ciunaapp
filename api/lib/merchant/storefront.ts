@@ -1,3 +1,4 @@
+import { cleanCommunities } from "@ciuna/shared"
 import { openState, type Schedule } from "./hours"
 
 /** Public storefront fields derived from a hub_vendors row: hours state, minimum order, cover, verification tier. */
@@ -19,6 +20,7 @@ export function storefrontFields(row: Record<string, any>, now: Date = new Date(
     min_order_currency: row.min_order_currency ? String(row.min_order_currency) : null,
     cover_url: row.cover_url ? String(row.cover_url) : null,
     verification_tier: Number(row.verification_tier) || (row.is_verified ? 1 : 0),
+    communities: cleanCommunities(row.communities),
   }
 }
 

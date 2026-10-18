@@ -75,3 +75,22 @@ test("finance can read the merchant list but not review applications", () => {
   assert.ok(!adminCan("finance", "merchants.review"))
   assert.ok(adminCan("support", "merchants.read"))
 })
+
+test("communities: a store can set up to five known ids; anything else is rejected", () => {
+  const store: any = { ...merchant, type: "store" }
+  assert.deepEqual(pickEditable({ communities: ["nigerian", "chinese"] }, store).communities, ["nigerian", "chinese"])
+  assert.deepEqual(pickEditable({ communities: [] }, store).communities, [])
+  const code = (fn: () => unknown) => {
+    try {
+      fn()
+    } catch (e) {
+      return (e as MerchantError).code
+    }
+    return null
+  }
+  assert.equal(code(() => pickEditable({ communities: ["klingon"] }, store)), "COMMUNITIES_INVALID")
+  assert.equal(code(() => pickEditable({ communities: ["indian", "indian"] }, store)), "COMMUNITIES_INVALID")
+  assert.equal(code(() => pickEditable({ communities: ["nigerian", "african", "chinese", "indian", "arab", "turkish"] }, store)), "COMMUNITIES_INVALID")
+  assert.equal(code(() => pickEditable({ communities: "nigerian" }, store)), "COMMUNITIES_INVALID")
+  assert.equal(code(() => pickEditable({ communities: ["nigerian"] }, { ...merchant, type: "expert" })), "COMMUNITIES_STORES_ONLY")
+})

@@ -5,6 +5,7 @@ import { MERCHANT_EDITABLE_FIELDS, SUPPORTED_CURRENCIES, SUPPORTED_LANGUAGES } f
 import type { MerchantRow } from "./auth"
 import { isValidTimeZone } from "./hours"
 import { isMissingSchemaError } from "@/lib/safe-select"
+import { MAX_STORE_COMMUNITIES, isCommunityId } from "@ciuna/shared"
 
 const db = () => createServerClient()
 
@@ -91,6 +92,9 @@ export function pickEditable(body: Record<string, any>, merchant: MerchantRow) {
       v = Array.from(new Set(v))
     } else if (key === "default_language") {
       assert((SUPPORTED_LANGUAGES as readonly string[]).includes(v), "LANGUAGE_INVALID")
+    } else if (key === "communities") {
+      assert(merchant.type === "store", "COMMUNITIES_STORES_ONLY")
+      assert(Array.isArray(v) && v.length <= MAX_STORE_COMMUNITIES && v.every(isCommunityId) && new Set(v).size === v.length, "COMMUNITIES_INVALID")
     } else if (key === "time_zone") {
       assert(isValidTimeZone(v), "TIME_ZONE_INVALID")
     } else if (key === "default_currency") {
@@ -157,7 +161,7 @@ export async function syncStorefrontFields(merchant: MerchantRow) {
       .update({ name: merchant.display_name, photo_url: merchant.logo_url, short_bio: desc, translations: { description: merchant.description || {} }, updated_at: new Date().toISOString() })
       .eq("merchant_id", merchant.id)
     check(error)
-    await mirrorOptional("hub_vendors", merchant.id, { cover_url: merchant.cover_url, time_zone: merchant.time_zone })
+    await mirrorOptional("hub_vendors", merchant.id, { cover_url: merchant.cover_url, time_zone: merchant.time_zone, communities: merchant.communities ?? [] })
   } else {
     const { error } = await db()
       .from("expert_profiles")

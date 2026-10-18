@@ -36,6 +36,8 @@ export const NEW_COLUMNS = [
   "is_paused",
   // 20261019180000_expert_main_category.sql
   "main_category",
+  // 20261020100000_store_communities.sql
+  "communities",
 ] as const
 
 const MISSING_CODES = new Set(["42703", "42P01", "PGRST204", "PGRST205"])

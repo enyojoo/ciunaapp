@@ -31,6 +31,7 @@ export const MERCHANT_EDITABLE_FIELDS = [
   "contact_phone",
   "website",
   "time_zone",
+  "communities",
 ] as const
 
 export const SUPPORTED_LANGUAGES = ["en", "ru", "fr", "es", "zh", "pt"] as const

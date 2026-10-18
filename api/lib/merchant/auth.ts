@@ -13,6 +13,8 @@ export interface MerchantRow {
   country: string
   operating_country: string
   languages: string[]
+  /** Communities a store serves (ids in packages/shared/src/hub/communities.ts). Stores only. */
+  communities?: string[]
   default_language: string
   default_currency: string
   status: string

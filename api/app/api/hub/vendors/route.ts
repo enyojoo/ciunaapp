@@ -18,7 +18,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   }
 
   const server = createServerClient()
-  const { data, error } = await safeSelect("hub_vendors", "id, service_line_slug, name, slug, photo_url, short_bio, location, is_published, is_verified, rating_avg, rating_count, created_at, updated_at, opening_hours, time_zone, min_order_amount, min_order_currency, cover_url, verification_tier", (cols) =>
+  const { data, error } = await safeSelect("hub_vendors", "id, service_line_slug, name, slug, photo_url, short_bio, location, is_published, is_verified, rating_avg, rating_count, created_at, updated_at, opening_hours, time_zone, min_order_amount, min_order_currency, cover_url, verification_tier, communities", (cols) =>
     server
       .from("hub_vendors")
       .select(cols)
