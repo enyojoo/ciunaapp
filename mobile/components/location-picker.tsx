@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
     height: 36,
-    width: 176,
+    width: 124,
     flexShrink: 1,
     paddingHorizontal: 10,
     marginRight: 4,

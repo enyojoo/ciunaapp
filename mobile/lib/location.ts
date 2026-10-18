@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react"
 import { RU_CITIES, normalizeRuCity, sameCity } from "@ciuna/shared"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useCommunity, vendorServesCommunity } from "@/lib/community"
 import { useHubCatalog } from "@/lib/use-hub-catalog"
 import type { ExpertCatalogService, ExpertProfile, HubProduct, HubVendor } from "@/lib/types"
 
@@ -81,18 +82,24 @@ export function vendorServesCity(v: Pick<HubVendor, "delivery_areas" | "delivery
   return areas.some((a) => sameCity(a.city, city))
 }
 
-/** Stores and their products narrowed to the chosen city. Products without a store (digital) always stay. */
+/**
+ * Stores and their products narrowed to the chosen city and community. A city keeps stores that deliver there, plus
+ * pickup-only and digital sellers; a community keeps only stores that serve it, so digital items without a store drop out.
+ */
 export function useLocationFilter(vendors: HubVendor[], products: HubProduct[]) {
   const { city } = useLocationCity()
+  const { community } = useCommunity()
   return useMemo(() => {
-    if (!city) return { city, vendors, products }
-    const ok = new Set(vendors.filter((v) => vendorServesCity(v, city)).map((v) => v.id))
+    if (!city && !community) return { city, community, vendors, products }
+    const ok = new Set(vendors.filter((v) => vendorServesCity(v, city) && vendorServesCommunity(v, community)).map((v) => v.id))
+    const known = new Set(vendors.map((v) => v.id))
     return {
       city,
+      community,
       vendors: vendors.filter((v) => ok.has(v.id)),
-      products: products.filter((p) => !p.vendor_id || ok.has(p.vendor_id) || !vendors.some((v) => v.id === p.vendor_id)),
+      products: products.filter((p) => (p.vendor_id ? ok.has(p.vendor_id) || (!known.has(p.vendor_id) && !community) : !community)),
     }
-  }, [city, vendors, products])
+  }, [city, community, vendors, products])
 }
 
 /** Experts and services: online ones always show; in-person ones show unless their service area names other places. */

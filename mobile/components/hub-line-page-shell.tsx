@@ -16,6 +16,7 @@ import { Icon } from "@/components/ui/icon"
 import { NavBar } from "@/components/ui/nav-bar"
 import { PressableScale } from "@/components/ui/pressable-scale"
 import { VerifiedBadge } from "@/components/verified-badge"
+import { CommunityPill } from "@/components/community-picker"
 import { LocationPill } from "@/components/location-picker"
 import { SearchHeroButton } from "@/components/search-entry"
 import { colors, radius, space, type as typeSize } from "@/lib/theme"
@@ -201,6 +202,7 @@ export function HubLinePageShell({
   trailingAction: trailingProp,
   searchLine,
   locationPicker,
+  communityPicker,
 }: {
   title: string
   subtitle?: string | null
@@ -221,11 +223,14 @@ export function HubLinePageShell({
   searchLine?: "food" | "mart" | "experts"
   /** Shows the location pill in the bar, before the other actions (Food, Mart and Experts homes). */
   locationPicker?: boolean
+  /** Shows the community filter before the location pill (Food and Mart homes). */
+  communityPicker?: boolean
 }) {
   const router = useRouter()
   const trailingAction =
-    searchLine || trailingProp || locationPicker ? (
+    searchLine || trailingProp || locationPicker || communityPicker ? (
       <View style={styles.trailing}>
+        {communityPicker ? <CommunityPill /> : null}
         {locationPicker ? <LocationPill /> : null}
         {searchLine ? <SearchHeroButton line={searchLine} /> : null}
         {trailingProp}

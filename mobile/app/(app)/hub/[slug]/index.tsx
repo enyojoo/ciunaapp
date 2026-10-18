@@ -188,6 +188,7 @@ export default function HubLineCatalog() {
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />
         }
         locationPicker={marketplace}
+        communityPicker={marketplace}
         trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} /> : undefined}
       >
         {catalog}

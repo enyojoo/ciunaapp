@@ -102,6 +102,8 @@ export type HubVendor = {
   hours_configured?: boolean
   is_open?: boolean
   is_paused?: boolean
+    /** Communities the store serves (ids in packages/shared/src/hub/communities.ts). */
+    communities?: string[]
     delivery_zone_count?: number
     /** City/district pairs the store delivers to (from its active zones). */
     delivery_areas?: { city: string; district: string }[]
