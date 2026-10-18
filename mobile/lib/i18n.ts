@@ -1,6 +1,8 @@
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import * as Localization from "expo-localization"
+import { pickSupportedLanguage } from "@ciuna/shared"
+import { AppState } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import enCommon from "@ciuna/shared/locales/en/common.json"
@@ -30,9 +32,12 @@ const resources = {
 
 const STORAGE_KEY = "ciuna_locale"
 
-function deviceLocale(): AppLocale {
-  const tag = Localization.getLocales()[0]?.languageCode ?? "en"
-  return (SUPPORTED_LOCALES as readonly string[]).includes(tag) ? (tag as AppLocale) : "en"
+/**
+ * The first of the device's preferred languages that the app supports (a German-then-Chinese phone gets Chinese, not
+ * English). Regional and script variants map to their language (zh-Hans-CN and zh-Hant both give zh, pt-BR and pt-PT give pt).
+ */
+export function deviceLocale(): AppLocale {
+  return pickSupportedLanguage(Localization.getLocales(), SUPPORTED_LOCALES, "en")
 }
 
 if (!i18n.isInitialized) {
@@ -49,16 +54,42 @@ if (!i18n.isInitialized) {
   })
 }
 
+/**
+ * Applies an explicit choice (picked in the app, or saved on the account) if there is one. Otherwise the app follows the
+ * device language, including when the device language changes while the app is closed or in the background.
+ */
 export async function hydrateLocale(): Promise<void> {
   const stored = await AsyncStorage.getItem(STORAGE_KEY)
   if (stored && (SUPPORTED_LOCALES as readonly string[]).includes(stored)) {
     await i18n.changeLanguage(stored)
+    return
   }
+  await followDeviceLocale()
+}
+
+/** With no explicit choice, switch to the device language if it differs from the one showing. */
+async function followDeviceLocale(): Promise<void> {
+  const stored = await AsyncStorage.getItem(STORAGE_KEY)
+  if (stored) return
+  const device = deviceLocale()
+  if ((i18n.language || "").split("-")[0] !== device) await i18n.changeLanguage(device)
+}
+
+let watchingAppState = false
+/** Re-check the device language when the app returns to the foreground (the user may have changed it in Settings). */
+function watchDeviceLocale() {
+  if (watchingAppState) return
+  watchingAppState = true
+  AppState.addEventListener("change", (next) => {
+    if (next === "active") void followDeviceLocale()
+  })
 }
 
 export async function setAppLocale(lng: AppLocale): Promise<void> {
   await AsyncStorage.setItem(STORAGE_KEY, lng)
   await i18n.changeLanguage(lng)
 }
+
+watchDeviceLocale()
 
 export default i18n

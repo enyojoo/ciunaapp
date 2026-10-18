@@ -9,6 +9,7 @@ export {
   resolveSellerUrl,
   joinApiPath,
 } from "./constants/urls"
+export { pickSupportedLanguage, type DeviceLocale } from "./locale/pick-language"
 export { COMMUNITY_IDS, MAX_STORE_COMMUNITIES, cleanCommunities, isCommunityId, type CommunityId } from "./hub/communities"
 export { RU_CITIES, RU_POPULAR_CITIES, normalizeRuCity, ruCityLabel, sameCity, searchRuCities, type RuCity } from "./geo/ru-cities"
 export { roundMoney } from "./money/round"
