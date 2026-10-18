@@ -10,19 +10,22 @@ import { colors, space, type as typeSize } from "@/lib/theme"
 /**
  * One action in a nav bar (cart, heart, share, search). Every action is the same 44 pt slot with a 22 pt ink glyph,
  * so a screen's actions line up with every other screen's. Put the cart last: it then sits in the same place
- * everywhere. `badge` shows a count (9+ above nine).
+ * everywhere. `dot` shows a small orange dot on the glyph ("there is something in here", e.g. a cart with items);
+ * `badge` shows a count (9+ above nine).
  */
 export function NavAction({
   label,
   onPress,
   children,
   badge,
+  dot,
   selected,
 }: {
   label: string
   onPress?: () => void
   children: ReactNode
   badge?: number
+  dot?: boolean
   selected?: boolean
 }) {
   return (
@@ -37,6 +40,7 @@ export function NavAction({
       style={styles.action}
     >
       {children}
+      {dot ? <View style={styles.dot} /> : null}
       {badge && badge > 0 ? (
         <View style={styles.badge}>
           <AppText variant="caption" tone="onPrimary" style={styles.badgeText} maxFontSizeMultiplier={1.2}>
@@ -113,7 +117,7 @@ export function NavBar({
       <View style={styles.bar} pointerEvents="box-none">
         {title && ios ? (
           <View style={styles.centerTitle} pointerEvents="none">
-            <AppText variant="bodyStrong" numberOfLines={1} accessibilityRole="header" style={styles.titleText}>
+            <AppText variant="headline" numberOfLines={1} accessibilityRole="header">
               {title}
             </AppText>
           </View>
@@ -141,11 +145,13 @@ const styles = StyleSheet.create({
   side: { minWidth: 44, flexDirection: "row", alignItems: "center" },
   trailing: { justifyContent: "flex-end", flexShrink: 1 },
   action: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
-  badge: { position: "absolute", top: 5, right: 3, minWidth: 18, height: 18, borderRadius: 9, paddingHorizontal: 4, alignItems: "center", justifyContent: "center", backgroundColor: colors.primary, borderWidth: 2, borderColor: colors.paper },
+  // A 10 pt dot (plus a 2 pt ring in the page colour) centred on the glyph's top-right corner.
+  dot: { position: "absolute", top: 4, right: 4, width: 14, height: 14, borderRadius: 7, backgroundColor: colors.primary, borderWidth: 2, borderColor: colors.paper },
+  // Sits on the icon's top-right corner (icon is 22 pt centred in the 44 pt slot) so it never hides the glyph.
+  badge: { position: "absolute", top: 0, right: -2, minWidth: 20, height: 20, borderRadius: 10, paddingHorizontal: 5, alignItems: "center", justifyContent: "center", backgroundColor: colors.primary, borderWidth: 2, borderColor: colors.paper },
   badgeText: { fontSize: typeSize.caption, lineHeight: 12 },
   back: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   spacer: { flex: 1 },
   leftTitle: { flex: 1, marginLeft: space.xs },
   centerTitle: { position: "absolute", top: 0, bottom: 0, left: 0, right: 0, alignItems: "center", justifyContent: "center", paddingHorizontal: 96 },
-  titleText: { fontSize: typeSize.body },
 })

@@ -1,6 +1,4 @@
 import { Redirect, Tabs, usePathname, useRouter } from "expo-router"
-import { Platform } from "react-native"
-import { NativeTabs } from "expo-router/native-tabs"
 import { Icon } from "@/components/ui/icon"
 import { useTranslation } from "react-i18next"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -34,27 +32,8 @@ export default function AppTabs() {
   const hideTabBar = showSidebarShell || (isWeb && mode !== "mobile") || !isTabRootPath(pathname)
   const badge = (n: number) => (n > 0 ? (n > 9 ? "9+" : String(n)) : undefined)
 
-  // iOS gets the system tab bar (glass on iOS 26, scroll-to-top, native badges). Android and web keep the styled JS bar.
-  if (Platform.OS === "ios") {
-    return (
-      <NativeTabs hidden={hideTabBar} tintColor={colors.primary} badgeBackgroundColor={colors.primary}>
-        <NativeTabs.Trigger name="hub">
-          <NativeTabs.Trigger.Icon sf={{ default: "house", selected: "house.fill" }} />
-          <NativeTabs.Trigger.Label>{t("nav.home", { defaultValue: "Home" })}</NativeTabs.Trigger.Label>
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="activities">
-          <NativeTabs.Trigger.Icon sf="clock.arrow.circlepath" />
-          <NativeTabs.Trigger.Label>{t("nav.activities", { defaultValue: "Activities" })}</NativeTabs.Trigger.Label>
-          <NativeTabs.Trigger.Badge hidden={chatUnread.count === 0}>{badge(chatUnread.count)}</NativeTabs.Trigger.Badge>
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="more">
-          <NativeTabs.Trigger.Icon sf={{ default: "person", selected: "person.fill" }} />
-          <NativeTabs.Trigger.Label>{t("nav.account", { defaultValue: "Account" })}</NativeTabs.Trigger.Label>
-          <NativeTabs.Trigger.Badge hidden={supportUnread.count === 0}>{badge(supportUnread.count)}</NativeTabs.Trigger.Badge>
-        </NativeTabs.Trigger>
-      </NativeTabs>
-    )
-  }
+  // One docked tab bar on every platform (full width, border on top, sits on the bottom edge). iOS 26's system tab bar
+  // floats as a pill over the content, so the app uses its own bar on iOS too.
   const bottomInset = tabBarBottomInset(insets.bottom, false)
   const barHeight = tabBarHeight(insets.bottom, false)
 
