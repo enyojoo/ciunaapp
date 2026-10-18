@@ -158,7 +158,7 @@ export function BitbankerKycSheet({
       />
       <PrimaryButton
         label={t("verification.kycBridge.refreshAfter", {
-          defaultValue: "I’ve finished — check status",
+          defaultValue: "I’ve finished, check status",
         })}
         variant="ghost"
         onPress={() => {

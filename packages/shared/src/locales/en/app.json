@@ -119,7 +119,7 @@
     "clearFilters": "Clear filters",
     "noMatch": "No matches",
     "noMatchBody": "Try another name or filter.",
-    "marketplaceNoVendors": "No stores yet — check back soon.",
+    "marketplaceNoVendors": "No stores yet. Check back soon.",
     "verifiedVendor": "Verified vendor",
     "backToLine": "Back to line",
     "vendorStoreNotFound": "Store not found",
@@ -141,7 +141,7 @@
     "expertsFeaturedHeading": "Featured",
     "expertsSeeAll": "All experts",
     "expertsServicesHeading": "Services",
-    "expertsFeaturedEmpty": "No experts yet — check back soon.",
+    "expertsFeaturedEmpty": "No experts yet. Check back soon.",
     "expertsDirectoryTitle": "All experts",
     "expertsDirectorySubtitle": "Browse every expert on Ciuna.",
     "backToExperts": "Back to experts",
@@ -301,7 +301,7 @@
   },
   "assistant": {
     "title": "Assistant",
-    "intro": "Tell us what you need — Ciuna Assistant coordinates pickup, shopping, and errands.",
+    "intro": "Tell us what you need. Ciuna Assistant coordinates pickup, shopping, and errands.",
     "help": "Help",
     "section": {
       "serviceType": "Service type",
@@ -325,7 +325,7 @@
     "placeholder": {
       "pickup": "Where to pick up, codes, contact on site…",
       "buy": "Store name, product list, sizes, alternatives…",
-      "vehicle": "Bike, car, van — or leave blank for any",
+      "vehicle": "Bike, car, van, or leave blank for any",
       "dropoff": "Full drop-off address and access notes"
     },
     "cta": {
@@ -423,15 +423,15 @@
       "slotUnavailable": "This time slot is no longer available.",
       "tryAgain": "Try booking again",
       "successTitle": "You’re booked",
-      "successBody": "Thanks — your session with {{name}} is reserved.",
+      "successBody": "Thanks, your session with {{name}} is reserved.",
       "confirmationEmail": "We sent a confirmation to {{email}}.",
       "bookAnother": "Book another session",
       "quoteNote": "Final price may be agreed separately before or after the session.",
       "priceQuote": "We’ll agree price later",
       "priceHourly": "{{rate}} {{currency}} / hr",
       "priceFixed": "{{amount}} {{currency}}",
-      "priceFixedWithLabel": "{{amount}} {{currency}} — {{label}}",
-      "priceDash": "—"
+      "priceFixedWithLabel": "{{amount}} {{currency}} · {{label}}",
+      "priceDash": "-"
     },
     "slots": {
       "timezone": "Times shown in your time zone ({{zone}})",
@@ -844,7 +844,7 @@
     "resendVerificationFailed": "Failed to send verification email. Please try again.",
     "optionalSuffix": " (Optional)",
     "fulfillmentErrorOutsideBank": "This receive amount is outside the range allowed for bank transfer on this corridor. Adjust the amount or add a cash window in admin / contact support.",
-    "fulfillmentErrorOverlap": "This receive amount matches both bank and cash rules. Corridor settings should use disjoint ranges — contact support.",
+    "fulfillmentErrorOverlap": "This receive amount matches both bank and cash rules. Corridor settings should use disjoint ranges. Contact support.",
     "fulfillmentErrorGap": "This receive amount is not eligible for this corridor. Adjust the amount.",
     "cashHandBanner": "For this amount, funds will be delivered as cash to the address you select (not by bank transfer).",
     "logisticsFeeLabel": "Logistics fee",
@@ -900,7 +900,7 @@
     "updateRecipient": "Update Recipient",
     "failedAdd": "Failed to add recipient",
     "failedUpdate": "Failed to update recipient",
-    "failedDeleteLinked": "Failed to delete — linked to a transaction",
+    "failedDeleteLinked": "Failed to delete: linked to a transaction",
     "noMatchSearch": "No recipients match your search",
     "noneFound": "No recipients found",
     "emptyAddHint": "Add your first recipient to get started",
@@ -1084,16 +1084,16 @@
     "hubStatusVerifiedTitle": "You're ready to send",
     "hubStatusVerifiedBody": "Your identity is verified. Open Send to transfer money.",
     "hubStatusPendingTitle": "Verification in progress",
-    "hubStatusPendingBody": "We're checking your passport details. Most reviews finish in a few minutes — this page updates automatically.",
+    "hubStatusPendingBody": "We're checking your passport details. Most reviews finish in a few minutes. This page updates automatically.",
     "hubStatusNeededTitle": "Confirm your identity",
     "hubStatusNeededBody": "Sending money requires a one-time identity check with our payment partner (Russian and foreign passports supported).",
     "hubContinueCta": "Verify identity",
     "optionalSection": "Upload documents",
     "sbpFormTitle": "Identity verification",
-    "formLead": "Use the exact name and passport details on your document — errors can block sending.",
+    "formLead": "Use the exact name and passport details on your document. Errors can block sending.",
     "sbpSuccessTitle": "You're ready to send",
     "sbpSuccessBody": "Identity verified. Go to Send to make a transfer.",
-    "sbpChecking": "We're reviewing your submission. Most checks finish in a few minutes — you can leave and come back.",
+    "sbpChecking": "We're reviewing your submission. Most checks finish in a few minutes. You can leave and come back.",
     "passportSegmentRu": "Russian passport",
     "passportSegmentForeign": "Other passport",
     "passportCountryShort": "Passport country",
@@ -1596,9 +1596,9 @@
         "title": "Your community, close by.",
         "body": "Stores and experts run by people like you."
       },
-      "pay": {
-        "title": "Pay the way you know.",
-        "body": "Bank transfer, QR or card, in your currency."
+      "language": {
+        "title": "Your app, in your language.",
+        "body": "English, Русский, Français, Español, 中文, Português."
       }
     },
     "now": {

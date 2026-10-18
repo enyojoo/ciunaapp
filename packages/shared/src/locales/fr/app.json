@@ -119,7 +119,7 @@
     "clearFilters": "Effacer les filtres",
     "noMatch": "Aucun résultat",
     "noMatchBody": "Essayez un autre nom ou filtre.",
-    "marketplaceNoVendors": "Pas encore de magasins — revenez bientôt.",
+    "marketplaceNoVendors": "Pas encore de magasins. Revenez bientôt.",
     "verifiedVendor": "Vendeur vérifié",
     "backToLine": "Retour au service",
     "vendorStoreNotFound": "Magasin introuvable",
@@ -141,7 +141,7 @@
     "expertsFeaturedHeading": "En vedette",
     "expertsSeeAll": "Tous les experts",
     "expertsServicesHeading": "Services",
-    "expertsFeaturedEmpty": "Aucun expert pour le moment — revenez bientôt.",
+    "expertsFeaturedEmpty": "Aucun expert pour le moment. Revenez bientôt.",
     "expertsDirectoryTitle": "Tous les experts",
     "expertsDirectorySubtitle": "Parcourez tous les experts sur Ciuna.",
     "backToExperts": "Retour aux experts",
@@ -301,7 +301,7 @@
   },
   "assistant": {
     "title": "Assistant",
-    "intro": "Dites-nous ce dont vous avez besoin — l’assistant Ciuna coordonne les enlèvements, courses et petites tâches.",
+    "intro": "Dites-nous ce dont vous avez besoin. L’assistant Ciuna coordonne les enlèvements, courses et petites tâches.",
     "help": "Aide",
     "section": {
       "serviceType": "Type de service",
@@ -325,7 +325,7 @@
     "placeholder": {
       "pickup": "Lieu de retrait, codes, contact sur place…",
       "buy": "Nom du magasin, liste de produits, tailles, alternatives…",
-      "vehicle": "Vélo, voiture, camionnette — ou laissez vide pour indifférent",
+      "vehicle": "Vélo, voiture, camionnette ou laissez vide pour indifférent",
       "dropoff": "Adresse complète de livraison et accès"
     },
     "cta": {
@@ -680,7 +680,7 @@
     "resendVerificationFailed": "Impossible d’envoyer l’e-mail. Réessayez.",
     "optionalSuffix": " (facultatif)",
     "fulfillmentErrorOutsideBank": "Ce montant reçu est hors plage pour un virement bancaire sur ce couloir. Ajustez le montant ou contactez le support.",
-    "fulfillmentErrorOverlap": "Ce montant correspond à la fois au règles banque et espèces. Les plages doivent être disjointes — contactez le support.",
+    "fulfillmentErrorOverlap": "Ce montant correspond à la fois au règles banque et espèces. Les plages doivent être disjointes. Contactez le support.",
     "fulfillmentErrorGap": "Ce montant n'est pas éligible sur ce couloir. Ajustez le montant.",
     "cashHandBanner": "Pour ce montant, les fonds seront livrés en espèces à l'adresse choisie.",
     "logisticsFeeLabel": "Frais logistiques",
@@ -736,7 +736,7 @@
     "updateRecipient": "Mettre à jour",
     "failedAdd": "Impossible d’ajouter le bénéficiaire",
     "failedUpdate": "Impossible de mettre à jour le bénéficiaire",
-    "failedDeleteLinked": "Suppression impossible — lié à une transaction",
+    "failedDeleteLinked": "Suppression impossible : lié à une transaction",
     "noMatchSearch": "Aucun bénéficiaire ne correspond",
     "noneFound": "Aucun bénéficiaire",
     "emptyAddHint": "Ajoutez un bénéficiaire pour commencer",
@@ -920,16 +920,16 @@
     "hubStatusVerifiedTitle": "Vous pouvez envoyer",
     "hubStatusVerifiedBody": "Identité vérifiée. Ouvrez Send pour effectuer un transfert.",
     "hubStatusPendingTitle": "Vérification en cours",
-    "hubStatusPendingBody": "Nous contrôlons vos données passeport. La plupart des dossiers sont traités en quelques minutes — cette page se met à jour automatiquement.",
+    "hubStatusPendingBody": "Nous contrôlons vos données passeport. La plupart des dossiers sont traités en quelques minutes. Cette page se met à jour automatiquement.",
     "hubStatusNeededTitle": "Confirmez votre identité",
-    "hubStatusNeededBody": "L’envoi d’argent exige un contrôle d’identité unique (passeport et téléphone). Comptez environ 5 minutes — exigence de notre partenaire de paiement.",
+    "hubStatusNeededBody": "L’envoi d’argent exige un contrôle d’identité unique (passeport et téléphone). Comptez environ 5 minutes. Exigence de notre partenaire de paiement.",
     "hubContinueCta": "Vérifier maintenant",
     "optionalSection": "Téléverser des documents",
     "sbpFormTitle": "Vérification d’identité",
-    "formLead": "Saisissez exactement les données de votre passeport — toute erreur peut bloquer l’envoi.",
+    "formLead": "Saisissez exactement les données de votre passeport. Toute erreur peut bloquer l’envoi.",
     "sbpSuccessTitle": "Vous pouvez envoyer",
     "sbpSuccessBody": "Identité vérifiée. Allez dans Send pour transférer.",
-    "sbpChecking": "Nous examinons votre demande. La plupart des contrôles prennent quelques minutes — vous pouvez revenir plus tard.",
+    "sbpChecking": "Nous examinons votre demande. La plupart des contrôles prennent quelques minutes. Vous pouvez revenir plus tard.",
     "passportSegmentRu": "Passeport russe",
     "passportSegmentForeign": "Autre passeport",
     "passportCountryShort": "Pays du passeport",
@@ -1192,15 +1192,15 @@
       "slotUnavailable": "Ce créneau n'est plus disponible.",
       "tryAgain": "Réessayer la réservation",
       "successTitle": "Réservation confirmée",
-      "successBody": "Merci — votre session avec {{name}} est réservée.",
+      "successBody": "Merci, votre session avec {{name}} est réservée.",
       "confirmationEmail": "Nous avons envoyé une confirmation à {{email}}.",
       "bookAnother": "Réserver une autre session",
       "quoteNote": "Le prix final peut être convenu séparément avant ou après la session.",
       "priceQuote": "Nous conviendrons du prix plus tard",
       "priceHourly": "{{rate}} {{currency}} / h",
       "priceFixed": "{{amount}} {{currency}}",
-      "priceFixedWithLabel": "{{amount}} {{currency}} — {{label}}",
-      "priceDash": "—"
+      "priceFixedWithLabel": "{{amount}} {{currency}} · {{label}}",
+      "priceDash": "-"
     },
     "slots": {
       "timezone": "Heures affichées dans votre fuseau horaire ({{zone}})",
@@ -1589,16 +1589,16 @@
       "adLabel": "Publicité",
       "position": "Diapositive {{n}} sur {{total}}",
       "sorted": {
-        "title": "La vie à l'étranger, simplifiée.",
-        "body": "Argent, repas et aide du pays, dans une seule app."
+        "title": "La vie ailleurs, simplifiée.",
+        "body": "Argent, repas et aide, dans une seule app."
       },
       "community": {
-        "title": "Votre communauté, tout près.",
-        "body": "Des boutiques et experts tenus par des gens comme vous."
+        "title": "Votre communauté, à côté.",
+        "body": "Boutiques et experts de gens comme vous."
       },
-      "pay": {
-        "title": "Payez comme vous en avez l'habitude.",
-        "body": "Virement, QR ou carte, dans votre devise."
+      "language": {
+        "title": "Votre appli, votre langue.",
+        "body": "English, Русский, Français, Español, 中文, Português."
       }
     },
     "now": {

@@ -48,7 +48,7 @@
     "greeting": "Привет, {{firstName}}! Добро пожаловать в Ciuna.",
     "intro": "Спасибо, что присоединились к Ciuna! Мы рады видеть вас в нашем сообществе. Ваш аккаунт активирован и готов отправлять деньги по всему миру менее чем за 5 минут.",
     "featuresLead": "С Ciuna вы можете:",
-    "featureSpeed": "Отправлять деньги за границу менее чем за 5 минут — молниеносные международные переводы",
+    "featureSpeed": "Отправлять деньги за границу менее чем за 5 минут. Молниеносные международные переводы",
     "featureTracking": "Отслеживать переводы в реальном времени с живыми обновлениями",
     "featureRecipients": "Сохранять избранных получателей для мгновенных переводов",
     "featureRates": "Получать выгодные курсы обмена без скрытых комиссий",
@@ -58,7 +58,7 @@
   },
   "send": {
     "pending": {
-      "subject": "Перевод создан — #{{transactionId}}",
+      "subject": "Перевод создан: #{{transactionId}}",
       "title": "Перевод создан",
       "body": "Ваш перевод для {{recipientName}} создан и сейчас обрабатывается. Мы будем держать вас в курсе на каждом этапе!",
       "nextHeading": "Что дальше",
@@ -66,7 +66,7 @@
       "cta": "Отследить перевод"
     },
     "processing": {
-      "subject": "Перевод в обработке — #{{transactionId}}",
+      "subject": "Перевод в обработке: #{{transactionId}}",
       "title": "Перевод в обработке",
       "body": "Отличные новости! Мы получили ваш платёж, и перевод для {{recipientName}} сейчас обрабатывается. Деньги поступят менее чем за 5 минут!",
       "nextHeading": "Что происходит",
@@ -82,7 +82,7 @@
       "cta": "Посмотреть транзакцию"
     },
     "failed": {
-      "subject": "Перевод не выполнен — #{{transactionId}}",
+      "subject": "Перевод не выполнен: #{{transactionId}}",
       "title": "Перевод не выполнен",
       "bodyWithReason": "К сожалению, ваш перевод для {{recipientName}} не удалось выполнить. Причина: {{reason}}",
       "bodyNoReason": "К сожалению, ваш перевод для {{recipientName}} не удалось выполнить. Пожалуйста, свяжитесь с поддержкой для получения деталей.",
@@ -90,7 +90,7 @@
       "cta": "Связаться с поддержкой"
     },
     "cancelled": {
-      "subject": "Перевод отменён — #{{transactionId}}",
+      "subject": "Перевод отменён: #{{transactionId}}",
       "title": "Перевод отменён",
       "bodyWithReason": "Ваш перевод для {{recipientName}} отменён. Причина: {{reason}}",
       "bodyNoReason": "Ваш перевод для {{recipientName}} отменён. Это могло произойти по вашей инициативе или по решению команды поддержки.",
@@ -100,11 +100,11 @@
   },
   "hubOrder": {
     "pending": {
-      "subject": "Заказ принят — {{productTitle}} (#{{transactionId}})",
+      "subject": "Заказ принят: {{productTitle}} (#{{transactionId}})",
       "title": "Заказ принят",
       "hero": {
         "fixed": "Спасибо за покупку {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
-        "userInput": "Мы получили ваше пополнение для {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}."
+        "userInput": "Мы получили ваше пополнение для {{productTitle}} · {{fundedAmount}} {{fundedCurrency}}."
       },
       "fulfillment": {
         "online": "Мы доставим {{contactName}} по номеру {{contactPhone}}.",
@@ -115,7 +115,7 @@
       "cta": "Посмотреть заказ"
     },
     "processing": {
-      "subject": "Обрабатываем заказ — {{productTitle}} (#{{transactionId}})",
+      "subject": "Обрабатываем заказ: {{productTitle}} (#{{transactionId}})",
       "title": "Заказ в обработке",
       "hero": {
         "fixed": "Мы получили оплату за {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) и уже обрабатываем её.",
@@ -130,15 +130,15 @@
       "cta": "Посмотреть заказ"
     },
     "completed": {
-      "subjectOnline": "Заказ доставлен — {{productTitle}} (#{{transactionId}})",
-      "subjectInPerson": "Заказ в пути — {{productTitle}} (#{{transactionId}})",
+      "subjectOnline": "Заказ доставлен: {{productTitle}} (#{{transactionId}})",
+      "subjectInPerson": "Заказ в пути: {{productTitle}} (#{{transactionId}})",
       "title": "Заказ выполнен",
       "hero": {
         "fixed": "Ваш заказ {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) выполнен.",
         "userInput": "Ваше пополнение для {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) завершено."
       },
       "fulfillment": {
-        "online": "Заказ доставлен {{contactName}}. Подробности — на странице заказа.",
+        "online": "Заказ доставлен {{contactName}}. Подробности на странице заказа.",
         "inPerson": "Курьер уже в пути к {{contactName}} по адресу {{deliveryAddressLine}} и позвонит на {{contactPhone}} при прибытии."
       },
       "nextHeading": "Что дальше",
@@ -146,7 +146,7 @@
       "cta": "Посмотреть заказ"
     },
     "failed": {
-      "subject": "Заказ не выполнен — {{productTitle}} (#{{transactionId}})",
+      "subject": "Заказ не выполнен: {{productTitle}} (#{{transactionId}})",
       "title": "Заказ не выполнен",
       "bodyWithReason": "К сожалению, ваш заказ {{productTitle}} не удалось выполнить. Причина: {{reason}}",
       "bodyNoReason": "К сожалению, ваш заказ {{productTitle}} не удалось выполнить. Пожалуйста, свяжитесь с поддержкой для получения деталей.",
@@ -154,7 +154,7 @@
       "cta": "Связаться с поддержкой"
     },
     "cancelled": {
-      "subject": "Заказ отменён — {{productTitle}} (#{{transactionId}})",
+      "subject": "Заказ отменён: {{productTitle}} (#{{transactionId}})",
       "title": "Заказ отменён",
       "bodyWithReason": "Ваш заказ {{productTitle}} отменён. Причина: {{reason}}",
       "bodyNoReason": "Ваш заказ {{productTitle}} отменён. Это могло произойти по вашей инициативе или по решению команды поддержки.",
@@ -164,11 +164,11 @@
   },
   "referralPayout": {
     "pending": {
-      "subjectWithTx": "Запрос на выплату реферальных — #{{payoutTransactionId}}",
-      "subjectWithRequest": "Запрос на выплату реферальных получен — {{requestIdShort}}…",
+      "subjectWithTx": "Запрос на выплату реферальных: #{{payoutTransactionId}}",
+      "subjectWithRequest": "Запрос на выплату реферальных получен: {{requestIdShort}}…",
       "subjectFallback": "Запрос на выплату реферальных получен",
       "title": "Запрос на выплату реферальных получен",
-      "body": "Привет, {{firstName}}! Мы получили ваш запрос на вывод реферального вознаграждения {{amount}} {{currency}} для {{recipientName}}. Наша команда проверит и обработает его — как и при обычной отправке, мы пришлём письмо, когда выплата будет завершена или отменена.",
+      "body": "Привет, {{firstName}}! Мы получили ваш запрос на вывод реферального вознаграждения {{amount}} {{currency}} для {{recipientName}}. Наша команда проверит и обработает его. Как и при обычной отправке, мы пришлём письмо, когда выплата будет завершена или отменена.",
       "referenceTx": "ID транзакции: {{payoutTransactionId}}",
       "referenceRequest": "ID запроса: {{payoutRequestId}}",
       "nextHeading": "Что дальше",
@@ -176,7 +176,7 @@
       "cta": "Открыть рефералов"
     },
     "completed": {
-      "subject": "Реферальная выплата отправлена — {{amount}} {{currency}}",
+      "subject": "Реферальная выплата отправлена: {{amount}} {{currency}}",
       "title": "Реферальная выплата завершена",
       "body": "Привет, {{firstName}}! Ваш вывод реферального вознаграждения {{amount}} {{currency}} для {{recipientName}} успешно завершён. Этот перевод отображается в вашей активности как обычный и учитывается в годовой статистике.",
       "referenceTx": "ID транзакции: {{linkedTransactionId}}",

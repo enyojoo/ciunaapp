@@ -79,7 +79,7 @@ export default function StoresScreen() {
           </View>
         ) : null}
         {!loading && vendors.length === 0 ? (
-          <EmptyState title={t("hub.marketplaceNoVendors", { defaultValue: "No stores yet — check back soon." })} />
+          <EmptyState title={t("hub.marketplaceNoVendors", { defaultValue: "No stores yet. Check back soon." })} />
         ) : null}
         {vendors.length > 0 && filtered.length === 0 ? (
           <EmptyState

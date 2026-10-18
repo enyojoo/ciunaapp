@@ -48,7 +48,7 @@
     "greeting": "Olá, {{firstName}}! Bem-vindo à Ciuna.",
     "intro": "Obrigado por entrar na Ciuna! Sua conta já está ativa e pronta para enviar dinheiro para o exterior em menos de 5 minutos.",
     "featuresLead": "Com a Ciuna, você pode:",
-    "featureSpeed": "Enviar dinheiro para o mundo todo em menos de 5 minutos — transferências internacionais rápidas",
+    "featureSpeed": "Enviar dinheiro para o mundo todo em menos de 5 minutos. Transferências internacionais rápidas",
     "featureTracking": "Acompanhar suas transferências em tempo real",
     "featureRecipients": "Salvar seus destinatários favoritos para transferências rápidas",
     "featureRates": "Aproveitar taxas de câmbio competitivas, sem taxas ocultas",
@@ -104,7 +104,7 @@
       "title": "Pedido recebido",
       "hero": {
         "fixed": "Obrigado pela compra de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
-        "userInput": "Recebemos seu carregamento para {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}."
+        "userInput": "Recebemos seu carregamento para {{productTitle}} · {{fundedAmount}} {{fundedCurrency}}."
       },
       "fulfillment": {
         "online": "Vamos entregar para {{contactName}} no telefone {{contactPhone}}.",
@@ -164,11 +164,11 @@
   },
   "referralPayout": {
     "pending": {
-      "subjectWithTx": "Solicitação de repasse de indicação — #{{payoutTransactionId}}",
-      "subjectWithRequest": "Solicitação de repasse de indicação recebida — {{requestIdShort}}…",
+      "subjectWithTx": "Solicitação de repasse de indicação: #{{payoutTransactionId}}",
+      "subjectWithRequest": "Solicitação de repasse de indicação recebida: {{requestIdShort}}…",
       "subjectFallback": "Solicitação de repasse de indicação recebida",
       "title": "Solicitação de repasse de indicação recebida",
-      "body": "Olá, {{firstName}}! Recebemos seu pedido de saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}}. Nossa equipe vai analisar e processar — assim como ao iniciar um envio, você receberá outro e-mail quando o repasse for concluído ou cancelado.",
+      "body": "Olá, {{firstName}}! Recebemos seu pedido de saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}}. Nossa equipe vai analisar e processar. Assim como ao iniciar um envio, você receberá outro e-mail quando o repasse for concluído ou cancelado.",
       "referenceTx": "ID da transação: {{payoutTransactionId}}",
       "referenceRequest": "ID da solicitação: {{payoutRequestId}}",
       "nextHeading": "Próximos passos",
@@ -176,7 +176,7 @@
       "cta": "Ver indicações"
     },
     "completed": {
-      "subject": "Repasse de indicação enviado — {{amount}} {{currency}}",
+      "subject": "Repasse de indicação enviado: {{amount}} {{currency}}",
       "title": "Repasse de indicação concluído",
       "body": "Olá, {{firstName}}! Seu saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}} foi concluído. Este envio aparece nas suas atividades como uma transferência comum e conta para o total de envios do ano.",
       "referenceTx": "ID da transação: {{linkedTransactionId}}",

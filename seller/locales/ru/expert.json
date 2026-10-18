@@ -89,7 +89,7 @@
   "expert.avail.window.start": "Запись открыта с",
   "expert.avail.window.end": "Запись открыта до",
   "expert.avail.window.days": "Клиенты могут записаться на {count} дн. вперёд (максимум {max}).",
-  "expert.avail.window.max": "Период — не более {max} дней.",
+  "expert.avail.window.max": "Период: не более {max} дней.",
   "expert.avail.window.reset": "Ближайшие 60 дней",
   "expert.avail.window.order": "Дата окончания не может быть раньше даты начала.",
   "expert.avail.window.long": "Выберите период не больше {max} дней.",
@@ -203,7 +203,7 @@
   "errors.SLOT_NOT_FOUND": "Этого слота больше нет. Обновите список.",
   "errors.SLOT_OVERLAP": "Это время пересекается с существующим слотом.",
   "errors.SLOT_IN_PAST": "Выберите время в будущем.",
-  "errors.WINDOW_TOO_LONG": "Период записи — не более {maxDays} дней.",
+  "errors.WINDOW_TOO_LONG": "Период записи: не более {maxDays} дней.",
   "errors.WINDOW_INVALID": "Укажите корректные даты начала и окончания.",
   "errors.WINDOW_ORDER": "Дата окончания не может быть раньше даты начала.",
   "errors.RULE_TIME_ORDER": "Каждый период должен заканчиваться позже, чем начинается.",
@@ -228,8 +228,8 @@
   "expert.cred.empty": "Пока ничего не добавлено.",
   "errors.CREDENTIALS_TOO_MANY": "Не более 10 записей.",
   "errors.CREDENTIAL_TITLE_INVALID": "У каждой записи должно быть название до 120 символов.",
-  "errors.CREDENTIAL_ISSUER_INVALID": "Организация — до 120 символов.",
+  "errors.CREDENTIAL_ISSUER_INVALID": "Организация: до 120 символов.",
   "errors.CREDENTIAL_YEAR_INVALID": "Год должен быть от 1950 до текущего.",
-  "errors.YEARS_INVALID": "Стаж — целое число от 0 до 80.",
+  "errors.YEARS_INVALID": "Стаж: целое число от 0 до 80.",
   "errors.CREDENTIALS_INVALID": "Список указан неверно."
 }

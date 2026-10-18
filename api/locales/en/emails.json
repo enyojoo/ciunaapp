@@ -164,11 +164,11 @@
   },
   "referralPayout": {
     "pending": {
-      "subjectWithTx": "Referral payout request — #{{payoutTransactionId}}",
-      "subjectWithRequest": "Referral payout request received — {{requestIdShort}}…",
+      "subjectWithTx": "Referral payout request: #{{payoutTransactionId}}",
+      "subjectWithRequest": "Referral payout request received: {{requestIdShort}}…",
       "subjectFallback": "Referral payout request received",
       "title": "Referral payout request received",
-      "body": "Hi {{firstName}}, we've received your referral reward withdrawal request of {{amount}} {{currency}} to {{recipientName}}. Our team will review and process it—similar to when you start a send, you'll get another email when the payout is completed or if it's cancelled.",
+      "body": "Hi {{firstName}}, we've received your referral reward withdrawal request of {{amount}} {{currency}} to {{recipientName}}. Our team will review and process it. Similar to when you start a send, you'll get another email when the payout is completed or if it's cancelled.",
       "referenceTx": "Transaction ID: {{payoutTransactionId}}",
       "referenceRequest": "Request ID: {{payoutRequestId}}",
       "nextHeading": "What happens next",
@@ -176,7 +176,7 @@
       "cta": "View referrals"
     },
     "completed": {
-      "subject": "Referral payout sent — {{amount}} {{currency}}",
+      "subject": "Referral payout sent: {{amount}} {{currency}}",
       "title": "Referral payout completed",
       "body": "Hi {{firstName}}, your referral reward withdrawal of {{amount}} {{currency}} to {{recipientName}} has been completed. This send appears in your activity like a regular transfer and counts toward your send totals for the year.",
       "referenceTx": "Transaction ID: {{linkedTransactionId}}",

@@ -164,8 +164,8 @@
   },
   "referralPayout": {
     "pending": {
-      "subjectWithTx": "推荐奖励提现申请 — #{{payoutTransactionId}}",
-      "subjectWithRequest": "已收到推荐奖励提现申请 — {{requestIdShort}}…",
+      "subjectWithTx": "推荐奖励提现申请：#{{payoutTransactionId}}",
+      "subjectWithRequest": "已收到推荐奖励提现申请：{{requestIdShort}}…",
       "subjectFallback": "已收到推荐奖励提现申请",
       "title": "已收到推荐奖励提现申请",
       "body": "您好，{{firstName}}，我们已收到您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请。我们的团队会审核并处理，与发起汇款时类似，提现完成或取消时您都会收到邮件。",
@@ -176,7 +176,7 @@
       "cta": "查看推荐"
     },
     "completed": {
-      "subject": "推荐奖励已发出 — {{amount}} {{currency}}",
+      "subject": "推荐奖励已发出：{{amount}} {{currency}}",
       "title": "推荐奖励提现已完成",
       "body": "您好，{{firstName}}，您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请已完成。这笔转账会像普通转账一样显示在您的记录中，并计入您全年的汇款总额。",
       "referenceTx": "交易编号：{{linkedTransactionId}}",

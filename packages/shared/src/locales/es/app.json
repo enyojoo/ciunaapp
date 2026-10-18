@@ -119,7 +119,7 @@
     "clearFilters": "Quitar filtros",
     "noMatch": "Sin resultados",
     "noMatchBody": "Prueba otro nombre o filtro.",
-    "marketplaceNoVendors": "Aún no hay tiendas — vuelve pronto.",
+    "marketplaceNoVendors": "Aún no hay tiendas. Vuelve pronto.",
     "verifiedVendor": "Vendedor verificado",
     "backToLine": "Volver al servicio",
     "vendorStoreNotFound": "Tienda no encontrada",
@@ -141,7 +141,7 @@
     "expertsFeaturedHeading": "Destacados",
     "expertsSeeAll": "Todos los expertos",
     "expertsServicesHeading": "Servicios",
-    "expertsFeaturedEmpty": "Aún no hay expertos — vuelve pronto.",
+    "expertsFeaturedEmpty": "Aún no hay expertos. Vuelve pronto.",
     "expertsDirectoryTitle": "Todos los expertos",
     "expertsDirectorySubtitle": "Explora todos los expertos en Ciuna.",
     "backToExperts": "Volver a expertos",
@@ -301,7 +301,7 @@
   },
   "assistant": {
     "title": "Asistente",
-    "intro": "Cuéntanos qué necesitas — el Asistente Ciuna coordina recogidas, compras y encargos.",
+    "intro": "Cuéntanos qué necesitas. El Asistente Ciuna coordina recogidas, compras y encargos.",
     "help": "Ayuda",
     "section": {
       "serviceType": "Tipo de servicio",
@@ -325,7 +325,7 @@
     "placeholder": {
       "pickup": "Dónde recoger, códigos, contacto en el lugar…",
       "buy": "Nombre de la tienda, lista de productos, tallas, alternativas…",
-      "vehicle": "Bici, coche, furgoneta — o déjalo en blanco para cualquiera",
+      "vehicle": "Bici, coche, furgoneta o déjalo en blanco para cualquiera",
       "dropoff": "Dirección completa de entrega y notas de acceso"
     },
     "cta": {
@@ -680,7 +680,7 @@
     "resendVerificationFailed": "No se pudo enviar el correo. Inténtalo de nuevo.",
     "optionalSuffix": " (opcional)",
     "fulfillmentErrorOutsideBank": "Este monto a recibir está fuera del rango permitido para transferencia bancaria en este corredor. Ajuste el monto o contacte a soporte.",
-    "fulfillmentErrorOverlap": "Este monto coincide con reglas de banco y efectivo. Los corredores deben ser disjuntos — contacte a soporte.",
+    "fulfillmentErrorOverlap": "Este monto coincide con reglas de banco y efectivo. Los corredores deben ser disjuntos. Contacte a soporte.",
     "fulfillmentErrorGap": "Este monto no es elegible para este corredor. Ajuste el monto.",
     "cashHandBanner": "Para este monto, los fondos se entregarán en efectivo en la dirección que elija.",
     "logisticsFeeLabel": "Tarifa logística",
@@ -920,16 +920,16 @@
     "hubStatusVerifiedTitle": "Listo para enviar",
     "hubStatusVerifiedBody": "Identidad verificada. Abre Send para hacer una transferencia.",
     "hubStatusPendingTitle": "Verificación en curso",
-    "hubStatusPendingBody": "Estamos revisando los datos de tu pasaporte. La mayoría termina en unos minutos — esta pantalla se actualiza sola.",
+    "hubStatusPendingBody": "Estamos revisando los datos de tu pasaporte. La mayoría termina en unos minutos. Esta pantalla se actualiza sola.",
     "hubStatusNeededTitle": "Confirma tu identidad",
     "hubStatusNeededBody": "Enviar dinero requiere una verificación única (pasaporte y teléfono). Tarda unos 5 minutos y la exige nuestro socio de pagos.",
     "hubContinueCta": "Verificar ahora",
     "optionalSection": "Subir documentos",
     "sbpFormTitle": "Verificación de identidad",
-    "formLead": "Usa exactamente los datos de tu pasaporte — un error puede impedir el envío.",
+    "formLead": "Usa exactamente los datos de tu pasaporte. Un error puede impedir el envío.",
     "sbpSuccessTitle": "Listo para enviar",
     "sbpSuccessBody": "Identidad verificada. Ve a Send para transferir.",
-    "sbpChecking": "Estamos revisando tu solicitud. Suele tardar unos minutos — puedes volver más tarde.",
+    "sbpChecking": "Estamos revisando tu solicitud. Suele tardar unos minutos. Puedes volver más tarde.",
     "passportSegmentRu": "Pasaporte ruso",
     "passportSegmentForeign": "Otro pasaporte",
     "passportCountryShort": "País del pasaporte",
@@ -1192,15 +1192,15 @@
       "slotUnavailable": "Este horario ya no está disponible.",
       "tryAgain": "Intentar reservar de nuevo",
       "successTitle": "Reserva confirmada",
-      "successBody": "Gracias — tu sesión con {{name}} está reservada.",
+      "successBody": "Gracias, tu sesión con {{name}} está reservada.",
       "confirmationEmail": "Enviamos una confirmación a {{email}}.",
       "bookAnother": "Reservar otra sesión",
       "quoteNote": "El precio final puede acordarse por separado antes o después de la sesión.",
       "priceQuote": "Acordaremos el precio después",
       "priceHourly": "{{rate}} {{currency}} / h",
       "priceFixed": "{{amount}} {{currency}}",
-      "priceFixedWithLabel": "{{amount}} {{currency}} — {{label}}",
-      "priceDash": "—"
+      "priceFixedWithLabel": "{{amount}} {{currency}} · {{label}}",
+      "priceDash": "-"
     },
     "slots": {
       "timezone": "Horas mostradas en tu zona horaria ({{zone}})",
@@ -1590,15 +1590,15 @@
       "position": "Diapositiva {{n}} de {{total}}",
       "sorted": {
         "title": "La vida fuera, resuelta.",
-        "body": "Dinero, comida y ayuda de casa, en una sola app."
+        "body": "Dinero, comida y ayuda de casa, en una app."
       },
       "community": {
         "title": "Tu comunidad, cerca.",
         "body": "Tiendas y expertos de gente como tú."
       },
-      "pay": {
-        "title": "Paga como sabes.",
-        "body": "Transferencia, QR o tarjeta, en tu moneda."
+      "language": {
+        "title": "Tu app, en tu idioma.",
+        "body": "English, Русский, Français, Español, 中文, Português."
       }
     },
     "now": {

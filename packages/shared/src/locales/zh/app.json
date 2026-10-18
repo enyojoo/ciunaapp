@@ -231,7 +231,7 @@
       "deliveryFree": "免费配送",
       "deliveryFrom": "配送费 {{fee}} 起",
       "delivers": "支持配送",
-      "etaRange": "{{min}}–{{max}} 分钟",
+      "etaRange": "{{min}}-{{max}} 分钟",
       "eta": "{{min}} 分钟",
       "deliveryFee": "配送费 {{fee}} 起"
     },
@@ -430,8 +430,8 @@
       "priceQuote": "价格稍后商定",
       "priceHourly": "{{rate}} {{currency}} / 小时",
       "priceFixed": "{{amount}} {{currency}}",
-      "priceFixedWithLabel": "{{amount}} {{currency}} — {{label}}",
-      "priceDash": "—"
+      "priceFixedWithLabel": "{{amount}} {{currency}} · {{label}}",
+      "priceDash": "-"
     },
     "slots": {
       "timezone": "时间按您的时区显示（{{zone}}）",
@@ -1178,7 +1178,7 @@
         "passport_issue_date_future": "签发日期不能晚于今天。",
         "passport_issue_before_birth": "签发日期必须晚于出生日期。",
         "passport_number_required": "请填写护照号码。",
-        "passport_number_invalid": "请输入不含空格的系列和号码（6–20 个字符）。",
+        "passport_number_invalid": "请输入不含空格的系列和号码（6-20 个字符）。",
         "registration_country_required": "请填写登记国家。",
         "registration_country_invalid": "请使用 3 位字母国家代码（例如 RUS）。",
         "registration_city_required": "请填写登记城市。",
@@ -1589,16 +1589,16 @@
       "adLabel": "广告",
       "position": "第 {{n}} 张，共 {{total}} 张",
       "sorted": {
-        "title": "海外生活，一站搞定。",
+        "title": "海外生活，轻松搞定。",
         "body": "汇款、美食和家乡帮助，尽在一个应用。"
       },
       "community": {
         "title": "你的社群，就在身边。",
         "body": "由和你一样的人开设的店铺和专家。"
       },
-      "pay": {
-        "title": "用熟悉的方式付款。",
-        "body": "银行转账、二维码或银行卡，以你的货币支付。"
+      "language": {
+        "title": "你的应用，用你的语言。",
+        "body": "English, Русский, Français, Español, 中文, Português."
       }
     },
     "now": {

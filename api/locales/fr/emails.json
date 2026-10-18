@@ -48,7 +48,7 @@
     "greeting": "Bonjour {{firstName}} ! Bienvenue sur Ciuna.",
     "intro": "Merci d'avoir rejoint Ciuna ! Nous sommes ravis de vous compter parmi nos membres. Votre compte est actif et prêt à envoyer de l'argent à l'international en moins de 5 minutes.",
     "featuresLead": "Avec Ciuna, vous pouvez :",
-    "featureSpeed": "Envoyer de l'argent dans le monde entier en moins de 5 minutes — des transferts transfrontaliers ultrarapides",
+    "featureSpeed": "Envoyer de l'argent dans le monde entier en moins de 5 minutes. Des transferts transfrontaliers ultrarapides",
     "featureTracking": "Suivre vos transferts en temps réel avec des mises à jour en direct",
     "featureRecipients": "Enregistrer vos bénéficiaires favoris pour des envois instantanés",
     "featureRates": "Profiter de taux de change compétitifs sans frais cachés",
@@ -58,7 +58,7 @@
   },
   "send": {
     "pending": {
-      "subject": "Transfert créé — #{{transactionId}}",
+      "subject": "Transfert créé : #{{transactionId}}",
       "title": "Transfert créé",
       "body": "Votre transfert à {{recipientName}} a été créé et est en cours de traitement. Nous vous tiendrons informé à chaque étape !",
       "nextHeading": "Et maintenant",
@@ -66,7 +66,7 @@
       "cta": "Suivre la transaction"
     },
     "processing": {
-      "subject": "Transfert en cours — #{{transactionId}}",
+      "subject": "Transfert en cours : #{{transactionId}}",
       "title": "Transfert en cours",
       "body": "Bonne nouvelle ! Nous avons reçu votre paiement et votre transfert à {{recipientName}} est en cours. L'argent arrivera en moins de 5 minutes !",
       "nextHeading": "Ce qui se passe",
@@ -82,7 +82,7 @@
       "cta": "Voir la transaction"
     },
     "failed": {
-      "subject": "Transfert échoué — #{{transactionId}}",
+      "subject": "Transfert échoué : #{{transactionId}}",
       "title": "Transfert échoué",
       "bodyWithReason": "Malheureusement, votre transfert à {{recipientName}} n'a pas pu aboutir. Raison : {{reason}}",
       "bodyNoReason": "Malheureusement, votre transfert à {{recipientName}} n'a pas pu aboutir. Merci de contacter le support pour plus d'informations.",
@@ -90,7 +90,7 @@
       "cta": "Contacter le support"
     },
     "cancelled": {
-      "subject": "Transfert annulé — #{{transactionId}}",
+      "subject": "Transfert annulé : #{{transactionId}}",
       "title": "Transfert annulé",
       "bodyWithReason": "Votre transfert à {{recipientName}} a été annulé. Raison : {{reason}}",
       "bodyNoReason": "Votre transfert à {{recipientName}} a été annulé. L'annulation peut venir de vous ou de notre équipe support.",
@@ -100,11 +100,11 @@
   },
   "hubOrder": {
     "pending": {
-      "subject": "Commande reçue — {{productTitle}} (#{{transactionId}})",
+      "subject": "Commande reçue : {{productTitle}} (#{{transactionId}})",
       "title": "Commande reçue",
       "hero": {
         "fixed": "Merci pour votre achat de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
-        "userInput": "Nous avons reçu votre recharge pour {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}."
+        "userInput": "Nous avons reçu votre recharge pour {{productTitle}} · {{fundedAmount}} {{fundedCurrency}}."
       },
       "fulfillment": {
         "online": "Nous livrerons {{contactName}} au {{contactPhone}}.",
@@ -115,7 +115,7 @@
       "cta": "Voir la commande"
     },
     "processing": {
-      "subject": "Traitement de votre commande — {{productTitle}} (#{{transactionId}})",
+      "subject": "Traitement de votre commande : {{productTitle}} (#{{transactionId}})",
       "title": "Commande en cours",
       "hero": {
         "fixed": "Nous avons reçu votre paiement pour {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) et nous le traitons.",
@@ -130,8 +130,8 @@
       "cta": "Voir la commande"
     },
     "completed": {
-      "subjectOnline": "Commande livrée — {{productTitle}} (#{{transactionId}})",
-      "subjectInPerson": "Commande en route — {{productTitle}} (#{{transactionId}})",
+      "subjectOnline": "Commande livrée : {{productTitle}} (#{{transactionId}})",
+      "subjectInPerson": "Commande en route : {{productTitle}} (#{{transactionId}})",
       "title": "Commande terminée",
       "hero": {
         "fixed": "Votre commande {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) est terminée.",
@@ -146,7 +146,7 @@
       "cta": "Voir la commande"
     },
     "failed": {
-      "subject": "Commande échouée — {{productTitle}} (#{{transactionId}})",
+      "subject": "Commande échouée : {{productTitle}} (#{{transactionId}})",
       "title": "Commande échouée",
       "bodyWithReason": "Malheureusement, votre commande de {{productTitle}} n'a pas pu aboutir. Raison : {{reason}}",
       "bodyNoReason": "Malheureusement, votre commande de {{productTitle}} n'a pas pu aboutir. Merci de contacter le support pour plus d'informations.",
@@ -154,7 +154,7 @@
       "cta": "Contacter le support"
     },
     "cancelled": {
-      "subject": "Commande annulée — {{productTitle}} (#{{transactionId}})",
+      "subject": "Commande annulée : {{productTitle}} (#{{transactionId}})",
       "title": "Commande annulée",
       "bodyWithReason": "Votre commande de {{productTitle}} a été annulée. Raison : {{reason}}",
       "bodyNoReason": "Votre commande de {{productTitle}} a été annulée. L'annulation peut venir de vous ou de notre équipe support.",
@@ -164,11 +164,11 @@
   },
   "referralPayout": {
     "pending": {
-      "subjectWithTx": "Demande de paiement de parrainage — #{{payoutTransactionId}}",
-      "subjectWithRequest": "Demande de paiement de parrainage reçue — {{requestIdShort}}…",
+      "subjectWithTx": "Demande de paiement de parrainage : #{{payoutTransactionId}}",
+      "subjectWithRequest": "Demande de paiement de parrainage reçue : {{requestIdShort}}…",
       "subjectFallback": "Demande de paiement de parrainage reçue",
       "title": "Demande de paiement de parrainage reçue",
-      "body": "Bonjour {{firstName}}, nous avons reçu votre demande de retrait de récompense de parrainage de {{amount}} {{currency}} vers {{recipientName}}. Notre équipe va l'examiner et la traiter — comme pour un envoi classique, vous recevrez un e-mail lorsque le paiement sera terminé ou annulé.",
+      "body": "Bonjour {{firstName}}, nous avons reçu votre demande de retrait de récompense de parrainage de {{amount}} {{currency}} vers {{recipientName}}. Notre équipe va l'examiner et la traiter. Comme pour un envoi classique, vous recevrez un e-mail lorsque le paiement sera terminé ou annulé.",
       "referenceTx": "ID de transaction : {{payoutTransactionId}}",
       "referenceRequest": "ID de demande : {{payoutRequestId}}",
       "nextHeading": "La suite",
@@ -176,7 +176,7 @@
       "cta": "Voir les parrainages"
     },
     "completed": {
-      "subject": "Paiement de parrainage envoyé — {{amount}} {{currency}}",
+      "subject": "Paiement de parrainage envoyé : {{amount}} {{currency}}",
       "title": "Paiement de parrainage terminé",
       "body": "Bonjour {{firstName}}, votre retrait de récompense de parrainage de {{amount}} {{currency}} vers {{recipientName}} est terminé. Cet envoi apparaît dans votre activité comme un transfert classique et compte dans vos totaux annuels.",
       "referenceTx": "ID de transaction : {{linkedTransactionId}}",

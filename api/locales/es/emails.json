@@ -48,7 +48,7 @@
     "greeting": "¡Hola {{firstName}}! Bienvenido a Ciuna.",
     "intro": "¡Gracias por unirte a Ciuna! Estamos felices de tenerte en nuestra comunidad. Tu cuenta está activa y lista para enviar dinero al extranjero en menos de 5 minutos.",
     "featuresLead": "Con Ciuna puedes:",
-    "featureSpeed": "Enviar dinero a nivel global en menos de 5 minutos — transferencias transfronterizas ultrarrápidas",
+    "featureSpeed": "Enviar dinero a nivel global en menos de 5 minutos. Transferencias transfronterizas ultrarrápidas",
     "featureTracking": "Seguir tus transferencias en tiempo real con actualizaciones en vivo",
     "featureRecipients": "Guardar tus destinatarios favoritos para envíos instantáneos",
     "featureRates": "Disfrutar tasas de cambio competitivas sin cargos ocultos",
@@ -58,7 +58,7 @@
   },
   "send": {
     "pending": {
-      "subject": "Transferencia creada — #{{transactionId}}",
+      "subject": "Transferencia creada: #{{transactionId}}",
       "title": "Transferencia creada",
       "body": "Tu transferencia a {{recipientName}} ha sido creada y está en proceso. ¡Te mantendremos informado en cada paso!",
       "nextHeading": "Qué sigue",
@@ -66,7 +66,7 @@
       "cta": "Seguir transacción"
     },
     "processing": {
-      "subject": "Transferencia en proceso — #{{transactionId}}",
+      "subject": "Transferencia en proceso: #{{transactionId}}",
       "title": "Transferencia en proceso",
       "body": "¡Buenas noticias! Recibimos tu pago y tu transferencia a {{recipientName}} se está procesando. ¡El dinero llegará en menos de 5 minutos!",
       "nextHeading": "Qué está pasando",
@@ -82,7 +82,7 @@
       "cta": "Ver transacción"
     },
     "failed": {
-      "subject": "Transferencia fallida — #{{transactionId}}",
+      "subject": "Transferencia fallida: #{{transactionId}}",
       "title": "Transferencia fallida",
       "bodyWithReason": "Lamentablemente, tu transferencia a {{recipientName}} no pudo completarse. Motivo: {{reason}}",
       "bodyNoReason": "Lamentablemente, tu transferencia a {{recipientName}} no pudo completarse. Por favor, contacta con soporte para más información.",
@@ -90,7 +90,7 @@
       "cta": "Contactar con soporte"
     },
     "cancelled": {
-      "subject": "Transferencia cancelada — #{{transactionId}}",
+      "subject": "Transferencia cancelada: #{{transactionId}}",
       "title": "Transferencia cancelada",
       "bodyWithReason": "Tu transferencia a {{recipientName}} fue cancelada. Motivo: {{reason}}",
       "bodyNoReason": "Tu transferencia a {{recipientName}} fue cancelada. Esto puede haber sido iniciado por ti o por nuestro equipo de soporte.",
@@ -100,11 +100,11 @@
   },
   "hubOrder": {
     "pending": {
-      "subject": "Pedido recibido — {{productTitle}} (#{{transactionId}})",
+      "subject": "Pedido recibido: {{productTitle}} (#{{transactionId}})",
       "title": "Pedido recibido",
       "hero": {
         "fixed": "Gracias por tu compra de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}).",
-        "userInput": "Hemos recibido tu recarga para {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}."
+        "userInput": "Hemos recibido tu recarga para {{productTitle}} · {{fundedAmount}} {{fundedCurrency}}."
       },
       "fulfillment": {
         "online": "Entregaremos a {{contactName}} al {{contactPhone}}.",
@@ -115,7 +115,7 @@
       "cta": "Ver pedido"
     },
     "processing": {
-      "subject": "Procesando tu pedido — {{productTitle}} (#{{transactionId}})",
+      "subject": "Procesando tu pedido: {{productTitle}} (#{{transactionId}})",
       "title": "Pedido en proceso",
       "hero": {
         "fixed": "Recibimos tu pago de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) y lo estamos procesando.",
@@ -130,8 +130,8 @@
       "cta": "Ver pedido"
     },
     "completed": {
-      "subjectOnline": "Pedido entregado — {{productTitle}} (#{{transactionId}})",
-      "subjectInPerson": "Pedido en camino — {{productTitle}} (#{{transactionId}})",
+      "subjectOnline": "Pedido entregado: {{productTitle}} (#{{transactionId}})",
+      "subjectInPerson": "Pedido en camino: {{productTitle}} (#{{transactionId}})",
       "title": "Pedido completado",
       "hero": {
         "fixed": "Tu pedido de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}) está completo.",
@@ -146,7 +146,7 @@
       "cta": "Ver pedido"
     },
     "failed": {
-      "subject": "Pedido fallido — {{productTitle}} (#{{transactionId}})",
+      "subject": "Pedido fallido: {{productTitle}} (#{{transactionId}})",
       "title": "Pedido fallido",
       "bodyWithReason": "Lamentablemente, tu pedido de {{productTitle}} no pudo completarse. Motivo: {{reason}}",
       "bodyNoReason": "Lamentablemente, tu pedido de {{productTitle}} no pudo completarse. Por favor, contacta con soporte para más información.",
@@ -154,7 +154,7 @@
       "cta": "Contactar con soporte"
     },
     "cancelled": {
-      "subject": "Pedido cancelado — {{productTitle}} (#{{transactionId}})",
+      "subject": "Pedido cancelado: {{productTitle}} (#{{transactionId}})",
       "title": "Pedido cancelado",
       "bodyWithReason": "Tu pedido de {{productTitle}} fue cancelado. Motivo: {{reason}}",
       "bodyNoReason": "Tu pedido de {{productTitle}} fue cancelado. Esto puede haber sido iniciado por ti o por nuestro equipo de soporte.",
@@ -164,11 +164,11 @@
   },
   "referralPayout": {
     "pending": {
-      "subjectWithTx": "Solicitud de pago de referidos — #{{payoutTransactionId}}",
-      "subjectWithRequest": "Solicitud de pago de referidos recibida — {{requestIdShort}}…",
+      "subjectWithTx": "Solicitud de pago de referidos: #{{payoutTransactionId}}",
+      "subjectWithRequest": "Solicitud de pago de referidos recibida: {{requestIdShort}}…",
       "subjectFallback": "Solicitud de pago de referidos recibida",
       "title": "Solicitud de pago de referidos recibida",
-      "body": "Hola {{firstName}}, hemos recibido tu solicitud de retiro de recompensa de referidos de {{amount}} {{currency}} para {{recipientName}}. Nuestro equipo la revisará y procesará — igual que con un envío normal, recibirás otro correo cuando el pago esté completado o cancelado.",
+      "body": "Hola {{firstName}}, hemos recibido tu solicitud de retiro de recompensa de referidos de {{amount}} {{currency}} para {{recipientName}}. Nuestro equipo la revisará y procesará. Igual que con un envío normal, recibirás otro correo cuando el pago esté completado o cancelado.",
       "referenceTx": "ID de transacción: {{payoutTransactionId}}",
       "referenceRequest": "ID de solicitud: {{payoutRequestId}}",
       "nextHeading": "Qué sigue",
@@ -176,7 +176,7 @@
       "cta": "Ver referidos"
     },
     "completed": {
-      "subject": "Pago de referidos enviado — {{amount}} {{currency}}",
+      "subject": "Pago de referidos enviado: {{amount}} {{currency}}",
       "title": "Pago de referidos completado",
       "body": "Hola {{firstName}}, tu retiro de recompensa de referidos de {{amount}} {{currency}} para {{recipientName}} ha sido completado. Este envío aparece en tu actividad como una transferencia normal y cuenta en tus totales anuales.",
       "referenceTx": "ID de transacción: {{linkedTransactionId}}",

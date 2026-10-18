@@ -294,7 +294,7 @@ export function ServicePriceRow({ service: s }: { service: ExpertCatalogService 
   }
   return (
     <View style={styles.priceRow}>
-      <Text style={styles.pricePrefix}>{t("experts.bookingWizard.priceDash", { defaultValue: "—" })}</Text>
+      <Text style={styles.pricePrefix}>{t("experts.bookingWizard.priceDash", { defaultValue: "-" })}</Text>
     </View>
   )
 }

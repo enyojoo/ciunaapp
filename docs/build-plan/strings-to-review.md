@@ -3,7 +3,7 @@
 Agent-written translations. Each file below is the single source for its strings: edit the JSON to change a string, no code change needed. After edits run `npm run locales:check` (must print `locales ok`).
 
 Regenerate with `node scripts/list-strings-to-review.mjs`.
-Total strings: 7500.
+Total strings: 8921.
 
 
 ## Seller portal
@@ -31,7 +31,7 @@ Total strings: 7500.
 | `auth.checkEmail.title` | Проверьте почту | Check your email |
 | `auth.checkEmail.body` | Мы отправили ссылку для подтверждения на {email}. Откройте её, затем войдите. | We sent a confirmation link to {email}. Open it, then sign in. |
 
-### `seller/locales/ru/catalog.json` (147 strings)
+### `seller/locales/ru/catalog.json` (185 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -118,7 +118,7 @@ Total strings: 7500.
 | `catalog.archive.title` | Архивировать этот товар? | Archive this product? |
 | `catalog.archive.body` | Он исчезнет из магазина. В прошлых заказах данные сохранятся, а сам товар останется в разделе «Архив». | It will disappear from the store. Past orders keep their details, and you can still find it under Archived. |
 | `catalog.fulfilment.title` | Доставка и самовывоз | Delivery and pickup |
-| `catalog.fulfilment.intro` | Укажите, где покупатели забирают заказы и в какие районы вы доставляете. Для публикации товаров с доставкой нужны зоны доставки, для товаров с самовывозом — данные о точке самовывоза. | Set where customers collect orders and which areas you deliver to. You need delivery zones to publish delivery products, and pickup details to publish pickup products. |
+| `catalog.fulfilment.intro` | Укажите, где покупатели забирают заказы и в какие районы вы доставляете. Для публикации товаров с доставкой нужны зоны доставки, для товаров с самовывозом нужны данные о точке самовывоза. | Set where customers collect orders and which areas you deliver to. You need delivery zones to publish delivery products, and pickup details to publish pickup products. |
 | `catalog.fulfilment.pickup` | Самовывоз | Pickup |
 | `catalog.fulfilment.pickupHint` | Покупатели увидят это, выбрав самовывоз. | Customers see this when they choose pickup. |
 | `catalog.fulfilment.location` | Адрес самовывоза | Pickup address |
@@ -154,7 +154,7 @@ Total strings: 7500.
 | `catalog.import.progress` | Импортировано {done} из {total} | {done} of {total} imported |
 | `catalog.import.step3` | 3. Импорт | 3. Import |
 | `catalog.import.result` | Создано: {created}, не удалось: {failed}. | {created} created, {failed} failed. |
-| `catalog.import.draftNote` | Созданные товары — черновики. Откройте каждый, добавьте фото и опубликуйте. | Created products are drafts. Open each one to add photos, then publish. |
+| `catalog.import.draftNote` | Созданные товары сохраняются как черновики. Откройте каждый, добавьте фото и опубликуйте. | Created products are drafts. Open each one to add photos, then publish. |
 | `catalog.import.failedRow` | Строка {line} ({title}): {reason} | Row {line} ({title}): {reason} |
 | `catalog.import.another` | Импортировать другой файл | Import another file |
 | `catalog.import.viewCatalog` | Открыть каталог | View catalog |
@@ -182,8 +182,46 @@ Total strings: 7500.
 | `errors.ZONE_FEE_INVALID` | Укажите стоимость доставки от 0. | Enter a delivery fee of 0 or more. |
 | `errors.ZONE_CURRENCY_INVALID` | Выберите поддерживаемую валюту для зоны. | Choose a supported currency for the zone. |
 | `errors.ZONE_DUPLICATE` | Каждый город и район можно указать только один раз. | Each city and district can be listed only once. |
+| `catalog.fulfilment.schedule` | Часы работы по дням | Weekly opening hours |
+| `catalog.fulfilment.scheduleHint` | Покупатели видят, открыт ли магазин. Если все дни закрыты, часы работы не показываются. | Customers see whether you are open. Leave every day closed to show no opening hours. |
+| `catalog.fulfilment.timeZone` | Часовой пояс | Time zone |
+| `catalog.fulfilment.openDay` | Открыто | Open |
+| `catalog.fulfilment.addRange` | Добавить часы | Add hours |
+| `catalog.fulfilment.openFrom` | Открывается | Opens |
+| `catalog.fulfilment.openTo` | Закрывается | Closes |
+| `catalog.fulfilment.minOrder` | Минимальный заказ для доставки | Minimum order for delivery |
+| `catalog.fulfilment.minOrderHint` | Заказы на доставку на меньшую сумму оформить нельзя. Оставьте пустым, если минимума нет. | Delivery orders below this amount cannot be placed. Leave empty for no minimum. |
+| `catalog.fulfilment.minOrderAmount` | Сумма | Amount |
+| `catalog.fulfilment.eta` | Время доставки (мин) | Delivery time (min) |
+| `errors.HOURS_INVALID` | Проверьте часы работы: время закрытия должно быть позже времени открытия. | Check the opening hours: each range must end after it starts. |
+| `errors.HOURS_OVERLAP` | Часы работы в один день не должны пересекаться. | Opening hours on the same day must not overlap. |
+| `errors.MIN_ORDER_INVALID` | Введите корректную сумму минимального заказа. | Enter a valid minimum order amount. |
+| `errors.MIN_ORDER_CURRENCY_INVALID` | Выберите валюту минимального заказа. | Choose a currency for the minimum order. |
+| `errors.ZONE_ETA_INVALID` | Время доставки: целое число минут от 1 до 1440. | Delivery time must be a whole number of minutes between 1 and 1440. |
+| `errors.TIME_ZONE_INVALID` | Выберите корректный часовой пояс. | Choose a valid time zone. |
+| `catalog.fulfilment.pause` | Приостановить магазин | Pause store |
+| `catalog.fulfilment.pauseHint` | Пока магазин на паузе, покупатели не могут оформить заказ. Подходит для короткого перерыва; после возобновления действуют часы работы. | Customers cannot check out while the store is paused. Use it for a short break; opening hours still apply when you resume. |
+| `catalog.fulfilment.pausedOn` | На паузе: заказы недоступны | Paused: customers cannot order |
+| `catalog.fulfilment.pausedOff` | Принимаем заказы | Taking orders |
+| `catalog.field.appCategory` | Раздел в приложении | Shows in the app under |
+| `catalog.field.appCategoryHint` | Где покупатели найдут товар в разделах Еда и Маркет. | Where customers find it when they browse Food or Mart. |
+| `catalog.appCat.choose` | Выберите… | Choose… |
+| `catalog.appCat.food.mains` | Основные блюда | Mains |
+| `catalog.appCat.food.soups` | Супы и рагу | Soups and stews |
+| `catalog.appCat.food.grill` | Гриль | Grill |
+| `catalog.appCat.food.snacks` | Закуски и выпечка | Snacks and pastries |
+| `catalog.appCat.food.breakfast` | Завтрак | Breakfast |
+| `catalog.appCat.food.drinks` | Напитки | Drinks |
+| `catalog.appCat.mart.staples` | Бакалея | Pantry staples |
+| `catalog.appCat.mart.sauces` | Соусы и специи | Sauces and spices |
+| `catalog.appCat.mart.snacks` | Снеки и сладости | Snacks and sweets |
+| `catalog.appCat.mart.drinks` | Напитки | Drinks |
+| `catalog.appCat.mart.fresh` | Свежее и заморозка | Fresh and frozen |
+| `catalog.appCat.mart.digital` | Цифровые услуги | Digital services |
+| `catalog.appCat.mart.other` | Другое | Other |
+| `errors.MAIN_CATEGORY_OUTSIDE_LINE` | Это не категория вашего магазина. | That isn't one of the categories for your store. |
 
-### `seller/locales/ru/common.json` (151 strings)
+### `seller/locales/ru/common.json` (153 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -245,6 +283,8 @@ Total strings: 7500.
 | `errors.DISPLAY_NAME_INVALID` | Введите название от 2 до 80 символов. | Enter a name between 2 and 80 characters. |
 | `errors.COUNTRY_INVALID` | Выберите страну. | Choose a country. |
 | `errors.LANGUAGE_INVALID` | Выберите хотя бы один доступный язык. | Choose at least one supported language. |
+| `errors.COMMUNITIES_INVALID` | Выберите не более 5 сообществ из списка. | Choose up to 5 communities from the list. |
+| `errors.COMMUNITIES_STORES_ONLY` | Сообщества могут задавать только магазины. | Only stores can set communities. |
 | `errors.EMAIL_INVALID` | Введите действующий адрес электронной почты. | Enter a valid email address. |
 | `errors.URL_INVALID` | Укажите ссылку, которая начинается с https://. | Use a link that starts with https://. |
 | `errors.CURRENCY_INVALID` | Выберите доступную валюту. | Choose a supported currency. |
@@ -496,7 +536,7 @@ Total strings: 7500.
 | `errors.DATE_INVALID` | Укажите корректный период. | Choose a valid date range. |
 | `errors.METHOD_HAS_HISTORY` | Этот способ уже использовался для выплаты, поэтому его нельзя удалить. Сделайте основным другой способ. | This method was used for a past payout, so it can't be removed. Make another method the default instead. |
 
-### `seller/locales/ru/expert.json` (219 strings)
+### `seller/locales/ru/expert.json` (233 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -590,7 +630,7 @@ Total strings: 7500.
 | `expert.avail.window.start` | Запись открыта с | Bookable from |
 | `expert.avail.window.end` | Запись открыта до | Bookable until |
 | `expert.avail.window.days` | Клиенты могут записаться на {count} дн. вперёд (максимум {max}). | Customers can book {count} days ahead (up to {max}). |
-| `expert.avail.window.max` | Период — не более {max} дней. | The window can be at most {max} days. |
+| `expert.avail.window.max` | Период: не более {max} дней. | The window can be at most {max} days. |
 | `expert.avail.window.reset` | Ближайшие 60 дней | Next 60 days |
 | `expert.avail.window.order` | Дата окончания не может быть раньше даты начала. | The end date must be on or after the start date. |
 | `expert.avail.window.long` | Выберите период не больше {max} дней. | Choose a window of {max} days or fewer. |
@@ -704,7 +744,7 @@ Total strings: 7500.
 | `errors.SLOT_NOT_FOUND` | Этого слота больше нет. Обновите список. | This slot no longer exists. Refresh the list. |
 | `errors.SLOT_OVERLAP` | Это время пересекается с существующим слотом. | This time overlaps an existing slot. |
 | `errors.SLOT_IN_PAST` | Выберите время в будущем. | Choose a time in the future. |
-| `errors.WINDOW_TOO_LONG` | Период записи — не более {maxDays} дней. | The booking window can be at most {maxDays} days. |
+| `errors.WINDOW_TOO_LONG` | Период записи: не более {maxDays} дней. | The booking window can be at most {maxDays} days. |
 | `errors.WINDOW_INVALID` | Укажите корректные даты начала и окончания. | Enter a valid start and end date. |
 | `errors.WINDOW_ORDER` | Дата окончания не может быть раньше даты начала. | The end date must be on or after the start date. |
 | `errors.RULE_TIME_ORDER` | Каждый период должен заканчиваться позже, чем начинается. | Each range must end after it starts. |
@@ -719,6 +759,20 @@ Total strings: 7500.
 | `errors.MEETING_EMPTY` | Добавьте ссылку на встречу или инструкции. | Add a meeting link or instructions. |
 | `errors.BOOKING_CLOSED` | Запись закрыта, данные встречи изменить нельзя. | This booking is closed, so meeting details can't be changed. |
 | `errors.BOOKING_NOT_PAID` | Эта запись ещё не оплачена. | This booking isn't paid yet. |
+| `expert.cred.title` | Квалификация | Credentials |
+| `expert.cred.hint` | Отображается в публичном профиле, чтобы клиенты вам доверяли. | Shown on your public profile so customers can trust your experience. |
+| `expert.cred.years` | Стаж, лет | Years of experience |
+| `expert.cred.name` | Диплом или сертификат | Credential or degree |
+| `expert.cred.issuer` | Кем выдан | Issued by |
+| `expert.cred.year` | Год | Year |
+| `expert.cred.add` | Добавить | Add credential |
+| `expert.cred.empty` | Пока ничего не добавлено. | No credentials yet. |
+| `errors.CREDENTIALS_TOO_MANY` | Не более 10 записей. | Add at most 10 credentials. |
+| `errors.CREDENTIAL_TITLE_INVALID` | У каждой записи должно быть название до 120 символов. | Each credential needs a name of up to 120 characters. |
+| `errors.CREDENTIAL_ISSUER_INVALID` | Организация: до 120 символов. | The issuer can be up to 120 characters. |
+| `errors.CREDENTIAL_YEAR_INVALID` | Год должен быть от 1950 до текущего. | The year must be between 1950 and this year. |
+| `errors.YEARS_INVALID` | Стаж: целое число от 0 до 80. | Years of experience must be a whole number from 0 to 80. |
+| `errors.CREDENTIALS_INVALID` | Список указан неверно. | That credentials list is not valid. |
 
 ### `seller/locales/ru/home.json` (13 strings)
 
@@ -907,7 +961,7 @@ Total strings: 7500.
 | `errors.REPLY_LOCKED` | Этот ответ больше нельзя изменить. | This reply can no longer be edited. |
 | `errors.REVIEW_NOT_FOUND` | Мы не нашли этот отзыв. | We couldn't find that review. |
 
-### `seller/locales/ru/settings.json` (49 strings)
+### `seller/locales/ru/settings.json` (62 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -921,6 +975,19 @@ Total strings: 7500.
 | `profile.phone` | Телефон | Phone |
 | `profile.website` | Сайт | Website |
 | `profile.currency` | Валюта по умолчанию | Default currency |
+| `profile.communities` | Сообщества, которым вы служите | Communities you serve |
+| `profile.communities.hint` | Покупатели могут фильтровать Еду и Mart по сообществу. Выберите не более {max}. | Shoppers can filter Food and Mart by community. Pick up to {max}. |
+| `profile.communities.count` | Выбрано {n} из {max} | {n} of {max} selected |
+| `community.nigerian` | Нигерийская | Nigerian |
+| `community.african` | Африканская | African |
+| `community.chinese` | Китайская | Chinese |
+| `community.indian` | Индийская | Indian |
+| `community.arab` | Арабская | Arab |
+| `community.latin_american` | Латиноамериканская | Latin American |
+| `community.turkish` | Турецкая | Turkish |
+| `community.vietnamese` | Вьетнамская | Vietnamese |
+| `community.korean` | Корейская | Korean |
+| `community.central_asian` | Среднеазиатская | Central Asian |
 | `team.title` | Команда | Team |
 | `team.subtitle` | Люди, которые могут входить в этот бизнес. | People who can sign in to this business. |
 | `team.invite` | Пригласить человека | Invite a person |
@@ -1050,7 +1117,7 @@ Total strings: 7500.
 | `auth.checkEmail.title` | Vérifiez votre messagerie | Check your email |
 | `auth.checkEmail.body` | Nous avons envoyé un lien de confirmation à {email}. Ouvrez-le, puis connectez-vous. | We sent a confirmation link to {email}. Open it, then sign in. |
 
-### `seller/locales/fr/catalog.json` (147 strings)
+### `seller/locales/fr/catalog.json` (185 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -1201,8 +1268,46 @@ Total strings: 7500.
 | `errors.ZONE_FEE_INVALID` | Saisissez des frais de livraison supérieurs ou égaux à 0. | Enter a delivery fee of 0 or more. |
 | `errors.ZONE_CURRENCY_INVALID` | Choisissez une devise prise en charge pour la zone. | Choose a supported currency for the zone. |
 | `errors.ZONE_DUPLICATE` | Chaque ville et quartier ne peut figurer qu'une seule fois. | Each city and district can be listed only once. |
+| `catalog.fulfilment.schedule` | Horaires d’ouverture hebdomadaires | Weekly opening hours |
+| `catalog.fulfilment.scheduleHint` | Les clients voient si vous êtes ouvert. Laissez tous les jours fermés pour ne pas afficher d’horaires. | Customers see whether you are open. Leave every day closed to show no opening hours. |
+| `catalog.fulfilment.timeZone` | Fuseau horaire | Time zone |
+| `catalog.fulfilment.openDay` | Ouvert | Open |
+| `catalog.fulfilment.addRange` | Ajouter des horaires | Add hours |
+| `catalog.fulfilment.openFrom` | Ouverture | Opens |
+| `catalog.fulfilment.openTo` | Fermeture | Closes |
+| `catalog.fulfilment.minOrder` | Commande minimale pour la livraison | Minimum order for delivery |
+| `catalog.fulfilment.minOrderHint` | Les commandes de livraison inférieures à ce montant ne peuvent pas être passées. Laissez vide pour aucun minimum. | Delivery orders below this amount cannot be placed. Leave empty for no minimum. |
+| `catalog.fulfilment.minOrderAmount` | Montant | Amount |
+| `catalog.fulfilment.eta` | Délai de livraison (min) | Delivery time (min) |
+| `errors.HOURS_INVALID` | Vérifiez les horaires : chaque plage doit se terminer après son début. | Check the opening hours: each range must end after it starts. |
+| `errors.HOURS_OVERLAP` | Les horaires d’une même journée ne doivent pas se chevaucher. | Opening hours on the same day must not overlap. |
+| `errors.MIN_ORDER_INVALID` | Saisissez un montant de commande minimale valide. | Enter a valid minimum order amount. |
+| `errors.MIN_ORDER_CURRENCY_INVALID` | Choisissez une devise pour la commande minimale. | Choose a currency for the minimum order. |
+| `errors.ZONE_ETA_INVALID` | Le délai doit être un nombre entier de minutes entre 1 et 1440. | Delivery time must be a whole number of minutes between 1 and 1440. |
+| `errors.TIME_ZONE_INVALID` | Choisissez un fuseau horaire valide. | Choose a valid time zone. |
+| `catalog.fulfilment.pause` | Mettre la boutique en pause | Pause store |
+| `catalog.fulfilment.pauseHint` | Les clients ne peuvent pas commander tant que la boutique est en pause. Utile pour une courte pause ; les horaires s'appliquent à la reprise. | Customers cannot check out while the store is paused. Use it for a short break; opening hours still apply when you resume. |
+| `catalog.fulfilment.pausedOn` | En pause : commandes impossibles | Paused: customers cannot order |
+| `catalog.fulfilment.pausedOff` | Commandes ouvertes | Taking orders |
+| `catalog.field.appCategory` | Apparaît dans l'app sous | Shows in the app under |
+| `catalog.field.appCategoryHint` | Là où les clients le trouvent en parcourant Food ou Mart. | Where customers find it when they browse Food or Mart. |
+| `catalog.appCat.choose` | Choisir… | Choose… |
+| `catalog.appCat.food.mains` | Plats | Mains |
+| `catalog.appCat.food.soups` | Soupes et ragoûts | Soups and stews |
+| `catalog.appCat.food.grill` | Grillades | Grill |
+| `catalog.appCat.food.snacks` | Snacks et pâtisseries | Snacks and pastries |
+| `catalog.appCat.food.breakfast` | Petit-déjeuner | Breakfast |
+| `catalog.appCat.food.drinks` | Boissons | Drinks |
+| `catalog.appCat.mart.staples` | Épicerie | Pantry staples |
+| `catalog.appCat.mart.sauces` | Sauces et épices | Sauces and spices |
+| `catalog.appCat.mart.snacks` | Snacks et douceurs | Snacks and sweets |
+| `catalog.appCat.mart.drinks` | Boissons | Drinks |
+| `catalog.appCat.mart.fresh` | Frais et surgelés | Fresh and frozen |
+| `catalog.appCat.mart.digital` | Services numériques | Digital services |
+| `catalog.appCat.mart.other` | Autres | Other |
+| `errors.MAIN_CATEGORY_OUTSIDE_LINE` | Ce n'est pas une catégorie disponible pour votre boutique. | That isn't one of the categories for your store. |
 
-### `seller/locales/fr/common.json` (151 strings)
+### `seller/locales/fr/common.json` (153 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -1264,6 +1369,8 @@ Total strings: 7500.
 | `errors.DISPLAY_NAME_INVALID` | Saisissez un nom de 2 à 80 caractères. | Enter a name between 2 and 80 characters. |
 | `errors.COUNTRY_INVALID` | Choisissez un pays. | Choose a country. |
 | `errors.LANGUAGE_INVALID` | Choisissez au moins une langue prise en charge. | Choose at least one supported language. |
+| `errors.COMMUNITIES_INVALID` | Choisissez jusqu'à 5 communautés dans la liste. | Choose up to 5 communities from the list. |
+| `errors.COMMUNITIES_STORES_ONLY` | Seules les boutiques peuvent définir des communautés. | Only stores can set communities. |
 | `errors.EMAIL_INVALID` | Saisissez une adresse e-mail valide. | Enter a valid email address. |
 | `errors.URL_INVALID` | Utilisez un lien commençant par https://. | Use a link that starts with https://. |
 | `errors.CURRENCY_INVALID` | Choisissez une devise prise en charge. | Choose a supported currency. |
@@ -1515,7 +1622,7 @@ Total strings: 7500.
 | `errors.DATE_INVALID` | Choisissez une période valide. | Choose a valid date range. |
 | `errors.METHOD_HAS_HISTORY` | Ce moyen a déjà servi pour un versement, il ne peut donc pas être supprimé. Définissez-en un autre par défaut. | This method was used for a past payout, so it can't be removed. Make another method the default instead. |
 
-### `seller/locales/fr/expert.json` (219 strings)
+### `seller/locales/fr/expert.json` (233 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -1738,6 +1845,20 @@ Total strings: 7500.
 | `errors.MEETING_EMPTY` | Ajoutez un lien de réunion ou des instructions. | Add a meeting link or instructions. |
 | `errors.BOOKING_CLOSED` | Cette réservation est clôturée ; les détails ne peuvent plus être modifiés. | This booking is closed, so meeting details can't be changed. |
 | `errors.BOOKING_NOT_PAID` | Cette réservation n'est pas encore payée. | This booking isn't paid yet. |
+| `expert.cred.title` | Diplômes et certifications | Credentials |
+| `expert.cred.hint` | Affichés sur votre profil public pour inspirer confiance. | Shown on your public profile so customers can trust your experience. |
+| `expert.cred.years` | Années d'expérience | Years of experience |
+| `expert.cred.name` | Diplôme ou certification | Credential or degree |
+| `expert.cred.issuer` | Délivré par | Issued by |
+| `expert.cred.year` | Année | Year |
+| `expert.cred.add` | Ajouter | Add credential |
+| `expert.cred.empty` | Aucun diplôme pour l'instant. | No credentials yet. |
+| `errors.CREDENTIALS_TOO_MANY` | 10 entrées au maximum. | Add at most 10 credentials. |
+| `errors.CREDENTIAL_TITLE_INVALID` | Chaque entrée doit avoir un nom de 120 caractères maximum. | Each credential needs a name of up to 120 characters. |
+| `errors.CREDENTIAL_ISSUER_INVALID` | L'organisme peut faire 120 caractères maximum. | The issuer can be up to 120 characters. |
+| `errors.CREDENTIAL_YEAR_INVALID` | L'année doit être comprise entre 1950 et cette année. | The year must be between 1950 and this year. |
+| `errors.YEARS_INVALID` | Les années d'expérience doivent être un entier de 0 à 80. | Years of experience must be a whole number from 0 to 80. |
+| `errors.CREDENTIALS_INVALID` | Cette liste n'est pas valide. | That credentials list is not valid. |
 
 ### `seller/locales/fr/home.json` (13 strings)
 
@@ -1926,7 +2047,7 @@ Total strings: 7500.
 | `errors.REPLY_LOCKED` | Cette réponse ne peut plus être modifiée. | This reply can no longer be edited. |
 | `errors.REVIEW_NOT_FOUND` | Nous n'avons pas trouvé cet avis. | We couldn't find that review. |
 
-### `seller/locales/fr/settings.json` (49 strings)
+### `seller/locales/fr/settings.json` (62 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -1940,6 +2061,19 @@ Total strings: 7500.
 | `profile.phone` | Téléphone | Phone |
 | `profile.website` | Site web | Website |
 | `profile.currency` | Devise par défaut | Default currency |
+| `profile.communities` | Communautés que vous servez | Communities you serve |
+| `profile.communities.hint` | Les clients peuvent filtrer Food et Mart par communauté. Choisissez-en jusqu'à {max}. | Shoppers can filter Food and Mart by community. Pick up to {max}. |
+| `profile.communities.count` | {n} sur {max} sélectionnées | {n} of {max} selected |
+| `community.nigerian` | Nigériane | Nigerian |
+| `community.african` | Africaine | African |
+| `community.chinese` | Chinoise | Chinese |
+| `community.indian` | Indienne | Indian |
+| `community.arab` | Arabe | Arab |
+| `community.latin_american` | Latino-américaine | Latin American |
+| `community.turkish` | Turque | Turkish |
+| `community.vietnamese` | Vietnamienne | Vietnamese |
+| `community.korean` | Coréenne | Korean |
+| `community.central_asian` | D'Asie centrale | Central Asian |
 | `team.title` | Équipe | Team |
 | `team.subtitle` | Les personnes qui peuvent se connecter à cette activité. | People who can sign in to this business. |
 | `team.invite` | Inviter une personne | Invite a person |
@@ -2069,7 +2203,7 @@ Total strings: 7500.
 | `auth.checkEmail.title` | Revise su correo | Check your email |
 | `auth.checkEmail.body` | Enviamos un enlace de confirmación a {email}. Ábralo y después inicie sesión. | We sent a confirmation link to {email}. Open it, then sign in. |
 
-### `seller/locales/es/catalog.json` (147 strings)
+### `seller/locales/es/catalog.json` (185 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -2220,8 +2354,46 @@ Total strings: 7500.
 | `errors.ZONE_FEE_INVALID` | Introduce un coste de entrega igual o mayor que 0. | Enter a delivery fee of 0 or more. |
 | `errors.ZONE_CURRENCY_INVALID` | Elige una moneda compatible para la zona. | Choose a supported currency for the zone. |
 | `errors.ZONE_DUPLICATE` | Cada ciudad y barrio solo puede aparecer una vez. | Each city and district can be listed only once. |
+| `catalog.fulfilment.schedule` | Horario semanal | Weekly opening hours |
+| `catalog.fulfilment.scheduleHint` | Los clientes ven si estás abierto. Deja todos los días cerrados para no mostrar horario. | Customers see whether you are open. Leave every day closed to show no opening hours. |
+| `catalog.fulfilment.timeZone` | Zona horaria | Time zone |
+| `catalog.fulfilment.openDay` | Abierto | Open |
+| `catalog.fulfilment.addRange` | Añadir horario | Add hours |
+| `catalog.fulfilment.openFrom` | Abre | Opens |
+| `catalog.fulfilment.openTo` | Cierra | Closes |
+| `catalog.fulfilment.minOrder` | Pedido mínimo para entrega | Minimum order for delivery |
+| `catalog.fulfilment.minOrderHint` | No se pueden hacer pedidos de entrega por debajo de este importe. Déjalo vacío si no hay mínimo. | Delivery orders below this amount cannot be placed. Leave empty for no minimum. |
+| `catalog.fulfilment.minOrderAmount` | Importe | Amount |
+| `catalog.fulfilment.eta` | Tiempo de entrega (min) | Delivery time (min) |
+| `errors.HOURS_INVALID` | Revisa el horario: cada tramo debe terminar después de empezar. | Check the opening hours: each range must end after it starts. |
+| `errors.HOURS_OVERLAP` | Los horarios de un mismo día no deben solaparse. | Opening hours on the same day must not overlap. |
+| `errors.MIN_ORDER_INVALID` | Introduce un importe mínimo válido. | Enter a valid minimum order amount. |
+| `errors.MIN_ORDER_CURRENCY_INVALID` | Elige una moneda para el pedido mínimo. | Choose a currency for the minimum order. |
+| `errors.ZONE_ETA_INVALID` | El tiempo de entrega debe ser un número entero de minutos entre 1 y 1440. | Delivery time must be a whole number of minutes between 1 and 1440. |
+| `errors.TIME_ZONE_INVALID` | Elige una zona horaria válida. | Choose a valid time zone. |
+| `catalog.fulfilment.pause` | Pausar la tienda | Pause store |
+| `catalog.fulfilment.pauseHint` | Los clientes no pueden pagar mientras la tienda esté en pausa. Úsalo para un descanso corto; al reanudar se aplican tus horarios. | Customers cannot check out while the store is paused. Use it for a short break; opening hours still apply when you resume. |
+| `catalog.fulfilment.pausedOn` | En pausa: no se puede pedir | Paused: customers cannot order |
+| `catalog.fulfilment.pausedOff` | Aceptando pedidos | Taking orders |
+| `catalog.field.appCategory` | Aparece en la app en | Shows in the app under |
+| `catalog.field.appCategoryHint` | Dónde lo encuentran los clientes al explorar Comida o Mart. | Where customers find it when they browse Food or Mart. |
+| `catalog.appCat.choose` | Elegir… | Choose… |
+| `catalog.appCat.food.mains` | Platos principales | Mains |
+| `catalog.appCat.food.soups` | Sopas y guisos | Soups and stews |
+| `catalog.appCat.food.grill` | Parrilla | Grill |
+| `catalog.appCat.food.snacks` | Snacks y repostería | Snacks and pastries |
+| `catalog.appCat.food.breakfast` | Desayuno | Breakfast |
+| `catalog.appCat.food.drinks` | Bebidas | Drinks |
+| `catalog.appCat.mart.staples` | Despensa | Pantry staples |
+| `catalog.appCat.mart.sauces` | Salsas y especias | Sauces and spices |
+| `catalog.appCat.mart.snacks` | Snacks y dulces | Snacks and sweets |
+| `catalog.appCat.mart.drinks` | Bebidas | Drinks |
+| `catalog.appCat.mart.fresh` | Frescos y congelados | Fresh and frozen |
+| `catalog.appCat.mart.digital` | Servicios digitales | Digital services |
+| `catalog.appCat.mart.other` | Otros | Other |
+| `errors.MAIN_CATEGORY_OUTSIDE_LINE` | Esa no es una de las categorías de tu tienda. | That isn't one of the categories for your store. |
 
-### `seller/locales/es/common.json` (151 strings)
+### `seller/locales/es/common.json` (153 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -2283,6 +2455,8 @@ Total strings: 7500.
 | `errors.DISPLAY_NAME_INVALID` | Introduzca un nombre de entre 2 y 80 caracteres. | Enter a name between 2 and 80 characters. |
 | `errors.COUNTRY_INVALID` | Elija un país. | Choose a country. |
 | `errors.LANGUAGE_INVALID` | Elija al menos un idioma compatible. | Choose at least one supported language. |
+| `errors.COMMUNITIES_INVALID` | Elija hasta 5 comunidades de la lista. | Choose up to 5 communities from the list. |
+| `errors.COMMUNITIES_STORES_ONLY` | Solo las tiendas pueden definir comunidades. | Only stores can set communities. |
 | `errors.EMAIL_INVALID` | Introduzca un correo electrónico válido. | Enter a valid email address. |
 | `errors.URL_INVALID` | Use un enlace que empiece por https://. | Use a link that starts with https://. |
 | `errors.CURRENCY_INVALID` | Elija una moneda compatible. | Choose a supported currency. |
@@ -2534,7 +2708,7 @@ Total strings: 7500.
 | `errors.DATE_INVALID` | Elige un periodo válido. | Choose a valid date range. |
 | `errors.METHOD_HAS_HISTORY` | Este método se usó en un pago anterior, por lo que no se puede eliminar. Elige otro como predeterminado. | This method was used for a past payout, so it can't be removed. Make another method the default instead. |
 
-### `seller/locales/es/expert.json` (219 strings)
+### `seller/locales/es/expert.json` (233 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -2757,6 +2931,20 @@ Total strings: 7500.
 | `errors.MEETING_EMPTY` | Añade un enlace de reunión o instrucciones. | Add a meeting link or instructions. |
 | `errors.BOOKING_CLOSED` | Esta reserva está cerrada y no se pueden cambiar los datos de la reunión. | This booking is closed, so meeting details can't be changed. |
 | `errors.BOOKING_NOT_PAID` | Esta reserva aún no está pagada. | This booking isn't paid yet. |
+| `expert.cred.title` | Credenciales | Credentials |
+| `expert.cred.hint` | Se muestran en tu perfil público para generar confianza. | Shown on your public profile so customers can trust your experience. |
+| `expert.cred.years` | Años de experiencia | Years of experience |
+| `expert.cred.name` | Título o certificación | Credential or degree |
+| `expert.cred.issuer` | Emitido por | Issued by |
+| `expert.cred.year` | Año | Year |
+| `expert.cred.add` | Añadir | Add credential |
+| `expert.cred.empty` | Aún no hay credenciales. | No credentials yet. |
+| `errors.CREDENTIALS_TOO_MANY` | Máximo 10 credenciales. | Add at most 10 credentials. |
+| `errors.CREDENTIAL_TITLE_INVALID` | Cada credencial necesita un nombre de hasta 120 caracteres. | Each credential needs a name of up to 120 characters. |
+| `errors.CREDENTIAL_ISSUER_INVALID` | El emisor puede tener hasta 120 caracteres. | The issuer can be up to 120 characters. |
+| `errors.CREDENTIAL_YEAR_INVALID` | El año debe estar entre 1950 y este año. | The year must be between 1950 and this year. |
+| `errors.YEARS_INVALID` | Los años de experiencia deben ser un número entero de 0 a 80. | Years of experience must be a whole number from 0 to 80. |
+| `errors.CREDENTIALS_INVALID` | Esa lista no es válida. | That credentials list is not valid. |
 
 ### `seller/locales/es/home.json` (13 strings)
 
@@ -2945,7 +3133,7 @@ Total strings: 7500.
 | `errors.REPLY_LOCKED` | Esta respuesta ya no se puede editar. | This reply can no longer be edited. |
 | `errors.REVIEW_NOT_FOUND` | No encontramos esa reseña. | We couldn't find that review. |
 
-### `seller/locales/es/settings.json` (49 strings)
+### `seller/locales/es/settings.json` (62 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -2959,6 +3147,19 @@ Total strings: 7500.
 | `profile.phone` | Teléfono | Phone |
 | `profile.website` | Sitio web | Website |
 | `profile.currency` | Moneda predeterminada | Default currency |
+| `profile.communities` | Comunidades que atiendes | Communities you serve |
+| `profile.communities.hint` | Los compradores pueden filtrar Comida y Mart por comunidad. Elige hasta {max}. | Shoppers can filter Food and Mart by community. Pick up to {max}. |
+| `profile.communities.count` | {n} de {max} seleccionadas | {n} of {max} selected |
+| `community.nigerian` | Nigeriana | Nigerian |
+| `community.african` | Africana | African |
+| `community.chinese` | China | Chinese |
+| `community.indian` | India | Indian |
+| `community.arab` | Árabe | Arab |
+| `community.latin_american` | Latinoamericana | Latin American |
+| `community.turkish` | Turca | Turkish |
+| `community.vietnamese` | Vietnamita | Vietnamese |
+| `community.korean` | Coreana | Korean |
+| `community.central_asian` | Centroasiática | Central Asian |
 | `team.title` | Equipo | Team |
 | `team.subtitle` | Personas que pueden iniciar sesión en este negocio. | People who can sign in to this business. |
 | `team.invite` | Invitar a una persona | Invite a person |
@@ -3088,7 +3289,7 @@ Total strings: 7500.
 | `auth.checkEmail.title` | 请查收邮件 | Check your email |
 | `auth.checkEmail.body` | 我们已向 {email} 发送确认链接。请打开链接，然后登录。 | We sent a confirmation link to {email}. Open it, then sign in. |
 
-### `seller/locales/zh/catalog.json` (147 strings)
+### `seller/locales/zh/catalog.json` (185 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -3180,7 +3381,7 @@ Total strings: 7500.
 | `catalog.fulfilment.pickupHint` | 顾客选择自提时会看到这些信息。 | Customers see this when they choose pickup. |
 | `catalog.fulfilment.location` | 自提地址 | Pickup address |
 | `catalog.fulfilment.hours` | 营业时间 | Opening hours |
-| `catalog.fulfilment.hoursHint` | 例如：周一至周六 9:00–20:00 | For example: Mon to Sat, 9:00 to 20:00 |
+| `catalog.fulfilment.hoursHint` | 例如：周一至周六 9:00-20:00 | For example: Mon to Sat, 9:00 to 20:00 |
 | `catalog.fulfilment.notes` | 给顾客的备注 | Notes for customers |
 | `catalog.fulfilment.zones` | 配送区域 | Delivery zones |
 | `catalog.fulfilment.zonesHint` | 顾客只能在你列出的区域下单配送。 | Customers can order delivery only in the zones you list. |
@@ -3239,8 +3440,46 @@ Total strings: 7500.
 | `errors.ZONE_FEE_INVALID` | 请输入 0 或更大的配送费。 | Enter a delivery fee of 0 or more. |
 | `errors.ZONE_CURRENCY_INVALID` | 请为该区域选择支持的币种。 | Choose a supported currency for the zone. |
 | `errors.ZONE_DUPLICATE` | 每个城市和区域只能列出一次。 | Each city and district can be listed only once. |
+| `catalog.fulfilment.schedule` | 每周营业时间 | Weekly opening hours |
+| `catalog.fulfilment.scheduleHint` | 顾客可以看到您是否营业。所有日期都不营业则不显示营业时间。 | Customers see whether you are open. Leave every day closed to show no opening hours. |
+| `catalog.fulfilment.timeZone` | 时区 | Time zone |
+| `catalog.fulfilment.openDay` | 营业 | Open |
+| `catalog.fulfilment.addRange` | 添加时段 | Add hours |
+| `catalog.fulfilment.openFrom` | 开门 | Opens |
+| `catalog.fulfilment.openTo` | 关门 | Closes |
+| `catalog.fulfilment.minOrder` | 配送起送金额 | Minimum order for delivery |
+| `catalog.fulfilment.minOrderHint` | 低于该金额的配送订单无法下单。留空表示无起送金额。 | Delivery orders below this amount cannot be placed. Leave empty for no minimum. |
+| `catalog.fulfilment.minOrderAmount` | 金额 | Amount |
+| `catalog.fulfilment.eta` | 配送时间（分钟） | Delivery time (min) |
+| `errors.HOURS_INVALID` | 请检查营业时间：每个时段的结束时间必须晚于开始时间。 | Check the opening hours: each range must end after it starts. |
+| `errors.HOURS_OVERLAP` | 同一天的营业时段不能重叠。 | Opening hours on the same day must not overlap. |
+| `errors.MIN_ORDER_INVALID` | 请输入有效的起送金额。 | Enter a valid minimum order amount. |
+| `errors.MIN_ORDER_CURRENCY_INVALID` | 请选择起送金额的币种。 | Choose a currency for the minimum order. |
+| `errors.ZONE_ETA_INVALID` | 配送时间必须是 1 到 1440 之间的整数分钟。 | Delivery time must be a whole number of minutes between 1 and 1440. |
+| `errors.TIME_ZONE_INVALID` | 请选择有效的时区。 | Choose a valid time zone. |
+| `catalog.fulfilment.pause` | 暂停店铺 | Pause store |
+| `catalog.fulfilment.pauseHint` | 店铺暂停期间，顾客无法下单。适合短暂休息；恢复后营业时间仍然生效。 | Customers cannot check out while the store is paused. Use it for a short break; opening hours still apply when you resume. |
+| `catalog.fulfilment.pausedOn` | 已暂停：顾客无法下单 | Paused: customers cannot order |
+| `catalog.fulfilment.pausedOff` | 正在接单 | Taking orders |
+| `catalog.field.appCategory` | 在应用中显示于 | Shows in the app under |
+| `catalog.field.appCategoryHint` | 顾客浏览美食或超市时在哪里找到它。 | Where customers find it when they browse Food or Mart. |
+| `catalog.appCat.choose` | 请选择… | Choose… |
+| `catalog.appCat.food.mains` | 主菜 | Mains |
+| `catalog.appCat.food.soups` | 汤与炖菜 | Soups and stews |
+| `catalog.appCat.food.grill` | 烧烤 | Grill |
+| `catalog.appCat.food.snacks` | 小吃与点心 | Snacks and pastries |
+| `catalog.appCat.food.breakfast` | 早餐 | Breakfast |
+| `catalog.appCat.food.drinks` | 饮品 | Drinks |
+| `catalog.appCat.mart.staples` | 主食杂货 | Pantry staples |
+| `catalog.appCat.mart.sauces` | 酱料与香料 | Sauces and spices |
+| `catalog.appCat.mart.snacks` | 零食与甜品 | Snacks and sweets |
+| `catalog.appCat.mart.drinks` | 饮品 | Drinks |
+| `catalog.appCat.mart.fresh` | 生鲜与冷冻 | Fresh and frozen |
+| `catalog.appCat.mart.digital` | 数字服务 | Digital services |
+| `catalog.appCat.mart.other` | 其他 | Other |
+| `errors.MAIN_CATEGORY_OUTSIDE_LINE` | 这不是你店铺可用的类别。 | That isn't one of the categories for your store. |
 
-### `seller/locales/zh/common.json` (151 strings)
+### `seller/locales/zh/common.json` (153 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -3302,6 +3541,8 @@ Total strings: 7500.
 | `errors.DISPLAY_NAME_INVALID` | 请输入 2 到 80 个字符的名称。 | Enter a name between 2 and 80 characters. |
 | `errors.COUNTRY_INVALID` | 请选择国家或地区。 | Choose a country. |
 | `errors.LANGUAGE_INVALID` | 请至少选择一种支持的语言。 | Choose at least one supported language. |
+| `errors.COMMUNITIES_INVALID` | 最多从列表中选择 5 个社群。 | Choose up to 5 communities from the list. |
+| `errors.COMMUNITIES_STORES_ONLY` | 只有商店可以设置社群。 | Only stores can set communities. |
 | `errors.EMAIL_INVALID` | 请输入有效的电子邮箱地址。 | Enter a valid email address. |
 | `errors.URL_INVALID` | 请使用以 https:// 开头的链接。 | Use a link that starts with https://. |
 | `errors.CURRENCY_INVALID` | 请选择支持的币种。 | Choose a supported currency. |
@@ -3553,7 +3794,7 @@ Total strings: 7500.
 | `errors.DATE_INVALID` | 请选择有效的日期范围。 | Choose a valid date range. |
 | `errors.METHOD_HAS_HISTORY` | 此收款方式已用于过往提现，无法删除。请改为将其他方式设为默认。 | This method was used for a past payout, so it can't be removed. Make another method the default instead. |
 
-### `seller/locales/zh/expert.json` (219 strings)
+### `seller/locales/zh/expert.json` (233 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -3776,6 +4017,20 @@ Total strings: 7500.
 | `errors.MEETING_EMPTY` | 请填写会议链接或说明。 | Add a meeting link or instructions. |
 | `errors.BOOKING_CLOSED` | 此预约已关闭，无法再更改会议信息。 | This booking is closed, so meeting details can't be changed. |
 | `errors.BOOKING_NOT_PAID` | 此预约尚未付款。 | This booking isn't paid yet. |
+| `expert.cred.title` | 资质证书 | Credentials |
+| `expert.cred.hint` | 显示在你的公开主页上，帮助客户建立信任。 | Shown on your public profile so customers can trust your experience. |
+| `expert.cred.years` | 从业年限 | Years of experience |
+| `expert.cred.name` | 证书或学位 | Credential or degree |
+| `expert.cred.issuer` | 颁发机构 | Issued by |
+| `expert.cred.year` | 年份 | Year |
+| `expert.cred.add` | 添加 | Add credential |
+| `expert.cred.empty` | 暂无资质。 | No credentials yet. |
+| `errors.CREDENTIALS_TOO_MANY` | 最多 10 项。 | Add at most 10 credentials. |
+| `errors.CREDENTIAL_TITLE_INVALID` | 每项需要不超过 120 个字符的名称。 | Each credential needs a name of up to 120 characters. |
+| `errors.CREDENTIAL_ISSUER_INVALID` | 颁发机构最多 120 个字符。 | The issuer can be up to 120 characters. |
+| `errors.CREDENTIAL_YEAR_INVALID` | 年份须在 1950 年至今年之间。 | The year must be between 1950 and this year. |
+| `errors.YEARS_INVALID` | 从业年限须为 0 到 80 的整数。 | Years of experience must be a whole number from 0 to 80. |
+| `errors.CREDENTIALS_INVALID` | 该列表无效。 | That credentials list is not valid. |
 
 ### `seller/locales/zh/home.json` (13 strings)
 
@@ -3964,7 +4219,7 @@ Total strings: 7500.
 | `errors.REPLY_LOCKED` | 此回复已无法修改。 | This reply can no longer be edited. |
 | `errors.REVIEW_NOT_FOUND` | 找不到该评价。 | We couldn't find that review. |
 
-### `seller/locales/zh/settings.json` (49 strings)
+### `seller/locales/zh/settings.json` (62 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -3978,6 +4233,19 @@ Total strings: 7500.
 | `profile.phone` | 电话 | Phone |
 | `profile.website` | 网站 | Website |
 | `profile.currency` | 默认币种 | Default currency |
+| `profile.communities` | 你服务的社群 | Communities you serve |
+| `profile.communities.hint` | 顾客可以按社群筛选美食和 Mart。最多选择 {max} 个。 | Shoppers can filter Food and Mart by community. Pick up to {max}. |
+| `profile.communities.count` | 已选 {n}/{max} | {n} of {max} selected |
+| `community.nigerian` | 尼日利亚 | Nigerian |
+| `community.african` | 非洲 | African |
+| `community.chinese` | 中国 | Chinese |
+| `community.indian` | 印度 | Indian |
+| `community.arab` | 阿拉伯 | Arab |
+| `community.latin_american` | 拉丁美洲 | Latin American |
+| `community.turkish` | 土耳其 | Turkish |
+| `community.vietnamese` | 越南 | Vietnamese |
+| `community.korean` | 韩国 | Korean |
+| `community.central_asian` | 中亚 | Central Asian |
 | `team.title` | 团队 | Team |
 | `team.subtitle` | 可以登录此业务的人员。 | People who can sign in to this business. |
 | `team.invite` | 邀请成员 | Invite a person |
@@ -4107,7 +4375,7 @@ Total strings: 7500.
 | `auth.checkEmail.title` | Verifique seu e-mail | Check your email |
 | `auth.checkEmail.body` | Enviamos um link de confirmação para {email}. Abra o link e depois entre. | We sent a confirmation link to {email}. Open it, then sign in. |
 
-### `seller/locales/pt/catalog.json` (147 strings)
+### `seller/locales/pt/catalog.json` (185 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -4258,8 +4526,46 @@ Total strings: 7500.
 | `errors.ZONE_FEE_INVALID` | Informe uma taxa de entrega igual ou maior que 0. | Enter a delivery fee of 0 or more. |
 | `errors.ZONE_CURRENCY_INVALID` | Escolha uma moeda compatível para a zona. | Choose a supported currency for the zone. |
 | `errors.ZONE_DUPLICATE` | Cada cidade e bairro só pode aparecer uma vez. | Each city and district can be listed only once. |
+| `catalog.fulfilment.schedule` | Horário semanal de funcionamento | Weekly opening hours |
+| `catalog.fulfilment.scheduleHint` | Os clientes veem se você está aberto. Deixe todos os dias fechados para não mostrar horário. | Customers see whether you are open. Leave every day closed to show no opening hours. |
+| `catalog.fulfilment.timeZone` | Fuso horário | Time zone |
+| `catalog.fulfilment.openDay` | Aberto | Open |
+| `catalog.fulfilment.addRange` | Adicionar horário | Add hours |
+| `catalog.fulfilment.openFrom` | Abre | Opens |
+| `catalog.fulfilment.openTo` | Fecha | Closes |
+| `catalog.fulfilment.minOrder` | Pedido mínimo para entrega | Minimum order for delivery |
+| `catalog.fulfilment.minOrderHint` | Pedidos de entrega abaixo desse valor não podem ser feitos. Deixe vazio para não ter mínimo. | Delivery orders below this amount cannot be placed. Leave empty for no minimum. |
+| `catalog.fulfilment.minOrderAmount` | Valor | Amount |
+| `catalog.fulfilment.eta` | Tempo de entrega (min) | Delivery time (min) |
+| `errors.HOURS_INVALID` | Confira o horário: cada faixa deve terminar depois de começar. | Check the opening hours: each range must end after it starts. |
+| `errors.HOURS_OVERLAP` | Os horários de um mesmo dia não podem se sobrepor. | Opening hours on the same day must not overlap. |
+| `errors.MIN_ORDER_INVALID` | Informe um valor mínimo de pedido válido. | Enter a valid minimum order amount. |
+| `errors.MIN_ORDER_CURRENCY_INVALID` | Escolha uma moeda para o pedido mínimo. | Choose a currency for the minimum order. |
+| `errors.ZONE_ETA_INVALID` | O tempo de entrega deve ser um número inteiro de minutos entre 1 e 1440. | Delivery time must be a whole number of minutes between 1 and 1440. |
+| `errors.TIME_ZONE_INVALID` | Escolha um fuso horário válido. | Choose a valid time zone. |
+| `catalog.fulfilment.pause` | Pausar a loja | Pause store |
+| `catalog.fulfilment.pauseHint` | Os clientes não podem finalizar a compra enquanto a loja está pausada. Use para uma pausa curta; ao retomar, os horários continuam valendo. | Customers cannot check out while the store is paused. Use it for a short break; opening hours still apply when you resume. |
+| `catalog.fulfilment.pausedOn` | Pausada: não é possível pedir | Paused: customers cannot order |
+| `catalog.fulfilment.pausedOff` | Aceitando pedidos | Taking orders |
+| `catalog.field.appCategory` | Aparece no app em | Shows in the app under |
+| `catalog.field.appCategoryHint` | Onde os clientes encontram ao navegar em Food ou Mart. | Where customers find it when they browse Food or Mart. |
+| `catalog.appCat.choose` | Escolher… | Choose… |
+| `catalog.appCat.food.mains` | Pratos principais | Mains |
+| `catalog.appCat.food.soups` | Sopas e ensopados | Soups and stews |
+| `catalog.appCat.food.grill` | Grelhados | Grill |
+| `catalog.appCat.food.snacks` | Lanches e salgados | Snacks and pastries |
+| `catalog.appCat.food.breakfast` | Café da manhã | Breakfast |
+| `catalog.appCat.food.drinks` | Bebidas | Drinks |
+| `catalog.appCat.mart.staples` | Mercearia | Pantry staples |
+| `catalog.appCat.mart.sauces` | Molhos e temperos | Sauces and spices |
+| `catalog.appCat.mart.snacks` | Lanches e doces | Snacks and sweets |
+| `catalog.appCat.mart.drinks` | Bebidas | Drinks |
+| `catalog.appCat.mart.fresh` | Frescos e congelados | Fresh and frozen |
+| `catalog.appCat.mart.digital` | Serviços digitais | Digital services |
+| `catalog.appCat.mart.other` | Outros | Other |
+| `errors.MAIN_CATEGORY_OUTSIDE_LINE` | Essa não é uma das categorias da sua loja. | That isn't one of the categories for your store. |
 
-### `seller/locales/pt/common.json` (151 strings)
+### `seller/locales/pt/common.json` (153 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -4321,6 +4627,8 @@ Total strings: 7500.
 | `errors.DISPLAY_NAME_INVALID` | Informe um nome com 2 a 80 caracteres. | Enter a name between 2 and 80 characters. |
 | `errors.COUNTRY_INVALID` | Escolha um país. | Choose a country. |
 | `errors.LANGUAGE_INVALID` | Escolha pelo menos um idioma compatível. | Choose at least one supported language. |
+| `errors.COMMUNITIES_INVALID` | Escolha até 5 comunidades da lista. | Choose up to 5 communities from the list. |
+| `errors.COMMUNITIES_STORES_ONLY` | Somente lojas podem definir comunidades. | Only stores can set communities. |
 | `errors.EMAIL_INVALID` | Informe um e-mail válido. | Enter a valid email address. |
 | `errors.URL_INVALID` | Use um link que comece com https://. | Use a link that starts with https://. |
 | `errors.CURRENCY_INVALID` | Escolha uma moeda compatível. | Choose a supported currency. |
@@ -4572,7 +4880,7 @@ Total strings: 7500.
 | `errors.DATE_INVALID` | Escolha um período válido. | Choose a valid date range. |
 | `errors.METHOD_HAS_HISTORY` | Este método já foi usado em um repasse, por isso não pode ser removido. Defina outro como padrão. | This method was used for a past payout, so it can't be removed. Make another method the default instead. |
 
-### `seller/locales/pt/expert.json` (219 strings)
+### `seller/locales/pt/expert.json` (233 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -4795,6 +5103,20 @@ Total strings: 7500.
 | `errors.MEETING_EMPTY` | Adicione um link da reunião ou instruções. | Add a meeting link or instructions. |
 | `errors.BOOKING_CLOSED` | Esta reserva está encerrada e os dados da reunião não podem ser alterados. | This booking is closed, so meeting details can't be changed. |
 | `errors.BOOKING_NOT_PAID` | Esta reserva ainda não foi paga. | This booking isn't paid yet. |
+| `expert.cred.title` | Credenciais | Credentials |
+| `expert.cred.hint` | Aparecem no seu perfil público para dar confiança aos clientes. | Shown on your public profile so customers can trust your experience. |
+| `expert.cred.years` | Anos de experiência | Years of experience |
+| `expert.cred.name` | Diploma ou certificação | Credential or degree |
+| `expert.cred.issuer` | Emitido por | Issued by |
+| `expert.cred.year` | Ano | Year |
+| `expert.cred.add` | Adicionar | Add credential |
+| `expert.cred.empty` | Nenhuma credencial ainda. | No credentials yet. |
+| `errors.CREDENTIALS_TOO_MANY` | No máximo 10 credenciais. | Add at most 10 credentials. |
+| `errors.CREDENTIAL_TITLE_INVALID` | Cada credencial precisa de um nome de até 120 caracteres. | Each credential needs a name of up to 120 characters. |
+| `errors.CREDENTIAL_ISSUER_INVALID` | O emissor pode ter até 120 caracteres. | The issuer can be up to 120 characters. |
+| `errors.CREDENTIAL_YEAR_INVALID` | O ano deve estar entre 1950 e este ano. | The year must be between 1950 and this year. |
+| `errors.YEARS_INVALID` | Os anos de experiência devem ser um número inteiro de 0 a 80. | Years of experience must be a whole number from 0 to 80. |
+| `errors.CREDENTIALS_INVALID` | Essa lista não é válida. | That credentials list is not valid. |
 
 ### `seller/locales/pt/home.json` (13 strings)
 
@@ -4983,7 +5305,7 @@ Total strings: 7500.
 | `errors.REPLY_LOCKED` | Esta resposta não pode mais ser editada. | This reply can no longer be edited. |
 | `errors.REVIEW_NOT_FOUND` | Não encontramos essa avaliação. | We couldn't find that review. |
 
-### `seller/locales/pt/settings.json` (49 strings)
+### `seller/locales/pt/settings.json` (62 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -4997,6 +5319,19 @@ Total strings: 7500.
 | `profile.phone` | Telefone | Phone |
 | `profile.website` | Site | Website |
 | `profile.currency` | Moeda padrão | Default currency |
+| `profile.communities` | Comunidades que você atende | Communities you serve |
+| `profile.communities.hint` | Os clientes podem filtrar Comida e Mart por comunidade. Escolha até {max}. | Shoppers can filter Food and Mart by community. Pick up to {max}. |
+| `profile.communities.count` | {n} de {max} selecionadas | {n} of {max} selected |
+| `community.nigerian` | Nigeriana | Nigerian |
+| `community.african` | Africana | African |
+| `community.chinese` | Chinesa | Chinese |
+| `community.indian` | Indiana | Indian |
+| `community.arab` | Árabe | Arab |
+| `community.latin_american` | Latino-americana | Latin American |
+| `community.turkish` | Turca | Turkish |
+| `community.vietnamese` | Vietnamita | Vietnamese |
+| `community.korean` | Coreana | Korean |
+| `community.central_asian` | Centro-asiática | Central Asian |
 | `team.title` | Equipe | Team |
 | `team.subtitle` | Pessoas que podem entrar neste negócio. | People who can sign in to this business. |
 | `team.invite` | Convidar uma pessoa | Invite a person |
@@ -5105,7 +5440,7 @@ Total strings: 7500.
 
 ## Customer app (web and Expo)
 
-### `packages/shared/src/locales/zh/app.json` (1126 strings)
+### `packages/shared/src/locales/zh/app.json` (1633 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -5135,6 +5470,7 @@ Total strings: 7500.
 | `dashboard.receiveAmount` | 到账金额 | Receive Amount |
 | `dashboard.fullAmountAria` | 完整金额：{{label}} | Full amount: {{label}} |
 | `dashboard.fullAmountCaption` | 完整金额 | Full amount |
+| `dashboard.referShort` | 邀请 | Refer |
 | `hub.hub` | Hub | Hub |
 | `hub.heroTitle` | 汇款、购物、预约。 | Send, Shop & Book. |
 | `hub.heroBody` | 美食杂货、汇款和各类服务，在 Ciuna 一站办理。 | Everything you need: groceries, transfers, and services in one place on Ciuna. |
@@ -5168,8 +5504,44 @@ Total strings: 7500.
 | `hub.marketplaceProductsHeading` | 商品 | Products |
 | `hub.marketplaceStoresHeading` | 店铺 | Stores |
 | `hub.storesDirectorySubtitle` | 选择一家店铺查看其商品。 | Choose a store to see its products. |
-| `hub.marketplaceSeeAllStores` | 查看全部 | See all |
-| `hub.marketplaceNoVendors` | 暂无店铺，请稍后再来。 | No stores yet — check back soon. |
+| `hub.marketplaceSeeAllStores` | 全部商店 | All Stores |
+| `hub.marketplaceSeeAllProducts` | 全部商品 | All Products |
+| `hub.locationTitle` | 选择你的地区 | Choose your area |
+| `hub.locationAll` | 所有地区 | All areas |
+| `hub.locationLabel` | 位置 | Location |
+| `hub.locationHint` | 我们会显示可配送到所选城市的商店，以及仅限自取的商店和数字商品。 | We show stores that deliver to the city you pick, plus pickup-only stores and digital items. |
+| `hub.locationEmpty` | 尚未设置配送区域。 | No delivery areas are set up yet. |
+| `hub.locationDelivering` | 可配送 | Delivery available |
+| `hub.locationPopular` | 热门 | Popular |
+| `hub.locationAllCities` | 所有城市 | All cities |
+| `hub.communityLabel` | 社群 | Community |
+| `hub.communityTitle` | 选择社群 | Choose a community |
+| `hub.communityAll` | 所有社群 | All communities |
+| `hub.communityHint` | 显示服务某个社群的商店，例如尼日利亚或中国的美食和食品杂货。 | Show stores that serve a community, such as Nigerian or Chinese food and groceries. |
+| `hub.community_nigerian` | 尼日利亚 | Nigerian |
+| `hub.community_african` | 非洲 | African |
+| `hub.community_chinese` | 中国 | Chinese |
+| `hub.community_indian` | 印度 | Indian |
+| `hub.community_arab` | 阿拉伯 | Arab |
+| `hub.community_latin_american` | 拉丁美洲 | Latin American |
+| `hub.community_turkish` | 土耳其 | Turkish |
+| `hub.community_vietnamese` | 越南 | Vietnamese |
+| `hub.community_korean` | 韩国 | Korean |
+| `hub.community_central_asian` | 中亚 | Central Asian |
+| `hub.locationSearch` | 搜索城市 | Search cities |
+| `hub.searchStores` | 搜索商店 | Search stores |
+| `hub.searchProducts` | 搜索商品 | Search products |
+| `hub.searchServices` | 搜索服务 | Search services |
+| `hub.filterAll` | 全部 | All |
+| `hub.filterOpenNow` | 营业中 | Open now |
+| `hub.filterDelivers` | 可配送 | Delivers |
+| `hub.filterOnline` | 线上 | Online |
+| `hub.filterInPerson` | 线下 | In person |
+| `hub.resultsCount` | 结果：{{count}} | Results: {{count}} |
+| `hub.clearFilters` | 清除筛选 | Clear filters |
+| `hub.noMatch` | 没有匹配项 | No matches |
+| `hub.noMatchBody` | 试试其他名称或筛选条件。 | Try another name or filter. |
+| `hub.marketplaceNoVendors` | 暂无店铺，请稍后再来。 | No stores yet. Check back soon. |
 | `hub.verifiedVendor` | 已认证商家 | Verified vendor |
 | `hub.backToLine` | 返回上一级 | Back to line |
 | `hub.vendorStoreNotFound` | 未找到店铺 | Store not found |
@@ -5189,9 +5561,9 @@ Total strings: 7500.
 | `hub.expertsTitle` | 专家 | Experts |
 | `hub.expertsSubtitle` | 为您的家居和美容需求提供值得信赖的专业人士。 | Trusted professionals for all your home and beauty needs. |
 | `hub.expertsFeaturedHeading` | 精选 | Featured |
-| `hub.expertsSeeAll` | 查看全部 | See all |
+| `hub.expertsSeeAll` | 全部专家 | All experts |
 | `hub.expertsServicesHeading` | 服务 | Services |
-| `hub.expertsFeaturedEmpty` | 暂无专家，请稍后再来。 | No experts yet — check back soon. |
+| `hub.expertsFeaturedEmpty` | 暂无专家，请稍后再来。 | No experts yet. Check back soon. |
 | `hub.expertsDirectoryTitle` | 全部专家 | All experts |
 | `hub.expertsDirectorySubtitle` | 浏览 Ciuna 上的所有专家。 | Browse every expert on Ciuna. |
 | `hub.backToExperts` | 返回专家列表 | Back to experts |
@@ -5264,8 +5636,74 @@ Total strings: 7500.
 | `hub.payUpTo` | 最高付款 | Pay up to |
 | `hub.toRange` | 至 | to |
 | `hub.sellPrice` | 售价 | Sell price |
+| `hub.store.newStore` | 新店铺 | New store |
+| `hub.store.openUntil` | 营业至 {{time}} | Open until {{time}} |
+| `hub.store.closed` | 已打烊 | Closed |
+| `hub.store.closedOpens` | 已打烊 · {{day}} {{time}} 开门 | Closed · opens {{day}} {{time}} |
+| `hub.store.minOrder` | 配送起送金额：{{min}} | Minimum order for delivery: {{min}} |
+| `hub.store.paused` | 暂时不可用 | Temporarily unavailable |
+| `hub.store.pickupOnly` | 仅限自取 | Pickup only |
+| `hub.store.deliveryFree` | 免费配送 | Free delivery |
+| `hub.store.deliveryFrom` | 配送费 {{fee}} 起 | Delivery from {{fee}} |
+| `hub.store.delivers` | 支持配送 | Delivers |
+| `hub.store.etaRange` | {{min}}-{{max}} 分钟 | {{min}}–{{max}} min |
+| `hub.store.eta` | {{min}} 分钟 | {{min}} min |
+| `hub.store.deliveryFee` | 配送费 {{fee}} 起 | Delivery from {{fee}} |
+| `hub.cart.emptyBody` | 从店铺添加商品，开始下单。 | Add something from a store to start your order. |
+| `hub.cart.browse` | 去逛美食 | Browse Food |
+| `hub.cart.addMore` | 继续添加 | Add more |
+| `hub.cart.total` | 合计 | Total |
+| `hub.cart.deliveryAtCheckout` | 配送费在结算时添加。 | Delivery is added at checkout. |
+| `hub.cart.checkoutWithTotal` | 结算 · {{total}} | Checkout · {{total}} |
+| `hub.cart.unavailable` | 已不可用 | No longer available |
+| `hub.cart.unavailableNote` | 请移除不可用商品后再结账。 | Remove unavailable items to check out. |
+| `hub.cart.lockTitle` | 开始新购物车？ | Start a new cart? |
+| `hub.cart.lockBody` | 购物车中有来自 {{vendor}} 的商品。一个购物车只能放一家店的商品，添加后将清空原购物车。 | Your cart has items from {{vendor}}. A cart holds one store, so adding this will clear it. |
+| `hub.cart.lockConfirm` | 新建购物车 | Start new cart |
+| `hub.cart.lockCancel` | 保留当前购物车 | Keep current cart |
+| `hub.cart.minOrderMore` | 再加 {{more}} 即可配送。起送金额为 {{min}}。 | Add {{more}} more for delivery. Minimum order is {{min}}. |
+| `hub.cart.storeClosedNote` | 该店铺已打烊，营业前无法结账。 | This store is closed, so checkout is unavailable until it opens. |
+| `hub.cart.storePausedNote` | 该店铺暂停营业，暂时无法结账。 | This store is taking a break, so checkout is unavailable for now. |
+| `hub.cart.removedItem` | 已从购物车移除 | Removed from cart |
+| `hub.cart.undo` | 撤销 | Undo |
+| `hub.cart.addToCartPrice` | 加入购物车 · {{price}} | Add to cart · {{price}} |
+| `hub.cart.removeShort` | 删除 | Delete |
+| `hub.cart.storeClosedShort` | 店铺目前已打烊。 | The store is closed right now. |
+| `hub.cart.itemCount_one` | {{count}} 件商品 | {{count}} item |
+| `hub.cart.itemCount_other` | {{count}} 件商品 | {{count}} items |
+| `hub.stock.onlyLeft` | 仅剩 {{n}} 件 | Only {{n}} left |
+| `hub.stock.left` | 剩余 {{n}} 件 | {{n}} left |
+| `hub.verifiedBusiness` | 已验证企业 | Verified business |
+| `hub.verifiedIndividual` | 已验证 | Verified |
+| `hub.verifiedInfoBusiness` | Ciuna 已根据官方公司信息核实该商家。 | Ciuna checked this business against its official company details. |
+| `hub.verifiedInfoIndividual` | Ciuna 已核实此人的身份。 | Ciuna checked this person's identity. |
+| `hub.verifiedInfoHint` | 这是什么意思？ | What does this mean? |
+| `hub.verifiedInfoClose` | 知道了 | Got it |
+| `hub.noDeliveryTitle` | 暂无支持配送的店铺 | No stores deliver yet |
+| `hub.noDeliveryBody` | 这些店铺提供自取。店铺开通配送后会显示在这里。 | These stores offer pickup. Delivery will appear here as stores open it. |
+| `hub.cat.food.mains` | 主菜 | Mains |
+| `hub.cat.food.soups` | 汤与炖菜 | Soups and stews |
+| `hub.cat.food.grill` | 烧烤 | Grill |
+| `hub.cat.food.snacks` | 小吃与点心 | Snacks and pastries |
+| `hub.cat.food.breakfast` | 早餐 | Breakfast |
+| `hub.cat.food.drinks` | 饮品 | Drinks |
+| `hub.cat.mart.staples` | 主食杂货 | Pantry staples |
+| `hub.cat.mart.sauces` | 酱料与香料 | Sauces and spices |
+| `hub.cat.mart.snacks` | 零食与甜品 | Snacks and sweets |
+| `hub.cat.mart.drinks` | 饮品 | Drinks |
+| `hub.cat.mart.fresh` | 生鲜与冷冻 | Fresh and frozen |
+| `hub.cat.mart.digital` | 数字服务 | Digital services |
+| `hub.cat.mart.other` | 其他 | Other |
+| `hub.cat.foodHeading` | 想吃点什么？ | What are you craving? |
+| `hub.cat.martHeading` | 你需要什么？ | What do you need? |
+| `hub.cat.allProducts` | 全部商品 | All products |
+| `hub.cat.empty` | 这里暂时还没有商品。 | Nothing here yet. |
+| `hub.cat.emptyBody` | 商家正在上新，请稍后再来。 | Stores are adding products. Check back soon. |
+| `hub.cat.productCount_one` | {{count}} 件商品 | {{count}} product |
+| `hub.cat.productCount_other` | {{count}} 件商品 | {{count}} products |
+| `hub.cat.allStores` | 全部店铺 | All stores |
 | `assistant.title` | 助手 | Assistant |
-| `assistant.intro` | 告诉我们您的需求，Ciuna 助手将为您安排取件、代购和跑腿。 | Tell us what you need — Ciuna Assistant coordinates pickup, shopping, and errands. |
+| `assistant.intro` | 告诉我们您的需求，Ciuna 助手将为您安排取件、代购和跑腿。 | Tell us what you need. Ciuna Assistant coordinates pickup, shopping, and errands. |
 | `assistant.help` | 帮助 | Help |
 | `assistant.section.serviceType` | 服务类型 | Service type |
 | `assistant.section.details` | 地址和说明 | Addresses & instructions |
@@ -5282,7 +5720,7 @@ Total strings: 7500.
 | `assistant.field.dropoff` | 送达地点 | Drop-off |
 | `assistant.placeholder.pickup` | 取件地点、取件码、现场联系人… | Where to pick up, codes, contact on site… |
 | `assistant.placeholder.buy` | 店铺名称、商品清单、尺码、可替代选项… | Store name, product list, sizes, alternatives… |
-| `assistant.placeholder.vehicle` | 自行车、汽车、厢式货车，或留空表示不限 | Bike, car, van — or leave blank for any |
+| `assistant.placeholder.vehicle` | 自行车、汽车、厢式货车，或留空表示不限 | Bike, car, van, or leave blank for any |
 | `assistant.placeholder.dropoff` | 完整的送达地址和进入说明 | Full drop-off address and access notes |
 | `assistant.cta.pickKind` | 选择服务类型 | Choose a service type |
 | `assistant.cta.pickupDetails` | 填写取件信息 | Add pickup details |
@@ -5308,6 +5746,16 @@ Total strings: 7500.
 | `experts.profile.fulfillmentBoth` | 线上或线下 | Online or in person |
 | `experts.profile.fulfillmentHero` | 服务方式：{{value}} | Fulfillment: {{value}} |
 | `experts.profile.priceFrom` | 起价 | From |
+| `experts.profile.languages` | 使用语言 | Speaks |
+| `experts.profile.credentials` | 资质 | Credentials |
+| `experts.profile.yearsExp` | {{n}} 年经验 | {{n}} years of experience |
+| `experts.profile.nextAvailable` | 最近可约：{{when}} | Next available: {{when}} |
+| `experts.profile.noTimes` | 目前没有空闲时间 | No open times right now |
+| `experts.profile.notifyHint` | 该专家开放新时间时通知你。 | Get a notification when this expert opens new times. |
+| `experts.profile.notifyOn` | 一有空闲时间我们就会通知你。 | We will tell you as soon as times open. |
+| `experts.profile.notifyMe` | 通知我 | Notify me |
+| `experts.profile.notifyCancel` | 不再通知我 | Stop notifying me |
+| `experts.profile.notifyFailed` | 无法保存，请重试。 | Could not save that. Try again. |
 | `experts.booking.title` | 预约专家 | Book an expert |
 | `experts.booking.intro` | 请选择一位已上线的专家并提出时间。Ciuna 将与您确认详情。 | Pick a published expert and suggest a time. Ciuna will confirm details with you. |
 | `experts.booking.loading` | 正在加载专家… | Loading experts… |
@@ -5356,20 +5804,72 @@ Total strings: 7500.
 | `experts.bookingWizard.slotUnavailable` | 该时段已不可预约。 | This time slot is no longer available. |
 | `experts.bookingWizard.tryAgain` | 重新预约 | Try booking again |
 | `experts.bookingWizard.successTitle` | 预约成功 | You’re booked |
-| `experts.bookingWizard.successBody` | 谢谢，您与 {{name}} 的预约已保留。 | Thanks — your session with {{name}} is reserved. |
+| `experts.bookingWizard.successBody` | 谢谢，您与 {{name}} 的预约已保留。 | Thanks, your session with {{name}} is reserved. |
 | `experts.bookingWizard.confirmationEmail` | 我们已向 {{email}} 发送确认邮件。 | We sent a confirmation to {{email}}. |
 | `experts.bookingWizard.bookAnother` | 再预约一次 | Book another session |
 | `experts.bookingWizard.quoteNote` | 最终价格可能在服务前后另行商定。 | Final price may be agreed separately before or after the session. |
 | `experts.bookingWizard.priceQuote` | 价格稍后商定 | We’ll agree price later |
 | `experts.bookingWizard.priceHourly` | {{rate}} {{currency}} / 小时 | {{rate}} {{currency}} / hr |
 | `experts.bookingWizard.priceFixed` | {{amount}} {{currency}} | {{amount}} {{currency}} |
-| `experts.bookingWizard.priceFixedWithLabel` | {{amount}} {{currency}} — {{label}} | {{amount}} {{currency}} — {{label}} |
-| `experts.bookingWizard.priceDash` | — | — |
+| `experts.bookingWizard.priceFixedWithLabel` | {{amount}} {{currency}} · {{label}} | {{amount}} {{currency}} · {{label}} |
+| `experts.bookingWizard.priceDash` | - | - |
+| `experts.slots.timezone` | 时间按您的时区显示（{{zone}}） | Times shown in your time zone ({{zone}}) |
+| `experts.slots.book` | 预订 {{time}} | Book {{time}} |
+| `experts.slots.pickTime` | 选择时间 | Choose a time |
+| `experts.slots.expertZone` | 专家所在地 {{place}}（{{zone}}） | Expert in {{place}} ({{zone}}) |
+| `experts.slots.dayFull` | 已满 | Full |
+| `experts.slots.noneLeft` | 当天已无可预约时间。 | No times left on this day. |
+| `experts.slots.jumpNext` | 最近可约：{{day}} | Next available: {{day}} |
+| `experts.directory.search` | 搜索专家 | Search experts |
+| `experts.directory.count` | 专家：{{count}} | Experts: {{count}} |
+| `experts.directory.clear` | 清除筛选 | Clear filters |
+| `experts.directory.noMatch` | 没有匹配的专家 | No experts match |
+| `experts.directory.noMatchBody` | 试试其他名称或类别。 | Try another name or category. |
+| `experts.directory.all` | 全部 | All |
+| `experts.directory.isNew` | 新 | New |
+| `experts.directory.allLanguages` | 所有语言 | All languages |
+| `experts.directory.from` | {{price}} 起 | From {{price}} |
+| `experts.directory.fromPerHour` | {{price}}/小时起 | From {{price}}/hr |
+| `experts.directory.customQuote` | 按需报价 | Custom quote |
+| `experts.directory.nextAvailable` | 最近：{{when}} | Next: {{when}} |
+| `experts.discover.needHeading` | 你需要什么？ | What do you need? |
+| `experts.discover.serviceCount_one` | {{count}} 项服务 | {{count}} service |
+| `experts.discover.serviceCount_other` | {{count}} 项服务 | {{count}} services |
+| `experts.discover.all` | 全部 | All |
+| `experts.discover.servicesHeading` | 服务 | Services |
+| `experts.discover.allServices` | 全部服务 | All services |
+| `experts.cat.documents.title` | 证件与签证 | Documents and visas |
+| `experts.cat.documents.blurb` | 签证、居留许可、登记和法律帮助。 | Visas, residence permits, registration and legal help. |
+| `experts.cat.translation.title` | 翻译 | Translation |
+| `experts.cat.translation.blurb` | 公证翻译、公证与海牙认证。 | Certified translations, notary and apostille. |
+| `experts.cat.education.title` | 教育 | Education |
+| `experts.cat.education.blurb` | 俄语课、备考和大学申请。 | Russian lessons, exam prep and university admission. |
+| `experts.cat.work.title` | 工作与商业 | Work and business |
+| `experts.cat.work.blurb` | 求职、简历、注册公司、税务和IT。 | Jobs, CVs, company setup, taxes and IT. |
+| `experts.cat.housing.title` | 住房 | Housing |
+| `experts.cat.housing.blurb` | 找房、安全租房和搬家。 | Find a flat, rent safely and move in. |
+| `experts.cat.health.title` | 健康 | Health |
+| `experts.cat.health.blurb` | 会说你语言的医生和心理咨询师。 | Doctors and therapists who speak your language. |
+| `experts.cat.beauty.title` | 美发与美容 | Hair and beauty |
+| `experts.cat.beauty.blurb` | 理发、编发、美甲和化妆。 | Barbers, braids, nails and makeup. |
+| `experts.cat.errands.title` | 跑腿 | Errands |
+| `experts.cat.errands.blurb` | 快递、代购、清洁和日常事务。 | Couriers, shopping help, cleaning and everyday tasks. |
+| `experts.cat.expertCount_one` | {{count}} 位专家 | {{count}} expert |
+| `experts.cat.expertCount_other` | {{count}} 位专家 | {{count}} experts |
+| `experts.cat.whoCanHelp` | 谁能帮你 | Who can help |
+| `experts.cat.whatToBook` | 可预约的服务 | What you can book |
+| `experts.cat.empty` | 这里暂时没有可预约的服务。 | Nothing to book here yet. |
+| `experts.cat.emptyBody` | 我们正在添加专家。请稍后再来或联系客服。 | We're adding experts. Check back soon or ask support for help. |
+| `experts.cat.soon` | 即将推出 | Coming soon |
+| `experts.card.minutes_one` | {{count}} 分钟 | {{count}} min |
+| `experts.card.minutes_other` | {{count}} 分钟 | {{count}} min |
+| `experts.card.book` | 预约 | Book |
+| `experts.card.perHour` | /小时 | /hr |
 | `transactions.title` | 动态 | Activities |
-| `transactions.searchPlaceholder` | 搜索交易… | Search transactions... |
-| `transactions.empty` | 未找到交易 | No transactions found |
+| `transactions.searchPlaceholder` | 搜索动态… | Search activity... |
+| `transactions.empty` | 未找到动态 | No activity found |
 | `transactions.emptyHint` | 从发起第一笔汇款开始吧 | Start by sending your first transfer |
-| `transactions.noSearchResults` | 没有符合搜索条件的交易 | No transactions match your search |
+| `transactions.noSearchResults` | 没有符合搜索条件的动态 | No activity matches your search |
 | `transactions.adjustSearch` | 请尝试更换搜索词 | Try adjusting your search terms |
 | `transactions.referralPayout` | 推荐奖励提现 | Referral payout |
 | `transactions.withdrawalTo` | 提现至 | Withdrawal to |
@@ -5383,24 +5883,35 @@ Total strings: 7500.
 | `transactions.sendBadge` | 汇款 | SEND |
 | `transactions.amountPaid` | 已付金额 | Amount Paid |
 | `transactions.orderAmount` | 订单金额 | Order Amount |
+| `transactions.offline` | 正在显示已保存的记录。恢复网络后下拉刷新。 | Showing your saved activity. Pull down to refresh when you are back online. |
 | `orders.title` | 转账 | Transfer |
-| `orders.totalVolume` | 累计支出 | Total Spent |
-| `orders.totalTransactions` | 交易 | Transactions |
+| `orders.totalVolume` | 累计支出 | Total spent |
+| `orders.totalTransactions` | 交易 | Completed |
 | `orders.rowSentTo` | 汇款给 {{name}} | Sent to {{name}} |
 | `orders.rowHubOrder` | Hub 订单 | Hub order |
 | `orders.statusPending` | 待处理 | Pending |
 | `orders.statusFailed` | 失败 | Failed |
 | `orders.statusCancelled` | 已取消 | Cancelled |
-| `orders.searchPlaceholder` | 搜索交易… | Search transactions... |
+| `orders.searchPlaceholder` | 搜索动态… | Search activity... |
+| `orders.clearSearch` | 清除搜索 | Clear search |
+| `orders.colOrder` | 订单 | Order |
+| `orders.colDate` | 时间 | Time |
+| `orders.colStatus` | 状态 | Status |
+| `orders.colAmount` | 金额 | Amount |
+| `orders.helpTitle` | 订单需要帮助？ | Need help with an order? |
+| `orders.helpBody` | 可在订单中联系卖家，或联系 Ciuna 客服。 | Message the seller from the order, or ask Ciuna support. |
 | `orders.chipAll` | 全部 | All |
-| `orders.chipSend` | 汇款 | Send |
-| `orders.chipHub` | Hub | Hub |
-| `orders.chipPayout` | 提现 | Payout |
+| `orders.chipSend` | 汇款 | Transfers |
+| `orders.chipHub` | Hub | Orders |
+| `orders.chipPayout` | 提现 | Payouts |
 | `orders.badgeFood` | 美食 | Food |
 | `orders.badgeMart` | 超市 | Mart |
 | `orders.badgeReferral` | 推荐 | Referral |
 | `orders.groupToday` | 今天 | Today |
 | `orders.groupYesterday` | 昨天 | Yesterday |
+| `orders.chipBookings` | 预约 | Bookings |
+| `orders.statusRefunded` | 已退款 | Refunded |
+| `orders.rowItemsMore` | {{title}} +{{count}} | {{title}} +{{count}} |
 | `txDetail.errorNotFound` | 未找到交易或无权访问 | Transaction not found or access denied |
 | `txDetail.errorLoadFailed` | 无法加载交易详情 | Failed to load transaction details |
 | `txDetail.notFound` | 未找到交易 | Transaction not found |
@@ -5492,6 +6003,9 @@ Total strings: 7500.
 | `txDetail.statusTxnCancelledDesc` | 此交易已取消。如已付款，将为您退款。 | This transaction has been cancelled. You will receive a refund if payment was made. |
 | `txDetail.statusProcessing` | 交易处理中 | Transaction Processing |
 | `txDetail.statusProcessingDesc` | 您的交易正在处理中 | Your transaction is being processed |
+| `txDetail.shareReceipt` | 分享收据 | Share receipt |
+| `txDetail.shareText` | Ciuna 转账 {{id}}：已于 {{date}} 向 {{name}} 汇出 {{send}}。 | Ciuna transfer {{id}}: {{send}} sent to {{name}} on {{date}}. |
+| `txDetail.repeatTransfer` | 重复转账 | Repeat transfer |
 | `txTimeline.payoutSubmitted` | 申请已提交 | Request submitted |
 | `txTimeline.payoutSubmittedDesc` | 我们已收到您的推荐奖励提现申请。 | Your referral withdrawal request was received. |
 | `txTimeline.processing` | 处理中 | Processing |
@@ -5523,6 +6037,38 @@ Total strings: 7500.
 | `support.faq2a` | 我们对所有交易均不收取任何手续费。通过 Ciuna 向全球汇款，完全免费。 | We charge absolutely no fees on any transaction. Send money worldwide completely free with Ciuna. |
 | `support.faq3q` | 需要多长时间？ | How long does it take? |
 | `support.faq3a` | 所有交易均在几分钟内完成，确保您的款项快速、高效地到达目的地。 | All transactions are completed within minutes, ensuring your money reaches its destination quickly and efficiently. |
+| `support.req.myRequests` | 我的请求 | My requests |
+| `support.req.myRequestsHint` | 给我们留言，并在此查看回复 | Write to us and follow the answers here |
+| `support.req.empty` | 暂无请求 | No requests yet |
+| `support.req.emptyBody` | 给我们发消息，团队会在此回复。 | Send us a message and our team will reply here. |
+| `support.req.newRequest` | 新建请求 | New request |
+| `support.req.all` | 全部 | All |
+| `support.req.open` | 进行中 | Open |
+| `support.req.resolved` | 已解决 | Resolved |
+| `support.req.statusOpen` | 处理中 | In review |
+| `support.req.statusAwaiting` | 等待您回复 | Awaiting you |
+| `support.req.topicLabel` | 主题 | Topic |
+| `support.req.topic_order` | 订单 | Order |
+| `support.req.topic_payment` | 付款 | Payment |
+| `support.req.topic_transfer` | 转账 | Transfer |
+| `support.req.topic_account` | 账户 | Account |
+| `support.req.topic_booking` | 预约 | Booking |
+| `support.req.topic_other` | 其他 | Other |
+| `support.req.relatedOrder` | 相关订单（可选） | Related order (optional) |
+| `support.req.noOrder` | 无 | None |
+| `support.req.subject` | 标题 | Subject |
+| `support.req.subjectPlaceholder` | 您需要什么帮助？ | What do you need help with? |
+| `support.req.message` | 消息 | Message |
+| `support.req.send` | 发送请求 | Send request |
+| `support.req.reply` | 输入回复 | Write a reply |
+| `support.req.agent` | Ciuna 客服 | Ciuna support |
+| `support.req.resolvedLine` | 已标记为已解决 | Marked as resolved |
+| `support.req.err_SUPPORT_TOO_MANY_OPEN` | 未解决的请求过多。请先等待回复。 | You have too many open requests. Wait for a reply first. |
+| `support.req.err_SUPPORT_CLOSED` | 此请求已解决较久。请新建请求。 | This request was resolved a while ago. Start a new request. |
+| `support.req.err_RATE_LIMITED` | 发送过快，请稍后再试。 | You are sending messages too fast. Try again in a moment. |
+| `support.req.err_SUBJECT` | 请填写简短标题（至少 3 个字符）。 | Add a short subject (at least 3 characters). |
+| `support.req.err_EMPTY` | 请先输入消息。 | Write a message first. |
+| `support.req.err_GENERIC` | 出了点问题，请重试。 | Something went wrong. Please try again. |
 | `send.retry` | 重试 | Retry |
 | `send.noCurrencies` | 暂无可用币种，请联系客服。 | No currencies available. Please contact support. |
 | `send.youSend` | 您汇出 | You Send |
@@ -5532,6 +6078,7 @@ Total strings: 7500.
 | `send.steps.amount` | 金额 | Amount |
 | `send.steps.recipient` | 收款人 | Recipient |
 | `send.steps.review` | 核对 | Review |
+| `send.steps.pay` | 支付 | Pay |
 | `send.rateUnavailable` | 该币种组合暂无汇率。 | Exchange rate not available for this pair. |
 | `send.mobile.amountHeadline` | 您要汇多少？ | How much are you sending? |
 | `send.mobile.recipientHeadline` | 汇给谁？ | Who receives it? |
@@ -5547,6 +6094,8 @@ Total strings: 7500.
 | `send.mobile.quoteFeesUnavailable` | 无法确认手续费，请重试。 | Couldn't confirm the fee. Try again. |
 | `send.mobile.quoteBelowMinRub` | 汇款金额不得低于 1,000 RUB。 | Send at least 1,000 RUB. |
 | `send.mobile.quoteMinContribution` | 请提高汇款金额后继续。 | Send a higher amount to continue. |
+| `send.mobile.verifyCta` | 验证身份 | Verify identity |
+| `send.mobile.paySbpAmount` | 通过 SBP 支付 {{amount}} | Pay {{amount}} by SBP |
 | `send.quoteDeskRateNotConfigured` | 该汇款通道尚未就绪。请在 Office 中设置 USD → 收款币种的汇率（用作 USDT 出款汇率）。 | This corridor isn't ready yet. Set the USD → receive currency rate in Office (used as USDT payout desk). |
 | `send.quoteReceiveCappedByUsdt` | 收款金额为扣除手续费后此笔付款可兑付的金额。 | Recipient amount reflects what this payment can fund after fees. |
 | `send.quoteMinContribution` | 请提高汇款金额后继续。 | Send a higher amount to continue. |
@@ -5631,7 +6180,7 @@ Total strings: 7500.
 | `send.resendVerificationFailed` | 发送验证邮件失败，请重试。 | Failed to send verification email. Please try again. |
 | `send.optionalSuffix` | （选填） |  (Optional) |
 | `send.fulfillmentErrorOutsideBank` | 该到账金额超出此汇款通道银行转账允许的范围。请调整金额，或在管理后台添加现金区间/联系客服。 | This receive amount is outside the range allowed for bank transfer on this corridor. Adjust the amount or add a cash window in admin / contact support. |
-| `send.fulfillmentErrorOverlap` | 该到账金额同时符合银行和现金规则。通道设置应使用互不重叠的区间，请联系客服。 | This receive amount matches both bank and cash rules. Corridor settings should use disjoint ranges — contact support. |
+| `send.fulfillmentErrorOverlap` | 该到账金额同时符合银行和现金规则。通道设置应使用互不重叠的区间，请联系客服。 | This receive amount matches both bank and cash rules. Corridor settings should use disjoint ranges. Contact support. |
 | `send.fulfillmentErrorGap` | 该到账金额不适用于此汇款通道，请调整金额。 | This receive amount is not eligible for this corridor. Adjust the amount. |
 | `send.cashHandBanner` | 该金额将以现金形式送达您选择的地址（不通过银行转账）。 | For this amount, funds will be delivered as cash to the address you select (not by bank transfer). |
 | `send.logisticsFeeLabel` | 物流费 | Logistics fee |
@@ -5651,6 +6200,25 @@ Total strings: 7500.
 | `send.saveDeliveryAddress` | 保存地址 | Save address |
 | `send.failedAddDelivery` | 无法保存配送地址，请重试。 | Could not save delivery address. Try again. |
 | `send.cashDeliverySummary` | 现金配送 | Cash delivery |
+| `send.limitHint` | 单笔最低 {{min}} · 最高 {{max}} | Min {{min}} · Max {{max}} per transfer |
+| `send.limitHintMax` | 单笔最高 {{max}} | Max {{max}} per transfer |
+| `send.limitHintMin` | 单笔最低 {{min}} | Min {{min}} per transfer |
+| `send.seeLimits` | 查看限额 | See limits |
+| `send.payAmount` | 支付 {{amount}} | Pay {{amount}} |
+| `send.change` | 更改 | Change |
+| `send.aside.live` | 实时汇率 | Live rate |
+| `send.aside.enter` | 请输入限额内的金额以查看手续费和总额。 | Enter an amount within your limit to see the fee and total. |
+| `send.aside.limitTitle` | 你本月的限额 | Your limit this month |
+| `send.aside.left` | 剩余可发送 | Left to send |
+| `send.aside.resets` | {{date}} 重置 | Resets {{date}} |
+| `send.aside.rate` | 汇率 | Exchange rate |
+| `send.aside.sent` | 你发送 | You send |
+| `send.aside.fee` | 手续费 | Processing fee |
+| `send.aside.gets` | 收款人收到 | Recipient gets |
+| `send.aside.total` | 应付总额 | Total to pay |
+| `send.aside.noRecipient` | 尚未选择收款人。 | No recipient chosen yet. |
+| `send.aside.choose` | 选择收款人 | Choose recipient |
+| `send.aside.use` | 使用 {{name}} | Use {{name}} |
 | `recipients.title` | 收款人 | Recipients |
 | `recipients.transferType` | 转账类型 * | Transfer Type * |
 | `recipients.addRecipient` | 添加收款人 | Add Recipient |
@@ -5664,7 +6232,7 @@ Total strings: 7500.
 | `recipients.updateRecipient` | 更新收款人 | Update Recipient |
 | `recipients.failedAdd` | 添加收款人失败 | Failed to add recipient |
 | `recipients.failedUpdate` | 更新收款人失败 | Failed to update recipient |
-| `recipients.failedDeleteLinked` | 删除失败，该收款人已关联交易 | Failed to delete — linked to a transaction |
+| `recipients.failedDeleteLinked` | 删除失败，该收款人已关联交易 | Failed to delete: linked to a transaction |
 | `recipients.noMatchSearch` | 没有符合搜索条件的收款人 | No recipients match your search |
 | `recipients.noneFound` | 未找到收款人 | No recipients found |
 | `recipients.emptyAddHint` | 添加第一位收款人即可开始 | Add your first recipient to get started |
@@ -5701,6 +6269,8 @@ Total strings: 7500.
 | `recipients.fieldPlaceholders.sort_code` | 例如：123456 | e.g., 123456 |
 | `recipients.fieldPlaceholders.iban` | 例如：GB82 WEST 1234 5698 7654 32 | e.g., GB82 WEST 1234 5698 7654 32 |
 | `recipients.fieldPlaceholders.swift_bic` | 例如：NWBKGB2L | e.g., NWBKGB2L |
+| `recipients.confirmDeleteTitleNamed` | 删除 {{name}}？ | Delete {{name}}? |
+| `recipients.failedDelete` | 无法删除，请重试。 | Could not delete. Try again. |
 | `referrals.pageTitle` | 合作伙伴与推荐 | Affiliates & Referrals |
 | `referrals.subtitle` | 分享您的链接，好友汇款后即可查看您的奖励。 | Share your link and track rewards when friends send money. |
 | `referrals.referFriend` | 推荐好友 | Refer a friend |
@@ -5745,6 +6315,10 @@ Total strings: 7500.
 | `referrals.shareTitle` | 用 Ciuna 汇款 | Send Money with Ciuna |
 | `referrals.shareMessagePrefix` | 使用我的链接注册，即可在 Ciuna 免费汇款，覆盖 10 多个非洲国家与俄罗斯之间的汇款： | Use my link to sign up and send money between 10+ African countries and Russia for free on Ciuna: |
 | `referrals.unnamedReferee` | 用户 | User |
+| `referrals.yourCode` | 您的邀请码 | Your code |
+| `referrals.progress` | 本季度已邀请 {{n}}/{{next}} 位好友，即可升级 | {{n}} of {{next}} friends this quarter for your next level |
+| `referrals.topTier` | 本季度您已达到最高等级。 | You are on the top level this quarter. |
+| `referrals.rewardsUntil` | 奖励有效期至 {{date}} | Rewards until {{date}} |
 | `profile.title` | 个人资料 | Your profile |
 | `profile.changePhoto` | 更换照片 | Change photo |
 | `profile.removePhoto` | 删除照片 | Remove photo |
@@ -5772,6 +6346,8 @@ Total strings: 7500.
 | `profile.deleteDescription` | 您确定要删除账户吗？此操作无法撤销。您的所有数据、交易和账户信息将被永久删除。 | Are you sure you want to delete your account? This action cannot be undone. All your data, transactions, and account information will be permanently deleted. |
 | `profile.cancel` | 取消 | Cancel |
 | `profile.deleting` | 正在删除… | Deleting... |
+| `profile.emailHint` | 如需更改邮箱，请联系客服。 | To change your email, contact support. |
+| `profile.phoneInvalid` | 请输入带国家区号的电话号码，例如 +86 138 0000 0000。 | Enter a phone number with the country code, for example +7 900 000 00 00. |
 | `verification.hubTitle` | 身份验证 | Verification |
 | `verification.hubSubtitle` | 为满足合规要求，请完成身份和地址验证。 | Complete identity and address verification for compliance. |
 | `verification.infoKyc` | 为满足合规要求，请完成 KYC 身份和地址信息。 | Please complete KYC Identity and Address information for compliance. |
@@ -5830,16 +6406,16 @@ Total strings: 7500.
 | `verification.hubStatusVerifiedTitle` | 您已可以汇款 | You're ready to send |
 | `verification.hubStatusVerifiedBody` | 您的身份已验证。打开“汇款”即可转账。 | Your identity is verified. Open Send to transfer money. |
 | `verification.hubStatusPendingTitle` | 验证进行中 | Verification in progress |
-| `verification.hubStatusPendingBody` | 我们正在核对您的护照信息。大多数审核在几分钟内完成，本页面会自动更新。 | We're checking your passport details. Most reviews finish in a few minutes — this page updates automatically. |
+| `verification.hubStatusPendingBody` | 我们正在核对您的护照信息。大多数审核在几分钟内完成，本页面会自动更新。 | We're checking your passport details. Most reviews finish in a few minutes. This page updates automatically. |
 | `verification.hubStatusNeededTitle` | 确认您的身份 | Confirm your identity |
 | `verification.hubStatusNeededBody` | 汇款需通过我们支付合作伙伴进行一次性身份核验（支持俄罗斯护照和外国护照）。 | Sending money requires a one-time identity check with our payment partner (Russian and foreign passports supported). |
 | `verification.hubContinueCta` | 验证身份 | Verify identity |
 | `verification.optionalSection` | 上传文件 | Upload documents |
 | `verification.sbpFormTitle` | 身份验证 | Identity verification |
-| `verification.formLead` | 请填写与证件完全一致的姓名和护照信息，信息有误可能导致无法汇款。 | Use the exact name and passport details on your document — errors can block sending. |
+| `verification.formLead` | 请填写与证件完全一致的姓名和护照信息，信息有误可能导致无法汇款。 | Use the exact name and passport details on your document. Errors can block sending. |
 | `verification.sbpSuccessTitle` | 您已可以汇款 | You're ready to send |
 | `verification.sbpSuccessBody` | 身份已验证。请前往“汇款”进行转账。 | Identity verified. Go to Send to make a transfer. |
-| `verification.sbpChecking` | 我们正在审核您提交的信息。大多数核验在几分钟内完成，您可以先离开，稍后再回来。 | We're reviewing your submission. Most checks finish in a few minutes — you can leave and come back. |
+| `verification.sbpChecking` | 我们正在审核您提交的信息。大多数核验在几分钟内完成，您可以先离开，稍后再回来。 | We're reviewing your submission. Most checks finish in a few minutes. You can leave and come back. |
 | `verification.passportSegmentRu` | 俄罗斯护照 | Russian passport |
 | `verification.passportSegmentForeign` | 其他护照 | Other passport |
 | `verification.passportCountryShort` | 护照签发国 | Passport country |
@@ -5920,7 +6496,7 @@ Total strings: 7500.
 | `verification.bitbanker.errors.passport_issue_date_future` | 签发日期不能晚于今天。 | Issue date cannot be in the future. |
 | `verification.bitbanker.errors.passport_issue_before_birth` | 签发日期必须晚于出生日期。 | Issue date must be after date of birth. |
 | `verification.bitbanker.errors.passport_number_required` | 请填写护照号码。 | Passport number is required. |
-| `verification.bitbanker.errors.passport_number_invalid` | 请输入不含空格的系列和号码（6–20 个字符）。 | Enter series and number without spaces (6–20 characters). |
+| `verification.bitbanker.errors.passport_number_invalid` | 请输入不含空格的系列和号码（6-20 个字符）。 | Enter series and number without spaces (6–20 characters). |
 | `verification.bitbanker.errors.registration_country_required` | 请填写登记国家。 | Registration country is required. |
 | `verification.bitbanker.errors.registration_country_invalid` | 请使用 3 位字母国家代码（例如 RUS）。 | Use a 3-letter country code (e.g. RUS). |
 | `verification.bitbanker.errors.registration_city_required` | 请填写登记城市。 | Registration city is required. |
@@ -5929,6 +6505,8 @@ Total strings: 7500.
 | `verification.bitbanker.errors.cyrillic_required` | 俄罗斯护照的姓名请使用西里尔字母。 | Use Cyrillic letters for Russian passport names. |
 | `verification.bitbanker.errors.validation_failed` | 请修正标红的字段。 | Please fix the highlighted fields. |
 | `verification.bitbanker.errors.submit_failed` | 无法提交验证，请稍后再试。 | Verification could not be submitted. Try again later. |
+| `verification.yourLimit` | 你的月度限额 | Your monthly limit |
+| `verification.limitLeft` | {{total}} 中还剩 {{left}} | {{left}} left of {{total}} |
 | `auth.welcomeBack` | 欢迎回来 | Welcome back |
 | `auth.signInGoogle` | 使用 Google 登录 | Sign in with Google |
 | `auth.signInApple` | 使用 Apple 登录 | Sign in with Apple |
@@ -6011,8 +6589,11 @@ Total strings: 7500.
 | `auth.callbackFailedSignIn` | 无法完成登录 | Failed to complete sign in |
 | `auth.callbackRedirectLogin` | 正在跳转到登录页… | Redirecting to login... |
 | `auth.fillAllFields` | 请填写所有字段 | Please fill in all fields |
-| `auth.passwordMinLength` | 密码至少需要 6 个字符 | Password must be at least 6 characters long |
+| `auth.passwordMinLength` | 密码至少需要 {{count}} 个字符 | Password must be at least {{count}} characters long |
 | `auth.helpToast` | 需要帮助？请联系客服：{{email}} | Need assistance? Contact support at {{email}} |
+| `auth.passwordRuleLength` | 至少 {{count}} 个字符 | At least {{count}} characters |
+| `auth.termsAnd` | 和 | and |
+| `auth.privacyLink` | 隐私政策 | Privacy Policy |
 | `referralLanding.redirecting` | 正在跳转… | Redirecting… |
 | `referralLanding.invalidLink` | 此推荐链接无效或已过期。 | This referral link is invalid or expired. |
 | `pwa.title` | Ciuna 应用 | Ciuna App |
@@ -6029,6 +6610,10 @@ Total strings: 7500.
 | `pwa.menu` | 菜单 | Menu |
 | `errors.generic` | 出现错误，请重试。 | Something went wrong. Please try again. |
 | `errors.loadFailed` | 无法加载数据，请重试。 | Could not load data. Please try again. |
+| `marketplace.paidWith` | 付款方式 | Payment method |
+| `marketplace.refundDone` | 已退款 | Refunded |
+| `marketplace.refundOnItsWay` | 退款处理中 | Refund on its way |
+| `marketplace.refundRequested` | 申请于 | requested |
 | `marketplace.checkout` | 结算 | Checkout |
 | `marketplace.amount` | 金额 | Amount |
 | `marketplace.loading` | 正在加载… | Loading… |
@@ -6117,6 +6702,8 @@ Total strings: 7500.
 | `marketplace.errors.AMOUNT_REQUIRED` | 请输入在商品限额范围内的金额。 | Enter an amount within the product’s limits. |
 | `marketplace.errors.CONTACT_SUPPORT` | 如需修改已接单的订单，请联系客服。 | Contact support to change an accepted order. |
 | `marketplace.errors.CHECKOUT_UNAVAILABLE` | 暂时无法结算。 | Checkout is not available yet. |
+| `marketplace.errors.BELOW_MINIMUM_ORDER` | 该店铺配送需要更高的订单金额。 | This store needs a higher order total for delivery. |
+| `marketplace.errors.STORE_CLOSED` | 该店铺已打烊，请在营业时再试。 | This store is closed. Try again when it opens. |
 | `marketplace.events.created` | 待付款 | Awaiting payment |
 | `marketplace.events.paid` | 已付款 | Paid |
 | `marketplace.events.unknown` | 正在核实付款 | Checking payment |
@@ -6135,6 +6722,43 @@ Total strings: 7500.
 | `marketplace.newPurchase` | 再次购买 | Make another purchase |
 | `marketplace.backToShopping` | 返回购物 | Back to shopping |
 | `marketplace.orderCancelled` | 订单已取消 | Order cancelled |
+| `marketplace.progressDetails` | 详情 | Details |
+| `marketplace.progressReview` | 确认 | Review |
+| `marketplace.placed` | 订单已下达 | Order placed |
+| `marketplace.statusLine.awaiting_payment` | 请完成付款以提交订单。 | Complete your payment to place the order. |
+| `marketplace.statusLine.awaiting_acceptance` | 等待卖家接单。 | Waiting for the seller to accept your order. |
+| `marketplace.statusLine.accepted` | 卖家已接受您的订单。 | The seller accepted your order. |
+| `marketplace.statusLine.in_progress` | 您的订单正在准备中。 | Your order is being prepared. |
+| `marketplace.statusLine.fulfilled` | 您的订单已完成。 | Your order is complete. |
+| `marketplace.statusLine.cancelled` | 此订单已取消。 | This order was cancelled. |
+| `marketplace.statusLine.expired` | 付款时间已过，订单未提交。请重新添加商品下单。 | The time to pay ran out, so this order was not placed. Add the items again to order. |
+| `marketplace.zoneNotServedTitle` | 暂不支持配送到此处 | We can’t deliver here yet |
+| `marketplace.pickupInstead` | 改为自取 | Pick up instead |
+| `marketplace.minOrderBanner` | 配送需满 {{min}}。再加 {{more}}，或选择自取。 | Delivery needs a {{min}} minimum. Add {{more}} more, or pick up instead. |
+| `marketplace.etaMinutes` | {{n}} 分钟 | {{n}} min |
+| `marketplace.storeClosedTitle` | 该店铺目前已打烊 | This store is closed right now |
+| `marketplace.storeOpensAt` | 将于{{day}} {{time}}开门。 | It opens {{day}} {{time}}. |
+| `marketplace.free` | 免费 | Free |
+| `marketplace.continueToReview` | 继续确认 | Continue to review |
+| `marketplace.edit` | 编辑 | Edit |
+| `marketplace.fromFee` | {{fee}} 起 | From {{fee}} |
+| `marketplace.progressTime` | 时间 | Time |
+| `marketplace.storePausedTitle` | 该店铺暂停营业 | This store is taking a break |
+| `marketplace.addressRequired` | 请填写街道和门牌号，方便配送员找到你。 | Enter the street and apartment so the courier can find you. |
+| `marketplace.contactName` | 你的姓名 | Your name |
+| `marketplace.contactNameRequired` | 请填写此订单的姓名。 | Enter the name for this order. |
+| `marketplace.contactPhone` | 电话 | Phone |
+| `marketplace.contactPhoneRequired` | 此订单需要电话号码。 | A phone number is needed for this order. |
+| `marketplace.subtotal` | 小计 | Subtotal |
+| `marketplace.orderProgress` | 订单进度 | Order progress |
+| `marketplace.checkingTitle` | 正在确认你的付款 | We are checking your payment |
+| `marketplace.checkingBody` | 请勿重复付款，通常需要一分钟。 | Please do not pay again. This usually takes a minute. |
+| `marketplace.completePaymentTitle` | 请完成付款 | Complete your payment |
+| `marketplace.completePaymentBody` | 请在下方支付 {{total}} 以提交订单。 | Pay {{total}} below to place this order. |
+| `marketplace.session.title` | 你的预约 | Your session |
+| `marketplace.session.expertTime` | 专家当地时间：{{time}} | Expert's time: {{time}} |
+| `marketplace.session.join` | 加入会话 | Join session |
+| `marketplace.session.noLink` | 专家会在预约开始前在此添加会议链接。 | The expert will add the meeting link here before your session. |
 | `social.loadFailed` | 加载失败，请重试 | Couldn't load, try again |
 | `social.retry` | 重试 | Try again |
 | `search.all` | 全部 | All |
@@ -6156,6 +6780,8 @@ Total strings: 7500.
 | `search.recent` | 最近搜索 | Recent searches |
 | `search.searchAll` | 搜索全部 | Search everywhere |
 | `search.stores` | 店铺 | Stores |
+| `search.placeholderLine` | 搜索商品和店铺 | Search products and stores |
+| `search.seeAll` | 查看全部（{{count}}） | See all ({{count}}) |
 | `favourites.title` | 收藏 | Favourites |
 | `favourites.stores` | 店铺 | Stores |
 | `favourites.products` | 商品 | Products |
@@ -6197,6 +6823,11 @@ Total strings: 7500.
 | `chat.unavailable` | 消息功能暂不可用 | Messaging isn't available right now |
 | `chat.unavailableBody` | 请稍后再试。 | Please try again later. |
 | `chat.closedOn` | 聊天已于 {{date}} 关闭，您仍可查看聊天记录。 | Chat closed on {{date}}. You can still read the conversation. |
+| `chat.quick.where` | 我的订单在哪里？ | Where is my order? |
+| `chat.quick.changeTime` | 更改配送时间 | Change delivery time |
+| `chat.quick.allergy` | 过敏问题 | Allergy question |
+| `chat.openUntil` | 与卖家的聊天将开放至 {{date}}。 | Chat with the seller stays open until {{date}}. |
+| `chat.unreadDot` | 卖家的新消息 | New message from the seller |
 | `reviews.promptTitle` | 为您的订单评分 | Rate your order |
 | `reviews.promptTitleSession` | 为本次服务评分 | Rate your session |
 | `reviews.promptHint` | 体验如何？您的评分可以帮助其他顾客。 | How was it? Your rating helps other customers. |
@@ -6235,8 +6866,219 @@ Total strings: 7500.
 | `reviews.anonymous` | 顾客 | Customer |
 | `reviews.count_one` | {{count}} 条评价 | {{count}} review |
 | `reviews.count_other` | {{count}} 条评价 | {{count}} reviews |
+| `reviews.readMore` | 展开 | Read more |
+| `reviews.readLess` | 收起 | Show less |
+| `reviews.verifiedOrder` | 已验证订单 | Verified order |
+| `home.slide.adLabel` | 广告 | Ad |
+| `home.slide.position` | 第 {{n}} 张，共 {{total}} 张 | Slide {{n}} of {{total}} |
+| `home.slide.sorted.title` | 海外生活，一站搞定。 | Life abroad, sorted. |
+| `home.slide.sorted.body` | 汇款、美食和家乡帮助，尽在一个应用。 | Money, meals and help from home, in one app. |
+| `home.slide.community.title` | 你的社群，就在身边。 | Your community, close by. |
+| `home.slide.community.body` | 由和你一样的人开设的店铺和专家。 | Stores and experts run by people like you. |
+| `home.slide.language.title` | 你的应用，用你的语言。 | Your app, in your language. |
+| `home.slide.language.body` | English, Русский, Français, Español, 中文, Português. | English, Русский, Français, Español, 中文, Português. |
+| `home.now.title` | 进行中 | In progress |
+| `home.sendAgain.title` | 再次汇款 | Send again |
+| `home.rate.aria` | 汇率 {{from}} 兑 {{to}}。打开汇款。 | Exchange rate {{from}} to {{to}}. Open Send. |
+| `home.banner.verify.title` | 验证您的身份 | Verify your identity |
+| `home.banner.verify.body` | 一次性验证，之后即可汇款。 | One-time check so you can send money. |
+| `home.banner.review.title` | 验证审核中 | Verification in review |
+| `home.banner.review.body` | 完成后我们会通知您。 | We'll let you know when it's done. |
+| `home.banner.refer.title` | 邀请好友赚取佣金 | Invite friends, earn commission |
+| `home.banner.refer.body` | 分享您的邀请码，从好友的汇款中获得佣金。 | Share your code and earn on their transfers. |
+| `offline.banner` | 您已离线，正在显示已保存的数据。 | You are offline. Showing saved data. |
+| `receipt.title` | 收据 | Receipt |
+| `receipt.view` | 查看收据 | View receipt |
+| `receipt.number` | 收据编号 | Receipt number |
+| `receipt.date` | 日期 | Date |
+| `receipt.status_completed` | 已完成 | Completed |
+| `receipt.status_paid` | 已付款 | Paid |
+| `receipt.status_refunded` | 已退款 | Refunded |
+| `receipt.customer` | 客户 | Customer |
+| `receipt.recipient` | 收款人 | Recipient |
+| `receipt.store` | 店铺 | Store |
+| `receipt.expert` | 专家 | Expert |
+| `receipt.account` | 账户 | Account |
+| `receipt.paidWith` | 付款方式 | Paid with |
+| `receipt.method_online` | 在线支付 | Online payment |
+| `receipt.method_bank` | 银行转账 | Bank transfer |
+| `receipt.items` | 商品 | Items |
+| `receipt.fee` | 手续费 | Fee |
+| `receipt.serviceFee` | 服务费 | Service fee |
+| `receipt.deliveryFee` | 配送费 | Delivery fee |
+| `receipt.conversionFee` | 兑换费 | Conversion fee |
+| `receipt.total` | 实付总额 | Total paid |
+| `receipt.rate` | 汇率 | Rate |
+| `receipt.recipientGets` | 收款人收到 | Recipient gets |
+| `receipt.session` | 咨询时间 | Session |
+| `receipt.address` | 配送地址 | Delivery address |
+| `receipt.refunded` | 已退款 | Refunded |
+| `receipt.notTax` | 此收据不是税务发票。 | This is not a tax invoice. |
+| `receipt.support` | 有疑问？请联系 {{email}} | Questions? Write to {{email}} |
+| `receipt.share` | 分享收据 | Share receipt |
+| `receipt.unavailable` | 付款完成后即可查看收据。 | A receipt is available once the payment is complete. |
+| `receipt.shareText` | Ciuna 收据 {{number}}：{{date}} 支付 {{total}}。 | Ciuna receipt {{number}}: {{total}} on {{date}}. |
+| `receipt.downloadPdf` | 下载 PDF | Download PDF |
+| `receipt.pdfFailed` | 无法生成 PDF，请重试。 | Could not create the PDF. Try again. |
+| `receipt.youSent` | 你发送 | You sent |
+| `limits.title` | 额度 | Limits |
+| `limits.moreHint` | 您可以汇出的金额 | How much you can send |
+| `limits.thisMonth` | 本月 | This month |
+| `limits.left` | 剩余 {{amount}} | {{amount}} left |
+| `limits.usedOf` | 已使用 {{used}} / {{limit}} | {{used}} of {{limit}} used |
+| `limits.resets` | {{date}} 重置 | Resets {{date}} |
+| `limits.perTransfer` | 每笔转账 | Per transfer |
+| `limits.minimum` | 最低 | Minimum |
+| `limits.maximum` | 最高 | Maximum |
+| `limits.levels` | 等级 | Levels |
+| `limits.level1` | 一级 · 邮箱和手机 | Level 1 · Email and phone |
+| `limits.level2` | 二级 · 身份 | Level 2 · Identity |
+| `limits.level3` | 三级 · 身份和地址 | Level 3 · Identity and address |
+| `limits.yourLevel` | 您的等级 | Your level |
+| `limits.monthly` | 每月 {{amount}} | {{amount}} a month |
+| `limits.verifyIdentity` | 验证身份 | Verify identity |
+| `limits.verifyAddress` | 验证地址 | Verify address |
+| `limits.inReview` | 您的验证正在审核中，目前额度仍然有效。 | Your verification is in review. Your current limit still applies. |
+| `limits.reached` | 您已达到本月额度上限。 | You have reached this month's limit. |
+| `limits.close` | 您已接近本月额度上限。 | You are close to this month's limit. |
+| `limits.highest` | 您已是最高等级。如需调整额度，请联系客服。 | You are at the highest level. Contact support to change your limit. |
+| `limits.notSet` | 您当前等级暂未设置汇款额度。 | No sending limit is set for your level right now. |
+| `limits.currencyNote` | 额度适用于以 {{currency}} 发送的转账。 | Limits apply to transfers sent in {{currency}}. |
+| `limits.err_LIMIT_EXCEEDED` | 此笔转账超过本月剩余额度（{{remaining}}）。额度将于 {{date}} 重置。请在“更多”中查看额度。 | This transfer is more than you have left this month ({{remaining}}). Your limit resets {{date}}. See Limits in More. |
+| `limits.err_ABOVE_MAX_TRANSFER` | 单笔最高可汇出 {{max}}。 | The most you can send at once is {{max}}. |
+| `limits.err_BELOW_MIN_TRANSFER` | 单笔最低需汇出 {{min}}。 | The least you can send at once is {{min}}. |
+| `deleteAccount.title` | 删除账户 | Delete account |
+| `deleteAccount.lead` | 你可以删除 Ciuna 账户。个人数据将在 {{days}} 天后删除。 | You can delete your Ciuna account. It takes {{days}} days to remove your personal data. |
+| `deleteAccount.whatHappens` | 会发生什么 | What happens |
+| `deleteAccount.now` | 账户立即关闭，并在所有设备上退出登录。 | Your account is closed straight away and you are signed out everywhere. |
+| `deleteAccount.later` | {{days}} 天后，你的姓名、邮箱、电话、已保存收款人和收藏将被删除。 | After {{days}} days your name, email, phone, saved recipients and favourites are removed. |
+| `deleteAccount.kept` | 依法我们会保留过往转账和订单记录，但不含你的个人信息。 | We keep a record of past transfers and orders, without your personal details, because the law requires it. |
+| `deleteAccount.restore` | 改变主意？请在 {{days}} 天内联系客服，我们可以恢复账户。 | Changed your mind? Contact support within {{days}} days and we can restore it. |
+| `deleteAccount.blockedTitle` | 暂时不能删除。请先完成： | Not yet. Finish these first: |
+| `deleteAccount.blockOrders` | 你有一个订单仍在进行中。 | You have an order that is still in progress. |
+| `deleteAccount.blockTransfers` | 你有一笔转账仍在处理中。 | You have a transfer that is still being processed. |
+| `deleteAccount.blockRefunds` | 一笔退款仍在支付中。 | A refund to you is still being paid out. |
+| `deleteAccount.cta` | 删除我的账户 | Delete my account |
+| `deleteAccount.confirmTitle` | 删除账户？ | Delete your account? |
+| `deleteAccount.confirmBody` | 账户将立即关闭，个人数据将在 {{days}} 天后删除。 | Your account closes now and your personal data is removed after {{days}} days. |
+| `deleteAccount.confirm` | 删除账户 | Delete account |
+| `deleteAccount.cancel` | 保留账户 | Keep account |
+| `deleteAccount.failed` | 操作失败，请重试。 | We could not do that. Try again. |
+| `deleteAccount.offline` | 没有网络。联网后再试。 | No connection. Try again when you are online. |
+| `more.deleteAccount` | 删除账户 | Delete account |
+| `more.notifications` | 通知 | Notifications |
+| `more.security` | 安全 | Security |
+| `notifications.title` | 通知 | Notifications |
+| `notifications.lead` | 选择向这部手机发送哪些通知。 | Choose what we send to this phone. |
+| `notifications.orders` | 订单 | Orders |
+| `notifications.ordersHint` | 已付款、已接受、已完成、已取消、已退款 | Payment received, accepted, completed, cancelled, refunded |
+| `notifications.messages` | 消息 | Messages |
+| `notifications.messagesHint` | 卖家就订单给你发消息时 | When a seller writes to you about an order |
+| `notifications.support` | 客服 | Support |
+| `notifications.supportHint` | 客服对你的请求的回复 | Replies to your support requests |
+| `notifications.failed` | 保存失败，请重试。 | Could not save. Try again. |
+| `notifications.transfers` | 转账 | Transfers |
+| `notifications.transfersHint` | 已收到付款、已送达、失败或已退款 | Payment received, delivered, failed or refunded |
+| `notifications.actionReply` | 回复 | Reply |
+| `notifications.actionSend` | 发送 | Send |
+| `notifications.actionPlaceholder` | 输入消息 | Write a message |
+| `notifications.actionView` | 查看 | View |
+| `notifications.actionJoin` | 加入 | Join |
+| `notifications.replySent` | 回复已发送 | Reply sent |
+| `notifications.replyFailed` | 无法发送回复，请打开聊天重试。 | Could not send your reply. Open the chat to try again. |
+| `notifications.quiet` | 免打扰时段 | Quiet hours |
+| `notifications.quietHint` | 夜间不推送通知，所有内容仍可在应用中查看。 | Hold notifications overnight. You still see everything in the app. |
+| `notifications.quietFrom` | 从 | From |
+| `notifications.quietUntil` | 到 | Until |
+| `notifications.earlier` | 提前 | Earlier |
+| `notifications.later` | 推后 | Later |
+| `share.aria` | 分享 | Share |
+| `share.copied` | 链接已复制 | Link copied |
+| `a11y.edit` | 编辑 | Edit |
+| `a11y.delete` | 删除 | Delete |
+| `a11y.copy` | 复制链接 | Copy link |
+| `a11y.open` | 打开 | Open |
+| `a11y.close` | 关闭 | Close |
+| `transferDetail.headline.pending` | 等待你付款 | Waiting for your payment |
+| `transferDetail.headline.processing` | 正在发送你的款项 | We are sending your money |
+| `transferDetail.headline.completed` | {{name}} 已收到款项 | {{name}} received the money |
+| `transferDetail.headline.failed` | 无法发送款项 | We could not send the money |
+| `transferDetail.headline.refunded` | 款项已退回 | Your money was returned |
+| `transferDetail.headline.cancelled` | 转账已取消 | Transfer cancelled |
+| `transferDetail.sub.pending` | 请支付 {{amount}} 以开始转账。 | Pay {{amount}} to start your transfer. |
+| `transferDetail.sub.processing` | 你可以关闭此页面，款项到账时我们会通知你。 | You can close this screen. We will notify you when the money arrives. |
+| `transferDetail.sub.completed` | 已于 {{when}} 送达 | Delivered {{when}} |
+| `transferDetail.sub.failed` | 你的付款正在退回到银行账户。 | Your payment is being returned to your bank account. |
+| `transferDetail.sub.refunded` | 你的付款已退回。 | Your payment was returned to you. |
+| `transferDetail.sub.cancelled` | 你未被扣款。 | You were not charged. |
+| `transferDetail.safe` | 你的资金是安全的。请核对收款人信息，然后重新转账，或告诉我们发生了什么。 | Your money is safe. Check the recipient details, then repeat the transfer or tell us what happened. |
+| `transferDetail.step.created` | 转账已创建 | Transfer created |
+| `transferDetail.step.pWaiting` | 等待你付款 | Waiting for your payment |
+| `transferDetail.step.pReceived` | 已收到付款 | Payment received |
+| `transferDetail.step.pNot` | 未收到付款 | Payment not received |
+| `transferDetail.step.sAfter` | 付款后发送至 {{bank}} | Sent to {{bank}} after payment |
+| `transferDetail.step.sSending` | 正在发送至 {{bank}} | Sending to {{bank}} |
+| `transferDetail.step.sSent` | 已发送至 {{bank}} | Sent to {{bank}} |
+| `transferDetail.step.sFailed` | 发送失败 | Sending failed |
+| `transferDetail.step.notSent` | 未发送 | Not sent |
+| `transferDetail.step.delivered` | 已送达 {{name}} | Delivered to {{name}} |
+| `transferDetail.step.rWay` | 退款处理中 | Refund on its way |
+| `transferDetail.step.rDone` | 已退款 | Refunded |
+| `transferDetail.amounts` | 金额 | Amounts |
+| `transferDetail.sent` | 你发送 | You sent |
+| `transferDetail.fee` | 手续费 | Fee |
+| `transferDetail.feePct` | 手续费（{{pct}}） | Fee ({{pct}}) |
+| `transferDetail.rate` | 汇率 | Exchange rate |
+| `transferDetail.gets` | 收款人收到 | Recipient gets |
+| `transferDetail.total` | 合计支付 | Total paid |
+| `transferDetail.refunded` | 已退款 | Refunded |
+| `transferDetail.recipient` | 收款人 | Recipient |
+| `transferDetail.payment` | 付款 | Payment |
+| `transferDetail.paidWith` | 支付方式 | Paid with |
+| `transferDetail.reference` | 参考号 | Reference |
+| `transferDetail.copied` | 已复制 | Copied |
+| `transferDetail.report` | 报告问题 | Report a problem |
+| `transferDetail.reportHint` | 将创建附带此转账的客服请求。 | Opens a support request with this transfer attached. |
+| `transferDetail.reportSubject` | 转账 {{id}} 的问题 | Problem with transfer {{id}} |
+| `transferDetail.share` | 分享收据 | Share receipt |
+| `transferDetail.repeat` | 再次转账 | Repeat transfer |
+| `transferDetail.view` | 查看收据 | View receipt |
+| `transferDetail.cancel.cta` | 取消转账 | Cancel transfer |
+| `transferDetail.cancel.title` | 取消这笔转账？ | Cancel this transfer? |
+| `transferDetail.cancel.body` | 你未被扣款。可以按新汇率重新开始。 | You have not been charged. You can start again with a new rate. |
+| `transferDetail.cancel.confirm` | 取消转账 | Cancel transfer |
+| `transferDetail.cancel.keep` | 保留 | Keep it |
+| `transferDetail.cancel.failed` | 无法取消，请重试。 | We could not cancel it. Try again. |
+| `transferDetail.cancel.paid` | 你的付款已到账，转账无法再取消。 | Your payment already arrived, so the transfer can no longer be cancelled. |
+| `transferDetail.timedOut.headline` | 付款时间已过 | The payment time ran out |
+| `transferDetail.timedOut.sub` | 你未被扣款。请重新转账以查看今日汇率。 | You were not charged. Repeat the transfer to see today's rate. |
+| `transferDetail.sbp.title` | 通过 SBP 支付 | Pay with SBP |
+| `transferDetail.sbp.exact` | 请准确支付 | Pay exactly |
+| `transferDetail.sbp.deadline` | 请在 {{time}} 前支付。 | Pay before {{time}}. |
+| `transferDetail.sbp.locked` | 汇率已锁定 {{time}} | Rate locked for {{time}} |
+| `transferDetail.sbp.scan` | 在银行应用中扫描二维码，并准确支付此金额。 | Scan the QR code in your banking app and pay exactly this amount. |
+| `transferDetail.sbp.openBank` | 打开我的银行 | Open my bank |
+| `security.title` | 安全 | Security |
+| `security.lead` | 选择 Ciuna 在这部手机上的锁定方式。 | Choose how Ciuna locks on this phone. |
+| `security.pin` | PIN 锁 | PIN lock |
+| `security.pinHint` | 打开应用时要求输入 4 位 PIN。 | Ask for a 4-digit PIN when you open the app. |
+| `security.changePin` | 更改 PIN | Change PIN |
+| `security.change` | 更改 | Change |
+| `security.biometric` | 面容 ID 或指纹 | Face ID or fingerprint |
+| `security.biometricHint` | 用面部或指纹解锁，无需输入 PIN。 | Unlock with your face or finger instead of typing the PIN. |
+| `security.offTitle` | 关闭 PIN 锁？ | Turn off PIN lock? |
+| `security.offBody` | 任何拿到这部手机的人都能打开 Ciuna。 | Anyone who opens this phone will be able to open Ciuna. |
+| `security.turnOff` | 关闭 | Turn off |
+| `security.keep` | 保持开启 | Keep it on |
+| `security.on` | 已开启 | On |
+| `security.off` | 已关闭 | Off |
+| `account.editProfile` | 编辑资料 | Edit profile |
+| `account.groupSecurity` | 安全与限额 | Security and limits |
+| `account.groupPreferences` | 偏好设置 | Preferences |
+| `account.groupHelp` | 帮助 | Help |
+| `account.logOut` | 退出登录 | Log out |
 
-### `packages/shared/src/locales/zh/common.json` (76 strings)
+### `packages/shared/src/locales/zh/common.json` (85 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -6246,9 +7088,12 @@ Total strings: 7500.
 | `nav.hub` | 首页 | Home |
 | `nav.recipients` | 收款人 | Recipients |
 | `nav.transactions` | 动态 | Activities |
+| `nav.activities` | 动态 | Activities |
 | `nav.more` | 更多 | More |
 | `nav.logout` | 退出登录 | Logout |
 | `nav.login` | 登录 | Log in |
+| `nav.orders` | 订单 | Orders |
+| `nav.account` | 账户 | Account |
 | `more.title` | 更多 | More |
 | `more.open` | 打开 | Open |
 | `more.account` | 账户 | Account |
@@ -6268,6 +7113,8 @@ Total strings: 7500.
 | `more.cancel` | 取消 | Cancel |
 | `more.signOut` | 退出登录 | Sign Out |
 | `more.signingOut` | 正在退出… | Signing out... |
+| `more.profile` | 资料 | Profile |
+| `more.legal` | 法律信息 | Legal |
 | `kyc.verified` | 已验证 | Verified |
 | `kyc.inReview` | 审核中 | In review |
 | `kyc.rejected` | 未通过 | Rejected |
@@ -6310,14 +7157,18 @@ Total strings: 7500.
 | `pinLock.welcomeBack` | 欢迎回来 | Welcome back |
 | `pinLock.enterPin` | 请输入 4 位 PIN 码 | Enter your 4-digit PIN |
 | `pinLock.incorrectPin` | PIN 码不正确 | Incorrect PIN |
+| `pinLock.attemptsLeft` | 还可尝试 {{count}} 次 | {{count}} attempts left |
+| `pinLock.attemptsLeftOne` | 还可尝试 1 次 | 1 attempt left |
+| `pinLock.signedOut` | PIN 错误次数过多，请重新登录。 | Too many wrong PINs. Please sign in again. |
 | `pinLock.verifying` | 正在验证… | Verifying… |
 | `pinLock.tooManyAttempts` | 尝试次数过多，请在 {{minutes}} 分钟后重试。 | Too many attempts. Try again in {{minutes}} minute(s). |
 | `pinLock.tooManyAttemptsOne` | 尝试次数过多，请在 1 分钟后重试。 | Too many attempts. Try again in 1 minute. |
 | `pinLock.notYourAccount` | 不是您的账户？ | Not your account? |
 | `pinLock.logOut` | 退出登录 | Log out |
 | `pinLock.backspaceAria` | 删除 | Delete |
+| `pinLock.welcomeName` | 欢迎回来，{{name}} | Welcome back, {{name}} |
 
-### `packages/shared/src/locales/pt/app.json` (1126 strings)
+### `packages/shared/src/locales/pt/app.json` (1633 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -6347,6 +7198,7 @@ Total strings: 7500.
 | `dashboard.receiveAmount` | Valor recebido | Receive Amount |
 | `dashboard.fullAmountAria` | Valor completo: {{label}} | Full amount: {{label}} |
 | `dashboard.fullAmountCaption` | Valor completo | Full amount |
+| `dashboard.referShort` | Indicar | Refer |
 | `hub.hub` | Hub | Hub |
 | `hub.heroTitle` | Envie, compre e reserve. | Send, Shop & Book. |
 | `hub.heroBody` | Tudo o que você precisa: mercado, transferências e serviços em um só lugar na Ciuna. | Everything you need: groceries, transfers, and services in one place on Ciuna. |
@@ -6380,8 +7232,44 @@ Total strings: 7500.
 | `hub.marketplaceProductsHeading` | Produtos | Products |
 | `hub.marketplaceStoresHeading` | Lojas | Stores |
 | `hub.storesDirectorySubtitle` | Escolha uma loja para ver os produtos. | Choose a store to see its products. |
-| `hub.marketplaceSeeAllStores` | Ver todas | See all |
-| `hub.marketplaceNoVendors` | Ainda não há lojas — volte em breve. | No stores yet — check back soon. |
+| `hub.marketplaceSeeAllStores` | Todas as lojas | All Stores |
+| `hub.marketplaceSeeAllProducts` | Todos os produtos | All Products |
+| `hub.locationTitle` | Escolha sua área | Choose your area |
+| `hub.locationAll` | Todas as áreas | All areas |
+| `hub.locationLabel` | Local | Location |
+| `hub.locationHint` | Mostramos lojas que entregam na cidade escolhida, além de lojas só com retirada e itens digitais. | We show stores that deliver to the city you pick, plus pickup-only stores and digital items. |
+| `hub.locationEmpty` | Ainda não há áreas de entrega configuradas. | No delivery areas are set up yet. |
+| `hub.locationDelivering` | Entrega disponível | Delivery available |
+| `hub.locationPopular` | Populares | Popular |
+| `hub.locationAllCities` | Todas as cidades | All cities |
+| `hub.communityLabel` | Comunidade | Community |
+| `hub.communityTitle` | Escolha uma comunidade | Choose a community |
+| `hub.communityAll` | Todas as comunidades | All communities |
+| `hub.communityHint` | Mostra lojas que atendem a uma comunidade, como comida e mercearia nigeriana ou chinesa. | Show stores that serve a community, such as Nigerian or Chinese food and groceries. |
+| `hub.community_nigerian` | Nigeriana | Nigerian |
+| `hub.community_african` | Africana | African |
+| `hub.community_chinese` | Chinesa | Chinese |
+| `hub.community_indian` | Indiana | Indian |
+| `hub.community_arab` | Árabe | Arab |
+| `hub.community_latin_american` | Latino-americana | Latin American |
+| `hub.community_turkish` | Turca | Turkish |
+| `hub.community_vietnamese` | Vietnamita | Vietnamese |
+| `hub.community_korean` | Coreana | Korean |
+| `hub.community_central_asian` | Centro-asiática | Central Asian |
+| `hub.locationSearch` | Buscar cidades | Search cities |
+| `hub.searchStores` | Buscar lojas | Search stores |
+| `hub.searchProducts` | Buscar produtos | Search products |
+| `hub.searchServices` | Buscar serviços | Search services |
+| `hub.filterAll` | Todos | All |
+| `hub.filterOpenNow` | Aberto agora | Open now |
+| `hub.filterDelivers` | Entrega | Delivers |
+| `hub.filterOnline` | Online | Online |
+| `hub.filterInPerson` | Presencial | In person |
+| `hub.resultsCount` | Resultados: {{count}} | Results: {{count}} |
+| `hub.clearFilters` | Limpar filtros | Clear filters |
+| `hub.noMatch` | Nenhum resultado | No matches |
+| `hub.noMatchBody` | Tente outro nome ou filtro. | Try another name or filter. |
+| `hub.marketplaceNoVendors` | Ainda não há lojas. Volte em breve. | No stores yet. Check back soon. |
 | `hub.verifiedVendor` | Vendedor verificado | Verified vendor |
 | `hub.backToLine` | Voltar à categoria | Back to line |
 | `hub.vendorStoreNotFound` | Loja não encontrada | Store not found |
@@ -6401,9 +7289,9 @@ Total strings: 7500.
 | `hub.expertsTitle` | Especialistas | Experts |
 | `hub.expertsSubtitle` | Profissionais de confiança para tudo o que você precisa em casa e em beleza. | Trusted professionals for all your home and beauty needs. |
 | `hub.expertsFeaturedHeading` | Em destaque | Featured |
-| `hub.expertsSeeAll` | Ver todos | See all |
+| `hub.expertsSeeAll` | Todos os especialistas | All experts |
 | `hub.expertsServicesHeading` | Serviços | Services |
-| `hub.expertsFeaturedEmpty` | Ainda não há especialistas — volte em breve. | No experts yet — check back soon. |
+| `hub.expertsFeaturedEmpty` | Ainda não há especialistas. Volte em breve. | No experts yet. Check back soon. |
 | `hub.expertsDirectoryTitle` | Todos os especialistas | All experts |
 | `hub.expertsDirectorySubtitle` | Veja todos os especialistas da Ciuna. | Browse every expert on Ciuna. |
 | `hub.backToExperts` | Voltar aos especialistas | Back to experts |
@@ -6476,8 +7364,74 @@ Total strings: 7500.
 | `hub.payUpTo` | Pagar até | Pay up to |
 | `hub.toRange` | a | to |
 | `hub.sellPrice` | Preço de venda | Sell price |
+| `hub.store.newStore` | Loja nova | New store |
+| `hub.store.openUntil` | Aberto até {{time}} | Open until {{time}} |
+| `hub.store.closed` | Fechado | Closed |
+| `hub.store.closedOpens` | Fechado · abre {{day}} {{time}} | Closed · opens {{day}} {{time}} |
+| `hub.store.minOrder` | Pedido mínimo para entrega: {{min}} | Minimum order for delivery: {{min}} |
+| `hub.store.paused` | Temporariamente indisponível | Temporarily unavailable |
+| `hub.store.pickupOnly` | Somente retirada | Pickup only |
+| `hub.store.deliveryFree` | Entrega grátis | Free delivery |
+| `hub.store.deliveryFrom` | Entrega a partir de {{fee}} | Delivery from {{fee}} |
+| `hub.store.delivers` | Entrega | Delivers |
+| `hub.store.etaRange` | {{min}}–{{max}} min | {{min}}–{{max}} min |
+| `hub.store.eta` | {{min}} min | {{min}} min |
+| `hub.store.deliveryFee` | Entrega a partir de {{fee}} | Delivery from {{fee}} |
+| `hub.cart.emptyBody` | Adicione algo de uma loja para começar seu pedido. | Add something from a store to start your order. |
+| `hub.cart.browse` | Ver Comida | Browse Food |
+| `hub.cart.addMore` | Adicionar mais | Add more |
+| `hub.cart.total` | Total | Total |
+| `hub.cart.deliveryAtCheckout` | A entrega é adicionada no checkout. | Delivery is added at checkout. |
+| `hub.cart.checkoutWithTotal` | Finalizar · {{total}} | Checkout · {{total}} |
+| `hub.cart.unavailable` | Não está mais disponível | No longer available |
+| `hub.cart.unavailableNote` | Remova os itens indisponíveis para finalizar. | Remove unavailable items to check out. |
+| `hub.cart.lockTitle` | Começar um novo carrinho? | Start a new cart? |
+| `hub.cart.lockBody` | Seu carrinho tem itens de {{vendor}}. Um carrinho aceita uma só loja, então ele será esvaziado. | Your cart has items from {{vendor}}. A cart holds one store, so adding this will clear it. |
+| `hub.cart.lockConfirm` | Novo carrinho | Start new cart |
+| `hub.cart.lockCancel` | Manter carrinho atual | Keep current cart |
+| `hub.cart.minOrderMore` | Adicione mais {{more}} para entrega. O pedido mínimo é {{min}}. | Add {{more}} more for delivery. Minimum order is {{min}}. |
+| `hub.cart.storeClosedNote` | Esta loja está fechada, então o checkout fica indisponível até abrir. | This store is closed, so checkout is unavailable until it opens. |
+| `hub.cart.storePausedNote` | Esta loja está em pausa, então o checkout está indisponível por enquanto. | This store is taking a break, so checkout is unavailable for now. |
+| `hub.cart.removedItem` | Removido do carrinho | Removed from cart |
+| `hub.cart.undo` | Desfazer | Undo |
+| `hub.cart.addToCartPrice` | Adicionar ao carrinho · {{price}} | Add to cart · {{price}} |
+| `hub.cart.removeShort` | Excluir | Delete |
+| `hub.cart.storeClosedShort` | A loja está fechada agora. | The store is closed right now. |
+| `hub.cart.itemCount_one` | {{count}} item | {{count}} item |
+| `hub.cart.itemCount_other` | {{count}} itens | {{count}} items |
+| `hub.stock.onlyLeft` | Restam só {{n}} | Only {{n}} left |
+| `hub.stock.left` | Restam {{n}} | {{n}} left |
+| `hub.verifiedBusiness` | Empresa verificada | Verified business |
+| `hub.verifiedIndividual` | Verificado | Verified |
+| `hub.verifiedInfoBusiness` | A Ciuna verificou esta empresa com os dados oficiais dela. | Ciuna checked this business against its official company details. |
+| `hub.verifiedInfoIndividual` | A Ciuna verificou a identidade desta pessoa. | Ciuna checked this person's identity. |
+| `hub.verifiedInfoHint` | O que isso significa? | What does this mean? |
+| `hub.verifiedInfoClose` | Entendi | Got it |
+| `hub.noDeliveryTitle` | Nenhuma loja entrega ainda | No stores deliver yet |
+| `hub.noDeliveryBody` | Estas lojas oferecem retirada. A entrega aparecerá aqui quando abrirem. | These stores offer pickup. Delivery will appear here as stores open it. |
+| `hub.cat.food.mains` | Pratos principais | Mains |
+| `hub.cat.food.soups` | Sopas e ensopados | Soups and stews |
+| `hub.cat.food.grill` | Grelhados | Grill |
+| `hub.cat.food.snacks` | Lanches e salgados | Snacks and pastries |
+| `hub.cat.food.breakfast` | Café da manhã | Breakfast |
+| `hub.cat.food.drinks` | Bebidas | Drinks |
+| `hub.cat.mart.staples` | Mercearia | Pantry staples |
+| `hub.cat.mart.sauces` | Molhos e temperos | Sauces and spices |
+| `hub.cat.mart.snacks` | Lanches e doces | Snacks and sweets |
+| `hub.cat.mart.drinks` | Bebidas | Drinks |
+| `hub.cat.mart.fresh` | Frescos e congelados | Fresh and frozen |
+| `hub.cat.mart.digital` | Serviços digitais | Digital services |
+| `hub.cat.mart.other` | Outros | Other |
+| `hub.cat.foodHeading` | O que você está com vontade? | What are you craving? |
+| `hub.cat.martHeading` | Do que você precisa? | What do you need? |
+| `hub.cat.allProducts` | Todos os produtos | All products |
+| `hub.cat.empty` | Ainda não há nada aqui. | Nothing here yet. |
+| `hub.cat.emptyBody` | As lojas estão adicionando produtos. Volte em breve. | Stores are adding products. Check back soon. |
+| `hub.cat.productCount_one` | {{count}} produto | {{count}} product |
+| `hub.cat.productCount_other` | {{count}} produtos | {{count}} products |
+| `hub.cat.allStores` | Todas as lojas | All stores |
 | `assistant.title` | Assistente | Assistant |
-| `assistant.intro` | Diga o que você precisa — o Assistente Ciuna coordena retiradas, compras e recados. | Tell us what you need — Ciuna Assistant coordinates pickup, shopping, and errands. |
+| `assistant.intro` | Diga o que você precisa. O Assistente Ciuna coordena retiradas, compras e recados. | Tell us what you need. Ciuna Assistant coordinates pickup, shopping, and errands. |
 | `assistant.help` | Ajuda | Help |
 | `assistant.section.serviceType` | Tipo de serviço | Service type |
 | `assistant.section.details` | Endereços e instruções | Addresses & instructions |
@@ -6494,7 +7448,7 @@ Total strings: 7500.
 | `assistant.field.dropoff` | Entrega | Drop-off |
 | `assistant.placeholder.pickup` | Onde retirar, códigos, contato no local… | Where to pick up, codes, contact on site… |
 | `assistant.placeholder.buy` | Nome da loja, lista de produtos, tamanhos, alternativas… | Store name, product list, sizes, alternatives… |
-| `assistant.placeholder.vehicle` | Moto, carro, van — ou deixe em branco para qualquer um | Bike, car, van — or leave blank for any |
+| `assistant.placeholder.vehicle` | Moto, carro, van ou deixe em branco para qualquer um | Bike, car, van, or leave blank for any |
 | `assistant.placeholder.dropoff` | Endereço completo de entrega e observações de acesso | Full drop-off address and access notes |
 | `assistant.cta.pickKind` | Escolha um tipo de serviço | Choose a service type |
 | `assistant.cta.pickupDetails` | Adicionar detalhes da retirada | Add pickup details |
@@ -6520,6 +7474,16 @@ Total strings: 7500.
 | `experts.profile.fulfillmentBoth` | Online ou presencial | Online or in person |
 | `experts.profile.fulfillmentHero` | Atendimento: {{value}} | Fulfillment: {{value}} |
 | `experts.profile.priceFrom` | A partir de | From |
+| `experts.profile.languages` | Idiomas | Speaks |
+| `experts.profile.credentials` | Credenciais | Credentials |
+| `experts.profile.yearsExp` | {{n}} anos de experiência | {{n}} years of experience |
+| `experts.profile.nextAvailable` | Próximo horário: {{when}} | Next available: {{when}} |
+| `experts.profile.noTimes` | Sem horários no momento | No open times right now |
+| `experts.profile.notifyHint` | Receba uma notificação quando este especialista abrir novos horários. | Get a notification when this expert opens new times. |
+| `experts.profile.notifyOn` | Avisaremos assim que houver horários. | We will tell you as soon as times open. |
+| `experts.profile.notifyMe` | Avise-me | Notify me |
+| `experts.profile.notifyCancel` | Parar de avisar | Stop notifying me |
+| `experts.profile.notifyFailed` | Não foi possível salvar. Tente de novo. | Could not save that. Try again. |
 | `experts.booking.title` | Reservar um especialista | Book an expert |
 | `experts.booking.intro` | Escolha um especialista publicado e sugira um horário. A Ciuna confirmará os detalhes com você. | Pick a published expert and suggest a time. Ciuna will confirm details with you. |
 | `experts.booking.loading` | Carregando especialistas… | Loading experts… |
@@ -6568,20 +7532,72 @@ Total strings: 7500.
 | `experts.bookingWizard.slotUnavailable` | Este horário não está mais disponível. | This time slot is no longer available. |
 | `experts.bookingWizard.tryAgain` | Tentar reservar novamente | Try booking again |
 | `experts.bookingWizard.successTitle` | Reserva confirmada | You’re booked |
-| `experts.bookingWizard.successBody` | Obrigado — sua sessão com {{name}} está reservada. | Thanks — your session with {{name}} is reserved. |
+| `experts.bookingWizard.successBody` | Obrigado, sua sessão com {{name}} está reservada. | Thanks, your session with {{name}} is reserved. |
 | `experts.bookingWizard.confirmationEmail` | Enviamos uma confirmação para {{email}}. | We sent a confirmation to {{email}}. |
 | `experts.bookingWizard.bookAnother` | Reservar outra sessão | Book another session |
 | `experts.bookingWizard.quoteNote` | O preço final pode ser combinado separadamente, antes ou depois da sessão. | Final price may be agreed separately before or after the session. |
 | `experts.bookingWizard.priceQuote` | Combinaremos o preço depois | We’ll agree price later |
 | `experts.bookingWizard.priceHourly` | {{rate}} {{currency}} / h | {{rate}} {{currency}} / hr |
 | `experts.bookingWizard.priceFixed` | {{amount}} {{currency}} | {{amount}} {{currency}} |
-| `experts.bookingWizard.priceFixedWithLabel` | {{amount}} {{currency}} — {{label}} | {{amount}} {{currency}} — {{label}} |
-| `experts.bookingWizard.priceDash` | — | — |
+| `experts.bookingWizard.priceFixedWithLabel` | {{amount}} {{currency}} · {{label}} | {{amount}} {{currency}} · {{label}} |
+| `experts.bookingWizard.priceDash` | - | - |
+| `experts.slots.timezone` | Horários exibidos no seu fuso horário ({{zone}}) | Times shown in your time zone ({{zone}}) |
+| `experts.slots.book` | Reservar {{time}} | Book {{time}} |
+| `experts.slots.pickTime` | Escolha um horário | Choose a time |
+| `experts.slots.expertZone` | Especialista em {{place}} ({{zone}}) | Expert in {{place}} ({{zone}}) |
+| `experts.slots.dayFull` | Lotado | Full |
+| `experts.slots.noneLeft` | Não há mais horários neste dia. | No times left on this day. |
+| `experts.slots.jumpNext` | Próximo disponível: {{day}} | Next available: {{day}} |
+| `experts.directory.search` | Buscar especialistas | Search experts |
+| `experts.directory.count` | Especialistas: {{count}} | Experts: {{count}} |
+| `experts.directory.clear` | Limpar filtros | Clear filters |
+| `experts.directory.noMatch` | Nenhum especialista encontrado | No experts match |
+| `experts.directory.noMatchBody` | Tente outro nome ou categoria. | Try another name or category. |
+| `experts.directory.all` | Todos | All |
+| `experts.directory.isNew` | Novo | New |
+| `experts.directory.allLanguages` | Todos os idiomas | All languages |
+| `experts.directory.from` | A partir de {{price}} | From {{price}} |
+| `experts.directory.fromPerHour` | A partir de {{price}}/h | From {{price}}/hr |
+| `experts.directory.customQuote` | Sob orçamento | Custom quote |
+| `experts.directory.nextAvailable` | Próximo: {{when}} | Next: {{when}} |
+| `experts.discover.needHeading` | Do que você precisa? | What do you need? |
+| `experts.discover.serviceCount_one` | {{count}} serviço | {{count}} service |
+| `experts.discover.serviceCount_other` | {{count}} serviços | {{count}} services |
+| `experts.discover.all` | Todos | All |
+| `experts.discover.servicesHeading` | Serviços | Services |
+| `experts.discover.allServices` | Todos os serviços | All services |
+| `experts.cat.documents.title` | Documentos e vistos | Documents and visas |
+| `experts.cat.documents.blurb` | Vistos, autorizações de residência, registro e ajuda jurídica. | Visas, residence permits, registration and legal help. |
+| `experts.cat.translation.title` | Tradução | Translation |
+| `experts.cat.translation.blurb` | Traduções juramentadas, cartório e apostila. | Certified translations, notary and apostille. |
+| `experts.cat.education.title` | Educação | Education |
+| `experts.cat.education.blurb` | Aulas de russo, preparação para exames e admissão na universidade. | Russian lessons, exam prep and university admission. |
+| `experts.cat.work.title` | Trabalho e negócios | Work and business |
+| `experts.cat.work.blurb` | Empregos, currículo, empresas, impostos e TI. | Jobs, CVs, company setup, taxes and IT. |
+| `experts.cat.housing.title` | Moradia | Housing |
+| `experts.cat.housing.blurb` | Encontre um apartamento, alugue com segurança e mude-se. | Find a flat, rent safely and move in. |
+| `experts.cat.health.title` | Saúde | Health |
+| `experts.cat.health.blurb` | Médicos e terapeutas que falam o seu idioma. | Doctors and therapists who speak your language. |
+| `experts.cat.beauty.title` | Cabelo e beleza | Hair and beauty |
+| `experts.cat.beauty.blurb` | Barbeiros, tranças, unhas e maquiagem. | Barbers, braids, nails and makeup. |
+| `experts.cat.errands.title` | Tarefas | Errands |
+| `experts.cat.errands.blurb` | Entregas, compras, limpeza e tarefas do dia a dia. | Couriers, shopping help, cleaning and everyday tasks. |
+| `experts.cat.expertCount_one` | {{count}} especialista | {{count}} expert |
+| `experts.cat.expertCount_other` | {{count}} especialistas | {{count}} experts |
+| `experts.cat.whoCanHelp` | Quem pode ajudar | Who can help |
+| `experts.cat.whatToBook` | O que você pode reservar | What you can book |
+| `experts.cat.empty` | Ainda não há nada para reservar. | Nothing to book here yet. |
+| `experts.cat.emptyBody` | Estamos adicionando especialistas. Volte em breve ou fale com o suporte. | We're adding experts. Check back soon or ask support for help. |
+| `experts.cat.soon` | Em breve | Coming soon |
+| `experts.card.minutes_one` | {{count}} min | {{count}} min |
+| `experts.card.minutes_other` | {{count}} min | {{count}} min |
+| `experts.card.book` | Reservar | Book |
+| `experts.card.perHour` | /h | /hr |
 | `transactions.title` | Atividades | Activities |
-| `transactions.searchPlaceholder` | Buscar transações... | Search transactions... |
-| `transactions.empty` | Nenhuma transação encontrada | No transactions found |
+| `transactions.searchPlaceholder` | Buscar atividades... | Search activity... |
+| `transactions.empty` | Nenhuma atividade encontrada | No activity found |
 | `transactions.emptyHint` | Comece enviando sua primeira transferência | Start by sending your first transfer |
-| `transactions.noSearchResults` | Nenhuma transação corresponde à sua busca | No transactions match your search |
+| `transactions.noSearchResults` | Nenhuma atividade corresponde à sua busca | No activity matches your search |
 | `transactions.adjustSearch` | Tente ajustar os termos da busca | Try adjusting your search terms |
 | `transactions.referralPayout` | Pagamento de indicação | Referral payout |
 | `transactions.withdrawalTo` | Saque para | Withdrawal to |
@@ -6595,24 +7611,35 @@ Total strings: 7500.
 | `transactions.sendBadge` | ENVIO | SEND |
 | `transactions.amountPaid` | Valor pago | Amount Paid |
 | `transactions.orderAmount` | Valor do pedido | Order Amount |
+| `transactions.offline` | Mostrando sua atividade salva. Puxe para atualizar quando voltar a ficar online. | Showing your saved activity. Pull down to refresh when you are back online. |
 | `orders.title` | Transferência | Transfer |
-| `orders.totalVolume` | Total gasto | Total Spent |
-| `orders.totalTransactions` | Transações | Transactions |
+| `orders.totalVolume` | Total gasto | Total spent |
+| `orders.totalTransactions` | Transações | Completed |
 | `orders.rowSentTo` | Enviado para {{name}} | Sent to {{name}} |
 | `orders.rowHubOrder` | Pedido do Hub | Hub order |
 | `orders.statusPending` | Pendente | Pending |
 | `orders.statusFailed` | Falhou | Failed |
 | `orders.statusCancelled` | Cancelada | Cancelled |
-| `orders.searchPlaceholder` | Buscar transações... | Search transactions... |
+| `orders.searchPlaceholder` | Buscar atividades... | Search activity... |
+| `orders.clearSearch` | Limpar busca | Clear search |
+| `orders.colOrder` | Pedido | Order |
+| `orders.colDate` | Hora | Time |
+| `orders.colStatus` | Status | Status |
+| `orders.colAmount` | Valor | Amount |
+| `orders.helpTitle` | Precisa de ajuda com um pedido? | Need help with an order? |
+| `orders.helpBody` | Fale com o vendedor pelo pedido ou com o suporte da Ciuna. | Message the seller from the order, or ask Ciuna support. |
 | `orders.chipAll` | Todas | All |
-| `orders.chipSend` | Envio | Send |
-| `orders.chipHub` | Hub | Hub |
-| `orders.chipPayout` | Pagamento | Payout |
+| `orders.chipSend` | Envio | Transfers |
+| `orders.chipHub` | Hub | Orders |
+| `orders.chipPayout` | Pagamento | Payouts |
 | `orders.badgeFood` | Comida | Food |
 | `orders.badgeMart` | Mercado | Mart |
 | `orders.badgeReferral` | Indicação | Referral |
 | `orders.groupToday` | Hoje | Today |
 | `orders.groupYesterday` | Ontem | Yesterday |
+| `orders.chipBookings` | Reservas | Bookings |
+| `orders.statusRefunded` | Reembolsado | Refunded |
+| `orders.rowItemsMore` | {{title}} +{{count}} | {{title}} +{{count}} |
 | `txDetail.errorNotFound` | Transação não encontrada ou acesso negado | Transaction not found or access denied |
 | `txDetail.errorLoadFailed` | Falha ao carregar os detalhes da transação | Failed to load transaction details |
 | `txDetail.notFound` | Transação não encontrada | Transaction not found |
@@ -6704,6 +7731,9 @@ Total strings: 7500.
 | `txDetail.statusTxnCancelledDesc` | Esta transação foi cancelada. Se o pagamento foi feito, você receberá o reembolso. | This transaction has been cancelled. You will receive a refund if payment was made. |
 | `txDetail.statusProcessing` | Transação em processamento | Transaction Processing |
 | `txDetail.statusProcessingDesc` | Sua transação está sendo processada | Your transaction is being processed |
+| `txDetail.shareReceipt` | Compartilhar recibo | Share receipt |
+| `txDetail.shareText` | Transferência Ciuna {{id}}: {{send}} enviados para {{name}} em {{date}}. | Ciuna transfer {{id}}: {{send}} sent to {{name}} on {{date}}. |
+| `txDetail.repeatTransfer` | Repetir transferência | Repeat transfer |
 | `txTimeline.payoutSubmitted` | Solicitação enviada | Request submitted |
 | `txTimeline.payoutSubmittedDesc` | Recebemos sua solicitação de saque de indicação. | Your referral withdrawal request was received. |
 | `txTimeline.processing` | Em processamento | Processing |
@@ -6735,6 +7765,38 @@ Total strings: 7500.
 | `support.faq2a` | Não cobramos nenhuma taxa em nenhuma transação. Envie dinheiro para o mundo todo sem custo com a Ciuna. | We charge absolutely no fees on any transaction. Send money worldwide completely free with Ciuna. |
 | `support.faq3q` | Quanto tempo leva? | How long does it take? |
 | `support.faq3a` | Todas as transações são concluídas em minutos, para que seu dinheiro chegue ao destino de forma rápida e eficiente. | All transactions are completed within minutes, ensuring your money reaches its destination quickly and efficiently. |
+| `support.req.myRequests` | Meus pedidos | My requests |
+| `support.req.myRequestsHint` | Escreva para nós e acompanhe as respostas aqui | Write to us and follow the answers here |
+| `support.req.empty` | Nenhum pedido ainda | No requests yet |
+| `support.req.emptyBody` | Envie uma mensagem e nossa equipe responderá aqui. | Send us a message and our team will reply here. |
+| `support.req.newRequest` | Novo pedido | New request |
+| `support.req.all` | Todos | All |
+| `support.req.open` | Abertos | Open |
+| `support.req.resolved` | Resolvidos | Resolved |
+| `support.req.statusOpen` | Em análise | In review |
+| `support.req.statusAwaiting` | Aguardando você | Awaiting you |
+| `support.req.topicLabel` | Assunto | Topic |
+| `support.req.topic_order` | Pedido | Order |
+| `support.req.topic_payment` | Pagamento | Payment |
+| `support.req.topic_transfer` | Transferência | Transfer |
+| `support.req.topic_account` | Conta | Account |
+| `support.req.topic_booking` | Reserva | Booking |
+| `support.req.topic_other` | Outro | Other |
+| `support.req.relatedOrder` | Pedido relacionado (opcional) | Related order (optional) |
+| `support.req.noOrder` | Nenhum | None |
+| `support.req.subject` | Assunto | Subject |
+| `support.req.subjectPlaceholder` | Com o que você precisa de ajuda? | What do you need help with? |
+| `support.req.message` | Mensagem | Message |
+| `support.req.send` | Enviar pedido | Send request |
+| `support.req.reply` | Escreva uma resposta | Write a reply |
+| `support.req.agent` | Suporte Ciuna | Ciuna support |
+| `support.req.resolvedLine` | Marcado como resolvido | Marked as resolved |
+| `support.req.err_SUPPORT_TOO_MANY_OPEN` | Você tem pedidos abertos demais. Aguarde uma resposta primeiro. | You have too many open requests. Wait for a reply first. |
+| `support.req.err_SUPPORT_CLOSED` | Este pedido foi resolvido há algum tempo. Abra um novo. | This request was resolved a while ago. Start a new request. |
+| `support.req.err_RATE_LIMITED` | Você está enviando mensagens rápido demais. Tente em instantes. | You are sending messages too fast. Try again in a moment. |
+| `support.req.err_SUBJECT` | Adicione um assunto curto (mínimo 3 caracteres). | Add a short subject (at least 3 characters). |
+| `support.req.err_EMPTY` | Escreva uma mensagem primeiro. | Write a message first. |
+| `support.req.err_GENERIC` | Algo deu errado. Tente novamente. | Something went wrong. Please try again. |
 | `send.retry` | Tentar novamente | Retry |
 | `send.noCurrencies` | Nenhuma moeda disponível. Entre em contato com o suporte. | No currencies available. Please contact support. |
 | `send.youSend` | Você envia | You Send |
@@ -6744,6 +7806,7 @@ Total strings: 7500.
 | `send.steps.amount` | Valor | Amount |
 | `send.steps.recipient` | Destinatário | Recipient |
 | `send.steps.review` | Revisão | Review |
+| `send.steps.pay` | Pagamento | Pay |
 | `send.rateUnavailable` | Taxa de câmbio indisponível para este par. | Exchange rate not available for this pair. |
 | `send.mobile.amountHeadline` | Quanto você quer enviar? | How much are you sending? |
 | `send.mobile.recipientHeadline` | Quem vai receber? | Who receives it? |
@@ -6759,6 +7822,8 @@ Total strings: 7500.
 | `send.mobile.quoteFeesUnavailable` | Não foi possível confirmar a taxa. Tente novamente. | Couldn't confirm the fee. Try again. |
 | `send.mobile.quoteBelowMinRub` | Envie pelo menos 1.000 RUB. | Send at least 1,000 RUB. |
 | `send.mobile.quoteMinContribution` | Envie um valor maior para continuar. | Send a higher amount to continue. |
+| `send.mobile.verifyCta` | Verificar identidade | Verify identity |
+| `send.mobile.paySbpAmount` | Pagar {{amount}} por SBP | Pay {{amount}} by SBP |
 | `send.quoteDeskRateNotConfigured` | Esta rota ainda não está pronta. Defina no Office a taxa de USD para a moeda de recebimento (usada como mesa de pagamento em USDT). | This corridor isn't ready yet. Set the USD → receive currency rate in Office (used as USDT payout desk). |
 | `send.quoteReceiveCappedByUsdt` | O valor do destinatário reflete o que este pagamento consegue cobrir após as taxas. | Recipient amount reflects what this payment can fund after fees. |
 | `send.quoteMinContribution` | Envie um valor maior para continuar. | Send a higher amount to continue. |
@@ -6843,7 +7908,7 @@ Total strings: 7500.
 | `send.resendVerificationFailed` | Falha ao enviar o e-mail de verificação. Tente novamente. | Failed to send verification email. Please try again. |
 | `send.optionalSuffix` |  (opcional) |  (Optional) |
 | `send.fulfillmentErrorOutsideBank` | Este valor de recebimento está fora do intervalo permitido para transferência bancária nesta rota. Ajuste o valor ou adicione uma faixa de dinheiro em espécie no admin / entre em contato com o suporte. | This receive amount is outside the range allowed for bank transfer on this corridor. Adjust the amount or add a cash window in admin / contact support. |
-| `send.fulfillmentErrorOverlap` | Este valor de recebimento se enquadra nas regras de banco e de dinheiro em espécie. As configurações da rota devem usar faixas distintas — entre em contato com o suporte. | This receive amount matches both bank and cash rules. Corridor settings should use disjoint ranges — contact support. |
+| `send.fulfillmentErrorOverlap` | Este valor de recebimento se enquadra nas regras de banco e de dinheiro em espécie. As configurações da rota devem usar faixas distintas. Entre em contato com o suporte. | This receive amount matches both bank and cash rules. Corridor settings should use disjoint ranges. Contact support. |
 | `send.fulfillmentErrorGap` | Este valor de recebimento não é elegível para esta rota. Ajuste o valor. | This receive amount is not eligible for this corridor. Adjust the amount. |
 | `send.cashHandBanner` | Para este valor, os fundos serão entregues em dinheiro no endereço que você selecionar (não por transferência bancária). | For this amount, funds will be delivered as cash to the address you select (not by bank transfer). |
 | `send.logisticsFeeLabel` | Taxa de logística | Logistics fee |
@@ -6863,6 +7928,25 @@ Total strings: 7500.
 | `send.saveDeliveryAddress` | Salvar endereço | Save address |
 | `send.failedAddDelivery` | Não foi possível salvar o endereço de entrega. Tente novamente. | Could not save delivery address. Try again. |
 | `send.cashDeliverySummary` | Entrega em dinheiro | Cash delivery |
+| `send.limitHint` | Mín. {{min}} · Máx. {{max}} por transferência | Min {{min}} · Max {{max}} per transfer |
+| `send.limitHintMax` | Máx. {{max}} por transferência | Max {{max}} per transfer |
+| `send.limitHintMin` | Mín. {{min}} por transferência | Min {{min}} per transfer |
+| `send.seeLimits` | Ver limites | See limits |
+| `send.payAmount` | Pagar {{amount}} | Pay {{amount}} |
+| `send.change` | Alterar | Change |
+| `send.aside.live` | Taxa ao vivo | Live rate |
+| `send.aside.enter` | Informe um valor dentro do seu limite para ver a taxa e o total. | Enter an amount within your limit to see the fee and total. |
+| `send.aside.limitTitle` | Seu limite neste mês | Your limit this month |
+| `send.aside.left` | Resta para enviar | Left to send |
+| `send.aside.resets` | Reinicia em {{date}} | Resets {{date}} |
+| `send.aside.rate` | Taxa de câmbio | Exchange rate |
+| `send.aside.sent` | Você envia | You send |
+| `send.aside.fee` | Taxa de processamento | Processing fee |
+| `send.aside.gets` | O destinatário recebe | Recipient gets |
+| `send.aside.total` | Total a pagar | Total to pay |
+| `send.aside.noRecipient` | Nenhum destinatário escolhido. | No recipient chosen yet. |
+| `send.aside.choose` | Escolher destinatário | Choose recipient |
+| `send.aside.use` | Usar {{name}} | Use {{name}} |
 | `recipients.title` | Destinatários | Recipients |
 | `recipients.transferType` | Tipo de transferência * | Transfer Type * |
 | `recipients.addRecipient` | Adicionar destinatário | Add Recipient |
@@ -6876,7 +7960,7 @@ Total strings: 7500.
 | `recipients.updateRecipient` | Atualizar destinatário | Update Recipient |
 | `recipients.failedAdd` | Falha ao adicionar o destinatário | Failed to add recipient |
 | `recipients.failedUpdate` | Falha ao atualizar o destinatário | Failed to update recipient |
-| `recipients.failedDeleteLinked` | Falha ao excluir — vinculado a uma transação | Failed to delete — linked to a transaction |
+| `recipients.failedDeleteLinked` | Falha ao excluir: vinculado a uma transação | Failed to delete: linked to a transaction |
 | `recipients.noMatchSearch` | Nenhum destinatário corresponde à sua busca | No recipients match your search |
 | `recipients.noneFound` | Nenhum destinatário encontrado | No recipients found |
 | `recipients.emptyAddHint` | Adicione seu primeiro destinatário para começar | Add your first recipient to get started |
@@ -6913,6 +7997,8 @@ Total strings: 7500.
 | `recipients.fieldPlaceholders.sort_code` | ex.: 123456 | e.g., 123456 |
 | `recipients.fieldPlaceholders.iban` | ex.: GB82 WEST 1234 5698 7654 32 | e.g., GB82 WEST 1234 5698 7654 32 |
 | `recipients.fieldPlaceholders.swift_bic` | ex.: NWBKGB2L | e.g., NWBKGB2L |
+| `recipients.confirmDeleteTitleNamed` | Excluir {{name}}? | Delete {{name}}? |
+| `recipients.failedDelete` | Não foi possível excluir. Tente de novo. | Could not delete. Try again. |
 | `referrals.pageTitle` | Afiliados e indicações | Affiliates & Referrals |
 | `referrals.subtitle` | Compartilhe seu link e acompanhe as recompensas quando seus amigos enviarem dinheiro. | Share your link and track rewards when friends send money. |
 | `referrals.referFriend` | Indique um amigo | Refer a friend |
@@ -6957,6 +8043,10 @@ Total strings: 7500.
 | `referrals.shareTitle` | Envie dinheiro com a Ciuna | Send Money with Ciuna |
 | `referrals.shareMessagePrefix` | Use meu link para se cadastrar e enviar dinheiro entre mais de 10 países africanos e a Rússia, sem taxas, na Ciuna: | Use my link to sign up and send money between 10+ African countries and Russia for free on Ciuna: |
 | `referrals.unnamedReferee` | Usuário | User |
+| `referrals.yourCode` | Seu código | Your code |
+| `referrals.progress` | {{n}} de {{next}} amigos neste trimestre para o próximo nível | {{n}} of {{next}} friends this quarter for your next level |
+| `referrals.topTier` | Você está no nível mais alto neste trimestre. | You are on the top level this quarter. |
+| `referrals.rewardsUntil` | Recompensas até {{date}} | Rewards until {{date}} |
 | `profile.title` | Seu perfil | Your profile |
 | `profile.changePhoto` | Alterar foto | Change photo |
 | `profile.removePhoto` | Remover foto | Remove photo |
@@ -6984,6 +8074,8 @@ Total strings: 7500.
 | `profile.deleteDescription` | Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita. Todos os seus dados, transações e informações da conta serão excluídos permanentemente. | Are you sure you want to delete your account? This action cannot be undone. All your data, transactions, and account information will be permanently deleted. |
 | `profile.cancel` | Cancelar | Cancel |
 | `profile.deleting` | Excluindo... | Deleting... |
+| `profile.emailHint` | Para alterar seu e-mail, fale com o suporte. | To change your email, contact support. |
+| `profile.phoneInvalid` | Informe um telefone com o código do país, por exemplo +55 11 91234-5678. | Enter a phone number with the country code, for example +7 900 000 00 00. |
 | `verification.hubTitle` | Verificação | Verification |
 | `verification.hubSubtitle` | Conclua a verificação de identidade e de endereço, exigida por conformidade. | Complete identity and address verification for compliance. |
 | `verification.infoKyc` | Conclua as informações de identidade e endereço (KYC) para fins de conformidade. | Please complete KYC Identity and Address information for compliance. |
@@ -6992,7 +8084,7 @@ Total strings: 7500.
 | `verification.identityCardDesc` | Informações do seu documento de identidade. | Your ID verification information. |
 | `verification.addressInformation` | Informações de endereço | Address information |
 | `verification.addressCardDesc` | Seu endereço residencial e comprovante. | Your home address and document. |
-| `verification.notStarted` | Não iniciada | Not started |
+| `verification.notStarted` | Não iniciado | Not started |
 | `verification.badgeDone` | Concluída | Done |
 | `verification.badgeInReview` | Em análise | In review |
 | `verification.badgeRejected` | Recusada | Rejected |
@@ -7042,16 +8134,16 @@ Total strings: 7500.
 | `verification.hubStatusVerifiedTitle` | Você está pronto para enviar | You're ready to send |
 | `verification.hubStatusVerifiedBody` | Sua identidade foi verificada. Abra Enviar para transferir dinheiro. | Your identity is verified. Open Send to transfer money. |
 | `verification.hubStatusPendingTitle` | Verificação em andamento | Verification in progress |
-| `verification.hubStatusPendingBody` | Estamos conferindo os dados do seu passaporte. A maioria das análises termina em poucos minutos — esta página é atualizada automaticamente. | We're checking your passport details. Most reviews finish in a few minutes — this page updates automatically. |
+| `verification.hubStatusPendingBody` | Estamos conferindo os dados do seu passaporte. A maioria das análises termina em poucos minutos. Esta página é atualizada automaticamente. | We're checking your passport details. Most reviews finish in a few minutes. This page updates automatically. |
 | `verification.hubStatusNeededTitle` | Confirme sua identidade | Confirm your identity |
 | `verification.hubStatusNeededBody` | Para enviar dinheiro, é preciso fazer uma verificação de identidade única com nosso parceiro de pagamentos (aceitamos passaportes russos e estrangeiros). | Sending money requires a one-time identity check with our payment partner (Russian and foreign passports supported). |
 | `verification.hubContinueCta` | Verificar identidade | Verify identity |
 | `verification.optionalSection` | Enviar documentos | Upload documents |
 | `verification.sbpFormTitle` | Verificação de identidade | Identity verification |
-| `verification.formLead` | Use exatamente o nome e os dados do passaporte que constam no seu documento — erros podem impedir o envio. | Use the exact name and passport details on your document — errors can block sending. |
+| `verification.formLead` | Use exatamente o nome e os dados do passaporte que constam no seu documento. Erros podem impedir o envio. | Use the exact name and passport details on your document. Errors can block sending. |
 | `verification.sbpSuccessTitle` | Você está pronto para enviar | You're ready to send |
 | `verification.sbpSuccessBody` | Identidade verificada. Vá para Enviar para fazer uma transferência. | Identity verified. Go to Send to make a transfer. |
-| `verification.sbpChecking` | Estamos analisando seu envio. A maioria das verificações termina em poucos minutos — você pode sair e voltar depois. | We're reviewing your submission. Most checks finish in a few minutes — you can leave and come back. |
+| `verification.sbpChecking` | Estamos analisando seu envio. A maioria das verificações termina em poucos minutos. Você pode sair e voltar depois. | We're reviewing your submission. Most checks finish in a few minutes. You can leave and come back. |
 | `verification.passportSegmentRu` | Passaporte russo | Russian passport |
 | `verification.passportSegmentForeign` | Outro passaporte | Other passport |
 | `verification.passportCountryShort` | País do passaporte | Passport country |
@@ -7141,6 +8233,8 @@ Total strings: 7500.
 | `verification.bitbanker.errors.cyrillic_required` | Use letras cirílicas para os nomes em passaportes russos. | Use Cyrillic letters for Russian passport names. |
 | `verification.bitbanker.errors.validation_failed` | Corrija os campos destacados. | Please fix the highlighted fields. |
 | `verification.bitbanker.errors.submit_failed` | Não foi possível enviar a verificação. Tente novamente mais tarde. | Verification could not be submitted. Try again later. |
+| `verification.yourLimit` | Seu limite mensal | Your monthly limit |
+| `verification.limitLeft` | Restam {{left}} de {{total}} | {{left}} left of {{total}} |
 | `auth.welcomeBack` | Bem-vindo de volta | Welcome back |
 | `auth.signInGoogle` | Entrar com Google | Sign in with Google |
 | `auth.signInApple` | Entrar com Apple | Sign in with Apple |
@@ -7223,8 +8317,11 @@ Total strings: 7500.
 | `auth.callbackFailedSignIn` | Falha ao concluir o login | Failed to complete sign in |
 | `auth.callbackRedirectLogin` | Redirecionando para o login... | Redirecting to login... |
 | `auth.fillAllFields` | Preencha todos os campos | Please fill in all fields |
-| `auth.passwordMinLength` | A senha deve ter pelo menos 6 caracteres | Password must be at least 6 characters long |
+| `auth.passwordMinLength` | A senha deve ter pelo menos {{count}} caracteres | Password must be at least {{count}} characters long |
 | `auth.helpToast` | Precisa de ajuda? Fale com o suporte em {{email}} | Need assistance? Contact support at {{email}} |
+| `auth.passwordRuleLength` | Pelo menos {{count}} caracteres | At least {{count}} characters |
+| `auth.termsAnd` | e a | and |
+| `auth.privacyLink` | Política de Privacidade | Privacy Policy |
 | `referralLanding.redirecting` | Redirecionando… | Redirecting… |
 | `referralLanding.invalidLink` | Este link de indicação é inválido ou expirou. | This referral link is invalid or expired. |
 | `pwa.title` | Aplicativo Ciuna | Ciuna App |
@@ -7241,6 +8338,10 @@ Total strings: 7500.
 | `pwa.menu` | Menu | Menu |
 | `errors.generic` | Algo deu errado. Tente novamente. | Something went wrong. Please try again. |
 | `errors.loadFailed` | Não foi possível carregar os dados. Tente novamente. | Could not load data. Please try again. |
+| `marketplace.paidWith` | Forma de pagamento | Payment method |
+| `marketplace.refundDone` | Reembolsado | Refunded |
+| `marketplace.refundOnItsWay` | Reembolso a caminho | Refund on its way |
+| `marketplace.refundRequested` | solicitado em | requested |
 | `marketplace.checkout` | Finalizar compra | Checkout |
 | `marketplace.amount` | Valor | Amount |
 | `marketplace.loading` | Carregando… | Loading… |
@@ -7329,6 +8430,8 @@ Total strings: 7500.
 | `marketplace.errors.AMOUNT_REQUIRED` | Digite um valor dentro dos limites do produto. | Enter an amount within the product’s limits. |
 | `marketplace.errors.CONTACT_SUPPORT` | Entre em contato com o suporte para alterar um pedido aceito. | Contact support to change an accepted order. |
 | `marketplace.errors.CHECKOUT_UNAVAILABLE` | A finalização da compra ainda não está disponível. | Checkout is not available yet. |
+| `marketplace.errors.BELOW_MINIMUM_ORDER` | Esta loja exige um valor de pedido maior para entrega. | This store needs a higher order total for delivery. |
+| `marketplace.errors.STORE_CLOSED` | Esta loja está fechada. Tente novamente quando abrir. | This store is closed. Try again when it opens. |
 | `marketplace.events.created` | Aguardando pagamento | Awaiting payment |
 | `marketplace.events.paid` | Pago | Paid |
 | `marketplace.events.unknown` | Verificando pagamento | Checking payment |
@@ -7347,6 +8450,43 @@ Total strings: 7500.
 | `marketplace.newPurchase` | Fazer outra compra | Make another purchase |
 | `marketplace.backToShopping` | Voltar às compras | Back to shopping |
 | `marketplace.orderCancelled` | Pedido cancelado | Order cancelled |
+| `marketplace.progressDetails` | Detalhes | Details |
+| `marketplace.progressReview` | Revisão | Review |
+| `marketplace.placed` | Pedido feito | Order placed |
+| `marketplace.statusLine.awaiting_payment` | Conclua o pagamento para fazer o pedido. | Complete your payment to place the order. |
+| `marketplace.statusLine.awaiting_acceptance` | Aguardando o vendedor aceitar seu pedido. | Waiting for the seller to accept your order. |
+| `marketplace.statusLine.accepted` | O vendedor aceitou seu pedido. | The seller accepted your order. |
+| `marketplace.statusLine.in_progress` | Seu pedido está sendo preparado. | Your order is being prepared. |
+| `marketplace.statusLine.fulfilled` | Seu pedido foi concluído. | Your order is complete. |
+| `marketplace.statusLine.cancelled` | Este pedido foi cancelado. | This order was cancelled. |
+| `marketplace.statusLine.expired` | O prazo para pagar terminou, então o pedido não foi feito. Adicione os itens novamente para pedir. | The time to pay ran out, so this order was not placed. Add the items again to order. |
+| `marketplace.zoneNotServedTitle` | Ainda não entregamos aqui | We can’t deliver here yet |
+| `marketplace.pickupInstead` | Retirar na loja | Pick up instead |
+| `marketplace.minOrderBanner` | A entrega exige no mínimo {{min}}. Adicione mais {{more}} ou escolha retirar. | Delivery needs a {{min}} minimum. Add {{more}} more, or pick up instead. |
+| `marketplace.etaMinutes` | {{n}} min | {{n}} min |
+| `marketplace.storeClosedTitle` | Esta loja está fechada agora | This store is closed right now |
+| `marketplace.storeOpensAt` | Abre {{day}} às {{time}}. | It opens {{day}} {{time}}. |
+| `marketplace.free` | Grátis | Free |
+| `marketplace.continueToReview` | Continuar para a revisão | Continue to review |
+| `marketplace.edit` | Editar | Edit |
+| `marketplace.fromFee` | A partir de {{fee}} | From {{fee}} |
+| `marketplace.progressTime` | Horário | Time |
+| `marketplace.storePausedTitle` | Esta loja está em pausa | This store is taking a break |
+| `marketplace.addressRequired` | Informe a rua e o apartamento para o entregador encontrar você. | Enter the street and apartment so the courier can find you. |
+| `marketplace.contactName` | Seu nome | Your name |
+| `marketplace.contactNameRequired` | Informe o nome para este pedido. | Enter the name for this order. |
+| `marketplace.contactPhone` | Telefone | Phone |
+| `marketplace.contactPhoneRequired` | É necessário um telefone para este pedido. | A phone number is needed for this order. |
+| `marketplace.subtotal` | Subtotal | Subtotal |
+| `marketplace.orderProgress` | Andamento do pedido | Order progress |
+| `marketplace.checkingTitle` | Estamos conferindo seu pagamento | We are checking your payment |
+| `marketplace.checkingBody` | Não pague de novo. Isso costuma levar um minuto. | Please do not pay again. This usually takes a minute. |
+| `marketplace.completePaymentTitle` | Conclua seu pagamento | Complete your payment |
+| `marketplace.completePaymentBody` | Pague {{total}} abaixo para fazer este pedido. | Pay {{total}} below to place this order. |
+| `marketplace.session.title` | Sua sessão | Your session |
+| `marketplace.session.expertTime` | Horário do especialista: {{time}} | Expert's time: {{time}} |
+| `marketplace.session.join` | Entrar na sessão | Join session |
+| `marketplace.session.noLink` | O especialista adicionará aqui o link da reunião antes da sua sessão. | The expert will add the meeting link here before your session. |
 | `social.loadFailed` | Não foi possível carregar, tente novamente | Couldn't load, try again |
 | `social.retry` | Tentar novamente | Try again |
 | `search.all` | Tudo | All |
@@ -7368,6 +8508,8 @@ Total strings: 7500.
 | `search.recent` | Pesquisas recentes | Recent searches |
 | `search.searchAll` | Pesquisar em tudo | Search everywhere |
 | `search.stores` | Lojas | Stores |
+| `search.placeholderLine` | Buscar produtos e lojas | Search products and stores |
+| `search.seeAll` | Ver tudo ({{count}}) | See all ({{count}}) |
 | `favourites.title` | Favoritos | Favourites |
 | `favourites.stores` | Lojas | Stores |
 | `favourites.products` | Produtos | Products |
@@ -7409,6 +8551,11 @@ Total strings: 7500.
 | `chat.unavailable` | As mensagens não estão disponíveis no momento | Messaging isn't available right now |
 | `chat.unavailableBody` | Tente novamente mais tarde. | Please try again later. |
 | `chat.closedOn` | Chat encerrado em {{date}}. Você ainda pode ler a conversa. | Chat closed on {{date}}. You can still read the conversation. |
+| `chat.quick.where` | Onde está meu pedido? | Where is my order? |
+| `chat.quick.changeTime` | Mudar o horário de entrega | Change delivery time |
+| `chat.quick.allergy` | Pergunta sobre alergia | Allergy question |
+| `chat.openUntil` | O chat com o vendedor fica aberto até {{date}}. | Chat with the seller stays open until {{date}}. |
+| `chat.unreadDot` | Nova mensagem do vendedor | New message from the seller |
 | `reviews.promptTitle` | Avalie o seu pedido | Rate your order |
 | `reviews.promptTitleSession` | Avalie a sua sessão | Rate your session |
 | `reviews.promptHint` | Como foi? Sua avaliação ajuda outros clientes. | How was it? Your rating helps other customers. |
@@ -7447,8 +8594,219 @@ Total strings: 7500.
 | `reviews.anonymous` | Cliente | Customer |
 | `reviews.count_one` | {{count}} avaliação | {{count}} review |
 | `reviews.count_other` | {{count}} avaliações | {{count}} reviews |
+| `reviews.readMore` | Ler mais | Read more |
+| `reviews.readLess` | Mostrar menos | Show less |
+| `reviews.verifiedOrder` | Pedido verificado | Verified order |
+| `home.slide.adLabel` | Anúncio | Ad |
+| `home.slide.position` | Slide {{n}} de {{total}} | Slide {{n}} of {{total}} |
+| `home.slide.sorted.title` | A vida fora, resolvida. | Life abroad, sorted. |
+| `home.slide.sorted.body` | Dinheiro, comida e ajuda de casa, num só app. | Money, meals and help from home, in one app. |
+| `home.slide.community.title` | Sua comunidade, por perto. | Your community, close by. |
+| `home.slide.community.body` | Lojas e especialistas de gente como você. | Stores and experts run by people like you. |
+| `home.slide.language.title` | Seu app, na sua língua. | Your app, in your language. |
+| `home.slide.language.body` | English, Русский, Français, Español, 中文, Português. | English, Русский, Français, Español, 中文, Português. |
+| `home.now.title` | Em andamento | In progress |
+| `home.sendAgain.title` | Enviar novamente | Send again |
+| `home.rate.aria` | Câmbio {{from}} para {{to}}. Abrir envio. | Exchange rate {{from}} to {{to}}. Open Send. |
+| `home.banner.verify.title` | Verifique sua identidade | Verify your identity |
+| `home.banner.verify.body` | Uma verificação única para poder enviar dinheiro. | One-time check so you can send money. |
+| `home.banner.review.title` | Verificação em análise | Verification in review |
+| `home.banner.review.body` | Avisaremos quando terminar. | We'll let you know when it's done. |
+| `home.banner.refer.title` | Convide amigos e ganhe | Invite friends, earn commission |
+| `home.banner.refer.body` | Compartilhe seu código e ganhe comissão nas transferências deles. | Share your code and earn on their transfers. |
+| `offline.banner` | Você está offline. Mostrando dados salvos. | You are offline. Showing saved data. |
+| `receipt.title` | Recibo | Receipt |
+| `receipt.view` | Ver recibo | View receipt |
+| `receipt.number` | Número do recibo | Receipt number |
+| `receipt.date` | Data | Date |
+| `receipt.status_completed` | Concluído | Completed |
+| `receipt.status_paid` | Pago | Paid |
+| `receipt.status_refunded` | Reembolsado | Refunded |
+| `receipt.customer` | Cliente | Customer |
+| `receipt.recipient` | Destinatário | Recipient |
+| `receipt.store` | Loja | Store |
+| `receipt.expert` | Especialista | Expert |
+| `receipt.account` | Conta | Account |
+| `receipt.paidWith` | Pago com | Paid with |
+| `receipt.method_online` | Pagamento online | Online payment |
+| `receipt.method_bank` | Transferência bancária | Bank transfer |
+| `receipt.items` | Itens | Items |
+| `receipt.fee` | Taxa | Fee |
+| `receipt.serviceFee` | Taxa de serviço | Service fee |
+| `receipt.deliveryFee` | Taxa de entrega | Delivery fee |
+| `receipt.conversionFee` | Taxa de conversão | Conversion fee |
+| `receipt.total` | Total pago | Total paid |
+| `receipt.rate` | Taxa de câmbio | Rate |
+| `receipt.recipientGets` | O destinatário recebe | Recipient gets |
+| `receipt.session` | Sessão | Session |
+| `receipt.address` | Endereço de entrega | Delivery address |
+| `receipt.refunded` | Reembolsado | Refunded |
+| `receipt.notTax` | Este não é um documento fiscal. | This is not a tax invoice. |
+| `receipt.support` | Dúvidas? Escreva para {{email}} | Questions? Write to {{email}} |
+| `receipt.share` | Compartilhar recibo | Share receipt |
+| `receipt.unavailable` | O recibo fica disponível quando o pagamento for concluído. | A receipt is available once the payment is complete. |
+| `receipt.shareText` | Recibo Ciuna {{number}}: {{total}} em {{date}}. | Ciuna receipt {{number}}: {{total}} on {{date}}. |
+| `receipt.downloadPdf` | Baixar PDF | Download PDF |
+| `receipt.pdfFailed` | Não foi possível criar o PDF. Tente de novo. | Could not create the PDF. Try again. |
+| `receipt.youSent` | Você enviou | You sent |
+| `limits.title` | Limites | Limits |
+| `limits.moreHint` | Quanto você pode enviar | How much you can send |
+| `limits.thisMonth` | Este mês | This month |
+| `limits.left` | Restam {{amount}} | {{amount}} left |
+| `limits.usedOf` | {{used}} usados de {{limit}} | {{used}} of {{limit}} used |
+| `limits.resets` | Reinicia em {{date}} | Resets {{date}} |
+| `limits.perTransfer` | Por transferência | Per transfer |
+| `limits.minimum` | Mínimo | Minimum |
+| `limits.maximum` | Máximo | Maximum |
+| `limits.levels` | Níveis | Levels |
+| `limits.level1` | Nível 1 · E-mail e telefone | Level 1 · Email and phone |
+| `limits.level2` | Nível 2 · Identidade | Level 2 · Identity |
+| `limits.level3` | Nível 3 · Identidade e endereço | Level 3 · Identity and address |
+| `limits.yourLevel` | Seu nível | Your level |
+| `limits.monthly` | {{amount}} por mês | {{amount}} a month |
+| `limits.verifyIdentity` | Verificar identidade | Verify identity |
+| `limits.verifyAddress` | Verificar endereço | Verify address |
+| `limits.inReview` | Sua verificação está em análise. Seu limite atual continua valendo. | Your verification is in review. Your current limit still applies. |
+| `limits.reached` | Você atingiu o limite deste mês. | You have reached this month's limit. |
+| `limits.close` | Você está perto do limite deste mês. | You are close to this month's limit. |
+| `limits.highest` | Você está no nível mais alto. Fale com o suporte para alterar seu limite. | You are at the highest level. Contact support to change your limit. |
+| `limits.notSet` | No momento, não há limite de envio para o seu nível. | No sending limit is set for your level right now. |
+| `limits.currencyNote` | Os limites valem para transferências enviadas em {{currency}}. | Limits apply to transfers sent in {{currency}}. |
+| `limits.err_LIMIT_EXCEEDED` | Esta transferência é maior do que o que resta neste mês ({{remaining}}). Seu limite reinicia em {{date}}. Veja Limites em Mais. | This transfer is more than you have left this month ({{remaining}}). Your limit resets {{date}}. See Limits in More. |
+| `limits.err_ABOVE_MAX_TRANSFER` | O máximo por transferência é {{max}}. | The most you can send at once is {{max}}. |
+| `limits.err_BELOW_MIN_TRANSFER` | O mínimo por transferência é {{min}}. | The least you can send at once is {{min}}. |
+| `deleteAccount.title` | Excluir conta | Delete account |
+| `deleteAccount.lead` | Você pode excluir sua conta Ciuna. Seus dados pessoais são apagados após {{days}} dias. | You can delete your Ciuna account. It takes {{days}} days to remove your personal data. |
+| `deleteAccount.whatHappens` | O que acontece | What happens |
+| `deleteAccount.now` | Sua conta é encerrada na hora e você sai de todos os dispositivos. | Your account is closed straight away and you are signed out everywhere. |
+| `deleteAccount.later` | Após {{days}} dias, nome, e-mail, telefone, destinatários salvos e favoritos são removidos. | After {{days}} days your name, email, phone, saved recipients and favourites are removed. |
+| `deleteAccount.kept` | Guardamos um registro de transferências e pedidos passados, sem seus dados pessoais, porque a lei exige. | We keep a record of past transfers and orders, without your personal details, because the law requires it. |
+| `deleteAccount.restore` | Mudou de ideia? Fale com o suporte em até {{days}} dias e podemos restaurar. | Changed your mind? Contact support within {{days}} days and we can restore it. |
+| `deleteAccount.blockedTitle` | Ainda não. Conclua antes: | Not yet. Finish these first: |
+| `deleteAccount.blockOrders` | Você tem um pedido em andamento. | You have an order that is still in progress. |
+| `deleteAccount.blockTransfers` | Você tem uma transferência em processamento. | You have a transfer that is still being processed. |
+| `deleteAccount.blockRefunds` | Um reembolso para você ainda está sendo pago. | A refund to you is still being paid out. |
+| `deleteAccount.cta` | Excluir minha conta | Delete my account |
+| `deleteAccount.confirmTitle` | Excluir sua conta? | Delete your account? |
+| `deleteAccount.confirmBody` | Sua conta fecha agora e seus dados pessoais são removidos após {{days}} dias. | Your account closes now and your personal data is removed after {{days}} days. |
+| `deleteAccount.confirm` | Excluir conta | Delete account |
+| `deleteAccount.cancel` | Manter conta | Keep account |
+| `deleteAccount.failed` | Não foi possível. Tente de novo. | We could not do that. Try again. |
+| `deleteAccount.offline` | Sem conexão. Tente quando estiver online. | No connection. Try again when you are online. |
+| `more.deleteAccount` | Excluir conta | Delete account |
+| `more.notifications` | Notificações | Notifications |
+| `more.security` | Segurança | Security |
+| `notifications.title` | Notificações | Notifications |
+| `notifications.lead` | Escolha o que enviamos para este telefone. | Choose what we send to this phone. |
+| `notifications.orders` | Pedidos | Orders |
+| `notifications.ordersHint` | Pagamento recebido, aceito, concluído, cancelado, reembolsado | Payment received, accepted, completed, cancelled, refunded |
+| `notifications.messages` | Mensagens | Messages |
+| `notifications.messagesHint` | Quando um vendedor escreve sobre um pedido | When a seller writes to you about an order |
+| `notifications.support` | Suporte | Support |
+| `notifications.supportHint` | Respostas às suas solicitações de suporte | Replies to your support requests |
+| `notifications.failed` | Não foi possível salvar. Tente de novo. | Could not save. Try again. |
+| `notifications.transfers` | Transferências | Transfers |
+| `notifications.transfersHint` | Pagamento recebido, entregue, falho ou reembolsado | Payment received, delivered, failed or refunded |
+| `notifications.actionReply` | Responder | Reply |
+| `notifications.actionSend` | Enviar | Send |
+| `notifications.actionPlaceholder` | Escreva uma mensagem | Write a message |
+| `notifications.actionView` | Ver | View |
+| `notifications.actionJoin` | Entrar | Join |
+| `notifications.replySent` | Resposta enviada | Reply sent |
+| `notifications.replyFailed` | Não foi possível enviar sua resposta. Abra o chat para tentar de novo. | Could not send your reply. Open the chat to try again. |
+| `notifications.quiet` | Horário silencioso | Quiet hours |
+| `notifications.quietHint` | Pausar as notificações à noite. Tudo continua visível no app. | Hold notifications overnight. You still see everything in the app. |
+| `notifications.quietFrom` | De | From |
+| `notifications.quietUntil` | Até | Until |
+| `notifications.earlier` | Mais cedo | Earlier |
+| `notifications.later` | Mais tarde | Later |
+| `share.aria` | Compartilhar | Share |
+| `share.copied` | Link copiado | Link copied |
+| `a11y.edit` | Editar | Edit |
+| `a11y.delete` | Excluir | Delete |
+| `a11y.copy` | Copiar link | Copy link |
+| `a11y.open` | Abrir | Open |
+| `a11y.close` | Fechar | Close |
+| `transferDetail.headline.pending` | Aguardando seu pagamento | Waiting for your payment |
+| `transferDetail.headline.processing` | Estamos enviando seu dinheiro | We are sending your money |
+| `transferDetail.headline.completed` | {{name}} recebeu o dinheiro | {{name}} received the money |
+| `transferDetail.headline.failed` | Não conseguimos enviar o dinheiro | We could not send the money |
+| `transferDetail.headline.refunded` | Seu dinheiro foi devolvido | Your money was returned |
+| `transferDetail.headline.cancelled` | Transferência cancelada | Transfer cancelled |
+| `transferDetail.sub.pending` | Pague {{amount}} para iniciar sua transferência. | Pay {{amount}} to start your transfer. |
+| `transferDetail.sub.processing` | Você pode fechar esta tela. Avisaremos quando o dinheiro chegar. | You can close this screen. We will notify you when the money arrives. |
+| `transferDetail.sub.completed` | Entregue {{when}} | Delivered {{when}} |
+| `transferDetail.sub.failed` | Seu pagamento está sendo devolvido à sua conta bancária. | Your payment is being returned to your bank account. |
+| `transferDetail.sub.refunded` | Seu pagamento foi devolvido. | Your payment was returned to you. |
+| `transferDetail.sub.cancelled` | Você não foi cobrado. | You were not charged. |
+| `transferDetail.safe` | Seu dinheiro está seguro. Confira os dados do destinatário e repita a transferência ou conte-nos o que aconteceu. | Your money is safe. Check the recipient details, then repeat the transfer or tell us what happened. |
+| `transferDetail.step.created` | Transferência criada | Transfer created |
+| `transferDetail.step.pWaiting` | Aguardando seu pagamento | Waiting for your payment |
+| `transferDetail.step.pReceived` | Pagamento recebido | Payment received |
+| `transferDetail.step.pNot` | Pagamento não recebido | Payment not received |
+| `transferDetail.step.sAfter` | Enviado para {{bank}} após o pagamento | Sent to {{bank}} after payment |
+| `transferDetail.step.sSending` | Enviando para {{bank}} | Sending to {{bank}} |
+| `transferDetail.step.sSent` | Enviado para {{bank}} | Sent to {{bank}} |
+| `transferDetail.step.sFailed` | Falha no envio | Sending failed |
+| `transferDetail.step.notSent` | Não enviado | Not sent |
+| `transferDetail.step.delivered` | Entregue a {{name}} | Delivered to {{name}} |
+| `transferDetail.step.rWay` | Reembolso a caminho | Refund on its way |
+| `transferDetail.step.rDone` | Reembolsado | Refunded |
+| `transferDetail.amounts` | Valores | Amounts |
+| `transferDetail.sent` | Você enviou | You sent |
+| `transferDetail.fee` | Taxa | Fee |
+| `transferDetail.feePct` | Taxa ({{pct}}) | Fee ({{pct}}) |
+| `transferDetail.rate` | Taxa de câmbio | Exchange rate |
+| `transferDetail.gets` | O destinatário recebe | Recipient gets |
+| `transferDetail.total` | Total pago | Total paid |
+| `transferDetail.refunded` | Reembolsado | Refunded |
+| `transferDetail.recipient` | Destinatário | Recipient |
+| `transferDetail.payment` | Pagamento | Payment |
+| `transferDetail.paidWith` | Pago com | Paid with |
+| `transferDetail.reference` | Referência | Reference |
+| `transferDetail.copied` | Copiado | Copied |
+| `transferDetail.report` | Relatar um problema | Report a problem |
+| `transferDetail.reportHint` | Abre uma solicitação de suporte com esta transferência anexada. | Opens a support request with this transfer attached. |
+| `transferDetail.reportSubject` | Problema com a transferência {{id}} | Problem with transfer {{id}} |
+| `transferDetail.share` | Compartilhar recibo | Share receipt |
+| `transferDetail.repeat` | Repetir transferência | Repeat transfer |
+| `transferDetail.view` | Ver recibo | View receipt |
+| `transferDetail.cancel.cta` | Cancelar transferência | Cancel transfer |
+| `transferDetail.cancel.title` | Cancelar esta transferência? | Cancel this transfer? |
+| `transferDetail.cancel.body` | Você não foi cobrado. Pode começar de novo com uma nova taxa. | You have not been charged. You can start again with a new rate. |
+| `transferDetail.cancel.confirm` | Cancelar transferência | Cancel transfer |
+| `transferDetail.cancel.keep` | Manter | Keep it |
+| `transferDetail.cancel.failed` | Não foi possível cancelar. Tente de novo. | We could not cancel it. Try again. |
+| `transferDetail.cancel.paid` | Seu pagamento já chegou, então a transferência não pode mais ser cancelada. | Your payment already arrived, so the transfer can no longer be cancelled. |
+| `transferDetail.timedOut.headline` | O tempo de pagamento acabou | The payment time ran out |
+| `transferDetail.timedOut.sub` | Você não foi cobrado. Repita a transferência para ver a taxa de hoje. | You were not charged. Repeat the transfer to see today's rate. |
+| `transferDetail.sbp.title` | Pagar com SBP | Pay with SBP |
+| `transferDetail.sbp.exact` | Pague exatamente | Pay exactly |
+| `transferDetail.sbp.deadline` | Pague antes de {{time}}. | Pay before {{time}}. |
+| `transferDetail.sbp.locked` | Taxa travada por {{time}} | Rate locked for {{time}} |
+| `transferDetail.sbp.scan` | Escaneie o QR code no app do seu banco e pague exatamente este valor. | Scan the QR code in your banking app and pay exactly this amount. |
+| `transferDetail.sbp.openBank` | Abrir meu banco | Open my bank |
+| `security.title` | Segurança | Security |
+| `security.lead` | Escolha como o Ciuna bloqueia neste telefone. | Choose how Ciuna locks on this phone. |
+| `security.pin` | Bloqueio por PIN | PIN lock |
+| `security.pinHint` | Pedir um PIN de 4 dígitos ao abrir o app. | Ask for a 4-digit PIN when you open the app. |
+| `security.changePin` | Alterar PIN | Change PIN |
+| `security.change` | Alterar | Change |
+| `security.biometric` | Face ID ou digital | Face ID or fingerprint |
+| `security.biometricHint` | Desbloqueie com o rosto ou o dedo em vez de digitar o PIN. | Unlock with your face or finger instead of typing the PIN. |
+| `security.offTitle` | Desativar o bloqueio por PIN? | Turn off PIN lock? |
+| `security.offBody` | Qualquer pessoa que abrir este telefone poderá abrir o Ciuna. | Anyone who opens this phone will be able to open Ciuna. |
+| `security.turnOff` | Desativar | Turn off |
+| `security.keep` | Manter | Keep it on |
+| `security.on` | Ativado | On |
+| `security.off` | Desativado | Off |
+| `account.editProfile` | Editar perfil | Edit profile |
+| `account.groupSecurity` | Segurança e limites | Security and limits |
+| `account.groupPreferences` | Preferências | Preferences |
+| `account.groupHelp` | Ajuda | Help |
+| `account.logOut` | Sair | Log out |
 
-### `packages/shared/src/locales/pt/common.json` (76 strings)
+### `packages/shared/src/locales/pt/common.json` (85 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -7458,9 +8816,12 @@ Total strings: 7500.
 | `nav.hub` | Início | Home |
 | `nav.recipients` | Destinatários | Recipients |
 | `nav.transactions` | Atividades | Activities |
+| `nav.activities` | Atividades | Activities |
 | `nav.more` | Mais | More |
 | `nav.logout` | Sair | Logout |
 | `nav.login` | Entrar | Log in |
+| `nav.orders` | Pedidos | Orders |
+| `nav.account` | Conta | Account |
 | `more.title` | Mais | More |
 | `more.open` | Abrir | Open |
 | `more.account` | Conta | Account |
@@ -7480,6 +8841,8 @@ Total strings: 7500.
 | `more.cancel` | Cancelar | Cancel |
 | `more.signOut` | Sair | Sign Out |
 | `more.signingOut` | Saindo... | Signing out... |
+| `more.profile` | Perfil | Profile |
+| `more.legal` | Jurídico | Legal |
 | `kyc.verified` | Verificada | Verified |
 | `kyc.inReview` | Em análise | In review |
 | `kyc.rejected` | Recusada | Rejected |
@@ -7522,16 +8885,20 @@ Total strings: 7500.
 | `pinLock.welcomeBack` | Bem-vindo de volta | Welcome back |
 | `pinLock.enterPin` | Digite seu PIN de 4 dígitos | Enter your 4-digit PIN |
 | `pinLock.incorrectPin` | PIN incorreto | Incorrect PIN |
+| `pinLock.attemptsLeft` | Restam {{count}} tentativas | {{count}} attempts left |
+| `pinLock.attemptsLeftOne` | Resta 1 tentativa | 1 attempt left |
+| `pinLock.signedOut` | Muitos PINs incorretos. Entre novamente. | Too many wrong PINs. Please sign in again. |
 | `pinLock.verifying` | Verificando… | Verifying… |
 | `pinLock.tooManyAttempts` | Muitas tentativas. Tente novamente em {{minutes}} minuto(s). | Too many attempts. Try again in {{minutes}} minute(s). |
 | `pinLock.tooManyAttemptsOne` | Muitas tentativas. Tente novamente em 1 minuto. | Too many attempts. Try again in 1 minute. |
 | `pinLock.notYourAccount` | Não é a sua conta? | Not your account? |
 | `pinLock.logOut` | Sair | Log out |
 | `pinLock.backspaceAria` | Apagar | Delete |
+| `pinLock.welcomeName` | Bem-vindo de volta, {{name}} | Welcome back, {{name}} |
 
 ## Customer email templates
 
-### `api/locales/zh/emails.json` (138 strings)
+### `api/locales/zh/emails.json` (165 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -7654,17 +9021,17 @@ Total strings: 7500.
 | `hubOrder.cancelled.bodyNoReason` | 您购买的 {{productTitle}} 已取消。可能是您或我们的客服取消的。 | Your order of {{productTitle}} has been cancelled. This may have been cancelled by you or our support team. |
 | `hubOrder.cancelled.refundHeading` | 退款信息 | Refund Information |
 | `hubOrder.cancelled.cta` | 浏览商城 | Browse Hub |
-| `referralPayout.pending.subjectWithTx` | 推荐奖励提现申请 — #{{payoutTransactionId}} | Referral payout request — #{{payoutTransactionId}} |
-| `referralPayout.pending.subjectWithRequest` | 已收到推荐奖励提现申请 — {{requestIdShort}}… | Referral payout request received — {{requestIdShort}}… |
+| `referralPayout.pending.subjectWithTx` | 推荐奖励提现申请：#{{payoutTransactionId}} | Referral payout request: #{{payoutTransactionId}} |
+| `referralPayout.pending.subjectWithRequest` | 已收到推荐奖励提现申请：{{requestIdShort}}… | Referral payout request received: {{requestIdShort}}… |
 | `referralPayout.pending.subjectFallback` | 已收到推荐奖励提现申请 | Referral payout request received |
 | `referralPayout.pending.title` | 已收到推荐奖励提现申请 | Referral payout request received |
-| `referralPayout.pending.body` | 您好，{{firstName}}，我们已收到您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请。我们的团队会审核并处理，与发起汇款时类似，提现完成或取消时您都会收到邮件。 | Hi {{firstName}}, we've received your referral reward withdrawal request of {{amount}} {{currency}} to {{recipientName}}. Our team will review and process it—similar to when you start a send, you'll get another email when the payout is completed or if it's cancelled. |
+| `referralPayout.pending.body` | 您好，{{firstName}}，我们已收到您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请。我们的团队会审核并处理，与发起汇款时类似，提现完成或取消时您都会收到邮件。 | Hi {{firstName}}, we've received your referral reward withdrawal request of {{amount}} {{currency}} to {{recipientName}}. Our team will review and process it. Similar to when you start a send, you'll get another email when the payout is completed or if it's cancelled. |
 | `referralPayout.pending.referenceTx` | 交易编号：{{payoutTransactionId}} | Transaction ID: {{payoutTransactionId}} |
 | `referralPayout.pending.referenceRequest` | 申请编号：{{payoutRequestId}} | Request ID: {{payoutRequestId}} |
 | `referralPayout.pending.nextHeading` | 接下来 | What happens next |
 | `referralPayout.pending.nextBody` | 提现发出或申请取消时，我们会通过邮件通知您。您也可以在应用的“联盟与推荐”中查看状态。 | We'll notify you by email when the payout is sent or if the request is cancelled. You can also check status under Affiliates & Referrals in the app. |
 | `referralPayout.pending.cta` | 查看推荐 | View referrals |
-| `referralPayout.completed.subject` | 推荐奖励已发出 — {{amount}} {{currency}} | Referral payout sent — {{amount}} {{currency}} |
+| `referralPayout.completed.subject` | 推荐奖励已发出：{{amount}} {{currency}} | Referral payout sent: {{amount}} {{currency}} |
 | `referralPayout.completed.title` | 推荐奖励提现已完成 | Referral payout completed |
 | `referralPayout.completed.body` | 您好，{{firstName}}，您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请已完成。这笔转账会像普通转账一样显示在您的记录中，并计入您全年的汇款总额。 | Hi {{firstName}}, your referral reward withdrawal of {{amount}} {{currency}} to {{recipientName}} has been completed. This send appears in your activity like a regular transfer and counts toward your send totals for the year. |
 | `referralPayout.completed.referenceTx` | 交易编号：{{linkedTransactionId}} | Transaction ID: {{linkedTransactionId}} |
@@ -7673,8 +9040,35 @@ Total strings: 7500.
 | `referralPayout.cancelled.title` | 推荐奖励提现已取消 | Referral payout cancelled |
 | `referralPayout.cancelled.body` | 您好，{{firstName}}，您向 {{recipientName}} 提现 {{amount}} {{currency}} 推荐奖励的申请已取消。这些资金仍保留在您可用的推荐余额中。如果您并未预期此结果，请联系客服。 | Hi {{firstName}}, your referral payout request for {{amount}} {{currency}} to {{recipientName}} has been cancelled. Those funds remain in your available referral balance. If you did not expect this, contact support. |
 | `referralPayout.cancelled.cta` | 打开推荐 | Open referrals |
+| `push.supportReply.title` | 客服已回复 | Support replied |
+| `push.supportReply.body` | “{{subject}}”有新回复。 | New reply on “{{subject}}”. |
+| `push.order.paid.title` | 已收到付款 | Payment received |
+| `push.order.paid.body` | 订单 {{id}} 已付款，卖家将很快确认。 | Order {{id}} is paid. The seller will confirm it soon. |
+| `push.order.accept.title` | 订单已接受 | Order accepted |
+| `push.order.accept.body` | 订单 {{id}} 已被接受。 | Order {{id}} was accepted. |
+| `push.order.start.title` | 已开始处理 | Work has started |
+| `push.order.start.body` | 订单 {{id}} 正在准备中。 | Order {{id}} is being prepared. |
+| `push.order.fulfill.title` | 订单已完成 | Order complete |
+| `push.order.fulfill.body` | 订单 {{id}} 已完成。欢迎评价。 | Order {{id}} is complete. Tell us how it went. |
+| `push.order.cancel.title` | 订单已取消 | Order cancelled |
+| `push.order.cancel.body` | 订单 {{id}} 已取消。 | Order {{id}} was cancelled. |
+| `push.order.refund.title` | 退款已发出 | Refund sent |
+| `push.order.refund.body` | 订单 {{id}} 的退款已发出。 | Your refund for order {{id}} has been sent. |
+| `push.chat.title` | 卖家的消息 | Message from the seller |
+| `push.transfer.processing.title` | 已收到付款 | Payment received |
+| `push.transfer.processing.body` | 我们已收到 {{sent}}，正在发送 {{received}}{{to}}。 | We got your {{sent}} and are sending {{received}}{{to}}. |
+| `push.transfer.completed.title` | 款项已送达 | Money delivered |
+| `push.transfer.completed.body` | {{received}} 已到账{{to}}。 | {{received}} arrived{{to}}. |
+| `push.transfer.failed.title` | 无法发送你的转账 | We could not send your transfer |
+| `push.transfer.failed.body` | 你的资金是安全的，正在退回。转账 {{id}}。 | Your money is safe and is being returned. Transfer {{id}}. |
+| `push.transfer.refunded.title` | 款项已退回 | Your money was returned |
+| `push.transfer.refunded.body` | {{sent}} 已退回你的账户。转账 {{id}}。 | {{sent}} is back in your account. Transfer {{id}}. |
+| `push.booking.reminder.title` | 预约即将开始 | Session starting soon |
+| `push.booking.reminder.body` | 你与 {{name}} 的预约将在约一小时后开始。 | Your session with {{name}} starts in about an hour. |
+| `push.expert.slots.title` | 有新的可预约时间 | New times available |
+| `push.expert.slots.body` | {{name}} 有空闲时间，立即预约。 | {{name}} has open times. Book one now. |
 
-### `api/locales/pt/emails.json` (138 strings)
+### `api/locales/pt/emails.json` (165 strings)
 
 | Key | Text | English source |
 | --- | --- | --- |
@@ -7720,7 +9114,7 @@ Total strings: 7500.
 | `welcome.greeting` | Olá, {{firstName}}! Bem-vindo à Ciuna. | Hi {{firstName}}! Welcome to Ciuna. |
 | `welcome.intro` | Obrigado por entrar na Ciuna! Sua conta já está ativa e pronta para enviar dinheiro para o exterior em menos de 5 minutos. | Thank you for joining Ciuna! We're excited to have you as part of our community. Your account is now active and ready to send money across borders in under 5 minutes. |
 | `welcome.featuresLead` | Com a Ciuna, você pode: | With Ciuna, you can: |
-| `welcome.featureSpeed` | Enviar dinheiro para o mundo todo em menos de 5 minutos — transferências internacionais rápidas | Send money globally in under 5 minutes - Lightning-fast cross-border transfers |
+| `welcome.featureSpeed` | Enviar dinheiro para o mundo todo em menos de 5 minutos. Transferências internacionais rápidas | Send money globally in under 5 minutes - Lightning-fast cross-border transfers |
 | `welcome.featureTracking` | Acompanhar suas transferências em tempo real | Track your transfers in real-time with live updates |
 | `welcome.featureRecipients` | Salvar seus destinatários favoritos para transferências rápidas | Save your favorite recipients for instant transfers |
 | `welcome.featureRates` | Aproveitar taxas de câmbio competitivas, sem taxas ocultas | Enjoy competitive exchange rates with zero hidden fees |
@@ -7760,7 +9154,7 @@ Total strings: 7500.
 | `hubOrder.pending.subject` | Pedido recebido - {{productTitle}} (#{{transactionId}}) | Order received - {{productTitle}} (#{{transactionId}}) |
 | `hubOrder.pending.title` | Pedido recebido | Order Received |
 | `hubOrder.pending.hero.fixed` | Obrigado pela compra de {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}). | Thanks for your purchase of {{productTitle}} ({{fundedAmount}} {{fundedCurrency}}). |
-| `hubOrder.pending.hero.userInput` | Recebemos seu carregamento para {{productTitle}} — {{fundedAmount}} {{fundedCurrency}}. | We've received your top-up for {{productTitle}} - {{fundedAmount}} {{fundedCurrency}}. |
+| `hubOrder.pending.hero.userInput` | Recebemos seu carregamento para {{productTitle}} · {{fundedAmount}} {{fundedCurrency}}. | We've received your top-up for {{productTitle}} - {{fundedAmount}} {{fundedCurrency}}. |
 | `hubOrder.pending.fulfillment.online` | Vamos entregar para {{contactName}} no telefone {{contactPhone}}. | We'll deliver to {{contactName}} at {{contactPhone}}. |
 | `hubOrder.pending.fulfillment.inPerson` | Vamos entregar para {{contactName}} em {{deliveryAddressLine}}. Nosso entregador ligará para {{contactPhone}} ao chegar. | We'll deliver to {{contactName}} at {{deliveryAddressLine}}. Our rider will call {{contactPhone}} on arrival. |
 | `hubOrder.pending.nextHeading` | Próximos passos | What's Next |
@@ -7797,17 +9191,17 @@ Total strings: 7500.
 | `hubOrder.cancelled.bodyNoReason` | Seu pedido de {{productTitle}} foi cancelado. Pode ter sido cancelado por você ou pela nossa equipe de suporte. | Your order of {{productTitle}} has been cancelled. This may have been cancelled by you or our support team. |
 | `hubOrder.cancelled.refundHeading` | Informações de reembolso | Refund Information |
 | `hubOrder.cancelled.cta` | Ver a loja | Browse Hub |
-| `referralPayout.pending.subjectWithTx` | Solicitação de repasse de indicação — #{{payoutTransactionId}} | Referral payout request — #{{payoutTransactionId}} |
-| `referralPayout.pending.subjectWithRequest` | Solicitação de repasse de indicação recebida — {{requestIdShort}}… | Referral payout request received — {{requestIdShort}}… |
+| `referralPayout.pending.subjectWithTx` | Solicitação de repasse de indicação: #{{payoutTransactionId}} | Referral payout request: #{{payoutTransactionId}} |
+| `referralPayout.pending.subjectWithRequest` | Solicitação de repasse de indicação recebida: {{requestIdShort}}… | Referral payout request received: {{requestIdShort}}… |
 | `referralPayout.pending.subjectFallback` | Solicitação de repasse de indicação recebida | Referral payout request received |
 | `referralPayout.pending.title` | Solicitação de repasse de indicação recebida | Referral payout request received |
-| `referralPayout.pending.body` | Olá, {{firstName}}! Recebemos seu pedido de saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}}. Nossa equipe vai analisar e processar — assim como ao iniciar um envio, você receberá outro e-mail quando o repasse for concluído ou cancelado. | Hi {{firstName}}, we've received your referral reward withdrawal request of {{amount}} {{currency}} to {{recipientName}}. Our team will review and process it—similar to when you start a send, you'll get another email when the payout is completed or if it's cancelled. |
+| `referralPayout.pending.body` | Olá, {{firstName}}! Recebemos seu pedido de saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}}. Nossa equipe vai analisar e processar. Assim como ao iniciar um envio, você receberá outro e-mail quando o repasse for concluído ou cancelado. | Hi {{firstName}}, we've received your referral reward withdrawal request of {{amount}} {{currency}} to {{recipientName}}. Our team will review and process it. Similar to when you start a send, you'll get another email when the payout is completed or if it's cancelled. |
 | `referralPayout.pending.referenceTx` | ID da transação: {{payoutTransactionId}} | Transaction ID: {{payoutTransactionId}} |
 | `referralPayout.pending.referenceRequest` | ID da solicitação: {{payoutRequestId}} | Request ID: {{payoutRequestId}} |
 | `referralPayout.pending.nextHeading` | Próximos passos | What happens next |
 | `referralPayout.pending.nextBody` | Avisaremos por e-mail quando o repasse for enviado ou se o pedido for cancelado. Você também pode ver o status em Afiliados e indicações no app. | We'll notify you by email when the payout is sent or if the request is cancelled. You can also check status under Affiliates & Referrals in the app. |
 | `referralPayout.pending.cta` | Ver indicações | View referrals |
-| `referralPayout.completed.subject` | Repasse de indicação enviado — {{amount}} {{currency}} | Referral payout sent — {{amount}} {{currency}} |
+| `referralPayout.completed.subject` | Repasse de indicação enviado: {{amount}} {{currency}} | Referral payout sent: {{amount}} {{currency}} |
 | `referralPayout.completed.title` | Repasse de indicação concluído | Referral payout completed |
 | `referralPayout.completed.body` | Olá, {{firstName}}! Seu saque de {{amount}} {{currency}} da recompensa de indicação para {{recipientName}} foi concluído. Este envio aparece nas suas atividades como uma transferência comum e conta para o total de envios do ano. | Hi {{firstName}}, your referral reward withdrawal of {{amount}} {{currency}} to {{recipientName}} has been completed. This send appears in your activity like a regular transfer and counts toward your send totals for the year. |
 | `referralPayout.completed.referenceTx` | ID da transação: {{linkedTransactionId}} | Transaction ID: {{linkedTransactionId}} |
@@ -7816,4 +9210,31 @@ Total strings: 7500.
 | `referralPayout.cancelled.title` | Repasse de indicação cancelado | Referral payout cancelled |
 | `referralPayout.cancelled.body` | Olá, {{firstName}}! Sua solicitação de repasse de {{amount}} {{currency}} para {{recipientName}} foi cancelada. Esses valores continuam no seu saldo de indicações disponível. Se você não esperava isso, fale com o suporte. | Hi {{firstName}}, your referral payout request for {{amount}} {{currency}} to {{recipientName}} has been cancelled. Those funds remain in your available referral balance. If you did not expect this, contact support. |
 | `referralPayout.cancelled.cta` | Abrir indicações | Open referrals |
+| `push.supportReply.title` | O suporte respondeu | Support replied |
+| `push.supportReply.body` | Nova resposta em “{{subject}}”. | New reply on “{{subject}}”. |
+| `push.order.paid.title` | Pagamento recebido | Payment received |
+| `push.order.paid.body` | O pedido {{id}} está pago. O vendedor vai confirmá-lo em breve. | Order {{id}} is paid. The seller will confirm it soon. |
+| `push.order.accept.title` | Pedido aceito | Order accepted |
+| `push.order.accept.body` | O pedido {{id}} foi aceito. | Order {{id}} was accepted. |
+| `push.order.start.title` | Trabalho iniciado | Work has started |
+| `push.order.start.body` | O pedido {{id}} está sendo preparado. | Order {{id}} is being prepared. |
+| `push.order.fulfill.title` | Pedido concluído | Order complete |
+| `push.order.fulfill.body` | O pedido {{id}} está concluído. Conte como foi. | Order {{id}} is complete. Tell us how it went. |
+| `push.order.cancel.title` | Pedido cancelado | Order cancelled |
+| `push.order.cancel.body` | O pedido {{id}} foi cancelado. | Order {{id}} was cancelled. |
+| `push.order.refund.title` | Reembolso enviado | Refund sent |
+| `push.order.refund.body` | O reembolso do pedido {{id}} foi enviado. | Your refund for order {{id}} has been sent. |
+| `push.chat.title` | Mensagem do vendedor | Message from the seller |
+| `push.transfer.processing.title` | Pagamento recebido | Payment received |
+| `push.transfer.processing.body` | Recebemos {{sent}} e estamos enviando {{received}}{{to}}. | We got your {{sent}} and are sending {{received}}{{to}}. |
+| `push.transfer.completed.title` | Dinheiro entregue | Money delivered |
+| `push.transfer.completed.body` | {{received}} chegou{{to}}. | {{received}} arrived{{to}}. |
+| `push.transfer.failed.title` | Não conseguimos enviar sua transferência | We could not send your transfer |
+| `push.transfer.failed.body` | Seu dinheiro está seguro e está sendo devolvido. Transferência {{id}}. | Your money is safe and is being returned. Transfer {{id}}. |
+| `push.transfer.refunded.title` | Seu dinheiro foi devolvido | Your money was returned |
+| `push.transfer.refunded.body` | {{sent}} voltou para sua conta. Transferência {{id}}. | {{sent}} is back in your account. Transfer {{id}}. |
+| `push.booking.reminder.title` | Sua sessão começa em breve | Session starting soon |
+| `push.booking.reminder.body` | Sua sessão com {{name}} começa em cerca de uma hora. | Your session with {{name}} starts in about an hour. |
+| `push.expert.slots.title` | Novos horários disponíveis | New times available |
+| `push.expert.slots.body` | {{name}} tem horários livres. Reserve agora. | {{name}} has open times. Book one now. |
 

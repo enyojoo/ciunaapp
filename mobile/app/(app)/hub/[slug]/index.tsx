@@ -116,7 +116,7 @@ export default function HubLineCatalog() {
             <LoadError onRetry={() => void revalidate()} />
           ) : vendors.length === 0 ? (
             <Text style={styles.storesEmpty}>
-              {t("hub.marketplaceNoVendors", { defaultValue: "No stores yet — check back soon." })}
+              {t("hub.marketplaceNoVendors", { defaultValue: "No stores yet. Check back soon." })}
             </Text>
           ) : (
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.storesRow}>
