@@ -1,5 +1,5 @@
-import type { ReactNode } from "react"
-import { Modal, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from "react-native"
+import { useEffect, useRef, useState, type ReactNode } from "react"
+import { Animated, Dimensions, Easing, Modal, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from "react-native"
 import { useWebCenteredModal, webCenteredModalStyles } from "@/lib/web-centered-modal"
 import { colors } from "@/lib/theme"
 
@@ -17,8 +17,21 @@ export function WebAwareModal({
   sheetStyle?: StyleProp<ViewStyle>
 }) {
   const centered = useWebCenteredModal()
-  // Stay mounted and let `Modal` own `visible`: returning null here removed the sheet before its slide-down / fade-out
-  // could play, so every sheet vanished instantly on close.
+  // Bottom sheet: the system "slide" animation carries the dark backdrop down with the sheet, which looks abrupt. Run our
+  // own: the backdrop fades while the sheet slides, and the Modal stays mounted until the exit has finished.
+  const [mounted, setMounted] = useState(visible)
+  const progress = useRef(new Animated.Value(visible ? 1 : 0)).current
+  useEffect(() => {
+    if (centered) return
+    if (visible) {
+      setMounted(true)
+      Animated.timing(progress, { toValue: 1, duration: 280, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start()
+    } else {
+      Animated.timing(progress, { toValue: 0, duration: 220, easing: Easing.in(Easing.cubic), useNativeDriver: true }).start(({ finished }) => {
+        if (finished) setMounted(false)
+      })
+    }
+  }, [visible, centered, progress])
 
   if (centered) {
     return (
@@ -38,11 +51,15 @@ export function WebAwareModal({
     )
   }
 
+  const travel = Dimensions.get("window").height
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onRequestClose}>
+    <Modal visible={mounted} transparent animationType="none" onRequestClose={onRequestClose}>
       <View style={styles.sheetOverlay}>
+        <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.backdrop, { opacity: progress }]} />
         <Pressable style={StyleSheet.absoluteFill} onPress={onRequestClose} accessibilityRole="button" accessibilityLabel="Close" />
-        <View style={[styles.sheet, sheetStyle]}>{children}</View>
+        <Animated.View style={[styles.sheet, sheetStyle, { transform: [{ translateY: progress.interpolate({ inputRange: [0, 1], outputRange: [travel, 0] }) }] }]}>
+          {children}
+        </Animated.View>
       </View>
     </Modal>
   )
@@ -52,8 +69,8 @@ const styles = StyleSheet.create({
   sheetOverlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.4)",
   },
+  backdrop: { backgroundColor: "rgba(0,0,0,0.4)" },
   sheet: {
     maxHeight: "75%",
     borderTopLeftRadius: 24,
