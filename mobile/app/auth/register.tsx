@@ -3,7 +3,7 @@ import { useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { Check, Circle } from "lucide-react-native"
 import { useTranslation } from "react-i18next"
-import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth, useAuthBack, AuthNotice } from "@/components/auth-chrome"
+import { AuthFooter, AuthTitle, AuthTopBar, PasswordEye, SocialAuth, AuthNotice } from "@/components/auth-chrome"
 import { Field } from "@/components/field"
 import { PrimaryButton } from "@/components/primary-button"
 import { ScreenScroll } from "@/components/screen"
@@ -22,7 +22,6 @@ export default function RegisterScreen() {
   const { showError } = useToast()
   const { openLink } = useExternalLink()
   const router = useRouter()
-  const onBack = useAuthBack()
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -67,7 +66,7 @@ export default function RegisterScreen() {
 
   return (
     <ScreenScroll keyboard contentStyle={styles.content}>
-      <AuthTopBar onBack={onBack} />
+      <AuthTopBar />
       <AuthTitle>{t("auth.createAccountTitle", { defaultValue: "Create an Account" })}</AuthTitle>
       <Text style={styles.terms}>
         {t("auth.termsPrefix", { defaultValue: "By creating an account you agree to our" })}{" "}
@@ -76,13 +75,6 @@ export default function RegisterScreen() {
           onPress={() => void openLink("https://www.ciuna.com/terms", t("auth.termsLink", { defaultValue: "Terms" }))}
         >
           {t("auth.termsLink", { defaultValue: "Terms" })}
-        </Text>{" "}
-        {t("auth.termsAnd", { defaultValue: "and" })}{" "}
-        <Text
-          style={styles.termsLink}
-          onPress={() => void openLink("https://www.ciuna.com/privacy", t("auth.privacyLink", { defaultValue: "Privacy Policy" }))}
-        >
-          {t("auth.privacyLink", { defaultValue: "Privacy Policy" })}
         </Text>
         .
       </Text>

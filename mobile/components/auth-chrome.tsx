@@ -26,10 +26,10 @@ export function AuthTopBar({ onBack }: { onBack?: () => void }) {
         <Pressable onPress={onBack} style={styles.iconHit} accessibilityRole="button" accessibilityLabel="Back" hitSlop={8}>
           <ArrowLeft size={22} color={colors.primary} strokeWidth={2} />
         </Pressable>
-      ) : (
-        <View style={styles.iconHit} />
-      )}
-      <LanguageChip />
+      ) : null}
+      {/* Top-level auth screens (sign in, sign up) show the language chip at the left end; subpages (forgot and reset
+          password) show Back instead and no language chip. Help stays on the right either way. */}
+      <View style={styles.langSlot}>{onBack ? null : <LanguageChip />}</View>
       <Pressable
         onPress={() =>
           showInfo(
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   iconHit: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
+  langSlot: { flex: 1, alignItems: "flex-start" },
   helpCircle: {
     width: 40,
     height: 40,
