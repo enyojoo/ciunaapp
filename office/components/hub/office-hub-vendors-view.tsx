@@ -34,6 +34,11 @@ const DEFAULT_VENDOR_LOCATIONS = [
   "Other",
 ]
 
+/** Display name for a community id ("latin_american" becomes "Latin American"). */
+function communityName(id: string): string {
+  return id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 type HubVendor = {
   id: string
   service_line_slug: string
@@ -42,6 +47,8 @@ type HubVendor = {
   photo_url: string | null
   short_bio: string | null
   location?: string | null
+  /** Communities the store serves (set by the seller; read-only here). Ids from @ciuna/shared. */
+  communities?: string[]
   is_published: boolean
   is_verified?: boolean
 }
@@ -411,6 +418,7 @@ export function OfficeHubVendorsView({ fixedLineSlug }: { fixedLineSlug: HubMark
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Location</TableHead>
+                    <TableHead>Communities</TableHead>
                     <TableHead>Slug</TableHead>
                     <TableHead>Published</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -422,6 +430,9 @@ export function OfficeHubVendorsView({ fixedLineSlug }: { fixedLineSlug: HubMark
                       <TableCell>{v.name}</TableCell>
                       <TableCell className="max-w-[10rem] truncate text-sm text-muted-foreground">
                         {(v.location || "").trim() || "—"}
+                      </TableCell>
+                      <TableCell className="max-w-[12rem] truncate text-sm text-muted-foreground">
+                        {(v.communities || []).map(communityName).join(", ") || "—"}
                       </TableCell>
                       <TableCell className="font-mono text-xs">{v.slug}</TableCell>
                       <TableCell>{v.is_published ? "Yes" : "No"}</TableCell>

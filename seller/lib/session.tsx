@@ -21,6 +21,8 @@ export interface SellerMerchant {
   description: Record<string, string>
   contact_email: string | null
   contact_phone: string | null
+  /** Communities a store serves (ids from @ciuna/shared). Stores only. */
+  communities?: string[]
   website: string | null
   service_line: "food" | "mart" | null
   role: "owner" | "manager" | "staff" | "finance"

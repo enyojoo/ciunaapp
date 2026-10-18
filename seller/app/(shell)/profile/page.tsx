@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
-import { Button, Card, CardBody, CardHeader, Field, Input, LanguageTabs, PageHeader, Select, Textarea, useToast, Banner } from "@ciuna/ui-web"
+import { COMMUNITY_IDS, MAX_STORE_COMMUNITIES } from "@ciuna/shared"
+import { Button, Card, CardBody, CardHeader, Chip, Field, Input, LanguageTabs, PageHeader, Select, Textarea, useToast, Banner } from "@ciuna/ui-web"
 import { RequirePermission } from "@/components/no-access"
 import { api, ApiError } from "@/lib/api"
 import { useSeller } from "@/lib/session"
@@ -40,7 +41,7 @@ function ProfilePageContent() {
   async function save() {
     setBusy(true); setError(null)
     try {
-      await api("/api/merchant/profile", { method: "PATCH", json: { display_name: f.display_name, description: f.description, contact_email: f.contact_email, contact_phone: f.contact_phone, website: f.website, logo_url: f.logo_url, cover_url: f.cover_url, default_currency: f.default_currency, operating_country: f.operating_country, country: f.country } })
+      await api("/api/merchant/profile", { method: "PATCH", json: { display_name: f.display_name, description: f.description, contact_email: f.contact_email, contact_phone: f.contact_phone, website: f.website, logo_url: f.logo_url, cover_url: f.cover_url, default_currency: f.default_currency, operating_country: f.operating_country, country: f.country, ...(merchant?.type === "store" ? { communities: f.communities } : {}) } })
       dirty.current = false
       await refresh(); toast.show(t("state.saved"))
     } catch (e) { setError(errText(e instanceof ApiError ? e.code : undefined)) } finally { setBusy(false) }
@@ -81,6 +82,26 @@ function ProfilePageContent() {
             <Field label={t("onb.operating")}><Select disabled={!editable} value={f.operating_country} onChange={(e) => set({ operating_country: e.target.value })}>{countries.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}</Select></Field>
           </CardBody>
         </Card>
+        {merchant.type === "store" ? (
+          <Card>
+            <CardHeader title={t("profile.communities")} />
+            <CardBody className="space-y-3">
+              <p className="text-sm text-muted">{t("profile.communities.hint", { max: MAX_STORE_COMMUNITIES })}</p>
+              <div className="flex flex-wrap gap-2" role="group" aria-label={t("profile.communities")}>
+                {COMMUNITY_IDS.map((id) => {
+                  const on = f.communities.includes(id)
+                  const full = !on && f.communities.length >= MAX_STORE_COMMUNITIES
+                  return (
+                    <span key={id} className={editable && !full ? undefined : "pointer-events-none opacity-50"}>
+                      <Chip selected={on} onClick={() => set({ communities: on ? f.communities.filter((c) => c !== id) : [...f.communities, id] })}>{t(`community.${id}`)}</Chip>
+                    </span>
+                  )
+                })}
+              </div>
+              <p className="text-xs text-muted">{t("profile.communities.count", { n: f.communities.length, max: MAX_STORE_COMMUNITIES })}</p>
+            </CardBody>
+          </Card>
+        ) : null}
         {merchant.type === "expert" ? <CredentialsCard editable={editable} /> : null}
       </div>
       {editable ? (
@@ -104,5 +125,6 @@ function seed(m: ReturnType<typeof useSeller>["merchant"]) {
     default_currency: m?.default_currency || "RUB",
     country: m?.country || "RU",
     operating_country: m?.operating_country || "RU",
+    communities: (m?.communities || []) as string[],
   }
 }

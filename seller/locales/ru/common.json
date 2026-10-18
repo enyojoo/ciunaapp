@@ -57,6 +57,8 @@
   "errors.DISPLAY_NAME_INVALID": "Введите название от 2 до 80 символов.",
   "errors.COUNTRY_INVALID": "Выберите страну.",
   "errors.LANGUAGE_INVALID": "Выберите хотя бы один доступный язык.",
+  "errors.COMMUNITIES_INVALID": "Выберите не более 5 сообществ из списка.",
+  "errors.COMMUNITIES_STORES_ONLY": "Сообщества могут задавать только магазины.",
   "errors.EMAIL_INVALID": "Введите действующий адрес электронной почты.",
   "errors.URL_INVALID": "Укажите ссылку, которая начинается с https://.",
   "errors.CURRENCY_INVALID": "Выберите доступную валюту.",

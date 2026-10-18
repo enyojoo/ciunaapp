@@ -57,6 +57,8 @@
   "errors.DISPLAY_NAME_INVALID": "Enter a name between 2 and 80 characters.",
   "errors.COUNTRY_INVALID": "Choose a country.",
   "errors.LANGUAGE_INVALID": "Choose at least one supported language.",
+  "errors.COMMUNITIES_INVALID": "Choose up to 5 communities from the list.",
+  "errors.COMMUNITIES_STORES_ONLY": "Only stores can set communities.",
   "errors.EMAIL_INVALID": "Enter a valid email address.",
   "errors.URL_INVALID": "Use a link that starts with https://.",
   "errors.CURRENCY_INVALID": "Choose a supported currency.",

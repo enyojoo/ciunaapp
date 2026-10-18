@@ -57,6 +57,8 @@
   "errors.DISPLAY_NAME_INVALID": "请输入 2 到 80 个字符的名称。",
   "errors.COUNTRY_INVALID": "请选择国家或地区。",
   "errors.LANGUAGE_INVALID": "请至少选择一种支持的语言。",
+  "errors.COMMUNITIES_INVALID": "最多从列表中选择 5 个社群。",
+  "errors.COMMUNITIES_STORES_ONLY": "只有商店可以设置社群。",
   "errors.EMAIL_INVALID": "请输入有效的电子邮箱地址。",
   "errors.URL_INVALID": "请使用以 https:// 开头的链接。",
   "errors.CURRENCY_INVALID": "请选择支持的币种。",
