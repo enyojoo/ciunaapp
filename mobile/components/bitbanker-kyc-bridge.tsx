@@ -111,14 +111,22 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
       [refresh, router, startPoll],
     )
 
+    // `loading` also covers the quiet session fetch on open and when the app returns to the foreground. The button spins
+    // only while the shopper's own tap is being handled, so the screen never opens with a spinning CTA.
+    const [starting, setStarting] = useState(false)
     const startVerification = useCallback(async () => {
-      const session = state?.session
-      if (session?.kycUrl && new Date(session.expiresAt).getTime() > Date.now()) {
-        await openHosted(session.kycUrl, session.paymentUrl)
-        return
+      setStarting(true)
+      try {
+        const session = state?.session
+        if (session?.kycUrl && new Date(session.expiresAt).getTime() > Date.now()) {
+          await openHosted(session.kycUrl, session.paymentUrl)
+          return
+        }
+        const created = await startSession(email)
+        await openHosted(created.kycUrl, created.paymentUrl)
+      } finally {
+        setStarting(false)
       }
-      const created = await startSession(email)
-      await openHosted(created.kycUrl, created.paymentUrl)
     }, [email, openHosted, startSession, state?.session])
 
     useImperativeHandle(ref, () => ({ startVerification }), [startVerification])
@@ -165,7 +173,7 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
     const trigger =
       renderTrigger?.({
         onPress: () => void startVerification(),
-        loading,
+        loading: starting,
         label: primaryLabel,
       }) ?? null
 
@@ -182,7 +190,7 @@ export const BitbankerKycBridge = forwardRef<BitbankerKycBridgeHandle, Bitbanker
               })}
             </Text>
 
-            <PrimaryButton label={primaryLabel} onPress={() => void startVerification()} busy={loading} />
+            <PrimaryButton label={primaryLabel} onPress={() => void startVerification()} busy={starting} />
 
             <PrimaryButton
               label={t("verification.bitbanker.refreshStatus", { defaultValue: "Refresh status" })}
