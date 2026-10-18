@@ -12,11 +12,14 @@ const fs = require("fs")
 const path = require("path")
 
 const YOO_POD_SOURCE = "https://git.yoomoney.ru/scm/sdk/cocoa-pod-specs.git"
+// CocoaPods CDN: a Podfile that lists any `source` stops using the default, and the old `Specs.git` source made
+// `pod install` clone the whole multi-gigabyte spec repo from GitHub.
+const COCOAPODS_CDN = "https://cdn.cocoapods.org/"
 
 function ensurePodSources(podfileContents) {
   let next = podfileContents
   if (!next.includes(YOO_POD_SOURCE)) {
-    next = `source 'https://github.com/CocoaPods/Specs.git'\nsource '${YOO_POD_SOURCE}'\n${next}`
+    next = `source '${COCOAPODS_CDN}'\nsource '${YOO_POD_SOURCE}'\n${next}`
   }
   if (!/use_frameworks!/.test(next)) {
     next = next.replace(

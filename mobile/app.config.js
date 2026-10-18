@@ -44,9 +44,16 @@ module.exports = () => {
       console.log("[expo] Send Bitbanker verification gate: OFF (dev)")
     }
   }
+  // Local native builds on a network that cannot reach YooMoney's pod server (git.yoomoney.ru) can set SKIP_YOOKASSA=1
+  // to leave out react-native-yookassa and its config plugin. Off by default: normal and EAS builds include YooKassa.
+  const skipYooKassa = process.env.SKIP_YOOKASSA === "1"
+  const plugins = skipYooKassa
+    ? (appJson.expo.plugins || []).filter((p) => !String(Array.isArray(p) ? p[0] : p).includes("withYooKassa"))
+    : appJson.expo.plugins
   return {
     expo: {
       ...appJson.expo,
+      plugins,
       extra: {
         ...appJson.expo.extra,
         apiUrl,

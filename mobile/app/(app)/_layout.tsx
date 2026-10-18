@@ -1,6 +1,6 @@
 import { Redirect, Tabs, usePathname, useRouter } from "expo-router"
 import { Platform } from "react-native"
-import { NativeTabs } from "expo-router/unstable-native-tabs"
+import { NativeTabs } from "expo-router/native-tabs"
 import { Icon } from "@/components/ui/icon"
 import { useTranslation } from "react-i18next"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
