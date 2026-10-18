@@ -3,7 +3,7 @@
  * calls to action, so the slides carry no buttons. Copy: `home.slide.<id>.title|body`. Office will supply paid
  * slides later (`ad: true`, with an `href`).
  */
-export type HomeSlideId = "sorted" | "community" | "pay"
+export type HomeSlideId = "sorted" | "community" | "language"
 
 export interface HomeSlide {
   id: HomeSlideId
@@ -12,4 +12,4 @@ export interface HomeSlide {
   ad?: boolean
 }
 
-export const HOME_SLIDES: HomeSlide[] = [{ id: "sorted" }, { id: "community" }, { id: "pay" }]
+export const HOME_SLIDES: HomeSlide[] = [{ id: "sorted" }, { id: "community" }, { id: "language" }]

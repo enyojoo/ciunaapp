@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react"
 import { FlatList, Pressable, StyleSheet, Text, View, useWindowDimensions, type NativeScrollEvent, type NativeSyntheticEvent } from "react-native"
 import { useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
+import { FlagIcon } from "@/components/flag-icon"
 import { Icon } from "@/components/ui/icon"
 import { PressableScale } from "@/components/ui/pressable-scale"
 import type { HomeSlide, HomeSlideId } from "@/lib/home-slides"
@@ -11,7 +12,7 @@ import { colors, radius, space, type as typeSize } from "@/lib/theme"
 const BG: Record<HomeSlideId, string> = {
   sorted: "#1F2937",
   community: "#115E59",
-  pay: "#1E3A8A",
+  language: "#1E3A8A",
 }
 
 const AUTO_MS = 6000
@@ -44,16 +45,13 @@ function Motif({ id }: { id: HomeSlideId }): ReactNode {
           ))}
         </View>
       )
-    case "pay":
+    case "language":
+      // One flag chip per app language (same flags as the language picker).
       return (
         <View style={styles.methods}>
-          {[
-            { icon: "bank" as const, label: "Bank" },
-            { icon: "document" as const, label: "QR" },
-            { icon: "lock" as const, label: "Card" },
-          ].map((m) => (
-            <View key={m.label} style={styles.method}>
-              <Icon name={m.icon} size={13} color="#FFFFFF" />
+          {["GB", "RU", "FR", "ES", "CN", "BR"].map((c) => (
+            <View key={c} style={styles.method}>
+              <FlagIcon code={c} size={16} />
             </View>
           ))}
         </View>
@@ -198,8 +196,8 @@ const styles = StyleSheet.create({
   markDotOn: { backgroundColor: "#F97316" },
   people: { flexDirection: "row", alignItems: "center" },
   person: { width: 30, height: 30, borderRadius: 15, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#115E59" },
-  methods: { flexDirection: "row", gap: 6 },
-  method: { width: 28, height: 28, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(255,255,255,0.16)" },
+  methods: { flexDirection: "row", gap: 5 },
+  method: { width: 26, height: 26, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(255,255,255,0.16)" },
   dots: { flexDirection: "row", justifyContent: "center", gap: 6, marginTop: 10 },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.border },
   dotOn: { width: 18, backgroundColor: colors.text },
