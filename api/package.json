@@ -9,6 +9,7 @@
     "lint": "next lint",
     "start": "next start --port 3002",
     "test:merchant": "node --import tsx --test tests/merchant/*.test.ts && node --test tests/merchant/database*.test.mjs",
+    "test:contract": "node --import tsx --test tests/contract/*.test.ts",
     "test:marketplace": "node --test tests/marketplace/database.test.mjs && node --import tsx --test tests/marketplace/*.test.ts"
   },
   "dependencies": {
@@ -21,10 +22,9 @@
     "date-fns-tz": "^3.2.0",
     "i18next": "^24.2.0",
     "jsonwebtoken": "latest",
-    "next": "16.0.10",
+    "next": "16.4.3",
     "react": "^18",
-    "react-dom": "^18",
-    "zod": "^3.24.1"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",
