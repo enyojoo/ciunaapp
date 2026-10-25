@@ -1,3 +1,4 @@
+import { audit } from "@/lib/merchant/audit"
 // Admin transaction status update API endpoint
 
 import { NextRequest, NextResponse } from "next/server"
@@ -115,6 +116,7 @@ export async function PATCH(
       await rollbackReferralRewardsForTransaction(currentTransaction as any)
     }
 
+    await audit({ actorKind: "admin", actorId: adminUser.id, actorRole: adminUser.role, action: "transaction.status_changed", entityType: "transaction", entityId: transactionId, details: { from: previousStatus, to: nextStatus, reference: reference ?? null } })
     console.info("[admin-audit] transaction.status", {
       adminId: adminUser.id,
       adminEmail: adminUser.email,

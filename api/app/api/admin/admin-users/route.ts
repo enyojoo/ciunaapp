@@ -1,15 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
+import { ADMIN_ASSIGNABLE_ROLES, isAssignableAdminRole } from "@/lib/admin-roles"
+import { audit } from "@/lib/merchant/audit"
 import {
   requireSuperAdmin,
   SuperAdminRequiredError,
 } from "@/lib/admin-auth-utils"
 
-const ASSIGNABLE_ROLES = ["admin"] as const
-
-function isAssignableRole(role: string): role is (typeof ASSIGNABLE_ROLES)[number] {
-  return (ASSIGNABLE_ROLES as readonly string[]).includes(role)
-}
 
 async function findAuthUserByEmail(
   serverClient: ReturnType<typeof createServerClient>,
@@ -59,7 +56,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    await requireSuperAdmin(request)
+    const actor = await requireSuperAdmin(request)
     const body = await request.json()
     const email = typeof body.email === "string" ? body.email.trim() : ""
     const name = typeof body.name === "string" ? body.name.trim() : ""
@@ -68,9 +65,9 @@ export async function POST(request: NextRequest) {
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
-    if (!role || !isAssignableRole(role)) {
+    if (!role || !isAssignableAdminRole(role)) {
       return NextResponse.json(
-        { error: `Role must be one of: ${ASSIGNABLE_ROLES.join(", ")}` },
+        { error: `Role must be one of: ${ADMIN_ASSIGNABLE_ROLES.join(", ")}` },
         { status: 400 },
       )
     }
@@ -153,6 +150,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: upsertErr.message }, { status: 500 })
     }
 
+    await audit({ actorKind: "admin", actorId: actor.id, actorRole: actor.role, action: "admin_user.invited", entityType: "admin_user", entityId: userId, details: { role } })
     return NextResponse.json({ success: true, id: userId })
   } catch (error) {
     return adminAuthErrorResponse(error)

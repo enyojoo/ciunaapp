@@ -84,6 +84,9 @@ with checks as (
   select 'store-pause.sql', 'column hub_vendors.is_paused', exists (select 1 from information_schema.columns where table_name = 'hub_vendors' and column_name = 'is_paused')
   union all
   select 'push-preferences.sql', 'column marketplace_events.notified_at', exists (select 1 from information_schema.columns where table_name = 'marketplace_events' and column_name = 'notified_at')
+  union all
+  select 'store-communities.sql', 'column ' || c, exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = split_part(c, '.', 1) and column_name = split_part(c, '.', 2))
+    from unnest(array['merchants.communities', 'hub_vendors.communities']) as c
 )
 select file, what, ok from checks order by ok, file, what;
 

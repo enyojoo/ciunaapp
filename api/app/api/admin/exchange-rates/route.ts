@@ -1,3 +1,4 @@
+import { audit } from "@/lib/merchant/audit"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    await requireAdmin(request)
+    const admin = await requireAdmin(request)
 
     const { rates } = await request.json()
 
@@ -44,6 +45,7 @@ export async function PUT(request: NextRequest) {
       .upsert(updates, { onConflict: "from_currency,to_currency" })
 
     if (error) throw error
+    await audit({ actorKind: "admin", actorId: admin.id, actorRole: admin.role, action: "exchange_rates.updated", entityType: "exchange_rates", details: { pairs: updates.map((u: any) => `${u.from_currency}>${u.to_currency}=${u.rate}`).slice(0, 50) } })
 
     return NextResponse.json({ success: true, rates: data })
   } catch (error) {

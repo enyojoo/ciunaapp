@@ -1,3 +1,4 @@
+import { audit } from "@/lib/merchant/audit"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireAdmin, AdminForbiddenError } from "@/lib/admin-auth-utils"
@@ -6,7 +7,7 @@ import { dataCache, CACHE_KEYS } from "@/lib/cache"
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> | { id: string } }) {
   try {
-    await requireAdmin(request)
+    const admin = await requireAdmin(request)
     const { id } = await Promise.resolve(params)
     const supabase = createServerClient()
 
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // Always use referral payout template (referralPayoutCancelled); linked tx may or may not exist.
     void EmailNotificationService.sendReferralPayoutStatusEmail(id, "cancelled").catch(() => {})
 
+    await audit({ actorKind: "admin", actorId: admin.id, actorRole: admin.role, action: "referral_payout.cancelled", entityType: "referral_payout", entityId: id })
     return NextResponse.json({ success: true })
   } catch (e: any) {
     if (e instanceof AdminForbiddenError) return NextResponse.json({ error: "Forbidden" }, { status: 403 })

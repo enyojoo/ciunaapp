@@ -1,7 +1,8 @@
 import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto"
 
 function key() {
-  const raw = process.env.MERCHANT_PAYOUT_KEY || process.env.MARKETPLACE_TOKEN_KEY || ""
+  // The marketplace key is only a development fallback: in production payout details need their own key.
+  const raw = process.env.MERCHANT_PAYOUT_KEY || (process.env.NODE_ENV === "production" ? "" : process.env.MARKETPLACE_TOKEN_KEY) || ""
   const k = Buffer.from(raw, "base64")
   if (k.length !== 32) throw new Error("PAYOUT_ENCRYPTION_UNAVAILABLE")
   return k

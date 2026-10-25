@@ -1,65 +1,17 @@
-import { NextRequest, NextResponse } from "next/server"
-import { getAuthenticatedUser } from "@/lib/auth-utils"
-import { supabase } from "@/lib/supabase"
+import { adminRoute } from "@/lib/merchant/http"
+import { MerchantError } from "@/lib/merchant/errors"
 import { createServerClient } from "@/lib/supabase"
 
-/**
- * GET /api/admin/users/[id]
- * Get user data by userId (admin only)
- */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const user = await getAuthenticatedUser(request)
-    if (!user) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 })
-    }
+export const dynamic = "force-dynamic"
 
-    // Check if user is admin using admin_users table
-    const serverClient = createServerClient()
-    const { data: adminUser } = await serverClient
-      .from("admin_users")
-      .select("id")
-      .eq("id", user.id)
-      .single()
-
-    if (!adminUser) {
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 })
-    }
-
-    const { id: userId } = await params
-    if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
-      )
-    }
-
-    // Server client already created above
-
-    // Get user data
-    const { data: userData, error: userError } = await serverClient
-      .from("users")
-      .select("id, email, first_name, last_name, phone, kyc_status, kyc_rejection_reasons")
-      .eq("id", userId)
-      .single()
-
-    if (userError || !userData) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      )
-    }
-
-    return NextResponse.json(userData)
-  } catch (error: any) {
-    console.error("Error fetching user:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to fetch user" },
-      { status: 500 }
-    )
-  }
-}
-
+/** One customer's profile and KYC state (users.read). */
+export const GET = adminRoute("users.read", async (_req, _admin, params) => {
+  if (!params.id) throw new MerchantError("INVALID_REQUEST", 400)
+  const { data, error } = await createServerClient()
+    .from("users")
+    .select("id, email, first_name, last_name, phone, kyc_status, kyc_rejection_reasons")
+    .eq("id", params.id)
+    .single()
+  if (error || !data) throw new MerchantError("NOT_FOUND", 404)
+  return data
+})

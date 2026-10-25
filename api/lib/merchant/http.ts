@@ -1,3 +1,4 @@
+import { reportError } from "@/lib/error-report"
 import { NextRequest, NextResponse } from "next/server"
 import { requireAdmin, type AdminUser } from "@/lib/admin-auth-utils"
 import { requireAuth, type AuthenticatedUser } from "@/lib/auth-utils"
@@ -19,6 +20,7 @@ function handle(e: unknown) {
   if (message === "Account is suspended") return NextResponse.json({ error: message, errorCode: "SUSPENDED" }, { status: 403 })
   if (e instanceof SyntaxError) return NextResponse.json({ error: "INVALID_REQUEST", errorCode: "INVALID_REQUEST" }, { status: 400 })
   console.error("merchant route failed", e instanceof Error ? e.message : e)
+  void reportError({ source: "api", message: e instanceof Error ? e.message : String(e), stack: e instanceof Error ? e.stack : undefined })
   return NextResponse.json({ error: "UNAVAILABLE", errorCode: "UNAVAILABLE" }, { status: 503 })
 }
 

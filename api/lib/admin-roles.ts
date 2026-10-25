@@ -38,6 +38,13 @@ export const ADMIN_ROLE_PERMISSIONS: Record<AdminRole, ReadonlySet<AdminPermissi
   compliance: new Set<AdminPermission>(["merchants.read", "merchants.review", "kyb.manage", "audit.read", "support.read", "users.read", "users.manage"]),
 }
 
+/** Roles Office can hand out. Legacy `admin` rows still work (treated as ops) but are no longer assigned. */
+export const ADMIN_ASSIGNABLE_ROLES: readonly AdminRole[] = ["ops", "support", "finance", "compliance", "super_admin"]
+
+export function isAssignableAdminRole(role: string): role is AdminRole {
+  return (ADMIN_ASSIGNABLE_ROLES as readonly string[]).includes(role)
+}
+
 export function normalizeAdminRole(role: string | null | undefined): AdminRole {
   if (role === "super_admin" || role === "ops" || role === "support" || role === "finance" || role === "compliance") return role
   return "ops"

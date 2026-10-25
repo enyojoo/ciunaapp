@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const filePath = searchParams.get("path")
     
-    if (!filePath) {
+    if (!filePath || filePath.includes("..") || filePath.split("/").length !== 2) {
       return NextResponse.json({ error: "File path is required" }, { status: 400 })
     }
 

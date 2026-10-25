@@ -1,83 +1,21 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { adminRoute, readJson } from "@/lib/merchant/http"
+import { MerchantError } from "@/lib/merchant/errors"
+import { audit } from "@/lib/merchant/audit"
 import { createServerClient } from "@/lib/supabase"
-import { createClient } from "@supabase/supabase-js"
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    // Create a client that can read cookies from the request
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-        },
-      }
-    )
-    
-    // Get session from cookies in the request
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-    
-    if (sessionError) {
-      console.error("Session error:", sessionError)
-      return NextResponse.json({ error: "Session error" }, { status: 401 })
-    }
-    
-    if (!session) {
-      console.error("No session found")
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 })
-    }
+export const dynamic = "force-dynamic"
 
-    const { user } = session
-    console.log("Authenticated user:", user.id)
-    
-    // Check if user is admin by querying admin_users table using service role
-    const serverClient = createServerClient()
-    const { data: adminUser, error: adminError } = await serverClient
-      .from("admin_users")
-      .select("id")
-      .eq("id", user.id)
-      .single()
-    
-    if (adminError) {
-      console.error("Admin check error:", adminError)
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 })
-    }
-    
-    if (!adminUser) {
-      console.error("User is not admin")
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 })
-    }
-
-    const { status } = await request.json()
-    const { id: userId } = await params
-
-    console.log(`Updating user ${userId} status to ${status}`)
-
-    // Update user status using service role (bypasses RLS)
-    const { data, error } = await serverClient
-      .from("users")
-      .update({ 
-        status,
-        updated_at: new Date().toISOString()
-      })
-      .eq("id", userId)
-      .select()
-      .single()
-
-    if (error) {
-      console.error("Database error:", error)
-      return NextResponse.json({ error: "Database update failed" }, { status: 500 })
-    }
-
-    console.log("User status updated successfully:", data)
-    return NextResponse.json({ user: data })
-  } catch (error) {
-    console.error("Error updating user status:", error)
-    return NextResponse.json({ error: "Failed to update user status" }, { status: 500 })
-  }
-}
+/** Set a customer account's status (users.manage). */
+export const PATCH = adminRoute("users.manage", async (req, admin, params) => {
+  const { status } = await readJson(req)
+  if (typeof status !== "string" || !status) throw new MerchantError("INVALID_REQUEST", 400)
+  const { data, error } = await createServerClient()
+    .from("users")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("id", params.id)
+    .select()
+    .single()
+  if (error) throw new MerchantError("UNAVAILABLE", 503)
+  await audit({ actorKind: "admin", actorId: admin.id, actorRole: admin.role, action: "user.status_changed", entityType: "user", entityId: params.id, details: { status } })
+  return { user: data }
+})

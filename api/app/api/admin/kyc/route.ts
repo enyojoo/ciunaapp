@@ -1,106 +1,27 @@
-import { NextRequest, NextResponse } from "next/server"
-import { getAuthenticatedUser } from "@/lib/auth-utils"
+import { adminRoute, readJson } from "@/lib/merchant/http"
+import { MerchantError } from "@/lib/merchant/errors"
+import { audit } from "@/lib/merchant/audit"
 import { kycService } from "@/lib/kyc-service"
 import { createServerClient } from "@/lib/supabase"
 
-// GET - Get all KYC submissions (admin only)
-export async function GET(request: NextRequest) {
-  try {
-    const user = await getAuthenticatedUser(request)
-    if (!user) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 })
-    }
+export const dynamic = "force-dynamic"
 
-    // Check if user is admin using admin_users table
-    const serverClient = createServerClient()
-    const { data: adminUser } = await serverClient
-      .from("admin_users")
-      .select("id")
-      .eq("id", user.id)
-      .single()
+/** KYC submissions with Bitbanker compliance references (users.read). */
+export const GET = adminRoute("users.read", async (req) => {
+  const status = req.nextUrl.searchParams.get("status")
+  const submissions = await kycService.getAllSubmissions(status || undefined)
+  const { data: bitbanker, error } = await createServerClient()
+    .from("bitbanker_client_refs")
+    .select("user_id, client_id, environment, is_verified_for_sbp, last_form_snapshot, last_form_submitted_at, updated_at")
+  if (error) console.error("Error fetching Bitbanker compliance refs:", error)
+  return { submissions, bitbanker: bitbanker ?? [] }
+})
 
-    if (!adminUser) {
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 })
-    }
-
-    const status = request.nextUrl.searchParams.get("status")
-    const submissions = await kycService.getAllSubmissions(status || undefined)
-
-    const { data: bitbankerRefs, error: bitbankerError } = await serverClient
-      .from("bitbanker_client_refs")
-      .select(
-        "user_id, client_id, environment, is_verified_for_sbp, last_form_snapshot, last_form_submitted_at, updated_at",
-      )
-
-    if (bitbankerError) {
-      console.error("Error fetching Bitbanker compliance refs:", bitbankerError)
-    }
-
-    return NextResponse.json({
-      submissions,
-      bitbanker: bitbankerRefs ?? [],
-    })
-  } catch (error: any) {
-    console.error("Error fetching KYC submissions:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to fetch KYC submissions" },
-      { status: 500 }
-    )
-  }
-}
-
-// PATCH - Update KYC submission status (admin only)
-export async function PATCH(request: NextRequest) {
-  try {
-    const user = await getAuthenticatedUser(request)
-    if (!user) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 })
-    }
-
-    // Check if user is admin using admin_users table
-    const serverClient = createServerClient()
-    const { data: adminUser } = await serverClient
-      .from("admin_users")
-      .select("id")
-      .eq("id", user.id)
-      .single()
-
-    if (!adminUser) {
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 })
-    }
-
-    const body = await request.json()
-    const { submissionId, status, rejectionReason } = body
-
-    if (!submissionId || !status) {
-      return NextResponse.json(
-        { error: "Submission ID and status are required" },
-        { status: 400 }
-      )
-    }
-
-    if (!["in_review", "approved", "rejected"].includes(status)) {
-      return NextResponse.json(
-        { error: "Invalid status" },
-        { status: 400 }
-      )
-    }
-
-    const submission = await kycService.updateStatus(
-      submissionId,
-      status as "in_review" | "approved" | "rejected",
-      user.id,
-      rejectionReason
-    )
-
-    return NextResponse.json({ submission })
-  } catch (error: any) {
-    console.error("Error updating KYC submission:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to update KYC submission" },
-      { status: 500 }
-    )
-  }
-}
-
-
+/** Review a KYC submission (users.manage: compliance, ops, super admin). */
+export const PATCH = adminRoute("users.manage", async (req, admin) => {
+  const { submissionId, status, rejectionReason } = await readJson(req)
+  if (!submissionId || !status || !["in_review", "approved", "rejected"].includes(status)) throw new MerchantError("INVALID_REQUEST", 400)
+  const submission = await kycService.updateStatus(submissionId, status, admin.id, rejectionReason)
+  await audit({ actorKind: "admin", actorId: admin.id, actorRole: admin.role, action: "kyc.reviewed", entityType: "kyc_submission", entityId: String(submissionId), details: { status } })
+  return { submission }
+})
