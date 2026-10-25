@@ -1,4 +1,5 @@
 import { audit } from "@/lib/merchant/audit"
+import { canMoveStatus } from "@/lib/transaction-transitions"
 // Admin transaction status update API endpoint
 
 import { NextRequest, NextResponse } from "next/server"
@@ -51,6 +52,10 @@ export async function PATCH(
       }, { status: 404 })
     }
     const previousStatus = currentTransaction.status as string
+
+    if (status && !canMoveStatus(previousStatus, String(status))) {
+      return NextResponse.json({ error: `A ${previousStatus} transaction cannot be set to ${status}. Use Retry or Refund.`, errorCode: "INVALID_TRANSITION" }, { status: 409 })
+    }
 
     // Update transaction status directly
     const updateData: Record<string, unknown> = {

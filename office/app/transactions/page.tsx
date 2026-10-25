@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Search,
   Download,
@@ -32,6 +31,8 @@ import { OfficeTransactionsSkeleton } from "@/components/office-transactions-ske
 import { officeDataStore } from "@/lib/office-data-store"
 import { useOfficeData } from "@/hooks/use-office-data"
 import { officeFetch } from "@/lib/api-client"
+import { usePermissions } from "@/lib/permissions"
+import { Textarea } from "@/components/ui/textarea"
 import { buildRateMap, convertWithRateMap } from "@/lib/referral-currency"
 import { cn } from "@/lib/utils"
 import {
@@ -271,7 +272,16 @@ function mapPayoutRequests(
   })
 }
 
+/** Hand moves allowed in Office; mirrors api/lib/transaction-transitions.ts. A finished transaction is retried or refunded, not edited. */
+const MOVES: Record<string, string[]> = { pending: ["processing", "failed", "cancelled"], processing: ["completed", "failed", "cancelled"], completed: [], failed: [], cancelled: [], refunded: [] }
+const canMove = (from: string, to: string) => from === to ? false : !(from in MOVES) || MOVES[from]!.includes(to)
+
 export default function AdminTransactionsPage() {
+  const perms = usePermissions()
+  const [reasonAction, setReasonAction] = useState<{ kind: "retry" | "refund"; id: string } | null>(null)
+  const [reasonText, setReasonText] = useState("")
+  const [reasonBusy, setReasonBusy] = useState(false)
+  const [reasonError, setReasonError] = useState("")
   const { data: adminData, loading: adminDataLoading } = useOfficeData()
   
   // Initialize from cache synchronously to prevent flicker
@@ -299,7 +309,6 @@ export default function AdminTransactionsPage() {
     "all" | "send" | "hub" | "food" | "mart" | "referral_payout"
   >("all")
   const [currencyFilter, setCurrencyFilter] = useState("all")
-  const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
   const [selectedTransaction, setSelectedTransaction] = useState<CombinedTransaction | null>(null)
   const [currentTime, setCurrentTime] = useState(Date.now())
   const [timerDuration, setTimerDuration] = useState(3600)
@@ -430,6 +439,7 @@ export default function AdminTransactionsPage() {
       deposited: { color: "bg-green-100 text-green-800", icon: <CheckCircle className="h-3 w-3 mr-1" /> },
       failed: { color: "bg-red-100 text-red-800", icon: <XCircle className="h-3 w-3 mr-1" /> },
       cancelled: { color: "bg-gray-100 text-gray-800", icon: <XCircle className="h-3 w-3 mr-1" /> },
+      refunded: { color: "bg-purple-100 text-purple-800", icon: <AlertCircle className="h-3 w-3 mr-1" /> },
     }
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending
@@ -442,19 +452,19 @@ export default function AdminTransactionsPage() {
     )
   }
 
-  const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedTransactions(filteredTransactions.map((t: any) => t.transaction_id))
-    } else {
-      setSelectedTransactions([])
-    }
-  }
-
-  const handleSelectTransaction = (transactionId: string, checked: boolean) => {
-    if (checked) {
-      setSelectedTransactions([...selectedTransactions, transactionId])
-    } else {
-      setSelectedTransactions(selectedTransactions.filter((id) => id !== transactionId))
+  const submitReason = async () => {
+    if (!reasonAction) return
+    setReasonBusy(true)
+    setReasonError("")
+    try {
+      const res = await officeFetch(`/api/admin/transactions/${reasonAction.id}/${reasonAction.kind}`, { method: "POST", body: JSON.stringify({ reason: reasonText }) })
+      const j = await res.json().catch(() => ({}))
+      if (!res.ok) return setReasonError(j?.error === "REASON_REQUIRED" ? "Write a reason." : j?.error === "FORBIDDEN" ? "Your role cannot do this." : j?.error === "INVALID_TRANSITION" ? "This transaction is not in a state that allows it." : "Could not save. Try again.")
+      setReasonAction(null)
+      setReasonText("")
+      await officeDataStore.refreshAllData()
+    } finally {
+      setReasonBusy(false)
     }
   }
 
@@ -468,23 +478,6 @@ export default function AdminTransactionsPage() {
       }
     } catch (err) {
       console.error("Error updating transaction status:", err)
-    }
-  }
-
-  const handleBulkStatusUpdate = async (newStatus: string) => {
-    try {
-      const ids = selectedTransactions.filter((tid) => {
-        const row = transactions.find((tr) => tr.transaction_id === tid)
-        return row && row.type !== "referral_payout"
-      })
-      await Promise.all(
-        ids.map(async (transactionId) => {
-          await officeDataStore.updateTransactionStatus(transactionId, newStatus)
-        }),
-      )
-      setSelectedTransactions([])
-    } catch (err) {
-      console.error("Error updating transaction statuses:", err)
     }
   }
 
@@ -711,6 +704,7 @@ export default function AdminTransactionsPage() {
                 <SelectItem value="deposited">Deposited</SelectItem>
                 <SelectItem value="failed">Failed</SelectItem>
                 <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="refunded">Refunded</SelectItem>
               </SelectContent>
             </Select>
 
@@ -810,45 +804,12 @@ export default function AdminTransactionsPage() {
           )}
         </div>
 
-        {/* Bulk Actions */}
-        {selectedTransactions.length > 0 && (
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">{selectedTransactions.length} transaction(s) selected</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleBulkStatusUpdate("processing")}>
-                    Payment Received
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleBulkStatusUpdate("completed")}>
-                    Transfer Complete
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleBulkStatusUpdate("failed")}>
-                    Mark Failed
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleBulkStatusUpdate("cancelled")}>
-                    Cancel Transfer
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Transactions Table */}
         <Card>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-12">
-                    <Checkbox
-                      checked={
-                        selectedTransactions.length === filteredTransactions.length && filteredTransactions.length > 0
-                      }
-                      onCheckedChange={handleSelectAll}
-                    />
-                  </TableHead>
                   <TableHead>Transaction ID</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>User</TableHead>
@@ -860,14 +821,6 @@ export default function AdminTransactionsPage() {
               <TableBody>
                 {filteredTransactions.map((transaction: any) => (
                   <TableRow key={transaction.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={selectedTransactions.includes(transaction.transaction_id)}
-                        onCheckedChange={(checked) =>
-                          handleSelectTransaction(transaction.transaction_id, checked as boolean)
-                        }
-                      />
-                    </TableCell>
                     <TableCell className="font-mono text-sm">{transaction.transaction_id}</TableCell>
                     <TableCell>{formatDate(transaction.created_at)}</TableCell>
                     <TableCell>
@@ -1339,7 +1292,7 @@ export default function AdminTransactionsPage() {
                                         onClick={() =>
                                           void handleReferralPayoutStatusUpdate(transaction, "cancelled")
                                         }
-                                        disabled={transaction.status === "cancelled"}
+                                        disabled={!canMove(transaction.status, "cancelled")}
                                         className="text-gray-600 hover:text-gray-700"
                                       >
                                         Cancel Transfer
@@ -1366,7 +1319,7 @@ export default function AdminTransactionsPage() {
                                         onClick={() =>
                                           handleStatusUpdate(transaction.transaction_id, "processing")
                                         }
-                                        disabled={transaction.status === "processing"}
+                                        disabled={!canMove(transaction.status, "processing")}
                                       >
                                         Payment Received
                                       </Button>
@@ -1377,7 +1330,7 @@ export default function AdminTransactionsPage() {
                                         onClick={() =>
                                           handleStatusUpdate(transaction.transaction_id, "completed")
                                         }
-                                        disabled={transaction.status === "completed"}
+                                        disabled={!canMove(transaction.status, "completed")}
                                         className="text-green-600 hover:text-green-700"
                                       >
                                         {isHubTransaction(transaction) ? "Transaction Complete" : "Transfer Complete"}
@@ -1387,7 +1340,7 @@ export default function AdminTransactionsPage() {
                                         size="sm"
                                         variant="outline"
                                         onClick={() => handleStatusUpdate(transaction.transaction_id, "failed")}
-                                        disabled={transaction.status === "failed"}
+                                        disabled={!canMove(transaction.status, "failed")}
                                         className="text-red-600 hover:text-red-700"
                                       >
                                         Mark Failed
@@ -1404,6 +1357,16 @@ export default function AdminTransactionsPage() {
                                       >
                                         {isHubTransaction(transaction) ? "Cancel Transaction" : "Cancel Transfer"}
                                       </Button>
+                                      {perms.can("transactions.manage") && transaction.status === "failed" ? (
+                                        <Button type="button" size="sm" variant="outline" onClick={() => setReasonAction({ kind: "retry", id: transaction.transaction_id })}>
+                                          Retry
+                                        </Button>
+                                      ) : null}
+                                      {perms.can("finance.manage") && ["processing", "completed", "failed"].includes(transaction.status) ? (
+                                        <Button type="button" size="sm" variant="outline" className="text-red-600 hover:text-red-700" onClick={() => setReasonAction({ kind: "refund", id: transaction.transaction_id })}>
+                                          Refund
+                                        </Button>
+                                      ) : null}
                                     </div>
                                   )}
                                 </div>
@@ -1423,6 +1386,25 @@ export default function AdminTransactionsPage() {
           </CardContent>
         </Card>
       </div>
+      <Dialog open={!!reasonAction} onOpenChange={(o) => { if (!o) { setReasonAction(null); setReasonText(""); setReasonError("") } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{reasonAction?.kind === "refund" ? "Refund this transaction" : "Retry this transaction"}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              {reasonAction?.kind === "refund"
+                ? "This records the refund and takes back any referral reward. Send the money back through the payment provider as well."
+                : "This puts the failed transaction back to processing."}
+            </p>
+            <Textarea value={reasonText} onChange={(e) => setReasonText(e.target.value)} placeholder="Reason (required, kept in the audit log)" rows={3} />
+            {reasonError ? <p className="text-sm text-destructive">{reasonError}</p> : null}
+            <Button disabled={reasonBusy || !reasonText.trim()} onClick={() => void submitReason()}>
+              {reasonAction?.kind === "refund" ? "Record refund" : "Retry"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </OfficeDashboardLayout>
   )
 }
