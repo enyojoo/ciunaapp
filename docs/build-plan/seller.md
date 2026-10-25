@@ -101,6 +101,16 @@ Exists and is enforced: `api/lib/merchant/permissions.ts` roles owner, manager, 
 
 Parallelism: P2 is independent. P4 to P10 can run in parallel after P3 by different people since files do not overlap (only `seller/lib/i18n` strings: add keys to all six locales in `packages/shared/src/locales/*` together).
 
+## Status check, 2026-10-25
+
+Only what was verified against the code and the test runs is marked. The other packages (P1 to P10) were not re-audited line by line and keep the status in the gap table above until someone walks them.
+
+| Package | Status | Evidence |
+| --- | --- | --- |
+| P0 Test harness | Built | `npm run test:seller`: 195 of 195 at 375, 768 and 1280 in mock mode; `tests/seller/languages.spec.ts` adds every screen in ru, fr, es, pt and zh at 375 and 1280 (250 pass): no overflow, no raw translation keys, no console errors |
+| P11 Expert extras, credentials | Built | Credentials and years are edited in Seller; Office reviews them (Office, Experts, Credentials tab; approve, or reject with a reason); Seller shows the status; an edit sends the review back to pending. Needs `supabase/deploy/expert-credentials-review.sql` (file 21). Languages spoken and intro video are not built |
+| Seller strings | Complete | `npm run locales:check` now also compares `seller/locales` and `api/locales` across the six languages |
+
 ## 4. Risks
 
 - Nav fix changes muscle memory for sellers already using the portal; ship with the More page rows first.

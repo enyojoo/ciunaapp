@@ -122,3 +122,21 @@ eas build --profile staging --platform all
 ```
 
 Repeat with `--environment production` and the production values for store builds. The anon key is public by design; never put a service-role key in an `EXPO_PUBLIC_` variable.
+
+## 16. Baseline schema for an empty database (B6)
+
+The core tables (`users`, `transactions`, `hub_products`, `hub_vendors` and others) were created in the Supabase dashboard and exist in no migration, so an empty project cannot be built from the repository alone. Generate the missing file once, from production, with the structure only (no data):
+
+```bash
+pg_dump "$PRODUCTION_DATABASE_URL" --schema-only --no-owner --no-privileges --schema=public > supabase/baseline/00000000000000_baseline.sql
+```
+
+Review it for anything private, commit it, then build a scratch project from it plus `supabase/migrations` to prove it works (steps 1 to 6 of `launch-readiness.md` section 1). I cannot do this: it needs the production connection string.
+
+## 17. Android (F11)
+
+The Android SDK on this Mac has platform tools, build tools and system images but no command line tools and no emulator device, and the app has never run on Android. Install them (Android Studio, SDK Manager, "Android SDK Command-line Tools"), create a Pixel emulator, then from `mobile/`: `npx expo prebuild --platform android` and `npx expo run:android`. Check the tab bar, sheets, keyboard, the back gesture, push and the YooKassa sheet; write what breaks in the plan.
+
+## 18. Race tests need staging (B8)
+
+`scripts/marketplace-postgres-races.sh` and the two-connection payout tests change data, so they run only against the staging project from step 4, never production.
