@@ -26,6 +26,7 @@ import { HubTopBar } from "@/components/hub-top-bar"
 import { StickyActionBar } from "@/components/ui/sticky-action-bar"
 import { SwipeRow } from "@/components/ui/swipe-row"
 import { colors, radius, type as typeSize } from "@/lib/theme"
+import { Skeleton } from "@/components/ui"
 
 function HubCartScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
@@ -123,7 +124,7 @@ function HubCartScreen() {
       <StatusBar style="dark" />
         <View style={styles.list}>
           {[0, 1, 2].map((i) => (
-            <View key={i} style={[styles.row, styles.skeletonRow]} />
+            <Skeleton key={i} width="100%" height={84} rounded={radius.card} />
           ))}
         </View>
       </ScreenScroll>
@@ -324,7 +325,6 @@ const styles = StyleSheet.create({
   storeLogoInitial: { fontSize: typeSize.body, fontWeight: "700", color: colors.primaryText },
   storeName: { flex: 1, minWidth: 0, fontSize: typeSize.label, fontWeight: "700", color: colors.text },
   addMore: { fontSize: typeSize.meta, fontWeight: "600", color: colors.primaryText },
-  skeletonRow: { height: 84, backgroundColor: colors.paper, borderColor: colors.paper },
   rowOff: { opacity: 0.7 },
   rowTitleOff: { fontSize: typeSize.label, fontWeight: "600", color: colors.muted, textDecorationLine: "line-through" },
   minNote: { marginTop: 12, fontSize: typeSize.meta, color: colors.primaryDeep, textAlign: "center" },

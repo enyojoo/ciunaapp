@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
   },
   segmentActive: {
     backgroundColor: colors.surface,
-    shadowColor: "#0F172A",
+    shadowColor: colors.text,
     shadowOpacity: 0.06,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 1 },
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: 14,
   },
-  consentRowOn: { borderColor: "#FDBA74", backgroundColor: colors.heroBody },
+  consentRowOn: { borderColor: colors.primaryBorder, backgroundColor: colors.heroBody },
   checkbox: {
     marginTop: 1,
     width: 22,

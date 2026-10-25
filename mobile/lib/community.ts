@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useSyncExternalStore } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { COMMUNITY_IDS, isCommunityId, type CommunityId } from "@ciuna/shared"
+import { COMMUNITY_IDS, isCommunityId, vendorServesCommunity, type CommunityId } from "@ciuna/shared"
 import { useHubCatalog } from "@/lib/use-hub-catalog"
 import type { HubVendor } from "@/lib/types"
 
@@ -66,8 +66,4 @@ export function useAvailableCommunities(): CommunityId[] {
   }, [food, mart])
 }
 
-/** True when the store serves the chosen community (or no community is chosen). */
-export function vendorServesCommunity(v: Pick<HubVendor, "communities">, community: CommunityId | null): boolean {
-  if (!community) return true
-  return (v.communities || []).includes(community)
-}
+export { vendorServesCommunity }

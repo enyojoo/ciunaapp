@@ -214,7 +214,13 @@
         "missingTransaction": "Falta la transacción",
         "failed": "Falló"
       },
-      "forProduct": "Pago de {{product}}"
+      "forProduct": "Pago de {{product}}",
+      "onlinePayInlineHint": "Completa el pago con tarjeta o SBP abajo.",
+      "orderLabel": "Pedido",
+      "paidOnline": "Completar pago",
+      "payManual": "Transferencia bancaria",
+      "payOnline": "Pagar en línea",
+      "paymentMethod": "Método de pago"
     },
     "payFrom": "Paga desde",
     "payUpTo": "Paga hasta",
@@ -257,7 +263,17 @@
       "removeShort": "Eliminar",
       "storeClosedShort": "La tienda está cerrada ahora.",
       "itemCount_one": "{{count}} artículo",
-      "itemCount_other": "{{count}} artículos"
+      "itemCount_other": "{{count}} artículos",
+      "title": "Carrito",
+      "empty": "Tu carrito está vacío.",
+      "addToCart": "Añadir al carrito",
+      "addFailed": "No se pudo añadir al carrito",
+      "updateFailed": "No se pudo actualizar el carrito",
+      "increase": "Aumentar cantidad",
+      "decrease": "Reducir cantidad",
+      "remove": "Quitar artículo",
+      "viewCart": "Ver carrito",
+      "moreFromVendor": "Más de {{vendor}}"
     },
     "stock": {
       "onlyLeft": "Solo quedan {{n}}",
@@ -297,7 +313,19 @@
       "productCount_one": "{{count}} producto",
       "productCount_other": "{{count}} productos",
       "allStores": "Todas las tiendas"
-    }
+    },
+    "expertsEmpty": "Aún no hay expertos.",
+    "pay": {
+      "failed": "El pago falló. Inténtalo de nuevo.",
+      "loading": "Cargando pago seguro…",
+      "missingToken": "Este enlace de pago ha caducado.",
+      "success": "Pago recibido.",
+      "widgetError": "No se pudo iniciar el pago."
+    },
+    "soldOut": "Agotado",
+    "vendorProductCount_one": "{{count}} producto",
+    "vendorProductCount_other": "{{count}} productos",
+    "noStoresForFilter": "No hay tiendas para esta ciudad o comunidad. Prueba otra."
   },
   "assistant": {
     "title": "Asistente",
@@ -493,7 +521,9 @@
     "statusProcessingDesc": "Tu transacción se está procesando",
     "shareReceipt": "Compartir recibo",
     "shareText": "Transferencia Ciuna {{id}}: {{send}} enviados a {{name}} el {{date}}.",
-    "repeatTransfer": "Repetir transferencia"
+    "repeatTransfer": "Repetir transferencia",
+    "loadFailed": "No se pudo cargar esta transferencia",
+    "loadFailedHint": "Revisa tu conexión e inténtalo de nuevo."
   },
   "txTimeline": {
     "payoutSubmitted": "Solicitud enviada",
@@ -1023,7 +1053,13 @@
       "lead": "Verifica tu identidad con nuestro socio de verificación. Se aceptan pasaportes rusos y extranjeros; la comprobación se hace en su página segura, no en Ciuna.",
       "linkExpires": "El enlace de verificación vence a las {{time}} (aproximadamente una hora).",
       "reviewPending": "Verificación en curso o en revisión. Desbloquearemos el envío cuando se confirme.",
-      "successBody": "Ya puedes enviar dinero por SBP. Vuelve a tu transferencia para continuar."
+      "successBody": "Ya puedes enviar dinero por SBP. Vuelve a tu transferencia para continuar.",
+      "inAppSecureTitle": "Continúa de forma segura con nuestro socio",
+      "inAppSecureBody": "Por seguridad, nuestro socio abre la verificación en una ventana protegida. Termina el KYC allí. Esta pantalla sigue abierta y se actualiza cuando estés verificado.",
+      "openPartner": "Abrir verificación",
+      "opening": "Abriendo…",
+      "refreshAfter": "Ya terminé, comprobar estado",
+      "waitingPartner": "Esperando la verificación…"
     },
     "yourLimit": "Tu límite mensual",
     "limitLeft": "Quedan {{left}} de {{total}}"
@@ -1115,7 +1151,8 @@
     "helpToast": "¿Necesitas ayuda? Contacta a {{email}}",
     "passwordRuleLength": "Al menos {{count}} caracteres",
     "termsAnd": "y la",
-    "privacyLink": "Política de privacidad"
+    "privacyLink": "Política de privacidad",
+    "invalidCredentials": "Correo o contraseña incorrectos"
   },
   "experts": {
     "profile": {
@@ -1849,5 +1886,11 @@
     "groupPreferences": "Preferencias",
     "groupHelp": "Ayuda",
     "logOut": "Cerrar sesión"
+  },
+  "common": {
+    "back": "Atrás",
+    "clear": "Borrar",
+    "loading": "Cargando",
+    "retry": "Reintentar"
   }
 }

@@ -10,7 +10,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { Avatar } from "@/components/avatar"
 import { AddRecipientSheet } from "@/components/send/add-recipient-sheet"
 import type { CurrencyRow, RecipientRow } from "@/lib/types"
-import { colors, radius, type as typeSize } from "@/lib/theme"
+import { colors, illustration, radius, type as typeSize } from "@/lib/theme"
 
 export function SendRecipientStep({
   receiveCurrency,
@@ -59,14 +59,14 @@ export function SendRecipientStep({
           onFocus={searchFocus.onFocus}
           onBlur={searchFocus.onBlur}
           placeholder={t("send.searchRecipients")}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.placeholder}
           style={styles.searchInput}
         />
       </View>
 
       <Pressable style={styles.addRow} onPress={() => setAddOpen(true)}>
-        <LinearGradient colors={["#34D399", "#3B82F6", "#9333EA"]} style={styles.addIcon}>
-          <Plus size={22} color="#fff" strokeWidth={2.5} />
+        <LinearGradient colors={[...illustration.addGradient]} style={styles.addIcon}>
+          <Plus size={22} color={colors.onPrimary} strokeWidth={2.5} />
         </LinearGradient>
         <Text style={styles.addRowLabel}>{t("send.addNewRecipient")}</Text>
         <ChevronRight size={20} color={colors.muted} />
@@ -116,7 +116,7 @@ export function SendRecipientStep({
                 </View>
                 {selected ? (
                   <View style={styles.check}>
-                    <Check size={18} color="#fff" strokeWidth={2.8} />
+                    <Check size={18} color={colors.onPrimary} strokeWidth={2.8} />
                   </View>
                 ) : null}
               </Pressable>
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: 14,
   },
-  cardSelected: { borderColor: colors.primary, backgroundColor: "#FFF7ED" },
+  cardSelected: { borderColor: colors.primary, backgroundColor: colors.primaryTint },
   avatarWrap: { position: "relative" },
   flagBadge: {
     position: "absolute",

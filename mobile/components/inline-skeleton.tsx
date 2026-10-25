@@ -1,3 +1,4 @@
+import { colors } from "@/lib/theme"
 import { useEffect, useRef } from "react"
 import { Animated, Easing, StyleSheet, View, type ViewStyle } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
@@ -52,10 +53,10 @@ const styles = StyleSheet.create({
   track: {
     borderRadius: 7,
     overflow: "hidden",
-    backgroundColor: "#E5E1D8",
+    backgroundColor: colors.skeletonTrack,
     flexShrink: 0,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#DDD8CE",
+    borderColor: colors.skeletonEdge,
   },
   shimmer: {
     position: "absolute",

@@ -38,10 +38,10 @@ const PRODUCTS_PREVIEW = 8
 export default function HubLineCatalog() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
   const line = String(slug || "").toLowerCase()
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const router = useRouter()
   const serviceLine = useHubServiceLine(line)
-  const labels = hubServiceLineShellLabels(line, serviceLine, t, line)
+  const labels = hubServiceLineShellLabels(line, serviceLine, t, line, i18n.language)
   const marketplace = isHubMarketplaceSlug(line)
   const engineRedirect = isHubExpertsSlug(line) ? "/experts" : isHubSendSlug(line) ? "/send" : null
   const backAria = t("hub.backToHub", { defaultValue: "Back to Hub" })
@@ -116,7 +116,9 @@ export default function HubLineCatalog() {
             <LoadError onRetry={() => void revalidate()} />
           ) : vendors.length === 0 ? (
             <Text style={styles.storesEmpty}>
-              {t("hub.marketplaceNoVendors", { defaultValue: "No stores yet. Check back soon." })}
+              {allVendors.length > 0
+                ? t("hub.noStoresForFilter")
+                : t("hub.marketplaceNoVendors", { defaultValue: "No stores yet. Check back soon." })}
             </Text>
           ) : (
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.storesRow}>

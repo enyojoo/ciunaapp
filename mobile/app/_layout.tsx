@@ -6,7 +6,7 @@ import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
-import { Platform, StyleSheet, View } from "react-native"
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { ResponsiveAppShell } from "@/components/layout/responsive-app-shell"
@@ -18,9 +18,26 @@ import { ToastProvider } from "@/components/toast-provider"
 import { AuthProvider, useAuth } from "@/lib/auth-context"
 import { PushRegistration } from "@/components/push-registration"
 import { ExternalLinkProvider } from "@/lib/external-link"
+import { installErrorReporting, reportClientError } from "@/lib/error-reporting"
 import { hydrateLocale } from "@/lib/i18n"
 import { ResponsiveLayoutProvider } from "@/lib/responsive-layout"
-import { colors, type as typeSize } from "@/lib/theme"
+import { colors, radius, type as typeSize } from "@/lib/theme"
+
+installErrorReporting()
+
+/** Shown by the router when a screen throws while rendering; the error is reported and the user can retry. */
+export function ErrorBoundary({ error, retry }: { error: Error; retry: () => Promise<void> }) {
+  const { t } = useTranslation("app")
+  useEffect(() => reportClientError(error, { fatal: true, route: "render" }), [error])
+  return (
+    <View style={styles.errorRoot}>
+      <Text style={styles.errorTitle}>{t("errors.generic")}</Text>
+      <Pressable accessibilityRole="button" onPress={() => void retry()} style={styles.errorButton}>
+        <Text style={styles.errorButtonLabel}>{t("common.retry")}</Text>
+      </Pressable>
+    </View>
+  )
+}
 
 export default function RootLayout() {
   const { t } = useTranslation("app")
@@ -140,6 +157,10 @@ function RootChrome({ children }: { children: ReactNode }) {
 
 const styles = StyleSheet.create({
   gestureRoot: { flex: 1 },
+  errorRoot: { flex: 1, alignItems: "center", justifyContent: "center", gap: 16, padding: 24, backgroundColor: colors.paper },
+  errorTitle: { fontSize: typeSize.headline, fontWeight: "600", color: colors.text, textAlign: "center" },
+  errorButton: { minHeight: 48, paddingHorizontal: 24, borderRadius: radius.control, alignItems: "center", justifyContent: "center", backgroundColor: colors.primary },
+  errorButtonLabel: { fontSize: typeSize.body, fontWeight: "600", color: colors.onPrimary },
   chrome: { flex: 1, width: "100%", minHeight: 0, height: Platform.OS === "web" ? "100%" : undefined },
   navRoot: {
     flex: 1,

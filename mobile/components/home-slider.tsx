@@ -6,14 +6,10 @@ import { FlagIcon } from "@/components/flag-icon"
 import { Icon } from "@/components/ui/icon"
 import { PressableScale } from "@/components/ui/pressable-scale"
 import type { HomeSlide, HomeSlideId } from "@/lib/home-slides"
-import { colors, radius, space, type as typeSize } from "@/lib/theme"
+import { colors, illustration, radius, space, type as typeSize } from "@/lib/theme"
 
 /** One flat colour per slide. White text on each is 6:1 or better. */
-const BG: Record<HomeSlideId, string> = {
-  sorted: "#1F2937",
-  community: "#115E59",
-  language: "#1E3A8A",
-}
+const BG: Record<HomeSlideId, string> = illustration.slide
 
 const AUTO_MS = 6000
 const RESUME_MS = 8000
@@ -38,9 +34,9 @@ function Motif({ id }: { id: HomeSlideId }): ReactNode {
     case "community":
       return (
         <View style={styles.people}>
-          {["#FDE68A", "#A7F3D0", "#BFDBFE", "#FBCFE8"].map((c, i) => (
+          {illustration.people.map((c, i) => (
             <View key={c} style={[styles.person, { backgroundColor: c, marginLeft: i === 0 ? 0 : -12 }]}>
-              <Icon name="account" size={18} color="#1F2937" filled />
+              <Icon name="account" size={18} color={illustration.ink} filled />
             </View>
           ))}
         </View>
@@ -186,16 +182,16 @@ const styles = StyleSheet.create({
   slide: { padding: 18, justifyContent: "flex-end" },
   top: { flex: 1, flexDirection: "row", alignItems: "flex-end", gap: 12 },
   copy: { flex: 1, minWidth: 0, gap: 4 },
-  title: { fontSize: typeSize.title, lineHeight: 27, fontWeight: "700", color: "#FFFFFF", letterSpacing: -0.4 },
+  title: { fontSize: typeSize.title, lineHeight: 27, fontWeight: "700", color: colors.onPrimary, letterSpacing: -0.4 },
   body: { fontSize: typeSize.meta, lineHeight: 19, color: "rgba(255,255,255,0.82)" },
   motif: { position: "absolute", top: 0, right: 0 },
   adLabel: { position: "absolute", right: 14, bottom: 14, backgroundColor: "rgba(255,255,255,0.92)", borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
   adText: { fontSize: typeSize.caption, fontWeight: "600", letterSpacing: 0.6, textTransform: "uppercase", color: colors.text },
   mark: { width: 34, flexDirection: "row", flexWrap: "wrap", gap: 4 },
   markDot: { width: 15, height: 15, borderRadius: 8, backgroundColor: "rgba(255,255,255,0.22)" },
-  markDotOn: { backgroundColor: "#F97316" },
+  markDotOn: { backgroundColor: illustration.accent },
   people: { flexDirection: "row", alignItems: "center" },
-  person: { width: 30, height: 30, borderRadius: 15, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#115E59" },
+  person: { width: 30, height: 30, borderRadius: 15, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: illustration.slide.community },
   methods: { flexDirection: "row", gap: 5 },
   method: { width: 26, height: 26, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(255,255,255,0.16)" },
   dots: { flexDirection: "row", justifyContent: "center", gap: 6, marginTop: 10 },

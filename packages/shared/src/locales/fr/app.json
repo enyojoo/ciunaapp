@@ -214,7 +214,13 @@
         "missingTransaction": "Transaction manquante",
         "failed": "Échec"
       },
-      "forProduct": "Paiement pour {{product}}"
+      "forProduct": "Paiement pour {{product}}",
+      "onlinePayInlineHint": "Payez par carte ou SBP ci-dessous.",
+      "orderLabel": "Commande",
+      "paidOnline": "Finaliser le paiement",
+      "payManual": "Virement bancaire",
+      "payOnline": "Payer en ligne",
+      "paymentMethod": "Moyen de paiement"
     },
     "payFrom": "Payer de",
     "payUpTo": "Payer jusqu'à",
@@ -257,7 +263,17 @@
       "removeShort": "Supprimer",
       "storeClosedShort": "La boutique est fermée pour le moment.",
       "itemCount_one": "{{count}} article",
-      "itemCount_other": "{{count}} articles"
+      "itemCount_other": "{{count}} articles",
+      "title": "Panier",
+      "empty": "Votre panier est vide.",
+      "addToCart": "Ajouter au panier",
+      "addFailed": "Impossible d'ajouter au panier",
+      "updateFailed": "Impossible de mettre à jour le panier",
+      "increase": "Augmenter la quantité",
+      "decrease": "Diminuer la quantité",
+      "remove": "Retirer l'article",
+      "viewCart": "Voir le panier",
+      "moreFromVendor": "Plus de {{vendor}}"
     },
     "stock": {
       "onlyLeft": "Plus que {{n}}",
@@ -297,7 +313,19 @@
       "productCount_one": "{{count}} produit",
       "productCount_other": "{{count}} produits",
       "allStores": "Toutes les boutiques"
-    }
+    },
+    "expertsEmpty": "Aucun expert pour le moment.",
+    "pay": {
+      "failed": "Le paiement a échoué. Réessayez.",
+      "loading": "Chargement du paiement sécurisé…",
+      "missingToken": "Ce lien de paiement a expiré.",
+      "success": "Paiement reçu.",
+      "widgetError": "Impossible de lancer le paiement."
+    },
+    "soldOut": "Épuisé",
+    "vendorProductCount_one": "{{count}} produit",
+    "vendorProductCount_other": "{{count}} produits",
+    "noStoresForFilter": "Aucune boutique pour cette ville ou communauté. Essayez-en une autre."
   },
   "assistant": {
     "title": "Assistant",
@@ -493,7 +521,9 @@
     "statusProcessingDesc": "Votre transaction est en traitement",
     "shareReceipt": "Partager le reçu",
     "shareText": "Transfert Ciuna {{id}} : {{send}} envoyés à {{name}} le {{date}}.",
-    "repeatTransfer": "Répéter le transfert"
+    "repeatTransfer": "Répéter le transfert",
+    "loadFailed": "Impossible de charger ce transfert",
+    "loadFailedHint": "Vérifiez votre connexion et réessayez."
   },
   "txTimeline": {
     "payoutSubmitted": "Demande envoyée",
@@ -1023,7 +1053,13 @@
       "lead": "Vérifiez votre identité auprès de notre partenaire de vérification. Les passeports russes et étrangers sont acceptés ; la vérification se fait sur leur page sécurisée, pas dans Ciuna.",
       "linkExpires": "Le lien de vérification expire à {{time}} (environ une heure).",
       "reviewPending": "Vérification en cours ou en examen. Nous débloquerons l'envoi dès qu'elle sera confirmée.",
-      "successBody": "Vous pouvez envoyer de l'argent par SBP. Retournez à votre transfert pour continuer."
+      "successBody": "Vous pouvez envoyer de l'argent par SBP. Retournez à votre transfert pour continuer.",
+      "inAppSecureTitle": "Continuez en toute sécurité chez notre partenaire",
+      "inAppSecureBody": "Par sécurité, notre partenaire ouvre la vérification dans une fenêtre protégée. Terminez le KYC là-bas. Cet écran reste ouvert et se met à jour une fois vérifié.",
+      "openPartner": "Ouvrir la vérification",
+      "opening": "Ouverture…",
+      "refreshAfter": "J'ai terminé, vérifier le statut",
+      "waitingPartner": "En attente de la vérification…"
     },
     "yourLimit": "Votre limite mensuelle",
     "limitLeft": "{{left}} restants sur {{total}}"
@@ -1115,7 +1151,8 @@
     "helpToast": "Besoin d’aide ? Contactez {{email}}",
     "passwordRuleLength": "Au moins {{count}} caractères",
     "termsAnd": "et la",
-    "privacyLink": "Politique de confidentialité"
+    "privacyLink": "Politique de confidentialité",
+    "invalidCredentials": "E-mail ou mot de passe incorrect"
   },
   "experts": {
     "profile": {
@@ -1849,5 +1886,11 @@
     "groupPreferences": "Préférences",
     "groupHelp": "Aide",
     "logOut": "Se déconnecter"
+  },
+  "common": {
+    "back": "Retour",
+    "clear": "Effacer",
+    "loading": "Chargement",
+    "retry": "Réessayer"
   }
 }

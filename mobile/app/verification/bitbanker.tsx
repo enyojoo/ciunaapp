@@ -80,7 +80,7 @@ export default function BitbankerVerificationScreen() {
     return (
       <ScreenScroll edges={["left", "right"]} keyboard>
         <View style={[styles.stateCard, styles.stateCardPending, styles.inlinePending]}>
-          <Clock size={28} color="#B45309" strokeWidth={2} />
+          <Clock size={28} color={colors.warningText} strokeWidth={2} />
           <Text style={styles.stateTitle}>{t("verification.hubStatusPendingTitle")}</Text>
           <Text style={styles.stateBody}>{t("verification.kycBridge.reviewPending")}</Text>
         </View>
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   stateIconSuccess: { backgroundColor: colors.successSurface },
-  stateIconPending: { backgroundColor: "#FEF3C7" },
+  stateIconPending: { backgroundColor: colors.warningSurface },
   stateTitle: { fontSize: typeSize.headline, fontWeight: "700", color: colors.text, textAlign: "center" },
   stateBody: { marginTop: 8, fontSize: typeSize.body, lineHeight: 22, color: colors.muted, textAlign: "center" },
   stateAction: { marginTop: 24 },

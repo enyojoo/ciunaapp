@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react"
-import { RU_CITIES, normalizeRuCity, sameCity } from "@ciuna/shared"
+import { areaMatches, normalizeRuCity, vendorServesCity } from "@ciuna/shared"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useCommunity, vendorServesCommunity } from "@/lib/community"
 import { useHubCatalog } from "@/lib/use-hub-catalog"
@@ -74,14 +74,6 @@ export function useDeliveryCities(): string[] {
   }, [food, mart])
 }
 
-/** A store is shown for a city when it delivers there, or delivers nowhere at all (pickup only, digital sellers). */
-export function vendorServesCity(v: Pick<HubVendor, "delivery_areas" | "delivery_zone_count">, city: string | null): boolean {
-  if (!city) return true
-  const areas = v.delivery_areas
-  if (!areas || areas.length === 0) return (v.delivery_zone_count ?? 0) === 0
-  return areas.some((a) => sameCity(a.city, city))
-}
-
 /**
  * Stores and their products narrowed to the chosen city and community. A city keeps stores that deliver there, plus
  * pickup-only and digital sellers; a community keeps only stores that serve it, so digital items without a store drop out.
@@ -102,16 +94,7 @@ export function useLocationFilter(vendors: HubVendor[], products: HubProduct[]) 
   }, [city, community, vendors, products])
 }
 
-/** Experts and services: online ones always show; in-person ones show unless their service area names other places. */
-export function areaMatches(serviceArea: string | null | undefined, city: string | null): boolean {
-  if (!city) return true
-  const area = (serviceArea || "").trim()
-  if (!area) return true
-  const en = normalizeRuCity(city) ?? city
-  const ru = RU_CITIES.find((c) => c.en === en)?.ru
-  const hay = norm(area)
-  return hay.includes(norm(en)) || (ru ? hay.includes(norm(ru)) : false) || hay.includes(norm(city))
-}
+export { areaMatches, vendorServesCity }
 
 /** Experts and their services for the chosen city. A service is in person when its fulfilment is not online-only. */
 export function useExpertAreaFilter(profiles: ExpertProfile[], services: ExpertCatalogService[]) {

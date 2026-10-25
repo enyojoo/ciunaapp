@@ -3,7 +3,7 @@ import { PressableScale } from "@/components/ui/pressable-scale"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { Briefcase, Gift, GraduationCap, Send, ShoppingBasket, Sparkles, Utensils, type LucideIcon } from "lucide-react-native"
-import { colors, radius, type as typeSize } from "@/lib/theme"
+import { colors, illustration, radius, type as typeSize } from "@/lib/theme"
 
 /**
  * Service-line tile (Home grid), as in design-system/components/CustomerHome: 4:3 gradient artwork with a white
@@ -12,21 +12,21 @@ import { colors, radius, type as typeSize } from "@/lib/theme"
 export type TileArt = { from: string; to: string; icon: LucideIcon }
 
 export const TILE_ART: Record<string, TileArt> = {
-  food: { from: "#F3B47A", to: "#D9622B", icon: Utensils },
-  mart: { from: "#9FCB8A", to: "#3F8A55", icon: ShoppingBasket },
-  send: { from: "#8FB8D9", to: "#3F6F9C", icon: Send },
-  experts: { from: "#D9A3C7", to: "#9C4F83", icon: GraduationCap },
+  food: { ...illustration.tile.food, icon: Utensils },
+  mart: { ...illustration.tile.mart, icon: ShoppingBasket },
+  send: { ...illustration.tile.send, icon: Send },
+  experts: { ...illustration.tile.experts, icon: GraduationCap },
   /** Hero slides (not tiles). */
-  refer: { from: "#5EC4B6", to: "#0F766E", icon: Gift },
-  pick: { from: "#F3B47A", to: "#D9622B", icon: Sparkles },
-  offer: { from: "#9FCB8A", to: "#3F8A55", icon: ShoppingBasket },
+  refer: { ...illustration.tile.refer, icon: Gift },
+  pick: { ...illustration.tile.food, icon: Sparkles },
+  offer: { ...illustration.tile.mart, icon: ShoppingBasket },
 }
 
 /** Art for a service-line slug. Unknown slugs get the neutral brown fallback. */
 export function tileArtFor(slug: string): TileArt {
   const key = slug.trim().toLowerCase().replace(/_/g, "-")
   if (key === "send-money") return TILE_ART.send
-  return TILE_ART[key] ?? { from: "#B7A58F", to: "#6F5B47", icon: Briefcase }
+  return TILE_ART[key] ?? { ...illustration.tile.fallback, icon: Briefcase }
 }
 
 export function Tile({
@@ -53,7 +53,7 @@ export function Tile({
         {iconUrl ? (
           <Image source={{ uri: iconUrl }} style={styles.artImage} contentFit="contain" />
         ) : (
-          <Icon size={52} color="#FFFFFF" strokeWidth={2} style={{ opacity: 0.9 }} />
+          <Icon size={52} color={colors.onPrimary} strokeWidth={2} style={{ opacity: 0.9 }} />
         )}
       </View>
       <View style={styles.caption}>

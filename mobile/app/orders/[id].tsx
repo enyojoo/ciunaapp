@@ -304,7 +304,7 @@ function LegacyOrderScreen() {
         ) : (
           <View style={styles.failureBlock}>
             <View style={[styles.failureIcon, tone === "cancelled" && styles.failureIconCancelled]}>
-              <XCircle size={28} color={tone === "cancelled" ? colors.neutralText : "#DC2626"} strokeWidth={2} />
+              <XCircle size={28} color={tone === "cancelled" ? colors.neutralText : colors.danger} strokeWidth={2} />
             </View>
             <Text style={styles.failureTitle}>{statusMessage.title}</Text>
             <Text style={styles.failureDesc}>{statusMessage.description}</Text>
@@ -735,7 +735,7 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FEE2E2",
+    backgroundColor: colors.dangerSurface,
     marginBottom: 12,
   },
   failureIconCancelled: { backgroundColor: colors.neutralSurface },
@@ -760,7 +760,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#DCFCE7",
+    backgroundColor: colors.successSurface,
   },
   receiptBody: { flex: 1 },
   receiptTitle: { fontSize: typeSize.body, fontWeight: "600", color: colors.text },

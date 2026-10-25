@@ -32,14 +32,17 @@
     "sync:rates:debug": "npm run sync:debug -w @ciuna/rate-sync --",
     "design:cards-build": "node design-system/scripts/build-cards.mjs",
     "design:audit": "node design-system/scripts/audit-cards.mjs",
-    "test:seller": "playwright test --project=seller-375 --project=seller-768 --project=seller-1280"
+    "test:seller": "playwright test --project=seller-375 --project=seller-768 --project=seller-1280",
+    "locales:keys": "node scripts/check-missing-keys.mjs",
+    "design:hex": "node scripts/check-hex.mjs",
+    "db:rls-probe": "node scripts/rls-probe.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
     "turbo": "^2.8.12"
   },
   "dependencies": {
-    "next": "^16.1.6"
+    "next": "16.4.3"
   },
   "allowScripts": {
     "esbuild": true,

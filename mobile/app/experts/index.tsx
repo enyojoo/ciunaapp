@@ -26,9 +26,9 @@ const SERVICES_PREVIEW = 8
  */
 export default function ExpertsDirectory() {
   const router = useRouter()
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const expertsLine = useHubServiceLine("experts")
-  const labels = hubServiceLineShellLabels("experts", expertsLine, t, t("hub.expertsTitle", { defaultValue: "Experts" }))
+  const labels = hubServiceLineShellLabels("experts", expertsLine, t, t("hub.expertsTitle", { defaultValue: "Experts" }), i18n.language)
   const { data: profilesData, loading: loadingProfiles, revalidate: revalidateProfiles } = useExpertProfiles()
   const { data: servicesData, loading: loadingServices, revalidate: revalidateServices } = useExpertCatalogServices()
   const { profiles, services } = useExpertAreaFilter(profilesData || [], servicesData || [])

@@ -92,6 +92,37 @@ export const colors = {
   heroOrangeMid: "#F97316",
   heroAmber: "#FBBF24",
   heroBody: "#FFF7ED",
+  info: "#1E40AF",
+  infoSurface: "#EFF6FF",
+  placeholder: "#9CA3AF",
+  skeletonTrack: "#E5E1D8",
+  skeletonEdge: "#DDD8CE",
+} as const
+
+/** Decorative colour that is not UI chrome: tile art, monogram grounds, hero slide fills, people chips. */
+export const illustration = {
+  tile: {
+    food: { from: "#F3B47A", to: "#D9622B" },
+    mart: { from: "#9FCB8A", to: "#3F8A55" },
+    send: { from: "#8FB8D9", to: "#3F6F9C" },
+    experts: { from: "#D9A3C7", to: "#9C4F83" },
+    refer: { from: "#5EC4B6", to: "#0F766E" },
+    fallback: { from: "#B7A58F", to: "#6F5B47" },
+  },
+  monogram: [
+    { bg: "#FFF3E8", fg: "#9A3412" },
+    { bg: "#ECFDF5", fg: "#065F46" },
+    { bg: "#EFF6FF", fg: "#1E40AF" },
+    { bg: "#F5F3FF", fg: "#5B21B6" },
+    { bg: "#FDF2F8", fg: "#9D174D" },
+    { bg: "#F0FDFA", fg: "#115E59" },
+    { bg: "#FEFCE8", fg: "#854D0E" },
+  ],
+  slide: { sorted: "#1F2937", community: "#115E59", language: "#1E3A8A" },
+  people: ["#FDE68A", "#A7F3D0", "#BFDBFE", "#FBCFE8"],
+  ink: "#1F2937",
+  accent: "#F97316",
+  addGradient: ["#34D399", "#3B82F6", "#9333EA"],
 } as const
 
 export const radius = {

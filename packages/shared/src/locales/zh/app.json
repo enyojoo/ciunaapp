@@ -214,7 +214,13 @@
         "missingTransaction": "缺少交易",
         "failed": "失败"
       },
-      "forProduct": "{{product}} 的结算"
+      "forProduct": "{{product}} 的结算",
+      "onlinePayInlineHint": "请在下方使用银行卡或 SBP 完成付款。",
+      "orderLabel": "订单",
+      "paidOnline": "完成付款",
+      "payManual": "银行转账",
+      "payOnline": "在线支付",
+      "paymentMethod": "付款方式"
     },
     "payFrom": "起付金额",
     "payUpTo": "最高付款",
@@ -257,7 +263,17 @@
       "removeShort": "删除",
       "storeClosedShort": "店铺目前已打烊。",
       "itemCount_one": "{{count}} 件商品",
-      "itemCount_other": "{{count}} 件商品"
+      "itemCount_other": "{{count}} 件商品",
+      "title": "购物车",
+      "empty": "购物车是空的。",
+      "addToCart": "加入购物车",
+      "addFailed": "无法加入购物车",
+      "updateFailed": "无法更新购物车",
+      "increase": "增加数量",
+      "decrease": "减少数量",
+      "remove": "移除商品",
+      "viewCart": "查看购物车",
+      "moreFromVendor": "{{vendor}} 的更多商品"
     },
     "stock": {
       "onlyLeft": "仅剩 {{n}} 件",
@@ -297,7 +313,19 @@
       "productCount_one": "{{count}} 件商品",
       "productCount_other": "{{count}} 件商品",
       "allStores": "全部店铺"
-    }
+    },
+    "expertsEmpty": "暂无专家。",
+    "pay": {
+      "failed": "付款失败，请重试。",
+      "loading": "正在加载安全支付…",
+      "missingToken": "此付款链接已过期。",
+      "success": "已收到付款。",
+      "widgetError": "无法开始付款。"
+    },
+    "soldOut": "已售罄",
+    "vendorProductCount_other": "{{count}} 件商品",
+    "vendorProductCount_one": "{{count}} 件商品",
+    "noStoresForFilter": "此城市或社群暂无店铺，请换一个试试。"
   },
   "assistant": {
     "title": "助手",
@@ -657,7 +685,9 @@
     "statusProcessingDesc": "您的交易正在处理中",
     "shareReceipt": "分享收据",
     "shareText": "Ciuna 转账 {{id}}：已于 {{date}} 向 {{name}} 汇出 {{send}}。",
-    "repeatTransfer": "重复转账"
+    "repeatTransfer": "重复转账",
+    "loadFailed": "无法加载此转账",
+    "loadFailedHint": "请检查网络后重试。"
   },
   "txTimeline": {
     "payoutSubmitted": "申请已提交",
@@ -1122,7 +1152,13 @@
       "lead": "通过我们的验证合作伙伴进行验证。支持俄罗斯护照和外国护照；验证在其安全页面上完成，而非在 Ciuna 内。",
       "linkExpires": "验证链接将于 {{time}} 失效（约一小时）。",
       "reviewPending": "验证进行中或正在审核。确认后，我们将为您开通汇款。",
-      "successBody": "您现在可以通过 SBP 汇款。请返回转账页面继续。"
+      "successBody": "您现在可以通过 SBP 汇款。请返回转账页面继续。",
+      "inAppSecureTitle": "通过合作伙伴安全继续",
+      "inAppSecureBody": "为了安全，验证由合作伙伴在受保护的窗口中进行。请在那里完成 KYC。此页面保持打开，验证通过后会自动更新。",
+      "openPartner": "打开验证",
+      "opening": "正在打开…",
+      "refreshAfter": "我已完成，检查状态",
+      "waitingPartner": "等待验证结果…"
     },
     "bitbanker": {
       "pageTitle": "验证身份",
@@ -1279,7 +1315,8 @@
     "helpToast": "需要帮助？请联系客服：{{email}}",
     "passwordRuleLength": "至少 {{count}} 个字符",
     "termsAnd": "和",
-    "privacyLink": "隐私政策"
+    "privacyLink": "隐私政策",
+    "invalidCredentials": "邮箱或密码不正确"
   },
   "referralLanding": {
     "redirecting": "正在跳转…",
@@ -1849,5 +1886,11 @@
     "groupPreferences": "偏好设置",
     "groupHelp": "帮助",
     "logOut": "退出登录"
+  },
+  "common": {
+    "back": "返回",
+    "clear": "清除",
+    "loading": "加载中",
+    "retry": "重试"
   }
 }

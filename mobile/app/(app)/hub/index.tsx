@@ -19,7 +19,7 @@ import { useTabContentPadding } from "@/lib/use-tab-content-padding"
 import { colors, space } from "@/lib/theme"
 
 export default function HomeScreen() {
-  const { t } = useTranslation("app")
+  const { t, i18n } = useTranslation("app")
   const tabContentPadding = useTabContentPadding()
   const router = useRouter()
   const { openLink } = useExternalLink()
@@ -37,7 +37,7 @@ export default function HomeScreen() {
     const href = lineHref(line)
     if (!href) return
     if (line.grid_kind === "external_url") {
-      const { title } = hubServiceLineTileCopy(line, t)
+      const { title } = hubServiceLineTileCopy(line, t, i18n.language)
       void openLink(href, title)
       return
     }
@@ -83,7 +83,7 @@ export default function HomeScreen() {
             {Array.from({ length: Math.ceil(lines.length / perRow) }).map((_, r) => (
               <View key={r} style={[styles.row, wide && styles.rowWide]}>
                 {lines.slice(r * perRow, r * perRow + perRow).map((line) => {
-                  const { title, shortDescription } = hubServiceLineTileCopy(line, t)
+                  const { title, shortDescription } = hubServiceLineTileCopy(line, t, i18n.language)
                   return (
                     <View key={line.id} style={styles.cell}>
                       <Tile title={title} description={shortDescription} slug={line.slug} onPress={() => open(line)} />

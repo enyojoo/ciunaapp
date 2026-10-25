@@ -214,7 +214,13 @@
         "missingTransaction": "Missing transaction",
         "failed": "Failed"
       },
-      "forProduct": "Checkout for {{product}}"
+      "forProduct": "Checkout for {{product}}",
+      "onlinePayInlineHint": "Complete payment by card or SBP below.",
+      "orderLabel": "Order",
+      "paidOnline": "Complete payment",
+      "payManual": "Bank transfer",
+      "payOnline": "Pay online",
+      "paymentMethod": "Payment method"
     },
     "payFrom": "Pay from",
     "payUpTo": "Pay up to",
@@ -257,7 +263,17 @@
       "removeShort": "Delete",
       "storeClosedShort": "The store is closed right now.",
       "itemCount_one": "{{count}} item",
-      "itemCount_other": "{{count}} items"
+      "itemCount_other": "{{count}} items",
+      "title": "Cart",
+      "empty": "Your cart is empty.",
+      "addToCart": "Add to cart",
+      "addFailed": "Couldn't add to cart",
+      "updateFailed": "Couldn't update cart",
+      "increase": "Increase quantity",
+      "decrease": "Decrease quantity",
+      "remove": "Remove item",
+      "viewCart": "View cart",
+      "moreFromVendor": "More from {{vendor}}"
     },
     "stock": {
       "onlyLeft": "Only {{n}} left",
@@ -297,7 +313,19 @@
       "productCount_one": "{{count}} product",
       "productCount_other": "{{count}} products",
       "allStores": "All stores"
-    }
+    },
+    "expertsEmpty": "No experts listed yet.",
+    "pay": {
+      "failed": "Payment failed. Please try again.",
+      "loading": "Loading secure payment…",
+      "missingToken": "This payment link has expired.",
+      "success": "Payment received.",
+      "widgetError": "Payment could not be started."
+    },
+    "soldOut": "Sold out",
+    "vendorProductCount_one": "{{count}} product",
+    "vendorProductCount_other": "{{count}} products",
+    "noStoresForFilter": "No stores match this city or community. Try another."
   },
   "assistant": {
     "title": "Assistant",
@@ -657,7 +685,9 @@
     "statusProcessingDesc": "Your transaction is being processed",
     "shareReceipt": "Share receipt",
     "shareText": "Ciuna transfer {{id}}: {{send}} sent to {{name}} on {{date}}.",
-    "repeatTransfer": "Repeat transfer"
+    "repeatTransfer": "Repeat transfer",
+    "loadFailed": "Couldn't load this transfer",
+    "loadFailedHint": "Check your connection and try again."
   },
   "txTimeline": {
     "payoutSubmitted": "Request submitted",
@@ -1122,7 +1152,13 @@
       "lead": "Verify with our verification partner. Russian and foreign passports are supported; the check happens on their secure page, not in Ciuna.",
       "linkExpires": "Verification link expires at {{time}} (about one hour).",
       "reviewPending": "Verification in progress or under review. We will unlock Send when it is confirmed.",
-      "successBody": "You can send money with SBP. Return to your transfer to continue."
+      "successBody": "You can send money with SBP. Return to your transfer to continue.",
+      "inAppSecureTitle": "Continue securely with our partner",
+      "inAppSecureBody": "For security, our verification partner opens verification in a protected window. Finish KYC there. This screen stays open and updates when you're verified.",
+      "openPartner": "Open verification",
+      "opening": "Opening…",
+      "refreshAfter": "I've finished, check status",
+      "waitingPartner": "Waiting for verification…"
     },
     "bitbanker": {
       "pageTitle": "Verify identity",
@@ -1279,7 +1315,8 @@
     "helpToast": "Need assistance? Contact support at {{email}}",
     "passwordRuleLength": "At least {{count}} characters",
     "termsAnd": "and",
-    "privacyLink": "Privacy Policy"
+    "privacyLink": "Privacy Policy",
+    "invalidCredentials": "Invalid email or password"
   },
   "referralLanding": {
     "redirecting": "Redirecting…",
@@ -1849,5 +1886,11 @@
     "groupPreferences": "Preferences",
     "groupHelp": "Help",
     "logOut": "Log out"
+  },
+  "common": {
+    "back": "Back",
+    "clear": "Clear",
+    "loading": "Loading",
+    "retry": "Retry"
   }
 }

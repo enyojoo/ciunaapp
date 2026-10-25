@@ -123,7 +123,7 @@ export default function AccountScreen() {
 
       <View style={styles.shortcuts}>
         <Shortcut icon="heart" label={tApp("favourites.title", { defaultValue: "Favourites" })} onPress={() => router.push("/favourites" as never)} tint={colors.dangerText} bg={colors.dangerSurface} />
-        <Shortcut icon="bank" label={t("more.recipients")} onPress={() => router.push("/recipients")} tint="#1E40AF" bg="#EFF6FF" />
+        <Shortcut icon="bank" label={t("more.recipients")} onPress={() => router.push("/recipients")} tint={colors.info} bg={colors.infoSurface} />
         <Shortcut icon="gift" label={tApp("dashboard.referShort", { defaultValue: "Refer" })} onPress={() => router.push("/referrals")} tint={colors.refer} bg={colors.referBg} />
       </View>
 

@@ -58,6 +58,7 @@ export default function SendScreen() {
     sendLine,
     t,
     t("hub.serviceLineTiles.send.title", { defaultValue: "Send Money" }),
+    i18n.language,
   )
   const backAria = t("hub.backToHub", { defaultValue: "Back to Hub" })
   const { currencies, rates, loading: fxLoading, reload: reloadFx } = useFx()
@@ -471,7 +472,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: radius.row,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#FDBA74",
+    borderColor: colors.primaryBorder,
     backgroundColor: colors.heroBody,
     paddingHorizontal: 10,
     paddingVertical: 8,

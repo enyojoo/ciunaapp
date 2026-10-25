@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native"
 import { Image } from "expo-image"
-import { colors } from "@/lib/theme"
+import { colors, illustration } from "@/lib/theme"
 
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -10,15 +10,7 @@ function initials(name: string): string {
 }
 
 /** Soft grounds for monograms. The name picks one, so a person keeps the same colour everywhere. */
-const MONOGRAM = [
-  { bg: "#FFF3E8", fg: "#9A3412" },
-  { bg: "#ECFDF5", fg: "#065F46" },
-  { bg: "#EFF6FF", fg: "#1E40AF" },
-  { bg: "#F5F3FF", fg: "#5B21B6" },
-  { bg: "#FDF2F8", fg: "#9D174D" },
-  { bg: "#F0FDFA", fg: "#115E59" },
-  { bg: "#FEFCE8", fg: "#854D0E" },
-] as const
+const MONOGRAM = illustration.monogram
 
 export function monogramColors(name: string) {
   let h = 0

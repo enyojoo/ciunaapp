@@ -214,7 +214,13 @@
         "missingTransaction": "Отсутствует транзакция",
         "failed": "Ошибка"
       },
-      "forProduct": "Оплата за {{product}}"
+      "forProduct": "Оплата за {{product}}",
+      "onlinePayInlineHint": "Оплатите картой или через СБП ниже.",
+      "orderLabel": "Заказ",
+      "paidOnline": "Завершить оплату",
+      "payManual": "Банковский перевод",
+      "payOnline": "Оплатить онлайн",
+      "paymentMethod": "Способ оплаты"
     },
     "payFrom": "Оплатить от",
     "payUpTo": "Оплатить до",
@@ -259,7 +265,17 @@
       "itemCount_one": "{{count}} товар",
       "itemCount_few": "{{count}} товара",
       "itemCount_many": "{{count}} товаров",
-      "itemCount_other": "{{count}} товара"
+      "itemCount_other": "{{count}} товара",
+      "title": "Корзина",
+      "empty": "Корзина пуста.",
+      "addToCart": "В корзину",
+      "addFailed": "Не удалось добавить в корзину",
+      "updateFailed": "Не удалось обновить корзину",
+      "increase": "Увеличить количество",
+      "decrease": "Уменьшить количество",
+      "remove": "Удалить товар",
+      "viewCart": "Открыть корзину",
+      "moreFromVendor": "Ещё от {{vendor}}"
     },
     "stock": {
       "onlyLeft": "Осталось всего {{n}}",
@@ -301,7 +317,21 @@
       "productCount_many": "{{count}} товаров",
       "productCount_other": "{{count}} товара",
       "allStores": "Все магазины"
-    }
+    },
+    "expertsEmpty": "Экспертов пока нет.",
+    "pay": {
+      "failed": "Оплата не прошла. Попробуйте ещё раз.",
+      "loading": "Загружаем безопасную оплату…",
+      "missingToken": "Срок действия ссылки на оплату истёк.",
+      "success": "Оплата получена.",
+      "widgetError": "Не удалось начать оплату."
+    },
+    "soldOut": "Распродано",
+    "vendorProductCount_one": "{{count}} товар",
+    "vendorProductCount_few": "{{count}} товара",
+    "vendorProductCount_many": "{{count}} товаров",
+    "vendorProductCount_other": "{{count}} товара",
+    "noStoresForFilter": "В этом городе или сообществе магазинов нет. Выберите другой вариант."
   },
   "assistant": {
     "title": "Ассистент",
@@ -497,7 +527,9 @@
     "statusProcessingDesc": "Ваша операция в обработке",
     "shareReceipt": "Поделиться квитанцией",
     "shareText": "Перевод Ciuna {{id}}: {{send}} отправлено получателю {{name}}, {{date}}.",
-    "repeatTransfer": "Повторить перевод"
+    "repeatTransfer": "Повторить перевод",
+    "loadFailed": "Не удалось загрузить перевод",
+    "loadFailedHint": "Проверьте соединение и попробуйте снова."
   },
   "txTimeline": {
     "payoutSubmitted": "Запрос отправлен",
@@ -1027,7 +1059,13 @@
       "lead": "Пройдите проверку у нашего партнёра по верификации. Поддерживаются российские и иностранные паспорта; проверка проходит на их защищённой странице, а не в Ciuna.",
       "linkExpires": "Ссылка для проверки действует до {{time}} (около часа).",
       "reviewPending": "Проверка идёт или на рассмотрении. Мы откроем отправку, когда она будет подтверждена.",
-      "successBody": "Теперь вы можете отправлять деньги через СБП. Вернитесь к переводу, чтобы продолжить."
+      "successBody": "Теперь вы можете отправлять деньги через СБП. Вернитесь к переводу, чтобы продолжить.",
+      "inAppSecureTitle": "Продолжите безопасно у нашего партнёра",
+      "inAppSecureBody": "В целях безопасности партнёр открывает проверку в защищённом окне. Завершите KYC там. Этот экран останется открытым и обновится, когда проверка пройдёт.",
+      "openPartner": "Открыть проверку",
+      "opening": "Открываем…",
+      "refreshAfter": "Я закончил, проверить статус",
+      "waitingPartner": "Ждём результат проверки…"
     },
     "yourLimit": "Ваш месячный лимит",
     "limitLeft": "Осталось {{left}} из {{total}}"
@@ -1119,7 +1157,8 @@
     "helpToast": "Нужна помощь? Напишите на {{email}}",
     "passwordRuleLength": "Не менее {{count}} символов",
     "termsAnd": "и",
-    "privacyLink": "Политикой конфиденциальности"
+    "privacyLink": "Политикой конфиденциальности",
+    "invalidCredentials": "Неверный email или пароль"
   },
   "experts": {
     "profile": {
@@ -1861,5 +1900,11 @@
     "groupPreferences": "Настройки",
     "groupHelp": "Помощь",
     "logOut": "Выйти"
+  },
+  "common": {
+    "back": "Назад",
+    "clear": "Очистить",
+    "loading": "Загрузка",
+    "retry": "Повторить"
   }
 }

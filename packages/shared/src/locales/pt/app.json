@@ -214,7 +214,13 @@
         "missingTransaction": "Transação não encontrada",
         "failed": "Falhou"
       },
-      "forProduct": "Finalizar compra de {{product}}"
+      "forProduct": "Finalizar compra de {{product}}",
+      "onlinePayInlineHint": "Conclua o pagamento por cartão ou SBP abaixo.",
+      "orderLabel": "Pedido",
+      "paidOnline": "Concluir pagamento",
+      "payManual": "Transferência bancária",
+      "payOnline": "Pagar online",
+      "paymentMethod": "Forma de pagamento"
     },
     "payFrom": "Pagar a partir de",
     "payUpTo": "Pagar até",
@@ -257,7 +263,17 @@
       "removeShort": "Excluir",
       "storeClosedShort": "A loja está fechada agora.",
       "itemCount_one": "{{count}} item",
-      "itemCount_other": "{{count}} itens"
+      "itemCount_other": "{{count}} itens",
+      "title": "Carrinho",
+      "empty": "Seu carrinho está vazio.",
+      "addToCart": "Adicionar ao carrinho",
+      "addFailed": "Não foi possível adicionar ao carrinho",
+      "updateFailed": "Não foi possível atualizar o carrinho",
+      "increase": "Aumentar quantidade",
+      "decrease": "Diminuir quantidade",
+      "remove": "Remover item",
+      "viewCart": "Ver carrinho",
+      "moreFromVendor": "Mais de {{vendor}}"
     },
     "stock": {
       "onlyLeft": "Restam só {{n}}",
@@ -297,7 +313,19 @@
       "productCount_one": "{{count}} produto",
       "productCount_other": "{{count}} produtos",
       "allStores": "Todas as lojas"
-    }
+    },
+    "expertsEmpty": "Ainda não há especialistas.",
+    "pay": {
+      "failed": "O pagamento falhou. Tente de novo.",
+      "loading": "Carregando pagamento seguro…",
+      "missingToken": "Este link de pagamento expirou.",
+      "success": "Pagamento recebido.",
+      "widgetError": "Não foi possível iniciar o pagamento."
+    },
+    "soldOut": "Esgotado",
+    "vendorProductCount_one": "{{count}} produto",
+    "vendorProductCount_other": "{{count}} produtos",
+    "noStoresForFilter": "Nenhuma loja para esta cidade ou comunidade. Tente outra."
   },
   "assistant": {
     "title": "Assistente",
@@ -657,7 +685,9 @@
     "statusProcessingDesc": "Sua transação está sendo processada",
     "shareReceipt": "Compartilhar recibo",
     "shareText": "Transferência Ciuna {{id}}: {{send}} enviados para {{name}} em {{date}}.",
-    "repeatTransfer": "Repetir transferência"
+    "repeatTransfer": "Repetir transferência",
+    "loadFailed": "Não foi possível carregar esta transferência",
+    "loadFailedHint": "Verifique sua conexão e tente de novo."
   },
   "txTimeline": {
     "payoutSubmitted": "Solicitação enviada",
@@ -1122,7 +1152,13 @@
       "lead": "Faça a verificação com nosso parceiro de verificação. Aceitamos passaportes russos e estrangeiros; a checagem é feita na página segura dele, não na Ciuna.",
       "linkExpires": "O link de verificação expira às {{time}} (cerca de uma hora).",
       "reviewPending": "Verificação em andamento ou em análise. Liberaremos o envio quando for confirmada.",
-      "successBody": "Você pode enviar dinheiro por SBP. Volte à sua transferência para continuar."
+      "successBody": "Você pode enviar dinheiro por SBP. Volte à sua transferência para continuar.",
+      "inAppSecureTitle": "Continue com segurança no nosso parceiro",
+      "inAppSecureBody": "Por segurança, nosso parceiro abre a verificação em uma janela protegida. Conclua o KYC lá. Esta tela continua aberta e atualiza quando você for verificado.",
+      "openPartner": "Abrir verificação",
+      "opening": "Abrindo…",
+      "refreshAfter": "Terminei, verificar status",
+      "waitingPartner": "Aguardando a verificação…"
     },
     "bitbanker": {
       "pageTitle": "Verificar identidade",
@@ -1279,7 +1315,8 @@
     "helpToast": "Precisa de ajuda? Fale com o suporte em {{email}}",
     "passwordRuleLength": "Pelo menos {{count}} caracteres",
     "termsAnd": "e a",
-    "privacyLink": "Política de Privacidade"
+    "privacyLink": "Política de Privacidade",
+    "invalidCredentials": "E-mail ou senha incorretos"
   },
   "referralLanding": {
     "redirecting": "Redirecionando…",
@@ -1849,5 +1886,11 @@
     "groupPreferences": "Preferências",
     "groupHelp": "Ajuda",
     "logOut": "Sair"
+  },
+  "common": {
+    "back": "Voltar",
+    "clear": "Limpar",
+    "loading": "Carregando",
+    "retry": "Tentar de novo"
   }
 }
