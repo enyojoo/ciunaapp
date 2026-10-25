@@ -60,7 +60,7 @@ test("Office can assign every role in the matrix, and only those", async () => {
 test("admin write routes that change people or money write an audit entry", () => {
   const WRITES = [
     "users/[id]/status", "users/[id]/verification", "kyc", "admin-users", "admin-users/[id]",
-    "transactions/[id]/status", "referral-payouts/[id]/complete", "referral-payouts/[id]/cancel", "exchange-rates",
+    "transactions/[id]/status", "transactions/[id]/retry", "transactions/[id]/refund", "expert/profiles/[id]/credentials", "referral-payouts/[id]/complete", "referral-payouts/[id]/cancel", "exchange-rates",
   ]
   const missing = WRITES.filter((r) => !readFileSync(join(ROOT, r, "route.ts"), "utf8").includes("audit("))
   assert.deepEqual(missing, [])

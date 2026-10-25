@@ -16,6 +16,7 @@ import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
+import { ExpertCredentialsReview } from "@/components/experts/expert-credentials-review"
 import { ExpertServiceScheduleEditor } from "@/components/experts/expert-service-schedule-editor"
 import { officeFetch } from "@/lib/api-client"
 import { useOfficeData } from "@/hooks/use-office-data"
@@ -479,6 +480,7 @@ export default function OfficeExpertProfileDetailPage() {
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="services">Services</TabsTrigger>
             <TabsTrigger value="slots">Slots</TabsTrigger>
+            <TabsTrigger value="credentials">Credentials</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile" className="mt-6">
@@ -649,6 +651,10 @@ export default function OfficeExpertProfileDetailPage() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="credentials" className="mt-6">
+            <ExpertCredentialsReview profileId={id} />
           </TabsContent>
 
           <TabsContent value="slots" className="mt-6 space-y-4">

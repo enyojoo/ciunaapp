@@ -87,6 +87,9 @@ with checks as (
   union all
   select 'store-communities.sql', 'column ' || c, exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = split_part(c, '.', 1) and column_name = split_part(c, '.', 2))
     from unnest(array['merchants.communities', 'hub_vendors.communities']) as c
+  union all
+  select 'expert-credentials-review.sql', 'column ' || c, exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = split_part(c, '.', 1) and column_name = split_part(c, '.', 2))
+    from unnest(array['expert_profiles.credentials_review', 'expert_profiles.credentials_review_reason', 'expert_profiles.credentials_reviewed_by', 'expert_profiles.credentials_reviewed_at']) as c
 )
 select file, what, ok from checks order by ok, file, what;
 

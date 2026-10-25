@@ -231,5 +231,8 @@
   "errors.CREDENTIAL_ISSUER_INVALID": "The issuer can be up to 120 characters.",
   "errors.CREDENTIAL_YEAR_INVALID": "The year must be between 1950 and this year.",
   "errors.YEARS_INVALID": "Years of experience must be a whole number from 0 to 80.",
-  "errors.CREDENTIALS_INVALID": "That credentials list is not valid."
+  "errors.CREDENTIALS_INVALID": "That credentials list is not valid.",
+  "expert.cred.review.pending": "Waiting for review by Ciuna",
+  "expert.cred.review.approved": "Approved by Ciuna",
+  "expert.cred.review.rejected": "Not approved: {{reason}}"
 }

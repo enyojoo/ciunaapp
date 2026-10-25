@@ -231,5 +231,8 @@
   "errors.CREDENTIAL_ISSUER_INVALID": "Организация: до 120 символов.",
   "errors.CREDENTIAL_YEAR_INVALID": "Год должен быть от 1950 до текущего.",
   "errors.YEARS_INVALID": "Стаж: целое число от 0 до 80.",
-  "errors.CREDENTIALS_INVALID": "Список указан неверно."
+  "errors.CREDENTIALS_INVALID": "Список указан неверно.",
+  "expert.cred.review.pending": "Ждёт проверки Ciuna",
+  "expert.cred.review.approved": "Одобрено Ciuna",
+  "expert.cred.review.rejected": "Не одобрено: {{reason}}"
 }

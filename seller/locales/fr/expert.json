@@ -231,5 +231,8 @@
   "errors.CREDENTIAL_ISSUER_INVALID": "L'organisme peut faire 120 caractères maximum.",
   "errors.CREDENTIAL_YEAR_INVALID": "L'année doit être comprise entre 1950 et cette année.",
   "errors.YEARS_INVALID": "Les années d'expérience doivent être un entier de 0 à 80.",
-  "errors.CREDENTIALS_INVALID": "Cette liste n'est pas valide."
+  "errors.CREDENTIALS_INVALID": "Cette liste n'est pas valide.",
+  "expert.cred.review.pending": "En attente de vérification par Ciuna",
+  "expert.cred.review.approved": "Approuvé par Ciuna",
+  "expert.cred.review.rejected": "Non approuvé : {{reason}}"
 }

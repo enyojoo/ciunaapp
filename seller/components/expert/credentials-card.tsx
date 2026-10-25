@@ -7,7 +7,7 @@ import { useQuery, invalidate } from "@/lib/query"
 import { useErrorText, useT } from "@/lib/i18n"
 
 interface Row { title: string; issuer: string; year: string }
-interface Data { credentials: Array<{ title: string; issuer?: string; year?: number }>; yearsExperience: number | null }
+interface Data { credentials: Array<{ title: string; issuer?: string; year?: number }>; yearsExperience: number | null; review?: "none" | "pending" | "approved" | "rejected"; reviewReason?: string | null }
 const ctl = "h-12 md:h-11"
 
 /** Credentials and years of experience, shown on the expert's public profile. Saves on its own. */
@@ -45,6 +45,12 @@ export function CredentialsCard({ editable }: { editable: boolean }) {
       <CardHeader title={t("expert.cred.title")} description={t("expert.cred.hint")} />
       <CardBody className="space-y-4">
         {error ? <Banner tone="destructive" title={error} /> : null}
+        {q.data?.review && q.data.review !== "none" ? (
+          <Banner
+            tone={q.data.review === "approved" ? "success" : q.data.review === "rejected" ? "destructive" : "warning"}
+            title={t(`expert.cred.review.${q.data.review}`, { reason: q.data.reviewReason ?? "" })}
+          />
+        ) : null}
         {!loaded && !q.error ? <Skeleton className="h-24" /> : (
           <>
             <Field label={t("expert.cred.years")}><Input className={ctl} inputMode="numeric" disabled={!editable} value={years} maxLength={2} onChange={(e) => setYears(e.target.value.replace(/\D/g, ""))} /></Field>

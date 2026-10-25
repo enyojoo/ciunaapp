@@ -231,5 +231,8 @@
   "errors.CREDENTIAL_ISSUER_INVALID": "El emisor puede tener hasta 120 caracteres.",
   "errors.CREDENTIAL_YEAR_INVALID": "El año debe estar entre 1950 y este año.",
   "errors.YEARS_INVALID": "Los años de experiencia deben ser un número entero de 0 a 80.",
-  "errors.CREDENTIALS_INVALID": "Esa lista no es válida."
+  "errors.CREDENTIALS_INVALID": "Esa lista no es válida.",
+  "expert.cred.review.pending": "Pendiente de revisión por Ciuna",
+  "expert.cred.review.approved": "Aprobado por Ciuna",
+  "expert.cred.review.rejected": "No aprobado: {{reason}}"
 }

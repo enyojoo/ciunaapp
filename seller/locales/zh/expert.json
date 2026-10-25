@@ -231,5 +231,8 @@
   "errors.CREDENTIAL_ISSUER_INVALID": "颁发机构最多 120 个字符。",
   "errors.CREDENTIAL_YEAR_INVALID": "年份须在 1950 年至今年之间。",
   "errors.YEARS_INVALID": "从业年限须为 0 到 80 的整数。",
-  "errors.CREDENTIALS_INVALID": "该列表无效。"
+  "errors.CREDENTIALS_INVALID": "该列表无效。",
+  "expert.cred.review.pending": "等待 Ciuna 审核",
+  "expert.cred.review.approved": "Ciuna 已批准",
+  "expert.cred.review.rejected": "未获批准：{{reason}}"
 }
