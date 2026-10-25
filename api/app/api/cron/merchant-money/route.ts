@@ -1,3 +1,4 @@
+import { pingHeartbeat } from "@/lib/heartbeat"
 import { NextResponse, type NextRequest } from "next/server"
 import { timingSafeEqual } from "node:crypto"
 import { runMoneyJobs } from "@/lib/merchant/money"
@@ -11,7 +12,9 @@ async function handle(request: NextRequest) {
   const actual = Buffer.from(request.headers.get("authorization") || "")
   if (!secret || actual.length !== expected.length || !timingSafeEqual(actual, expected)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   try {
-    return NextResponse.json(await runMoneyJobs())
+    const result = await runMoneyJobs()
+    await pingHeartbeat("merchant-money")
+    return NextResponse.json(result)
   } catch (e) {
     console.error("merchant-money cron failed", e instanceof Error ? e.message : e)
     return NextResponse.json({ error: "Job failed; it is safe to retry." }, { status: 503 })

@@ -1,7 +1,10 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
+  const limited = await limitOrResponse(request, "otp", LIMITS.otp)
+  if (limited) return limited
   try {
     const { email } = await request.json()
 

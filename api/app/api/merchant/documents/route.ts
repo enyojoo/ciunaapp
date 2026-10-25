@@ -1,3 +1,4 @@
+import { rateLimit, LIMITS } from "@/lib/rate-limit"
 import { merchantRoute, readJson } from "@/lib/merchant/http"
 import { createServerClient } from "@/lib/supabase"
 import { assert, check } from "@/lib/merchant/errors"
@@ -14,6 +15,7 @@ export const GET = merchantRoute("documents", async (_req, { merchant }) => {
 
 /** Register a file already uploaded through /api/merchant/uploads (kind=document). */
 export const POST = merchantRoute("documents", async (req, { user, merchant }) => {
+  assert(await rateLimit(`kyc:${user.id}`, LIMITS.kyc.limit, LIMITS.kyc.windowSeconds), "RATE_LIMITED", 429)
   const body = await readJson(req)
   const kind = String(body.kind || "").trim().slice(0, 48)
   const path = String(body.path || "")

@@ -1,3 +1,4 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { NextRequest, NextResponse } from "next/server"
 import { assertWithinLimits } from "@/lib/limits"
 import { MerchantError } from "@/lib/merchant/errors"
@@ -8,6 +9,8 @@ import { BitbankerApiError, formatBitbankerApiError } from "@/lib/bitbanker/clie
 import { acceptSendQuoteAndCreateInvoice } from "@/lib/bitbanker/send-transfer-service"
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
+  const limited = await limitOrResponse(request, "checkout", LIMITS.checkout)
+  if (limited) return limited
   const user = await requireUser(request)
   const admin = createServerClient()
 

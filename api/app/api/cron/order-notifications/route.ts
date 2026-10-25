@@ -1,3 +1,4 @@
+import { pingHeartbeat } from "@/lib/heartbeat"
 import { NextResponse, type NextRequest } from "next/server"
 import { timingSafeEqual } from "node:crypto"
 import { expireStaleTransfers, sendBookingReminders, sendOrderNotifications, sendSlotAlerts, sendTransferNotifications } from "@/lib/push-events"
@@ -13,6 +14,7 @@ async function handle(request: NextRequest) {
     // Expire first so a transfer that just timed out is cancelled before anything else looks at it.
     const expired = await expireStaleTransfers()
     const [orders, transfers, reminders, slots] = await Promise.all([sendOrderNotifications(), sendTransferNotifications(), sendBookingReminders(), sendSlotAlerts()])
+    await pingHeartbeat("order-notifications")
     return NextResponse.json({ expired, orders, transfers, reminders, slots })
   } catch (e) {
     console.error("order-notifications cron failed", e instanceof Error ? e.message : e)

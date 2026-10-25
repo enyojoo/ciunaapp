@@ -1,3 +1,4 @@
+import { pingHeartbeat } from "@/lib/heartbeat"
 import { NextResponse, type NextRequest } from "next/server"
 import { syncExchangeRatesFromModel } from "@ciuna/rate-sync"
 
@@ -47,6 +48,7 @@ async function runSync(url: string, key: string) {
       serviceRoleKey: key,
       dryRun: false,
     })
+    await pingHeartbeat("sync-exchange-rates")
     return NextResponse.json({
       ok: true,
       updated: result.updated,

@@ -1,3 +1,4 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@/lib/supabase"
 import { requireUser, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
@@ -27,6 +28,8 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
 })
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
+  const limited = await limitOrResponse(request, "assistant", LIMITS.assistant)
+  if (limited) return limited
   let user
   try {
     user = await requireUser(request)

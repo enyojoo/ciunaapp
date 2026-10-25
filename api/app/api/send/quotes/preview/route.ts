@@ -1,3 +1,4 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { NextRequest, NextResponse } from "next/server"
 import { requireUser, withErrorHandling, createErrorResponse } from "@/lib/auth-utils"
 import { isBitbankerConfigured } from "@/lib/bitbanker/config"
@@ -24,6 +25,8 @@ function previewCacheKey(body: Record<string, unknown>): string {
 
 /** Live Bitbanker fee breakdown for send UI (no persisted quote, no recipient required). */
 export const POST = withErrorHandling(async (request: NextRequest) => {
+  const limited = await limitOrResponse(request, "quote", LIMITS.quote)
+  if (limited) return limited
   await requireUser(request)
 
   if (!isBitbankerConfigured()) {

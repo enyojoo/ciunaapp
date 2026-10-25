@@ -25,6 +25,11 @@ export const LIMITS = {
   cart: { limit: 60, windowSeconds: 60 },
   favourite: { limit: 60, windowSeconds: 60 },
   support: { limit: 20, windowSeconds: 60 },
+  otp: { limit: 5, windowSeconds: 900 },
+  message: { limit: 20, windowSeconds: 60 },
+  quote: { limit: 10, windowSeconds: 60 },
+  kyc: { limit: 10, windowSeconds: 3600 },
+  assistant: { limit: 20, windowSeconds: 60 },
 } as const
 
 /**

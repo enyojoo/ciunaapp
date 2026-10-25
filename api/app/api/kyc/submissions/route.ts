@@ -1,3 +1,4 @@
+import { limitOrResponse, LIMITS } from "@/lib/rate-limit"
 import { NextRequest, NextResponse } from "next/server"
 import { requireUser, createErrorResponse, withErrorHandling } from "@/lib/auth-utils"
 import { kycService } from "@/lib/kyc-service"
@@ -14,6 +15,8 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
 
 // POST - Create new KYC submission
 export const POST = withErrorHandling(async (request: NextRequest) => {
+  const limited = await limitOrResponse(request, "kyc", LIMITS.kyc)
+  if (limited) return limited
   const user = await requireUser(request)
   // Use server-side client with user's session for storage uploads
   const { client } = createServerSupabaseClient(request)

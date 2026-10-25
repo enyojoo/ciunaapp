@@ -13,7 +13,12 @@ export function proxy(request: NextRequest) {
     return new NextResponse(null, { status: 204, headers: corsHeaders })
   }
 
-  const response = NextResponse.next()
+  // Every API response carries a request id so a customer report, a log line and an error report can be matched.
+  const requestId = request.headers.get("x-request-id") || crypto.randomUUID()
+  const forwarded = new Headers(request.headers)
+  forwarded.set("x-request-id", requestId)
+  const response = NextResponse.next({ request: { headers: forwarded } })
+  response.headers.set("x-request-id", requestId)
   Object.entries(corsHeaders).forEach(([key, value]) => {
     response.headers.set(key, value)
   })

@@ -1,3 +1,4 @@
+import { reportError } from "@/lib/error-report"
 import { type NextRequest } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import { createServerClient } from "./supabase"
@@ -276,6 +277,7 @@ export function withErrorHandling(
             return createErrorResponse("Account is suspended", 403)
           default:
             console.error("API Error:", error)
+            void reportError({ source: "api", message: error.message, stack: error.stack, route: new URL(request.url).pathname, requestId: request.headers.get("x-request-id") || undefined })
             return createErrorResponse(
               process.env.NODE_ENV === "development" 
                 ? error.message 
@@ -286,6 +288,7 @@ export function withErrorHandling(
       }
 
       console.error("API Error:", error)
+      void reportError({ source: "api", message: String(error), route: new URL(request.url).pathname })
       return createErrorResponse("Internal server error", 500)
     }
   }

@@ -1,3 +1,4 @@
+import { pingHeartbeat } from "@/lib/heartbeat"
 import { NextRequest, NextResponse } from "next/server"
 import { timingSafeEqual } from "node:crypto"
 import { runMarketplaceWorker } from "@/lib/marketplace/worker"
@@ -12,7 +13,9 @@ export async function POST(request: NextRequest) {
   )
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   try {
-    return NextResponse.json(await runMarketplaceWorker())
+    const result = await runMarketplaceWorker()
+    await pingHeartbeat("marketplace")
+    return NextResponse.json(result)
   } catch {
     return NextResponse.json({ error: "Worker failed; pending jobs remain retryable." }, { status: 503 })
   }
