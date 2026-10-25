@@ -69,22 +69,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const backgroundedAt = useRef<number | null>(null)
   const oauthInFlightRef = useRef(false)
 
+  const appliedUserId = useRef<string | null>(null)
+
+  /**
+   * Applies the signed-in user. The user, their profile and whether the PIN lock applies are set together, so a user
+   * without a PIN never passes through the PIN screen on the way to the app. A repeat for the same user (a token
+   * refresh) only refreshes the profile and leaves an unlocked app unlocked.
+   */
   const applySessionUser = useCallback(async (sessionUser: User | null) => {
-    setUser(sessionUser)
     if (!sessionUser) {
+      appliedUserId.current = null
+      setUser(null)
       setProfile(null)
       setPinUnlocked(false)
       return
     }
-    const { data } = await supabase.from("users").select("*").eq("id", sessionUser.id).maybeSingle()
+    const sameUser = appliedUserId.current === sessionUser.id
+    const [{ data }, locked] = await Promise.all([
+      supabase.from("users").select("*").eq("id", sessionUser.id).maybeSingle(),
+      sameUser ? Promise.resolve(null) : hasPin(sessionUser.id),
+    ])
     const row = data as Profile | null
-    setProfile(row)
     const pref = row?.preferred_language
     if (pref && (SUPPORTED_LOCALES as readonly string[]).includes(pref) && i18n.language.split("-")[0] !== pref) {
       await setAppLocale(pref)
     }
-    const locked = await hasPin(sessionUser.id)
-    setPinUnlocked(!locked)
+    appliedUserId.current = sessionUser.id
+    setProfile(row)
+    if (!sameUser) setPinUnlocked(!locked)
+    setUser(sessionUser)
   }, [])
 
   const consumeOAuthCallback = useCallback(async (url: string): Promise<boolean> => {

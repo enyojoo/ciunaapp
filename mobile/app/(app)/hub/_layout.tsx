@@ -2,7 +2,7 @@ import { Stack } from "expo-router"
 import { colors } from "@/lib/theme"
 
 export const unstable_settings = {
-  initialRouteName: "index",
+  anchor: "index",
 }
 
 export default function HubStack() {
