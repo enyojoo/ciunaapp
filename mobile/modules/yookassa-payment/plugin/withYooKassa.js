@@ -1,20 +1,26 @@
 /**
- * Expo config plugin: wire YooKassa CocoaPods source + Android Maven repo for react-native-yookassa.
+ * Expo config plugin: wire YooKassa CocoaPods source for react-native-yookassa.
  * Runs at `expo prebuild` / EAS Build — no effect in Expo Go.
+ *
+ * Android: react-native-yookassa 3.7+ resolves
+ * `ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk` from Maven Central.
+ * The old `nexus.yoomoney.ru` host is NXDOMAIN (retired); do not inject it.
  */
 
 const {
-  withDangerousMod,
   withPodfile,
   createRunOncePlugin,
 } = require("@expo/config-plugins")
-const fs = require("fs")
-const path = require("path")
 
 const YOO_POD_SOURCE = "https://git.yoomoney.ru/scm/sdk/cocoa-pod-specs.git"
 // CocoaPods CDN: a Podfile that lists any `source` stops using the default, and the old `Specs.git` source made
 // `pod install` clone the whole multi-gigabyte spec repo from GitHub.
 const COCOAPODS_CDN = "https://cdn.cocoapods.org/"
+// react-native-yookassa 3.7.x targets iOS SDK 11.0.1 (see its README). Unpinned
+// `s.dependency "YooKassaPayments"` resolves 12.x, which replaced
+// TokenizationModuleInput/Output with YooKassaDelegate and breaks the bridge.
+const YOO_PAYMENTS_POD_VERSION = "11.0.1"
+const YOO_PAYMENTS_POD_LINE = `pod 'YooKassaPayments', '${YOO_PAYMENTS_POD_VERSION}'`
 
 function ensurePodSources(podfileContents) {
   let next = podfileContents
@@ -30,39 +36,37 @@ function ensurePodSources(podfileContents) {
   return next
 }
 
+function ensureYooKassaPaymentsPin(podfileContents) {
+  if (podfileContents.includes(`pod 'YooKassaPayments'`)) {
+    return podfileContents.replace(
+      /pod\s+'YooKassaPayments'[^\n]*/,
+      YOO_PAYMENTS_POD_LINE,
+    )
+  }
+  // Prefer anchoring after use_native_modules! inside the app target.
+  if (/config\s*=\s*use_native_modules!/.test(podfileContents)) {
+    return podfileContents.replace(
+      /(config\s*=\s*use_native_modules![^\n]*\n)/,
+      `$1\n  ${YOO_PAYMENTS_POD_LINE}\n`,
+    )
+  }
+  return podfileContents.replace(
+    /(target\s+'[^']+'\s+do\n)/,
+    `$1  ${YOO_PAYMENTS_POD_LINE}\n`,
+  )
+}
+
 function withYooKassaIos(config) {
   return withPodfile(config, (cfg) => {
-    cfg.modResults.contents = ensurePodSources(cfg.modResults.contents)
+    let contents = ensurePodSources(cfg.modResults.contents)
+    contents = ensureYooKassaPaymentsPin(contents)
+    cfg.modResults.contents = contents
     return cfg
   })
 }
 
-function withYooKassaAndroid(config) {
-  return withDangerousMod(config, [
-    "android",
-    async (cfg) => {
-      const rootBuild = path.join(cfg.modRequest.platformProjectRoot, "build.gradle")
-      if (fs.existsSync(rootBuild)) {
-        let contents = fs.readFileSync(rootBuild, "utf8")
-        if (!contents.includes("nexus.yoomoney.ru") && !contents.includes("yoomoney")) {
-          contents = contents.replace(
-            /allprojects\s*\{\s*repositories\s*\{/,
-            `allprojects {
-    repositories {
-        maven { url "https://nexus.yoomoney.ru/repository/maven-releases/" }`,
-          )
-          fs.writeFileSync(rootBuild, contents)
-        }
-      }
-      return cfg
-    },
-  ])
-}
-
 function withYooKassa(config) {
-  config = withYooKassaIos(config)
-  config = withYooKassaAndroid(config)
-  return config
+  return withYooKassaIos(config)
 }
 
 module.exports = createRunOncePlugin(withYooKassa, "with-yookassa", "1.0.0")
