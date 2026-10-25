@@ -1,0 +1,44 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run locales:check
+      - run: npm run locales:keys
+      - run: npm run design:check
+      - run: npm run design:hex
+      - name: Typecheck mobile
+        run: npx tsc --noEmit -p mobile
+      - name: Typecheck api
+        run: npx tsc --noEmit -p api
+      - name: Typecheck office
+        run: npx tsc --noEmit -p office
+      - name: Shared tests
+        run: npm test -w @ciuna/shared
+      - name: API tests
+        run: |
+          cd api
+          node --import tsx --test tests/merchant/*.test.ts
+          node --import tsx --test tests/marketplace/*.test.ts
+          node --import tsx --test tests/contract/*.test.ts
+      - name: Build office
+        run: npm run build -w office
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: public-placeholder
+      - name: Build seller (mock must be off)
+        run: npm run build -w seller
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: public-placeholder
