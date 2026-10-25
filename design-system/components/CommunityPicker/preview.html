@@ -1,0 +1,25 @@
+<!-- @dsCard group="Navigation" height=620 width=900 subtitle="Community pill and sheet on Food and Mart: all, chosen, and the picker list" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CommunityPicker</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.pills{display:flex;gap:8px;font-family:var(--font-native)}
+.pill{display:flex;align-items:center;height:36px;width:124px;padding:0 10px;border-radius:999px;border:1px solid var(--hairline);background:var(--surface);font:600 14px/18px var(--font-native)}
+.pill span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheet{width:390px;border-radius:24px 24px 0 0;background:var(--surface);box-shadow:var(--shadow-lg);padding:12px 20px 24px;font-family:var(--font-native)}
+.sheet h4{margin:8px 0 6px;font:700 18px/24px var(--font-native)}
+.hint{font:400 14px/18px var(--font-native);color:var(--muted);margin-bottom:8px}
+.row{display:flex;justify-content:space-between;align-items:center;min-height:52px;border-bottom:1px solid var(--hairline);font:400 16px/22px var(--font-native)}
+.row.on{font-weight:700}
+.empty{padding:32px 16px;text-align:center;border-radius:16px;border:1px solid var(--hairline);background:var(--surface);font-family:var(--font-native)}
+.empty b{display:block;font:600 17px/24px var(--font-native)}.empty a{color:var(--primary-text);font:600 15px/20px var(--font-native)}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+  <div class="cz-col" style="width:390px;gap:16px">
+    <div class="pills"><div class="pill"><span>All communities</span></div><div class="pill"><span>Moscow</span></div></div>
+    <div class="pills"><div class="pill"><span>Nigerian</span></div><div class="pill"><span>Moscow</span></div></div>
+    <div class="empty"><b>No stores match</b><p style="margin:6px 0 10px;color:var(--muted)">Try another city or community.</p><a>Clear filters</a></div>
+    <p class="cz-cap">Default, chosen, and the empty result of a narrow filter.</p></div>
+  <div class="cz-col"><div class="sheet"><h4>Community</h4><div class="hint">Show stores that serve your community.</div>
+    <div class="row"><span>All communities</span></div><div class="row on"><span>Nigerian</span><span>✓</span></div><div class="row"><span>Chinese</span></div><div class="row"><span>Indian</span></div><div class="row"><span>Arab</span></div></div>
+    <p class="cz-cap">Picker sheet.</p></div>
+</div></div></body></html>

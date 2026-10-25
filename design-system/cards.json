@@ -294,10 +294,46 @@
    "readme": true
   },
   {
+   "name": "CommunityPicker",
+   "group": "Navigation",
+   "subtitle": "Community pill and sheet on Food and Mart: all, chosen, and the picker list",
+   "height": 620,
+   "width": 900,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "DirectoryFilters",
+   "group": "Navigation",
+   "subtitle": "Search, filter chips, count and clear on an All stores list: default, filtered, and no match",
+   "height": 816,
+   "width": 900,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "DockedTabBar",
+   "group": "Navigation",
+   "subtitle": "Bottom tab bar docked to the screen edge and the cart dot: tabs, active, empty cart and cart with items",
+   "height": 724,
+   "width": 900,
+   "page": false,
+   "readme": true
+  },
+  {
+   "name": "LocationPicker",
+   "group": "Navigation",
+   "subtitle": "City pill in the Food, Mart and Experts header: all cities, chosen, long name, and the picker sheet",
+   "height": 790,
+   "width": 900,
+   "page": false,
+   "readme": true
+  },
+  {
    "name": "SectionHeader",
    "group": "Navigation",
    "subtitle": "Block title with an optional text action: title only, with See all, and a long title that truncates",
-   "height": 300,
+   "height": 496,
    "width": 900,
    "page": false,
    "readme": true
@@ -306,7 +342,7 @@
    "name": "StickyActionBar",
    "group": "Navigation",
    "subtitle": "Bottom action bar: product page, cart with summary, disabled with a reason, and busy",
-   "height": 520,
+   "height": 952,
    "width": 900,
    "page": false,
    "readme": true
@@ -693,7 +729,7 @@
    "name": "CustomerActivityWeb",
    "group": "Customer app · Screens",
    "subtitle": "Desktop web Activities: table of transfers, orders and bookings grouped by day, search, filters and a totals aside, plus first use, no match and error",
-   "height": 2900,
+   "height": 3466,
    "width": 1240,
    "page": true,
    "readme": true

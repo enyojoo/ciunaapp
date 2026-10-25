@@ -1,0 +1,27 @@
+<!-- @dsCard group="Navigation" height=790 width=900 subtitle="City pill in the Food, Mart and Experts header: all cities, chosen, long name, and the picker sheet" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><title>LocationPicker</title><link rel="stylesheet" href="../bundle.css"><script src="../icons.js"></script><script src="../kit.js" defer></script>
+<style>
+.bar{display:flex;align-items:center;gap:8px;height:52px;padding:0 12px;background:var(--paper);border-radius:var(--radius-card);border:1px solid var(--hairline);font-family:var(--font-native)}
+.bar .t{flex:1;font:700 20px/26px var(--font-native)}
+.pill{display:flex;align-items:center;gap:5px;height:36px;width:124px;padding:0 10px;border-radius:999px;border:1px solid var(--hairline);background:var(--surface);font:600 14px/18px var(--font-native)}
+.pill span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ic{width:44px;height:44px;display:grid;place-items:center;border-radius:50%}
+.sheet{width:390px;border-radius:24px 24px 0 0;background:var(--surface);box-shadow:var(--shadow-lg);padding:12px 20px 24px;font-family:var(--font-native)}
+.sheet h4{margin:8px 0 10px;font:700 18px/24px var(--font-native)}
+.srch{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--hairline);color:var(--muted)}
+.sec{margin:16px 0 4px;font:700 12px/16px var(--font-native);letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;justify-content:space-between;align-items:center;min-height:52px;border-bottom:1px solid var(--hairline);font:400 16px/22px var(--font-native)}
+.row.on{font-weight:700}
+</style></head>
+<body><div class="cz-page"><div class="cz-grid">
+  <div class="cz-col" style="width:390px;gap:12px">
+    <div class="bar"><div class="t">Food</div><div class="pill"><span>All cities</span></div><div class="ic"></div></div>
+    <div class="bar"><div class="t">Food</div><div class="pill"><span>Moscow</span></div><div class="ic"></div></div>
+    <div class="bar"><div class="t">Food</div><div class="pill"><span>Nizhny Novgorod</span></div><div class="ic"></div></div>
+    <p class="cz-cap">All cities, a chosen city, and a long name that truncates inside the fixed width.</p></div>
+  <div class="cz-col"><div class="sheet"><h4>City</h4><div class="srch">Search cities</div>
+    <div class="sec">Popular</div><div class="row on"><span>Moscow</span><span>✓</span></div><div class="row"><span>Saint Petersburg</span></div><div class="row"><span>Kazan</span></div>
+    <div class="sec">All cities</div><div class="row"><span>Astrakhan</span></div></div>
+    <p class="cz-cap">Picker sheet: search, popular first, check on the chosen city.</p></div>
+</div></div></body></html>
