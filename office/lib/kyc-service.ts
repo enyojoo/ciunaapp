@@ -191,7 +191,7 @@ export const kycService = {
           id_type: data.id_type,
           id_document_url: path, // Store path instead of public URL
           id_document_filename: filename,
-          metadata: data.metadata || null, // Store provider-specific KYC fields (SSN, passport, etc.)
+          metadata: (data as { metadata?: unknown }).metadata || null, // Store provider-specific KYC fields (SSN, passport, etc.)
           status: "in_review", // Change status to in_review after upload
           updated_at: new Date().toISOString(),
         })
@@ -216,7 +216,7 @@ export const kycService = {
           id_type: data.id_type,
           id_document_url: path, // Store path instead of public URL
           id_document_filename: filename,
-          metadata: data.metadata || null, // Store provider-specific KYC fields (SSN, passport, etc.)
+          metadata: (data as { metadata?: unknown }).metadata || null, // Store provider-specific KYC fields (SSN, passport, etc.)
         })
         .select()
         .single()

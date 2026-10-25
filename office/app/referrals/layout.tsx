@@ -5,9 +5,7 @@ export const metadata: Metadata = {
   description: "View referrers, invited users, send activity, and referral rewards.",
   robots: {
     index: false,
-    noindex: true,
     follow: false,
-    nofollow: true,
   },
 }
 

@@ -1032,11 +1032,11 @@ export function OfficeHubProductsView({
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        {!p.fulfillment_mode ? (
+                        {!p.fulfillment_type ? (
                           <Badge variant="destructive">Needs review</Badge>
                         ) : (
                           <span className="capitalize text-sm">
-                            {String(p.fulfillment_mode).replace(/_/g, " ")}
+                            {String(p.fulfillment_type).replace(/_/g, " ")}
                           </span>
                         )}
                       </TableCell>

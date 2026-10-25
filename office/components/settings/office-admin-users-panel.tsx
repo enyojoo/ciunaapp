@@ -20,6 +20,8 @@ import { officeFetch } from "@/lib/api-client"
 import { useAuth } from "@/lib/auth-context"
 import { SUPER_ADMIN_ROLE } from "@/lib/admin-role"
 
+const ASSIGNABLE_ROLES = ["ops", "support", "finance", "compliance", "super_admin"]
+
 export type AdminUserRow = {
   id: string
   email: string
@@ -112,6 +114,7 @@ export function OfficeAdminUsersPanel({
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
+  const [role, setRole] = useState("ops")
 
   const showSkeleton = !settingsBootComplete
   const showEmpty = settingsBootComplete && adminUsers.length === 0
@@ -122,7 +125,7 @@ export function OfficeAdminUsersPanel({
     try {
       const res = await officeFetch("/api/admin/admin-users", {
         method: "POST",
-        body: JSON.stringify({ email: email.trim(), name: name.trim(), role: "admin" }),
+        body: JSON.stringify({ email: email.trim(), name: name.trim(), role }),
       })
       const j = await res.json().catch(() => ({}))
       if (!res.ok) {
@@ -132,6 +135,18 @@ export function OfficeAdminUsersPanel({
       setOpen(false)
       setEmail("")
       setName("")
+      await onReloadAdminUsers()
+    } finally {
+      setActionSaving(false)
+    }
+  }
+
+  const handleRole = async (id: string, next: string) => {
+    setActionSaving(true)
+    try {
+      const res = await officeFetch(`/api/admin/admin-users/${id}`, { method: "PATCH", body: JSON.stringify({ role: next }) })
+      const j = await res.json().catch(() => ({}))
+      if (!res.ok) alert(j?.error || "Failed to change role")
       await onReloadAdminUsers()
     } finally {
       setActionSaving(false)
@@ -191,6 +206,21 @@ export function OfficeAdminUsersPanel({
                     placeholder="Optional"
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="admin-role">Role</Label>
+                  <select
+                    id="admin-role"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="h-9 w-full rounded-md border bg-background px-3 text-sm"
+                  >
+                    {ASSIGNABLE_ROLES.map((r) => (
+                      <option key={r} value={r}>
+                        {formatAdminRole(r)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <Button
                   className="w-full bg-primary hover:bg-primary/90"
                   disabled={actionSaving || !email.trim()}
@@ -227,9 +257,23 @@ export function OfficeAdminUsersPanel({
                     <TableCell className="font-medium">{displayName}</TableCell>
                     <TableCell className="text-muted-foreground">{r.email}</TableCell>
                     <TableCell>
-                      <Badge variant={r.role === SUPER_ADMIN_ROLE ? "default" : "secondary"}>
-                        {formatAdminRole(r.role)}
-                      </Badge>
+                      {r.status === "active" && r.id !== user?.id ? (
+                        <select
+                          aria-label={`Role for ${r.email}`}
+                          value={ASSIGNABLE_ROLES.includes(r.role) ? r.role : "ops"}
+                          disabled={actionSaving}
+                          onChange={(e) => void handleRole(r.id, e.target.value)}
+                          className="h-8 rounded-md border bg-background px-2 text-sm"
+                        >
+                          {ASSIGNABLE_ROLES.map((x) => (
+                            <option key={x} value={x}>
+                              {formatAdminRole(x)}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <Badge variant={r.role === SUPER_ADMIN_ROLE ? "default" : "secondary"}>{formatAdminRole(r.role)}</Badge>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Badge

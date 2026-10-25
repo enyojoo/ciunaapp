@@ -5,9 +5,7 @@ export const metadata: Metadata = {
   description: "Monitor and manage all money transfer transactions across the Ciuna platform.",
   robots: {
     index: false,
-    noindex: true,
     follow: false,
-    nofollow: true,
   },
 }
 

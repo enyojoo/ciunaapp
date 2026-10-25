@@ -63,7 +63,7 @@ export default function OfficeKYCPage() {
         
         // Group submissions by user and fetch user data
         const userMap = new Map<string, UserKYCData>()
-        const userIds = new Set(allSubmissions.map((s: KYCSubmission) => s.user_id))
+        const userIds = new Set<string>(allSubmissions.map((s: KYCSubmission) => s.user_id))
         
         // Fetch user data for each user
         await Promise.all(
@@ -93,7 +93,6 @@ export default function OfficeKYCPage() {
                 userId,
                 identitySubmission: userSubmissions.find((s: KYCSubmission) => s.type === "identity") || null,
                 addressSubmission: userSubmissions.find((s: KYCSubmission) => s.type === "address") || null,
-                hasTOS: false,
               })
             }
           })

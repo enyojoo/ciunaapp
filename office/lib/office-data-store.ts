@@ -233,7 +233,7 @@ class OfficeDataStore {
       })
       const recentActivity = this.processRecentActivity(sortedTransactions.slice(0, 10))
       const serviceLinePopularity = this.processServiceLinePopularity(
-        transactionsResult.filter((t) => t.status === "completed"),
+        transactionsResult.filter((t: any) => t.status === "completed"),
         baseCurrency,
         exchangeRatesResult,
       )
@@ -308,7 +308,7 @@ class OfficeDataStore {
       // Try to load from cache as fallback
       if (this.loadFromCache()) {
         this.notify()
-        return this.data
+        return this.data as unknown as AdminData
       }
       // If no existing data, return minimal structure
       throw error
@@ -369,7 +369,7 @@ class OfficeDataStore {
         const totalVolume = 0
 
         // Find corresponding auth user to get email_confirmed_at
-        const authUser = authUsers?.users?.find(au => au.id === user.id)
+        const authUser = authUsers?.users?.find((au: any) => au.id === user.id)
         
         return {
           ...user,

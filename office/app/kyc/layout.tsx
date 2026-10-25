@@ -4,9 +4,7 @@ export const metadata: Metadata = {
   title: "KYC - Ciuna",
   robots: {
     index: false,
-    noindex: true,
     follow: false,
-    nofollow: true,
   },
 }
 

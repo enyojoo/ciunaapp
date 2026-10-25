@@ -93,7 +93,7 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
       const newCurrency = await officeDataStore.addCurrency(currencyData)
 
       // Create default exchange rates for the new currency
-      const existingCurrencies = currencies.filter((c) => c.code !== newCurrencyData.code.toUpperCase())
+      const existingCurrencies = currencies.filter((c: any) => c.code !== newCurrencyData.code.toUpperCase())
       const newRates = []
 
       // Add rates FROM new currency TO existing currencies
@@ -143,7 +143,7 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
 
   const handleEditRates = (currency: any) => {
     setSelectedCurrency(currency)
-    const currencyRates = exchangeRates.filter((rate) => rate.from_currency === currency.code)
+    const currencyRates = exchangeRates.filter((rate: any) => rate.from_currency === currency.code)
     const updates: any = {}
 
     currencyRates.forEach((rate: any) => {
@@ -179,7 +179,7 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
       for (const [toCurrency, rateData] of Object.entries(rateUpdates)) {
         const rateInfo = rateData as any
         const existingRate = exchangeRates.find(
-          (r) => r.from_currency === selectedCurrency.code && r.to_currency === toCurrency,
+          (r: any) => r.from_currency === selectedCurrency.code && r.to_currency === toCurrency,
         )
         const metadata =
           existingRate?.metadata && typeof existingRate.metadata === "object" && !Array.isArray(existingRate.metadata)
@@ -237,7 +237,7 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
 
   const handleSuspendCurrency = async (currencyId: string) => {
     try {
-      const currency = currencies.find((c) => c.id === currencyId)
+      const currency = currencies.find((c: any) => c.id === currencyId)
       if (!currency) return
 
       const newStatus = currency.status === "active" ? "suspended" : "active"
@@ -274,7 +274,7 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
   }
 
   const getCurrencyRates = (currencyCode: string) => {
-    return exchangeRates.filter((rate) => rate.from_currency === currencyCode)
+    return exchangeRates.filter((rate: any) => rate.from_currency === currencyCode)
   }
 
   return (
@@ -400,7 +400,7 @@ export function OfficeRatesPanel({ settingsBootComplete }: OfficeRatesPanelProps
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currencies.map((currency) => (
+                {currencies.map((currency: any) => (
                   <TableRow key={currency.id}>
                     <TableCell>
                       <div className="flex items-center gap-2">

@@ -5,9 +5,7 @@ export const metadata: Metadata = {
   description: "Admin dashboard for managing Ciuna platform operations, users, and transactions.",
   robots: {
     index: false,
-    noindex: true,
     follow: false,
-    nofollow: true,
   },
 }
 

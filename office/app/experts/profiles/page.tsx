@@ -86,7 +86,7 @@ export default function OfficeExpertProfilesPage() {
   }, [load])
 
   const locationSuggestions = useMemo(() => {
-    const fromRows = rows.map((r) => String(r.service_area || "").trim()).filter(Boolean)
+    const fromRows = rows.map((r) => String((r as { service_area?: string | null }).service_area || "").trim()).filter(Boolean)
     return Array.from(new Set([...DEFAULT_SERVICE_AREAS, ...fromRows]))
   }, [rows])
 

@@ -5,9 +5,7 @@ export const metadata: Metadata = {
   description: "Configure platform settings, payment methods, and system parameters for the Ciuna platform.",
   robots: {
     index: false,
-    noindex: true,
     follow: false,
-    nofollow: true,
   },
 }
 
