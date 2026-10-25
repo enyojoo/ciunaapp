@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native"
 import { useTranslation } from "react-i18next"
 import { DirectoryCount, DirectorySearch, directoryStyles } from "@/components/directory-filters"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { FilterChips } from "@/components/filter-chips"
 import { ExpertServiceCard, ExpertServiceSkeleton } from "@/components/expert-catalog"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
@@ -15,7 +16,7 @@ import { useRevalidateOnForeground } from "@/lib/use-revalidate-on-foreground"
 
 export default function ExpertsServicesScreen() {
   const { t } = useTranslation("app")
-  const { data, loading, revalidate } = useExpertCatalogServices()
+  const { data, loading, error, revalidate } = useExpertCatalogServices()
   const { data: profilesData } = useExpertProfiles()
   const { services } = useExpertAreaFilter(profilesData || [], data || [])
   const [query, setQuery] = useState("")
@@ -80,6 +81,8 @@ export default function ExpertsServicesScreen() {
             <ExpertServiceSkeleton key={i} />
           ))}
         </View>
+      ) : services.length === 0 && error && !data ? (
+        <LoadError onRetry={() => void revalidate()} />
       ) : services.length === 0 ? (
         <EmptyState title={t("hub.expertsServicesEmpty", { defaultValue: "No services listed yet." })} />
       ) : filtered.length === 0 ? (

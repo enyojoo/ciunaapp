@@ -18,6 +18,7 @@ jobs:
       - run: npm run locales:keys
       - run: npm run design:check
       - run: npm run design:hex
+      - run: npm run a11y:check
       - name: Typecheck mobile
         run: npx tsc --noEmit -p mobile
       - name: Typecheck api

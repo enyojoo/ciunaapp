@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { DirectorySearch } from "@/components/directory-filters"
+import { LoadError } from "@/components/load-error"
 import { CatalogProducts } from "@/components/catalog-products"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
@@ -19,7 +20,7 @@ export default function ProductsScreen() {
   const router = useRouter()
   const { t } = useTranslation("app")
   const marketplace = isHubMarketplaceSlug(line)
-  const { data, loading, revalidate } = useHubCatalog(marketplace ? line : "", marketplace)
+  const { data, loading, error, revalidate } = useHubCatalog(marketplace ? line : "", marketplace)
   const located = useLocationFilter(data?.vendors || [], data?.products || [])
   const products = useMemo(
     () => attachVendorsToProducts(located.products, located.vendors, line),
@@ -44,6 +45,7 @@ export default function ProductsScreen() {
         trailingAction={marketplace ? <HubCartHeaderButton lineSlug={line as "food" | "mart"} /> : undefined}
       >
         <DirectorySearch value={query} onChange={setQuery} placeholder={t("hub.searchProducts", { defaultValue: "Search products" })} />
+        {!loading && error && !data ? <LoadError onRetry={() => void revalidate()} /> : null}
         <CatalogProducts
           products={shown}
           loading={loading}

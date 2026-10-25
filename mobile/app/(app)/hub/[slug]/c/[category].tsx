@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { CatalogProducts } from "@/components/catalog-products"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
@@ -25,7 +26,7 @@ export default function HubCategoryScreen() {
   const cat = hubCategory(line, id)
   const { t } = useTranslation("app")
   const router = useRouter()
-  const { data, loading, revalidate } = useHubCatalog(line, true)
+  const { data, loading, error, revalidate } = useHubCatalog(line, true)
   const [store, setStore] = useState(ALL)
   useFocusRevalidate(revalidate)
 
@@ -62,7 +63,9 @@ export default function HubCategoryScreen() {
             />
           </View>
         ) : null}
-        {!loading && shown.length === 0 ? (
+        {!loading && shown.length === 0 && error && !data ? (
+          <LoadError onRetry={() => void revalidate()} />
+        ) : !loading && shown.length === 0 ? (
           <EmptyState title={t("hub.cat.empty", { defaultValue: "Nothing here yet." })} body={t("hub.cat.emptyBody", { defaultValue: "Stores are adding products. Check back soon." })} />
         ) : (
           <CatalogProducts

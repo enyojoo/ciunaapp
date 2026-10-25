@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { DirectoryCount, DirectorySearch, directoryStyles } from "@/components/directory-filters"
 import { EmptyState } from "@/components/empty-state"
 import { FilterChips } from "@/components/filter-chips"
+import { LoadError } from "@/components/load-error"
 import { HubCartBar } from "@/components/hub-cart-bar"
 import { HubCartHeaderButton } from "@/components/hub-cart-header-button"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
@@ -20,7 +21,7 @@ export default function StoresScreen() {
   const router = useRouter()
   const { t } = useTranslation("app")
   const marketplace = isHubMarketplaceSlug(line)
-  const { data, loading, revalidate } = useHubCatalog(marketplace ? line : "", marketplace)
+  const { data, loading, error, revalidate } = useHubCatalog(marketplace ? line : "", marketplace)
   const allVendors = data?.vendors || []
   const { vendors } = useLocationFilter(allVendors, [])
   const [query, setQuery] = useState("")
@@ -78,8 +79,9 @@ export default function StoresScreen() {
             ))}
           </View>
         ) : null}
-        {!loading && vendors.length === 0 ? (
-          <EmptyState title={t("hub.marketplaceNoVendors", { defaultValue: "No stores yet. Check back soon." })} />
+        {!loading && vendors.length === 0 && error && allVendors.length === 0 ? <LoadError onRetry={() => void revalidate()} /> : null}
+        {!loading && vendors.length === 0 && !(error && allVendors.length === 0) ? (
+          <EmptyState title={allVendors.length > 0 ? t("hub.noStoresForFilter") : t("hub.marketplaceNoVendors", { defaultValue: "No stores yet. Check back soon." })} />
         ) : null}
         {vendors.length > 0 && filtered.length === 0 ? (
           <EmptyState

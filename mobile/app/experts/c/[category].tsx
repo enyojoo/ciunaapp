@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { useLocalSearchParams } from "expo-router"
 import { useTranslation } from "react-i18next"
 import { EmptyState } from "@/components/empty-state"
+import { LoadError } from "@/components/load-error"
 import { ExpertFeaturedChip, ExpertFeaturedSkeleton, ExpertServiceCard, ExpertServiceSkeleton } from "@/components/expert-catalog"
 import { HubLinePageShell } from "@/components/hub-line-page-shell"
 import { Icon } from "@/components/ui"
@@ -19,7 +20,7 @@ export default function ExpertCategoryScreen() {
   const id = isMainCategoryId(String(params.category)) ? (String(params.category) as Parameters<typeof mainCategory>[0]) : "errands"
   const cat = mainCategory(id)
   const { data: profilesData, loading: loadingProfiles, revalidate: revalidateProfiles } = useExpertProfiles()
-  const { data: servicesData, loading: loadingServices, revalidate: revalidateServices } = useExpertCatalogServices()
+  const { data: servicesData, loading: loadingServices, error: servicesError, revalidate: revalidateServices } = useExpertCatalogServices()
 
   useFocusRevalidate(() => {
     revalidateProfiles()
@@ -63,6 +64,8 @@ export default function ExpertCategoryScreen() {
             <ExpertServiceSkeleton />
             <ExpertServiceSkeleton />
           </View>
+        ) : services.length === 0 && servicesError && !servicesData ? (
+          <LoadError onRetry={() => void revalidateServices()} />
         ) : services.length === 0 ? (
           <EmptyState title={t("experts.cat.empty", { defaultValue: "Nothing to book here yet." })} body={t("experts.cat.emptyBody", { defaultValue: "We're adding experts. Check back soon or ask support for help." })} />
         ) : (

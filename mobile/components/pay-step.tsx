@@ -69,7 +69,7 @@ export function PayStep({
       ) : null}
       <View style={styles.row}>
         {sendPickerEnabled ? (
-          <Pressable style={styles.flex} onPress={() => setOpenSend(true)}>
+          <Pressable style={styles.flex} onPress={() => setOpenSend(true)} accessibilityRole="button" accessibilityLabel={`Pay in ${sendCurrency}`}>
             <View style={styles.passThrough}>
               <Field label="Pay in" value={sendCurrency} editable={false} />
             </View>
@@ -80,7 +80,7 @@ export function PayStep({
           </View>
         )}
         {receivePickerEnabled ? (
-          <Pressable style={styles.flex} onPress={() => setOpenRecv(true)}>
+          <Pressable style={styles.flex} onPress={() => setOpenRecv(true)} accessibilityRole="button" accessibilityLabel={`They get ${receiveCurrency}`}>
             <View style={styles.passThrough}>
               <Field label="They get" value={receiveCurrency} editable={false} />
             </View>

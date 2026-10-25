@@ -70,7 +70,7 @@ export function Tile({
   )
   if (!onPress || disabled) return inner
   return (
-    <PressableScale onPress={onPress} haptics style={styles.press} accessibilityRole="button">
+    <PressableScale onPress={onPress} haptics style={styles.press} accessibilityRole="button" accessibilityLabel={description ? `${title}. ${description}` : title}>
       {inner}
     </PressableScale>
   )
