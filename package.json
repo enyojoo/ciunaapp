@@ -35,7 +35,8 @@
     "test:seller": "playwright test --project=seller-375 --project=seller-768 --project=seller-1280",
     "locales:keys": "node scripts/check-missing-keys.mjs",
     "design:hex": "node scripts/check-hex.mjs",
-    "db:rls-probe": "node scripts/rls-probe.mjs"
+    "db:rls-probe": "node scripts/rls-probe.mjs",
+    "test:office": "playwright test --project=office-1280"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

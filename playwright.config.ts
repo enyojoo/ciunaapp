@@ -18,12 +18,23 @@ export default defineConfig({
     baseURL: `http://localhost:${SELLER_PORT}`,
     trace: "off",
   },
-  projects: widths.map((w) => ({
+  projects: [
+    { name: "office-1280", testDir: "./tests/office", use: { browserName: "chromium" as const, launchOptions: { executablePath }, viewport: { width: 1280, height: 800 }, baseURL: "http://localhost:3001" } },
+    ...widths.map((w) => ({
     name: `seller-${w}`,
     testDir: "./tests/seller",
     use: { browserName: "chromium" as const, launchOptions: { executablePath }, viewport: { width: w, height: w === 375 ? 812 : w === 768 ? 1024 : 800 }, baseURL: `http://localhost:${SELLER_PORT}` },
   })),
+  ],
   webServer: [
+    {
+      // office in mock mode
+      command: "npm run dev -w office",
+      url: "http://localhost:3001/dashboard",
+      env: { NEXT_PUBLIC_OFFICE_MOCK: "1" },
+      reuseExistingServer: !process.env.CI,
+      timeout: 180_000,
+    },
     {
       // seller in mock mode
       command: "npm run dev -w seller",

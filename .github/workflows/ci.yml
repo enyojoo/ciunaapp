@@ -42,3 +42,8 @@ jobs:
         env:
           NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: public-placeholder
+      - run: npx playwright install --with-deps chromium
+      - name: Office smoke (mock mode)
+        run: npm run test:office
+      - name: Seller end to end (mock mode)
+        run: npm run test:seller

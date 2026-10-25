@@ -29,7 +29,9 @@ What the build pass did, what is waiting on the owner, and what is still open. C
 
 **Waiting on the owner:** everything in `docs/runbooks/owner-steps.md` (B0 to B4, B10 to B12, C1, C9, G1 DSN, G2 monitors, G5, G6, H, R). One new decision: the anon key can read `payment_methods`.
 
-**Still open (not built):** E4 credential approval (needs a status column, so SQL), E6 role-based Retry and Refund (money behaviour; design with finance first), E7 Office smoke test (needs an auth mock like Seller has), B6 baseline migration, B8 race tests (need staging), D2 to D5, F6 loading and empty state walk of all routes, F8, F9, F10, F11, G5, H, R.
+**Built since the first pass:** E4 (SQL file 21, Office Credentials tab, Seller status line), E6 (guided status moves, Retry needs `transactions.manage`, Refund needs `finance.manage`, both need a reason and are audited; bulk edits removed), E7 (`npm run test:office`, 38 pages, in CI); the login no longer flashes the PIN screen for users without a PIN.
+
+**Still open (not built):** B6 baseline migration, B8 race tests (need staging), D2 to D5, F6 loading and empty state walk of all routes, F8, F9, F10, F11, G5, H, R.
 
 ## 2. How to read this plan
 
