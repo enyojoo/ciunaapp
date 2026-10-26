@@ -96,6 +96,14 @@
         return Promise.resolve(new Response(JSON.stringify(one[1] === "orders" ? { order: hit, events: [{ id: "ev1", kind: "paid", created_at: new Date(now - 600000).toISOString(), message: "Payment received." }] } : { product: hit }), { status: 200, headers: { "Content-Type": "application/json" } }))
       }
       if (method === "GET" && routes[path]) return Promise.resolve(new Response(JSON.stringify(routes[path](u)), { status: 200, headers: { "Content-Type": "application/json" } }))
+      var patchProduct = path.match(/^\/api\/merchant\/products\/([^/]+)$/)
+      if (method === "PATCH" && patchProduct) {
+        var base = products.find(function (x) { return x.id === patchProduct[1] }) || products[0]
+        var change = {}
+        try { change = JSON.parse((init && init.body) || "{}") } catch (e) {}
+        Object.assign(base, change)
+        return Promise.resolve(new Response(JSON.stringify({ product: base }), { status: 200, headers: { "Content-Type": "application/json" } }))
+      }
       if (method !== "GET") return Promise.resolve(new Response(JSON.stringify({ ok: true, order: order(1, "accepted", 3), product: products[0], fee: 0, net: 0 }), { status: 200, headers: { "Content-Type": "application/json" } }))
     }
     return real(url, init)
