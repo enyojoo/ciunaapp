@@ -1,5 +1,6 @@
 import Constants from "expo-constants"
 import { tracked } from "@/lib/network-status"
+import * as Device from "expo-device"
 import { Platform } from "react-native"
 import { joinApiPath, resolveApiUrl } from "@ciuna/shared/urls"
 import { supabase } from "./supabase"
@@ -15,10 +16,21 @@ function normalizeDevApiBase(url: string): string {
   return `http://localhost:${port}`
 }
 
+declare const __DEV__: boolean
+
+/**
+ * The iOS simulator shares the Mac's network, so a development build can always use localhost. The LAN address baked into
+ * the native build at prebuild time goes stale as soon as the Mac changes network (home, office, hotspot).
+ */
+function simulatorLocalhost(url: string): string {
+  if (!__DEV__ || Platform.OS !== "ios" || Device.isDevice) return url
+  return url.replace(/^(https?:\/\/)(?:10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+)(?=[:/]|$)/, "$1localhost")
+}
+
 function apiBaseUrl(): string {
   const fromExtra = Constants.expoConfig?.extra?.apiUrl
   if (typeof fromExtra === "string" && fromExtra.trim()) {
-    return normalizeDevApiBase(fromExtra)
+    return simulatorLocalhost(normalizeDevApiBase(fromExtra))
   }
   return normalizeDevApiBase(resolveApiUrl())
 }
